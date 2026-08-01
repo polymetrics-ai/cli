@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/wql/v1/data",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "wql_v1_wql_v1_data_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

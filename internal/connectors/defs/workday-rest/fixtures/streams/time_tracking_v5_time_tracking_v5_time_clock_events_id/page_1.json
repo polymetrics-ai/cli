@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/timeTracking/v5/timeClockEvents/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "time_tracking_v5_time_tracking_v5_time_clock_events_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

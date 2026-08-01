@@ -1,0 +1,22 @@
+{
+  "record": {
+    "project": {
+      "id": "sample"
+    },
+    "projectRole": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/v3/adHocProjectTimeTransactions",
+    "body": {
+      "project": {
+        "id": "sample"
+      },
+      "projectRole": {
+        "id": "sample"
+      }
+    }
+  }
+}

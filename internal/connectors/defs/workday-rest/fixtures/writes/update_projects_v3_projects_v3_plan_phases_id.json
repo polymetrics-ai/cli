@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "phase": {
+      "id": "sample"
+    },
+    "fromQuotePhase": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/projects/v3/planPhases/sample-id",
+    "body": {
+      "phase": {
+        "id": "sample"
+      },
+      "fromQuotePhase": true
+    }
+  }
+}

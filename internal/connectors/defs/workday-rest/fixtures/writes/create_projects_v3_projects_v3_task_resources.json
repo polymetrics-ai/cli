@@ -1,0 +1,14 @@
+{
+  "record": {
+    "warningCustomValidations": "sample",
+    "memo": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/v3/taskResources",
+    "body": {
+      "warningCustomValidations": "sample",
+      "memo": "sample"
+    }
+  }
+}

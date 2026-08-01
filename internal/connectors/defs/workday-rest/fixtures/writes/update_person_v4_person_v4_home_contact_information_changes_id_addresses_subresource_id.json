@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "citySubdivision2Local": "sample",
+    "addressLine9": "sample"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/person/v4/homeContactInformationChanges/sample-id/addresses/sample-id",
+    "body": {
+      "citySubdivision2Local": "sample",
+      "addressLine9": "sample"
+    }
+  }
+}

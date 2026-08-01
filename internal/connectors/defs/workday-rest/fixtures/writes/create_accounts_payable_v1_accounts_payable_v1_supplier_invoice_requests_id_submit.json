@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "sample-id",
+    "descriptor": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accountsPayable/v1/supplierInvoiceRequests/sample-id/submit",
+    "body": {
+      "descriptor": "sample"
+    }
+  }
+}

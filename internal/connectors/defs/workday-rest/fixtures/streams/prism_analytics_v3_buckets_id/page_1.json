@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/buckets/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "prism_analytics_v3_buckets_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

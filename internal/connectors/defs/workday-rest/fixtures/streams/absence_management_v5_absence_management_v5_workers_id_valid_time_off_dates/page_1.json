@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/absenceManagement/v5/workers/synthetic-conformance-value/validTimeOffDates",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "absence_management_v5_absence_management_v5_workers_id_valid_time_off_dates_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/revenue/v1/billableTransactions/synthetic-conformance-value/billingRateApplication/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "revenue_v1_revenue_v1_billable_transactions_id_billing_rate_application_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

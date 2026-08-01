@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/studentAcademicFoundation/v1/programsOfStudy",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "student_academic_foundation_v1_student_academic_foundation_v1_programs_of_study_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

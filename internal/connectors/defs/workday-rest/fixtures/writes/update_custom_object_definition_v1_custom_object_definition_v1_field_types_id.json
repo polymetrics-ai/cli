@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "alias": "sample",
+    "name": "sample"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customObjectDefinition/v1/fieldTypes/sample-id",
+    "body": {
+      "alias": "sample",
+      "name": "sample"
+    }
+  }
+}

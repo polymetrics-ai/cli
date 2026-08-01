@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/globalPayroll/v1/payGroups/synthetic-conformance-value/periods/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "global_payroll_v1_global_payroll_v1_pay_groups_id_periods_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

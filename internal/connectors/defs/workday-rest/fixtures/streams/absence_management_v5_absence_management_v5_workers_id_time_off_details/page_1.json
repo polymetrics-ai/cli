@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/absenceManagement/v5/workers/synthetic-conformance-value/timeOffDetails",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "absence_management_v5_absence_management_v5_workers_id_time_off_details_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

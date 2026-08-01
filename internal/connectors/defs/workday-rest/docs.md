@@ -1,58 +1,39 @@
 # Overview
 
-Reads Workday REST API resources (workers, organizations, job profiles) with bearer-token
-authentication. Read-only.
+Workday REST is generated from the official Workday REST Directory 2026.30 `productionConfidenceLevel` service manifest and its 52 OpenAPI v2 service files. Archived services in the official directory are not counted as current production surface.
 
-Readable streams: `workers`, `organizations`, `jobs`.
+Post-change operation dispositions:
 
-This connector is read-only; no write actions are declared.
+| disposition | count |
+| --- | ---: |
+| fixture-backed ETL streams | 463 |
+| bounded direct reads | 174 |
+| typed reverse ETL writes | 252 |
+| blocked binary/file or contract-gap operations | 31 |
+| total official production operations | 920 |
+
+The connector does not claim Workday certification and this implementation makes no live provider calls.
 
 ## Auth setup
 
-Connection fields:
-
-- `access_token` (required, secret, string); Workday REST API bearer access token (Authorization:
-  Bearer <access_token>). Never logged.
-- `base_url` (optional, string); default `https://wd2-impl-services1.workday.com`; format `uri`;
-  Workday API base URL override for a tenant's actual Workday instance, tests, or proxies.
-- `tenant` (required, string); Workday tenant name, substituted as a path segment into every
-  stream's resource URL (e.g. ccx/api/hcm/v1/<tenant>/workers).
-
-Secret fields are redacted in logs and write previews: `access_token`.
-
-Default configuration values: `base_url=https://wd2-impl-services1.workday.com`.
-
-Authentication behavior:
-
-- Bearer token authentication using `secrets.access_token`.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/ccx/api/hcm/v1/{{ config.tenant }}/workers` with query `limit`=`1`.
+- `access_token` is required and marked `x-secret`; provide it through credentials, environment, or stdin-backed secret flows, never prompt text or fixtures.
+- `base_url` defaults to `https://wd2-impl-services1.workday.com` and should be set to the tenant-specific Workday REST hostname/base URL for live use.
+- `tenant` is retained as an optional legacy compatibility field but is not interpolated into the official 2026.30 service paths.
+- Optional path-parameter config fields such as `id`, `subresource_id`, and other generated Workday ID fields are needed only when reading streams whose official paths contain those parameters.
 
 ## Streams notes
 
-Default pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at
-1; page size 100; maximum 1 page(s).
-
-- `workers`: GET `/ccx/api/hcm/v1/{{ config.tenant }}/workers` - records path `data`; page-number
-  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; maximum 1
-  page(s); emits passthrough records.
-- `organizations`: GET `/ccx/api/hcm/v1/{{ config.tenant }}/organizations` - records path `data`;
-  page-number pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100;
-  maximum 1 page(s); emits passthrough records.
-- `jobs`: GET `/ccx/api/hcm/v1/{{ config.tenant }}/jobs` - records path `data`; page-number
-  pagination; page parameter `page`; size parameter `limit`; starts at 1; page size 100; maximum 1
-  page(s); emits passthrough records.
+The bundle declares 463 fixture-backed streams. Stream paths use official service `basePath + path` values from the 2026.30 OpenAPI files. Collection responses read `data`; single-resource responses emit the response object. Pagination is bounded to one page (`limit=100`, `offset=0`) unless a stream is a single-object read, in which case pagination is disabled. This keeps fixture replay and accidental live reads bounded.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Workday REST API read of worker, organization,
-and job profile data (HR/PII-adjacent).
+The bundle declares 252 typed non-binary write actions. Each action has a closed root `record_schema`, explicit path fields, risk text, redaction for path identifiers, and uses the existing reverse ETL plan -> preview -> explicit approval -> execute flow. DELETE actions are marked destructive and include documented 404 idempotent-missing handling.
+
+Multipart Workday business-process writes that carry a `jsonData` root part are represented as bounded multipart field writes. Attachment/file upload and binary/download operations are not implemented as writes.
 
 ## Known limits
 
-- Batch defaults: read_page_size=100.
-- API coverage includes 3 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  out_of_scope=1.
+- 31 official operations remain blocked/planned because they are binary/file/attachment operations or require a declarative write query feature not available in the current connector contract.
+- Direct reads are limited to Workday values/search endpoints and cap JSON responses at 1 MiB with clinical JSON redaction. No raw method/path/body/query passthrough is exposed.
+- Fixture-backed parity is not live certification; live-safe certification requires separate approved credentials, redacted artifacts, and provider-safe execution.
+- Official source evidence: `services2026.30.json` plus each service `specFilePath` from `https://community.workday.com/sites/default/files/file-hosting/restapi/`.

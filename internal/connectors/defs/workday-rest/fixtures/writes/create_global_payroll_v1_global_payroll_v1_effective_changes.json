@@ -1,0 +1,38 @@
+{
+  "record": {
+    "requestCriteria": {
+      "extendedAllEffectiveTo": "sample",
+      "workers": [
+        {
+          "id": {}
+        }
+      ]
+    },
+    "responseData": {
+      "status": {
+        "id": {}
+      },
+      "totalExceptionMessageCount": 1
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/globalPayroll/v1/effectiveChanges",
+    "body": {
+      "requestCriteria": {
+        "extendedAllEffectiveTo": "sample",
+        "workers": [
+          {
+            "id": {}
+          }
+        ]
+      },
+      "responseData": {
+        "status": {
+          "id": {}
+        },
+        "totalExceptionMessageCount": 1
+      }
+    }
+  }
+}

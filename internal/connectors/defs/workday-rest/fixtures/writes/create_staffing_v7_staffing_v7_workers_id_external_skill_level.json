@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "externalSkillId": "sample",
+    "externalSkillLevel": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/staffing/v7/workers/sample-id/externalSkillLevel",
+    "body": {
+      "externalSkillId": "sample",
+      "externalSkillLevel": 1
+    }
+  }
+}

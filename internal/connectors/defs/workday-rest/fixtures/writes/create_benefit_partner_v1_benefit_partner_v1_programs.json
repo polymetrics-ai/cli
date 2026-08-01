@@ -1,0 +1,16 @@
+{
+  "record": {
+    "json_data": {
+      "wellbeingInterest": {
+        "id": "sample"
+      },
+      "programPartner": {
+        "id": "sample"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/benefitPartner/v1/programs"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "validation": "sample",
+      "businessProcessParameters": {
+        "action": {
+          "id": {}
+        }
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/staffing/v7/jobChanges/sample-id/submit"
+  }
+}

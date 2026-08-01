@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "contractEndDate": "sample",
+    "assignmentDetails": "sample"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/staffing/v7/jobChanges/sample-id/contract/sample-id",
+    "body": {
+      "contractEndDate": "sample",
+      "assignmentDetails": "sample"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "otherCharges": {},
+    "externalSourceableId": "sample"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/procurement/v5/requisitions/sample-id",
+    "body": {
+      "otherCharges": {},
+      "externalSourceableId": "sample"
+    }
+  }
+}

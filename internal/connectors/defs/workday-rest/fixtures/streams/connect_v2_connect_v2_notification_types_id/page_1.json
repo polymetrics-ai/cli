@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/connect/v2/notificationTypes/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "connect_v2_connect_v2_notification_types_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

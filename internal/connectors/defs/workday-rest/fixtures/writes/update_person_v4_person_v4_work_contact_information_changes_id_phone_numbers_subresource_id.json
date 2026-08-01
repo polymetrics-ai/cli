@@ -1,0 +1,36 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "countryPhoneCode": {
+      "country": {
+        "id": {}
+      },
+      "countryPhoneCode": "sample"
+    },
+    "usage": {
+      "usageType": {
+        "id": {}
+      },
+      "comment": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/person/v4/workContactInformationChanges/sample-id/phoneNumbers/sample-id",
+    "body": {
+      "countryPhoneCode": {
+        "country": {
+          "id": {}
+        },
+        "countryPhoneCode": "sample"
+      },
+      "usage": {
+        "usageType": {
+          "id": {}
+        },
+        "comment": "sample"
+      }
+    }
+  }
+}

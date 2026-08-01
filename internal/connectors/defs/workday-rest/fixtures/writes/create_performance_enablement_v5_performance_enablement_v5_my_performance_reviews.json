@@ -1,0 +1,26 @@
+{
+  "record": {
+    "businessProcessParameters": {
+      "action": {
+        "id": {}
+      }
+    },
+    "reviewTemplate": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/performanceEnablement/v5/myPerformanceReviews",
+    "body": {
+      "businessProcessParameters": {
+        "action": {
+          "id": {}
+        }
+      },
+      "reviewTemplate": {
+        "id": "sample"
+      }
+    }
+  }
+}

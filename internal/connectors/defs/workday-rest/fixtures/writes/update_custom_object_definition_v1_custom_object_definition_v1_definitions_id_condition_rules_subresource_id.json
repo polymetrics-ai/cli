@@ -1,0 +1,28 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "conditionItems": [
+      {
+        "order": {},
+        "relationalOperator": {},
+        "sourceField": {}
+      }
+    ],
+    "ruleDescription": "sample"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customObjectDefinition/v1/definitions/sample-id/conditionRules/sample-id",
+    "body": {
+      "conditionItems": [
+        {
+          "order": {},
+          "relationalOperator": {},
+          "sourceField": {}
+        }
+      ],
+      "ruleDescription": "sample"
+    }
+  }
+}

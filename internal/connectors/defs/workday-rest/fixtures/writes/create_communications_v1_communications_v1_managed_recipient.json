@@ -1,0 +1,18 @@
+{
+  "record": {
+    "channel": "sample",
+    "messagingContactable_ID": "sample",
+    "optInPreference": true,
+    "phoneNumber": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/communications/v1/managedRecipient",
+    "body": {
+      "channel": "sample",
+      "messagingContactable_ID": "sample",
+      "optInPreference": true,
+      "phoneNumber": "sample"
+    }
+  }
+}

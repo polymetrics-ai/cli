@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/person/v4/workContactInformationChanges/sample-id/instantMessengers/sample-id"
+  }
+}

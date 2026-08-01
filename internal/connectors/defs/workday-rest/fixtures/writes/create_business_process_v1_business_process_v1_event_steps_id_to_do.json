@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "sample-id",
+    "stepAction": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/businessProcess/v1/eventSteps/sample-id/toDo",
+    "body": {
+      "stepAction": {
+        "id": "sample"
+      }
+    }
+  }
+}

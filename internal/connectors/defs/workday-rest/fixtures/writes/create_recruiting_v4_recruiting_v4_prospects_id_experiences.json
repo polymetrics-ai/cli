@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "description": "sample",
+    "location": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recruiting/v4/prospects/sample-id/experiences",
+    "body": {
+      "description": "sample",
+      "location": "sample"
+    }
+  }
+}

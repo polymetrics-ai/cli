@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "stepAction": {
+        "id": "sample"
+      },
+      "questionnaireResponse": {
+        "questionnaireAnswers": [
+          {
+            "questionItem": {},
+            "questionnaireAttachments": {}
+          }
+        ],
+        "questionnaireTargetContext": {
+          "id": {}
+        }
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/businessProcess/v1/eventSteps/sample-id/questionnaire"
+  }
+}

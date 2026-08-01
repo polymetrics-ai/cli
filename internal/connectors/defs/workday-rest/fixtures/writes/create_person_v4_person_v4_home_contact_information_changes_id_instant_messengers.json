@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "sample-id",
+    "userName": "sample",
+    "type": {
+      "descriptor": "sample",
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/person/v4/homeContactInformationChanges/sample-id/instantMessengers",
+    "body": {
+      "userName": "sample",
+      "type": {
+        "descriptor": "sample",
+        "id": "sample"
+      }
+    }
+  }
+}

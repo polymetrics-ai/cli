@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "sample",
+    "blocked": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/helpCase/v4/externalCreators",
+    "body": {
+      "name": "sample",
+      "blocked": true
+    }
+  }
+}

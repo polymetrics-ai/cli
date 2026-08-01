@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "warningCustomValidations": "sample",
+    "memo": "sample"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/projects/v3/taskResources/sample-id",
+    "body": {
+      "warningCustomValidations": "sample",
+      "memo": "sample"
+    }
+  }
+}

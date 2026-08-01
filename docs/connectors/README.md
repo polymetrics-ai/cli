@@ -529,7 +529,7 @@
 - [wordpress](wordpress/MANUAL.md): Reads and writes WordPress REST API content: posts, pages, comments, media, users, categories, tags, taxonomies, post types, and post statuses.
 - [workable](workable/MANUAL.md): Reads Workable recruiting, account, employee, time tracking, time off, review, subscription, requisition, and offer data; writes Workable candidate, employee, department, member, subscription, time tracking, time off, offer, and requisition mutations.
 - [workday](workday/MANUAL.md): Reads Workday tenant data (workers, organizations, positions) through conservative Workday API endpoints. Read-only.
-- [workday-rest](workday-rest/MANUAL.md): Reads Workday REST API resources (workers, organizations, job profiles) with bearer-token authentication. Read-only.
+- [workday-rest](workday-rest/MANUAL.md): Reads Workday REST 2026.30 production service resources, exposes bounded provider direct reads for values/search endpoints, and provides typed non-binary reverse ETL write actions. Fixture-backed; not live-certified.
 - [workflowmax](workflowmax/MANUAL.md): Reads and writes WorkflowMax jobs, clients, and client contacts through the real WorkflowMax API v2 (api.workflowmax2.com/v2).
 - [workramp](workramp/MANUAL.md): Reads and writes WorkRamp users and groups, and reads guides, resources, and SCORM courses, through the real WorkRamp Employee Learning Cloud API (app.workramp.com/api/v1).
 - [wrike](wrike/MANUAL.md): Reads Wrike tasks, folders, and contacts through the Wrike REST API. Read-only.

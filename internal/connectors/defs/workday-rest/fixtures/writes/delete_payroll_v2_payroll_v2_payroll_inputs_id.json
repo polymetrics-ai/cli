@@ -1,0 +1,9 @@
+{
+  "record": {
+    "id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/payroll/v2/payrollInputs/sample-id"
+  }
+}

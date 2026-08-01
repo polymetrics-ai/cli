@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/studentEngagement/v1/students/synthetic-conformance-value/holds/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "student_engagement_v1_student_engagement_v1_students_id_holds_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

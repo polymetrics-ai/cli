@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/v3/resourceForecastLines/synthetic-conformance-value/allocations",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "projects_v3_projects_v3_resource_forecast_lines_id_allocations_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

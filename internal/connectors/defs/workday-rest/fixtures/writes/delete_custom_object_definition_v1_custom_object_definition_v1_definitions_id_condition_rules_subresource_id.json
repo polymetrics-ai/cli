@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/customObjectDefinition/v1/definitions/sample-id/conditionRules/sample-id"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/staffing/v7/supervisoryOrganizations/synthetic-conformance-value/orgChart/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "staffing_v7_staffing_v7_supervisory_organizations_id_org_chart_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

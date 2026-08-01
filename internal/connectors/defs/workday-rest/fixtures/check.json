@@ -1,7 +1,21 @@
 {
-  "request": { "method": "GET", "path": "/ccx/api/hcm/v1/synthetic-conformance-value/workers", "query": { "limit": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/common/v1/workers",
+    "query": {
+      "limit": "1"
+    }
+  },
   "response": {
     "status": 200,
-    "body": { "data": [] }
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "check_fixture",
+          "descriptor": "Synthetic Workday check fixture"
+        }
+      ]
+    }
   }
 }

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/timeTracking/v5/workers/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "time_tracking_v5_time_tracking_v5_workers_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

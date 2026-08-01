@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/asor/v1/registration/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "asor_v1_asor_v1_registration_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

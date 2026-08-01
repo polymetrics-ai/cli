@@ -1,0 +1,37 @@
+{
+  "record": {
+    "id": "sample-id",
+    "academicPeriod": {
+      "descriptor": "sample",
+      "id": "sample"
+    },
+    "amount": {},
+    "institutionalAcademicUnit": {
+      "descriptor": "sample",
+      "id": "sample"
+    },
+    "paymentType": {
+      "descriptor": "sample",
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/studentFinance/v1/students/sample-id/payments",
+    "body": {
+      "academicPeriod": {
+        "descriptor": "sample",
+        "id": "sample"
+      },
+      "amount": {},
+      "institutionalAcademicUnit": {
+        "descriptor": "sample",
+        "id": "sample"
+      },
+      "paymentType": {
+        "descriptor": "sample",
+        "id": "sample"
+      }
+    }
+  }
+}

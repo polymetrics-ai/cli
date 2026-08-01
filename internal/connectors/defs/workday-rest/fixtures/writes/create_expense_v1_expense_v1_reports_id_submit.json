@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "expenseReport": {
+      "id": "sample"
+    },
+    "descriptor": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/expense/v1/reports/sample-id/submit",
+    "body": {
+      "expenseReport": {
+        "id": "sample"
+      },
+      "descriptor": "sample"
+    }
+  }
+}

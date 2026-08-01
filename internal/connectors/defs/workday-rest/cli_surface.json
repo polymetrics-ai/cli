@@ -1,0 +1,4292 @@
+{
+  "tagline": "Workday REST provider commands are definition-owned and bounded; no raw API passthrough is available.",
+  "usage": "pm workday-rest <command> [flags]",
+  "source_cli": {
+    "name": "Workday REST API Directory",
+    "docs": "https://community.workday.com/sites/default/files/file-hosting/restapi/index.html",
+    "source": "official Workday REST 2026.30 service OpenAPI files"
+  },
+  "groups": [
+    {
+      "id": "direct",
+      "title": "Bounded direct reads for Workday values/search endpoints",
+      "commands": [
+        "direct_absence_management_v5_absence_management_v5_values_leave_status",
+        "direct_absence_management_v5_absence_management_v5_values_time_off_status",
+        "direct_asor_v1_asor_v1_agent_resource_search_id",
+        "direct_asor_v1_asor_v1_agent_resource_search",
+        "direct_business_process_v1_business_process_v1_values_send_back_to",
+        "direct_compensation_v3_compensation_v3_values_one_time_payment_plan_group_one_time_paym",
+        "direct_connect_v2_connect_v2_values_audience_prompt_group_audience_type",
+        "direct_connect_v2_connect_v2_values_audience_prompt_group_selection",
+        "direct_contract_compliance_v1_contract_compliance_v1_values_contract_compliance_group_companie",
+        "direct_contract_compliance_v1_contract_compliance_v1_values_contract_compliance_group_contract",
+        "direct_expense_v1_expense_v1_values_bespoke_prompt_expense_group",
+        "direct_expense_v1_expense_v1_values_bespoke_prompt_expense_item",
+        "direct_expense_v1_expense_v1_values_bespoke_prompt_currency",
+        "direct_help_article_v1_help_article_v1_values_common_audiences",
+        "direct_help_case_v4_help_case_v4_values_external_records_source",
+        "direct_help_case_v4_help_case_v4_values_case_statuses_group_case_statuses",
+        "direct_help_case_v4_help_case_v4_values_service_teams_group_service_teams",
+        "direct_help_case_v4_help_case_v4_values_case_label_categories_group_case_label_categ",
+        "direct_help_case_v4_help_case_v4_values_case_flags_group_case_flags",
+        "direct_journeys_v1_journeys_v1_values_related_role_role",
+        "direct_learning_v1_learning_v1_values_tracking_enrollment_data_attendance_status",
+        "direct_learning_v1_learning_v1_values_tracking_enrollment_data_grade",
+        "direct_learning_v1_learning_v1_values_tracking_enrollment_data_duration_unit",
+        "direct_payroll_v2_payroll_v2_values_tax_rates_group_company_instances",
+        "direct_payroll_v2_payroll_v2_values_payroll_inputs_group_worktags",
+        "direct_payroll_v2_payroll_v2_values_payroll_inputs_group_run_categories",
+        "direct_payroll_v2_payroll_v2_values_payroll_inputs_group_positions",
+        "direct_payroll_v2_payroll_v2_values_minimum_wage_rates_group_tax_authorities",
+        "direct_payroll_v2_payroll_v2_values_tax_rates_group_state_instances",
+        "direct_payroll_v2_payroll_v2_values_minimum_wage_rates_group_countries",
+        "direct_payroll_v2_payroll_v2_values_payroll_inputs_group_pay_components",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_workers_to_notify_workers_to_no",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_manage_goals_categories",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_feedback_template_feedback_temp",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_feedback_on_worker_feedback_on",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_feedback_responder_feedback_res",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_organization_goal_organizations",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_organization_goal_supporting_in",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_review_template_template_for_my",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_cascade_goal_talent_pools",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_organization_goal_goal_periods",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_manage_goals_status",
+        "direct_performance_enablement_v5_performance_enablement_v5_values_relates_to_relates_to",
+        "direct_person_v4_person_v4_values_name_components_hereditary",
+        "direct_person_v4_person_v4_values_name_components_religious",
+        "direct_person_v4_person_v4_values_name_components_honorary",
+        "direct_person_v4_person_v4_values_name_components_royal",
+        "direct_person_v4_person_v4_values_name_components_title",
+        "direct_person_v4_person_v4_values_common_phone_country_phone_codes",
+        "direct_person_v4_person_v4_values_country_components_country_city"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "direct_absence_management_v5_absence_management_v5_values_leave_status",
+      "summary": "The status of the event that tracks the requested time off.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_absence_management_v5_absence_management_v5_values_leave_status",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/absenceManagement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/absenceManagement/v5/values/leave/status/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_absence_management_v5_absence_management_v5_values_time_off_status",
+      "summary": "The possible statuses for a worker's time off entry request event. They include: * Approved, 0391102bd1b542538d996936c8fa2fa7 * Not Submitted, eddf5968e6d4430ca4bce9a4cfaba337 * Se",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_absence_management_v5_absence_management_v5_values_time_off_status",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/absenceManagement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/absenceManagement/v5/values/timeOff/status/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_asor_v1_asor_v1_agent_resource_search_id",
+      "summary": "Agent Resource Search APi",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_asor_v1_asor_v1_agent_resource_search_id",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/asor_v1_20260727_oas2.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Workday path parameter {ID}.",
+          "maps_to": "path.ID",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/asor/v1/agentResourceSearch/{ID}"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_asor_v1_asor_v1_agent_resource_search",
+      "summary": "Agent Resource Search APi",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_asor_v1_asor_v1_agent_resource_search",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/asor_v1_20260727_oas2.json",
+      "flags": [
+        {
+          "name": "operation-type",
+          "type": "string",
+          "summary": "Operation Type for this search. Valid options are CREATE, PATCH, VIEW",
+          "maps_to": "query.operationType",
+          "allow_empty": false
+        },
+        {
+          "name": "protocol",
+          "type": "string",
+          "summary": "Protocol type for this search. Valid options are HTTP or MCP",
+          "maps_to": "query.protocol",
+          "allow_empty": false
+        },
+        {
+          "name": "search-string",
+          "type": "string",
+          "summary": "Search String",
+          "maps_to": "query.searchString",
+          "allow_empty": false
+        },
+        {
+          "name": "tool-type",
+          "type": "string",
+          "summary": "Tool Type for this search. Valid options are SOAP, REST, AGENT, or AGENT_READY",
+          "maps_to": "query.toolType",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/asor/v1/agentResourceSearch"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_business_process_v1_business_process_v1_values_send_back_to",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_business_process_v1_business_process_v1_values_send_back_to",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/businessProcess_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/businessProcess/v1/values/sendBack/to/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_compensation_v3_compensation_v3_values_one_time_payment_plan_group_one_time_paym",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_compensation_v3_compensation_v3_values_one_time_payment_plan_group_one_time_payment_plan",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/compensation_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/compensation/v3/values/oneTimePaymentPlanGroup/oneTimePaymentPlan/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_connect_v2_connect_v2_values_audience_prompt_group_audience_type",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_connect_v2_connect_v2_values_audience_prompt_group_audience_type",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/connect_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/connect/v2/values/AudiencePromptGroup/audienceType/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_connect_v2_connect_v2_values_audience_prompt_group_selection",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_connect_v2_connect_v2_values_audience_prompt_group_selection",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/connect_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/connect/v2/values/AudiencePromptGroup/selection/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_contract_compliance_v1_contract_compliance_v1_values_contract_compliance_group_companie",
+      "summary": "Retrieves all companies or company hierarchies the user has access to.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_contract_compliance_v1_contract_compliance_v1_values_contract_compliance_group_companies_or_hierarchies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/contractCompliance_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contractCompliance/v1/values/contractComplianceGroup/companiesOrHierarchies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_contract_compliance_v1_contract_compliance_v1_values_contract_compliance_group_contract",
+      "summary": "Retrieves all contract types the user has access to.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_contract_compliance_v1_contract_compliance_v1_values_contract_compliance_group_contract_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/contractCompliance_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contractCompliance/v1/values/contractComplianceGroup/contractTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_expense_v1_expense_v1_values_bespoke_prompt_expense_group",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_expense_v1_expense_v1_values_bespoke_prompt_expense_group",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/expense_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/expense/v1/values/bespokePrompt/expenseGroup/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_expense_v1_expense_v1_values_bespoke_prompt_expense_item",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_expense_v1_expense_v1_values_bespoke_prompt_expense_item",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/expense_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/expense/v1/values/bespokePrompt/expenseItem/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_expense_v1_expense_v1_values_bespoke_prompt_currency",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_expense_v1_expense_v1_values_bespoke_prompt_currency",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/expense_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/expense/v1/values/bespokePrompt/currency/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_help_article_v1_help_article_v1_values_common_audiences",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_help_article_v1_help_article_v1_values_common_audiences",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpArticle_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/helpArticle/v1/values/common/audiences/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_help_case_v4_help_case_v4_values_external_records_source",
+      "summary": "Get all sources for External Records",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_help_case_v4_help_case_v4_values_external_records_source",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpCase_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/helpCase/v4/values/externalRecords/source/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_help_case_v4_help_case_v4_values_case_statuses_group_case_statuses",
+      "summary": "Get all \\~case\\~ statuses.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_help_case_v4_help_case_v4_values_case_statuses_group_case_statuses",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpCase_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/helpCase/v4/values/caseStatusesGroup/caseStatuses/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_help_case_v4_help_case_v4_values_service_teams_group_service_teams",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_help_case_v4_help_case_v4_values_service_teams_group_service_teams",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpCase_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/helpCase/v4/values/serviceTeamsGroup/serviceTeams/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_help_case_v4_help_case_v4_values_case_label_categories_group_case_label_categ",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_help_case_v4_help_case_v4_values_case_label_categories_group_case_label_categories",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpCase_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/helpCase/v4/values/caseLabelCategoriesGroup/caseLabelCategories/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_help_case_v4_help_case_v4_values_case_flags_group_case_flags",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_help_case_v4_help_case_v4_values_case_flags_group_case_flags",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/helpCase_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/helpCase/v4/values/caseFlagsGroup/caseFlags/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_journeys_v1_journeys_v1_values_related_role_role",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_journeys_v1_journeys_v1_values_related_role_role",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/journeys_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/journeys/v1/values/relatedRole/role/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_learning_v1_learning_v1_values_tracking_enrollment_data_attendance_status",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_learning_v1_learning_v1_values_tracking_enrollment_data_attendance_status",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/learning_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/learning/v1/values/trackingEnrollmentData/attendanceStatus/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_learning_v1_learning_v1_values_tracking_enrollment_data_grade",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_learning_v1_learning_v1_values_tracking_enrollment_data_grade",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/learning_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/learning/v1/values/trackingEnrollmentData/grade/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_learning_v1_learning_v1_values_tracking_enrollment_data_duration_unit",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_learning_v1_learning_v1_values_tracking_enrollment_data_duration_unit",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/learning_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/learning/v1/values/trackingEnrollmentData/durationUnit/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_payroll_v2_payroll_v2_values_tax_rates_group_company_instances",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_payroll_v2_payroll_v2_values_tax_rates_group_company_instances",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payroll/v2/values/taxRatesGroup/companyInstances/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_payroll_v2_payroll_v2_values_payroll_inputs_group_worktags",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_payroll_v2_payroll_v2_values_payroll_inputs_group_worktags",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payroll/v2/values/payrollInputsGroup/worktags/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_payroll_v2_payroll_v2_values_payroll_inputs_group_run_categories",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_payroll_v2_payroll_v2_values_payroll_inputs_group_run_categories",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payroll/v2/values/payrollInputsGroup/runCategories/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_payroll_v2_payroll_v2_values_payroll_inputs_group_positions",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_payroll_v2_payroll_v2_values_payroll_inputs_group_positions",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payroll/v2/values/payrollInputsGroup/positions/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_payroll_v2_payroll_v2_values_minimum_wage_rates_group_tax_authorities",
+      "summary": "Retrieves a list of tax authorities available for use as query parameters in the /minimumWageRates endpoint.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_payroll_v2_payroll_v2_values_minimum_wage_rates_group_tax_authorities",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payroll/v2/values/minimumWageRatesGroup/taxAuthorities/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_payroll_v2_payroll_v2_values_tax_rates_group_state_instances",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_payroll_v2_payroll_v2_values_tax_rates_group_state_instances",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payroll/v2/values/taxRatesGroup/stateInstances/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_payroll_v2_payroll_v2_values_minimum_wage_rates_group_countries",
+      "summary": "Retrieves a list of all countries available as query parameters in the /minimumWageRates endpoint.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_payroll_v2_payroll_v2_values_minimum_wage_rates_group_countries",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payroll/v2/values/minimumWageRatesGroup/countries/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_payroll_v2_payroll_v2_values_payroll_inputs_group_pay_components",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_payroll_v2_payroll_v2_values_payroll_inputs_group_pay_components",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/payroll_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/payroll/v2/values/payrollInputsGroup/payComponents/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_workers_to_notify_workers_to_no",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_workers_to_notify_workers_to_notify",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/workersToNotify/workersToNotify/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_manage_goals_categories",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_manage_goals_categories",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/manageGoals/categories/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_feedback_template_feedback_temp",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_feedback_template_feedback_template",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/feedbackTemplate/feedbackTemplate/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_feedback_on_worker_feedback_on",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_feedback_on_worker_feedback_on_worker",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/feedbackOnWorker/feedbackOnWorker/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_feedback_responder_feedback_res",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_feedback_responder_feedback_responder",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/feedbackResponder/feedbackResponder/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_organization_goal_organizations",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_organization_goal_organizations",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/organizationGoal/organizations/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_organization_goal_supporting_in",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_organization_goal_supporting_initiatives",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/organizationGoal/supportingInitiatives/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_review_template_template_for_my",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_review_template_template_for_my_performance_re",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/reviewTemplate/templateForMyPerformanceReview/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_cascade_goal_talent_pools",
+      "summary": "Talent Pools the processing user has view and edit access for.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_cascade_goal_talent_pools",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/cascadeGoal/talentPools/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_organization_goal_goal_periods",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_organization_goal_goal_periods",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/organizationGoal/goalPeriods/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_manage_goals_status",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_manage_goals_status",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/manageGoals/status/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_performance_enablement_v5_performance_enablement_v5_values_relates_to_relates_to",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_performance_enablement_v5_performance_enablement_v5_values_relates_to_relates_to",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/performanceEnablement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/performanceEnablement/v5/values/relatesTo/relatesTo/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_name_components_hereditary",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_name_components_hereditary",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/nameComponents/hereditary/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_name_components_religious",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_name_components_religious",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/nameComponents/religious/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_name_components_honorary",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_name_components_honorary",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/nameComponents/honorary/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_name_components_royal",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_name_components_royal",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/nameComponents/royal/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_name_components_title",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_name_components_title",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/nameComponents/title/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_common_phone_country_phone_codes",
+      "summary": "Exposes prompting for country phone codes, which are used during the collection of phone numbers.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_common_phone_country_phone_codes",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/commonPhone/countryPhoneCodes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_country_components_country_city",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_country_components_country_city",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/countryComponents/countryCity/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_name_components_salutation",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_name_components_salutation",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/nameComponents/salutation/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_marital_status_active_martial_statuses",
+      "summary": "Marital Statuses that are Active and configured for the Country or Country Region.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_marital_status_active_martial_statuses",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/maritalStatus/activeMartialStatuses/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_personal_information_country_populated_country",
+      "summary": "The set of countries a person has populated with country specific data.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_personal_information_country_populated_country",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/personalInformationCountry/populatedCountry/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_name_components_social",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_name_components_social",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/nameComponents/social/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_name_components_professional",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_name_components_professional",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/nameComponents/professional/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_country_components_country",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_country_components_country",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/countryComponents/country/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_name_components_academic",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_name_components_academic",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/nameComponents/academic/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_personal_information_country_allowed_country",
+      "summary": "The set of countries a person is allowed to populated with country specific data.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_personal_information_country_allowed_country",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/personalInformationCountry/allowedCountry/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_country_components_country_region",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_country_components_country_region",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/countryComponents/countryRegion/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_person_v4_person_v4_values_common_phone_phone_device_types",
+      "summary": "Exposes prompting for phone device types, which are used during the collection of phone numbers.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_person_v4_person_v4_values_common_phone_phone_device_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/person_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/person/v4/values/commonPhone/phoneDeviceTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_resolved_worktags",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_resolved_worktags",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/resolvedWorktags/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_requesters",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_requesters",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/requesters/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_companies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service. Note: This prompt value endpoint also returns the Company_Reference_ID response field.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_companies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/companies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_order_from_connection",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_order_from_connection",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/orderFromConnection/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_ship_to_address",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_ship_to_address",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/shipToAddress/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_resource_provider",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_resource_provider",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/resourceProvider/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_deliver_to_location",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_deliver_to_location",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/deliverToLocation/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_spend_category",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service. Note: This prompt value endpoint also returns the Spend_Category_ID response field.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_spend_category",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/spendCategory/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_supplier_contract",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_supplier_contract",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/supplierContract/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_unit_of_measure",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service. Note: This prompt value endpoint also returns the unCefactCommonCode response field.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_unit_of_measure",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/unitOfMeasure/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_sourcing_buyer",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_sourcing_buyer",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/sourcingBuyer/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_inventory_site",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_inventory_site",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/inventorySite/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_line_company",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_line_company",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/lineCompany/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_currencies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_currencies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/currencies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_requesting_entity",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_requesting_entity",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/requestingEntity/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_requisition_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_requisition_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/requisitionTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_par_location",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_par_location",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/parLocation/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_commodity_codes",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_commodity_codes",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/commodityCodes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_procurement_v5_procurement_v5_values_requisitions_group_worktags",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_procurement_v5_procurement_v5_values_requisitions_group_worktags",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/procurement_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/procurement/v5/values/requisitionsGroup/worktags/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_worker_groups",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_worker_groups",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/workerGroups/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_currencies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_currencies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/currencies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_worktag_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_worktag_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/worktagTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_unnamed_resources",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_unnamed_resources",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/unnamedResources/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_worker_to_replace_unnamed_resou",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_worker_to_replace_unnamed_resources",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/workerToReplaceUnnamedResources/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_success_ratings",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_success_ratings",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/successRatings/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_groups",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_groups",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/groups/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_project_plan_project_phases",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_project_plan_project_phases",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/projectPlan/projectPhases/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_roles",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_roles",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/roles/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_hierarchies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_hierarchies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/hierarchies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_customers",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_customers",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/customers/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_worktags",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_worktags",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/worktags/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_role_categories",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_role_categories",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/roleCategories/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_project_plan_project_tasks",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_project_plan_project_tasks",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/projectPlan/projectTasks/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_owners",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_owners",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/owners/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_workers",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_workers",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/workers/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_statuses",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_statuses",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/statuses/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_optional_hierarchies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_optional_hierarchies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/optionalHierarchies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_priorities",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_priorities",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/priorities/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_resource_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_resource_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/resourceTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_project_plan_project_plan_phases",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_project_plan_project_plan_phases",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/projectPlan/projectPlanPhases/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_cost_rate_currencies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_cost_rate_currencies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/costRateCurrencies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_requirements",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_requirements",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/requirements/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_requirement_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_requirement_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/requirementTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_companies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_companies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/companies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_risk_levels",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_risk_levels",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/riskLevels/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_resource_plan_booking_status",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_resource_plan_booking_status",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/resourcePlan/bookingStatus/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_project_plan_project_plan_tasks",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_project_plan_project_plan_tasks",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/projectPlan/projectPlanTasks/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_importance_ratings",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_importance_ratings",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/importanceRatings/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_projects",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_projects",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/projects/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_project_states",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_project_states",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/projectStates/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_projects_v3_projects_v3_values_common_project_dependencies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_projects_v3_projects_v3_values_common_project_dependencies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/projects_v3_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/v3/values/common/projectDependencies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_recruiting_v4_recruiting_v4_values_common_countries",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_recruiting_v4_recruiting_v4_values_common_countries",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/recruiting_v4_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/recruiting/v4/values/common/countries/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_regions",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_regions",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/regions/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_reason",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_reason",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/reason/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_customs",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_customs",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/customs/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_supervisory_organization",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_supervisory_organization",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/supervisoryOrganization/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_program",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_programs",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/programs/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_jobs",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_jobs",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/jobs/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_funds",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_funds",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/funds/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_workers_compensation_code_o",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_workers_compensation_code_overrides",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/workersCompensationCodeOverrides/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_time_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_time_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/timeTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_work_shifts",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_work_shifts",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/workShifts/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_cost_ce",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_cost_centers",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/costCenters/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_busines",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_business_units",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/businessUnits/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_frequencies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_frequencies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/frequencies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_employee_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_employee_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/employeeTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_pay_rate_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_pay_rate_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/payRateTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_templates",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_templates",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/templates/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_workers",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_workers",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/workers/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_contingent_worker_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_contingent_worker_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/contingentWorkerTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_currencies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_currencies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/currencies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_proposed_position",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_proposed_position",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/proposedPosition/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_jobs",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_jobs",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/jobs/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_company_insider_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_company_insider_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/companyInsiderTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_headcount_options",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_headcount_options",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/headcountOptions/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_grants",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_grants",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/grants/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_worker_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_worker_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/workerTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_workers",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_workers",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/workers/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_work_study_awards",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_work_study_awards",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/workStudyAwards/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_locations",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_locations",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/locations/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_positio",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_positions",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/positions/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_job_requisitions",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_job_requisitions",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/jobRequisitions/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_job_profiles",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_job_profiles",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/jobProfiles/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_compani",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_companies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/companies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_work_spaces",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_work_spaces",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/workSpaces/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_assignment_types",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_assignment_types",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/assignmentTypes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_job_changes_group_job_classifications",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_job_changes_group_job_classifications",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/jobChangesGroup/jobClassifications/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_staffing_v7_staffing_v7_values_organization_assignment_changes_group_gifts",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_staffing_v7_staffing_v7_values_organization_assignment_changes_group_gifts",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/staffing_v7_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/staffing/v7/values/organizationAssignmentChangesGroup/gifts/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_advising_v1_student_advising_v1_values_hypothetical_academic_progress_progra",
+      "summary": "Retrieves all programs of study. You can filter the programs of study by academic unit, academic level, program type, and effective date.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_advising_v1_student_advising_v1_values_hypothetical_academic_progress_program_of_study",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentAdvising_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentAdvising/v1/values/hypotheticalAcademicProgress/programOfStudy/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_advising_v1_student_advising_v1_values_hypothetical_academic_progress_studen",
+      "summary": "Retrieves a student with the specified username or universal ID.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_advising_v1_student_advising_v1_values_hypothetical_academic_progress_student",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentAdvising_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentAdvising/v1/values/hypotheticalAcademicProgress/student/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_advising_v1_student_advising_v1_values_hypothetical_academic_progress_academ",
+      "summary": "Retrieves an academic record with the specified ID.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_advising_v1_student_advising_v1_values_hypothetical_academic_progress_academic_record",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentAdvising_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentAdvising/v1/values/hypotheticalAcademicProgress/academicRecord/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_core_v1_student_core_v1_values_holds_award_years",
+      "summary": "Valid financial aid award years.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_core_v1_student_core_v1_values_holds_award_years",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentCore/v1/values/holds/awardYears/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_core_v1_student_core_v1_values_holds_academic_records",
+      "summary": "Valid academic records filtered by student and hold reason. Call the GET /values/holds/academicRecords?student=id&reason=id endpoint.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_core_v1_student_core_v1_values_holds_academic_records",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentCore/v1/values/holds/academicRecords/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_core_v1_student_core_v1_values_holds_reasons",
+      "summary": "All of the active hold reasons, optionally filtered by student and academic unit query parms. Call these endpoints for valid filter values: - GET /values/holds/reasons?student={id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_core_v1_student_core_v1_values_holds_reasons",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentCore/v1/values/holds/reasons/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_core_v1_student_core_v1_values_holds_award_items",
+      "summary": "Valid student award items for the student and academic unit specified. Call the GET /values/holds/awardItems?student={id}&academicUnit={id} endpoint.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_core_v1_student_core_v1_values_holds_award_items",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentCore/v1/values/holds/awardItems/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_core_v1_student_core_v1_values_holds_institution",
+      "summary": "The institution of the hold reason. Call the following endpoint for the correct institution: GET /values/holds/institution?reason={id}",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_core_v1_student_core_v1_values_holds_institution",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentCore/v1/values/holds/institution/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_core_v1_student_core_v1_values_holds_school_codes",
+      "summary": "All federal school codes, optionally filtered by student and hold reason query parms. Call these endpoints for valid filter values: - GET /values/holds/schoolCodes?student={id} - G",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_core_v1_student_core_v1_values_holds_school_codes",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentCore/v1/values/holds/schoolCodes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_core_v1_student_core_v1_values_holds_academic_periods",
+      "summary": "Valid academic periods filtered by student, academic record, or academic unit. Call these endpoints for valid filter values: GET /values/holds/academicPeriods?student={id} GET /val",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_core_v1_student_core_v1_values_holds_academic_periods",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentCore_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentCore/v1/values/holds/academicPeriods/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_uni",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_unit_type",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentRecruiting_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentRecruiting/v1/values/academicRequirementEvaluation/unitType/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_edu",
+      "summary": "Retrieves all educational institutions.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_educational_institutio",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentRecruiting_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentRecruiting/v1/values/academicRequirementEvaluation/educationalInstitution/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_ext",
+      "summary": "Retrieves the external courses for the educational institution you specify.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_external_course",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentRecruiting_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentRecruiting/v1/values/academicRequirementEvaluation/externalCourse/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_ext_2",
+      "summary": "Retrieves the educational institution grading schemes for the educational institution you specify.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_external_grading_schem",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentRecruiting_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentRecruiting/v1/values/academicRequirementEvaluation/externalGradingScheme/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_pro",
+      "summary": "Retrieves all programs of study. You can filter the programs of study by academic unit, academic level, program type, and effective date.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_student_recruiting_v1_student_recruiting_v1_values_academic_requirement_evaluation_programs_of_study",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/studentRecruiting_v1_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/studentRecruiting/v1/values/academicRequirementEvaluation/programsOfStudy/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_talent_management_v2_talent_management_v2_values_succession_plan_members",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_talent_management_v2_talent_management_v2_values_succession_plan_members",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/talentManagement_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/talentManagement/v2/values/successionPlan/members/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_talent_management_v2_talent_management_v2_values_succession_plan_strategies",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_talent_management_v2_talent_management_v2_values_succession_plan_strategies",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/talentManagement_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/talentManagement/v2/values/successionPlan/strategies/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_talent_management_v2_talent_management_v2_values_succession_plan_readiness",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_talent_management_v2_talent_management_v2_values_succession_plan_readiness",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/talentManagement_v2_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/talentManagement/v2/values/successionPlan/readiness/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_time_tracking_v5_time_tracking_v5_values_time_types_time_entry_codes",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_time_tracking_v5_time_tracking_v5_values_time_types_time_entry_codes",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeTracking/v5/values/timeTypes/timeEntryCodes/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_time_tracking_v5_time_tracking_v5_values_time_values_positions",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_time_tracking_v5_time_tracking_v5_values_time_values_positions",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeTracking/v5/values/timeValues/positions/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_time_tracking_v5_time_tracking_v5_values_enter_time_by_type_time_type_nested",
+      "summary": "Provides a nested prompt for Time Tracking Time Types, similar prompt structure to the one provided in UI prompts. Currently does not support Time Offs.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_time_tracking_v5_time_tracking_v5_values_enter_time_by_type_time_type_nested",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeTracking/v5/values/enterTimeByType/timeTypeNested/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_time_tracking_v5_time_tracking_v5_values_time_types_default_time_entry_code",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_time_tracking_v5_time_tracking_v5_values_time_types_default_time_entry_code",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeTracking/v5/values/timeTypes/defaultTimeEntryCode/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_time_tracking_v5_time_tracking_v5_values_time_values_worker_time_zone",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_time_tracking_v5_time_tracking_v5_values_time_values_worker_time_zone",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeTracking/v5/values/timeValues/workerTimeZone/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_time_tracking_v5_time_tracking_v5_values_time_types_project_plan_tasks",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_time_tracking_v5_time_tracking_v5_values_time_types_project_plan_tasks",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeTracking/v5/values/timeTypes/projectPlanTasks/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_time_tracking_v5_time_tracking_v5_values_time_types_projects",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_time_tracking_v5_time_tracking_v5_values_time_types_projects",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeTracking/v5/values/timeTypes/projects/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    },
+    {
+      "path": "direct_time_tracking_v5_time_tracking_v5_values_time_values_out_reason",
+      "summary": "Retrieves instances that can be used as values for other endpoint parameters in this service.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "read_time_tracking_v5_time_tracking_v5_values_time_values_out_reason",
+      "source_url": "https://community.workday.com/sites/default/files/file-hosting/restapi/timeTracking_v5_20260727_oas2.json",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeTracking/v5/values/timeValues/outReason/"
+        }
+      ],
+      "output_policy": "clinical_json_redacted",
+      "redact_fields": [
+        "id",
+        "descriptor",
+        "name",
+        "email",
+        "phone"
+      ],
+      "risk": "bounded read of Workday data; response is JSON-redacted and capped at 1 MiB"
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "workday-rest-auth",
+      "summary": "Use a Workday REST bearer token supplied through credentials; tokens are never stored in fixtures."
+    },
+    {
+      "name": "workday-rest-safety",
+      "summary": "Writes require reverse ETL plan, preview, explicit approval, and destructive confirmation where applicable."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/dataChanges/synthetic-conformance-value/validate",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "prism_analytics_v3_data_changes_data_change_id_validate_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

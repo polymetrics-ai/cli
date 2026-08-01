@@ -525,7 +525,7 @@
 | `wordpress` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | WordPress | `api` | ga | check, catalog, read, write | 10 | 20 | [Documentation](https://developer.wordpress.org/rest-api/) | bundle definition |
 | `workable` | [`icons/workable.svg`](../icons/workable.svg) | Workable | `api` | ga | check, catalog, read, write | 42 | 38 | [Documentation](https://workable.readme.io/reference) | bundle definition |
 | `workday` | [`icons/workday.svg`](../icons/workday.svg) | Workday | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://community.workday.com/sites/default/files/file-hosting/restapi/) | bundle definition |
-| `workday-rest` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Workday REST | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](manual intervention needed) | bundle definition |
+| `workday-rest` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Workday REST | `api` | ga | check, catalog, read, write | 463 | 252 | [Documentation](https://community.workday.com/sites/default/files/file-hosting/restapi/index.html) | bundle definition |
 | `workflowmax` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | WorkflowMax | `api` | ga | check, catalog, read, write | 2 | 8 | [Documentation](https://api-docs.workflowmax.com/) | bundle definition |
 | `workramp` | [`icons/workramp.svg`](../icons/workramp.svg) | WorkRamp | `api` | ga | check, catalog, read, write | 5 | 5 | [Documentation](https://developers.workramp.com/) | bundle definition |
 | `wrike` | [`icons/wrike.svg`](../icons/wrike.svg) | Wrike | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developers.wrike.com/api/v4/) | bundle definition |

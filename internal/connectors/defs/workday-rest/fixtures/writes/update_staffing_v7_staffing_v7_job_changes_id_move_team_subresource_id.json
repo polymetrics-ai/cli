@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "moveTeam": true
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/staffing/v7/jobChanges/sample-id/moveTeam/sample-id",
+    "body": {
+      "moveTeam": true
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/benefitEnrollmentEventOfferings/v1/employeeEnrollmentEvent",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "benefit_enrollment_event_offerings_v1_benefit_enrollment_event_offerings_v1_employee_enrollment_event_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

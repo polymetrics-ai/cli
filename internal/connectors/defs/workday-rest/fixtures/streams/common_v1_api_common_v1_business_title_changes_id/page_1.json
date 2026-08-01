@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/api/common/v1/businessTitleChanges/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "common_v1_api_common_v1_business_title_changes_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

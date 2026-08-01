@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/performanceEnablement/v5/workerGoalEvents",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "performance_enablement_v5_performance_enablement_v5_worker_goal_events_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

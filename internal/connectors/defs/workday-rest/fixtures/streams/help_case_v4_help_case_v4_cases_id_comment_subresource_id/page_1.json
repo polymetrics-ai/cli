@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/helpCase/v4/cases/synthetic-conformance-value/comment/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "help_case_v4_help_case_v4_cases_id_comment_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "project": {
+      "id": "sample"
+    },
+    "phase": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/v3/planPhases",
+    "body": {
+      "project": {
+        "id": "sample"
+      },
+      "phase": {
+        "id": "sample"
+      }
+    }
+  }
+}

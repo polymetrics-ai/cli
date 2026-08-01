@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/dataChanges",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "prism_analytics_v3_data_changes_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

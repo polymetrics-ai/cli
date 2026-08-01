@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/privacy/v1/activityLogging",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "privacy_v1_privacy_v1_activity_logging_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "href": "sample",
+    "effective_date": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/staffing/v7/workers/sample-id/workContactInformationChanges",
+    "body": {
+      "href": "sample",
+      "effective_date": "sample"
+    }
+  }
+}

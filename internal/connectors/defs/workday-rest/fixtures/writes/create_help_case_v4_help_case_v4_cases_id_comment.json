@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "comment": {
+        "content": "sample",
+        "textBody": "sample"
+      },
+      "attachments": [
+        {
+          "contentType": {},
+          "file": {}
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/helpCase/v4/cases/sample-id/comment"
+  }
+}

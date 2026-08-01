@@ -1,0 +1,12 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "date": "sample"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/expense/v1/entries/sample-id"
+  }
+}

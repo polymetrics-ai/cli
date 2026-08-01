@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/v3/adHocProjectTimeTransactions",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "projects_v3_projects_v3_ad_hoc_project_time_transactions_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "record": {
+    "id": "sample-id",
+    "endDate": "sample",
+    "holdTypes": [
+      {
+        "descriptor": {},
+        "id": {}
+      }
+    ],
+    "startDate": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/studentCore/v1/holds/sample-id/overrideHold",
+    "body": {
+      "endDate": "sample",
+      "holdTypes": [
+        {
+          "descriptor": {},
+          "id": {}
+        }
+      ],
+      "startDate": "sample"
+    }
+  }
+}

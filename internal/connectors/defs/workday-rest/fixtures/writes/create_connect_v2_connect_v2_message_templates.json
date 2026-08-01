@@ -1,0 +1,18 @@
+{
+  "record": {
+    "name": "sample",
+    "notificationType": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/connect/v2/messageTemplates",
+    "body": {
+      "name": "sample",
+      "notificationType": {
+        "id": "sample"
+      }
+    }
+  }
+}

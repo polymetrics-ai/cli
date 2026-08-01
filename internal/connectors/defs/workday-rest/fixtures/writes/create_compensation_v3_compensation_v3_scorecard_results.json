@@ -1,0 +1,18 @@
+{
+  "record": {
+    "evaluationDate": "sample",
+    "scorecardID": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/compensation/v3/scorecardResults",
+    "body": {
+      "evaluationDate": "sample",
+      "scorecardID": {
+        "id": "sample"
+      }
+    }
+  }
+}

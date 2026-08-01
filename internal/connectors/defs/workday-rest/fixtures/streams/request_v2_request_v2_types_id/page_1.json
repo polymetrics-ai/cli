@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/request/v2/types/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "request_v2_request_v2_types_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

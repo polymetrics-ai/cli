@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/person/v4/people/synthetic-conformance-value/additionalNames/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "person_v4_person_v4_people_id_additional_names_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

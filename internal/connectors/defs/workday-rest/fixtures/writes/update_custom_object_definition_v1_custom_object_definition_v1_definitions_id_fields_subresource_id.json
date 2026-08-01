@@ -1,0 +1,46 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "alias": "sample",
+    "authorizedUsages": [
+      {
+        "descriptor": {},
+        "href": {}
+      }
+    ],
+    "categories": [
+      {
+        "descriptor": {},
+        "href": {}
+      }
+    ],
+    "fieldType": {
+      "id": "sample"
+    },
+    "name": "sample"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customObjectDefinition/v1/definitions/sample-id/fields/sample-id",
+    "body": {
+      "alias": "sample",
+      "authorizedUsages": [
+        {
+          "descriptor": {},
+          "href": {}
+        }
+      ],
+      "categories": [
+        {
+          "descriptor": {},
+          "href": {}
+        }
+      ],
+      "fieldType": {
+        "id": "sample"
+      },
+      "name": "sample"
+    }
+  }
+}

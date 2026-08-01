@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/person/v4/people/synthetic-conformance-value/publicContactInformation",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "person_v4_person_v4_people_id_public_contact_information_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

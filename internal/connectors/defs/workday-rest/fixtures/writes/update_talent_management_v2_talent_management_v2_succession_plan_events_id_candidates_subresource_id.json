@@ -1,0 +1,24 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "readiness": {
+      "id": "sample"
+    },
+    "successionPlanCandidate": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/talentManagement/v2/successionPlanEvents/sample-id/candidates/sample-id",
+    "body": {
+      "readiness": {
+        "id": "sample"
+      },
+      "successionPlanCandidate": {
+        "id": "sample"
+      }
+    }
+  }
+}

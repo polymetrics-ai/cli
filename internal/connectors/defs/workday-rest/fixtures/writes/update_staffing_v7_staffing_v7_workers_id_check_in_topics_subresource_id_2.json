@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "json_data": {
+      "checkInTopicAttachments": [
+        {
+          "contentType": {},
+          "fileLength": {}
+        }
+      ],
+      "associatedCheckIns": [
+        {
+          "id": {}
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/staffing/v7/workers/sample-id/checkInTopics/sample-id"
+  }
+}

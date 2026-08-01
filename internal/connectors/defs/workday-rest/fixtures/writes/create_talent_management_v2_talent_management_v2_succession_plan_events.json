@@ -1,0 +1,13 @@
+{
+  "record": {
+    "json_data": {
+      "successionPlan": {
+        "id": "sample"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/talentManagement/v2/successionPlanEvents"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/holiday/v1/holidayEvents",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "holiday_v1_holiday_v1_holiday_events_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

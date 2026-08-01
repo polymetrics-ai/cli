@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "sample-id",
+    "startDate": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/talentManagement/v2/mentorships/sample-id/edit",
+    "body": {
+      "startDate": "sample"
+    }
+  }
+}

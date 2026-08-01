@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/request/v2/requests",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "request_v2_request_v2_requests_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

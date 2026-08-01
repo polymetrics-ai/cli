@@ -1,0 +1,18 @@
+{
+  "record": {
+    "prompt": {
+      "id": "sample"
+    },
+    "comment": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/timeTracking/v5/workerTimeAttestation",
+    "body": {
+      "prompt": {
+        "id": "sample"
+      },
+      "comment": "sample"
+    }
+  }
+}

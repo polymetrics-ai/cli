@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "toWorker": {
+        "id": "sample"
+      },
+      "workersToNotify": [
+        {
+          "descriptor": {},
+          "id": {}
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/performanceEnablement/v5/workers/sample-id/anytimeFeedbackEvents"
+  }
+}

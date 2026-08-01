@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/compensation/v3/workers",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "compensation_v3_compensation_v3_workers_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

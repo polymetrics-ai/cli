@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/studentFinance/v1/students/synthetic-conformance-value/payments/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "student_finance_v1_student_finance_v1_students_id_payments_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

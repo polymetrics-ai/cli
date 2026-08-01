@@ -1,0 +1,26 @@
+{
+  "record": {
+    "companyInstance": {
+      "id": "sample"
+    },
+    "startDate": "sample",
+    "stateInstance": {
+      "id": "sample"
+    },
+    "taxCode": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/payroll/v2/taxRates",
+    "body": {
+      "companyInstance": {
+        "id": "sample"
+      },
+      "startDate": "sample",
+      "stateInstance": {
+        "id": "sample"
+      },
+      "taxCode": "sample"
+    }
+  }
+}

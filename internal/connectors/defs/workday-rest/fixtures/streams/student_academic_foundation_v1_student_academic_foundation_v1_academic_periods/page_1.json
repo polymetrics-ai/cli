@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/studentAcademicFoundation/v1/academicPeriods",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "student_academic_foundation_v1_student_academic_foundation_v1_academic_periods_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

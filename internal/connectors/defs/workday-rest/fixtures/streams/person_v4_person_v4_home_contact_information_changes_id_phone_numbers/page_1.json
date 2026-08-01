@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/person/v4/homeContactInformationChanges/synthetic-conformance-value/phoneNumbers",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "person_v4_person_v4_home_contact_information_changes_id_phone_numbers_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

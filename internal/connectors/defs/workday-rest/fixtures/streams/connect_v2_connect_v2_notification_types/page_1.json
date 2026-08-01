@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/connect/v2/notificationTypes",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "connect_v2_connect_v2_notification_types_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

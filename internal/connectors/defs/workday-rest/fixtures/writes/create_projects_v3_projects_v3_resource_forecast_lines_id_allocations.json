@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "date": "sample",
+    "forecastedHours": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/v3/resourceForecastLines/sample-id/allocations",
+    "body": {
+      "date": "sample",
+      "forecastedHours": 1
+    }
+  }
+}

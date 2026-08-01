@@ -1,0 +1,46 @@
+{
+  "record": {
+    "description": "sample",
+    "name": "sample",
+    "platform": {
+      "reference_id": "sample",
+      "descriptor": "sample"
+    },
+    "provider": {
+      "id": "sample"
+    },
+    "skills": [
+      {
+        "description": {},
+        "id": {},
+        "name": {}
+      }
+    ],
+    "url": "sample",
+    "version": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/asor/v1/agentDefinition",
+    "body": {
+      "description": "sample",
+      "name": "sample",
+      "platform": {
+        "reference_id": "sample",
+        "descriptor": "sample"
+      },
+      "provider": {
+        "id": "sample"
+      },
+      "skills": [
+        {
+          "description": {},
+          "id": {},
+          "name": {}
+        }
+      ],
+      "url": "sample",
+      "version": "sample"
+    }
+  }
+}

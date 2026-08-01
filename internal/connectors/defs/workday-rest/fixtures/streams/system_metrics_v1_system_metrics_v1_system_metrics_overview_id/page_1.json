@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/systemMetrics/v1/systemMetricsOverview/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "system_metrics_v1_system_metrics_v1_system_metrics_overview_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

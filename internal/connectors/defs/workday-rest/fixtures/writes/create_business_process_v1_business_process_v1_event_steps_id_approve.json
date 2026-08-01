@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "comment": "sample",
+    "eventStatus": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/businessProcess/v1/eventSteps/sample-id/approve",
+    "body": {
+      "comment": "sample",
+      "eventStatus": {
+        "id": "sample"
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "addressLine3": "sample",
+    "addressLine8Local": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/person/v4/workContactInformationChanges/sample-id/addresses",
+    "body": {
+      "addressLine3": "sample",
+      "addressLine8Local": "sample"
+    }
+  }
+}

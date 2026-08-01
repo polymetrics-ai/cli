@@ -1,0 +1,24 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "completionStatus": {
+      "id": "sample"
+    },
+    "lessonIdentifier": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/learning/v1/enrollments/sample-id/lessonTrackings/sample-id",
+    "body": {
+      "completionStatus": {
+        "id": "sample"
+      },
+      "lessonIdentifier": {
+        "id": "sample"
+      }
+    }
+  }
+}

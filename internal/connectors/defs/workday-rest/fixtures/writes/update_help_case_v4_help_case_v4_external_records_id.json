@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "sample-id",
+    "case": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/helpCase/v4/externalRecords/sample-id",
+    "body": {
+      "case": {
+        "id": "sample"
+      }
+    }
+  }
+}

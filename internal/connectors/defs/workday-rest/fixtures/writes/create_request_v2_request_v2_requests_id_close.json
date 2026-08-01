@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "comment": "sample",
+    "workdayObjectValue": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/request/v2/requests/sample-id/close",
+    "body": {
+      "comment": "sample",
+      "workdayObjectValue": {
+        "id": "sample"
+      }
+    }
+  }
+}

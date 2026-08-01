@@ -1,0 +1,14 @@
+{
+  "record": {
+    "billable": true,
+    "includeProjectIDInName": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/v3/projects",
+    "body": {
+      "billable": true,
+      "includeProjectIDInName": true
+    }
+  }
+}

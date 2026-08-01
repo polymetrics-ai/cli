@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/businessProcess/v1/eventSteps",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "business_process_v1_business_process_v1_event_steps_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

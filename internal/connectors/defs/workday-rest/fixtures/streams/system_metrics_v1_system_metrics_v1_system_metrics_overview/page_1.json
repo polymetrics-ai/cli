@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/systemMetrics/v1/systemMetricsOverview",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "system_metrics_v1_system_metrics_v1_system_metrics_overview_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

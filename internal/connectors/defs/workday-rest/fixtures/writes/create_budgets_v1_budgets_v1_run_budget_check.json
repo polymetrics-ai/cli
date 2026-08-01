@@ -1,0 +1,20 @@
+{
+  "record": {
+    "company": {
+      "descriptor": "sample",
+      "id": "sample"
+    },
+    "inflightTransactionDate": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/budgets/v1/runBudgetCheck",
+    "body": {
+      "company": {
+        "descriptor": "sample",
+        "id": "sample"
+      },
+      "inflightTransactionDate": "sample"
+    }
+  }
+}

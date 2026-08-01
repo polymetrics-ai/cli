@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "moveManagersTeam": true,
+    "jobChangeReason": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/common/v1/workers/sample-id/jobChanges",
+    "body": {
+      "moveManagersTeam": true,
+      "jobChangeReason": {
+        "id": "sample"
+      }
+    }
+  }
+}

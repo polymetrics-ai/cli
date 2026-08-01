@@ -1,0 +1,35 @@
+{
+  "record": {
+    "id": "sample-id",
+    "countryPhoneCode": {
+      "country": {
+        "id": {}
+      },
+      "countryPhoneCode": "sample"
+    },
+    "usage": {
+      "usageType": {
+        "id": {}
+      },
+      "comment": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/person/v4/homeContactInformationChanges/sample-id/phoneNumbers",
+    "body": {
+      "countryPhoneCode": {
+        "country": {
+          "id": {}
+        },
+        "countryPhoneCode": "sample"
+      },
+      "usage": {
+        "usageType": {
+          "id": {}
+        },
+        "comment": "sample"
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "comment": "sample",
+    "status": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/businessProcess/v1/events/sample-id/rescind",
+    "body": {
+      "comment": "sample",
+      "status": "sample"
+    }
+  }
+}

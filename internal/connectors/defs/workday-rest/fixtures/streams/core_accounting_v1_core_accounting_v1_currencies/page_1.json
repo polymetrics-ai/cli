@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/coreAccounting/v1/currencies",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "core_accounting_v1_core_accounting_v1_currencies_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

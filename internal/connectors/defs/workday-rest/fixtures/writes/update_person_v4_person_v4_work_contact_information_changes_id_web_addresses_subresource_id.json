@@ -1,0 +1,26 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "url": "sample",
+    "usage": {
+      "usageType": {
+        "id": {}
+      },
+      "comment": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/person/v4/workContactInformationChanges/sample-id/webAddresses/sample-id",
+    "body": {
+      "url": "sample",
+      "usage": {
+        "usageType": {
+          "id": {}
+        },
+        "comment": "sample"
+      }
+    }
+  }
+}

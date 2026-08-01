@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "reason": "sample",
+    "to": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/businessProcess/v1/eventSteps/sample-id/sendBack",
+    "body": {
+      "reason": "sample",
+      "to": {
+        "id": "sample"
+      }
+    }
+  }
+}

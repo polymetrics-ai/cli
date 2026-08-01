@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/customObjectDefinition/v1/fieldTypes/synthetic-conformance-value/listValues/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "custom_object_definition_v1_custom_object_definition_v1_field_types_id_list_values_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

@@ -2,22 +2,60 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Workday REST Connection Specification",
   "type": "object",
-  "required": ["tenant", "access_token"],
+  "required": [
+    "access_token"
+  ],
   "properties": {
-    "tenant": {
-      "type": "string",
-      "description": "Workday tenant name, substituted as a path segment into every stream's resource URL (e.g. ccx/api/hcm/v1/<tenant>/workers)."
-    },
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Workday REST API bearer access token (Authorization: Bearer <access_token>). Never logged."
+      "description": "Workday REST API bearer access token. Never log or commit this value."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
       "default": "https://wd2-impl-services1.workday.com",
-      "description": "Workday API base URL override for a tenant's actual Workday instance, tests, or proxies."
+      "description": "Workday tenant hostname/base URL for REST services, for example https://wd2-impl-services1.workday.com."
+    },
+    "tenant": {
+      "type": "string",
+      "description": "Legacy Workday tenant label retained for compatibility with existing saved configs; official 2026.30 service paths use base_url plus service path."
+    },
+    "id": {
+      "type": "string",
+      "description": "Optional Workday path parameter value for official {ID} path segments. Required only for streams that include {ID} in their path."
+    },
+    "subresource_id": {
+      "type": "string",
+      "description": "Optional Workday path parameter value for official {subresourceID} path segments. Required only for streams that include {subresourceID} in their path."
+    },
+    "business_object_resource": {
+      "type": "string",
+      "description": "Optional Workday path parameter value for official {businessObjectResource} path segments. Required only for streams that include {businessObjectResource} in their path."
+    },
+    "business_object_id": {
+      "type": "string",
+      "description": "Optional Workday path parameter value for official {businessObjectId} path segments. Required only for streams that include {businessObjectId} in their path."
+    },
+    "custom_object_alias": {
+      "type": "string",
+      "description": "Optional Workday path parameter value for official {customObjectAlias} path segments. Required only for streams that include {customObjectAlias} in their path."
+    },
+    "custom_object_id": {
+      "type": "string",
+      "description": "Optional Workday path parameter value for official {customObjectID} path segments. Required only for streams that include {customObjectID} in their path."
+    },
+    "data_change_id": {
+      "type": "string",
+      "description": "Optional Workday path parameter value for official {dataChangeID} path segments. Required only for streams that include {dataChangeID} in their path."
+    },
+    "activity_id": {
+      "type": "string",
+      "description": "Optional Workday path parameter value for official {activityID} path segments. Required only for streams that include {activityID} in their path."
+    },
+    "file_container_id": {
+      "type": "string",
+      "description": "Optional Workday path parameter value for official {fileContainerID} path segments. Required only for streams that include {fileContainerID} in their path."
     }
   }
 }

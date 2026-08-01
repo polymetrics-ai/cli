@@ -1,0 +1,10 @@
+{
+  "record": {
+    "custom_object_alias": "sample-id",
+    "custom_object_id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/customObjects/sample-id/sample-id"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "addressLine3": "sample",
+    "addressLine8Local": "sample"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/person/v4/workContactInformationChanges/sample-id/addresses/sample-id",
+    "body": {
+      "addressLine3": "sample",
+      "addressLine8Local": "sample"
+    }
+  }
+}

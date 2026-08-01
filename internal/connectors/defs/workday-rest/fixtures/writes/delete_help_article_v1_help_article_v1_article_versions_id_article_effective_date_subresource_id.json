@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/helpArticle/v1/articleVersions/sample-id/articleEffectiveDate/sample-id"
+  }
+}

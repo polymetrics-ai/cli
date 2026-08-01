@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "json_data": {
+      "date": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/staffing/v7/workers/sample-id/checkIns/sample-id"
+  }
+}

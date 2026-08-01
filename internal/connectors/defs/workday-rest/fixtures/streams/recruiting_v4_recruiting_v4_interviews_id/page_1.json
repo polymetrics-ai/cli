@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/recruiting/v4/interviews/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "recruiting_v4_recruiting_v4_interviews_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

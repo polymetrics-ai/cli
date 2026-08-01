@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/studentCurriculum/v1/courseSubjects/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "student_curriculum_v1_student_curriculum_v1_course_subjects_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

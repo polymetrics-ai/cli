@@ -1,0 +1,22 @@
+{
+  "record": {
+    "json_data": {
+      "requestID": "sample",
+      "questionnaireResponses": {
+        "questionnaireAnswers": [
+          {
+            "questionItem": {},
+            "questionnaireAttachments": {}
+          }
+        ],
+        "questionnaireTargetContext": {
+          "id": {}
+        }
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/request/v2/requests"
+  }
+}

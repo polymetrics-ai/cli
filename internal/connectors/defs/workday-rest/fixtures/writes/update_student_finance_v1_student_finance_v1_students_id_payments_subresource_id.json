@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "reason": {
+      "descriptor": "sample",
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/studentFinance/v1/students/sample-id/payments/sample-id",
+    "body": {
+      "reason": {
+        "descriptor": "sample",
+        "id": "sample"
+      }
+    }
+  }
+}

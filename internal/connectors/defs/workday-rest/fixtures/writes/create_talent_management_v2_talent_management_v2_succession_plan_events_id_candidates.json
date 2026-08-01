@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "sample-id",
+    "readiness": {
+      "id": "sample"
+    },
+    "successionPlanCandidate": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/talentManagement/v2/successionPlanEvents/sample-id/candidates",
+    "body": {
+      "readiness": {
+        "id": "sample"
+      },
+      "successionPlanCandidate": {
+        "id": "sample"
+      }
+    }
+  }
+}

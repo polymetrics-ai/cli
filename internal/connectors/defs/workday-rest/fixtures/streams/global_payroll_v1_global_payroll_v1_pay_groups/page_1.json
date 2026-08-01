@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/globalPayroll/v1/payGroups",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "global_payroll_v1_global_payroll_v1_pay_groups_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/procurement/v5/purchaseOrders",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "procurement_v5_procurement_v5_purchase_orders_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

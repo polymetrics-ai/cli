@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/procurement/v5/requisitions/sample-id/requisitionLines/sample-id"
+  }
+}

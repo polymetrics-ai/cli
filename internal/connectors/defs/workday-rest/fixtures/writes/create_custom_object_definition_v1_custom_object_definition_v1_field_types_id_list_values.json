@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id": "sample-id",
+    "name": "sample",
+    "order": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/customObjectDefinition/v1/fieldTypes/sample-id/listValues",
+    "body": {
+      "name": "sample",
+      "order": "sample"
+    }
+  }
+}

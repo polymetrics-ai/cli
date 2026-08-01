@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/person/v4/people/synthetic-conformance-value/workAddresses",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "person_v4_person_v4_people_id_work_addresses_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

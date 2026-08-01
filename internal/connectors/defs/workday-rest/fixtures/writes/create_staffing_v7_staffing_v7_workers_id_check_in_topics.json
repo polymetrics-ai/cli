@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "checkInTopicAttachments": [
+        {
+          "contentType": {},
+          "fileLength": {}
+        }
+      ],
+      "associatedCheckIns": [
+        {
+          "id": {}
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/staffing/v7/workers/sample-id/checkInTopics"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/wql/v1/dataSources/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "wql_v1_wql_v1_data_sources_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

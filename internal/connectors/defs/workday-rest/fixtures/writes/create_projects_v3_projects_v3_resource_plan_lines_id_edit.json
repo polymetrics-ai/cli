@@ -1,0 +1,35 @@
+{
+  "record": {
+    "id": "sample-id",
+    "unnamedResourceWorkerSwap": [
+      {
+        "unnamedResource": {},
+        "worker": {}
+      }
+    ],
+    "requirements": [
+      {
+        "optional": {},
+        "requirementType": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/v3/resourcePlanLines/sample-id/edit",
+    "body": {
+      "unnamedResourceWorkerSwap": [
+        {
+          "unnamedResource": {},
+          "worker": {}
+        }
+      ],
+      "requirements": [
+        {
+          "optional": {},
+          "requirementType": {}
+        }
+      ]
+    }
+  }
+}

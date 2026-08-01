@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/accountsPayable/v1/supplierInvoiceRequests/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "accounts_payable_v1_accounts_payable_v1_supplier_invoice_requests_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

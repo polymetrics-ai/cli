@@ -1,0 +1,18 @@
+{
+  "record": {
+    "status": {
+      "id": "sample"
+    },
+    "contactConsent": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recruiting/v4/prospects",
+    "body": {
+      "status": {
+        "id": "sample"
+      },
+      "contactConsent": true
+    }
+  }
+}

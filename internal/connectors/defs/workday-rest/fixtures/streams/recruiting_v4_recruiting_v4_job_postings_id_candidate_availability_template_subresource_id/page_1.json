@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/recruiting/v4/jobPostings/synthetic-conformance-value/candidateAvailabilityTemplate/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "recruiting_v4_recruiting_v4_job_postings_id_candidate_availability_template_subresource_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

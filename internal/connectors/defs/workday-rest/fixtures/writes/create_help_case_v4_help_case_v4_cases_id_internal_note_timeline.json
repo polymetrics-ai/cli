@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "sample-id",
+    "json_data": {
+      "note": {
+        "textBody": "sample",
+        "id": "sample"
+      },
+      "attachments": [
+        {
+          "contentType": {},
+          "fileName": {}
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/helpCase/v4/cases/sample-id/internalNoteTimeline"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "record": {
+    "company": {
+      "id": "sample"
+    },
+    "invoiceDate": "sample",
+    "supplier": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/accountsPayable/v1/supplierInvoiceRequests",
+    "body": {
+      "company": {
+        "id": "sample"
+      },
+      "invoiceDate": "sample",
+      "supplier": {
+        "id": "sample"
+      }
+    }
+  }
+}

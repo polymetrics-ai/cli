@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/v3/planTasks/synthetic-conformance-value",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "projects_v3_projects_v3_plan_tasks_id_fixture",
+      "descriptor": "Synthetic Workday fixture"
+    }
+  }
+}

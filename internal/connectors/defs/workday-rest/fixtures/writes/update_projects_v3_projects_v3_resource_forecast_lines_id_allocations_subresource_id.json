@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "date": "sample",
+    "forecastedHours": 1
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/projects/v3/resourceForecastLines/sample-id/allocations/sample-id",
+    "body": {
+      "date": "sample",
+      "forecastedHours": 1
+    }
+  }
+}

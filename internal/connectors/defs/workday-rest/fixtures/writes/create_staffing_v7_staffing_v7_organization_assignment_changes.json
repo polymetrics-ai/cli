@@ -1,0 +1,18 @@
+{
+  "record": {
+    "date": "sample",
+    "position": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/staffing/v7/organizationAssignmentChanges",
+    "body": {
+      "date": "sample",
+      "position": {
+        "id": "sample"
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "externalSkillId": "sample",
+    "externalSkillLevel": 1
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/staffing/v7/workers/sample-id/externalSkillLevel/sample-id",
+    "body": {
+      "externalSkillId": "sample",
+      "externalSkillLevel": 1
+    }
+  }
+}

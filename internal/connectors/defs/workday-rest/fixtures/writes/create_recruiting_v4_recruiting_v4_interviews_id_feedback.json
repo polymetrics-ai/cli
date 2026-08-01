@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "sample-id",
+    "overallRating": {
+      "descriptor": "sample",
+      "id": "sample"
+    },
+    "comment": "sample"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recruiting/v4/interviews/sample-id/feedback",
+    "body": {
+      "overallRating": {
+        "descriptor": "sample",
+        "id": "sample"
+      },
+      "comment": "sample"
+    }
+  }
+}

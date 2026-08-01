@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/projects/v3/resourcePlanLines",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "projects_v3_projects_v3_resource_plan_lines_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "record": {
+    "id": "sample-id",
+    "subresource_id": "sample-id",
+    "conditionRule": {
+      "id": "sample"
+    },
+    "customField": {
+      "id": "sample"
+    },
+    "messageText": "sample",
+    "name": "sample",
+    "onlyOnOk": true,
+    "severityLevel": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/customObjectDefinition/v1/definitions/sample-id/validations/sample-id",
+    "body": {
+      "conditionRule": {
+        "id": "sample"
+      },
+      "customField": {
+        "id": "sample"
+      },
+      "messageText": "sample",
+      "name": "sample",
+      "onlyOnOk": true,
+      "severityLevel": {
+        "id": "sample"
+      }
+    }
+  }
+}

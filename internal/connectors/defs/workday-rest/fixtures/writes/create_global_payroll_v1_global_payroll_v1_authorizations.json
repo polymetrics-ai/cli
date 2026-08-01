@@ -1,0 +1,24 @@
+{
+  "record": {
+    "featureId": "sample",
+    "subjectId": "sample",
+    "targets": [
+      {
+        "id": {}
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/globalPayroll/v1/authorizations",
+    "body": {
+      "featureId": "sample",
+      "subjectId": "sample",
+      "targets": [
+        {
+          "id": {}
+        }
+      ]
+    }
+  }
+}

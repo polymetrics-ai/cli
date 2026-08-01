@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": "sample-id",
+    "emailAddress": "sample",
+    "usage": {
+      "usageType": {
+        "id": {}
+      },
+      "comment": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/person/v4/workContactInformationChanges/sample-id/emailAddresses",
+    "body": {
+      "emailAddress": "sample",
+      "usage": {
+        "usageType": {
+          "id": {}
+        },
+        "comment": "sample"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/absenceManagement/v5/balances",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "total": 1,
+      "data": [
+        {
+          "id": "absence_management_v5_absence_management_v5_balances_fixture",
+          "descriptor": "Synthetic Workday fixture"
+        }
+      ]
+    }
+  }
+}

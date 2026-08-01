@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "sample-id",
+    "gradeAverage": "sample",
+    "degree": {
+      "id": "sample"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/recruiting/v4/prospects/sample-id/educations",
+    "body": {
+      "gradeAverage": "sample",
+      "degree": {
+        "id": "sample"
+      }
+    }
+  }
+}
