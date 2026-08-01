@@ -836,7 +836,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceValidationDeclarations(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
-		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
+		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints, operations)...)
 	}
 	return findings
 }
@@ -905,7 +905,7 @@ func checkCLISurfaceOperationSafety(
 	cmd engine.CLICommand,
 	operations map[string]engine.OperationSpec,
 ) []Finding {
-	if cmd.Availability != "implemented" || cmd.Operation == "" || strings.TrimSpace(cmd.OutputPolicy) == "" {
+	if cmd.Availability != "implemented" || cmd.Operation == "" {
 		return nil
 	}
 	op, ok := operations[cmd.Operation]
@@ -1496,6 +1496,7 @@ func checkCLISurfaceEndpointCoverage(
 	i int,
 	cmd engine.CLICommand,
 	endpoints map[string][]cliSurfaceEndpointState,
+	operations map[string]engine.OperationSpec,
 ) []Finding {
 	if b.Surface == nil {
 		return nil
@@ -1503,6 +1504,9 @@ func checkCLISurfaceEndpointCoverage(
 
 	var findings []Finding
 	for _, ep := range cmd.APISurface {
+		if finding, ok := checkCLISurfaceOperationEndpointRef(b, i, cmd, ep, operations); ok {
+			findings = append(findings, finding)
+		}
 		states := endpoints[surfaceEndpointKey(ep.Method, ep.Path)]
 		if len(states) == 0 {
 			findings = append(findings, Finding{
@@ -1524,6 +1528,31 @@ func checkCLISurfaceEndpointCoverage(
 		})
 	}
 	return findings
+}
+
+func checkCLISurfaceOperationEndpointRef(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	ep engine.CLISurfaceEndpointRef,
+	operations map[string]engine.OperationSpec,
+) (Finding, bool) {
+	if cmd.Availability != "implemented" || cmd.Operation == "" {
+		return Finding{}, false
+	}
+	op, ok := operations[cmd.Operation]
+	if !ok || op.REST == nil {
+		return Finding{}, false
+	}
+	if strings.ToUpper(strings.TrimSpace(ep.Method)) == strings.ToUpper(strings.TrimSpace(op.REST.Method)) && strings.TrimSpace(ep.Path) == strings.TrimSpace(op.REST.Path) {
+		return Finding{}, false
+	}
+	return Finding{
+		Connector: b.Name,
+		File:      "cli_surface.json",
+		Rule:      ruleCLISurfaceSafety,
+		Message:   fmt.Sprintf("implemented operation command %d (%q) api_surface endpoint %s %s must match operation %q REST endpoint %s %s", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, cmd.Operation, strings.ToUpper(op.REST.Method), op.REST.Path),
+	}, true
 }
 
 func cliSurfaceEndpointStatesMatchCommand(states []cliSurfaceEndpointState, cmd engine.CLICommand) bool {

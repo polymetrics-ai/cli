@@ -263,11 +263,19 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 }
 
 func normalizeOperationDirectReadRequest(req connectors.OperationDirectReadRequest) connectors.OperationDirectReadRequest {
+	req.PathParams = cloneStringMap(req.PathParams)
+	req.Config.Config = cloneStringMap(req.Config.Config)
+	req.Config.Secrets = cloneStringMap(req.Config.Secrets)
 	if req.PathParams == nil {
 		req.PathParams = map[string]string{}
 	}
 	if req.Config.Config == nil {
 		req.Config.Config = map[string]string{}
+	}
+	if strings.TrimSpace(req.Config.Secrets["access_token"]) == "" {
+		if token := gaSecret(req.Config); strings.TrimSpace(token) != "" {
+			req.Config.Secrets["access_token"] = token
+		}
 	}
 	if req.PathParams["property_id"] == "" {
 		if property := firstNonEmpty(req.Config.Config["property_id"], firstPropertyID(req.Config.Config["property_ids"])); property != "" {
@@ -280,6 +288,17 @@ func normalizeOperationDirectReadRequest(req connectors.OperationDirectReadReque
 		}
 	}
 	return req
+}
+
+func cloneStringMap(in map[string]string) map[string]string {
+	if len(in) == 0 {
+		return nil
+	}
+	out := make(map[string]string, len(in))
+	for key, value := range in {
+		out[key] = value
+	}
+	return out
 }
 
 func operationFixture(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
