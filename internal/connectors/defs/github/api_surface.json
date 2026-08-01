@@ -8922,15 +8922,27 @@
     {
       "method": "PUT",
       "path": "/repos/{owner}/{repo}/contents/{path}",
-      "covered_by": {
-        "write": "create_or_update_file"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Planned reverse ETL write remains blocked because current write path interpolation encodes record.path as one path segment; slash-bearing repository paths such as dir/file.txt require reviewed shared typed allowlisted multi-segment write-path support before dispatch.",
+        "source_url": "https://docs.github.com/en/rest/repos/contents#create-or-update-file-contents",
+        "notes": "Planned action: create_or_update_file. Dependency: shared typed allowlisted multi-segment write-path support for GitHub contents paths; no generic raw path or HTTP escape hatch."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/contents/{path}",
-      "covered_by": {
-        "write": "delete_file"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Planned reverse ETL write remains blocked because current write path interpolation encodes record.path as one path segment; slash-bearing repository paths such as dir/file.txt require reviewed shared typed allowlisted multi-segment write-path support before dispatch.",
+        "source_url": "https://docs.github.com/en/rest/repos/contents#delete-a-file",
+        "notes": "Planned action: delete_file. Dependency: shared typed allowlisted multi-segment write-path support for GitHub contents paths; no generic raw path or HTTP escape hatch."
       }
     },
     {
@@ -9578,15 +9590,27 @@
     {
       "method": "PATCH",
       "path": "/repos/{owner}/{repo}/git/refs/{ref}",
-      "covered_by": {
-        "write": "update_ref"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Planned reverse ETL write remains blocked because current write path interpolation encodes record.ref as one path segment; ref values such as heads/main require reviewed shared typed allowlisted multi-segment write-path support before dispatch.",
+        "source_url": "https://docs.github.com/en/rest/git/refs#update-a-reference",
+        "notes": "Planned action: update_ref. Dependency: shared typed allowlisted multi-segment write-path support for GitHub ref paths; no generic raw path or HTTP escape hatch."
       }
     },
     {
       "method": "DELETE",
       "path": "/repos/{owner}/{repo}/git/refs/{ref}",
-      "covered_by": {
-        "write": "delete_ref"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Planned reverse ETL write remains blocked because current write path interpolation encodes record.ref as one path segment; ref values such as heads/main require reviewed shared typed allowlisted multi-segment write-path support before dispatch.",
+        "source_url": "https://docs.github.com/en/rest/git/refs#delete-a-reference",
+        "notes": "Planned action: delete_ref. Dependency: shared typed allowlisted multi-segment write-path support for GitHub ref paths; no generic raw path or HTTP escape hatch."
       }
     },
     {

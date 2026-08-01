@@ -1,13 +1,13 @@
 # Overview
 
-GitHub reads 37 stream(s), accounts for 68 fixture-backed connector-owned write action(s), and tracks the full
+GitHub reads 37 stream(s), accounts for 64 fixture-backed connector-owned write action(s), and tracks the full
 public GitHub REST, GraphQL, and webhook inventory in `api_surface.json`.
 
 Certification status: this bundle is not certified by this parity slice. The current documented
 ledger contains 1,596 official operations/events (1,216 REST, 305 GraphQL, 75 webhook/changefeed)
 plus 8 connector conformance coverage rows required by the current one-target-per-row schema. The
-227 covered rows map to existing streams, fixture-backed write actions, direct reads, or fixed GraphQL documents;
-the remaining 1,377 rows are blocked/planned ledger entries, not implemented-count claims. Destructive,
+223 covered rows map to existing streams, fixture-backed write actions, direct reads, or fixed GraphQL documents;
+the remaining 1,381 rows are blocked/planned ledger entries, not implemented-count claims. Destructive,
 delete, and admin operations are in scope when implemented with typed schemas, write fixtures,
 idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.
 
@@ -30,15 +30,15 @@ Write actions: `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
 `merge_pull_request`, `create_label`, `update_label`, `delete_label`, `create_milestone`,
 `update_milestone`, `delete_milestone`, `create_release`, `update_release`, `delete_release`,
 `dispatch_workflow`, `rerun_workflow_run`, `cancel_workflow_run`, `delete_workflow_run`,
-`create_pull_request_review`, `create_or_update_file`, `delete_file`, `create_webhook`,
-`update_webhook`, `delete_webhook`, `create_deploy_key`, `delete_deploy_key`,
+`create_pull_request_review`, `create_webhook`, `update_webhook`, `delete_webhook`,
+`create_deploy_key`, `delete_deploy_key`,
 `create_or_update_environment`, `delete_environment`, `create_commit_comment`,
 `update_commit_comment`, `delete_commit_comment`, `update_issue_comment`, `delete_issue_comment`,
 `lock_issue`, `unlock_issue`, `set_issue_labels`, `add_issue_labels`, `remove_issue_label`,
 `add_issue_assignees`, `remove_issue_assignees`, `create_review_comment`, `update_review_comment`,
 `delete_review_comment`, `submit_pull_request_review`, `dismiss_pull_request_review`,
 `update_pull_request_branch`, `update_release_asset`, `delete_release_asset`, `replace_repo_topics`,
-`add_collaborator`, `remove_collaborator`, `create_ref`, `update_ref`, `delete_ref`, `merge_branch`,
+`add_collaborator`, `remove_collaborator`, `create_ref`, `merge_branch`,
 `update_code_scanning_alert`, `update_dependabot_alert`, `create_deployment`, `create_fork`,
 `create_repo_ruleset`, `update_repo_ruleset`, `delete_repo_ruleset`, `update_secret_scanning_alert`,
 `repo`.
@@ -354,15 +354,6 @@ actions:
   required record fields `pull_number`; accepted fields `body`, `comments`, `commit_id`, `event`,
   `pull_number`; risk: submits reviewer feedback and may approve or request changes on a pull
   request.
-- `create_or_update_file`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/contents/{{ record.path
-  }}` - kind `upsert`; body type `json`; path fields `path`; required record fields `path`,
-  `message`, `content`; accepted fields `author`, `branch`, `committer`, `content`, `message`,
-  `path`, `sha`; risk: writes a commit to the repository and may trigger CI/CD.
-- `delete_file`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/contents/{{ record.path }}` -
-  kind `delete`; body type `json`; path fields `path`; body fields `message`, `sha`, `branch`,
-  `committer`, `author`; required record fields `path`, `message`, `sha`; accepted fields `author`,
-  `branch`, `committer`, `message`, `path`, `sha`; risk: writes a commit that removes a file from
-  the repository.
 - `create_webhook`: POST `/repos/{{ config.owner }}/{{ config.repo }}/hooks` - kind `create`; body
   type `json`; required record fields `config`; accepted fields `active`, `config`, `events`,
   `name`; risk: registers an outbound webhook that will receive repository event payloads.
@@ -485,14 +476,6 @@ actions:
 - `create_ref`: POST `/repos/{{ config.owner }}/{{ config.repo }}/git/refs` - kind `create`; body
   type `json`; required record fields `ref`, `sha`; accepted fields `ref`, `sha`; risk: creates a
   new branch or tag ref pointing at the given commit SHA.
-- `update_ref`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}` - kind
-  `update`; body type `json`; path fields `ref`; body fields `sha`, `force`; required record fields
-  `ref`, `sha`; accepted fields `force`, `ref`, `sha`; risk: moves an existing branch or tag ref to
-  a different commit SHA, potentially discarding history.
-- `delete_ref`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}` -
-  kind `delete`; body type `none`; path fields `ref`; required record fields `ref`; accepted fields
-  `ref`; confirmation `destructive`;
-  risk: permanently deletes a branch or tag ref.
 - `merge_branch`: POST `/repos/{{ config.owner }}/{{ config.repo }}/merges` - kind `create`; body
   type `json`; required record fields `base`, `head`; accepted fields `base`, `commit_message`,
   `head`; risk: creates a merge commit combining the head ref into the base branch.
@@ -539,7 +522,7 @@ actions:
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 227 covered connector rows and 1,377 blocked/planned ledger rows. The
+- API coverage includes 223 covered connector rows and 1,381 blocked/planned ledger rows. The
   official source inventory is 1,596 operations/events; 8 additional rows exist only to satisfy
   connector conformance coverage for write-action reuse and fixed GraphQL documents.
 - GitHub CLI parity is intentionally staged. The current metadata covers selected `gh` command
@@ -553,6 +536,10 @@ actions:
   executable only when a bounded command/write action supplies typed schemas, write fixtures,
   redaction or idempotency notes as applicable, and the existing plan -> preview -> explicit approval
   -> execute safety path with typed `destructive` confirmation for destructive actions.
+- `create_or_update_file`, `delete_file`, `update_ref`, and `delete_ref` remain blocked/planned
+  until reviewed shared typed allowlisted multi-segment write-path support can dispatch
+  slash-bearing `record.path` and `record.ref` values without the current per-segment
+  percent-encoding boundary.
 - Raw `gh api` and `gh api graphql` style escape hatches remain disallowed unless replaced by
   individually allowlisted operations with connector auth, connector base URLs, bounded methods,
   mutation approval, and secret redaction.

@@ -46,5 +46,6 @@ These counts are source inventory counts, not implemented counts. Implementation
 
 - Shared typed confirmation foundation is present in `internal/app`: destructive connector command and reverse ETL plans require the matching `--confirm destructive` challenge before execution.
 - This connector slice does not change shared runtime code.
-- Destructive/delete operations are not blanket-excluded as unsafe. Missing, unimplemented, or unfixture-backed destructive operations remain blocked/planned until they have typed schemas, write fixtures, bounded command metadata, idempotency notes, and the existing plan -> preview -> explicit approval -> execute path.
+- Destructive/delete operations are not blanket-excluded as unsafe. Missing, unimplemented, unfixture-backed, or multi-segment path-blocked destructive operations remain blocked/planned until they have typed schemas, write fixtures, bounded command metadata, idempotency notes, and the existing plan -> preview -> explicit approval -> execute path.
+- `create_or_update_file`, `delete_file`, `update_ref`, and `delete_ref` depend on reviewed shared typed allowlisted multi-segment write-path support before connector dispatch.
 - Raw arbitrary GitHub API access and token-printing commands remain disallowed because they would expose a generic API escape hatch or secret values, not because DELETE operations are categorically out of scope.

@@ -77,8 +77,8 @@ REVERSE ETL WRITE ACTIONS
   GitHub is one writable connector example. It supports approved write actions
   such as create_issue, create_pull_request, comment_issue, update_issue,
   update_pull_request, request_reviewers, merge_pull_request, labels,
-  milestones, releases, workflow runs, pull request reviews, and repository
-  file create/update/delete.
+  milestones, releases, workflow runs, pull request reviews, deploy keys,
+  environments, rulesets, and security alert triage.
 
 ACTIONS
   list

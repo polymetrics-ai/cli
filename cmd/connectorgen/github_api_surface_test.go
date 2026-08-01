@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
@@ -73,11 +75,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 1604 {
 		t.Fatalf("endpoints = %d, want 1604 (1596 official rows plus 8 connector conformance coverage rows)", len(surface.Endpoints))
 	}
-	if covered != 227 {
-		t.Fatalf("covered endpoints = %d, want 227", covered)
+	if covered != 223 {
+		t.Fatalf("covered endpoints = %d, want 223", covered)
 	}
-	if operations != 1377 {
-		t.Fatalf("operation endpoints = %d, want 1377 blocked/planned rows", operations)
+	if operations != 1381 {
+		t.Fatalf("operation endpoints = %d, want 1381 blocked/planned rows", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -92,25 +94,25 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"WEBHOOK": 75,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"DELETE":  19,
+		"DELETE":  17,
 		"GET":     155,
 		"GRAPHQL": 4,
-		"PATCH":   16,
+		"PATCH":   15,
 		"POST":    23,
-		"PUT":     10,
+		"PUT":     9,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
-		"DELETE":  168,
+		"DELETE":  170,
 		"GET":     479,
 		"GRAPHQL": 305,
-		"PATCH":   57,
+		"PATCH":   58,
 		"POST":    170,
-		"PUT":     123,
+		"PUT":     124,
 		"WEBHOOK": 75,
 	})
 	assertStringIntMap(t, "models", models, map[string]int{
 		"admin_reverse_etl":     494,
-		"destructive_action":    220,
+		"destructive_action":    224,
 		"direct_read":           516,
 		"disallowed":            1,
 		"duplicate":             53,
@@ -119,12 +121,12 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
 		"critical": 60,
-		"high":     725,
+		"high":     729,
 		"low":      419,
 		"medium":   173,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 1377,
+		"blocked": 1381,
 	})
 }
 
@@ -216,6 +218,126 @@ func TestGitHubDestructiveMetadataUsesTypedConfirmation(t *testing.T) {
 		"api":        true,
 		"auth token": true,
 	})
+}
+
+func TestGitHubMultiSegmentWritePathsRemainBlocked(t *testing.T) {
+	targetWrites := map[string]bool{
+		"create_or_update_file": true,
+		"delete_file":           true,
+		"update_ref":            true,
+		"delete_ref":            true,
+	}
+
+	writesRaw, err := os.ReadFile("../../internal/connectors/defs/github/writes.json")
+	if err != nil {
+		t.Fatalf("read github writes.json: %v", err)
+	}
+	var writes struct {
+		Actions []githubWriteAction `json:"actions"`
+	}
+	if err := json.Unmarshal(writesRaw, &writes); err != nil {
+		t.Fatalf("unmarshal github writes.json: %v", err)
+	}
+	for _, action := range writes.Actions {
+		if targetWrites[action.Name] {
+			t.Fatalf("write action %q must remain blocked until typed multi-segment write path support exists", action.Name)
+		}
+	}
+
+	cliRaw, err := os.ReadFile("../../internal/connectors/defs/github/cli_surface.json")
+	if err != nil {
+		t.Fatalf("read github cli_surface.json: %v", err)
+	}
+	var cli struct {
+		Commands []githubCLICommand `json:"commands"`
+	}
+	if err := json.Unmarshal(cliRaw, &cli); err != nil {
+		t.Fatalf("unmarshal github cli_surface.json: %v", err)
+	}
+	for _, cmd := range cli.Commands {
+		if targetWrites[cmd.Write] {
+			t.Fatalf("command %q still maps blocked multi-segment write %q", cmd.Path, cmd.Write)
+		}
+	}
+
+	surfaceRaw, err := os.ReadFile("../../internal/connectors/defs/github/api_surface.json")
+	if err != nil {
+		t.Fatalf("read github api_surface.json: %v", err)
+	}
+	var surface struct {
+		Endpoints []struct {
+			Method    string           `json:"method"`
+			Path      string           `json:"path"`
+			CoveredBy map[string]any   `json:"covered_by"`
+			Operation *githubOperation `json:"operation"`
+		} `json:"endpoints"`
+	}
+	if err := json.Unmarshal(surfaceRaw, &surface); err != nil {
+		t.Fatalf("unmarshal github api_surface.json: %v", err)
+	}
+	targetEndpoints := map[string]bool{
+		"PUT /repos/{owner}/{repo}/contents/{path}":    true,
+		"DELETE /repos/{owner}/{repo}/contents/{path}": true,
+		"PATCH /repos/{owner}/{repo}/git/refs/{ref}":   true,
+		"DELETE /repos/{owner}/{repo}/git/refs/{ref}":  true,
+	}
+	seen := 0
+	for _, ep := range surface.Endpoints {
+		key := ep.Method + " " + ep.Path
+		if !targetEndpoints[key] {
+			continue
+		}
+		seen++
+		if len(ep.CoveredBy) > 0 {
+			t.Fatalf("endpoint %s is covered by %+v; want blocked operation", key, ep.CoveredBy)
+		}
+		if ep.Operation == nil {
+			t.Fatalf("endpoint %s has no blocked operation ledger row", key)
+		}
+		if ep.Operation.Status != "blocked" || ep.Operation.Model != "destructive_action" || !ep.Operation.BlockedByDefault {
+			t.Fatalf("endpoint %s operation = %+v, want blocked destructive_action", key, ep.Operation)
+		}
+		if !strings.Contains(ep.Operation.Reason, "typed allowlisted multi-segment write-path support") {
+			t.Fatalf("endpoint %s reason = %q, want typed multi-segment write path dependency", key, ep.Operation.Reason)
+		}
+	}
+	if seen != len(targetEndpoints) {
+		t.Fatalf("blocked multi-segment endpoints seen = %d, want %d", seen, len(targetEndpoints))
+	}
+
+	cases := []struct {
+		name     string
+		template string
+		record   map[string]any
+		want     string
+	}{
+		{
+			name:     "contents path",
+			template: "/repos/{{ config.owner }}/{{ config.repo }}/contents/{{ record.path }}",
+			record:   map[string]any{"path": "dir/file.txt"},
+			want:     "/repos/octocat/hello-world/contents/dir%2Ffile.txt",
+		},
+		{
+			name:     "git ref",
+			template: "/repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}",
+			record:   map[string]any{"ref": "heads/main"},
+			want:     "/repos/octocat/hello-world/git/refs/heads%2Fmain",
+		},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := engine.InterpolatePath(tt.template, engine.Vars{
+				Config: map[string]string{"owner": "octocat", "repo": "hello-world"},
+				Record: tt.record,
+			})
+			if err != nil {
+				t.Fatalf("InterpolatePath: %v", err)
+			}
+			if got != tt.want {
+				t.Fatalf("InterpolatePath = %q, want %q", got, tt.want)
+			}
+		})
+	}
 }
 
 func TestGitHubImplementedDirectReadOperationsAreRunnable(t *testing.T) {
