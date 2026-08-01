@@ -558,11 +558,11 @@
       "method": "PUT",
       "path": "/api/v2/brands/{brand_id}/logo",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateBrandLogo; summary=Update a Brand Logo; tags=Brands"
       }
@@ -1143,11 +1143,11 @@
       "method": "POST",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateCustomObjectRecordAttachment; summary=Create Custom Object Record Attachment; tags=Custom Object Record Attachments"
       }
@@ -3067,11 +3067,11 @@
       "method": "POST",
       "path": "/api/v2/macros/{macro_id}/attachments",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateAssociatedMacroAttachment; summary=Create Macro Attachment; tags=Macros"
       }
@@ -3106,11 +3106,11 @@
       "method": "POST",
       "path": "/api/v2/macros/attachments",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateMacroAttachment; summary=Create Unassociated Macro Attachment; tags=Macros"
       }
@@ -4990,11 +4990,11 @@
       "method": "POST",
       "path": "/api/v2/suspended_tickets/attachments",
       "operation": {
-        "model": "destructive_action",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
+        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SuspendedTicketsAttachments; summary=Suspended Ticket Attachments; tags=Suspended Tickets"
       }
@@ -6371,9 +6371,9 @@
       "operation": {
         "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UploadFiles; summary=Upload Files; tags=Attachments"
       }

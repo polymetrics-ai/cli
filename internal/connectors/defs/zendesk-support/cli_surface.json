@@ -1701,8 +1701,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
+      "approval": "blocked pending bounded file upload approval binding",
+      "notes": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes."
     },
     {
       "path": "operations delete_brand_logo",
@@ -2466,8 +2466,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
+      "approval": "blocked pending bounded file upload approval binding",
+      "notes": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes."
     },
     {
       "path": "operations update_custom_object_record_attachment",
@@ -2518,7 +2518,8 @@
       ],
       "risk": "high",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "notes": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download."
+      "notes": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+      "output_policy": "binary_file_bounded"
     },
     {
       "path": "operations autocomplete_custom_object_record_search",
@@ -4863,8 +4864,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
+      "approval": "blocked pending bounded file upload approval binding",
+      "notes": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes."
     },
     {
       "path": "operations list_macros_actions",
@@ -4914,8 +4915,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
+      "approval": "blocked pending bounded file upload approval binding",
+      "notes": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes."
     },
     {
       "path": "operations show_macro_attachment",
@@ -7277,8 +7278,8 @@
         }
       ],
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
     },
     {
       "path": "operations bulk_recover_suspended_tickets",
@@ -8942,9 +8943,9 @@
           "path": "/api/v2/uploads"
         }
       ],
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
+      "risk": "high",
+      "approval": "blocked pending bounded file upload approval binding",
+      "notes": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes."
     },
     {
       "path": "operations delete_upload",
