@@ -159,11 +159,11 @@
       "method": "POST",
       "path": "/api/v2/any_channel/validate_token",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ValidateToken; summary=Validate Token; tags=Channel Framework"
       }
@@ -3212,9 +3212,9 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ListOAuthClients; summary=List Clients; tags=OAuth Clients"
       }
@@ -3223,11 +3223,11 @@
       "method": "POST",
       "path": "/api/v2/oauth/clients",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction.",
+        "reason": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOAuthClient; summary=Create Client; tags=OAuth Clients"
       }
@@ -3238,9 +3238,9 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ShowClient; summary=Show Client; tags=OAuth Clients"
       }
@@ -3249,11 +3249,11 @@
       "method": "PUT",
       "path": "/api/v2/oauth/clients/{oauth_client_id}",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
-        "risk": "high",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateClient; summary=Update Client; tags=OAuth Clients"
       }
@@ -3275,11 +3275,11 @@
       "method": "PUT",
       "path": "/api/v2/oauth/clients/{oauth_client_id}/generate_secret",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction.",
+        "reason": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ClientGenerateSecret; summary=Generate Secret; tags=OAuth Clients"
       }
@@ -3329,9 +3329,9 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ListOAuthTokens; summary=List Tokens; tags=OAuth Tokens"
       }
@@ -3340,11 +3340,11 @@
       "method": "POST",
       "path": "/api/v2/oauth/tokens",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction.",
+        "reason": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOAuthToken; summary=Create Token; tags=OAuth Tokens"
       }
@@ -3355,9 +3355,9 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ShowToken; summary=Show Token; tags=OAuth Tokens"
       }
@@ -3381,9 +3381,9 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ShowCurrentToken; summary=Show Current Token; tags=OAuth Tokens"
       }
@@ -6963,11 +6963,11 @@
       "method": "POST",
       "path": "/api/v2/users/{user_id}/password",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SetUserPassword; summary=Set a User's Password; tags=User Passwords"
       }
@@ -6976,11 +6976,11 @@
       "method": "PUT",
       "path": "/api/v2/users/{user_id}/password",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ChangeOwnPassword; summary=Change Your Password; tags=User Passwords"
       }
@@ -7279,7 +7279,7 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOrUpdateUser; summary=Create Or Update User; tags=Users"
       }
@@ -7355,9 +7355,9 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command with credential redaction is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ListCurrentUserOAuthClients; summary=List Current User's Clients; tags=OAuth Clients"
       }
@@ -7797,11 +7797,11 @@
       "method": "POST",
       "path": "/oauth/tokens",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "sensitive_reverse_etl",
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, execute, and credential-bearing response redaction.",
+        "reason": "Blocked by default until a connector-local typed action implements non-inline credential input where required, credential redaction, plan/preview/approval/execute, and typed confirmation.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateTokenForGrantType; summary=Create Token for Grant Type; tags=Grant Type Tokens"
       }
