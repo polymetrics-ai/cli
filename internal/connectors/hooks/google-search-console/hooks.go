@@ -48,14 +48,14 @@ type Hooks struct{}
 
 func (h *Hooks) ConnectorName() string { return "google-search-console" }
 
-// analyticsDimensions is the per-stream fixed one-dimension searchAnalytics
-// dimension set, mirroring legacy streams.go's gscStreamDefs routing table.
+// analyticsDimensions is the per-stream fixed searchAnalytics dimension set,
+// mirroring legacy streams.go's gscStreamDefs routing table.
 var analyticsDimensions = map[string][]string{
 	"search_analytics_by_date":    {"date"},
-	"search_analytics_by_country": {"country"},
-	"search_analytics_by_device":  {"device"},
-	"search_analytics_by_page":    {"page"},
-	"search_analytics_by_query":   {"query"},
+	"search_analytics_by_country": {"date", "country"},
+	"search_analytics_by_device":  {"date", "device"},
+	"search_analytics_by_page":    {"date", "page"},
+	"search_analytics_by_query":   {"date", "query"},
 }
 
 // ReadStream implements engine.StreamHook. It handles sitemaps plus every

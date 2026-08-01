@@ -586,6 +586,9 @@ func resolveSurfaceEndpointPath(template string, cfg connectors.RuntimeConfig, p
 	if strings.Contains(resolved, "{") || strings.Contains(resolved, "}") {
 		return "", fmt.Errorf("unresolved path template %q", template)
 	}
+	if containsDotDotSegment(resolved) {
+		return "", fmt.Errorf("direct read endpoint path %q contains a \"..\" path segment", template)
+	}
 	return resolved, nil
 }
 

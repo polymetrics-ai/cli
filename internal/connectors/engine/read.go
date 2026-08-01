@@ -18,7 +18,11 @@ import (
 
 // defaultPageSize is used when neither the stream's nor the base pagination
 // spec declares an explicit page_size.
-const defaultPageSize = 100
+const (
+	defaultPageSize                   = 100
+	googleSearchConsoleConnectorName  = "google-search-console"
+	googleSearchConsoleLegacyBasePath = "/webmasters/v3"
+)
 
 // Read executes a declarative stream read against b per design §B.4: resolve
 // the StreamSpec, build a connsdk.Requester (base URL/headers/auth), build
@@ -470,24 +474,54 @@ func findStream(b Bundle, name string) (StreamSpec, error) {
 // preserved as-is rather than silently defaulted, since RuntimeConfig.Config
 // is a plain map with no separate "was this key set" bit beyond key presence).
 // b.Spec == nil (no compiled spec.json at all, e.g. many ad hoc test
-// bundles) is a no-op — cfg is returned unchanged.
+// bundles) skips default materialization.
 func materializeConfigDefaults(b Bundle, cfg connectors.RuntimeConfig) connectors.RuntimeConfig {
-	if b.Spec == nil {
-		return cfg
+	if b.Spec != nil {
+		defaults := b.Spec.Defaults()
+		if len(defaults) > 0 {
+			merged := make(map[string]string, len(defaults)+len(cfg.Config))
+			for k, v := range defaults {
+				merged[k] = v
+			}
+			for k, v := range cfg.Config {
+				merged[k] = v
+			}
+			cfg.Config = merged
+		}
 	}
-	defaults := b.Spec.Defaults()
-	if len(defaults) == 0 {
-		return cfg
-	}
-	merged := make(map[string]string, len(defaults)+len(cfg.Config))
-	for k, v := range defaults {
-		merged[k] = v
-	}
-	for k, v := range cfg.Config {
-		merged[k] = v
-	}
-	cfg.Config = merged
+	cfg.Config = normalizeRuntimeConfigForBundle(b.Name, cfg.Config)
 	return cfg
+}
+
+func normalizeRuntimeConfigForBundle(connectorName string, cfg map[string]string) map[string]string {
+	if connectorName != googleSearchConsoleConnectorName || cfg == nil {
+		return cfg
+	}
+	raw := strings.TrimSpace(cfg["base_url"])
+	if raw == "" {
+		return cfg
+	}
+	parsed, err := url.Parse(raw)
+	if err != nil {
+		return cfg
+	}
+	if strings.TrimRight(parsed.EscapedPath(), "/") != googleSearchConsoleLegacyBasePath {
+		return cfg
+	}
+	parsed.Path = ""
+	parsed.RawPath = ""
+	parsed.RawQuery = ""
+	parsed.Fragment = ""
+	origin := strings.TrimRight(parsed.String(), "/")
+	if origin == "" || origin == raw {
+		return cfg
+	}
+	out := make(map[string]string, len(cfg))
+	for k, v := range cfg {
+		out[k] = v
+	}
+	out["base_url"] = origin
+	return out
 }
 
 // newRuntime builds the shared *Runtime (Requester + Bundle + Config) used

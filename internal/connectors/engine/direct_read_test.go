@@ -185,6 +185,50 @@ func TestDirectReadEncodesOpaqueURLPathVariables(t *testing.T) {
 	}
 }
 
+func TestDirectReadRejectsOpaquePathVariableTraversalBeforeNetwork(t *testing.T) {
+	cases := []struct {
+		name       string
+		pathParams map[string]string
+	}{
+		{
+			name: "bare dot dot site url",
+			pathParams: map[string]string{
+				"siteUrl":  "..",
+				"feedpath": "https://example.com/sitemap.xml",
+			},
+		},
+		{
+			name: "encoded slash dot dot feedpath",
+			pathParams: map[string]string{
+				"siteUrl":  "https://example.com/",
+				"feedpath": "../sitemap.xml",
+			},
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			var hits int
+			srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+				hits++
+			}))
+			defer srv.Close()
+
+			_, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"), connectors.DirectReadRequest{
+				Method:       http.MethodGet,
+				Path:         "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}",
+				PathParams:   tc.pathParams,
+				OutputPolicy: "json_redacted",
+			}, nil)
+			if err == nil {
+				t.Fatal("DirectRead error = nil, want path traversal rejection")
+			}
+			if hits != 0 {
+				t.Fatalf("server hits = %d, want 0", hits)
+			}
+		})
+	}
+}
+
 func TestDirectReadRejectsOversizedResponse(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -645,6 +689,54 @@ func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t 
 	}, nil)
 	if err != nil {
 		t.Fatalf("DirectRead: %v", err)
+	}
+}
+
+func TestOperationDirectReadGoogleSearchConsoleLegacyBaseURLUsesOriginForV1(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/v1/urlInspection/index:inspect" {
+			t.Fatalf("path = %s, want /v1/urlInspection/index:inspect", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"inspectionResult":{}}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: googleSearchConsoleConnectorName,
+		HTTP: HTTPBase{URL: "{{ config.base_url }}"},
+		Operations: []OperationSpec{{
+			ID:           "google-search-console.urlinspection_index_inspect",
+			Kind:         "rest_read",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/v1/urlInspection/index:inspect",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","required":["inspectionUrl","siteUrl"],"properties":{"inspectionUrl":{"type":"string"},"siteUrl":{"type":"string"}},"additionalProperties":false}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/v1/urlInspection/index:inspect",
+			Operation: &SurfaceOperation{Model: "direct_read"},
+		}}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "google-search-console.urlinspection_index_inspect",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"base_url": srv.URL + googleSearchConsoleLegacyBasePath,
+		}},
+		Body: map[string]any{
+			"inspectionUrl": "https://example.com/page",
+			"siteUrl":       "https://example.com/",
+		},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
 	}
 }
 

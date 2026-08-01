@@ -197,6 +197,62 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 	}
 }
 
+func TestReadStream_SearchAnalyticsDimensionStreamsIncludeDate(t *testing.T) {
+	cases := []struct {
+		stream string
+		dim    string
+		value  string
+	}{
+		{stream: "search_analytics_by_country", dim: "country", value: "usa"},
+		{stream: "search_analytics_by_device", dim: "device", value: "DESKTOP"},
+		{stream: "search_analytics_by_page", dim: "page", value: "https://example.com/page"},
+		{stream: "search_analytics_by_query", dim: "query", value: "polymetrics"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.stream, func(t *testing.T) {
+			var sawDimensions []string
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				var body struct {
+					Dimensions []string `json:"dimensions"`
+				}
+				if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+					t.Errorf("decode body: %v", err)
+				}
+				sawDimensions = body.Dimensions
+				_, _ = w.Write([]byte(`{"rows":[{"keys":["2026-06-01","` + tc.value + `"],"clicks":1,"impressions":2,"ctr":0.5,"position":1.2}]}`))
+			}))
+			defer srv.Close()
+
+			req := connectors.ReadRequest{Config: connectors.RuntimeConfig{Config: map[string]string{
+				"site_urls":  "https://example.com/",
+				"start_date": "2026-06-01",
+				"end_date":   "2026-06-01",
+			}}}
+			var got []connectors.Record
+			h := &Hooks{}
+			handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: tc.stream}, req, newRuntime(srv.URL), func(rec connectors.Record) error {
+				got = append(got, rec)
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("ReadStream: %v", err)
+			}
+			if !handled {
+				t.Fatal("handled = false, want true")
+			}
+			if len(sawDimensions) != 2 || sawDimensions[0] != "date" || sawDimensions[1] != tc.dim {
+				t.Fatalf("dimensions = %v, want [date %s]", sawDimensions, tc.dim)
+			}
+			if len(got) != 1 {
+				t.Fatalf("records = %d, want 1", len(got))
+			}
+			if got[0]["date"] != "2026-06-01" || got[0][tc.dim] != tc.value {
+				t.Fatalf("record = %+v, want date and %s", got[0], tc.dim)
+			}
+		})
+	}
+}
+
 // TestReadStream_MultipleSitesFanOut verifies the hook loops over every
 // configured site_urls entry.
 func TestReadStream_MultipleSitesFanOut(t *testing.T) {

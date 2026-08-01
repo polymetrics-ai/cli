@@ -15,7 +15,7 @@ func baseVars() Vars {
 	return Vars{
 		Config: map[string]string{
 			"base_url":   "https://api.example.com",
-			"repository": "a/../b",
+			"repository": "octo/hello",
 			"query_char": "a?x=1&y=2",
 			"space":      "a b",
 			"unicode":    "héllo",
@@ -92,9 +92,9 @@ func TestInterpolatePathDefaultURLEncode(t *testing.T) {
 		want     string
 	}{
 		{
-			name:     "path traversal encoded",
+			name:     "slash encoded",
 			template: "/repos/{{ config.repository }}",
-			want:     "/repos/a%2F..%2Fb",
+			want:     "/repos/octo%2Fhello",
 		},
 		{
 			name:     "query metachars encoded",
@@ -407,10 +407,8 @@ func TestInterpolateStaticLiteralNoTemplateMarkersPassesThroughVerbatim(t *testi
 	}
 }
 
-// --- F9: InterpolatePath must reject a resolved segment that is exactly
-// ".." (or a raw "/../" survives after decode-normalization), closing the
-// SECURITY-REVIEW.md F9b/m3 gap where urlencodeSegment leaves bare "." (and
-// therefore "..") unescaped, so a literal ".." segment round-trips intact. ---
+// --- F9: InterpolatePath must reject resolved ".." traversal segments,
+// including after percent-decoding encoded path separators. ---
 
 func TestInterpolatePathRejectsDotDotSegment(t *testing.T) {
 	vars := baseVars()
@@ -427,6 +425,15 @@ func TestInterpolatePathRejectsDotDotAmongMultipleSegments(t *testing.T) {
 	_, err := InterpolatePath("/a/{{ config.mid }}/b", vars)
 	if err == nil {
 		t.Fatalf("InterpolatePath: expected error for a \"..\" segment in the middle of a path template")
+	}
+}
+
+func TestInterpolatePathRejectsEncodedSlashDotDotSegment(t *testing.T) {
+	vars := baseVars()
+	vars.Config["traversal_path"] = "a/../b"
+	_, err := InterpolatePath("/repos/{{ config.traversal_path }}", vars)
+	if err == nil {
+		t.Fatalf("InterpolatePath: expected error for an encoded traversal segment")
 	}
 }
 

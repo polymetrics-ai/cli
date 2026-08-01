@@ -608,6 +608,34 @@ func TestCheckBaseURLDefaultMaterializedWhenConfigAbsent(t *testing.T) {
 	}
 }
 
+func TestGoogleSearchConsoleLegacyBaseURLNormalizedForReadAndCheck(t *testing.T) {
+	var sawPaths []string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		sawPaths = append(sawPaths, r.URL.Path)
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Path: googleSearchConsoleLegacyBasePath + "/sites", Records: RecordsSpec{Path: "data"}})
+	b.Name = googleSearchConsoleConnectorName
+	b.HTTP.URL = "{{ config.base_url }}"
+	b.HTTP.Check = &RequestSpec{Method: http.MethodGet, Path: googleSearchConsoleLegacyBasePath + "/sites"}
+
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"base_url": srv.URL + googleSearchConsoleLegacyBasePath}}
+	if err := Check(context.Background(), b, cfg, nil); err != nil {
+		t.Fatalf("Check: %v", err)
+	}
+	if _, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", Config: cfg}, nil); err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(sawPaths) != 2 {
+		t.Fatalf("requests = %d, want 2", len(sawPaths))
+	}
+	for _, path := range sawPaths {
+		if path != googleSearchConsoleLegacyBasePath+"/sites" {
+			t.Fatalf("path = %q, want %s/sites", path, googleSearchConsoleLegacyBasePath)
+		}
+	}
+}
+
 func TestReadIncrementalLowerBoundFromStateCursor(t *testing.T) {
 	var gotSince string
 	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {

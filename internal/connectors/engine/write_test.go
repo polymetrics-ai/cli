@@ -172,6 +172,40 @@ func TestWritePreservesConfiguredBaseURLOverride(t *testing.T) {
 	}
 }
 
+func TestWriteGoogleSearchConsoleLegacyBaseURLAvoidsDoublePrefix(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"ok":true}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Kind:       "delete",
+		Method:     http.MethodDelete,
+		Path:       googleSearchConsoleLegacyBasePath + "/sites/{{ record.site_url | urlencode }}",
+		PathFields: []string{"site_url"},
+		BodyType:   "none",
+		RecordSchema: json.RawMessage(`{
+			"type":"object",
+			"required":["site_url"],
+			"properties":{"site_url":{"type":"string"}},
+			"additionalProperties":false
+		}`),
+	})
+	b.Name = googleSearchConsoleConnectorName
+	b.HTTP.URL = "{{ config.base_url }}"
+
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"base_url": srv.URL + googleSearchConsoleLegacyBasePath}}
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_widget", Config: cfg}, []connectors.Record{
+		{"site_url": "https://example.com/"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("result = %+v", result)
+	}
+	const wantPath = "/webmasters/v3/sites/https://example.com/"
+	if cap.path != wantPath {
+		t.Fatalf("path = %q, want %q", cap.path, wantPath)
+	}
+}
+
 // --- body construction: json default (record minus path_fields) ---
 
 func TestWriteJSONBodyDefaultExcludesPathFields(t *testing.T) {

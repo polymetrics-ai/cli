@@ -61,12 +61,12 @@ func Interpolate(template string, vars Vars) (string, error) {
 // InterpolatePath resolves every {{ }} expression in template against vars,
 // applying the urlencode filter by DEFAULT to every resolved value (path
 // segments are the primary injection surface; THREAT-MODEL §2). An explicit
-// filter still overrides the default. A resolved value that is exactly ".."
-// (or, after percent-decoding, still resolves to a ".." path segment) is
-// rejected outright (F9b/m3): urlencodeSegment intentionally leaves a bare
-// "." unescaped (it is not itself a metacharacter needing escaping for
-// safe insertion), which means a literal ".." value would otherwise survive
-// as an intact same-value path segment even though slashes are encoded.
+// filter still overrides the default. A resolved value that contains a ".."
+// traversal segment is rejected outright (F9b/m3): urlencodeSegment
+// intentionally leaves a bare "." unescaped (it is not itself a metacharacter
+// needing escaping for safe insertion), which means a traversal value would
+// otherwise survive as an intact same-value path segment even though slashes
+// are encoded.
 func InterpolatePath(template string, vars Vars) (string, error) {
 	out, err := interpolate(template, vars, true)
 	if err != nil {
@@ -78,20 +78,22 @@ func InterpolatePath(template string, vars Vars) (string, error) {
 	return out, nil
 }
 
-// containsDotDotSegment reports whether any "/"-delimited segment of path is
-// exactly "..", checking both the raw (possibly percent-encoded) segments
-// and their percent-decoded form so an encoded traversal segment (e.g.
-// "%2e%2e") is caught too.
+// containsDotDotSegment reports whether path includes a ".." traversal
+// segment, checking both raw and percent-decoded segment forms.
 func containsDotDotSegment(path string) bool {
 	for _, seg := range strings.Split(path, "/") {
-		if seg == ".." {
+		if isDotDotPath(seg) {
 			return true
 		}
-		if decoded, err := url.PathUnescape(seg); err == nil && decoded == ".." {
+		if decoded, err := url.PathUnescape(seg); err == nil && isDotDotPath(decoded) {
 			return true
 		}
 	}
 	return false
+}
+
+func isDotDotPath(path string) bool {
+	return path == ".." || strings.HasPrefix(path, "../") || strings.Contains(path, "/../") || strings.HasSuffix(path, "/..")
 }
 
 // InterpolateHeader resolves every {{ }} expression in template against vars
