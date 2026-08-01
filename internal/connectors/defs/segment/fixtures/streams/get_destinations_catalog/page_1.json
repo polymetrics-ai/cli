@@ -2,18 +2,75 @@
   "request": {
     "method": "GET",
     "path": "/catalog/destinations",
-    "query": {}
+    "query": {
+      "pagination.count": "100"
+    }
   },
   "response": {
     "status": 200,
     "body": {
       "data": {
+        "destinationsCatalog": [
+          {
+            "id": "synthetic-destination-metadata-id",
+            "name": "Synthetic Destination",
+            "description": "Synthetic Segment destination catalog item.",
+            "slug": "synthetic-destination",
+            "logos": {
+              "default": "https://example.invalid/destination-default.svg",
+              "mark": "https://example.invalid/destination-mark.svg"
+            },
+            "options": [
+              {
+                "name": "workspaceOption",
+                "type": "string",
+                "defaultValue": "",
+                "description": "Synthetic destination option.",
+                "required": false,
+                "label": "Workspace Option"
+              }
+            ],
+            "status": "PUBLIC",
+            "categories": [
+              "Analytics"
+            ],
+            "website": "https://example.invalid/destination",
+            "components": [
+              {
+                "code": "https://example.invalid/components/destination",
+                "type": "BROWSER"
+              }
+            ],
+            "previousNames": [],
+            "supportedMethods": {
+              "track": true,
+              "pageview": true,
+              "identify": true,
+              "group": false,
+              "alias": false
+            },
+            "supportedPlatforms": {
+              "browser": true,
+              "mobile": false,
+              "server": true,
+              "warehouse": false
+            },
+            "supportedFeatures": {
+              "cloudModeInstances": "0",
+              "deviceModeInstances": "0",
+              "replay": false,
+              "browserUnbundling": false,
+              "browserUnbundlingPublic": true
+            },
+            "actions": [],
+            "presets": [],
+            "contacts": [],
+            "partnerOwned": false
+          }
+        ],
         "pagination": {
-          "id": "synthetic-conformance-value",
-          "name": "Synthetic Segment get destinations catalog",
-          "slug": "get-destinations-catalog",
-          "workspaceId": "synthetic-conformance-value",
-          "updatedAt": "2026-01-01T00:00:00Z"
+          "current": "synthetic-current-cursor",
+          "totalEntries": 1
         }
       }
     }

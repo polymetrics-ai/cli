@@ -2266,7 +2266,8 @@
         "additionalProperties": false,
         "required": [
           "destinationId"
-        ]
+        ],
+        "minProperties": 2
       },
       "risk": "Segment Update Destination (PATCH /destinations/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -2472,7 +2473,8 @@
         "additionalProperties": false,
         "required": [
           "functionId"
-        ]
+        ],
+        "minProperties": 2
       },
       "risk": "Segment Update Function (PATCH /functions/{functionId}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -2699,7 +2701,8 @@
         "additionalProperties": false,
         "required": [
           "modelId"
-        ]
+        ],
+        "minProperties": 2
       },
       "risk": "Segment Update Reverse Etl Model (PATCH /reverse-etl-models/{modelId}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -2772,7 +2775,8 @@
         "additionalProperties": false,
         "required": [
           "sourceId"
-        ]
+        ],
+        "minProperties": 2
       },
       "risk": "Segment Update Source (PATCH /sources/{sourceId}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -2840,7 +2844,8 @@
         "additionalProperties": false,
         "required": [
           "trackingPlanId"
-        ]
+        ],
+        "minProperties": 2
       },
       "risk": "Segment Update Tracking Plan (PATCH /tracking-plans/{trackingPlanId}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -3037,7 +3042,8 @@
         "additionalProperties": false,
         "required": [
           "transformationId"
-        ]
+        ],
+        "minProperties": 2
       },
       "risk": "Segment Update Transformation (PATCH /transformations/{transformationId}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -3405,7 +3411,8 @@
           "spaceId",
           "audienceId",
           "id"
-        ]
+        ],
+        "minProperties": 4
       },
       "risk": "Segment Update Activation for Audience (PATCH /spaces/{spaceId}/audiences/{audienceId}/activations/{id}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -3591,7 +3598,8 @@
         "required": [
           "spaceId",
           "id"
-        ]
+        ],
+        "minProperties": 3
       },
       "risk": "Segment Update Audience for Space (PATCH /spaces/{spaceId}/audiences/{id}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -3787,7 +3795,8 @@
         "required": [
           "spaceId",
           "id"
-        ]
+        ],
+        "minProperties": 3
       },
       "risk": "Segment Update Computed Trait for Space (PATCH /spaces/{spaceId}/computed-traits/{id}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -3912,7 +3921,8 @@
         "required": [
           "destinationId",
           "filterId"
-        ]
+        ],
+        "minProperties": 3
       },
       "risk": "Segment Update Filter for Destination (PATCH /destination/{destinationId}/filters/{filterId}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -4340,7 +4350,8 @@
         "additionalProperties": false,
         "required": [
           "sourceId"
-        ]
+        ],
+        "minProperties": 2
       },
       "risk": "Segment Update Schema Settings in Source (PATCH /sources/{sourceId}/settings) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -4401,7 +4412,8 @@
         "required": [
           "spaceId",
           "warehouseId"
-        ]
+        ],
+        "minProperties": 3
       },
       "risk": "Segment Update Selective Sync for Warehouse And Space (PATCH /spaces/{spaceId}/profiles-warehouses/{warehouseId}/selective-syncs) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -4511,7 +4523,8 @@
           "spaceId",
           "audienceId",
           "destinationId"
-        ]
+        ],
+        "minProperties": 4
       },
       "risk": "Segment Update Destination for Audience (PATCH /spaces/{spaceId}/audiences/{audienceId}/destination-connections/{destinationId}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [
@@ -4816,7 +4829,8 @@
         "additionalProperties": false,
         "required": [
           "credentialId"
-        ]
+        ],
+        "minProperties": 2
       },
       "risk": "Segment Update Credential (PATCH /credentials/{credentialId}) mutates provider state; execute only through reverse ETL approval gates.",
       "path_fields": [

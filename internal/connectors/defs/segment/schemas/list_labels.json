@@ -2,37 +2,17 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "x-primary-key": [
-    "id"
+    "key",
+    "value"
   ],
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
-    "slug": {
-      "type": "string"
-    },
     "key": {
       "type": "string"
     },
-    "type": {
+    "value": {
       "type": "string"
     },
-    "workspaceId": {
-      "type": "string"
-    },
-    "createdAt": {
-      "type": "string"
-    },
-    "updatedAt": {
-      "type": "string"
-    },
-    "timestamp": {
-      "type": "string"
-    },
-    "event": {
+    "description": {
       "type": "string"
     }
   },

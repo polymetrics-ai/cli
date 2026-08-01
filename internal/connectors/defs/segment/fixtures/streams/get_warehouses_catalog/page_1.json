@@ -2,18 +2,37 @@
   "request": {
     "method": "GET",
     "path": "/catalog/warehouses",
-    "query": {}
+    "query": {
+      "pagination.count": "100"
+    }
   },
   "response": {
     "status": 200,
     "body": {
       "data": {
+        "warehousesCatalog": [
+          {
+            "id": "synthetic-warehouse-metadata-id",
+            "slug": "synthetic-warehouse",
+            "name": "Synthetic Warehouse",
+            "description": "Synthetic Segment warehouse catalog item.",
+            "logos": {
+              "default": "https://example.invalid/warehouse-default.svg",
+              "mark": "https://example.invalid/warehouse-mark.svg",
+              "alt": ""
+            },
+            "options": [
+              {
+                "name": "server",
+                "type": "string",
+                "required": true
+              }
+            ]
+          }
+        ],
         "pagination": {
-          "id": "synthetic-conformance-value",
-          "name": "Synthetic Segment get warehouses catalog",
-          "slug": "get-warehouses-catalog",
-          "workspaceId": "synthetic-conformance-value",
-          "updatedAt": "2026-01-01T00:00:00Z"
+          "current": "synthetic-current-cursor",
+          "totalEntries": 1
         }
       }
     }

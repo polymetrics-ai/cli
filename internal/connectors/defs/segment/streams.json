@@ -314,17 +314,8 @@
       },
       "schema": "schemas/list_labels.json",
       "projection": "passthrough",
-      "query": {
-        "pagination.count": {
-          "template": "{{ config.page_size }}",
-          "default": "100"
-        }
-      },
       "pagination": {
-        "type": "cursor",
-        "cursor_param": "pagination.cursor",
-        "token_path": "data.pagination.next",
-        "page_size": 100
+        "type": "none"
       }
     },
     {
@@ -762,13 +753,21 @@
       "name": "get_destinations_catalog",
       "path": "/catalog/destinations",
       "records": {
-        "path": "data.pagination",
-        "single_object": true
+        "path": "data.destinationsCatalog"
       },
       "schema": "schemas/get_destinations_catalog.json",
       "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
       "pagination": {
-        "type": "none"
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
       }
     },
     {
@@ -853,13 +852,21 @@
       "name": "get_sources_catalog",
       "path": "/catalog/sources",
       "records": {
-        "path": "data.pagination",
-        "single_object": true
+        "path": "data.sourcesCatalog"
       },
       "schema": "schemas/get_sources_catalog.json",
       "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
       "pagination": {
-        "type": "none"
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
       }
     },
     {
@@ -918,13 +925,21 @@
       "name": "get_warehouses_catalog",
       "path": "/catalog/warehouses",
       "records": {
-        "path": "data.pagination",
-        "single_object": true
+        "path": "data.warehousesCatalog"
       },
       "schema": "schemas/get_warehouses_catalog.json",
       "projection": "passthrough",
+      "query": {
+        "pagination.count": {
+          "template": "{{ config.page_size }}",
+          "default": "100"
+        }
+      },
       "pagination": {
-        "type": "none"
+        "type": "cursor",
+        "cursor_param": "pagination.cursor",
+        "token_path": "data.pagination.next",
+        "page_size": 100
       }
     },
     {

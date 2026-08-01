@@ -10,17 +10,11 @@
       "data": {
         "labels": [
           {
-            "id": "synthetic-conformance-value",
-            "name": "Synthetic Segment list labels",
-            "slug": "list-labels",
-            "workspaceId": "synthetic-conformance-value",
-            "updatedAt": "2026-01-01T00:00:00Z"
+            "key": "environment",
+            "value": "synthetic",
+            "description": "Synthetic Segment label."
           }
-        ],
-        "pagination": {
-          "current": "synthetic",
-          "totalEntries": 1
-        }
+        ]
       }
     }
   }

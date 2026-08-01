@@ -10,15 +10,14 @@
       "data": {
         "suppressed": [
           {
-            "id": "synthetic-conformance-value",
-            "name": "Synthetic Segment list suppressions",
-            "slug": "list-suppressions",
-            "workspaceId": "synthetic-conformance-value",
-            "updatedAt": "2026-01-01T00:00:00Z"
+            "subjectType": "userId",
+            "subjectIds": [
+              "synthetic-subject-id-1"
+            ]
           }
         ],
         "pagination": {
-          "current": "synthetic",
+          "current": "synthetic-current-cursor",
           "totalEntries": 1
         }
       }

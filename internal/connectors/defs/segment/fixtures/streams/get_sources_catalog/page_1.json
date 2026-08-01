@@ -2,18 +2,34 @@
   "request": {
     "method": "GET",
     "path": "/catalog/sources",
-    "query": {}
+    "query": {
+      "pagination.count": "100"
+    }
   },
   "response": {
     "status": 200,
     "body": {
       "data": {
+        "sourcesCatalog": [
+          {
+            "id": "synthetic-source-metadata-id",
+            "slug": "synthetic-source",
+            "name": "Synthetic Source",
+            "categories": [
+              "Synthetic"
+            ],
+            "description": "Synthetic Segment source catalog item.",
+            "logos": {
+              "default": "https://example.invalid/source-default.svg",
+              "alt": "https://example.invalid/source-alt.svg"
+            },
+            "options": [],
+            "isCloudEventSource": true
+          }
+        ],
         "pagination": {
-          "id": "synthetic-conformance-value",
-          "name": "Synthetic Segment get sources catalog",
-          "slug": "get-sources-catalog",
-          "workspaceId": "synthetic-conformance-value",
-          "updatedAt": "2026-01-01T00:00:00Z"
+          "current": "synthetic-current-cursor",
+          "totalEntries": 1
         }
       }
     }
