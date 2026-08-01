@@ -1,12 +1,16 @@
 {
   "record": {
-    "id": "trello-fixture-value",
-    "idBoard": "trello-fixture-value",
-    "idList": "trello-fixture-value"
+    "id": "507f1f77bcf86cd799439011",
+    "idBoard": "507f1f77bcf86cd799439011",
+    "idList": "507f1f77bcf86cd799439011"
   },
   "expect": {
     "method": "POST",
-    "path": "/lists/trello-fixture-value/moveAllCards"
+    "path": "/lists/507f1f77bcf86cd799439011/moveAllCards",
+    "body": {
+      "idBoard": "507f1f77bcf86cd799439011",
+      "idList": "507f1f77bcf86cd799439011"
+    }
   },
   "response": {
     "status": 200,

@@ -1,13 +1,16 @@
 {
   "record": {
-    "idCard": "trello-fixture-value",
-    "idChecklist": "trello-fixture-value",
-    "idCheckItem": "trello-fixture-value",
+    "idCard": "507f1f77bcf86cd799439011",
+    "idChecklist": "507f1f77bcf86cd799439011",
+    "idCheckItem": "507f1f77bcf86cd799439011",
     "pos": "trello-fixture-value"
   },
   "expect": {
     "method": "PUT",
-    "path": "/cards/trello-fixture-value/checklist/trello-fixture-value/checkItem/trello-fixture-value"
+    "path": "/cards/507f1f77bcf86cd799439011/checklist/507f1f77bcf86cd799439011/checkItem/507f1f77bcf86cd799439011",
+    "body": {
+      "pos": "trello-fixture-value"
+    }
   },
   "response": {
     "status": 200,

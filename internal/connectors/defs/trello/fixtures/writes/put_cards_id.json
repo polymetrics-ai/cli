@@ -3,11 +3,16 @@
     "id": "trello-fixture-value",
     "name": "trello-fixture-value",
     "desc": "trello-fixture-value",
-    "idList": "trello-fixture-value"
+    "idList": "507f1f77bcf86cd799439011"
   },
   "expect": {
     "method": "PUT",
-    "path": "/cards/trello-fixture-value"
+    "path": "/cards/trello-fixture-value",
+    "body": {
+      "desc": "trello-fixture-value",
+      "idList": "507f1f77bcf86cd799439011",
+      "name": "trello-fixture-value"
+    }
   },
   "response": {
     "status": 200,

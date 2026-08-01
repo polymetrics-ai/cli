@@ -7,7 +7,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/members/trello-fixture-value/savedSearches"
+    "path": "/members/trello-fixture-value/savedSearches",
+    "body": {
+      "name": "trello-fixture-value",
+      "pos": "trello-fixture-value",
+      "query": "trello-fixture-value"
+    }
   },
   "response": {
     "status": 200,

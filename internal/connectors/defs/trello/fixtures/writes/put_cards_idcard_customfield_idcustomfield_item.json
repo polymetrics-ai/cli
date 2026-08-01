@@ -1,11 +1,11 @@
 {
   "record": {
-    "idCard": "trello-fixture-value",
-    "idCustomField": "trello-fixture-value"
+    "idCard": "507f1f77bcf86cd799439011",
+    "idCustomField": "507f1f77bcf86cd799439011"
   },
   "expect": {
     "method": "PUT",
-    "path": "/cards/trello-fixture-value/customField/trello-fixture-value/item"
+    "path": "/cards/507f1f77bcf86cd799439011/customField/507f1f77bcf86cd799439011/item"
   },
   "response": {
     "status": 200,

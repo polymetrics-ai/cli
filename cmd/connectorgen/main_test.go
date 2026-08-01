@@ -914,6 +914,40 @@ func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {
 	}
 }
 
+func TestRunValidate_SingleBundleMissingMetadataReportsMissingFile(t *testing.T) {
+	root := t.TempDir()
+	bundleDir := filepath.Join(root, "missing-metadata")
+	if err := os.MkdirAll(bundleDir, 0o755); err != nil {
+		t.Fatalf("mkdir bundle: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(bundleDir, "spec.json"), []byte(`{"type":"object","properties":{}}`), 0o644); err != nil {
+		t.Fatalf("write spec: %v", err)
+	}
+
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"validate", bundleDir, "--json"}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("run(validate) exit = 0, want findings\nstdout=%s", stdout.String())
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("run(validate) stderr = %q", stderr.String())
+	}
+	var report Report
+	if err := json.Unmarshal(stdout.Bytes(), &report); err != nil {
+		t.Fatalf("decode report: %v\n%s", err, stdout.String())
+	}
+	if report.ConnectorsChecked != 1 {
+		t.Fatalf("ConnectorsChecked = %d, want 1", report.ConnectorsChecked)
+	}
+	if len(report.Findings) != 1 {
+		t.Fatalf("Findings = %+v, want exactly one", report.Findings)
+	}
+	finding := report.Findings[0]
+	if finding.Connector != "missing-metadata" || finding.File != "metadata.json" || finding.Rule != ruleMissingFile {
+		t.Fatalf("finding = %+v, want missing metadata finding", finding)
+	}
+}
+
 // --- gap-loop cycle-1 item 6 (REVIEW-A.md C3): validate-time hard FINDING
 // for a spec.json "default" that does not type-check against its own
 // declared "type" -------------------------------------------------------

@@ -6,7 +6,12 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/labels"
+    "path": "/labels",
+    "body": {
+      "color": "yellow",
+      "idBoard": "trello-fixture-value",
+      "name": "trello-fixture-value"
+    }
   },
   "response": {
     "status": 200,

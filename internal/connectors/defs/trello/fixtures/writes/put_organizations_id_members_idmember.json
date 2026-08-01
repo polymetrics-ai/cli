@@ -1,12 +1,15 @@
 {
   "record": {
-    "id": "trello-fixture-value",
+    "id": "507f1f77bcf86cd799439011",
     "idMember": "trello-fixture-value",
     "type": "admin"
   },
   "expect": {
     "method": "PUT",
-    "path": "/organizations/trello-fixture-value/members/trello-fixture-value"
+    "path": "/organizations/507f1f77bcf86cd799439011/members/trello-fixture-value",
+    "body": {
+      "type": "admin"
+    }
   },
   "response": {
     "status": 200,

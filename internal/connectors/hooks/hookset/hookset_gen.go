@@ -75,6 +75,7 @@ import (
 	_ "polymetrics.ai/internal/connectors/hooks/snapchat-marketing"
 	_ "polymetrics.ai/internal/connectors/hooks/stigg"
 	_ "polymetrics.ai/internal/connectors/hooks/strava"
+	_ "polymetrics.ai/internal/connectors/hooks/trello"
 	_ "polymetrics.ai/internal/connectors/hooks/twilio"
 	_ "polymetrics.ai/internal/connectors/hooks/uptick"
 	_ "polymetrics.ai/internal/connectors/hooks/us-census"

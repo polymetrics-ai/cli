@@ -1,12 +1,19 @@
 {
   "record": {
-    "idList": "trello-fixture-value",
+    "idList": "507f1f77bcf86cd799439011",
     "name": "trello-fixture-value",
-    "desc": "trello-fixture-value"
+    "desc": "trello-fixture-value",
+    "fileSource": "internal/connectors/defs/trello/fixtures/files/trello-upload.txt"
   },
   "expect": {
     "method": "POST",
-    "path": "/cards"
+    "path": "/cards",
+    "body": {
+      "name": "trello-fixture-value",
+      "desc": "trello-fixture-value",
+      "idList": "507f1f77bcf86cd799439011",
+      "fileSource": "trello-upload.txt"
+    }
   },
   "response": {
     "status": 200,

@@ -1,11 +1,14 @@
 {
   "record": {
-    "id": "trello-fixture-value",
+    "id": "507f1f77bcf86cd799439011",
     "name": "trello-fixture-value"
   },
   "expect": {
     "method": "POST",
-    "path": "/cards/trello-fixture-value/checklists"
+    "path": "/cards/507f1f77bcf86cd799439011/checklists",
+    "body": {
+      "name": "trello-fixture-value"
+    }
   },
   "response": {
     "status": 200,

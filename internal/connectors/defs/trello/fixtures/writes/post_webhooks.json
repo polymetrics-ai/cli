@@ -1,11 +1,15 @@
 {
   "record": {
     "callbackURL": "trello-fixture-value",
-    "idModel": "trello-fixture-value"
+    "idModel": "507f1f77bcf86cd799439011"
   },
   "expect": {
     "method": "POST",
-    "path": "/webhooks/"
+    "path": "/webhooks/",
+    "body": {
+      "callbackURL": "trello-fixture-value",
+      "idModel": "507f1f77bcf86cd799439011"
+    }
   },
   "response": {
     "status": 200,

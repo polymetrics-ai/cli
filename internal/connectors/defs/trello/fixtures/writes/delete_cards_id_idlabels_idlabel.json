@@ -1,11 +1,11 @@
 {
   "record": {
-    "id": "trello-fixture-value",
-    "idLabel": "trello-fixture-value"
+    "id": "507f1f77bcf86cd799439011",
+    "idLabel": "507f1f77bcf86cd799439011"
   },
   "expect": {
     "method": "DELETE",
-    "path": "/cards/trello-fixture-value/idLabels/trello-fixture-value"
+    "path": "/cards/507f1f77bcf86cd799439011/idLabels/507f1f77bcf86cd799439011"
   },
   "response": {
     "status": 200,

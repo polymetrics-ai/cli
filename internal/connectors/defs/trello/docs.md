@@ -14,7 +14,7 @@ Create a Trello API key and token out of band, then add credentials without plac
 pm credentials add trello-prod --connector trello --from-env key=TRELLO_API_KEY --from-env token=TRELLO_API_TOKEN
 ```
 
-The connector sends `key` as an API-key query authenticator and sends `token` on each declared Trello request. Both fields are marked `x-secret` and are redacted from previews and errors.
+The connector injects both `key` and `token` through connector-local query authentication so direct reads, streams, and writes carry the required Trello credentials without exposing secret values in command flags. Both fields are marked `x-secret` and are redacted from previews and errors.
 
 ## Streams notes
 
@@ -41,7 +41,7 @@ pm trello write comment-card --credential trello-prod --id <card-id> --text "Fix
 pm trello write delete-webhook --credential trello-prod --id <webhook-id> --preview --json
 ```
 
-The declarative engine builds Trello write requests from typed records. Form bodies carry supportable Trello parameters while path parameters and token authentication are interpolated safely. Destructive or notification-producing effects remain gated by reverse ETL plan → preview → approval → execute.
+The declarative engine builds Trello write requests from typed records. Form and bounded multipart bodies carry supportable Trello parameters, including file upload fields for card attachments, card file sources, board backgrounds, custom emoji, custom stickers, avatars, and organization logos. Destructive or notification-producing effects remain gated by reverse ETL plan → preview → approval → execute.
 
 ## Known limits
 
@@ -53,4 +53,4 @@ The official operation ledger intentionally blocks 42 endpoints:
 - `/batch` is blocked because it accepts arbitrary sub-request URLs and would be a raw generic HTTP escape hatch.
 - Field/filter accessor endpoints such as `/cards/{id}/{field}` are tracked as duplicates of covered object or collection endpoints.
 
-No credentialed Trello checks, live provider calls, or provider writes are part of local conformance. Binary response payloads were not found in the audited OpenAPI content types; attachment operations are modeled as JSON/form REST metadata/actions only.
+No credentialed Trello checks, live provider calls, or provider writes are part of local conformance. Binary response payloads were not found in the audited OpenAPI content types; OpenAPI file upload request parameters are modeled as bounded multipart reverse ETL actions rather than raw HTTP uploads.

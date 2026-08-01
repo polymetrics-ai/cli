@@ -1,10 +1,10 @@
 {
   "record": {
-    "idPlugin": "trello-fixture-value"
+    "idPlugin": "507f1f77bcf86cd799439011"
   },
   "expect": {
     "method": "POST",
-    "path": "/plugins/trello-fixture-value/listing"
+    "path": "/plugins/507f1f77bcf86cd799439011/listing"
   },
   "response": {
     "status": 200,

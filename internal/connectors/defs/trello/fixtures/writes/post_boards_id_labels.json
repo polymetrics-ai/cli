@@ -6,7 +6,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/boards/trello-fixture-value/labels"
+    "path": "/boards/trello-fixture-value/labels",
+    "body": {
+      "color": "trello-fixture-value",
+      "name": "trello-fixture-value"
+    }
   },
   "response": {
     "status": 200,

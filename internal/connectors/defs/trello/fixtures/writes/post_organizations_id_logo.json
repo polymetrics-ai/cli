@@ -1,10 +1,14 @@
 {
   "record": {
-    "id": "trello-fixture-value"
+    "id": "507f1f77bcf86cd799439011",
+    "file": "internal/connectors/defs/trello/fixtures/files/trello-upload.txt"
   },
   "expect": {
     "method": "POST",
-    "path": "/organizations/trello-fixture-value/logo"
+    "path": "/organizations/507f1f77bcf86cd799439011/logo",
+    "body": {
+      "file": "trello-upload.txt"
+    }
   },
   "response": {
     "status": 200,

@@ -3,6 +3,7 @@
   "expect": {
     "method": "PATCH",
     "path": "/widgets/1",
+    "query": { "mode": "form" },
     "body": { "name": "renamed sprocket" }
   }
 }

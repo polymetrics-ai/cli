@@ -218,6 +218,12 @@ func validateDir(fsys fs.FS) (Report, error) {
 
 func validateSingleBundleDir(fsys fs.FS, name string) (Report, error) {
 	findings, warnings := validateBundleDir(fsys, name)
+	if findings == nil {
+		findings = []Finding{}
+	}
+	if warnings == nil {
+		warnings = []Finding{}
+	}
 	sortFindingLists(findings, warnings)
 	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: 1}, nil
 }

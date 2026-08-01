@@ -6,7 +6,10 @@
   },
   "expect": {
     "method": "PUT",
-    "path": "/members/trello-fixture-value/boardStars/trello-fixture-value"
+    "path": "/members/trello-fixture-value/boardStars/trello-fixture-value",
+    "body": {
+      "pos": "trello-fixture-value"
+    }
   },
   "response": {
     "status": 200,

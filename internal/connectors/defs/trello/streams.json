@@ -4,9 +4,8 @@
     "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "api_key_query",
-        "param": "key",
-        "value": "{{ secrets.key }}"
+        "mode": "custom",
+        "hook": "query_auth"
       }
     ],
     "pagination": {

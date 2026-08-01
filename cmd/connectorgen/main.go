@@ -76,12 +76,30 @@ func usage() string {
   connectorgen new <name>`
 }
 
+var bundleRootMarkers = []string{
+	"metadata.json",
+	"spec.json",
+	"streams.json",
+	"writes.json",
+	"api_surface.json",
+	"operations.json",
+	"cli_surface.json",
+	"certification.json",
+	"docs.md",
+	"schemas",
+	"fixtures",
+}
+
 func isBundleRoot(dir string) bool {
 	if strings.TrimSpace(dir) == "" {
 		return false
 	}
-	info, err := os.Stat(filepath.Join(dir, "metadata.json"))
-	return err == nil && !info.IsDir()
+	for _, marker := range bundleRootMarkers {
+		if _, err := os.Stat(filepath.Join(dir, marker)); err == nil {
+			return true
+		}
+	}
+	return false
 }
 
 // runValidate implements `connectorgen validate [dir] [--json]`.

@@ -8,7 +8,13 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/cards/trello-fixture-value/stickers"
+    "path": "/cards/trello-fixture-value/stickers",
+    "body": {
+      "image": "trello-fixture-value",
+      "left": "1.5",
+      "top": "1.5",
+      "zIndex": "1"
+    }
   },
   "response": {
     "status": 200,

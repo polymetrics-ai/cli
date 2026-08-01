@@ -5,7 +5,11 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/boards/"
+    "path": "/boards/",
+    "body": {
+      "desc": "trello-fixture-value",
+      "name": "trello-fixture-value"
+    }
   },
   "response": {
     "status": 200,

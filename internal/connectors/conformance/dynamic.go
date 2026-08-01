@@ -14,7 +14,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
@@ -160,7 +162,7 @@ func withReplayURL(b engine.Bundle, baseURL string) engine.Bundle {
 // from real credentials) per THREAT-MODEL §4 — conformance never touches
 // live secrets.
 func runtimeConfigForEngine(b engine.Bundle) connectors.RuntimeConfig {
-	cfg := connectors.RuntimeConfig{Config: map[string]string{}, Secrets: map[string]string{}}
+	cfg := connectors.RuntimeConfig{ProjectDir: conformanceProjectDir(), Config: map[string]string{}, Secrets: map[string]string{}}
 	if b.Spec == nil {
 		return cfg
 	}
@@ -180,6 +182,23 @@ func runtimeConfigForEngine(b engine.Bundle) connectors.RuntimeConfig {
 		cfg.Config[name] = "synthetic-conformance-value"
 	}
 	return cfg
+}
+
+func conformanceProjectDir() string {
+	dir, err := os.Getwd()
+	if err != nil {
+		return "."
+	}
+	for {
+		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
+			return dir
+		}
+		next := filepath.Dir(dir)
+		if next == dir {
+			return "."
+		}
+		dir = next
+	}
 }
 
 // readRequestFor builds a connectors.ReadRequest for streamName with cfg and
@@ -803,9 +822,10 @@ type writeFixture struct {
 }
 
 type writeExpectation struct {
-	Method string         `json:"method"`
-	Path   string         `json:"path"`
-	Body   map[string]any `json:"body,omitempty"`
+	Method string            `json:"method"`
+	Path   string            `json:"path"`
+	Query  map[string]string `json:"query,omitempty"`
+	Body   map[string]any    `json:"body,omitempty"`
 }
 
 // loadWriteFixture reads fixtures/writes/<action>.json.
@@ -849,6 +869,11 @@ func compareWriteExpectation(got capturedRequest, want writeExpectation) string 
 	if want.Path != "" && got.Path != want.Path {
 		return fmt.Sprintf("path = %q, want %q", got.Path, want.Path)
 	}
+	for k, wantVal := range want.Query {
+		if gotVal := got.Query.Get(k); gotVal != wantVal {
+			return fmt.Sprintf("query[%q] = %q, want %q", k, gotVal, wantVal)
+		}
+	}
 	for k, wantVal := range want.Body {
 		gotVal, ok := got.Body[k]
 		if !ok {
@@ -887,10 +912,7 @@ type captureServer struct {
 func newCaptureServer(resp *fixtureResponse) *captureServer {
 	cs := &captureServer{resp: resp}
 	cs.Server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var body map[string]any
-		dec := json.NewDecoder(r.Body)
-		dec.UseNumber()
-		_ = dec.Decode(&body) // a body-less request (e.g. DELETE) decodes to nil, not an error worth surfacing
+		body := captureWriteRequestBody(r)
 
 		cs.mu.Lock()
 		cs.last = &capturedRequest{Method: r.Method, Path: r.URL.Path, Query: r.URL.Query(), Body: body}
@@ -925,6 +947,60 @@ func (cs *captureServer) LastRequest() *capturedRequest {
 	cs.mu.Lock()
 	defer cs.mu.Unlock()
 	return cs.last
+}
+
+func captureWriteRequestBody(r *http.Request) map[string]any {
+	contentType := strings.ToLower(r.Header.Get("Content-Type"))
+	switch {
+	case strings.HasPrefix(contentType, "application/x-www-form-urlencoded"):
+		if err := r.ParseForm(); err != nil {
+			return nil
+		}
+		return valuesBodyMap(r.PostForm)
+	case strings.HasPrefix(contentType, "multipart/form-data"):
+		if err := r.ParseMultipartForm(32 << 20); err != nil {
+			return nil
+		}
+		if r.MultipartForm == nil {
+			return nil
+		}
+		defer func() { _ = r.MultipartForm.RemoveAll() }()
+		body := valuesBodyMap(r.MultipartForm.Value)
+		if body == nil {
+			body = map[string]any{}
+		}
+		for key, files := range r.MultipartForm.File {
+			if len(files) > 0 {
+				body[key] = files[0].Filename
+			}
+		}
+		return body
+	default:
+		var body map[string]any
+		dec := json.NewDecoder(r.Body)
+		dec.UseNumber()
+		_ = dec.Decode(&body)
+		return body
+	}
+}
+
+func valuesBodyMap(values url.Values) map[string]any {
+	if len(values) == 0 {
+		return nil
+	}
+	body := make(map[string]any, len(values))
+	for key, vals := range values {
+		if len(vals) == 1 {
+			body[key] = vals[0]
+			continue
+		}
+		items := make([]any, len(vals))
+		for i, val := range vals {
+			items[i] = val
+		}
+		body[key] = items
+	}
+	return body
 }
 
 // newAlwaysStatusServer returns an httptest.Server that answers every

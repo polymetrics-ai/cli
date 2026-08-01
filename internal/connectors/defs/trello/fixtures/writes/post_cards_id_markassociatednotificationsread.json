@@ -1,10 +1,10 @@
 {
   "record": {
-    "id": "trello-fixture-value"
+    "id": "507f1f77bcf86cd799439011"
   },
   "expect": {
     "method": "POST",
-    "path": "/cards/trello-fixture-value/markAssociatedNotificationsRead"
+    "path": "/cards/507f1f77bcf86cd799439011/markAssociatedNotificationsRead"
   },
   "response": {
     "status": 200,
