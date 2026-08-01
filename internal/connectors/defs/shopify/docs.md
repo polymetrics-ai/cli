@@ -4,7 +4,7 @@
 
 This bundle records Shopify Admin API parity for parent issue #3013 using official Shopify documentation. The current source inventory reviewed on 2026-08-01 contains 1166 `api_surface.json` rows: 287 GraphQL queries, 518 GraphQL mutations, 317 REST non-delete rows, and 44 REST DELETE rows.
 
-The connector implements a fixture-backed `shop` read stream and typed REST path-parameter delete actions that the current engine can express safely (42 executable DELETE actions). All other official rows are present as blocked operation-ledger entries with source URLs. Blocked rows are in scope for future fixed streams, fixed direct reads, fixed binary reads, CDC/changefeed surfaces, or typed reverse-ETL write actions; they are not blanket unsafe exclusions. State-destroying blocked rows are classified as `destructive_action` with critical risk and `confirm: "destructive"`.
+The connector implements a fixture-backed `shop` read stream and typed REST path-parameter delete actions that the current engine can express safely (42 executable DELETE actions). All other official rows are present as blocked operation-ledger entries with source URLs. Blocked rows are in scope for future fixed streams, fixed direct reads, CDC/changefeed surfaces, or typed reverse-ETL write actions; they are not blanket unsafe exclusions. State-destroying blocked rows are classified as `destructive_action` with critical risk and `confirm: "destructive"`.
 
 ## Auth setup
 
@@ -14,13 +14,13 @@ Configure `shop_domain` with the Shopify shop host and provide the Admin API tok
 
 - `shop` calls the fixed REST path `/admin/api/latest/shop.json`, emits the `shop` object, and ships a sanitized replay fixture.
 - GraphQL query rows remain blocked until each has a fixed reviewed document, typed variables, bounded pagination/output policy, and fixture evidence. No arbitrary GraphQL document or raw variables blob is exposed.
-- REST read/direct/binary rows remain blocked unless represented by a fixed stream or future fixed command metadata.
+- REST read and direct-read rows remain blocked unless represented by a fixed stream or future fixed command metadata.
 
 ## Write actions & risks
 
 - Implemented REST DELETE actions are `kind: delete`, `body_type: none`, idempotent for `404`, use the official documented path variables (for example `{blog_id}` rather than generic `{id1}`), and declare `confirm: "destructive"`. They still execute only through the existing reverse ETL plan -> preview -> explicit approval -> execute path.
 - REST DELETE rows that require query identifiers, such as inventory levels (`inventory_item_id` + `location_id`) and theme assets (`asset[key]`), are blocked with an exact shared write-query foundation dependency instead of being excluded as unsafe.
-- State-destroying GraphQL mutations and REST operations that destroy, remove, cancel, close, disable, revoke, archive, deactivate, uninstall, erase, expire, void, dispose, release held state, detach media, leave selling-plan groups, unlink/disassociate relationships, unpublish resources, debit balances, clear feedback entries, or perform source-documented replacement removals are blocked as `destructive_action` with critical risk and `confirm: "destructive"`; non-destructive mutations such as activation and applying holds remain `admin_reverse_etl`.
+- State-destroying GraphQL mutations and REST operations that destroy, remove, cancel, close, disable, revoke, archive, deactivate, uninstall, erase, expire, void, dispose, release held state, detach media, leave selling-plan groups, unlink/disassociate relationships, unpublish resources, debit balances, clear feedback entries, remove comments from public view, delete prior server-pixel subscriptions, deactivate inventory, remove prior cash-drawer assignments, or perform source-documented replacement removals are blocked as `destructive_action` with critical risk and `confirm: "destructive"`; non-destructive mutations such as activation and applying holds remain `admin_reverse_etl`.
 - Other GraphQL mutations and REST POST/PUT rows are in scope but blocked until operation-specific typed schemas, redaction, fixtures, and approval text are added.
 
 ## Known limits

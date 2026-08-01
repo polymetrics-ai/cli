@@ -16,15 +16,15 @@
     "api_surface_covered_rows": 43,
     "api_surface_blocked_operation_rows": 1123,
     "operations_json_rows": 0,
-    "api_surface_blocked_destructive_action_rows": 179,
-    "api_surface_blocked_destructive_confirm_rows": 179,
-    "api_surface_blocked_state_destroying_reclassified_rows": 41
+    "api_surface_blocked_destructive_action_rows": 186,
+    "api_surface_blocked_destructive_confirm_rows": 186,
+    "api_surface_blocked_state_destroying_reclassified_rows": 48
   },
   "notes": [
     "Official current source inventory includes REST DELETE rows under the captain policy addendum; existing GitHub issue count tables were preserved and are not treated as implemented counts.",
     "All non-executable rows are blocked operation-ledger rows, not blanket unsafe exclusions.",
     "REST latest resource-page examples are inventoried as documented operations; owner-scoped Metafield routes are included rather than collapsed into one representative owner.",
     "operations.json is intentionally omitted in this connector-local slice because non-executable operation rows live in api_surface.json and fixed GraphQL documents are not fabricated.",
-    "State-destroying destroy/remove/cancel/close/disable/revoke/archive/deactivate/uninstall/erasure/expire/void/dispose/release/detach/leave/unlink/disassociate/unpublish/debit operation rows, plus source-documented replacement updates that remove pricing, publication, checkout, media, bundle, catalog-context, selling-plan relationships, or active feedback entries, are classified as destructive_action with critical risk and `confirm: destructive`; discountCodeActivate, fulfillmentOrderHold, inventoryTransferSetItems, fileCreate, orderUpdate, and shippingLabelPurchase remain non-destructive admin_reverse_etl."
+    "State-destroying destroy/remove/cancel/close/disable/revoke/archive/deactivate/uninstall/erasure/expire/void/dispose/release/detach/leave/unlink/disassociate/unpublish/debit operation rows, plus source-documented update/set/toggle/assignment replacement side effects that remove pricing, publication, checkout, media, bundle, catalog-context, selling-plan relationships, comments from public view, server-pixel subscriptions, inventory activation, cash-drawer assignments, product-list entries, or active feedback entries, are classified as destructive_action with critical risk and `confirm: destructive`; discountCodeActivate, fulfillmentOrderHold, inventoryTransferSetItems, fileCreate, orderUpdate, and shippingLabelPurchase remain non-destructive admin_reverse_etl."
   ]
 }

@@ -14,23 +14,30 @@ var shopifySourceDescriptionStateDestroyingPaths = map[string]struct{}{
 	"GraphQL Mutation.catalogContextUpdate":                 {},
 	"GraphQL Mutation.collectionUnpublish":                  {},
 	"GraphQL Mutation.combinedListingUpdate":                {},
+	"GraphQL Mutation.commentSpam":                          {},
 	"GraphQL Mutation.deliveryProfileUpdate":                {},
 	"GraphQL Mutation.draftOrderUpdate":                     {},
+	"GraphQL Mutation.eventBridgeServerPixelUpdate":         {},
 	"GraphQL Mutation.fileUpdate":                           {},
 	"GraphQL Mutation.giftCardDebit":                        {},
 	"GraphQL Mutation.giftCardProductSet":                   {},
+	"GraphQL Mutation.inventoryBulkToggleActivation":        {},
 	"GraphQL Mutation.orderEditSetQuantity":                 {},
+	"GraphQL Mutation.pointOfSaleDeviceAssignToCashDrawer":  {},
 	"GraphQL Mutation.priceListFixedPricesByProductUpdate":  {},
 	"GraphQL Mutation.priceListFixedPricesUpdate":           {},
 	"GraphQL Mutation.priceListUpdate":                      {},
 	"GraphQL Mutation.productLeaveSellingPlanGroups":        {},
+	"GraphQL Mutation.productSet":                           {},
 	"GraphQL Mutation.productUnpublish":                     {},
 	"GraphQL Mutation.productVariantDetachMedia":            {},
 	"GraphQL Mutation.productVariantLeaveSellingPlanGroups": {},
 	"GraphQL Mutation.productVariantRelationshipBulkUpdate": {},
+	"GraphQL Mutation.pubSubServerPixelUpdate":              {},
 	"GraphQL Mutation.publicationUpdate":                    {},
 	"GraphQL Mutation.publishableUnpublish":                 {},
 	"GraphQL Mutation.publishableUnpublishToCurrentChannel": {},
+	"GraphQL Mutation.quantityPricingByVariantUpdate":       {},
 	"GraphQL Mutation.shopResourceFeedbackCreate":           {},
 	"GraphQL Mutation.storeCreditAccountDebit":              {},
 }
@@ -86,20 +93,19 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 	if operations != 1123 {
 		t.Fatalf("operation endpoints = %d, want 1123", operations)
 	}
-	if destructiveConfirm != 179 {
-		t.Fatalf("destructive confirmed operations = %d, want 179", destructiveConfirm)
+	if destructiveConfirm != 186 {
+		t.Fatalf("destructive confirmed operations = %d, want 186", destructiveConfirm)
 	}
 	assertStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":  473,
-		"binary_read":        17,
-		"destructive_action": 179,
-		"direct_read":        454,
+		"admin_reverse_etl":  463,
+		"destructive_action": 186,
+		"direct_read":        474,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"critical": 179,
+		"critical": 186,
 		"high":     3,
 		"low":      471,
-		"medium":   470,
+		"medium":   463,
 	})
 
 	for _, path := range []string{
@@ -153,6 +159,50 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 		op := byPath[path].Operation
 		if op == nil || op.Model != "admin_reverse_etl" || op.Risk != "medium" || op.Confirm != "" {
 			t.Fatalf("%s operation = %+v, want non-destructive admin_reverse_etl/medium", path, op)
+		}
+	}
+}
+
+func TestShopifyObjectMetadataReadsAreDirect(t *testing.T) {
+	surface := loadShopifySurface(t)
+	byMethodPath := map[string]engine.SurfaceEndpoint{}
+	for _, ep := range surface.Endpoints {
+		if ep.Path != "" {
+			byMethodPath[ep.Method+" "+ep.Path] = ep
+		}
+		if ep.Operation != nil && ep.Operation.Model == "binary_read" {
+			t.Fatalf("endpoint %s %s uses binary_read without source evidence", ep.Method, ep.Path)
+		}
+	}
+
+	for _, endpoint := range []struct {
+		method string
+		path   string
+	}{
+		{method: "POST", path: "GraphQL Query.checkoutProfile"},
+		{method: "POST", path: "GraphQL Query.checkoutProfiles"},
+		{method: "POST", path: "GraphQL Query.deliveryProfile"},
+		{method: "POST", path: "GraphQL Query.deliveryProfiles"},
+		{method: "POST", path: "GraphQL Query.files"},
+		{method: "POST", path: "GraphQL Query.fileSavedSearches"},
+		{method: "POST", path: "GraphQL Query.locationsAvailableForDeliveryProfiles"},
+		{method: "POST", path: "GraphQL Query.locationsAvailableForDeliveryProfilesConnection"},
+		{method: "POST", path: "GraphQL Query.urlRedirect"},
+		{method: "POST", path: "GraphQL Query.urlRedirectImport"},
+		{method: "POST", path: "GraphQL Query.urlRedirects"},
+		{method: "POST", path: "GraphQL Query.urlRedirectSavedSearches"},
+		{method: "POST", path: "GraphQL Query.urlRedirectsCount"},
+		{method: "GET", path: "/admin/api/latest/products/{product_id}/images.json"},
+		{method: "GET", path: "/admin/api/latest/products/{product_id}/images/{image_id}.json"},
+		{method: "GET", path: "/admin/api/latest/products/{product_id}/images/count.json"},
+		{method: "GET", path: "/admin/api/latest/themes/{theme_id}/assets.json"},
+	} {
+		ep, ok := byMethodPath[endpoint.method+" "+endpoint.path]
+		if !ok {
+			t.Fatalf("expected endpoint %s %q", endpoint.method, endpoint.path)
+		}
+		if ep.Operation == nil || ep.Operation.Model != "direct_read" || ep.Operation.Risk != "low" {
+			t.Fatalf("object/metadata read endpoint %s %q operation = %+v, want direct_read/low", endpoint.method, endpoint.path, ep.Operation)
 		}
 	}
 }
@@ -293,11 +343,18 @@ func TestShopifyTokenizationDoesNotTreatActivateAsDeactivate(t *testing.T) {
 		t.Fatalf("unexpected reverseFulfillmentOrderDispose tokens")
 	}
 	for _, path := range []string{
+		"GraphQL Mutation.commentSpam",
+		"GraphQL Mutation.eventBridgeServerPixelUpdate",
 		"GraphQL Mutation.fulfillmentOrderReleaseHold",
 		"GraphQL Mutation.giftCardDebit",
+		"GraphQL Mutation.inventoryBulkToggleActivation",
+		"GraphQL Mutation.pointOfSaleDeviceAssignToCashDrawer",
 		"GraphQL Mutation.productLeaveSellingPlanGroups",
+		"GraphQL Mutation.productSet",
 		"GraphQL Mutation.productVariantDetachMedia",
+		"GraphQL Mutation.pubSubServerPixelUpdate",
 		"GraphQL Mutation.publishableUnpublish",
+		"GraphQL Mutation.quantityPricingByVariantUpdate",
 	} {
 		if !shopifyStateDestroying(engine.SurfaceEndpoint{Method: "POST", Path: path, Operation: &engine.SurfaceOperation{}}) {
 			t.Fatalf("%s was not classified as state-destroying", path)

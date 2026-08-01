@@ -645,7 +645,7 @@
       "method": "POST",
       "path": "GraphQL Query.checkoutProfile",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -657,7 +657,7 @@
       "method": "POST",
       "path": "GraphQL Query.checkoutProfiles",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -1197,7 +1197,7 @@
       "method": "POST",
       "path": "GraphQL Query.deliveryProfile",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -1209,7 +1209,7 @@
       "method": "POST",
       "path": "GraphQL Query.deliveryProfiles",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -1497,7 +1497,7 @@
       "method": "POST",
       "path": "GraphQL Query.files",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -1509,7 +1509,7 @@
       "method": "POST",
       "path": "GraphQL Query.fileSavedSearches",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -1797,7 +1797,7 @@
       "method": "POST",
       "path": "GraphQL Query.locationsAvailableForDeliveryProfiles",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -1809,7 +1809,7 @@
       "method": "POST",
       "path": "GraphQL Query.locationsAvailableForDeliveryProfilesConnection",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -3309,7 +3309,7 @@
       "method": "POST",
       "path": "GraphQL Query.urlRedirect",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -3321,7 +3321,7 @@
       "method": "POST",
       "path": "GraphQL Query.urlRedirectImport",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -3333,7 +3333,7 @@
       "method": "POST",
       "path": "GraphQL Query.urlRedirects",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -3345,7 +3345,7 @@
       "method": "POST",
       "path": "GraphQL Query.urlRedirectSavedSearches",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -3357,7 +3357,7 @@
       "method": "POST",
       "path": "GraphQL Query.urlRedirectsCount",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -4185,12 +4185,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.commentSpam",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/commentSpam"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/commentSpam",
+        "notes": "Shopify docs say the mutation marks a comment as spam and removes it from public view."
       }
     },
     {
@@ -5677,12 +5679,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.eventBridgeServerPixelUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/eventBridgeServerPixelUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/eventBridgeServerPixelUpdate",
+        "notes": "Shopify docs say running this mutation deletes previous server-pixel subscriptions."
       }
     },
     {
@@ -6295,12 +6299,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.inventoryBulkToggleActivation",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryBulkToggleActivation"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryBulkToggleActivation",
+        "notes": "Shopify docs say the mutation activates or deactivates inventory at locations; deactivation removes active inventory state."
       }
     },
     {
@@ -7735,12 +7741,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.pointOfSaleDeviceAssignToCashDrawer",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pointOfSaleDeviceAssignToCashDrawer"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pointOfSaleDeviceAssignToCashDrawer",
+        "notes": "Shopify docs say the mutation assigns a point-of-sale device and removes any prior cash-drawer assignment."
       }
     },
     {
@@ -8143,12 +8151,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.productSet",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productSet"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productSet",
+        "notes": "Shopify docs say list fields create, update, and delete existing entries that aren't included in the input."
       }
     },
     {
@@ -8401,12 +8411,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.pubSubServerPixelUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubServerPixelUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pubSubServerPixelUpdate",
+        "notes": "Shopify docs say running this mutation deletes previous server-pixel subscriptions."
       }
     },
     {
@@ -8437,12 +8449,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.quantityPricingByVariantUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/quantityPricingByVariantUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/quantityPricingByVariantUpdate",
+        "notes": "Shopify docs say the mutation executes delete operations before create operations and doesn't allow partial updates."
       }
     },
     {
@@ -11967,7 +11981,7 @@
       "method": "GET",
       "path": "/admin/api/latest/products/{product_id}/images.json",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -11979,7 +11993,7 @@
       "method": "GET",
       "path": "/admin/api/latest/products/{product_id}/images/{image_id}.json",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -11991,7 +12005,7 @@
       "method": "GET",
       "path": "/admin/api/latest/products/{product_id}/images/count.json",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -12394,7 +12408,7 @@
       "method": "GET",
       "path": "/admin/api/latest/themes/{theme_id}/assets.json",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
@@ -13376,7 +13390,7 @@
       "method": "POST",
       "path": "/admin/api/latest/products/{product_id}/images.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
@@ -13988,7 +14002,7 @@
       "method": "PUT",
       "path": "/admin/api/latest/products/{product_id}/images/{image_id}.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
@@ -14096,7 +14110,7 @@
       "method": "PUT",
       "path": "/admin/api/latest/themes/{theme_id}/assets.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
