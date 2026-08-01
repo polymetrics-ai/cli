@@ -33,7 +33,8 @@ JSON output. Use environment variables or stdin:
 export GITHUB_TOKEN=...
 pm credentials add github-token \
   --connector github \
-  --config repository=OWNER/REPO \
+  --config owner=OWNER \
+  --config repo=REPO \
   --from-env token=GITHUB_TOKEN
 ```
 
@@ -42,7 +43,8 @@ For GitHub App private keys:
 ```bash
 pm credentials add github-app \
   --connector github \
-  --config repository=OWNER/REPO \
+  --config owner=OWNER \
+  --config repo=REPO \
   --config auth_type=github_app \
   --config app_id=12345 \
   --config installation_id=67890 \
@@ -65,8 +67,8 @@ and public auth otherwise.
 
 ## ETL Streams
 
-All GitHub streams use bounded page reads. Set `per_page` up to `100`, and set
-`max_pages=all`, `max_pages=unlimited`, or `max_pages=0` to exhaust a stream.
+GitHub REST streams use the connector-defined page size of 100 records per page;
+GraphQL streams use fixed, reviewed documents with bounded page sizes.
 
 | Stream | GitHub API family | Primary key | Cursor |
 | --- | --- | --- | --- |
@@ -118,37 +120,19 @@ the local ETL runtime:
 ## Reverse ETL Actions
 
 All GitHub reverse ETL actions require token or GitHub App auth and approval
-before execution.
+before execution. The generated connector manual owns the full action list,
+required fields, per-action risk text, and destructive confirmation requirements.
+This slice includes issue, pull request, label, milestone, release, workflow,
+webhook, deploy key, environment, comment, review, collaboration, ruleset,
+security-alert triage, deployment, fork, branch merge, and repository deletion
+actions.
 
-| Action | Endpoint shape | Required fields |
-| --- | --- | --- |
-| `create_issue` | `POST /repos/{owner}/{repo}/issues` | `title` |
-| `update_issue` | `PATCH /repos/{owner}/{repo}/issues/{issue_number}` | `issue_number` or `number` |
-| `comment_issue` | `POST /repos/{owner}/{repo}/issues/{issue_number}/comments` | `issue_number`, `pull_number`, or `number`; `body` |
-| `close_issue` | `PATCH /repos/{owner}/{repo}/issues/{issue_number}` | `issue_number` or `number` |
-| `create_pull_request` | `POST /repos/{owner}/{repo}/pulls` | `title`, `head`, `base` |
-| `update_pull_request` | `PATCH /repos/{owner}/{repo}/pulls/{pull_number}` | `pull_number` or `number` |
-| `close_pull_request` | `PATCH /repos/{owner}/{repo}/pulls/{pull_number}` | `pull_number` or `number` |
-| `request_reviewers` | `POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers` | `pull_number` or `number`; `reviewers` or `team_reviewers` |
-| `merge_pull_request` | `PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge` | `pull_number` or `number` |
-| `create_label` | `POST /repos/{owner}/{repo}/labels` | `name`, `color` |
-| `update_label` | `PATCH /repos/{owner}/{repo}/labels/{name}` | `name` |
-| `delete_label` | `DELETE /repos/{owner}/{repo}/labels/{name}` | `name` |
-| `create_milestone` | `POST /repos/{owner}/{repo}/milestones` | `title` |
-| `update_milestone` | `PATCH /repos/{owner}/{repo}/milestones/{milestone_number}` | `milestone_number` or `number` |
-| `delete_milestone` | `DELETE /repos/{owner}/{repo}/milestones/{milestone_number}` | `milestone_number` or `number` |
-| `create_release` | `POST /repos/{owner}/{repo}/releases` | `tag_name` |
-| `update_release` | `PATCH /repos/{owner}/{repo}/releases/{release_id}` | `release_id` or `id` |
-| `delete_release` | `DELETE /repos/{owner}/{repo}/releases/{release_id}` | `release_id` or `id` |
-| `dispatch_workflow` | `POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches` | `workflow_id`, `ref` |
-| `rerun_workflow_run` | `POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun` | `run_id`, `workflow_run_id`, or `id` |
-| `cancel_workflow_run` | `POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel` | `run_id`, `workflow_run_id`, or `id` |
-| `delete_workflow_run` | `DELETE /repos/{owner}/{repo}/actions/runs/{run_id}` | `run_id`, `workflow_run_id`, or `id` |
-| `create_pull_request_review` | `POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews` | `pull_number` or `number` |
-| `create_or_update_file` | `PUT /repos/{owner}/{repo}/contents/{path}` | `path`, `message`, `content` or `content_base64` |
-| `delete_file` | `DELETE /repos/{owner}/{repo}/contents/{path}` | `path`, `message`, `sha` |
+Repository contents file writes (`create_or_update_file`, `delete_file`) and raw
+Git ref rewrites/deletes (`update_ref`, `delete_ref`) remain blocked until the
+shared connector engine has reviewed typed allowlisted multi-segment write-path
+support for slash-bearing `record.path` and `record.ref` values.
 
-For optional fields and per-action risk text, use:
+For the current action inventory, optional fields, and per-action risk text, use:
 
 ```bash
 pm connectors inspect github

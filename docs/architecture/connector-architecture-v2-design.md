@@ -283,8 +283,8 @@ Write semantics baked into the format:
 - **Body construction rule (default)**: every record field not consumed by the path
   (`path_fields`) becomes the JSON body. `body_type: "form"` switches to
   `x-www-form-urlencoded` (stripe). `body: {template}` overrides for reshaped payloads.
-  `kind: delete` sends no body unless `body_fields` listed (github `delete_file` needs
-  `message`/`sha` — declared via `"body_fields": ["message", "sha", "branch"]`).
+  `kind: delete` sends no body unless `body_fields` lists an endpoint's reviewed
+  delete-payload fields.
 - **`record_schema` is draft-07**, validated by the same compiled-schema machinery as `spec.json`.
   This replaces github's hand-written validate/payload functions (~700 lines) for the ~90% of
   actions that are plain payload mapping. Multi-request compound actions (github's

@@ -269,11 +269,11 @@ func ValidateConnectorGuide(c Connector) error {
 func RenderGuideManual(guide ConnectorGuide) string {
 	var b strings.Builder
 	b.WriteString("NAME\n")
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s - %s connector manual\n\n", guide.Name, guide.DisplayName))
+	fmt.Fprintf(&b, "  pm connectors inspect %s - %s connector manual\n\n", guide.Name, guide.DisplayName)
 	b.WriteString("SYNOPSIS\n")
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s\n", guide.Name))
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s --json\n", guide.Name))
-	b.WriteString(fmt.Sprintf("  pm credentials add <name> --connector %s [--config key=value] [--from-env field=ENV] [--value-stdin field]\n\n", guide.Name))
+	fmt.Fprintf(&b, "  pm connectors inspect %s\n", guide.Name)
+	fmt.Fprintf(&b, "  pm connectors inspect %s --json\n", guide.Name)
+	fmt.Fprintf(&b, "  pm credentials add <name> --connector %s [--config key=value] [--from-env field=ENV] [--value-stdin field]\n\n", guide.Name)
 	b.WriteString("DESCRIPTION\n")
 	for _, line := range splitParagraphs(guide.Summary) {
 		b.WriteString("  " + line + "\n")
@@ -319,7 +319,7 @@ func RenderGuideManual(guide ConnectorGuide) string {
 	if len(guide.Links) > 0 {
 		b.WriteString("SEE ALSO\n")
 		for _, link := range guide.Links {
-			b.WriteString(fmt.Sprintf("  %s: %s\n", link.Label, link.URL))
+			fmt.Fprintf(&b, "  %s: %s\n", link.Label, link.URL)
 		}
 		b.WriteString("\n")
 	}
@@ -604,9 +604,9 @@ func examplesForManifest(manifest Manifest) []GuideExample {
 		)
 	case "github":
 		examples = append(examples,
-			GuideExample{Title: "Public repository credential", Command: "pm credentials add github-public --connector github --config repository=octocat/Hello-World"},
-			GuideExample{Title: "Token credential", Command: "export GITHUB_TOKEN=...\npm credentials add github-token --connector github --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN"},
-			GuideExample{Title: "GitHub App credential", Command: "pm credentials add github-app --connector github --config repository=OWNER/REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app-private-key.pem"},
+			GuideExample{Title: "Public repository credential", Command: "pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World"},
+			GuideExample{Title: "Token credential", Command: "export GITHUB_TOKEN=...\npm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN"},
+			GuideExample{Title: "GitHub App credential", Command: "pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app-private-key.pem"},
 			GuideExample{Title: "Pull request ETL", Command: "pm connections create github_prs_to_warehouse --source github:github-token --destination warehouse:warehouse-local --stream pull_requests --primary-key node_id --cursor updated_at --table github_pull_requests\npm etl run --connection github_prs_to_warehouse --stream pull_requests --batch-size 100 --json"},
 			GuideExample{Title: "Approved pull request creation", Command: "pm reverse plan prs_to_github --source-table github_pr_candidates --destination github:github-token --action create_pull_request --map title:title --map body:body --map head:head --map base:base --map reviewers:reviewers\npm reverse preview <plan-id> --json\npm reverse run <plan-id> --approve <approval-token> --json"},
 		)
