@@ -11,15 +11,23 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[4]
 DEF_DIR = ROOT / "internal/connectors/defs/gitlab"
 EXPECTED = {
-    "gitlab.etl_read": 308,
+    "gitlab.etl_read": 392,
     "gitlab.reverse_etl_write": 637,
     "gitlab.direct_read_query_search": 6,
-    "gitlab.binary_file": 178,
+    "gitlab.binary_file": 94,
     "gitlab.cdc_changefeed": 15,
     "gitlab.excluded_not_applicable": 2,
 }
 WRITE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 TYPED_DESTRUCTIVE_APPROVAL = "typed_confirmation + plan_preview_approval_execute"
+METADATA_REST_ROWS = {
+    ("GET", "/groups/{id}/registry/repositories"),
+    ("GET", "/projects/{id}/registry/repositories"),
+    ("GET", "/groups/{id}/uploads"),
+    ("GET", "/projects/{id}/uploads"),
+    ("GET", "/projects/{id}/packages/{package_id}/package_files"),
+    ("GET", "/group/{id}/-/packages/composer/packages"),
+}
 
 
 def row_key(row: dict[str, Any]) -> tuple[str, str] | None:
@@ -112,6 +120,16 @@ def main() -> int:
                         break
         if method in WRITE_METHODS and audit_event not in {"gitlab.reverse_etl_write", "gitlab.excluded_not_applicable"}:
             problems.append(f"{op.get('id')} write method classified as {audit_event}")
+        if key in METADATA_REST_ROWS:
+            if op.get("kind") != "rest_read" or audit_event == "gitlab.binary_file":
+                problems.append(f"{op.get('id')} metadata row classified as {op.get('kind')}/{audit_event}")
+            if op.get("output_policy") == "binary_file_bounded":
+                problems.append(f"{op.get('id')} metadata row uses binary output policy")
+        if op.get("secret_sensitive") is True:
+            if op.get("risk") in {"low", "none"}:
+                problems.append(f"{op.get('id')} secret-sensitive risk={op.get('risk')!r}")
+            if method == "GET" and not command.get("risk"):
+                problems.append(f"{op.get('id')} secret-sensitive CLI risk missing")
         if method == "HEAD":
             if audit_event != "gitlab.direct_read_query_search":
                 problems.append(f"{op.get('id')} HEAD audit_event={audit_event}")

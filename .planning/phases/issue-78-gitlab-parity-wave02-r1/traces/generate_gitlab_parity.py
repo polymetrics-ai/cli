@@ -25,10 +25,10 @@ OPENAPI_URL = "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e
 MASTER_BRANCH_URL = "https://gitlab.com/api/v4/projects/gitlab-org%2Fgitlab/repository/branches/master"
 METHODS = {"get", "post", "put", "patch", "delete", "head", "options"}
 PARENT_COUNTS = {
-    "etl_read": 308,
+    "etl_read": 392,
     "reverse_etl_write": 637,
     "direct_read_query_search": 6,
-    "binary_file": 178,
+    "binary_file": 94,
     "cdc_changefeed": 15,
     "excluded_not_applicable": 2,
 }
@@ -63,17 +63,37 @@ FORCE_REVERSE = {
     ("DELETE", "/api/v4/projects/{id}/packages/{package_id}/package_files/{package_file_id}"),
 }
 BINARY_TERMS = (
-    "upload",
     "download",
     "artifact",
     "archive",
     "raw",
     "blobs",
-    "packages",
-    "package",
-    "registry",
     "terraform",
     "dependency_proxy",
+)
+METADATA_READ_SUMMARY_PATTERNS = tuple(
+    re.compile(pattern)
+    for pattern in (
+        r"^list\b",
+        r"^get all\b",
+        r"^retrieve details\b",
+        r"\bmetadata endpoint\b",
+        r"\bmetadata service\b",
+        r"\bfeed service index\b",
+        r"\bservice index\b",
+        r"\bfeed enumerate\b",
+        r"\bfind packages\b",
+        r"\bsearch\b",
+        r"^verify\b",
+        r"^check\b",
+        r"\bauthenticate\b",
+        r"\bavailability\b",
+        r"\bget all tags\b",
+        r"\ball tags\b",
+        r"\bpackage revisions\b",
+        r"\brecipe revision\b",
+        r"\blatest recipe\b",
+    )
 )
 ADMIN_TERMS = (
     "admin",
@@ -164,6 +184,53 @@ def op_blob(op: dict[str, Any]) -> str:
     ).lower()
 
 
+def path_has_file_payload(path: str, summary: str) -> bool:
+    normalized = path.lower()
+    lowered_summary = summary.lower()
+    if normalized.endswith("/artifacts/tree") or "/artifacts/tree/" in normalized:
+        return False
+    if re.search(r"/(download|raw|archive|snapshot)(/|$)", normalized):
+        return True
+    if "/blobs/" in normalized or "/artifact" in normalized or "/artifacts/" in normalized:
+        return True
+    if "/uploads/" in normalized and re.search(r"\{(upload_id|secret|filename)\}", normalized):
+        return True
+    if "/packages/debian/pool/" in normalized or "/packages/rpm/repodata/" in normalized:
+        return True
+    if "/packages/debian/dists/" in normalized and re.search(r"/(release|inrelease|packages|sources)(?:$|[/{*])", normalized):
+        return True
+    if re.search(r"\.(tgz|zip|tar|gz|gem|whl|jar|pom|sha1|md5|sha256|module|rpm|deb|apk|gpg|yaml|yml|asc)(?:$|[/{*])", normalized):
+        return True
+    return bool(re.search(r"\bretrieve (?:a |the |specific )?(?:recipe|package) file\b", lowered_summary))
+
+
+def summary_marks_metadata_read(summary: str) -> bool:
+    lowered = summary.lower()
+    return any(pattern.search(lowered) for pattern in METADATA_READ_SUMMARY_PATTERNS)
+
+
+def is_binary_payload(op: dict[str, Any]) -> bool:
+    key = (op["method"], op["path"])
+    if key in FORCE_ETL:
+        return False
+    if key in FORCE_BINARY:
+        return True
+    if op["method"] != "GET":
+        return False
+    if path_has_file_payload(op["path"], op.get("summary") or ""):
+        return True
+    if summary_marks_metadata_read(op.get("summary") or ""):
+        return False
+    first_tag = (op.get("tags") or [""])[0]
+    produces = op.get("produces") or ()
+    consumes = op.get("consumes") or ()
+    non_json = any(("json" not in item and "*/*" not in item) for item in tuple(produces) + tuple(consumes))
+    if first_tag != "project_import" and non_json:
+        return True
+    blob = op_blob(op)
+    return any(term in blob for term in BINARY_TERMS)
+
+
 def lane_for(op: dict[str, Any]) -> str:
     key = (op["method"], op["path"])
     if key in EXCLUDED:
@@ -181,15 +248,7 @@ def lane_for(op: dict[str, Any]) -> str:
             "/api/v4/groups/{id}/audit_events/{audit_event_id}",
         ):
             return "cdc_changefeed"
-    if key in FORCE_ETL:
-        return "etl_read"
-    if key in FORCE_BINARY:
-        return "binary_file"
-    first_tag = (op.get("tags") or [""])[0]
-    produces = op.get("produces") or ()
-    consumes = op.get("consumes") or ()
-    non_json = any(("json" not in item and "*/*" not in item) for item in tuple(produces) + tuple(consumes))
-    if first_tag != "project_import" and (non_json or any(term in blob for term in BINARY_TERMS)):
+    if is_binary_payload(op):
         return "binary_file"
     if op["method"] == "GET":
         return "etl_read"
@@ -217,14 +276,14 @@ def is_destructive(op: dict[str, Any], lane: str) -> bool:
 def risk_for(op: dict[str, Any], lane: str) -> str:
     if lane == "excluded_not_applicable":
         return "none"
-    if lane == "etl_read":
-        return "low"
-    if lane in {"direct_read_query_search", "binary_file", "cdc_changefeed"}:
-        return "medium"
     if is_destructive(op, lane):
         return "critical" if is_admin(op) else "high"
     if is_admin(op) or is_secret_sensitive(op):
         return "high"
+    if lane == "etl_read":
+        return "low"
+    if lane in {"direct_read_query_search", "binary_file", "cdc_changefeed"}:
+        return "medium"
     return "medium"
 
 
@@ -560,6 +619,7 @@ def cli_command_for_stream(stream: str, method: str, path: str, source_url: str 
 def cli_command_for_operation(op: dict[str, Any], lane: str, op_id: str, spec: dict[str, Any]) -> dict[str, Any]:
     method = op["method"].lower()
     slug = re.sub(r"[^a-z0-9]+", "-", relative_path(op["path"]).lower()).strip("-") or "root"
+    operation_risk = risk_for(op, lane)
     if lane == "etl_read":
         intent = "etl"
         availability = "implemented" if (op["method"], op["path"]) in STREAM_COVERAGE else "planned"
@@ -590,6 +650,9 @@ def cli_command_for_operation(op: dict[str, Any], lane: str, op_id: str, spec: d
     flags, _fixed_query, _body_schema = parameter_contract(op, spec)
     if flags:
         cmd["flags"] = flags
+    if intent == "etl" and availability == "planned" and operation_risk in {"high", "critical"}:
+        cmd["output_policy"] = "json_redacted"
+        cmd["risk"] = "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     if intent == "reverse_etl":
         cmd["risk"] = "Planned GitLab mutation; execution requires a named reverse-ETL action with typed schema, redaction, and safety evidence."
         cmd["approval"] = "Reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive/admin writes also require typed confirmation."

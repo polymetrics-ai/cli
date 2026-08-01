@@ -629,7 +629,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-ssh-certificates, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -668,7 +668,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-runners, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -837,7 +837,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-deploy-tokens, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -863,7 +863,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-deploy-tokens-token-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -965,13 +965,13 @@
       "method": "GET",
       "path": "/groups/{id}/registry/repositories",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-registry-repositories, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-registry-repositories, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -991,26 +991,26 @@
       "method": "GET",
       "path": "/groups/{id}/-/debian_distributions",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-debian-distributions, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-debian-distributions, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/groups/{id}/-/debian_distributions/{codename}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-debian-distributions-codename, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-debian-distributions-codename, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -1201,7 +1201,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-variables, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1227,7 +1227,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-variables-key, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -1955,7 +1955,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-integrations-slug, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -2070,13 +2070,13 @@
       "method": "GET",
       "path": "/groups/{id}/uploads",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-uploads, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-uploads, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -2111,7 +2111,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-uploads-secret-filename, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -2382,13 +2382,13 @@
       "method": "GET",
       "path": "/groups/{id}/-/packages/npm/-/package/*package_name/dist-tags",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-npm-package-package-name-dist-tags, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-npm-package-package-name-dist-tags, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -2447,26 +2447,26 @@
       "method": "GET",
       "path": "/groups/{id}/-/packages/npm/*package_name",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-npm-package-name, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-npm-package-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/groups/{id}/-/packages/nuget/index",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-index, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-index, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -2486,65 +2486,65 @@
       "method": "GET",
       "path": "/groups/{id}/-/packages/nuget/v2",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-v2, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-v2, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/groups/{id}/-/packages/nuget/v2/$metadata",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-v2-metadata, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-v2-metadata, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/groups/{id}/-/packages/nuget/metadata/*package_name/index",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-metadata-package-name-index, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-metadata-package-name-index, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/groups/{id}/-/packages/nuget/metadata/*package_name/*package_version",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-metadata-package-name-package-version, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-metadata-package-name-package-version, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/groups/{id}/-/packages/nuget/query",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-query, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-nuget-query, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -2564,26 +2564,26 @@
       "method": "GET",
       "path": "/groups/{id}/-/packages/pypi/simple",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-pypi-simple, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-pypi-simple, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/groups/{id}/-/packages/pypi/simple/*package_name",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-pypi-simple-package-name, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-groups-id-packages-pypi-simple-package-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -3383,13 +3383,13 @@
       "method": "GET",
       "path": "/projects/{id}/jobs/{job_id}/artifacts/tree",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-jobs-job-id-artifacts-tree, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-jobs-job-id-artifacts-tree, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -3593,7 +3593,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-runners, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -3814,7 +3814,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-pipelines-pipeline-id-variables, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -4009,7 +4009,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-pipeline-schedules-pipeline-schedule-id-variables-key, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -4061,7 +4061,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-triggers, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -4087,7 +4087,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-triggers-trigger-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -4126,7 +4126,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-variables, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -4152,7 +4152,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-variables-key, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -4191,7 +4191,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-cluster-agents-agent-id-tokens, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -4217,7 +4217,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-cluster-agents-agent-id-tokens-token-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -4293,13 +4293,13 @@
       "method": "GET",
       "path": "/projects/{id}/packages/cargo/config.json",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-cargo-config-json, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-cargo-config-json, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -4579,91 +4579,91 @@
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/users/authenticate",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-users-authenticate, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-users-authenticate, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/users/check_credentials",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-users-check-credentials, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-users-check-credentials, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/conans/search",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-search, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-search, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/search",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/ping",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-ping, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-ping, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -4683,52 +4683,52 @@
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/digest",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-digest, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-digest, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/digest",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-digest, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-digest, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/download_urls",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-download-urls, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-download-urls, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/download_urls",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-download-urls, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-download-urls, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -4839,78 +4839,78 @@
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/users/authenticate",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-users-authenticate, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-users-authenticate, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/users/check_credentials",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-users-check-credentials, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-users-check-credentials, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/conans/search",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-search, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-search, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/search",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-search, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-search, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/latest",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-latest, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-latest, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -4930,13 +4930,13 @@
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-files, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-files, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -4982,39 +4982,39 @@
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/search",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-search, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-search, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/latest",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-latest, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-latest, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -5034,13 +5034,13 @@
       "method": "GET",
       "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions-package-revision-files, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions-package-revision-files, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -5244,7 +5244,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-deploy-keys, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -5270,7 +5270,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-deploy-keys-key-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -5322,7 +5322,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-deploy-tokens, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -5348,7 +5348,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-deploy-tokens-token-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -5660,7 +5660,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-error-tracking-client-keys, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -5699,7 +5699,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-error-tracking-settings, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -5738,7 +5738,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-feature-flags, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -5764,7 +5764,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-feature-flags-feature-flag-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -5803,7 +5803,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-feature-flags-user-lists, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -5829,7 +5829,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-feature-flags-user-lists-iid, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -6074,26 +6074,26 @@
       "method": "GET",
       "path": "/projects/{id}/packages/go/*module_name/@v/list",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-go-module-name-v-list, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-go-module-name-v-list, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/go/*module_name/@v/{module_version}.info",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-go-module-name-v-module-version-info, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-go-module-name-v-module-version-info, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -6869,7 +6869,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-services-slug, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -7584,7 +7584,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-integrations-slug, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -8063,13 +8063,13 @@
       "method": "GET",
       "path": "/projects/{id}/uploads",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-uploads, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-uploads, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -8104,7 +8104,7 @@
       "operation": {
         "model": "binary_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-uploads-secret-filename, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -8765,13 +8765,13 @@
       "method": "GET",
       "path": "/projects/{id}/packages/npm/-/package/*package_name/dist-tags",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-npm-package-package-name-dist-tags, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-npm-package-package-name-dist-tags, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -8856,26 +8856,26 @@
       "method": "GET",
       "path": "/projects/{id}/packages/npm/*package_name",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-npm-package-name, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-npm-package-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/nuget/index",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-index, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-index, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -8895,13 +8895,13 @@
       "method": "GET",
       "path": "/projects/{id}/packages/nuget/v2",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-v2, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-v2, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -8921,52 +8921,52 @@
       "method": "GET",
       "path": "/projects/{id}/packages/nuget/v2/$metadata",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-v2-metadata, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-v2-metadata, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/nuget/metadata/*package_name/index",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-metadata-package-name-index, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-metadata-package-name-index, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/nuget/metadata/*package_name/*package_version",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-metadata-package-name-package-version, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-metadata-package-name-package-version, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/nuget/query",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-query, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-nuget-query, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -9077,52 +9077,52 @@
       "method": "GET",
       "path": "/projects/{project_id}/packages/nuget/v2/FindPackagesById\\(\\)",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-project-id-packages-nuget-v2-findpackagesbyid, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-project-id-packages-nuget-v2-findpackagesbyid, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(\\)",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-project-id-packages-nuget-v2-packages, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-project-id-packages-nuget-v2-packages, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(Id='*package_name',Version='*package_version'\\)",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-project-id-packages-nuget-v2-packages-id-package-name-version-package-version, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-project-id-packages-nuget-v2-packages-id-package-name-version-package-version, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/{package_id}/package_files",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-package-id-package-files, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-package-id-package-files, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -9183,7 +9183,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-pages, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9350,13 +9350,13 @@
       "method": "GET",
       "path": "/projects/{id}/registry/repositories",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-registry-repositories, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-registry-repositories, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -9376,13 +9376,13 @@
       "method": "GET",
       "path": "/projects/{id}/registry/repositories/{repository_id}/tags",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-registry-repositories-repository-id-tags, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-registry-repositories-repository-id-tags, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -9402,13 +9402,13 @@
       "method": "GET",
       "path": "/projects/{id}/registry/repositories/{repository_id}/tags/{tag_name}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-registry-repositories-repository-id-tags-tag-name, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-registry-repositories-repository-id-tags-tag-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -9428,13 +9428,13 @@
       "method": "GET",
       "path": "/projects/{id}/registry/protection/repository/rules",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-registry-protection-repository-rules, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-registry-protection-repository-rules, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -9480,13 +9480,13 @@
       "method": "GET",
       "path": "/projects/{id}/registry/protection/tag/rules",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-registry-protection-tag-rules, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-registry-protection-tag-rules, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -9545,26 +9545,26 @@
       "method": "GET",
       "path": "/projects/{id}/debian_distributions",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-debian-distributions, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-debian-distributions, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/debian_distributions/{codename}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-debian-distributions-codename, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-debian-distributions-codename, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -9755,7 +9755,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab cdc_changefeed operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-hooks, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9781,7 +9781,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab cdc_changefeed operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-hooks-hook-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9820,7 +9820,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab cdc_changefeed operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-hooks-hook-id-events, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -9976,7 +9976,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-job-token-scope, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -10002,7 +10002,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-job-token-scope-allowlist, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -10028,7 +10028,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-job-token-scope-groups-allowlist, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -10130,13 +10130,13 @@
       "method": "GET",
       "path": "/projects/{id}/packages/protection/rules",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-protection-rules, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-protection-rules, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -10930,26 +10930,26 @@
       "method": "GET",
       "path": "/projects/{id}/packages/pypi/simple",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-pypi-simple, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-pypi-simple, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/projects/{id}/packages/pypi/simple/*package_name",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-pypi-simple-package-name, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-pypi-simple-package-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -11580,13 +11580,13 @@
       "method": "GET",
       "path": "/projects/{id}/packages/rubygems/api/v1/dependencies",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-rubygems-api-v1-dependencies, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-packages-rubygems-api-v1-dependencies, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -11840,13 +11840,13 @@
       "method": "GET",
       "path": "/projects/{id}/terraform/state_protection_rules",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-terraform-state-protection-rules, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-projects-id-terraform-state-protection-rules, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -11998,7 +11998,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-admin-batched-background-migrations-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12037,7 +12037,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-admin-batched-background-migrations, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12050,7 +12050,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-admin-batched-background-operations, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12063,7 +12063,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-admin-batched-background-operations-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12102,7 +12102,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-admin-ci-variables, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12128,7 +12128,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-admin-ci-variables-key, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12167,7 +12167,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-admin-databases-database-name-dictionary-tables-table-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12180,7 +12180,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-admin-clusters, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12193,7 +12193,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-admin-clusters-cluster-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12245,7 +12245,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-admin-migrations-pending, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12271,7 +12271,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-broadcast-messages, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12297,7 +12297,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-broadcast-messages-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12349,7 +12349,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-applications, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12505,7 +12505,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-job, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12518,7 +12518,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-job-allowed-agents, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12557,7 +12557,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-runners, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12609,7 +12609,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-runners-router-discovery, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12622,7 +12622,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-runners-all, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12635,7 +12635,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-runners-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12674,7 +12674,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-runners-id-managers, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12687,7 +12687,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-runners-id-projects, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12700,7 +12700,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-runners-id-jobs, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -12815,143 +12815,143 @@
       "method": "GET",
       "path": "/group/{id}/-/packages/composer/packages",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-group-id-packages-composer-packages, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-group-id-packages-composer-packages, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/group/{id}/-/packages/composer/p/{sha}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-group-id-packages-composer-p-sha, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-group-id-packages-composer-p-sha, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/group/{id}/-/packages/composer/p2/*package_name",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-group-id-packages-composer-p2-package-name, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-group-id-packages-composer-p2-package-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/group/{id}/-/packages/composer/*package_name",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-group-id-packages-composer-package-name, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-group-id-packages-composer-package-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/conan/v1/users/authenticate",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-users-authenticate, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-users-authenticate, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/conan/v1/users/check_credentials",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-users-check-credentials, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-users-check-credentials, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/conan/v1/conans/search",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-search, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-search, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/search",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/conan/v1/ping",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-ping, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-ping, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -12971,52 +12971,52 @@
       "method": "GET",
       "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/digest",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-digest, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-digest, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/digest",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-digest, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-digest, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/download_urls",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-download-urls, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-download-urls, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/download_urls",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-download-urls, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-download-urls, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -13140,13 +13140,13 @@
       "method": "GET",
       "path": "/packages/npm/-/package/*package_name/dist-tags",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-npm-package-package-name-dist-tags, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-npm-package-package-name-dist-tags, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -13205,26 +13205,26 @@
       "method": "GET",
       "path": "/packages/npm/*package_name",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-npm-package-name, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-npm-package-name, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
       "method": "GET",
       "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/versions",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system-versions, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system-versions, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -13309,13 +13309,13 @@
       "method": "GET",
       "path": "/registry/repositories/{id}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "low",
         "blocked_by_default": true,
-        "reason": "planned GitLab binary_file operation; connector-local typed metadata exists as gitlab.get-api-v4-registry-repositories-id, but no verified executable stream/action/command is claimed in this wave",
+        "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-registry-repositories-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-        "notes": "Binary/file transfer rows stay blocked until a bounded connector-local download command has fixtures and size-limit evidence."
+        "notes": "Non-mutating planned read/search/metadata rows stay blocked until connector-local command fixtures and bounded response evidence are verified."
       }
     },
     {
@@ -13480,7 +13480,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-geo-repositories-gl-repository-pipeline-refs, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13721,7 +13721,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-keys-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13734,7 +13734,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-keys, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13968,7 +13968,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-personal-access-tokens-self, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -13994,7 +13994,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-personal-access-tokens-self-associations, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14020,7 +14020,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-personal-access-tokens, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14033,7 +14033,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-personal-access-tokens-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14293,7 +14293,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab cdc_changefeed operation; connector-local typed metadata exists as gitlab.get-api-v4-hooks, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14319,7 +14319,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab cdc_changefeed operation; connector-local typed metadata exists as gitlab.get-api-v4-hooks-hook-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14371,7 +14371,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-feature-flags-unleash-project-id, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14384,7 +14384,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-feature-flags-unleash-project-id-features, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14397,7 +14397,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-feature-flags-unleash-project-id-client-features, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14566,7 +14566,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-application-plan-limits, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14592,7 +14592,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-application-appearance, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14618,7 +14618,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-application-statistics, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14644,7 +14644,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-deploy-keys, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
@@ -14670,7 +14670,7 @@
       "operation": {
         "model": "direct_read",
         "status": "blocked",
-        "risk": "low",
+        "risk": "high",
         "blocked_by_default": true,
         "reason": "planned GitLab etl_read operation; connector-local typed metadata exists as gitlab.get-api-v4-deploy-tokens, but no verified executable stream/action/command is claimed in this wave",
         "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",

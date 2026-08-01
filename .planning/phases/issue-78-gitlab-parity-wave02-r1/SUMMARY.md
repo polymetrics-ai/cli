@@ -8,7 +8,7 @@ Implementation summary:
 
 - Generated a deterministic connector-local GitLab official API ledger from the pinned GitLab OpenAPI v2 source at commit `9cd04099eb59d87335798e4f57a2bc5a2622e4cc`.
 - Updated GitLab `metadata.json`, `api_surface.json`, `operations.json`, `cli_surface.json`, `certification.json`, and `docs.md` while preserving the four existing fixture-backed streams (`projects`, `groups`, `users`, `issues`).
-- Represented all 1,146 official operations with connector-local lane counts: 308 ETL/read, 637 reverse ETL write, 6 direct/query/search/metadata, 178 binary/file, 15 CDC/changefeed, and 2 excluded/not-applicable.
+- Represented all 1,146 official operations with connector-local lane counts: 392 ETL/read, 637 reverse ETL write, 6 direct/query/search/metadata, 94 binary/file, 15 CDC/changefeed, and 2 excluded/not-applicable.
 - Kept non-fixture-backed operations as planned/blocked typed metadata, not executable raw API escape hatches; `api_surface.json` also has one supplemental GET `/users` stream row absent from the pinned OpenAPI source.
 - Included destructive/admin/DELETE operations in scope with typed destructive confirmation plus plan -> preview -> explicit approval -> execute requirements before execution.
 - Added/verified the idempotent captain policy addendum on parent #78 and subissues #83-#89 via `gh-axi` earlier in the phase.

@@ -2029,7 +2029,7 @@
       "summary": "Get a list of Groups::SshCertificate for a Group.",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -2151,7 +2151,7 @@
       "summary": "List all runners in a group",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -2448,7 +2448,7 @@
       "summary": "List all group deploy tokens",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -2556,7 +2556,7 @@
       "summary": "Retrieve a group deploy token",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -2877,24 +2877,22 @@
     },
     {
       "id": "gitlab.get-api-v4-groups-id-registry-repositories",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all registry repositories for a group",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/registry/repositories",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -2972,46 +2970,42 @@
     },
     {
       "id": "gitlab.get-api-v4-groups-id-debian-distributions",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all Debian group distributions",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/debian_distributions",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-groups-id-debian-distributions-codename",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a Debian group distribution",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/debian_distributions/{codename}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -3409,7 +3403,7 @@
       "summary": "List all group variables",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -3528,7 +3522,7 @@
       "summary": "Retrieve details of a group variable",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -7198,7 +7192,7 @@
       "summary": "Retrieve integration settings",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -7474,24 +7468,22 @@
     },
     {
       "id": "gitlab.get-api-v4-groups-id-uploads",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all uploads for a group",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/uploads",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -7543,7 +7535,7 @@
       "summary": "Download an uploaded file by secret and filename",
       "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "binary_file_bounded",
       "auth_scopes": [
@@ -8077,24 +8069,22 @@
     },
     {
       "id": "gitlab.get-api-v4-groups-id-packages-npm-package-package-name-dist-tags",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Get all tags for a given an NPM package",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/packages/npm/-/package/*package_name/dist-tags",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -8196,46 +8186,42 @@
     },
     {
       "id": "gitlab.get-api-v4-groups-id-packages-npm-package-name",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "NPM registry metadata endpoint",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/packages/npm/*package_name",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-groups-id-packages-nuget-index",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet V3 Feed Service Index",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/packages/nuget/index",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -8262,112 +8248,102 @@
     },
     {
       "id": "gitlab.get-api-v4-groups-id-packages-nuget-v2",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet V2 Feed Service Index",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/packages/nuget/v2",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-groups-id-packages-nuget-v2-metadata",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet V2 Feed Package $metadata endpoint",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/packages/nuget/v2/$metadata",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-groups-id-packages-nuget-metadata-package-name-index",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet Metadata Service - Package name level",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/packages/nuget/metadata/*package_name/index",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-groups-id-packages-nuget-metadata-package-name-package-version",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet Metadata Service - Package name and version level",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/packages/nuget/metadata/*package_name/*package_version",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-groups-id-packages-nuget-query",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet Search Service",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/packages/nuget/query",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -8394,46 +8370,42 @@
     },
     {
       "id": "gitlab.get-api-v4-groups-id-packages-pypi-simple",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all packages for a group",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/packages/pypi/simple",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-groups-id-packages-pypi-simple-package-name",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The PyPi Simple Group Package Endpoint",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/groups/{id}/-/packages/pypi/simple/*package_name",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -10019,24 +9991,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-jobs-job-id-artifacts-tree",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all files in an artifacts archive",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/jobs/{job_id}/artifacts/tree",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -10420,7 +10390,7 @@
       "summary": "List project's runners",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -10851,7 +10821,7 @@
       "summary": "List all pipeline variables",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -11325,7 +11295,7 @@
       "summary": "Retrieve a variable for a pipeline schedule",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -11503,7 +11473,7 @@
       "summary": "List all project trigger tokens",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -11590,7 +11560,7 @@
       "summary": "Retrieve trigger token details",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -11704,7 +11674,7 @@
       "summary": "List all project variables",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -11823,7 +11793,7 @@
       "summary": "Retrieve a single variable",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -11975,7 +11945,7 @@
       "summary": "List all agent tokens",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -12061,7 +12031,7 @@
       "summary": "Retrieve an agent token",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -12221,24 +12191,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-cargo-config-json",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Get config.json",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/cargo/config.json",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -12829,24 +12797,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-users-authenticate",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve an authentication token",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/users/authenticate",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       },
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -12865,24 +12831,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-users-check-credentials",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Verify authentication credentials",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/users/check_credentials",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       },
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -12901,112 +12865,102 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-search",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Search for a Conan package",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/conans/search",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve package references metadata",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/search",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-ping",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Verify availability of a Conan repository",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/ping",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a package snapshot",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a recipe snapshot",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -13032,90 +12986,82 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-digest",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a package manifest",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/digest",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-digest",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a recipe manifest",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/digest",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-download-urls",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all package download URLs",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/download_urls",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-download-urls",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all recipe download URLs",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/download_urls",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -13316,24 +13262,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-users-authenticate",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve an authentication token",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/users/authenticate",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       },
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -13352,24 +13296,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-users-check-credentials",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Verify authentication credentials",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/users/check_credentials",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       },
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -13388,90 +13330,82 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-search",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Search for a Conan package",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/conans/search",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-search",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve package references metadata",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/search",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-latest",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve latest recipe revision",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/latest",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all recipe revisions",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -13497,24 +13431,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-files",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all recipe files",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/files",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -13596,68 +13528,62 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-search",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve package references metadata by recipe revision",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/search",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-latest",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve latest package revision",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/latest",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all package revisions",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -13683,24 +13609,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions-package-revision-files",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all package files",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/conan/v2/conans/{package_name}/{package_version}/{package_username}/{package_channel}/revisions/{recipe_revision}/packages/{conan_package_reference}/revisions/{package_revision}/files",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -14087,7 +14011,7 @@
       "summary": "List all deploy keys for project",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -14183,7 +14107,7 @@
       "summary": "Retrieve a deploy key",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -14336,7 +14260,7 @@
       "summary": "List all project deploy tokens",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -14444,7 +14368,7 @@
       "summary": "Retrieve a project deploy token",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -15400,7 +15324,7 @@
       "summary": "List all project client keys",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -15504,7 +15428,7 @@
       "summary": "Retrieve Error Tracking settings for a project",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -15601,7 +15525,7 @@
       "summary": "List all feature flags for a project",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -15691,7 +15615,7 @@
       "summary": "Retrieve a feature flag",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -15798,7 +15722,7 @@
       "summary": "List all feature flag user lists for a project",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -15857,7 +15781,7 @@
       "summary": "Retrieve a feature flag user list",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -16390,46 +16314,42 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-go-module-name-v-list",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/go/*module_name/@v/list",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-go-module-name-v-module-version-info",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Version metadata",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/go/*module_name/@v/{module_version}.info",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -20109,7 +20029,7 @@
       "summary": "Retrieve integration settings",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -23691,7 +23611,7 @@
       "summary": "Retrieve integration settings",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -24981,24 +24901,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-uploads",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all uploads",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/uploads",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -25050,7 +24968,7 @@
       "summary": "Download an uploaded file by secret and filename",
       "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "binary_file_bounded",
       "auth_scopes": [
@@ -26610,24 +26528,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-npm-package-package-name-dist-tags",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Get all tags for a given an NPM package",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/npm/-/package/*package_name/dist-tags",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -26785,46 +26701,42 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-npm-package-name",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "NPM registry metadata endpoint",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/npm/*package_name",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-nuget-index",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet V3 Feed Service Index",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/nuget/index",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -26851,24 +26763,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-nuget-v2",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet V2 Feed Service Index",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/nuget/v2",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -26907,90 +26817,82 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-nuget-v2-metadata",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet V2 Feed Package $metadata endpoint",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/nuget/v2/$metadata",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-nuget-metadata-package-name-index",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet Metadata Service - Package name level",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/nuget/metadata/*package_name/index",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-nuget-metadata-package-name-package-version",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet Metadata Service - Package name and version level",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/nuget/metadata/*package_name/*package_version",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-nuget-query",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet Search Service",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/nuget/query",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -27191,90 +27093,82 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-project-id-packages-nuget-v2-findpackagesbyid",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet V2 Feed Find Packages by ID endpoint",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{project_id}/packages/nuget/v2/FindPackagesById\\(\\)",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-project-id-packages-nuget-v2-packages",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet V2 Feed Enumerate Packages endpoint",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(\\)",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-project-id-packages-nuget-v2-packages-id-package-name-version-package-version",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The NuGet V2 Feed Single Package Metadata endpoint",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{project_id}/packages/nuget/v2/Packages\\(Id='*package_name',Version='*package_version'\\)",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-package-id-package-files",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all package files",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/{package_id}/package_files",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -27386,7 +27280,7 @@
       "summary": "Retrieve Pages settings for a project",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -27831,24 +27725,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-registry-repositories",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all registry repositories for a project",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/registry/repositories",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -27874,24 +27766,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-registry-repositories-repository-id-tags",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all registry repository tags for a project",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/registry/repositories/{repository_id}/tags",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -27917,24 +27807,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-registry-repositories-repository-id-tags-tag-name",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve details of a registry repository tag",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/registry/repositories/{repository_id}/tags/{tag_name}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -27960,24 +27848,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-registry-protection-repository-rules",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all container repository protection rules",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/registry/protection/repository/rules",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -28106,24 +27992,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-registry-protection-tag-rules",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all container registry protection tag rules",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/registry/protection/tag/rules",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -28327,46 +28211,42 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-debian-distributions",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all Debian project distributions",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/debian_distributions",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-debian-distributions-codename",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a Debian project distribution",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/debian_distributions/{codename}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -28813,7 +28693,7 @@
       "summary": "List all webhooks for a project",
       "description": "GitLab cdc_changefeed operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -29014,7 +28894,7 @@
       "summary": "Retrieve a project webhook",
       "description": "GitLab cdc_changefeed operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -29233,7 +29113,7 @@
       "summary": "List all events",
       "description": "GitLab cdc_changefeed operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -30941,7 +30821,7 @@
       "summary": "Retrieve the CI/CD job token access settings for a project",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -31023,7 +30903,7 @@
       "summary": "List all projects in a CI/CD job token allowlist",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -31106,7 +30986,7 @@
       "summary": "List all groups in a CI/CD job token allowlist",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -31336,24 +31216,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-protection-rules",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all package protection rules",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/protection/rules",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -35056,46 +34934,42 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-pypi-simple",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all packages for a project",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/pypi/simple",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-pypi-simple-package-name",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "The PyPi Simple Project Package Endpoint",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/pypi/simple/*package_name",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -36509,24 +36383,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-packages-rubygems-api-v1-dependencies",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve dependencies",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/packages/rubygems/api/v1/dependencies",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -37057,24 +36929,22 @@
     },
     {
       "id": "gitlab.get-api-v4-projects-id-terraform-state-protection-rules",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all Terraform state protection rules for a project",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/projects/{id}/terraform/state_protection_rules",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -37464,7 +37334,7 @@
       "summary": "getApiV4AdminBatchedBackgroundMigrationsId",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -37560,7 +37430,7 @@
       "summary": "getApiV4AdminBatchedBackgroundMigrations",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -37580,7 +37450,7 @@
       "summary": "Get the list of batched background operations",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -37600,7 +37470,7 @@
       "summary": "Retrieve a batched background operation",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -37696,7 +37566,7 @@
       "summary": "List all instance variables",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -37807,7 +37677,7 @@
       "summary": "Retrieve instance variable details",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -37945,7 +37815,7 @@
       "summary": "getApiV4AdminDatabasesDatabaseNameDictionaryTablesTableName",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -37965,7 +37835,7 @@
       "summary": "List all instance clusters",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -37985,7 +37855,7 @@
       "summary": "Retrieve a single instance cluster",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -38199,7 +38069,7 @@
       "summary": "List all pending migrations",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -38257,7 +38127,7 @@
       "summary": "List all broadcast messages",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -38377,7 +38247,7 @@
       "summary": "Retrieve a broadcast message",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -38563,7 +38433,7 @@
       "summary": "Get applications",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -38885,7 +38755,7 @@
       "summary": "Retrieve a job by job token",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -38919,7 +38789,7 @@
       "summary": "List all GitLab agents for Kubernetes by job token",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -39096,7 +38966,7 @@
       "summary": "List available runners",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -39238,7 +39108,7 @@
       "summary": "Discover Job Router information",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -39258,7 +39128,7 @@
       "summary": "List all runners",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -39278,7 +39148,7 @@
       "summary": "Retrieve details on a runner",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -39390,7 +39260,7 @@
       "summary": "List all managers for a runner",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -39410,7 +39280,7 @@
       "summary": "List runner's projects",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -39430,7 +39300,7 @@
       "summary": "List all jobs processed by a runner",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -39924,112 +39794,102 @@
     },
     {
       "id": "gitlab.get-api-v4-group-id-packages-composer-packages",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve repository URL templates",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/group/{id}/-/packages/composer/packages",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-group-id-packages-composer-p-sha",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all packages for a group",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/group/{id}/-/packages/composer/p/{sha}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-group-id-packages-composer-p2-package-name",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Composer v2 packages p2 endpoint at group level for package versions metadata",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/group/{id}/-/packages/composer/p2/*package_name",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-group-id-packages-composer-package-name",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Composer packages endpoint at group level for package versions metadata",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/group/{id}/-/packages/composer/*package_name",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-users-authenticate",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve an authentication token",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/users/authenticate",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       },
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -40048,24 +39908,22 @@
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-users-check-credentials",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Verify authentication credentials",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/users/check_credentials",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       },
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -40084,112 +39942,102 @@
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-conans-search",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Search for a Conan package",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/conans/search",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve package references metadata",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/search",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-ping",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Verify availability of a Conan repository",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/ping",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a package snapshot",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a recipe snapshot",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -40215,90 +40063,82 @@
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-digest",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a package manifest",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/digest",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-digest",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve a recipe manifest",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/digest",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-download-urls",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all package download URLs",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/download_urls",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-download-urls",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all recipe download URLs",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/download_urls",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -40521,24 +40361,22 @@
     },
     {
       "id": "gitlab.get-api-v4-packages-npm-package-package-name-dist-tags",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Get all tags for a given an NPM package",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/npm/-/package/*package_name/dist-tags",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -40640,46 +40478,42 @@
     },
     {
       "id": "gitlab.get-api-v4-packages-npm-package-name",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "NPM registry metadata endpoint",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/npm/*package_name",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
       "id": "gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system-versions",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List all available versions for a module",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/packages/terraform/modules/v1/{module_namespace}/{module_name}/{module_system}/versions",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -40815,24 +40649,22 @@
     },
     {
       "id": "gitlab.get-api-v4-registry-repositories-id",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Retrieve details of a container registry repository",
-      "description": "GitLab binary_file operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
+      "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "low",
       "approval": "none; planned bounded connector command/stream required before execution",
-      "output_policy": "binary_file_bounded",
+      "output_policy": "json_redacted",
       "auth_scopes": [
         "GitLab token scopes per official operation and target resource permissions"
       ],
-      "audit_event": "gitlab.binary_file",
+      "audit_event": "gitlab.etl_read",
       "mutation_class": "none",
-      "binary": {
+      "rest": {
         "method": "GET",
         "path": "/registry/repositories/{id}",
-        "max_bytes": 16777216,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 1048576
       }
     },
     {
@@ -41140,7 +40972,7 @@
       "summary": "Used by secondary runners to verify the secondary instance has the very latest version",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -42276,7 +42108,7 @@
       "summary": "Retrieve user by SSH key ID",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -42310,7 +42142,7 @@
       "summary": "Retrieve user by SSH key fingerprint",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -43150,7 +42982,7 @@
       "summary": "Retrieve a personal access token",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -43219,7 +43051,7 @@
       "summary": "List all token associations",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -43299,7 +43131,7 @@
       "summary": "List all personal access tokens",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -43333,7 +43165,7 @@
       "summary": "Retrieve a personal access token",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -43995,7 +43827,7 @@
       "summary": "List all system hooks",
       "description": "GitLab cdc_changefeed operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -44140,7 +43972,7 @@
       "summary": "Retrieve a system hook",
       "description": "GitLab cdc_changefeed operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "medium",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -44324,7 +44156,7 @@
       "summary": "getApiV4FeatureFlagsUnleashProjectId",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -44344,7 +44176,7 @@
       "summary": "Get a list of features (v2 client support)",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -44364,7 +44196,7 @@
       "summary": "getApiV4FeatureFlagsUnleashProjectIdClientFeatures",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -44841,7 +44673,7 @@
       "summary": "Get current plan limits",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -45038,7 +44870,7 @@
       "summary": "getApiV4ApplicationAppearance",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -45138,7 +44970,7 @@
       "summary": "Retrieve application statistics",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -45178,7 +45010,7 @@
       "summary": "List all deploy keys",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [
@@ -45270,7 +45102,7 @@
       "summary": "List all deploy tokens",
       "description": "GitLab etl_read operation from the pinned OpenAPI v2 source. This row is typed connector-local metadata; it is not executable until a verified stream/action/command covers it.",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "risk": "low",
+      "risk": "high",
       "approval": "none; planned bounded connector command/stream required before execution",
       "output_policy": "json_redacted",
       "auth_scopes": [

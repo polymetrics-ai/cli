@@ -31,7 +31,7 @@ Expected initial result: fail with `local api_surface row count 11 != official o
 
 - [x] Red inventory mismatch captured: `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_inventory_check.py` failed before production edits with `local api_surface row count 11 != official operation count 1146` and `local operations.json missing`.
 - [x] Green inventory count captured after generation: `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_inventory_check.py` passed with `PASS GitLab inventory parity: 1146 official operations plus 1 supplemental stream row represented`.
-- [x] Surface count check captured: `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py` reports 1,146 official operations, 1,147 api/CLI rows, lane counts 308 ETL/read, 637 reverse ETL write, 6 direct/query/search/metadata, 178 binary/file, 15 CDC/changefeed, and 2 excluded/not-applicable.
+- [x] Surface count check captured: `python3 .planning/phases/issue-78-gitlab-parity-wave02-r1/traces/gitlab_surface_counts.py` reports 1,146 official operations, 1,147 api/CLI rows, lane counts 392 ETL/read, 637 reverse ETL write, 6 direct/query/search/metadata, 94 binary/file, 15 CDC/changefeed, and 2 excluded/not-applicable.
 - [x] `connectorgen validate` result recorded: `go run ./cmd/connectorgen validate internal/connectors/defs --json` passed with 0 findings, including 0 GitLab findings.
 - [x] GitLab conformance result recorded: `go test ./internal/connectors/conformance -run 'TestConformance/gitlab' -count=1` passed.
 - [x] CLI targeted test result recorded: `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1 -timeout=10m` passed after regenerating GitLab-influenced golden root transcripts.

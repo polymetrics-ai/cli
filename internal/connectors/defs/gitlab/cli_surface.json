@@ -2299,7 +2299,9 @@
           "summary": "path parameter id",
           "maps_to": "path.id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post groups-id-ssh-certificates",
@@ -2434,7 +2436,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post groups-id-runners-reset-registration-token",
@@ -2982,7 +2986,9 @@
           "summary": "Limit by active status",
           "maps_to": "query.active"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post groups-id-deploy-tokens",
@@ -3036,7 +3042,9 @@
           "summary": "The ID of the deploy token",
           "maps_to": "path.token_id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation delete groups-id-deploy-tokens-token-id",
@@ -3254,11 +3262,11 @@
     {
       "path": "operation get groups-id-registry-repositories",
       "summary": "List all registry repositories for a group",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-registry-repositories",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -3285,9 +3293,7 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation post groups-id-debian-distributions",
@@ -3318,11 +3324,11 @@
     {
       "path": "operation get groups-id-debian-distributions",
       "summary": "List all Debian group distributions",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-debian-distributions",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -3403,18 +3409,16 @@
           "summary": "The list of Architectures",
           "maps_to": "query.architectures"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-debian-distributions-codename",
       "summary": "Retrieve a Debian group distribution",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-debian-distributions-codename",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -3436,9 +3440,7 @@
           "maps_to": "path.codename",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation put groups-id-debian-distributions-codename",
@@ -4039,7 +4041,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post groups-id-variables",
@@ -4096,7 +4100,9 @@
           "maps_to": "path.key",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put groups-id-variables-key",
@@ -5626,7 +5632,9 @@
           "summary": "path parameter id",
           "maps_to": "path.id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post groups-id-invitations",
@@ -6421,11 +6429,11 @@
     {
       "path": "operation get groups-id-uploads",
       "summary": "List all uploads for a group",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-uploads",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -6452,9 +6460,7 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-uploads-upload-id",
@@ -7638,11 +7644,11 @@
     {
       "path": "operation get groups-id-packages-npm-package-package-name-dist-tags",
       "summary": "Get all tags for a given an NPM package",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-packages-npm-package-package-name-dist-tags",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -7664,9 +7670,7 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation put groups-id-packages-npm-package-package-name-dist-tags-tag",
@@ -7796,11 +7800,11 @@
     {
       "path": "operation get groups-id-packages-npm-package-name",
       "summary": "NPM registry metadata endpoint",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-packages-npm-package-name",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -7822,18 +7826,16 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-packages-nuget-index",
       "summary": "The NuGet V3 Feed Service Index",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-packages-nuget-index",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -7847,9 +7849,7 @@
           "summary": "The group ID or full group path.",
           "maps_to": "path.id"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-packages-nuget-symbolfiles-file-name-signature-same-file-name",
@@ -7900,11 +7900,11 @@
     {
       "path": "operation get groups-id-packages-nuget-v2",
       "summary": "The NuGet V2 Feed Service Index",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-packages-nuget-v2",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -7918,18 +7918,16 @@
           "summary": "The group ID or full group path.",
           "maps_to": "path.id"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-packages-nuget-v2-metadata",
       "summary": "The NuGet V2 Feed Package $metadata endpoint",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-packages-nuget-v2-metadata",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -7943,18 +7941,16 @@
           "summary": "The group ID or full group path.",
           "maps_to": "path.id"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-packages-nuget-metadata-package-name-index",
       "summary": "The NuGet Metadata Service - Package name level",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-packages-nuget-metadata-package-name-index",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -7975,18 +7971,16 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-packages-nuget-metadata-package-name-package-version",
       "summary": "The NuGet Metadata Service - Package name and version level",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-packages-nuget-metadata-package-name-package-version",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -8014,18 +8008,16 @@
           "maps_to": "query.package_version",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-packages-nuget-query",
       "summary": "The NuGet Search Service",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-packages-nuget-query",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -8063,9 +8055,7 @@
           "summary": "Include prerelease versions",
           "maps_to": "query.prerelease"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-packages-pypi-files-sha256-file-identifier",
@@ -8109,11 +8099,11 @@
     {
       "path": "operation get groups-id-packages-pypi-simple",
       "summary": "List all packages for a group",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-packages-pypi-simple",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -8127,18 +8117,16 @@
           "summary": "The ID or full path of the group.",
           "maps_to": "path.id"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-packages-pypi-simple-package-name",
       "summary": "The PyPi Simple Group Package Endpoint",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-groups-id-packages-pypi-simple-package-name",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -8159,9 +8147,7 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get groups-id-releases",
@@ -10504,11 +10490,11 @@
     {
       "path": "operation get projects-id-jobs-job-id-artifacts-tree",
       "summary": "List all files in an artifacts archive",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-jobs-job-id-artifacts-tree",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -10559,9 +10545,7 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-jobs-job-id-artifacts-artifact-path",
@@ -11179,7 +11163,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-runners",
@@ -11941,7 +11927,9 @@
           "summary": "The pipeline ID",
           "maps_to": "path.pipeline_id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-pipelines-pipeline-id-test-report",
@@ -12510,7 +12498,9 @@
           "maps_to": "path.key",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put projects-id-pipeline-schedules-pipeline-schedule-id-variables-key",
@@ -12657,7 +12647,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-triggers",
@@ -12713,7 +12705,9 @@
           "summary": "The trigger token ID",
           "maps_to": "path.trigger_id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put projects-id-triggers-trigger-id",
@@ -12813,7 +12807,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-variables",
@@ -12876,7 +12872,9 @@
           "summary": "The environment scope of a variable",
           "maps_to": "query.filter[environment_scope]"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put projects-id-variables-key",
@@ -12990,7 +12988,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-cluster-agents-agent-id-tokens",
@@ -13058,7 +13058,9 @@
           "summary": "The ID of the agent token",
           "maps_to": "path.token_id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation delete projects-id-cluster-agents-agent-id-tokens-token-id",
@@ -13225,11 +13227,11 @@
     {
       "path": "operation get projects-id-packages-cargo-config-json",
       "summary": "Get config.json",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-cargo-config-json",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -13244,9 +13246,7 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-cargo-1-package-name",
@@ -14185,11 +14185,11 @@
     {
       "path": "operation get projects-id-packages-conan-v1-users-authenticate",
       "summary": "Retrieve an authentication token",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-users-authenticate",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14205,17 +14205,17 @@
           "allow_empty": false
         }
       ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-packages-conan-v1-users-check-credentials",
       "summary": "Verify authentication credentials",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-users-check-credentials",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14231,17 +14231,17 @@
           "allow_empty": false
         }
       ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-packages-conan-v1-conans-search",
       "summary": "Search for a Conan package",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-search",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14269,18 +14269,16 @@
           "summary": "Ignore case when searching (case-insensitive search)",
           "maps_to": "query.ignorecase"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search",
       "summary": "Retrieve package references metadata",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14323,18 +14321,16 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v1-ping",
       "summary": "Verify availability of a Conan repository",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-ping",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14349,18 +14345,16 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference",
       "summary": "Retrieve a package snapshot",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14410,18 +14404,16 @@
           "maps_to": "path.conan_package_reference",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel",
       "summary": "Retrieve a recipe snapshot",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14464,9 +14456,7 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation delete projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel",
@@ -14525,11 +14515,11 @@
     {
       "path": "operation get projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-digest",
       "summary": "Retrieve a package manifest",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-digest",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14579,18 +14569,16 @@
           "maps_to": "path.conan_package_reference",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-digest",
       "summary": "Retrieve a recipe manifest",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-digest",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14633,18 +14621,16 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-download-urls",
       "summary": "List all package download URLs",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-download-urls",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14694,18 +14680,16 @@
           "maps_to": "path.conan_package_reference",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-download-urls",
       "summary": "List all recipe download URLs",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-download-urls",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -14748,9 +14732,7 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation post projects-id-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-upload-urls",
@@ -15362,11 +15344,11 @@
     {
       "path": "operation get projects-id-packages-conan-v2-users-authenticate",
       "summary": "Retrieve an authentication token",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-users-authenticate",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -15382,17 +15364,17 @@
           "allow_empty": false
         }
       ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-packages-conan-v2-users-check-credentials",
       "summary": "Verify authentication credentials",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-users-check-credentials",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -15408,17 +15390,17 @@
           "allow_empty": false
         }
       ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-packages-conan-v2-conans-search",
       "summary": "Search for a Conan package",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-search",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -15446,18 +15428,16 @@
           "summary": "Ignore case when searching (case-insensitive search)",
           "maps_to": "query.ignorecase"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-search",
       "summary": "Retrieve package references metadata",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-search",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -15500,18 +15480,16 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-latest",
       "summary": "Retrieve latest recipe revision",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-latest",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -15554,18 +15532,16 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions",
       "summary": "List all recipe revisions",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -15608,9 +15584,7 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation delete projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision",
@@ -15676,11 +15650,11 @@
     {
       "path": "operation get projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-files",
       "summary": "List all recipe files",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-files",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -15730,9 +15704,7 @@
           "maps_to": "path.recipe_revision",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-files-file-name",
@@ -15962,11 +15934,11 @@
     {
       "path": "operation get projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-search",
       "summary": "Retrieve package references metadata by recipe revision",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-search",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -16016,18 +15988,16 @@
           "maps_to": "path.recipe_revision",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-latest",
       "summary": "Retrieve latest package revision",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-latest",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -16084,18 +16054,16 @@
           "maps_to": "path.conan_package_reference",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions",
       "summary": "List all package revisions",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -16152,9 +16120,7 @@
           "maps_to": "path.conan_package_reference",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation delete projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions-package-revision",
@@ -16234,11 +16200,11 @@
     {
       "path": "operation get projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions-package-revision-files",
       "summary": "List all package files",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions-package-revision-files",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -16302,9 +16268,7 @@
           "maps_to": "path.package_revision",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-conan-v2-conans-package-name-package-version-package-username-package-channel-revisions-recipe-revision-packages-conan-package-reference-revisions-package-revision-files-file-name",
@@ -17122,7 +17086,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-deploy-keys",
@@ -17178,7 +17144,9 @@
           "summary": "The ID of the deploy key",
           "maps_to": "path.key_id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put projects-id-deploy-keys-key-id",
@@ -17316,7 +17284,9 @@
           "summary": "Limit by active status",
           "maps_to": "query.active"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-deploy-tokens",
@@ -17372,7 +17342,9 @@
           "summary": "The ID of the deploy token",
           "maps_to": "path.token_id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation delete projects-id-deploy-tokens-token-id",
@@ -18533,7 +18505,9 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-error-tracking-client-keys",
@@ -18615,7 +18589,9 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation patch projects-id-error-tracking-settings",
@@ -18713,7 +18689,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-feature-flags",
@@ -18770,7 +18748,9 @@
           "maps_to": "path.feature_flag_name",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put projects-id-feature-flags-feature-flag-name",
@@ -18878,7 +18858,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-feature-flags-user-lists",
@@ -18935,7 +18917,9 @@
           "maps_to": "path.iid",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put projects-id-feature-flags-user-lists-iid",
@@ -19645,11 +19629,11 @@
     {
       "path": "operation get projects-id-packages-go-module-name-v-list",
       "summary": "List",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-go-module-name-v-list",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -19671,18 +19655,16 @@
           "maps_to": "query.module_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-go-module-name-v-module-version-info",
       "summary": "Version metadata",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-go-module-name-v-module-version-info",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -19711,9 +19693,7 @@
           "maps_to": "path.module_version",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-go-module-name-v-module-version-mod",
@@ -21392,7 +21372,9 @@
           "summary": "path parameter id",
           "maps_to": "path.id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-services-mattermost-slash-commands-trigger",
@@ -22882,7 +22864,9 @@
           "summary": "path parameter id",
           "maps_to": "path.id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-integrations-mattermost-slash-commands-trigger",
@@ -24591,11 +24575,11 @@
     {
       "path": "operation get projects-id-uploads",
       "summary": "List all uploads",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-uploads",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -24622,9 +24606,7 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-uploads-upload-id",
@@ -26827,11 +26809,11 @@
     {
       "path": "operation get projects-id-packages-npm-package-package-name-dist-tags",
       "summary": "Get all tags for a given an NPM package",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-npm-package-package-name-dist-tags",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -26853,9 +26835,7 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation put projects-id-packages-npm-package-package-name-dist-tags-tag",
@@ -27058,11 +27038,11 @@
     {
       "path": "operation get projects-id-packages-npm-package-name",
       "summary": "NPM registry metadata endpoint",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-npm-package-name",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27084,18 +27064,16 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-nuget-index",
       "summary": "The NuGet V3 Feed Service Index",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-nuget-index",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27110,9 +27088,7 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-nuget-symbolfiles-file-name-signature-same-file-name",
@@ -27164,11 +27140,11 @@
     {
       "path": "operation get projects-id-packages-nuget-v2",
       "summary": "The NuGet V2 Feed Service Index",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-nuget-v2",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27183,9 +27159,7 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation put projects-id-packages-nuget-v2",
@@ -27216,11 +27190,11 @@
     {
       "path": "operation get projects-id-packages-nuget-v2-metadata",
       "summary": "The NuGet V2 Feed Package $metadata endpoint",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-nuget-v2-metadata",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27235,18 +27209,16 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-nuget-metadata-package-name-index",
       "summary": "The NuGet Metadata Service - Package name level",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-nuget-metadata-package-name-index",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27268,18 +27240,16 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-nuget-metadata-package-name-package-version",
       "summary": "The NuGet Metadata Service - Package name and version level",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-nuget-metadata-package-name-package-version",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27308,18 +27278,16 @@
           "maps_to": "query.package_version",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-nuget-query",
       "summary": "The NuGet Search Service",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-nuget-query",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27358,9 +27326,7 @@
           "summary": "Include prerelease versions",
           "maps_to": "query.prerelease"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-nuget-download-package-name-index",
@@ -27615,11 +27581,11 @@
     {
       "path": "operation get projects-project-id-packages-nuget-v2-findpackagesbyid",
       "summary": "The NuGet V2 Feed Find Packages by ID endpoint",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-project-id-packages-nuget-v2-findpackagesbyid",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27641,18 +27607,16 @@
           "maps_to": "query.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-project-id-packages-nuget-v2-packages",
       "summary": "The NuGet V2 Feed Enumerate Packages endpoint",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-project-id-packages-nuget-v2-packages",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27674,18 +27638,16 @@
           "maps_to": "query.$filter",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-project-id-packages-nuget-v2-packages-id-package-name-version-package-version",
       "summary": "The NuGet V2 Feed Single Package Metadata endpoint",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-project-id-packages-nuget-v2-packages-id-package-name-version-package-version",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27714,18 +27676,16 @@
           "maps_to": "query.package_version",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-package-id-package-files",
       "summary": "List all package files",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-package-id-package-files",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -27779,9 +27739,7 @@
             "desc"
           ]
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation delete projects-id-packages-package-id-package-files-package-file-id",
@@ -27933,7 +27891,9 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get projects-id-pages-domains",
@@ -28312,11 +28272,11 @@
     {
       "path": "operation get projects-id-registry-repositories",
       "summary": "List all registry repositories for a project",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-registry-repositories",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -28355,9 +28315,7 @@
           "summary": "Determines if the tags count should be included",
           "maps_to": "query.tags_count"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation delete projects-id-registry-repositories-repository-id",
@@ -28394,11 +28352,11 @@
     {
       "path": "operation get projects-id-registry-repositories-repository-id-tags",
       "summary": "List all registry repository tags for a project",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-registry-repositories-repository-id-tags",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -28431,9 +28389,7 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation delete projects-id-registry-repositories-repository-id-tags",
@@ -28500,11 +28456,11 @@
     {
       "path": "operation get projects-id-registry-repositories-repository-id-tags-tag-name",
       "summary": "Retrieve details of a registry repository tag",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-registry-repositories-repository-id-tags-tag-name",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -28532,9 +28488,7 @@
           "maps_to": "path.tag_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation delete projects-id-registry-repositories-repository-id-tags-tag-name",
@@ -28578,11 +28532,11 @@
     {
       "path": "operation get projects-id-registry-protection-repository-rules",
       "summary": "List all container repository protection rules",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-registry-protection-repository-rules",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -28597,9 +28551,7 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation post projects-id-registry-protection-repository-rules",
@@ -28694,11 +28646,11 @@
     {
       "path": "operation get projects-id-registry-protection-tag-rules",
       "summary": "List all container registry protection tag rules",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-registry-protection-tag-rules",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -28713,9 +28665,7 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation post projects-id-registry-protection-tag-rules",
@@ -28836,11 +28786,11 @@
     {
       "path": "operation get projects-id-debian-distributions",
       "summary": "List all Debian project distributions",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-debian-distributions",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -28921,18 +28871,16 @@
           "summary": "The list of Architectures",
           "maps_to": "query.architectures"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-debian-distributions-codename",
       "summary": "Retrieve a Debian project distribution",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-debian-distributions-codename",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -28954,9 +28902,7 @@
           "maps_to": "path.codename",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation put projects-id-debian-distributions-codename",
@@ -32358,7 +32304,9 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation patch projects-id-job-token-scope",
@@ -32420,7 +32368,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-job-token-scope-allowlist",
@@ -32481,7 +32431,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post projects-id-job-token-scope-groups-allowlist",
@@ -32796,11 +32748,11 @@
     {
       "path": "operation get projects-id-packages-protection-rules",
       "summary": "List all package protection rules",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-protection-rules",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -32815,9 +32767,7 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation post projects-id-packages-protection-rules",
@@ -35048,11 +34998,11 @@
     {
       "path": "operation get projects-id-packages-pypi-simple",
       "summary": "List all packages for a project",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-pypi-simple",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -35067,18 +35017,16 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-packages-pypi-simple-package-name",
       "summary": "The PyPi Simple Project Package Endpoint",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-pypi-simple-package-name",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -35100,9 +35048,7 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation post projects-id-packages-pypi",
@@ -36893,11 +36839,11 @@
     {
       "path": "operation get projects-id-packages-rubygems-api-v1-dependencies",
       "summary": "Retrieve dependencies",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-packages-rubygems-api-v1-dependencies",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -36917,9 +36863,7 @@
           "summary": "Comma delimited gem names",
           "maps_to": "query.gems"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get projects-id-search",
@@ -37712,11 +37656,11 @@
     {
       "path": "operation get projects-id-terraform-state-protection-rules",
       "summary": "List all Terraform state protection rules for a project",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-projects-id-terraform-state-protection-rules",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -37731,9 +37675,7 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation post projects-id-terraform-state-protection-rules",
@@ -38127,7 +38069,9 @@
             "geo"
           ]
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put admin-batched-background-migrations-id-resume",
@@ -38213,7 +38157,9 @@
           "summary": "Filter migrations by job class name.",
           "maps_to": "query.job_class_name"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get admin-batched-background-operations",
@@ -38249,7 +38195,9 @@
           "summary": "Filter operations by job class name.",
           "maps_to": "query.job_class_name"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get admin-batched-background-operations-id",
@@ -38285,7 +38233,9 @@
             "geo"
           ]
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put admin-batched-background-operations-id-stop",
@@ -38364,7 +38314,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post admin-ci-variables",
@@ -38405,7 +38357,9 @@
           "maps_to": "path.key",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put admin-ci-variables-key",
@@ -38491,7 +38445,9 @@
           "maps_to": "path.table_name",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get admin-clusters",
@@ -38506,7 +38462,9 @@
           "method": "GET",
           "path": "/admin/clusters"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get admin-clusters-cluster-id",
@@ -38529,7 +38487,9 @@
           "summary": "The cluster ID",
           "maps_to": "path.cluster_id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put admin-clusters-cluster-id",
@@ -38626,7 +38586,9 @@
             "geo"
           ]
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post admin-migrations-timestamp-mark",
@@ -38680,7 +38642,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post broadcast-messages",
@@ -38720,7 +38684,9 @@
           "summary": "Broadcast message ID",
           "maps_to": "path.id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put broadcast-messages-id",
@@ -38802,7 +38768,9 @@
           "method": "GET",
           "path": "/applications"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation delete applications-id",
@@ -39233,7 +39201,9 @@
           "method": "GET",
           "path": "/job"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get job-allowed-agents",
@@ -39248,7 +39218,9 @@
           "method": "GET",
           "path": "/job/allowed_agents"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post runners",
@@ -39382,7 +39354,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation delete runners-managers",
@@ -39464,7 +39438,9 @@
           "method": "GET",
           "path": "/runners/router/discovery"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get runners-all",
@@ -39555,7 +39531,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get runners-id",
@@ -39584,7 +39562,9 @@
           "summary": "Include projects in the response. Set to false to improve performance for runners with many projects.",
           "maps_to": "query.include_projects"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put runners-id",
@@ -39657,7 +39637,9 @@
           "summary": "The ID of a runner",
           "maps_to": "path.id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get runners-id-projects",
@@ -39692,7 +39674,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get runners-id-jobs",
@@ -39770,7 +39754,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post runners-id-reset-authentication-token",
@@ -39971,11 +39957,11 @@
     {
       "path": "operation get group-id-packages-composer-packages",
       "summary": "Retrieve repository URL templates",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-group-id-packages-composer-packages",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -39990,18 +39976,16 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get group-id-packages-composer-p-sha",
       "summary": "List all packages for a group",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-group-id-packages-composer-p-sha",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40023,18 +40007,16 @@
           "maps_to": "path.sha",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get group-id-packages-composer-p2-package-name",
       "summary": "Composer v2 packages p2 endpoint at group level for package versions metadata",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-group-id-packages-composer-p2-package-name",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40056,18 +40038,16 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get group-id-packages-composer-package-name",
       "summary": "Composer packages endpoint at group level for package versions metadata",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-group-id-packages-composer-package-name",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40089,52 +40069,50 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-conan-v1-users-authenticate",
       "summary": "Retrieve an authentication token",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-users-authenticate",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
           "path": "/packages/conan/v1/users/authenticate"
         }
       ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get packages-conan-v1-users-check-credentials",
       "summary": "Verify authentication credentials",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-users-check-credentials",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
           "path": "/packages/conan/v1/users/check_credentials"
         }
       ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get packages-conan-v1-conans-search",
       "summary": "Search for a Conan package",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-conans-search",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40155,18 +40133,16 @@
           "summary": "Ignore case when searching (case-insensitive search)",
           "maps_to": "query.ignorecase"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search",
       "summary": "Retrieve package references metadata",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-search",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40202,35 +40178,31 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-conan-v1-ping",
       "summary": "Verify availability of a Conan repository",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-ping",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
           "path": "/packages/conan/v1/ping"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference",
       "summary": "Retrieve a package snapshot",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40273,18 +40245,16 @@
           "maps_to": "path.conan_package_reference",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-conan-v1-conans-package-name-package-version-package-username-package-channel",
       "summary": "Retrieve a recipe snapshot",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40320,9 +40290,7 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation delete packages-conan-v1-conans-package-name-package-version-package-username-package-channel",
@@ -40374,11 +40342,11 @@
     {
       "path": "operation get packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-digest",
       "summary": "Retrieve a package manifest",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-digest",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40421,18 +40389,16 @@
           "maps_to": "path.conan_package_reference",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-conan-v1-conans-package-name-package-version-package-username-package-channel-digest",
       "summary": "Retrieve a recipe manifest",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-digest",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40468,18 +40434,16 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-download-urls",
       "summary": "List all package download URLs",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-download-urls",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40522,18 +40486,16 @@
           "maps_to": "path.conan_package_reference",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-conan-v1-conans-package-name-package-version-package-username-package-channel-download-urls",
       "summary": "List all recipe download URLs",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-conan-v1-conans-package-name-package-version-package-username-package-channel-download-urls",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -40569,9 +40531,7 @@
           "maps_to": "path.package_channel",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation post packages-conan-v1-conans-package-name-package-version-package-username-package-channel-packages-conan-package-reference-upload-urls",
@@ -41160,11 +41120,11 @@
     {
       "path": "operation get packages-npm-package-package-name-dist-tags",
       "summary": "Get all tags for a given an NPM package",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-npm-package-package-name-dist-tags",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -41179,9 +41139,7 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation put packages-npm-package-package-name-dist-tags-tag",
@@ -41279,11 +41237,11 @@
     {
       "path": "operation get packages-npm-package-name",
       "summary": "NPM registry metadata endpoint",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-npm-package-name",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -41298,18 +41256,16 @@
           "maps_to": "query.package_name",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system-versions",
       "summary": "List all available versions for a module",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-packages-terraform-modules-v1-module-namespace-module-name-module-system-versions",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -41338,9 +41294,7 @@
           "maps_to": "path.module_system",
           "allow_empty": false
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get packages-terraform-modules-v1-module-namespace-module-name-module-system-download",
@@ -41583,11 +41537,11 @@
     {
       "path": "operation get registry-repositories-id",
       "summary": "Retrieve details of a container registry repository",
-      "intent": "direct_read",
+      "intent": "etl",
       "availability": "planned",
       "operation": "gitlab.get-api-v4-registry-repositories-id",
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml",
-      "notes": "Typed metadata for GitLab binary_file; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
+      "notes": "Typed metadata for GitLab etl_read; not a generic raw API escape hatch. Execution stays blocked until a connector-local stream/action/command has verification evidence.",
       "api_surface": [
         {
           "method": "GET",
@@ -41620,9 +41574,7 @@
           "summary": "Determines if the size should be included",
           "maps_to": "query.size"
         }
-      ],
-      "output_policy": "binary_file_bounded",
-      "risk": "Planned bounded binary/file metadata; no live provider call is made by this metadata."
+      ]
     },
     {
       "path": "operation get databases-database-name-dictionary-tables",
@@ -42574,7 +42526,9 @@
           "maps_to": "path.gl_repository",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post geo-status",
@@ -42910,7 +42864,9 @@
           "maps_to": "path.id",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get keys",
@@ -42934,7 +42890,9 @@
           "maps_to": "query.fingerprint",
           "allow_empty": false
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post markdown",
@@ -43721,7 +43679,9 @@
           "method": "GET",
           "path": "/personal_access_tokens/self"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation delete personal-access-tokens-self",
@@ -43782,7 +43742,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post personal-access-tokens-self-rotate",
@@ -43902,7 +43864,9 @@
           "summary": "Number of items per page",
           "maps_to": "query.per_page"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get personal-access-tokens-id",
@@ -43925,7 +43889,9 @@
           "summary": "The ID of a personal access token",
           "maps_to": "path.id"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation delete personal-access-tokens-id",
@@ -44752,7 +44718,9 @@
           "summary": "The application name of Unleash Client",
           "maps_to": "query.app_name"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get feature-flags-unleash-project-id-features",
@@ -44788,7 +44756,9 @@
           "summary": "The application name of Unleash Client",
           "maps_to": "query.app_name"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get feature-flags-unleash-project-id-client-features",
@@ -44824,7 +44794,9 @@
           "summary": "The application name of Unleash Client",
           "maps_to": "query.app_name"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post feature-flags-unleash-project-id-client-register",
@@ -45082,7 +45054,9 @@
             "opensource"
           ]
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put application-plan-limits",
@@ -45114,7 +45088,9 @@
           "method": "GET",
           "path": "/application/appearance"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation put application-appearance",
@@ -45256,7 +45232,9 @@
           "method": "GET",
           "path": "/application/statistics"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation get discover-cert-based-clusters",
@@ -45314,7 +45292,9 @@
           "summary": "Only return deploy keys that are public",
           "maps_to": "query.public"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post deploy-keys",
@@ -45366,7 +45346,9 @@
           "summary": "Limit by active status",
           "maps_to": "query.active"
         }
-      ]
+      ],
+      "output_policy": "json_redacted",
+      "risk": "Planned sensitive/admin GitLab read metadata; no live provider call is made by this metadata."
     },
     {
       "path": "operation post import-bitbucket",
