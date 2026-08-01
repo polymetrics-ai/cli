@@ -6144,18 +6144,22 @@
     },
     {
       "id": "zendesk-support.export_suspended_tickets",
-      "kind": "rest_write",
+      "kind": "rest_read",
       "summary": "Export Suspended Tickets (POST /api/v2/suspended_tickets/export)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "destructive",
-      "destructive": true,
+      "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
-        "path": "/api/v2/suspended_tickets/export"
+        "path": "/api/v2/suspended_tickets/export",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
       }
     },
     {
@@ -9369,17 +9373,22 @@
     },
     {
       "id": "zendesk-support.preview_views",
-      "kind": "rest_write",
+      "kind": "rest_read",
       "summary": "Preview Views (POST /api/v2/views/preview)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "create",
+      "risk": "medium",
+      "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
-        "path": "/api/v2/views/preview"
+        "path": "/api/v2/views/preview",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
       }
     },
     {

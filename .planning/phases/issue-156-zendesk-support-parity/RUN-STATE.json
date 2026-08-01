@@ -35,10 +35,10 @@
     "multi_disposition_rows": 0,
     "covered_delete_writes": 9,
     "blocked_delete_operations": 77,
-    "blocked_destructive_action_rows": 95,
+    "blocked_destructive_action_rows": 94,
     "blocked_sensitive_secret_rows": 22,
-    "destructive_or_sensitive_blocked_approvals": 117,
-    "destructive_confirmation_commands": 118,
+    "destructive_or_sensitive_blocked_approvals": 116,
+    "destructive_confirmation_commands": 125,
     "cli_commands_missing_endpoint_refs": 0,
     "cli_commands_stale_endpoint_refs": 0
   },

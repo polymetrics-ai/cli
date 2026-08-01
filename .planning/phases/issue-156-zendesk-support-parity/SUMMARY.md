@@ -26,7 +26,7 @@
 - Official operation totals remain 625 unique method/path rows across 434 paths: GET 325, POST 111, PUT 89, PATCH 14, DELETE 86.
 - Local ledger totals after the checkpoint: 631 `api_surface.json` rows = 625 official + 6 supplemental existing-bundle rows; 571 blocked operation rows; 33 stream-covered rows; 27 write-covered rows; 0 missing official, 0 stale official, 0 duplicate endpoint keys, 0 unclassified, 0 multi-disposition.
 - Command/operation parity remains exact: 571 `operations.json` entries match blocked rows, and 631 `cli_surface.json` commands reference 631 unique endpoint rows with 0 missing/stale refs.
-- Delete/destructive safety remains explicit: 86 official DELETE operations = 9 covered delete writes with `confirm: "destructive"` + 77 blocked typed operation rows; 95 blocked destructive-action rows include the 77 DELETE rows plus 18 non-DELETE destructive mutations; 22 sensitive/secret mutations also require typed destructive confirmation.
+- Delete/destructive safety remains explicit: 86 official DELETE operations = 9 covered delete writes with `confirm: "destructive"` + 77 blocked typed operation rows; 94 blocked destructive-action rows include the 77 DELETE rows plus 17 non-DELETE destructive mutations; 22 sensitive/secret mutations also require typed destructive confirmation.
 
 ## Verification run
 
