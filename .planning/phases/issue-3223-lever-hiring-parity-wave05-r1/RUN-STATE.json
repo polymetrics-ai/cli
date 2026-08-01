@@ -1,0 +1,52 @@
+{
+  "phase": "issue-3223-lever-hiring-parity-wave05-r1",
+  "branch": "fm/cli-lever-hiring-parity-wave05-r1",
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase issue-3223-lever-hiring-parity-wave05-r1 --dry-run",
+  "gsdFallback": "manual; scripts/gsd reported unknown GSD command: programming-loop",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single connector-local write scope; mutating subagents would collide in internal/connectors/defs/lever-hiring"
+    }
+  ],
+  "operationTotals": {
+    "official": 117,
+    "methods": {
+      "GET": 56,
+      "POST": 26,
+      "PUT": 14,
+      "DELETE": 11,
+      "WEBHOOK": 10
+    },
+    "dispositions": {
+      "stream": 25,
+      "direct_read": 23,
+      "write": 14,
+      "blocked": 55
+    }
+  },
+  "verificationPassed": true,
+  "verification": [
+    "official ledger comparison: official 117 local 117 missing 0 extra 0 dupes 0",
+    "go run ./cmd/connectorgen validate internal/connectors/defs: passed (550 connector(s), 0 findings)",
+    "go test ./internal/connectors/conformance -run 'TestConformance/lever-hiring' -count=1: passed",
+    "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1: passed",
+    "go vet ./internal/connectors/... ./internal/cli/...: passed",
+    "go build ./cmd/pm: passed",
+    "go run ./cmd/pm docs validate --connectors-dir docs/connectors: passed",
+    "CLI smoke for lever-hiring dynamic help groups: passed",
+    "make connector-boundary: passed (outcome clean, findings 0, warnings 0)",
+    "git diff --check: passed",
+    "make verify: passed",
+    "fm-ensure-agents-md.sh .: ran; reported pre-existing AGENTS.md/CLAUDE.md real-file conflict and made no tracked changes"
+  ],
+  "safety": {
+    "secrets": "not requested or stored",
+    "liveProviderCalls": false,
+    "providerWrites": false,
+    "newDependencies": false,
+    "sharedRuntimeEdits": false,
+    "reverseEtlGate": "plan -> preview -> explicit approval -> execute"
+  }
+}
