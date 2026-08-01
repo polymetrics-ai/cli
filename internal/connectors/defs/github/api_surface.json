@@ -7594,10 +7594,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/assignees/{assignee}",
-      "covered_by": {
-        "direct_reads": [
-          "assignees view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "GitHub documents a 204 no-content success response for this endpoint; direct reads remain planned until no-content direct-read handling is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -8526,10 +8529,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/code-security-configuration",
-      "covered_by": {
-        "direct_reads": [
-          "code-security-configuration view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "GitHub may return a 204 no-content success response for this endpoint; direct reads remain planned until no-content direct-read handling is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -9210,10 +9216,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
-      "covered_by": {
-        "direct_reads": [
-          "environments deployment-branch-policies view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -9232,10 +9241,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
-      "covered_by": {
-        "direct_reads": [
-          "environments deployment-branch-policies view-2"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -9267,10 +9279,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
-      "covered_by": {
-        "direct_reads": [
-          "environments deployment_protection_rules view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -9289,19 +9304,25 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps",
-      "covered_by": {
-        "direct_reads": [
-          "environments apps view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
-      "covered_by": {
-        "direct_reads": [
-          "environments deployment_protection_rules view-2"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -9320,28 +9341,37 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets",
-      "covered_by": {
-        "direct_reads": [
-          "environments secrets view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
-      "covered_by": {
-        "direct_reads": [
-          "environments public-key view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
-      "covered_by": {
-        "direct_reads": [
-          "environments secrets view-2"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -9373,10 +9403,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables",
-      "covered_by": {
-        "direct_reads": [
-          "environments variables view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -9395,10 +9428,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
-      "covered_by": {
-        "direct_reads": [
-          "environments variables view-2"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -9588,10 +9624,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}",
-      "covered_by": {
-        "direct_reads": [
-          "git trees view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Tree refs may contain branch or tag names with slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -10171,10 +10210,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
-      "covered_by": {
-        "direct_reads": [
-          "issues assignees view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "GitHub documents a 204 no-content success response for this endpoint; direct reads remain planned until no-content direct-read handling is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -10822,10 +10864,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pages/health",
-      "covered_by": {
-        "direct_reads": [
-          "pages health view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "GitHub may return a 202 pending response for this endpoint; direct reads remain planned until pending/no-content direct-read handling is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -11058,10 +11103,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
-      "covered_by": {
-        "direct_reads": [
-          "pulls merge view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "GitHub documents a 204 no-content success response for this endpoint; direct reads remain planned until no-content direct-read handling is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -11736,28 +11784,37 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/code_frequency",
-      "covered_by": {
-        "direct_reads": [
-          "stats code_frequency view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "GitHub may return 202/204 no-content responses while repository statistics are generated; direct reads remain planned until pending/no-content direct-read handling is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/commit_activity",
-      "covered_by": {
-        "direct_reads": [
-          "stats commit_activity view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "GitHub may return 202/204 no-content responses while repository statistics are generated; direct reads remain planned until pending/no-content direct-read handling is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/contributors",
-      "covered_by": {
-        "direct_reads": [
-          "stats contributors view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "GitHub may return 202/204 no-content responses while repository statistics are generated; direct reads remain planned until pending/no-content direct-read handling is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -11772,10 +11829,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/stats/punch_card",
-      "covered_by": {
-        "direct_reads": [
-          "stats punch_card view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "GitHub may return a 204 no-content response for repository statistics; direct reads remain planned until no-content direct-read handling is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {
@@ -11934,10 +11994,13 @@
     {
       "method": "GET",
       "path": "/repos/{owner}/{repo}/vulnerability-alerts",
-      "covered_by": {
-        "direct_reads": [
-          "vulnerability-alerts view"
-        ]
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "GitHub documents a 204 no-content success response for this endpoint; direct reads remain planned until no-content direct-read handling is supported.",
+        "source_url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
       }
     },
     {

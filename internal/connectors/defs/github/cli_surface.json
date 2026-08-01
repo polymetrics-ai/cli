@@ -3591,7 +3591,7 @@
       "path": "assignees view",
       "summary": "Read /repos/{owner}/{repo}/assignees/{assignee}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.assignees_assignee",
       "source_cli_path": "",
       "flags": [
@@ -3602,13 +3602,7 @@
           "maps_to": "path.assignee"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/assignees/{assignee}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "GitHub documents a 204 no-content success response for this endpoint; direct reads remain planned until no-content direct-read handling is supported."
     },
     {
       "path": "attestations create",
@@ -4882,17 +4876,11 @@
       "path": "code-security-configuration view",
       "summary": "Read /repos/{owner}/{repo}/code-security-configuration",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.code_security_configuration",
       "source_cli_path": "",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/code-security-configuration"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "GitHub may return a 204 no-content success response for this endpoint; direct reads remain planned until no-content direct-read handling is supported."
     },
     {
       "path": "codeowners errors view",
@@ -5547,7 +5535,7 @@
       "path": "environments deployment-branch-policies view",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.environments_environment_name_deployment_branch_policies",
       "source_cli_path": "",
       "flags": [
@@ -5558,13 +5546,7 @@
           "maps_to": "path.environment_name"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported."
     },
     {
       "path": "environments deployment-branch-policies create",
@@ -5612,7 +5594,7 @@
       "path": "environments deployment-branch-policies view-2",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.environments_environment_name_deployment_branch_policies_branch_policy_id2",
       "source_cli_path": "",
       "flags": [
@@ -5629,13 +5611,7 @@
           "maps_to": "path.branch_policy_id"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported."
     },
     {
       "path": "environments deployment-branch-policies set",
@@ -5665,7 +5641,7 @@
       "path": "environments deployment_protection_rules view",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.environments_environment_name_deployment_protection_rules",
       "source_cli_path": "",
       "flags": [
@@ -5676,13 +5652,7 @@
           "maps_to": "path.environment_name"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported."
     },
     {
       "path": "environments deployment_protection_rules create",
@@ -5706,7 +5676,7 @@
       "path": "environments apps view",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.environments_environment_name_deployment_protection_rules_apps",
       "source_cli_path": "",
       "flags": [
@@ -5717,13 +5687,7 @@
           "maps_to": "path.environment_name"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported."
     },
     {
       "path": "environments deployment_protection_rules delete",
@@ -5753,7 +5717,7 @@
       "path": "environments deployment_protection_rules view-2",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.environments_environment_name_deployment_protection_rules_protection_rule_id2",
       "source_cli_path": "",
       "flags": [
@@ -5770,19 +5734,13 @@
           "maps_to": "path.protection_rule_id"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported."
     },
     {
       "path": "environments secrets view",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.environments_environment_name_secrets",
       "source_cli_path": "",
       "flags": [
@@ -5793,19 +5751,13 @@
           "maps_to": "path.environment_name"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported."
     },
     {
       "path": "environments public-key view",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.environments_environment_name_secrets_public_key",
       "source_cli_path": "",
       "flags": [
@@ -5816,13 +5768,7 @@
           "maps_to": "path.environment_name"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported."
     },
     {
       "path": "secret delete-5",
@@ -5852,7 +5798,7 @@
       "path": "environments secrets view-2",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.environments_environment_name_secrets_secret_name2",
       "source_cli_path": "",
       "flags": [
@@ -5869,13 +5815,7 @@
           "maps_to": "path.secret_name"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported."
     },
     {
       "path": "secret set-5",
@@ -5905,7 +5845,7 @@
       "path": "environments variables view",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/variables",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.environments_environment_name_variables",
       "source_cli_path": "",
       "flags": [
@@ -5916,13 +5856,7 @@
           "maps_to": "path.environment_name"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported."
     },
     {
       "path": "variable create-2",
@@ -5970,7 +5904,7 @@
       "path": "environments variables view-2",
       "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.environments_environment_name_variables_name2",
       "source_cli_path": "",
       "flags": [
@@ -5987,13 +5921,7 @@
           "maps_to": "path.name"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Environment names may contain slashes and must be URL encoded; direct reads remain planned until GitHub environment-name path parameter encoding is supported."
     },
     {
       "path": "variable update-2",
@@ -6118,7 +6046,7 @@
       "path": "git trees view",
       "summary": "Read /repos/{owner}/{repo}/git/trees/{tree_sha}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.git_trees_tree_sha",
       "source_cli_path": "",
       "flags": [
@@ -6129,13 +6057,7 @@
           "maps_to": "path.tree_sha"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "Tree refs may contain branch or tag names with slashes; direct reads remain planned until GitHub ref-like path parameter encoding is supported."
     },
     {
       "path": "hash-algorithm view",
@@ -6662,7 +6584,7 @@
       "path": "issues assignees view",
       "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.issues_issue_number_assignees_assignee",
       "source_cli_path": "",
       "flags": [
@@ -6679,13 +6601,7 @@
           "maps_to": "path.assignee"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "GitHub documents a 204 no-content success response for this endpoint; direct reads remain planned until no-content direct-read handling is supported."
     },
     {
       "path": "issues blocked_by view",
@@ -7236,8 +7152,8 @@
       "flags": [
         {
           "name": "pages-deployment-id",
-          "type": "integer",
-          "summary": "pages_deployment_id path parameter",
+          "type": "string",
+          "summary": "Pages deployment ID or commit SHA path parameter.",
           "maps_to": "path.pages_deployment_id"
         }
       ],
@@ -7271,17 +7187,11 @@
       "path": "pages health view",
       "summary": "Read /repos/{owner}/{repo}/pages/health",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.pages_health",
       "source_cli_path": "",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/pages/health"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "GitHub may return a 202 pending response for this endpoint; direct reads remain planned until pending/no-content direct-read handling is supported."
     },
     {
       "path": "private-vulnerability-reporting delete",
@@ -7481,7 +7391,7 @@
       "path": "pulls merge view",
       "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/merge",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.pulls_pull_number_merge",
       "source_cli_path": "",
       "flags": [
@@ -7492,13 +7402,7 @@
           "maps_to": "path.pull_number"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "GitHub documents a 204 no-content success response for this endpoint; direct reads remain planned until no-content direct-read handling is supported."
     },
     {
       "path": "pulls requested_reviewers delete",
@@ -7964,49 +7868,31 @@
       "path": "stats code_frequency view",
       "summary": "Read /repos/{owner}/{repo}/stats/code_frequency",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.stats_code_frequency",
       "source_cli_path": "",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/stats/code_frequency"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "GitHub may return 202/204 no-content responses while repository statistics are generated; direct reads remain planned until pending/no-content direct-read handling is supported."
     },
     {
       "path": "stats commit_activity view",
       "summary": "Read /repos/{owner}/{repo}/stats/commit_activity",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.stats_commit_activity",
       "source_cli_path": "",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/stats/commit_activity"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "GitHub may return 202/204 no-content responses while repository statistics are generated; direct reads remain planned until pending/no-content direct-read handling is supported."
     },
     {
       "path": "stats contributors view",
       "summary": "Read /repos/{owner}/{repo}/stats/contributors",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.stats_contributors",
       "source_cli_path": "",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/stats/contributors"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "GitHub may return 202/204 no-content responses while repository statistics are generated; direct reads remain planned until pending/no-content direct-read handling is supported."
     },
     {
       "path": "stats participation view",
@@ -8028,17 +7914,11 @@
       "path": "stats punch_card view",
       "summary": "Read /repos/{owner}/{repo}/stats/punch_card",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.stats_punch_card",
       "source_cli_path": "",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/stats/punch_card"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "GitHub may return a 204 no-content response for repository statistics; direct reads remain planned until no-content direct-read handling is supported."
     },
     {
       "path": "statuses create",
@@ -8218,17 +8098,11 @@
       "path": "vulnerability-alerts view",
       "summary": "Read /repos/{owner}/{repo}/vulnerability-alerts",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.vulnerability_alerts2",
       "source_cli_path": "",
       "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/repos/{owner}/{repo}/vulnerability-alerts"
-        }
-      ],
-      "output_policy": "json_redacted"
+      "notes": "GitHub documents a 204 no-content success response for this endpoint; direct reads remain planned until no-content direct-read handling is supported."
     },
     {
       "path": "vulnerability-alerts set",

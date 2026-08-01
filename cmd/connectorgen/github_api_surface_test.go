@@ -73,11 +73,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 1604 {
 		t.Fatalf("endpoints = %d, want 1604 (1596 official rows plus 8 connector conformance coverage rows)", len(surface.Endpoints))
 	}
-	if covered != 249 {
-		t.Fatalf("covered endpoints = %d, want 249", covered)
+	if covered != 228 {
+		t.Fatalf("covered endpoints = %d, want 228", covered)
 	}
-	if operations != 1355 {
-		t.Fatalf("operation endpoints = %d, want 1355 blocked/planned rows", operations)
+	if operations != 1376 {
+		t.Fatalf("operation endpoints = %d, want 1376 blocked/planned rows", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -93,7 +93,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
 		"DELETE":  19,
-		"GET":     177,
+		"GET":     156,
 		"GRAPHQL": 4,
 		"PATCH":   16,
 		"POST":    23,
@@ -101,7 +101,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE":  168,
-		"GET":     457,
+		"GET":     478,
 		"GRAPHQL": 305,
 		"PATCH":   57,
 		"POST":    170,
@@ -111,7 +111,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	assertStringIntMap(t, "models", models, map[string]int{
 		"admin_reverse_etl":     494,
 		"destructive_action":    220,
-		"direct_read":           494,
+		"direct_read":           515,
 		"disallowed":            1,
 		"duplicate":             53,
 		"deprecated":            30,
@@ -119,12 +119,12 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
 		"critical": 60,
-		"high":     713,
-		"low":      416,
-		"medium":   166,
+		"high":     725,
+		"low":      419,
+		"medium":   172,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 1355,
+		"blocked": 1376,
 	})
 }
 
