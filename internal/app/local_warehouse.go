@@ -292,7 +292,7 @@ func materializeDedupedFinal(ctx context.Context, rawPath, finalPath string) (in
 	if err != nil {
 		return 0, fmt.Errorf("open deduped final table: %w", err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	encoder := json.NewEncoder(file)
 	count := 0
 	for _, key := range keys {
@@ -325,7 +325,7 @@ func readBestLocalRawRecords(ctx context.Context, path string) (map[string]local
 		}
 		return nil, fmt.Errorf("open raw table: %w", err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	reader := bufio.NewScanner(file)
 	reader.Buffer(make([]byte, 0, 64*1024), 10*1024*1024)
 	best := map[string]localRawRecord{}

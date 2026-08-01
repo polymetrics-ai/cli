@@ -146,11 +146,11 @@ Never paste secrets on the command line. Use one of:
 ```bash
 # from an environment variable
 export GITHUB_TOKEN=ghp_…
-pm credentials add gh --connector github --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN
+pm credentials add gh --connector github --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN
 
 # from stdin (e.g. a private key file)
 pm credentials add gh-app --connector github \
-  --config repository=OWNER/REPO --config auth_type=github_app \
+  --config owner=OWNER --config repo=REPO --config auth_type=github_app \
   --config app_id=12345 --config installation_id=67890 \
   --value-stdin private_key < app-private-key.pem
 ```
@@ -168,7 +168,7 @@ Pull data from a source into the local warehouse. Example with a public GitHub r
 
 ```bash
 pm init
-pm credentials add github    --connector github    --config repository=octocat/Hello-World
+pm credentials add github    --connector github    --config owner=octocat --config repo=Hello-World
 pm credentials add warehouse --connector warehouse --config path=.polymetrics/warehouse
 
 pm connections create gh \
@@ -184,8 +184,8 @@ For large streams, bound the work:
 
 ```bash
 pm etl run --connection gh --stream pull_requests --batch-size 100 --json
-# HTTP connectors default to one page for safe local runs; exhaust a stream with:
-pm credentials add github --connector github --config repository=OWNER/REPO --config max_pages=0
+# Inspect the connector manual for connector-defined pagination and query bounds:
+pm connectors inspect github
 ```
 
 The same pattern works for `stripe`, `postgres`, `slack`, and other connectors with
@@ -232,7 +232,7 @@ through `plan → preview → approve → execute`.
 ```bash
 export GITHUB_TOKEN=ghp_…
 pm credentials add github-write --connector github \
-  --config repository=OWNER/REPO --from-env token=GITHUB_TOKEN
+  --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN
 
 # 1. PLAN — describe the write; returns a plan id + one-time approval token + a sample
 pm reverse plan prs_to_github \
@@ -278,13 +278,14 @@ pm connectors inspect stripe --json
 The generated connector catalog is the source of truth for current connector counts and
 capabilities. A few examples:
 
-- **GitHub** (`github`) — full certification passed for the current connector surface:
-  509 API endpoints accounted, 37 catalog streams, 2 direct-read command families, and
-  231 write actions accounted. Public reads need no token; private/higher-rate-limit
-  reads use a classic/fine-grained PAT, OAuth token, Actions `GITHUB_TOKEN`, an
-  installation token, or a GitHub App (auto-signs a JWT → installation token). The
-  safe `create_label` write lifecycle passed with read-back and cleanup; other writes
-  remain approval-gated and are either safe untested pairings or blocked by policy.
+- **GitHub** (`github`) — reads repository, issue, pull request, release, Actions,
+  security, webhook, deploy key, environment, ruleset, Projects v2, and discussion
+  data. The generated connector manual and `api_surface.json` own current parity
+  counts, blocked/planned ledger rows, and the approved reverse ETL action list.
+  Public reads need no token; private/higher-rate-limit reads use a
+  classic/fine-grained PAT, OAuth token, Actions `GITHUB_TOKEN`, an installation
+  token, or a GitHub App (auto-signs a JWT → installation token). Destructive writes
+  remain approval-gated and require typed `destructive` confirmation when exposed.
 - **Stripe** (`stripe`) — Bearer (secret key) auth, cursor pagination, core CRM/billing
   streams, plus approval-gated customer create/update/delete writes. Run
   `pm connectors inspect stripe --json` for the current action list and destructive confirmation notes.

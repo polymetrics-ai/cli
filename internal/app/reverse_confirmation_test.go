@@ -107,10 +107,10 @@ func setupGitHubDestructiveCommandPlan(t *testing.T, ctx context.Context, baseUR
 		Name:       "delete_repo",
 		Connector:  "github",
 		Credential: "github-local",
-		Path:       []string{"repo", "delete-2"},
+		Path:       []string{"repo", "delete"},
 	})
 	if err != nil {
-		t.Fatalf("PlanConnectorCommand(repo delete-2) error = %v", err)
+		t.Fatalf("PlanConnectorCommand(repo delete) error = %v", err)
 	}
 	return a, plan
 }
@@ -122,19 +122,19 @@ func setupGitHubGenericDestructivePlan(t *testing.T, ctx context.Context, baseUR
 	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
 		t.Fatalf("mkdir warehouse: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(warehouseDir, "repo_deletes.jsonl"), []byte("{\"id\":\"row-1\"}\n"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(warehouseDir, "label_deletes.jsonl"), []byte("{\"name\":\"bug\"}\n"), 0o600); err != nil {
 		t.Fatalf("write warehouse row: %v", err)
 	}
 	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
-		Name:                  "delete_repo",
-		SourceTable:           "repo_deletes",
+		Name:                  "delete_label",
+		SourceTable:           "label_deletes",
 		DestinationConnector:  "github",
 		DestinationCredential: "github-local",
-		Action:                "repo",
-		Mappings:              map[string]string{"id": "id"},
+		Action:                "delete_label",
+		Mappings:              map[string]string{"name": "name"},
 	})
 	if err != nil {
-		t.Fatalf("PlanReverseETL(repo) error = %v", err)
+		t.Fatalf("PlanReverseETL(delete_label) error = %v", err)
 	}
 	return a, plan
 }

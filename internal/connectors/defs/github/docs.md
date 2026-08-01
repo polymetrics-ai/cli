@@ -1,12 +1,15 @@
 # Overview
 
-GitHub reads 37 stream(s), and accounts for 231 approved or explicitly blocked write action(s).
+GitHub reads 37 stream(s), accounts for 64 fixture-backed connector-owned write action(s), and tracks the full
+public GitHub REST, GraphQL, and webhook inventory in `api_surface.json`.
 
-Certification status: GitHub full certification passed for the current connector surface. The live
-certificate accounted for 509 API endpoints (440 covered, 69 blocked), 37 streams, 2 implemented
-direct-read command families, and 231 write actions. The safe `create_label` write lifecycle passed
-with read-back verification and cleanup. Remaining write actions are inventory-accounted as safe but
-untested pairings or blocked actions; destructive/admin/binary surfaces are not executed blindly.
+Certification status: this bundle is not certified by this parity slice. The current documented
+ledger contains 1,596 official operations/events (1,216 REST, 305 GraphQL, 75 webhook/changefeed)
+plus 8 connector conformance coverage rows required by the current one-target-per-row schema. The
+223 covered rows map to existing streams, fixture-backed write actions, direct reads, or fixed GraphQL documents;
+the remaining 1,381 rows are blocked/planned ledger entries, not implemented-count claims. Destructive,
+delete, and admin operations are in scope when implemented with typed schemas, write fixtures,
+idempotency notes, plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.
 
 The connector now declares a JSON-first command surface in `cli_surface.json`. This surface is a
 docs, validation, and safe dispatch contract for gh-inspired GitHub commands. Commands mapped to
@@ -27,17 +30,18 @@ Write actions: `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
 `merge_pull_request`, `create_label`, `update_label`, `delete_label`, `create_milestone`,
 `update_milestone`, `delete_milestone`, `create_release`, `update_release`, `delete_release`,
 `dispatch_workflow`, `rerun_workflow_run`, `cancel_workflow_run`, `delete_workflow_run`,
-`create_pull_request_review`, `create_or_update_file`, `delete_file`, `create_webhook`,
-`update_webhook`, `delete_webhook`, `create_deploy_key`, `delete_deploy_key`,
+`create_pull_request_review`, `create_webhook`, `update_webhook`, `delete_webhook`,
+`create_deploy_key`, `delete_deploy_key`,
 `create_or_update_environment`, `delete_environment`, `create_commit_comment`,
 `update_commit_comment`, `delete_commit_comment`, `update_issue_comment`, `delete_issue_comment`,
 `lock_issue`, `unlock_issue`, `set_issue_labels`, `add_issue_labels`, `remove_issue_label`,
 `add_issue_assignees`, `remove_issue_assignees`, `create_review_comment`, `update_review_comment`,
 `delete_review_comment`, `submit_pull_request_review`, `dismiss_pull_request_review`,
 `update_pull_request_branch`, `update_release_asset`, `delete_release_asset`, `replace_repo_topics`,
-`add_collaborator`, `remove_collaborator`, `create_ref`, `update_ref`, `delete_ref`, `merge_branch`,
+`add_collaborator`, `remove_collaborator`, `create_ref`, `merge_branch`,
 `update_code_scanning_alert`, `update_dependabot_alert`, `create_deployment`, `create_fork`,
-`create_repo_ruleset`, `update_repo_ruleset`, `delete_repo_ruleset`, `update_secret_scanning_alert`.
+`create_repo_ruleset`, `update_repo_ruleset`, `delete_repo_ruleset`, `update_secret_scanning_alert`,
+`delete_repo`.
 
 Service API documentation: https://docs.github.com/en/rest and https://docs.github.com/en/graphql.
 
@@ -252,7 +256,11 @@ lower bound is available.
 
 Overall write risk: external GitHub API mutation.
 
-Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+Reverse ETL writes should be planned, previewed, approved, and then executed. Every implemented
+DELETE or `kind: delete` action declares typed `destructive` confirmation; selected destructive or
+admin non-DELETE actions require the same typed confirmation. GitHub 404 responses are not treated
+as missing-ok delete success unless a future action records endpoint-specific proof. Declared
+actions:
 
 - `create_issue`: POST `/repos/{{ config.owner }}/{{ config.repo }}/issues` - kind `create`; body
   type `json`; required record fields `title`; accepted fields `assignees`, `body`, `labels`,
@@ -346,15 +354,6 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   required record fields `pull_number`; accepted fields `body`, `comments`, `commit_id`, `event`,
   `pull_number`; risk: submits reviewer feedback and may approve or request changes on a pull
   request.
-- `create_or_update_file`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/contents/{{ record.path
-  }}` - kind `upsert`; body type `json`; path fields `path`; required record fields `path`,
-  `message`, `content`; accepted fields `author`, `branch`, `committer`, `content`, `message`,
-  `path`, `sha`; risk: writes a commit to the repository and may trigger CI/CD.
-- `delete_file`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/contents/{{ record.path }}` -
-  kind `delete`; body type `json`; path fields `path`; body fields `message`, `sha`, `branch`,
-  `committer`, `author`; required record fields `path`, `message`, `sha`; accepted fields `author`,
-  `branch`, `committer`, `message`, `path`, `sha`; risk: writes a commit that removes a file from
-  the repository.
 - `create_webhook`: POST `/repos/{{ config.owner }}/{{ config.repo }}/hooks` - kind `create`; body
   type `json`; required record fields `config`; accepted fields `active`, `config`, `events`,
   `name`; risk: registers an outbound webhook that will receive repository event payloads.
@@ -364,14 +363,14 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   existing webhook's target URL, secret, or event subscriptions.
 - `delete_webhook`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}`
   - kind `delete`; body type `none`; path fields `hook_id`; required record fields `hook_id`;
-  accepted fields `hook_id`; missing records treated as success for status `404`; risk: removes a
+  accepted fields `hook_id`; risk: removes a
   webhook; the target will stop receiving repository event payloads.
 - `create_deploy_key`: POST `/repos/{{ config.owner }}/{{ config.repo }}/keys` - kind `create`; body
   type `json`; required record fields `key`; accepted fields `key`, `read_only`, `title`; risk:
   grants a new SSH public key deploy access to the repository.
 - `delete_deploy_key`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/keys/{{ record.key_id }}`
   - kind `delete`; body type `none`; path fields `key_id`; required record fields `key_id`; accepted
-  fields `key_id`; missing records treated as success for status `404`; risk: revokes an SSH deploy
+  fields `key_id`; risk: revokes an SSH deploy
   key's access to the repository.
 - `create_or_update_environment`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/environments/{{
   record.environment_name }}` - kind `upsert`; body type `json`; path fields `environment_name`;
@@ -380,8 +379,7 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   deployment environment's protection rules and reviewers.
 - `delete_environment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/environments/{{
   record.environment_name }}` - kind `delete`; body type `none`; path fields `environment_name`;
-  required record fields `environment_name`; accepted fields `environment_name`; missing records
-  treated as success for status `404`; risk: removes a deployment environment and its protection
+  required record fields `environment_name`; accepted fields `environment_name`; risk: removes a deployment environment and its protection
   rules.
 - `create_commit_comment`: POST `/repos/{{ config.owner }}/{{ config.repo }}/commits/{{
   record.commit_sha }}/comments` - kind `create`; body type `json`; path fields `commit_sha`;
@@ -393,16 +391,14 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   changes the text of an existing commit comment.
 - `delete_commit_comment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/comments/{{
   record.comment_id }}` - kind `delete`; body type `none`; path fields `comment_id`; required record
-  fields `comment_id`; accepted fields `comment_id`; missing records treated as success for status
-  `404`; risk: removes a commit comment.
+  fields `comment_id`; accepted fields `comment_id`; risk: removes a commit comment.
 - `update_issue_comment`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{
   record.comment_id }}` - kind `update`; body type `json`; path fields `comment_id`; body fields
   `body`; required record fields `comment_id`, `body`; accepted fields `body`, `comment_id`; risk:
   changes the text of an existing issue or pull request comment.
 - `delete_issue_comment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/issues/comments/{{
   record.comment_id }}` - kind `delete`; body type `none`; path fields `comment_id`; required record
-  fields `comment_id`; accepted fields `comment_id`; missing records treated as success for status
-  `404`; risk: removes an issue or pull request comment.
+  fields `comment_id`; accepted fields `comment_id`; risk: removes an issue or pull request comment.
 - `lock_issue`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number
   }}/lock` - kind `update`; body type `json`; path fields `issue_number`; body fields `lock_reason`;
   required record fields `issue_number`; accepted fields `issue_number`, `lock_reason`; risk:
@@ -422,7 +418,7 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 - `remove_issue_label`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{
   record.issue_number }}/labels/{{ record.name }}` - kind `delete`; body type `none`; path fields
   `issue_number`, `name`; required record fields `issue_number`, `name`; accepted fields
-  `issue_number`, `name`; missing records treated as success for status `404`; risk: removes a
+  `issue_number`, `name`; risk: removes a
   single label from an issue or pull request.
 - `add_issue_assignees`: POST `/repos/{{ config.owner }}/{{ config.repo }}/issues/{{
   record.issue_number }}/assignees` - kind `update`; body type `json`; path fields `issue_number`;
@@ -444,8 +440,7 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   changes the text of an existing pull request review comment.
 - `delete_review_comment`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/pulls/comments/{{
   record.comment_id }}` - kind `delete`; body type `none`; path fields `comment_id`; required record
-  fields `comment_id`; accepted fields `comment_id`; missing records treated as success for status
-  `404`; risk: removes a pull request review comment.
+  fields `comment_id`; accepted fields `comment_id`; risk: removes a pull request review comment.
 - `submit_pull_request_review`: POST `/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{
   record.pull_number }}/reviews/{{ record.review_id }}/events` - kind `update`; body type `json`;
   path fields `pull_number`, `review_id`; body fields `body`, `event`; required record fields
@@ -467,8 +462,7 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   asset's file name or label.
 - `delete_release_asset`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/releases/assets/{{
   record.asset_id }}` - kind `delete`; body type `none`; path fields `asset_id`; required record
-  fields `asset_id`; accepted fields `asset_id`; missing records treated as success for status
-  `404`; risk: removes a downloadable asset from a published release.
+  fields `asset_id`; accepted fields `asset_id`; risk: removes a downloadable asset from a published release.
 - `replace_repo_topics`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/topics` - kind `update`;
   body type `json`; required record fields `names`; accepted fields `names`; risk: replaces the
   repository's entire topic list, removing any topic not listed.
@@ -478,19 +472,10 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   grants a GitHub user access to the repository and may send an invitation email.
 - `remove_collaborator`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/collaborators/{{
   record.username }}` - kind `delete`; body type `none`; path fields `username`; required record
-  fields `username`; accepted fields `username`; missing records treated as success for status
-  `404`; risk: revokes a collaborator's access to the repository.
+  fields `username`; accepted fields `username`; risk: revokes a collaborator's access to the repository.
 - `create_ref`: POST `/repos/{{ config.owner }}/{{ config.repo }}/git/refs` - kind `create`; body
   type `json`; required record fields `ref`, `sha`; accepted fields `ref`, `sha`; risk: creates a
   new branch or tag ref pointing at the given commit SHA.
-- `update_ref`: PATCH `/repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}` - kind
-  `update`; body type `json`; path fields `ref`; body fields `sha`, `force`; required record fields
-  `ref`, `sha`; accepted fields `force`, `ref`, `sha`; risk: moves an existing branch or tag ref to
-  a different commit SHA, potentially discarding history.
-- `delete_ref`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/git/refs/{{ record.ref }}` -
-  kind `delete`; body type `none`; path fields `ref`; required record fields `ref`; accepted fields
-  `ref`; missing records treated as success for status `404`, `422`; confirmation `destructive`;
-  risk: permanently deletes a branch or tag ref.
 - `merge_branch`: POST `/repos/{{ config.owner }}/{{ config.repo }}/merges` - kind `create`; body
   type `json`; required record fields `base`, `head`; accepted fields `base`, `commit_message`,
   `head`; risk: creates a merge commit combining the head ref into the base branch.
@@ -514,40 +499,50 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   repository forked from this one, under the caller's account or a target organization.
 - `create_repo_ruleset`: POST `/repos/{{ config.owner }}/{{ config.repo }}/rulesets` - kind
   `create`; body type `json`; required record fields `name`, `enforcement`; accepted fields
-  `bypass_actors`, `conditions`, `enforcement`, `name`, `rules`, `target`; risk: creates a
-  repository ruleset that can block pushes, merges, or deletions repo-wide once active.
+  `enforcement`, `name`, `target`; risk: creates a repository ruleset that can block pushes,
+  merges, or deletions repo-wide once active.
 - `update_repo_ruleset`: PUT `/repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{
   record.ruleset_id }}` - kind `update`; body type `json`; path fields `ruleset_id`; required record
-  fields `ruleset_id`; accepted fields `bypass_actors`, `conditions`, `enforcement`, `name`,
-  `rules`, `ruleset_id`, `target`; risk: changes an existing repository ruleset's enforcement or
-  rule set, which can block pushes, merges, or deletions repo-wide.
+  fields `ruleset_id`; accepted fields `enforcement`, `name`, `ruleset_id`, `target`; risk: changes
+  an existing repository ruleset's enforcement or rule set, which can block pushes, merges, or
+  deletions repo-wide.
 - `delete_repo_ruleset`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}/rulesets/{{
   record.ruleset_id }}` - kind `delete`; body type `none`; path fields `ruleset_id`; required record
-  fields `ruleset_id`; accepted fields `ruleset_id`; missing records treated as success for status
-  `404`; risk: removes a repository ruleset, lifting any push/merge/deletion restrictions it
+  fields `ruleset_id`; accepted fields `ruleset_id`; risk: removes a repository ruleset, lifting any push/merge/deletion restrictions it
   enforced.
 - `update_secret_scanning_alert`: PATCH `/repos/{{ config.owner }}/{{ config.repo
   }}/secret-scanning/alerts/{{ record.alert_number }}` - kind `update`; body type `json`; path
   fields `alert_number`; required record fields `alert_number`, `state`; accepted fields
   `alert_number`, `resolution`, `resolution_comment`, `state`; risk: changes a secret scanning
   alert's triage state, which can suppress a real leaked-credential finding.
+- `delete_repo`: DELETE `/repos/{{ config.owner }}/{{ config.repo }}` - kind `delete`; body type `none`;
+  accepted fields none; risk: critical repository deletion; requires typed `destructive`
+  confirmation.
 
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 37 stream-backed endpoint group(s), 67 write-backed endpoint group(s).
+- API coverage includes 223 covered connector rows and 1,381 blocked/planned ledger rows. The
+  official source inventory is 1,596 operations/events; 8 additional rows exist only to satisfy
+  connector conformance coverage for write-action reuse and fixed GraphQL documents.
 - GitHub CLI parity is intentionally staged. The current metadata covers selected `gh` command
   families modeled in this slice and maps implemented commands to current stream/write names. Runtime
   dispatch is limited to stream reads, guarded direct reads, and reverse ETL write commands with
   explicit `record.*` flag mappings.
 - GitHub Projects v2 and discussions now have fixed GraphQL read streams for repository-scoped
   reads. Project/discussion mutations, gist, codespaces, organization-wide views, and several status
-  or search commands still require additional GraphQL or mixed REST/GraphQL coverage.
-- Secret and variable write commands are not exposed as reverse ETL actions until encryption,
-  redaction, scope, and approval semantics are modeled explicitly.
-- Raw `gh api` and `gh api graphql` style escape hatches are classified as unsafe unless constrained
-  to connector auth, connector base URLs, allowlisted methods, mutation approval, and secret
-  redaction.
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=10, deprecated=1, destructive_admin=5, duplicate_of=67, non_data_endpoint=9,
-  out_of_scope=143, requires_elevated_scope=168.
+  or search commands still require additional fixed GraphQL or mixed REST/GraphQL coverage.
+- Secret, variable, destructive, and admin operations are tracked as in-scope ledger rows. They are
+  executable only when a bounded command/write action supplies typed schemas, write fixtures,
+  redaction or idempotency notes as applicable, and the existing plan -> preview -> explicit approval
+  -> execute safety path with typed `destructive` confirmation for destructive actions.
+- `create_or_update_file`, `delete_file`, `update_ref`, and `delete_ref` remain blocked/planned
+  until reviewed shared typed allowlisted multi-segment write-path support can dispatch
+  slash-bearing `record.path` and `record.ref` values without the current per-segment
+  percent-encoding boundary.
+- Raw `gh api` and `gh api graphql` style escape hatches remain disallowed unless replaced by
+  individually allowlisted operations with connector auth, connector base URLs, bounded methods,
+  mutation approval, and secret redaction.
+- Blocked/planned rows use operation-ledger classifiers (`direct_read`,
+  `admin_reverse_etl`, `sensitive_reverse_etl`, `destructive_action`, `deprecated`, `duplicate`,
+  or `disallowed`) instead of legacy blanket exclusions.
