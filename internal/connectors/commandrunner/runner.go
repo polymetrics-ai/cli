@@ -170,11 +170,11 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 		}
 	}
 
-	query, err := queryOverrides(cmd, req.Flags)
+	readConfig, query, err := readOverrides(cmd, req.Config, req.Flags)
 	if err != nil {
 		return Result{}, err
 	}
-	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
+	if err := validateCommandInputs(cmd, readConfig, mappedCommandInputs{Query: query}); err != nil {
 		return Result{}, err
 	}
 	limit := req.Limit
@@ -184,7 +184,7 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	result := Result{Connector: connector.Name(), Command: command, Stream: cmd.Stream}
 	readReq := connectors.ReadRequest{
 		Stream: cmd.Stream,
-		Config: req.Config,
+		Config: readConfig,
 		Query:  query,
 		Limit:  limit,
 	}
@@ -492,49 +492,72 @@ func blockReason(cmd connectors.CommandSurfaceCommand) string {
 	}
 }
 
-func queryOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, error) {
+func readOverrides(cmd connectors.CommandSurfaceCommand, base connectors.RuntimeConfig, flags map[string][]string) (connectors.RuntimeConfig, map[string]string, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, err
+			return connectors.RuntimeConfig{}, nil, err
 		}
 		allowed[flag.Name] = flag
 	}
 
+	cfg := cloneRuntimeConfig(base)
 	query := map[string]string{}
 	for name, values := range flags {
 		if len(values) == 0 {
 			continue
 		}
 		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
-			return nil, err
+			return connectors.RuntimeConfig{}, nil, err
 		}
 		flag, ok := allowed[name]
 		if !ok {
-			return nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+			return connectors.RuntimeConfig{}, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
 		value := values[len(values)-1]
 		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
-			return nil, err
+			return connectors.RuntimeConfig{}, nil, err
 		}
 		if err := validateFlagValue(flag, value); err != nil {
-			return nil, err
+			return connectors.RuntimeConfig{}, nil, err
 		}
-		target, ok := strings.CutPrefix(flag.MapsTo, "query.")
-		if !ok || target == "" {
-			return nil, &BlockedCommandError{
+		switch {
+		case strings.HasPrefix(flag.MapsTo, "query."):
+			target := strings.TrimPrefix(flag.MapsTo, "query.")
+			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
+				return connectors.RuntimeConfig{}, nil, err
+			}
+			query[target] = value
+		case strings.HasPrefix(flag.MapsTo, "config."):
+			target := strings.TrimPrefix(flag.MapsTo, "config.")
+			if err := safety.ValidateIdentifier(target, "config field"); err != nil {
+				return connectors.RuntimeConfig{}, nil, err
+			}
+			if cfg.Config == nil {
+				cfg.Config = map[string]string{}
+			}
+			cfg.Config[target] = value
+		default:
+			return connectors.RuntimeConfig{}, nil, &BlockedCommandError{
 				Command:      cmd.Path,
 				Intent:       cmd.Intent,
 				Availability: cmd.Availability,
 				Reason:       fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo),
 			}
 		}
-		if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
-			return nil, err
-		}
-		query[target] = value
 	}
-	return query, nil
+	return cfg, query, nil
+}
+
+func cloneRuntimeConfig(base connectors.RuntimeConfig) connectors.RuntimeConfig {
+	cfg := base
+	if base.Config != nil {
+		cfg.Config = make(map[string]string, len(base.Config))
+		for key, value := range base.Config {
+			cfg.Config[key] = value
+		}
+	}
+	return cfg
 }
 
 type mappedCommandInputs struct {

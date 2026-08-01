@@ -152,6 +152,45 @@ func TestRunImplementedStreamCommand(t *testing.T) {
 	}
 }
 
+func TestRunImplementedStreamCommandMapsConfigFlags(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "group get",
+				Intent:       "etl",
+				Availability: "implemented",
+				Stream:       "scim_group",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "group-id", Type: "string", MapsTo: "config.group_id"},
+				},
+			},
+		},
+	}}
+	baseConfig := map[string]string{"page_size": "50"}
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:   []string{"group", "get"},
+		Flags:  map[string][]string{"group-id": {"grp_fixture"}},
+		Config: connectors.RuntimeConfig{Config: baseConfig},
+		Limit:  1,
+	}, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if got := connector.readReq.Config.Config["group_id"]; got != "grp_fixture" {
+		t.Fatalf("read config group_id = %q, want grp_fixture", got)
+	}
+	if got := connector.readReq.Config.Config["page_size"]; got != "50" {
+		t.Fatalf("read config page_size = %q, want 50", got)
+	}
+	if _, ok := connector.readReq.Query["group_id"]; ok {
+		t.Fatalf("read query should not receive config-mapped group_id: %+v", connector.readReq.Query)
+	}
+	if _, mutated := baseConfig["group_id"]; mutated {
+		t.Fatalf("input config mutated with group_id")
+	}
+}
+
 func TestRunCoreStreamMappings(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{

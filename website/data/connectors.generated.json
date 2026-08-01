@@ -1880,8 +1880,8 @@
       "check": true,
       "read": true,
       "write": true,
-      "query": true,
-      "cdc": true,
+      "query": false,
+      "cdc": false,
       "dynamic_schema": false
     },
     "streams": [
