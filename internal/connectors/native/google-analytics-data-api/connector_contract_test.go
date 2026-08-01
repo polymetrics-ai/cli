@@ -289,6 +289,35 @@ func TestOperationDirectReadLiveNormalizesBearerSecretAliases(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadLiveUsesReportReadSecretPrecedence(t *testing.T) {
+	ctx := context.Background()
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got := r.Header.Get("Authorization"); got != "Bearer fixture-access-token" {
+			t.Fatalf("Authorization = %q", got)
+		}
+		writeJSON(t, w, map[string]any{"name": "properties/123456/metadata"})
+	}))
+	defer server.Close()
+
+	c := New()
+	c.Client = server.Client()
+	secrets := map[string]string{
+		"access_token":             "lower-precedence-token",
+		"credentials.access_token": "fixture-access-token",
+	}
+	_, err := c.OperationDirectRead(ctx, connectors.OperationDirectReadRequest{
+		Operation:    "google-analytics-data-api.get_metadata",
+		Config:       connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL, "property_ids": "123456"}, Secrets: secrets},
+		OutputPolicy: "json_redacted",
+	})
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if secrets["access_token"] != "lower-precedence-token" {
+		t.Fatalf("original secrets map was mutated")
+	}
+}
+
 func assertNumber(t *testing.T, value any, want float64) {
 	t.Helper()
 	got, ok := value.(float64)

@@ -332,6 +332,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 			return fmt.Errorf("endpoint %d (%s %s) has both operation and excluded", i, ep.Method, ep.Path)
 		case hasCovered:
 			coveredDirectReads := coveredDirectReadTargets(ep.CoveredBy)
+			method := strings.ToUpper(strings.TrimSpace(ep.Method))
 			if ep.CoveredBy.Stream != "" {
 				if !streams[ep.CoveredBy.Stream] {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.stream %q is not a declared stream", i, ep.Method, ep.Path, ep.CoveredBy.Stream)
@@ -348,15 +349,18 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				if !directReads[directRead] {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead)
 				}
-				method := strings.ToUpper(strings.TrimSpace(ep.Method))
 				if method != "GET" && method != "POST" {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path)
 				}
 			}
-			if strings.EqualFold(ep.Method, "GET") || ep.CoveredBy.Stream != "" || len(coveredDirectReads) > 0 {
+			if method == "GET" || ep.CoveredBy.Stream != "" || len(coveredDirectReads) > 0 {
 				hasNonExcludedGET = true
 			}
-			if mutationMethods[strings.ToUpper(ep.Method)] && ep.CoveredBy.Write != "" {
+			if method == "POST" {
+				if ep.CoveredBy.Write != "" {
+					hasNonExcludedMutation = true
+				}
+			} else if mutationMethods[method] {
 				hasNonExcludedMutation = true
 			}
 		case hasExcluded:

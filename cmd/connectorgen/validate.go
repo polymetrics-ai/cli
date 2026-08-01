@@ -679,6 +679,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 			})
 		case hasCovered:
 			coveredDirectReads := coveredDirectReadTargets(ep.CoveredBy)
+			method := strings.ToUpper(strings.TrimSpace(ep.Method))
 			if ep.CoveredBy.Stream != "" {
 				if !streams[ep.CoveredBy.Stream] {
 					findings = append(findings, Finding{
@@ -706,7 +707,6 @@ func checkAPISurface(b engine.Bundle) []Finding {
 						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead),
 					})
 				}
-				method := strings.ToUpper(strings.TrimSpace(ep.Method))
 				if method != "GET" && method != "POST" {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
@@ -714,10 +714,14 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					})
 				}
 			}
-			if strings.EqualFold(ep.Method, "GET") || ep.CoveredBy.Stream != "" || len(coveredDirectReads) > 0 {
+			if method == "GET" || ep.CoveredBy.Stream != "" || len(coveredDirectReads) > 0 {
 				hasNonExcludedGET = true
 			}
-			if mutationMethods[strings.ToUpper(ep.Method)] && ep.CoveredBy.Write != "" {
+			if method == "POST" {
+				if ep.CoveredBy.Write != "" {
+					hasNonExcludedMutation = true
+				}
+			} else if mutationMethods[method] {
 				hasNonExcludedMutation = true
 			}
 		case hasExcluded:
@@ -1588,6 +1592,16 @@ func checkCLISurfaceEndpointCoverage(
 	}
 
 	var findings []Finding
+	if cmd.Availability == "implemented" && cmd.Intent == "direct_read" && cmd.Operation != "" {
+		if op, ok := operations[cmd.Operation]; ok && op.REST != nil && len(cmd.APISurface) != 1 {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented operation command %d (%q) must reference exactly one api_surface endpoint matching operation %q REST endpoint", i, cmd.Path, cmd.Operation),
+			})
+		}
+	}
 	for _, ep := range cmd.APISurface {
 		if finding, ok := checkCLISurfaceOperationEndpointRef(b, i, cmd, ep, operations); ok {
 			findings = append(findings, finding)
