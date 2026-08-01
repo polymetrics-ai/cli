@@ -564,7 +564,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 - cancel_new_hire_packet:
   - endpoint: POST /api/v1/new-hire-packets/{{ record.id }}/cancel
   - required fields: id
-  - risk: Cancel new hire packet; executes a BambooHR mutation against the configured account.
+  - risk: Deletes or removes BambooHR data: Cancel new hire packet; executes a BambooHR mutation against the configured account.
 - create_employee_onboarding_experience:
   - endpoint: POST /api/v1/employees/{{ record.employee_id }}/onboarding-experiences
   - required fields: employee_id
@@ -628,7 +628,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 - create_unassign_employees_from_break_policy:
   - endpoint: POST /api/v1/time-tracking/break-policies/{{ record.id }}/unassign
   - required fields: id, employeeIds
-  - risk: Unassign Employees from Break Policy through the BambooHR API.
+  - risk: Deletes or removes BambooHR data: Unassign Employees from Break Policy through the BambooHR API.
 - delete_break_policy:
   - endpoint: DELETE /api/v1/time-tracking/break-policies/{{ record.id }}
   - required fields: id
@@ -684,11 +684,11 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 - delete_timesheet_clock_entries_via_post:
   - endpoint: POST /api/v1/time_tracking/clock_entries/delete
   - required fields: clockEntryIds
-  - risk: Delete Timesheet Clock Entries through the BambooHR API.
+  - risk: Deletes or removes BambooHR data: Delete Timesheet Clock Entries through the BambooHR API.
 - delete_timesheet_hour_entries_via_post:
   - endpoint: POST /api/v1/time_tracking/hour_entries/delete
   - required fields: hourEntryIds
-  - risk: Delete Timesheet Hour Entries through the BambooHR API.
+  - risk: Deletes or removes BambooHR data: Delete Timesheet Hour Entries through the BambooHR API.
 - create_timesheet_clock_in_entry:
   - endpoint: POST /api/v1/time_tracking/employees/{{ record.employee_id }}/clock_in
   - required fields: employee_id
@@ -1059,9 +1059,9 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 - Countries
   - countries options get - Get Countries [intent=direct_read availability=implemented]; notes: Bounded fixed-target JSON direct read; no raw method, path, query, or body passthrough.
 - Custom
-  - custom report request - Request Custom Report [intent=direct_read availability=implemented]; notes: Bounded fixed-target JSON POST direct read; schema-gated body flags only.; flags: --title, --fields, --filters, --filter-duplicates
+  - custom report request - Request Custom Report [intent=direct_read availability=implemented]; notes: Bounded fixed-target JSON POST direct read; schema-gated body flags only. Object-valued request fields that cannot be represented by typed scalar CLI flags are intentionally omitted; use supported primitive/list flags only, with no generic JSON body passthrough.; flags: --title, --fields, --filter-duplicates
 - Data
-  - data from dataset get-v1 - Get Data from Dataset (v1) [intent=direct_read availability=implemented]; notes: Bounded fixed-target JSON POST direct read; schema-gated body flags only.; flags: --dataset-name, --fields, --aggregations, --sort-by, --filters, --group-by, --show-history
+  - data from dataset get-v1 - Get Data from Dataset (v1) [intent=direct_read availability=implemented]; notes: Bounded fixed-target JSON POST direct read; schema-gated body flags only. Object-valued request fields that cannot be represented by typed scalar CLI flags are intentionally omitted; use supported primitive/list flags only, with no generic JSON body passthrough.; flags: --dataset-name, --fields, --group-by, --show-history
   - data from dataset get-v2 - Get Data from Dataset (v2) [intent=direct_read availability=implemented]; notes: Bounded fixed-target JSON POST direct read; schema-gated body flags only.; flags: --dataset-name, --fields, --filter, --order-by, --page, --page-size
 - Employee
   - employee trainings list - List Employee Training Records [intent=direct_read availability=implemented]; notes: Bounded fixed-target JSON direct read; no raw method, path, query, or body passthrough.; flags: --employee-id

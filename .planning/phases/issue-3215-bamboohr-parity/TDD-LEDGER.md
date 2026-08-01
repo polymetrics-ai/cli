@@ -43,3 +43,9 @@
 - No live BambooHR calls were made and no credentials were requested, read, printed, summarized, or stored.
 - No shared runtime behavior was changed.
 - GSD `programming-loop` command was unavailable in this repo-local adapter; manual GSD/TDD loop was documented before production edits.
+
+## no-mistakes review fix loop
+
+- `no-mistakes status` found no active run owning `fm/cli-bamboohr-parity-wave05-r1`; `no-mistakes rerun` was attempted as requested and failed because the gate repository had no preserved branch ref for this branch.
+- Started `no-mistakes axi run --intent ...`; review gated on three findings (destructive POST deletes, direct-read examples missing required flags, unsupported object/array-object CLI flags).
+- `no-mistakes axi respond --action fix --findings F1,F2,F3 ...` was attempted; the pipeline fix agent failed with a WebSocket error and the run entered terminal `failed`, so follow-up fixes are made between runs and committed on top before rerunning no-mistakes.

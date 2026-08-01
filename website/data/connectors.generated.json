@@ -8966,7 +8966,7 @@
       {
         "name": "cancel_new_hire_packet",
         "method": "POST",
-        "kind": "create"
+        "kind": "delete"
       },
       {
         "name": "create_employee_onboarding_experience",
@@ -9046,7 +9046,7 @@
       {
         "name": "create_unassign_employees_from_break_policy",
         "method": "POST",
-        "kind": "create"
+        "kind": "delete"
       },
       {
         "name": "delete_break_policy",
@@ -9116,12 +9116,12 @@
       {
         "name": "delete_timesheet_clock_entries_via_post",
         "method": "POST",
-        "kind": "create"
+        "kind": "delete"
       },
       {
         "name": "delete_timesheet_hour_entries_via_post",
         "method": "POST",
-        "kind": "create"
+        "kind": "delete"
       },
       {
         "name": "create_timesheet_clock_in_entry",
@@ -9681,7 +9681,7 @@
             }
           ],
           "examples": [
-            "pm bamboo-hr break policy suggestions get --credential <name> --json"
+            "pm bamboo-hr break policy suggestions get --credential <name> --prompt \"meal break policy for CA employees\" --json"
           ],
           "output_policy": "json_redacted",
           "risk": "",
@@ -9731,27 +9731,6 @@
               "maps_to": "body.fields"
             },
             {
-              "name": "aggregations",
-              "type": "string",
-              "summary": "aggregations body field",
-              "values": [],
-              "maps_to": "body.aggregations"
-            },
-            {
-              "name": "sort-by",
-              "type": "string_array",
-              "summary": "sortBy body field",
-              "values": [],
-              "maps_to": "body.sortBy"
-            },
-            {
-              "name": "filters",
-              "type": "string",
-              "summary": "filters body field",
-              "values": [],
-              "maps_to": "body.filters"
-            },
-            {
               "name": "group-by",
               "type": "string_array",
               "summary": "groupBy body field",
@@ -9767,12 +9746,12 @@
             }
           ],
           "examples": [
-            "pm bamboo-hr data from dataset get-v1 --credential <name> --json"
+            "pm bamboo-hr data from dataset get-v1 --credential <name> --dataset-name employees --fields employeeNumber,firstName,lastName --json"
           ],
           "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
-          "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
+          "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only. Object-valued request fields that cannot be represented by typed scalar CLI flags are intentionally omitted; use supported primitive/list flags only, with no generic JSON body passthrough."
         },
         {
           "path": "data from dataset get-v2",
@@ -9828,7 +9807,7 @@
             }
           ],
           "examples": [
-            "pm bamboo-hr data from dataset get-v2 --credential <name> --json"
+            "pm bamboo-hr data from dataset get-v2 --credential <name> --dataset-name employees --fields employeeNumber,firstName,lastName --page 1 --page-size 100 --json"
           ],
           "output_policy": "json_redacted",
           "risk": "",
@@ -9875,7 +9854,7 @@
             }
           ],
           "examples": [
-            "pm bamboo-hr field options get-v1 --credential <name> --json"
+            "pm bamboo-hr field options get-v1 --credential <name> --dataset-name employees --fields department,division --json"
           ],
           "output_policy": "json_redacted",
           "risk": "",
@@ -9922,7 +9901,7 @@
             }
           ],
           "examples": [
-            "pm bamboo-hr field options v1 2 get --credential <name> --json"
+            "pm bamboo-hr field options v1 2 get --credential <name> --dataset-name employees --fields department,division --json"
           ],
           "output_policy": "json_redacted",
           "risk": "",
@@ -9948,7 +9927,7 @@
             }
           ],
           "examples": [
-            "pm bamboo-hr employee trainings list --credential <name> --json"
+            "pm bamboo-hr employee trainings list --credential <name> --employee-id 123 --json"
           ],
           "output_policy": "json_redacted",
           "risk": "",
@@ -9974,7 +9953,7 @@
             }
           ],
           "examples": [
-            "pm bamboo-hr webhook logs list --credential <name> --json"
+            "pm bamboo-hr webhook logs list --credential <name> --id 123 --json"
           ],
           "output_policy": "json_redacted",
           "risk": "",
@@ -10006,13 +9985,6 @@
               "maps_to": "body.fields"
             },
             {
-              "name": "filters",
-              "type": "string",
-              "summary": "filters body field",
-              "values": [],
-              "maps_to": "body.filters"
-            },
-            {
               "name": "filter-duplicates",
               "type": "string",
               "summary": "filterDuplicates body field",
@@ -10021,12 +9993,12 @@
             }
           ],
           "examples": [
-            "pm bamboo-hr custom report request --credential <name> --json"
+            "pm bamboo-hr custom report request --credential <name> --title \"Headcount\" --fields employeeNumber,firstName,lastName --json"
           ],
           "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
-          "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
+          "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only. Object-valued request fields that cannot be represented by typed scalar CLI flags are intentionally omitted; use supported primitive/list flags only, with no generic JSON body passthrough."
         }
       ],
       "help_topics": [

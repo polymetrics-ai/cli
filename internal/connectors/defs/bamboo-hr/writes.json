@@ -1571,7 +1571,7 @@
     },
     {
       "name": "cancel_new_hire_packet",
-      "kind": "create",
+      "kind": "delete",
       "method": "POST",
       "path": "/api/v1/new-hire-packets/{{ record.id }}/cancel",
       "path_fields": [
@@ -1590,10 +1590,11 @@
           "id"
         ]
       },
-      "risk": "Cancel new hire packet; executes a BambooHR mutation against the configured account.",
+      "risk": "Deletes or removes BambooHR data: Cancel new hire packet; executes a BambooHR mutation against the configured account.",
       "redact_fields": [
         "id"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "create_employee_onboarding_experience",
@@ -2303,7 +2304,7 @@
     },
     {
       "name": "create_unassign_employees_from_break_policy",
-      "kind": "create",
+      "kind": "delete",
       "method": "POST",
       "path": "/api/v1/time-tracking/break-policies/{{ record.id }}/unassign",
       "record_schema": {
@@ -2328,10 +2329,11 @@
         },
         "additionalProperties": false
       },
-      "risk": "Unassign Employees from Break Policy through the BambooHR API.",
+      "risk": "Deletes or removes BambooHR data: Unassign Employees from Break Policy through the BambooHR API.",
       "path_fields": [
         "id"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "delete_break_policy",
@@ -3039,7 +3041,7 @@
     },
     {
       "name": "delete_timesheet_clock_entries_via_post",
-      "kind": "create",
+      "kind": "delete",
       "method": "POST",
       "path": "/api/v1/time_tracking/clock_entries/delete",
       "record_schema": {
@@ -3057,11 +3059,12 @@
         },
         "additionalProperties": false
       },
-      "risk": "Delete Timesheet Clock Entries through the BambooHR API."
+      "risk": "Deletes or removes BambooHR data: Delete Timesheet Clock Entries through the BambooHR API.",
+      "confirm": "destructive"
     },
     {
       "name": "delete_timesheet_hour_entries_via_post",
-      "kind": "create",
+      "kind": "delete",
       "method": "POST",
       "path": "/api/v1/time_tracking/hour_entries/delete",
       "record_schema": {
@@ -3079,7 +3082,8 @@
         },
         "additionalProperties": false
       },
-      "risk": "Delete Timesheet Hour Entries through the BambooHR API."
+      "risk": "Deletes or removes BambooHR data: Delete Timesheet Hour Entries through the BambooHR API.",
+      "confirm": "destructive"
     },
     {
       "name": "create_timesheet_clock_in_entry",

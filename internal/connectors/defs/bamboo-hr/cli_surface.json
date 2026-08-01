@@ -108,7 +108,7 @@
         }
       ],
       "examples": [
-        "pm bamboo-hr break policy suggestions get --credential <name> --json"
+        "pm bamboo-hr break policy suggestions get --credential <name> --prompt \"meal break policy for CA employees\" --json"
       ],
       "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
     },
@@ -157,24 +157,6 @@
           "maps_to": "body.fields"
         },
         {
-          "name": "aggregations",
-          "type": "string",
-          "summary": "aggregations body field",
-          "maps_to": "body.aggregations"
-        },
-        {
-          "name": "sort-by",
-          "type": "string_array",
-          "summary": "sortBy body field",
-          "maps_to": "body.sortBy"
-        },
-        {
-          "name": "filters",
-          "type": "string",
-          "summary": "filters body field",
-          "maps_to": "body.filters"
-        },
-        {
           "name": "group-by",
           "type": "string_array",
           "summary": "groupBy body field",
@@ -188,9 +170,9 @@
         }
       ],
       "examples": [
-        "pm bamboo-hr data from dataset get-v1 --credential <name> --json"
+        "pm bamboo-hr data from dataset get-v1 --credential <name> --dataset-name employees --fields employeeNumber,firstName,lastName --json"
       ],
-      "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
+      "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only. Object-valued request fields that cannot be represented by typed scalar CLI flags are intentionally omitted; use supported primitive/list flags only, with no generic JSON body passthrough."
     },
     {
       "path": "data from dataset get-v2",
@@ -244,7 +226,7 @@
         }
       ],
       "examples": [
-        "pm bamboo-hr data from dataset get-v2 --credential <name> --json"
+        "pm bamboo-hr data from dataset get-v2 --credential <name> --dataset-name employees --fields employeeNumber,firstName,lastName --page 1 --page-size 100 --json"
       ],
       "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
     },
@@ -288,7 +270,7 @@
         }
       ],
       "examples": [
-        "pm bamboo-hr field options get-v1 --credential <name> --json"
+        "pm bamboo-hr field options get-v1 --credential <name> --dataset-name employees --fields department,division --json"
       ],
       "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
     },
@@ -332,7 +314,7 @@
         }
       ],
       "examples": [
-        "pm bamboo-hr field options v1 2 get --credential <name> --json"
+        "pm bamboo-hr field options v1 2 get --credential <name> --dataset-name employees --fields department,division --json"
       ],
       "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
     },
@@ -357,7 +339,7 @@
         }
       ],
       "examples": [
-        "pm bamboo-hr employee trainings list --credential <name> --json"
+        "pm bamboo-hr employee trainings list --credential <name> --employee-id 123 --json"
       ],
       "notes": "Bounded fixed-target JSON direct read; no raw method, path, query, or body passthrough."
     },
@@ -382,7 +364,7 @@
         }
       ],
       "examples": [
-        "pm bamboo-hr webhook logs list --credential <name> --json"
+        "pm bamboo-hr webhook logs list --credential <name> --id 123 --json"
       ],
       "notes": "Bounded fixed-target JSON direct read; no raw method, path, query, or body passthrough."
     },
@@ -413,12 +395,6 @@
           "maps_to": "body.fields"
         },
         {
-          "name": "filters",
-          "type": "string",
-          "summary": "filters body field",
-          "maps_to": "body.filters"
-        },
-        {
           "name": "filter-duplicates",
           "type": "string",
           "summary": "filterDuplicates body field",
@@ -426,9 +402,9 @@
         }
       ],
       "examples": [
-        "pm bamboo-hr custom report request --credential <name> --json"
+        "pm bamboo-hr custom report request --credential <name> --title \"Headcount\" --fields employeeNumber,firstName,lastName --json"
       ],
-      "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only."
+      "notes": "Bounded fixed-target JSON POST direct read; schema-gated body flags only. Object-valued request fields that cannot be represented by typed scalar CLI flags are intentionally omitted; use supported primitive/list flags only, with no generic JSON body passthrough."
     }
   ],
   "help_topics": [

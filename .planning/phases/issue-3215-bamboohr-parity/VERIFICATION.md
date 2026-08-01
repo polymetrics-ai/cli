@@ -92,3 +92,11 @@ make verify
 Notes:
 - An earlier cold-cache `make verify` reached the Makefile `go test -timeout 20m ./...` timeout while `internal/cli` consumed 978s and `internal/connectors/certify` was still running. Focused reruns of `internal/connectors/certify` passed, and the final pipefail `make verify` run passed.
 - `make verify` includes `gofmt -w cmd internal`, `go mod tidy`/tidy diff, `go vet ./...`, `go test -timeout 20m ./...`, `go build ./cmd/pm`, docs validate, smoke, golangci-lint, connectorgen validate, connector-boundary, and release workflow check.
+
+## no-mistakes follow-up gates
+
+Pending after review-finding fix commit:
+
+```bash
+no-mistakes axi run --intent "Complete documented BambooHR connector parity ..."
+```
