@@ -64,7 +64,6 @@ Wave 6 removed the legacy Airbyte-style `catalog_data.json`. The names below wer
 - sftp-bulk
 - sftp-json
 - sharepoint-enterprise
-- shopify
 - singlestore
 - smoke-test
 - snowflake

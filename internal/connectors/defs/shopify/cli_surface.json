@@ -37,7 +37,7 @@
       "summary": "Inspect the connector-owned Shopify operation ledger and source inventory.",
       "intent": "docs_only",
       "availability": "planned",
-      "notes": "Docs/metadata only in this slice; no provider call or raw API execution. Current source inventory contains 1166 operation rows, including 186 blocked state-destroying rows marked `destructive_action` with `confirm: destructive`."
+      "notes": "Docs/metadata only in this slice; no provider call or raw API execution. Current source inventory contains 1166 operation rows, including 191 blocked state-destroying rows marked `destructive_action` with `confirm: destructive`."
     },
     {
       "path": "shop read",
@@ -46,7 +46,7 @@
       "availability": "implemented",
       "stream": "shop",
       "examples": [
-        "pm etl run --source shopify --stream shop --limit 1 --json"
+        "pm etl read --connector shopify --stream shop --limit 1 --json"
       ],
       "notes": "Uses the fixed `shop` stream; no arbitrary REST path is accepted."
     },

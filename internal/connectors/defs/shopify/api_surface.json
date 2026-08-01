@@ -4999,12 +4999,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.deliveryCustomizationActivation",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryCustomizationActivation"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryCustomizationActivation",
+        "notes": "Shopify docs say activation deactivates other delivery customizations."
       }
     },
     {
@@ -5089,12 +5091,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.deliveryPromiseParticipantsUpdate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryPromiseParticipantsUpdate"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryPromiseParticipantsUpdate",
+        "notes": "Shopify docs say updates can remove delivery-promise participants."
       }
     },
     {
@@ -6817,12 +6821,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketingActivityUpsertExternal",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityUpsertExternal"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityUpsertExternal",
+        "notes": "Shopify docs say upsert can remove associated marketing activity information."
       }
     },
     {
@@ -7629,12 +7635,14 @@
       "method": "POST",
       "path": "GraphQL Mutation.paymentCustomizationActivation",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared",
-        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/paymentCustomizationActivation"
+        "reason": "in scope but blocked until a connector-owned fixed GraphQL mutation document, typed record schema, redaction/risk text, fixture, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation",
+        "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/paymentCustomizationActivation",
+        "notes": "Shopify docs say activation deactivates other payment customizations."
       }
     },
     {
@@ -12710,12 +12718,14 @@
       "method": "POST",
       "path": "/admin/api/latest/comments/{comment_id}/spam.json",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
-        "risk": "medium",
+        "risk": "critical",
+        "confirm": "destructive",
         "blocked_by_default": true,
-        "reason": "in scope but blocked until a fixed connector-owned REST stream/direct read or typed write action with sanitized fixtures is declared; no raw method/path/body passthrough is permitted",
-        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/comment"
+        "reason": "state-destroying REST operation is in scope but blocked until a fixed connector-owned typed write action, sanitized fixture, redaction/risk text, and plan -> preview -> explicit approval -> execute binding are declared with `destructive` typed confirmation; no raw method/path/body passthrough is permitted",
+        "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/comment",
+        "notes": "Shopify REST docs describe marking the comment as spam/hidden."
       }
     },
     {
@@ -13390,7 +13400,7 @@
       "method": "POST",
       "path": "/admin/api/latest/products/{product_id}/images.json",
       "operation": {
-        "model": "direct_read",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
@@ -14002,7 +14012,7 @@
       "method": "PUT",
       "path": "/admin/api/latest/products/{product_id}/images/{image_id}.json",
       "operation": {
-        "model": "direct_read",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
@@ -14110,7 +14120,7 @@
       "method": "PUT",
       "path": "/admin/api/latest/themes/{theme_id}/assets.json",
       "operation": {
-        "model": "direct_read",
+        "model": "admin_reverse_etl",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,

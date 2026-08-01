@@ -15,15 +15,19 @@ var shopifySourceDescriptionStateDestroyingPaths = map[string]struct{}{
 	"GraphQL Mutation.collectionUnpublish":                  {},
 	"GraphQL Mutation.combinedListingUpdate":                {},
 	"GraphQL Mutation.commentSpam":                          {},
+	"GraphQL Mutation.deliveryCustomizationActivation":      {},
 	"GraphQL Mutation.deliveryProfileUpdate":                {},
+	"GraphQL Mutation.deliveryPromiseParticipantsUpdate":    {},
 	"GraphQL Mutation.draftOrderUpdate":                     {},
 	"GraphQL Mutation.eventBridgeServerPixelUpdate":         {},
 	"GraphQL Mutation.fileUpdate":                           {},
 	"GraphQL Mutation.giftCardDebit":                        {},
 	"GraphQL Mutation.giftCardProductSet":                   {},
 	"GraphQL Mutation.inventoryBulkToggleActivation":        {},
+	"GraphQL Mutation.marketingActivityUpsertExternal":      {},
 	"GraphQL Mutation.orderEditSetQuantity":                 {},
 	"GraphQL Mutation.pointOfSaleDeviceAssignToCashDrawer":  {},
+	"GraphQL Mutation.paymentCustomizationActivation":       {},
 	"GraphQL Mutation.priceListFixedPricesByProductUpdate":  {},
 	"GraphQL Mutation.priceListFixedPricesUpdate":           {},
 	"GraphQL Mutation.priceListUpdate":                      {},
@@ -40,6 +44,7 @@ var shopifySourceDescriptionStateDestroyingPaths = map[string]struct{}{
 	"GraphQL Mutation.quantityPricingByVariantUpdate":       {},
 	"GraphQL Mutation.shopResourceFeedbackCreate":           {},
 	"GraphQL Mutation.storeCreditAccountDebit":              {},
+	"/admin/api/latest/comments/{comment_id}/spam.json":     {},
 }
 
 func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
@@ -93,19 +98,19 @@ func TestShopifyAPISurfaceDestructiveDisposition(t *testing.T) {
 	if operations != 1123 {
 		t.Fatalf("operation endpoints = %d, want 1123", operations)
 	}
-	if destructiveConfirm != 186 {
-		t.Fatalf("destructive confirmed operations = %d, want 186", destructiveConfirm)
+	if destructiveConfirm != 191 {
+		t.Fatalf("destructive confirmed operations = %d, want 191", destructiveConfirm)
 	}
 	assertStringIntMap(t, "models", models, map[string]int{
-		"admin_reverse_etl":  463,
-		"destructive_action": 186,
-		"direct_read":        474,
+		"admin_reverse_etl":  461,
+		"destructive_action": 191,
+		"direct_read":        471,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"critical": 186,
+		"critical": 191,
 		"high":     3,
 		"low":      471,
-		"medium":   463,
+		"medium":   458,
 	})
 
 	for _, path := range []string{
@@ -203,6 +208,33 @@ func TestShopifyObjectMetadataReadsAreDirect(t *testing.T) {
 		}
 		if ep.Operation == nil || ep.Operation.Model != "direct_read" || ep.Operation.Risk != "low" {
 			t.Fatalf("object/metadata read endpoint %s %q operation = %+v, want direct_read/low", endpoint.method, endpoint.path, ep.Operation)
+		}
+	}
+}
+
+func TestShopifyRESTWriteRowsAreNotDirectReads(t *testing.T) {
+	surface := loadShopifySurface(t)
+	byMethodPath := map[string]engine.SurfaceEndpoint{}
+	for _, ep := range surface.Endpoints {
+		if ep.Path != "" {
+			byMethodPath[ep.Method+" "+ep.Path] = ep
+		}
+	}
+
+	for _, endpoint := range []struct {
+		method string
+		path   string
+	}{
+		{method: "POST", path: "/admin/api/latest/products/{product_id}/images.json"},
+		{method: "PUT", path: "/admin/api/latest/products/{product_id}/images/{image_id}.json"},
+		{method: "PUT", path: "/admin/api/latest/themes/{theme_id}/assets.json"},
+	} {
+		ep, ok := byMethodPath[endpoint.method+" "+endpoint.path]
+		if !ok {
+			t.Fatalf("expected endpoint %s %q", endpoint.method, endpoint.path)
+		}
+		if ep.Operation == nil || ep.Operation.Model != "admin_reverse_etl" || ep.Operation.Risk != "medium" || ep.Operation.Confirm != "" {
+			t.Fatalf("REST write endpoint %s %q operation = %+v, want admin_reverse_etl/medium without direct_read", endpoint.method, endpoint.path, ep.Operation)
 		}
 	}
 }
@@ -344,10 +376,14 @@ func TestShopifyTokenizationDoesNotTreatActivateAsDeactivate(t *testing.T) {
 	}
 	for _, path := range []string{
 		"GraphQL Mutation.commentSpam",
+		"GraphQL Mutation.deliveryCustomizationActivation",
+		"GraphQL Mutation.deliveryPromiseParticipantsUpdate",
 		"GraphQL Mutation.eventBridgeServerPixelUpdate",
 		"GraphQL Mutation.fulfillmentOrderReleaseHold",
 		"GraphQL Mutation.giftCardDebit",
 		"GraphQL Mutation.inventoryBulkToggleActivation",
+		"GraphQL Mutation.marketingActivityUpsertExternal",
+		"GraphQL Mutation.paymentCustomizationActivation",
 		"GraphQL Mutation.pointOfSaleDeviceAssignToCashDrawer",
 		"GraphQL Mutation.productLeaveSellingPlanGroups",
 		"GraphQL Mutation.productSet",
@@ -355,6 +391,7 @@ func TestShopifyTokenizationDoesNotTreatActivateAsDeactivate(t *testing.T) {
 		"GraphQL Mutation.pubSubServerPixelUpdate",
 		"GraphQL Mutation.publishableUnpublish",
 		"GraphQL Mutation.quantityPricingByVariantUpdate",
+		"/admin/api/latest/comments/{comment_id}/spam.json",
 	} {
 		if !shopifyStateDestroying(engine.SurfaceEndpoint{Method: "POST", Path: path, Operation: &engine.SurfaceOperation{}}) {
 			t.Fatalf("%s was not classified as state-destroying", path)
