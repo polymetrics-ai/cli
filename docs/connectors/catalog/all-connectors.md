@@ -13,7 +13,7 @@
 | `agilecrm` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | AgileCRM | `api` | ga | check, catalog, read, write | 7 | 9 | [Documentation](https://github.com/agilecrm/rest-api) | bundle definition |
 | `aha` | [`icons/aha.svg`](../icons/aha.svg) | Aha! | `api` | ga | check, catalog, read | 8 | 0 | [Documentation](https://www.aha.io/api) | bundle definition |
 | `aircall` | [`icons/aircall.svg`](../icons/aircall.svg) | Aircall | `api` | ga | check, catalog, read, write | 7 | 20 | [Documentation](https://developer.aircall.io/api-references/) | bundle definition |
-| `airtable` | [`icons/airtable.svg`](../icons/airtable.svg) | Airtable | `api` | ga | check, catalog, read, write, query | 31 | 70 | [Documentation](https://airtable.com/developers/web/api/introduction) | bundle definition |
+| `airtable` | [`icons/airtable.svg`](../icons/airtable.svg) | Airtable | `api` | ga | check, catalog, read, write | 31 | 70 | [Documentation](https://airtable.com/developers/web/api/introduction) | bundle definition |
 | `akeneo` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Akeneo | `api` | ga | check, catalog, read, write | 12 | 9 | [Documentation](https://api.akeneo.com/api-reference.html) | bundle definition |
 | `algolia` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Algolia | `api` | ga | check, catalog, read, write | 7 | 2 | [Documentation](https://www.algolia.com/doc/rest-api/search/) | bundle definition |
 | `alpaca-broker-api` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Alpaca Broker API | `api` | ga | check, catalog, read | 11 | 0 | [Documentation](https://docs.alpaca.markets/docs/broker-api) | bundle definition |
