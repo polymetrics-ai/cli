@@ -73,11 +73,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if len(surface.Endpoints) != 1604 {
 		t.Fatalf("endpoints = %d, want 1604 (1596 official rows plus 8 connector conformance coverage rows)", len(surface.Endpoints))
 	}
-	if covered != 277 {
-		t.Fatalf("covered endpoints = %d, want 277", covered)
+	if covered != 269 {
+		t.Fatalf("covered endpoints = %d, want 269", covered)
 	}
-	if operations != 1327 {
-		t.Fatalf("operation endpoints = %d, want 1327 blocked/planned rows", operations)
+	if operations != 1335 {
+		t.Fatalf("operation endpoints = %d, want 1335 blocked/planned rows", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -93,7 +93,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
 		"DELETE":  19,
-		"GET":     205,
+		"GET":     197,
 		"GRAPHQL": 4,
 		"PATCH":   16,
 		"POST":    23,
@@ -101,7 +101,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE":  168,
-		"GET":     429,
+		"GET":     437,
 		"GRAPHQL": 305,
 		"PATCH":   57,
 		"POST":    170,
@@ -111,7 +111,7 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	assertStringIntMap(t, "models", models, map[string]int{
 		"admin_reverse_etl":     494,
 		"destructive_action":    220,
-		"direct_read":           466,
+		"direct_read":           474,
 		"disallowed":            1,
 		"duplicate":             53,
 		"deprecated":            30,
@@ -121,10 +121,10 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"critical": 60,
 		"high":     712,
 		"low":      416,
-		"medium":   139,
+		"medium":   147,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 1327,
+		"blocked": 1335,
 	})
 }
 
@@ -171,6 +171,17 @@ func TestGitHubDestructiveMetadataUsesTypedConfirmation(t *testing.T) {
 		if action.RecordSchema.AdditionalProperties == nil || *action.RecordSchema.AdditionalProperties {
 			t.Fatalf("write action %q must disable additional record properties", action.Name)
 		}
+		sensitiveFields := githubSensitiveSchemaPaths(action.RecordSchema.Properties)
+		if len(sensitiveFields) > 0 {
+			if action.Confirm != "destructive" {
+				t.Fatalf("write action %q has sensitive fields %+v but confirm = %q, want destructive", action.Name, sensitiveFields, action.Confirm)
+			}
+			for _, field := range sensitiveFields {
+				if !githubStringSliceContains(action.RedactFields, field) {
+					t.Fatalf("write action %q has sensitive field %q without redact_fields entry", action.Name, field)
+				}
+			}
+		}
 		if action.Confirm == "destructive" {
 			destructiveWrites[action.Name] = true
 		}
@@ -204,6 +215,88 @@ func TestGitHubDestructiveMetadataUsesTypedConfirmation(t *testing.T) {
 	})
 }
 
+func TestGitHubImplementedDirectReadOperationsAreRunnable(t *testing.T) {
+	cliRaw, err := os.ReadFile("../../internal/connectors/defs/github/cli_surface.json")
+	if err != nil {
+		t.Fatalf("read github cli_surface.json: %v", err)
+	}
+	var cli struct {
+		Commands []githubCLICommand `json:"commands"`
+	}
+	if err := json.Unmarshal(cliRaw, &cli); err != nil {
+		t.Fatalf("unmarshal github cli_surface.json: %v", err)
+	}
+
+	operationsRaw, err := os.ReadFile("../../internal/connectors/defs/github/operations.json")
+	if err != nil {
+		t.Fatalf("read github operations.json: %v", err)
+	}
+	var operations struct {
+		Operations []githubOperationSpec `json:"operations"`
+	}
+	if err := json.Unmarshal(operationsRaw, &operations); err != nil {
+		t.Fatalf("unmarshal github operations.json: %v", err)
+	}
+	operationsByID := map[string]githubOperationSpec{}
+	for _, op := range operations.Operations {
+		operationsByID[op.ID] = op
+	}
+
+	implementedDirectReads := map[string]githubCLICommand{}
+	for _, cmd := range cli.Commands {
+		if cmd.Intent != "direct_read" || cmd.Availability != "implemented" {
+			continue
+		}
+		implementedDirectReads[cmd.Path] = cmd
+		if cmd.Operation == "" {
+			continue
+		}
+		op, ok := operationsByID[cmd.Operation]
+		if !ok {
+			t.Fatalf("command %q references undeclared operation %q", cmd.Path, cmd.Operation)
+		}
+		if op.Kind != "rest_read" || op.REST == nil {
+			t.Fatalf("command %q operation %q kind = %q, want rest_read with rest metadata", cmd.Path, op.ID, op.Kind)
+		}
+		if op.REST.MaxBytes <= 0 {
+			t.Fatalf("command %q operation %q rest.max_bytes = %d, want positive bound", cmd.Path, op.ID, op.REST.MaxBytes)
+		}
+		if !githubSupportedDirectReadOutputPolicy(cmd.OutputPolicy) {
+			t.Fatalf("command %q output_policy = %q, want supported direct-read policy", cmd.Path, cmd.OutputPolicy)
+		}
+		if !githubSupportedDirectReadOutputPolicy(op.OutputPolicy) {
+			t.Fatalf("operation %q output_policy = %q, want supported direct-read policy", op.ID, op.OutputPolicy)
+		}
+	}
+
+	surfaceRaw, err := os.ReadFile("../../internal/connectors/defs/github/api_surface.json")
+	if err != nil {
+		t.Fatalf("read github api_surface.json: %v", err)
+	}
+	var surface struct {
+		Endpoints []struct {
+			CoveredBy *githubSurfaceCoverage `json:"covered_by"`
+		} `json:"endpoints"`
+	}
+	if err := json.Unmarshal(surfaceRaw, &surface); err != nil {
+		t.Fatalf("unmarshal github api_surface.json: %v", err)
+	}
+	for i, ep := range surface.Endpoints {
+		if ep.CoveredBy == nil {
+			continue
+		}
+		directReads := append([]string{}, ep.CoveredBy.DirectReads...)
+		if ep.CoveredBy.DirectRead != "" {
+			directReads = append(directReads, ep.CoveredBy.DirectRead)
+		}
+		for _, path := range directReads {
+			if _, ok := implementedDirectReads[path]; !ok {
+				t.Fatalf("endpoint %d covers direct read %q without an implemented runnable command", i, path)
+			}
+		}
+	}
+}
+
 type githubOperation struct {
 	Model            string `json:"model"`
 	Status           string `json:"status"`
@@ -222,6 +315,7 @@ type githubWriteAction struct {
 	Path         string              `json:"path"`
 	Risk         string              `json:"risk"`
 	Confirm      string              `json:"confirm"`
+	RedactFields []string            `json:"redact_fields"`
 	BodyType     string              `json:"body_type"`
 	Delete       *githubDeletePolicy `json:"delete"`
 	RecordSchema githubRecordSchema  `json:"record_schema"`
@@ -238,9 +332,28 @@ type githubDeletePolicy struct {
 	MissingOKStatus []int `json:"missing_ok_status"`
 }
 
+type githubOperationSpec struct {
+	ID           string                   `json:"id"`
+	Kind         string                   `json:"kind"`
+	OutputPolicy string                   `json:"output_policy"`
+	REST         *githubOperationRESTSpec `json:"rest"`
+}
+
+type githubOperationRESTSpec struct {
+	MaxBytes int `json:"max_bytes"`
+}
+
+type githubSurfaceCoverage struct {
+	DirectRead  string   `json:"direct_read"`
+	DirectReads []string `json:"direct_reads"`
+}
+
 type githubCLICommand struct {
 	Path         string `json:"path"`
+	Intent       string `json:"intent"`
 	Availability string `json:"availability"`
+	Operation    string `json:"operation"`
+	OutputPolicy string `json:"output_policy"`
 	Write        string `json:"write"`
 	Approval     string `json:"approval"`
 }
@@ -266,6 +379,54 @@ var githubDestructiveRiskPhrases = []string{
 
 func githubWritePathHasLiteralPlaceholder(path string) bool {
 	return githubSingleBracePathParamRE.MatchString(path)
+}
+
+func githubSensitiveSchemaPaths(properties map[string]json.RawMessage) []string {
+	var paths []string
+	for name, raw := range properties {
+		githubCollectSensitiveSchemaPaths(name, raw, &paths)
+	}
+	return paths
+}
+
+func githubCollectSensitiveSchemaPaths(path string, raw json.RawMessage, paths *[]string) {
+	parts := strings.Split(path, ".")
+	name := parts[len(parts)-1]
+	if githubSensitiveFieldName(name) {
+		*paths = append(*paths, path)
+	}
+	var schema struct {
+		Properties map[string]json.RawMessage `json:"properties"`
+	}
+	if err := json.Unmarshal(raw, &schema); err != nil {
+		return
+	}
+	for child, childRaw := range schema.Properties {
+		githubCollectSensitiveSchemaPaths(path+"."+child, childRaw, paths)
+	}
+}
+
+func githubSensitiveFieldName(name string) bool {
+	normalized := strings.ToLower(strings.ReplaceAll(name, "-", "_"))
+	return normalized == "secret" || strings.Contains(normalized, "token") || strings.Contains(normalized, "private_key")
+}
+
+func githubStringSliceContains(values []string, value string) bool {
+	for _, item := range values {
+		if item == value {
+			return true
+		}
+	}
+	return false
+}
+
+func githubSupportedDirectReadOutputPolicy(policy string) bool {
+	switch policy {
+	case "repository_contents_file_metadata", "repository_contents_directory", "json_redacted", "clinical_json_redacted":
+		return true
+	default:
+		return false
+	}
 }
 
 func githubActionRequiresTypedDestructiveConfirmation(action githubWriteAction) bool {

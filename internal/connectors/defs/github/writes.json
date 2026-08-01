@@ -1008,7 +1008,11 @@
         },
         "additionalProperties": false
       },
-      "risk": "registers an outbound webhook that will receive repository event payloads"
+      "risk": "registers an outbound webhook that will receive repository event payloads",
+      "confirm": "destructive",
+      "redact_fields": [
+        "config.secret"
+      ]
     },
     {
       "name": "update_webhook",
@@ -1071,7 +1075,11 @@
         },
         "additionalProperties": false
       },
-      "risk": "changes an existing webhook's target URL, secret, or event subscriptions"
+      "risk": "changes an existing webhook's target URL, secret, or event subscriptions",
+      "confirm": "destructive",
+      "redact_fields": [
+        "config.secret"
+      ]
     },
     {
       "name": "delete_webhook",

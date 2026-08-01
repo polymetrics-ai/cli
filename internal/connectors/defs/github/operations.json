@@ -214,10 +214,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/cache/retention-limit"
+        "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
+        "max_bytes": 1048576
       }
     },
     {
@@ -241,10 +242,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/cache/storage-limit"
+        "path": "/repos/{owner}/{repo}/actions/cache/storage-limit",
+        "max_bytes": 1048576
       }
     },
     {
@@ -268,10 +270,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/cache/usage"
+        "path": "/repos/{owner}/{repo}/actions/cache/usage",
+        "max_bytes": 1048576
       }
     },
     {
@@ -305,10 +308,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/caches"
+        "path": "/repos/{owner}/{repo}/actions/caches",
+        "max_bytes": 1048576
       }
     },
     {
@@ -342,10 +346,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/concurrency_groups"
+        "path": "/repos/{owner}/{repo}/actions/concurrency_groups",
+        "max_bytes": 1048576
       }
     },
     {
@@ -355,10 +360,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}"
+        "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -368,10 +374,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}"
+        "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -381,10 +388,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/logs"
+        "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
+        "max_bytes": 1048576
       }
     },
     {
@@ -418,10 +426,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub"
+        "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub",
+        "max_bytes": 1048576
       }
     },
     {
@@ -445,10 +454,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/organization-secrets"
+        "path": "/repos/{owner}/{repo}/actions/organization-secrets",
+        "max_bytes": 1048576
       }
     },
     {
@@ -458,10 +468,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/organization-variables"
+        "path": "/repos/{owner}/{repo}/actions/organization-variables",
+        "max_bytes": 1048576
       }
     },
     {
@@ -471,10 +482,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/permissions"
+        "path": "/repos/{owner}/{repo}/actions/permissions",
+        "max_bytes": 1048576
       }
     },
     {
@@ -498,10 +510,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/permissions/access"
+        "path": "/repos/{owner}/{repo}/actions/permissions/access",
+        "max_bytes": 1048576
       }
     },
     {
@@ -525,10 +538,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention"
+        "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+        "max_bytes": 1048576
       }
     },
     {
@@ -552,10 +566,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval"
+        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+        "max_bytes": 1048576
       }
     },
     {
@@ -579,10 +594,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos"
+        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+        "max_bytes": 1048576
       }
     },
     {
@@ -606,10 +622,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions"
+        "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions",
+        "max_bytes": 1048576
       }
     },
     {
@@ -633,10 +650,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/permissions/workflow"
+        "path": "/repos/{owner}/{repo}/actions/permissions/workflow",
+        "max_bytes": 1048576
       }
     },
     {
@@ -660,10 +678,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runners"
+        "path": "/repos/{owner}/{repo}/actions/runners",
+        "max_bytes": 1048576
       }
     },
     {
@@ -673,10 +692,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runners/downloads"
+        "path": "/repos/{owner}/{repo}/actions/runners/downloads",
+        "max_bytes": 1048576
       }
     },
     {
@@ -742,10 +762,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}"
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -769,10 +790,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+        "max_bytes": 1048576
       }
     },
     {
@@ -824,10 +846,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals"
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals",
+        "max_bytes": 1048576
       }
     },
     {
@@ -851,10 +874,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}"
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -864,10 +888,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs"
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs",
+        "max_bytes": 1048576
       }
     },
     {
@@ -893,10 +918,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups"
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups",
+        "max_bytes": 1048576
       }
     },
     {
@@ -920,10 +946,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/jobs"
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
+        "max_bytes": 1048576
       }
     },
     {
@@ -964,10 +991,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+        "max_bytes": 1048576
       }
     },
     {
@@ -991,10 +1019,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing"
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1004,10 +1033,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/secrets"
+        "path": "/repos/{owner}/{repo}/actions/secrets",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1017,10 +1047,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/secrets/public-key"
+        "path": "/repos/{owner}/{repo}/actions/secrets/public-key",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1044,10 +1075,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1071,10 +1103,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/variables"
+        "path": "/repos/{owner}/{repo}/actions/variables",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1112,10 +1145,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1167,10 +1201,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"
+        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1180,10 +1215,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "low",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/assignees/{assignee}"
+        "path": "/repos/{owner}/{repo}/assignees/{assignee}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1207,10 +1243,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/attestations/{subject_digest}"
+        "path": "/repos/{owner}/{repo}/attestations/{subject_digest}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1282,10 +1319,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/automated-security-fixes"
+        "path": "/repos/{owner}/{repo}/automated-security-fixes",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1323,10 +1361,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1364,10 +1403,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1405,10 +1445,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1446,10 +1487,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1487,10 +1529,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1528,10 +1571,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1583,10 +1627,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1610,10 +1655,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1665,10 +1711,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1720,10 +1767,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1800,10 +1848,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}"
+        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1837,10 +1886,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/annotations"
+        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/annotations",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1922,10 +1972,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}"
+        "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1935,10 +1986,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs"
+        "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1972,10 +2024,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-quality/findings"
+        "path": "/repos/{owner}/{repo}/code-quality/findings",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1985,10 +2038,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}"
+        "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -1998,10 +2052,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-quality/setup"
+        "path": "/repos/{owner}/{repo}/code-quality/setup",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2025,10 +2080,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix"
+        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2066,10 +2122,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"
+        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2079,10 +2136,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/analyses"
+        "path": "/repos/{owner}/{repo}/code-scanning/analyses",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2106,10 +2164,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
+        "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2119,10 +2178,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases"
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2146,10 +2206,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2173,10 +2234,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}"
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2186,10 +2248,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}"
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2199,10 +2262,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/default-setup"
+        "path": "/repos/{owner}/{repo}/code-scanning/default-setup",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2240,10 +2304,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"
+        "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2253,10 +2318,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-security-configuration"
+        "path": "/repos/{owner}/{repo}/code-security-configuration",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2266,10 +2332,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "low",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/codeowners/errors"
+        "path": "/repos/{owner}/{repo}/codeowners/errors",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2279,10 +2346,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/codespaces"
+        "path": "/repos/{owner}/{repo}/codespaces",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2316,10 +2384,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/codespaces/devcontainers"
+        "path": "/repos/{owner}/{repo}/codespaces/devcontainers",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2329,10 +2398,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/codespaces/machines"
+        "path": "/repos/{owner}/{repo}/codespaces/machines",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2342,10 +2412,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/codespaces/new"
+        "path": "/repos/{owner}/{repo}/codespaces/new",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2355,10 +2426,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/codespaces/permissions_check"
+        "path": "/repos/{owner}/{repo}/codespaces/permissions_check",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2368,10 +2440,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/codespaces/secrets"
+        "path": "/repos/{owner}/{repo}/codespaces/secrets",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2381,10 +2454,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/codespaces/secrets/public-key"
+        "path": "/repos/{owner}/{repo}/codespaces/secrets/public-key",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2418,10 +2492,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+        "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2455,10 +2530,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions"
+        "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2516,10 +2592,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head"
+        "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2529,10 +2606,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/commits/{commit_sha}/pulls"
+        "path": "/repos/{owner}/{repo}/commits/{commit_sha}/pulls",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2542,10 +2620,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs"
+        "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2555,10 +2634,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/commits/{ref}/check-suites"
+        "path": "/repos/{owner}/{repo}/commits/{ref}/check-suites",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2568,10 +2648,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/commits/{ref}/status"
+        "path": "/repos/{owner}/{repo}/commits/{ref}/status",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2581,10 +2662,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/commits/{ref}/statuses"
+        "path": "/repos/{owner}/{repo}/commits/{ref}/statuses",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2594,10 +2676,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/community/profile"
+        "path": "/repos/{owner}/{repo}/community/profile",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2607,10 +2690,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/compare/{basehead}"
+        "path": "/repos/{owner}/{repo}/compare/{basehead}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2620,10 +2704,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/copilot/cloud-agent/configuration"
+        "path": "/repos/{owner}/{repo}/copilot/cloud-agent/configuration",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2633,10 +2718,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/dependabot/secrets"
+        "path": "/repos/{owner}/{repo}/dependabot/secrets",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2646,10 +2732,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/dependabot/secrets/public-key"
+        "path": "/repos/{owner}/{repo}/dependabot/secrets/public-key",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2673,10 +2760,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+        "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2700,10 +2788,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}"
+        "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2800,10 +2889,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
+        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2861,10 +2951,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies"
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2902,10 +2993,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2929,10 +3021,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2956,10 +3049,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps"
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2983,10 +3077,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -2996,10 +3091,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets"
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3009,10 +3105,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key"
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3036,10 +3133,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3063,10 +3161,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables"
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3104,10 +3203,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3155,10 +3255,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}"
+        "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3192,10 +3293,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/git/ref/{ref}"
+        "path": "/repos/{owner}/{repo}/git/ref/{ref}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3205,10 +3307,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}"
+        "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3242,10 +3345,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}"
+        "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3255,10 +3359,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "low",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/hash-algorithm"
+        "path": "/repos/{owner}/{repo}/hash-algorithm",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3268,10 +3373,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries"
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3281,10 +3387,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}"
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3360,10 +3467,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/immutable-releases"
+        "path": "/repos/{owner}/{repo}/immutable-releases",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3411,10 +3519,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/import"
+        "path": "/repos/{owner}/{repo}/import",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3472,10 +3581,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/import/authors"
+        "path": "/repos/{owner}/{repo}/import/authors",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3509,10 +3619,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/import/large_files"
+        "path": "/repos/{owner}/{repo}/import/large_files",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3546,10 +3657,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/installation"
+        "path": "/repos/{owner}/{repo}/installation",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3573,10 +3685,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/interaction-limits"
+        "path": "/repos/{owner}/{repo}/interaction-limits",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3614,10 +3727,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
+        "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3689,10 +3803,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/issue-types"
+        "path": "/repos/{owner}/{repo}/issue-types",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3750,10 +3865,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3811,10 +3927,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "low",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}"
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3824,10 +3941,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by"
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3885,10 +4003,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking"
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3898,10 +4017,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values"
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3953,10 +4073,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent"
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent",
+        "max_bytes": 1048576
       }
     },
     {
@@ -3966,10 +4087,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions"
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4051,10 +4173,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues"
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4112,10 +4235,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/license"
+        "path": "/repos/{owner}/{repo}/license",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4149,10 +4273,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/milestones/{milestone_number}/labels"
+        "path": "/repos/{owner}/{repo}/milestones/{milestone_number}/labels",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4162,10 +4287,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/notifications"
+        "path": "/repos/{owner}/{repo}/notifications",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4223,10 +4349,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pages"
+        "path": "/repos/{owner}/{repo}/pages",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4284,10 +4411,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pages/builds"
+        "path": "/repos/{owner}/{repo}/pages/builds",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4321,10 +4449,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pages/builds/latest"
+        "path": "/repos/{owner}/{repo}/pages/builds/latest",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4334,10 +4463,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pages/builds/{build_id}"
+        "path": "/repos/{owner}/{repo}/pages/builds/{build_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4371,10 +4501,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}"
+        "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4408,10 +4539,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pages/health"
+        "path": "/repos/{owner}/{repo}/pages/health",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4435,10 +4567,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
+        "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4462,10 +4595,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/properties/values"
+        "path": "/repos/{owner}/{repo}/properties/values",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4489,10 +4623,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"
+        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4574,10 +4709,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/commits"
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/commits",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4587,10 +4723,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/files"
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/files",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4600,10 +4737,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "low",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge"
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4637,10 +4775,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews"
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4650,10 +4789,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments"
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4663,10 +4803,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/readme"
+        "path": "/repos/{owner}/{repo}/readme",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4676,10 +4817,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/readme/{dir}"
+        "path": "/repos/{owner}/{repo}/readme/{dir}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4689,10 +4831,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}"
+        "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4716,10 +4859,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
+        "path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4743,10 +4887,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions"
+        "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4804,10 +4949,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/rulesets/rule-suites"
+        "path": "/repos/{owner}/{repo}/rulesets/rule-suites",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4817,10 +4963,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}"
+        "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4830,10 +4977,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history"
+        "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4843,10 +4991,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}"
+        "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4856,10 +5005,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations"
+        "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4883,10 +5033,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/secret-scanning/scan-history"
+        "path": "/repos/{owner}/{repo}/secret-scanning/scan-history",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4966,10 +5117,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/stats/code_frequency"
+        "path": "/repos/{owner}/{repo}/stats/code_frequency",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4979,10 +5131,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/stats/commit_activity"
+        "path": "/repos/{owner}/{repo}/stats/commit_activity",
+        "max_bytes": 1048576
       }
     },
     {
@@ -4992,10 +5145,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/stats/contributors"
+        "path": "/repos/{owner}/{repo}/stats/contributors",
+        "max_bytes": 1048576
       }
     },
     {
@@ -5005,10 +5159,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/stats/participation"
+        "path": "/repos/{owner}/{repo}/stats/participation",
+        "max_bytes": 1048576
       }
     },
     {
@@ -5018,10 +5173,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/stats/punch_card"
+        "path": "/repos/{owner}/{repo}/stats/punch_card",
+        "max_bytes": 1048576
       }
     },
     {
@@ -5079,10 +5235,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/subscription"
+        "path": "/repos/{owner}/{repo}/subscription",
+        "max_bytes": 1048576
       }
     },
     {
@@ -5132,10 +5289,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/teams"
+        "path": "/repos/{owner}/{repo}/teams",
+        "max_bytes": 1048576
       }
     },
     {
@@ -5145,10 +5303,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/traffic/clones"
+        "path": "/repos/{owner}/{repo}/traffic/clones",
+        "max_bytes": 1048576
       }
     },
     {
@@ -5158,10 +5317,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/traffic/popular/paths"
+        "path": "/repos/{owner}/{repo}/traffic/popular/paths",
+        "max_bytes": 1048576
       }
     },
     {
@@ -5171,10 +5331,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/traffic/popular/referrers"
+        "path": "/repos/{owner}/{repo}/traffic/popular/referrers",
+        "max_bytes": 1048576
       }
     },
     {
@@ -5184,10 +5345,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/traffic/views"
+        "path": "/repos/{owner}/{repo}/traffic/views",
+        "max_bytes": 1048576
       }
     },
     {
@@ -5226,10 +5388,11 @@
       "source_url": "https://docs.github.com/en/rest",
       "risk": "high",
       "approval": "none",
-      "output_policy": "json",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "GET",
-        "path": "/repos/{owner}/{repo}/vulnerability-alerts"
+        "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+        "max_bytes": 1048576
       }
     },
     {

@@ -2386,7 +2386,7 @@
       "path": "artifact download",
       "summary": "Download /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.actions_artifacts_artifact_id_archive_format",
       "source_cli_path": "",
       "flags": [
@@ -2400,7 +2400,8 @@
           "type": "string",
           "summary": "archive_format path parameter"
         }
-      ]
+      ],
+      "notes": "Binary direct downloads remain planned until the command runner supports bounded binary output policies."
     },
     {
       "path": "actions retention-limit view",
@@ -2409,7 +2410,8 @@
       "availability": "implemented",
       "operation": "github.actions_cache_retention_limit",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions retention-limit set",
@@ -2429,7 +2431,8 @@
       "availability": "implemented",
       "operation": "github.actions_cache_storage_limit",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions storage-limit set",
@@ -2449,7 +2452,8 @@
       "availability": "implemented",
       "operation": "github.actions_cache_usage",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions caches delete",
@@ -2469,7 +2473,8 @@
       "availability": "implemented",
       "operation": "github.actions_caches2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions caches delete-2",
@@ -2496,7 +2501,8 @@
       "availability": "implemented",
       "operation": "github.actions_concurrency_groups",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions concurrency_groups view-2",
@@ -2511,7 +2517,8 @@
           "type": "string",
           "summary": "concurrency_group_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions jobs view",
@@ -2526,7 +2533,8 @@
           "type": "integer",
           "summary": "job_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "run logs view",
@@ -2541,7 +2549,8 @@
           "type": "integer",
           "summary": "job_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions rerun create",
@@ -2568,7 +2577,8 @@
       "availability": "implemented",
       "operation": "github.actions_oidc_customization_sub",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions sub set",
@@ -2588,7 +2598,8 @@
       "availability": "implemented",
       "operation": "github.actions_organization_secrets",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions organization-variables view",
@@ -2597,7 +2608,8 @@
       "availability": "implemented",
       "operation": "github.actions_organization_variables",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions view",
@@ -2606,7 +2618,8 @@
       "availability": "implemented",
       "operation": "github.actions_permissions",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set",
@@ -2626,7 +2639,8 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_access",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-2",
@@ -2646,7 +2660,8 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_artifact_and_log_retention",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-3",
@@ -2666,7 +2681,8 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_fork_pr_contributor_approval",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-4",
@@ -2686,7 +2702,8 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_fork_pr_workflows_private_repos",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-5",
@@ -2706,7 +2723,8 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_selected_actions",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-6",
@@ -2726,7 +2744,8 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_workflow",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-7",
@@ -2746,7 +2765,8 @@
       "availability": "implemented",
       "operation": "github.actions_runners",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions downloads view",
@@ -2755,7 +2775,8 @@
       "availability": "implemented",
       "operation": "github.actions_runners_downloads",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions generate-jitconfig create",
@@ -2821,7 +2842,8 @@
           "type": "integer",
           "summary": "runner_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions labels delete",
@@ -2854,7 +2876,8 @@
           "type": "integer",
           "summary": "runner_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions labels create",
@@ -2929,7 +2952,8 @@
           "type": "integer",
           "summary": "run_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions approve create",
@@ -2967,7 +2991,8 @@
           "type": "integer",
           "summary": "attempt_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions jobs view-2",
@@ -2987,13 +3012,14 @@
           "type": "integer",
           "summary": "attempt_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "run logs view-2",
       "summary": "Download /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.actions_runs_run_id_attempts_attempt_number_logs",
       "source_cli_path": "",
       "flags": [
@@ -3007,7 +3033,8 @@
           "type": "string",
           "summary": "attempt_number path parameter"
         }
-      ]
+      ],
+      "notes": "Binary direct downloads remain planned until the command runner supports bounded binary output policies."
     },
     {
       "path": "actions concurrency_groups view-3",
@@ -3022,7 +3049,8 @@
           "type": "integer",
           "summary": "run_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions deployment_protection_rule create",
@@ -3055,7 +3083,8 @@
           "type": "integer",
           "summary": "run_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions logs delete",
@@ -3079,7 +3108,7 @@
       "path": "run logs view-3",
       "summary": "Download /repos/{owner}/{repo}/actions/runs/{run_id}/logs",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.actions_runs_run_id_logs2",
       "source_cli_path": "",
       "flags": [
@@ -3088,7 +3117,8 @@
           "type": "string",
           "summary": "run_id path parameter"
         }
-      ]
+      ],
+      "notes": "Binary direct downloads remain planned until the command runner supports bounded binary output policies."
     },
     {
       "path": "actions pending_deployments view",
@@ -3103,7 +3133,8 @@
           "type": "integer",
           "summary": "run_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions pending_deployments create",
@@ -3136,7 +3167,8 @@
           "type": "integer",
           "summary": "run_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions secrets view",
@@ -3145,7 +3177,8 @@
       "availability": "implemented",
       "operation": "github.actions_secrets",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions public-key view",
@@ -3154,7 +3187,8 @@
       "availability": "implemented",
       "operation": "github.actions_secrets_public_key",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret delete-2",
@@ -3187,7 +3221,8 @@
           "type": "string",
           "summary": "secret_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret set-2",
@@ -3214,7 +3249,8 @@
       "availability": "implemented",
       "operation": "github.actions_variables",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "variable create",
@@ -3258,7 +3294,8 @@
           "type": "string",
           "summary": "name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "variable update",
@@ -3327,7 +3364,8 @@
           "type": "integer",
           "summary": "workflow_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "assignees view",
@@ -3342,7 +3380,8 @@
           "type": "string",
           "summary": "assignee path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "attestations create",
@@ -3368,7 +3407,8 @@
           "type": "string",
           "summary": "subject_digest path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "autolinks create",
@@ -3417,7 +3457,8 @@
       "availability": "implemented",
       "operation": "github.automated_security_fixes2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "automated-security-fixes set",
@@ -3461,7 +3502,8 @@
           "type": "string",
           "summary": "branch path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches protection set",
@@ -3512,7 +3554,8 @@
           "type": "string",
           "summary": "branch path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches enforce_admins create",
@@ -3563,7 +3606,8 @@
           "type": "string",
           "summary": "branch path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches required_pull_request_reviews update",
@@ -3614,7 +3658,8 @@
           "type": "string",
           "summary": "branch path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches required_signatures create",
@@ -3665,7 +3710,8 @@
           "type": "string",
           "summary": "branch path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches required_status_checks update",
@@ -3716,7 +3762,8 @@
           "type": "string",
           "summary": "branch path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches contexts create",
@@ -3785,7 +3832,8 @@
           "type": "string",
           "summary": "branch path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches apps delete",
@@ -3818,7 +3866,8 @@
           "type": "string",
           "summary": "branch path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches apps create",
@@ -3887,7 +3936,8 @@
           "type": "string",
           "summary": "branch path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches teams create",
@@ -3956,7 +4006,8 @@
           "type": "string",
           "summary": "branch path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches users create",
@@ -4036,7 +4087,8 @@
           "type": "integer",
           "summary": "check_run_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "check-runs update",
@@ -4069,7 +4121,8 @@
           "type": "integer",
           "summary": "check_run_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "check-runs rerequest create",
@@ -4124,7 +4177,8 @@
           "type": "integer",
           "summary": "check_suite_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "check-suites check-runs view",
@@ -4139,7 +4193,8 @@
           "type": "integer",
           "summary": "check_suite_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "check-suites rerequest create",
@@ -4166,7 +4221,8 @@
       "availability": "implemented",
       "operation": "github.code_quality_findings",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-quality findings view-2",
@@ -4181,7 +4237,8 @@
           "type": "integer",
           "summary": "finding_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-quality setup view",
@@ -4190,7 +4247,8 @@
       "availability": "implemented",
       "operation": "github.code_quality_setup",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-quality setup update",
@@ -4216,7 +4274,8 @@
           "type": "integer",
           "summary": "alert_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning autofix create",
@@ -4267,7 +4326,8 @@
           "type": "integer",
           "summary": "alert_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning analyses view",
@@ -4276,7 +4336,8 @@
       "availability": "implemented",
       "operation": "github.code_scanning_analyses",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning analyses delete",
@@ -4309,7 +4370,8 @@
           "type": "integer",
           "summary": "analysis_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning databases view",
@@ -4318,7 +4380,8 @@
       "availability": "implemented",
       "operation": "github.code_scanning_codeql_databases",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning databases delete",
@@ -4351,7 +4414,8 @@
           "type": "string",
           "summary": "language path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning variant-analyses create",
@@ -4377,7 +4441,8 @@
           "type": "integer",
           "summary": "codeql_variant_analysis_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning repos view",
@@ -4402,7 +4467,8 @@
           "type": "string",
           "summary": "repo_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning default-setup view",
@@ -4411,7 +4477,8 @@
       "availability": "implemented",
       "operation": "github.code_scanning_default_setup",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning default-setup update",
@@ -4448,7 +4515,8 @@
           "type": "integer",
           "summary": "sarif_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-security-configuration view",
@@ -4457,7 +4525,8 @@
       "availability": "implemented",
       "operation": "github.code_security_configuration",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codeowners errors view",
@@ -4466,7 +4535,8 @@
       "availability": "implemented",
       "operation": "github.codeowners_errors",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces view",
@@ -4475,7 +4545,8 @@
       "availability": "implemented",
       "operation": "github.codespaces",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces create",
@@ -4495,7 +4566,8 @@
       "availability": "implemented",
       "operation": "github.codespaces_devcontainers",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces machines view",
@@ -4504,7 +4576,8 @@
       "availability": "implemented",
       "operation": "github.codespaces_machines",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces new view",
@@ -4513,7 +4586,8 @@
       "availability": "implemented",
       "operation": "github.codespaces_new",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces permissions_check view",
@@ -4522,7 +4596,8 @@
       "availability": "implemented",
       "operation": "github.codespaces_permissions_check",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces secrets view",
@@ -4531,7 +4606,8 @@
       "availability": "implemented",
       "operation": "github.codespaces_secrets",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces public-key view",
@@ -4540,7 +4616,8 @@
       "availability": "implemented",
       "operation": "github.codespaces_secrets_public_key",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret delete-3",
@@ -4573,7 +4650,8 @@
           "type": "string",
           "summary": "secret_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret set-3",
@@ -4606,7 +4684,8 @@
           "type": "integer",
           "summary": "comment_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "comments reactions create",
@@ -4663,7 +4742,8 @@
           "type": "string",
           "summary": "commit_sha path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits pulls view",
@@ -4678,7 +4758,8 @@
           "type": "string",
           "summary": "commit_sha path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits check-runs view",
@@ -4693,7 +4774,8 @@
           "type": "string",
           "summary": "ref path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits check-suites view",
@@ -4708,7 +4790,8 @@
           "type": "string",
           "summary": "ref path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits status view",
@@ -4723,7 +4806,8 @@
           "type": "string",
           "summary": "ref path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits statuses view",
@@ -4738,7 +4822,8 @@
           "type": "string",
           "summary": "ref path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "community profile view",
@@ -4747,7 +4832,8 @@
       "availability": "implemented",
       "operation": "github.community_profile",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "compare view",
@@ -4762,7 +4848,8 @@
           "type": "string",
           "summary": "basehead path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot configuration view",
@@ -4771,7 +4858,8 @@
       "availability": "implemented",
       "operation": "github.copilot_cloud_agent_configuration",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot secrets view",
@@ -4780,7 +4868,8 @@
       "availability": "implemented",
       "operation": "github.dependabot_secrets",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot public-key view",
@@ -4789,7 +4878,8 @@
       "availability": "implemented",
       "operation": "github.dependabot_secrets_public_key",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret delete-4",
@@ -4822,7 +4912,8 @@
           "type": "string",
           "summary": "secret_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret set-4",
@@ -4855,22 +4946,24 @@
           "type": "string",
           "summary": "basehead path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "repo sbom view",
       "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.dependency_graph_sbom",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "notes": "Binary direct downloads remain planned until the command runner supports bounded binary output policies."
     },
     {
       "path": "repo sbom fetch",
       "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.dependency_graph_sbom_fetch_report_sbom_uuid",
       "source_cli_path": "",
       "flags": [
@@ -4879,16 +4972,18 @@
           "type": "string",
           "summary": "sbom_uuid path parameter"
         }
-      ]
+      ],
+      "notes": "Binary direct downloads remain planned until the command runner supports bounded binary output policies."
     },
     {
       "path": "repo sbom generate",
       "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom/generate-report",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.dependency_graph_sbom_generate_report",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "notes": "Binary direct downloads remain planned until the command runner supports bounded binary output policies."
     },
     {
       "path": "dependency-graph snapshots create",
@@ -4932,7 +5027,8 @@
           "type": "integer",
           "summary": "deployment_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "deployments statuses create",
@@ -4976,7 +5072,8 @@
           "type": "string",
           "summary": "environment_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment-branch-policies create",
@@ -5038,7 +5135,8 @@
           "type": "integer",
           "summary": "branch_policy_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment-branch-policies set",
@@ -5077,7 +5175,8 @@
           "type": "string",
           "summary": "environment_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment_protection_rules create",
@@ -5110,7 +5209,8 @@
           "type": "string",
           "summary": "environment_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment_protection_rules delete",
@@ -5154,7 +5254,8 @@
           "type": "integer",
           "summary": "protection_rule_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments secrets view",
@@ -5169,7 +5270,8 @@
           "type": "string",
           "summary": "environment_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments public-key view",
@@ -5184,7 +5286,8 @@
           "type": "string",
           "summary": "environment_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret delete-5",
@@ -5228,7 +5331,8 @@
           "type": "string",
           "summary": "secret_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret set-5",
@@ -5267,7 +5371,8 @@
           "type": "string",
           "summary": "environment_name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "variable create-2",
@@ -5329,7 +5434,8 @@
           "type": "string",
           "summary": "name path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "variable update-2",
@@ -5379,7 +5485,8 @@
           "type": "string",
           "summary": "file_sha path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "git commits create",
@@ -5405,7 +5512,8 @@
           "type": "string",
           "summary": "ref path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "git tags view",
@@ -5420,7 +5528,8 @@
           "type": "string",
           "summary": "tag_sha path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "git trees create",
@@ -5446,7 +5555,8 @@
           "type": "string",
           "summary": "tree_sha path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "hash-algorithm view",
@@ -5455,7 +5565,8 @@
       "availability": "implemented",
       "operation": "github.hash_algorithm",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "hooks deliveries view",
@@ -5470,7 +5581,8 @@
           "type": "integer",
           "summary": "hook_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "hooks deliveries view-2",
@@ -5490,7 +5602,8 @@
           "type": "integer",
           "summary": "delivery_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "webhook create",
@@ -5570,7 +5683,8 @@
       "availability": "implemented",
       "operation": "github.immutable_releases2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "immutable-releases set",
@@ -5601,7 +5715,8 @@
       "availability": "implemented",
       "operation": "github.import2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "import update",
@@ -5632,7 +5747,8 @@
       "availability": "implemented",
       "operation": "github.import_authors",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "import authors update",
@@ -5659,7 +5775,8 @@
       "availability": "implemented",
       "operation": "github.import_large_files",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "import lfs update",
@@ -5679,7 +5796,8 @@
       "availability": "implemented",
       "operation": "github.installation",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "interaction-limits delete",
@@ -5699,7 +5817,8 @@
       "availability": "implemented",
       "operation": "github.interaction_limits2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "interaction-limits set",
@@ -5730,7 +5849,8 @@
       "availability": "implemented",
       "operation": "github.interaction_limits_pulls_bypass_list2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "interaction-limits bypass-list set",
@@ -5786,7 +5906,8 @@
       "availability": "implemented",
       "operation": "github.issue_types",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues pin delete",
@@ -5837,7 +5958,8 @@
           "type": "integer",
           "summary": "comment_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues reactions create",
@@ -5899,7 +6021,8 @@
           "type": "string",
           "summary": "assignee path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues blocked_by view",
@@ -5914,7 +6037,8 @@
           "type": "integer",
           "summary": "issue_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues blocked_by create",
@@ -5971,7 +6095,8 @@
           "type": "integer",
           "summary": "issue_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues issue-field-values view",
@@ -5986,7 +6111,8 @@
           "type": "integer",
           "summary": "issue_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues issue-field-values create",
@@ -6061,7 +6187,8 @@
           "type": "integer",
           "summary": "issue_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues reactions view-2",
@@ -6076,7 +6203,8 @@
           "type": "integer",
           "summary": "issue_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues reactions create-2",
@@ -6151,7 +6279,8 @@
           "type": "integer",
           "summary": "issue_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues sub_issues create",
@@ -6196,7 +6325,8 @@
       "availability": "implemented",
       "operation": "github.license",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "merge-upstream create",
@@ -6222,7 +6352,8 @@
           "type": "integer",
           "summary": "milestone_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "notifications view",
@@ -6231,7 +6362,8 @@
       "availability": "implemented",
       "operation": "github.notifications",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "notifications set",
@@ -6262,7 +6394,8 @@
       "availability": "implemented",
       "operation": "github.pages2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages create",
@@ -6293,7 +6426,8 @@
       "availability": "implemented",
       "operation": "github.pages_builds",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages builds create",
@@ -6313,7 +6447,8 @@
       "availability": "implemented",
       "operation": "github.pages_builds_latest",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages builds view-2",
@@ -6328,7 +6463,8 @@
           "type": "integer",
           "summary": "build_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages deployments create",
@@ -6354,7 +6490,8 @@
           "type": "integer",
           "summary": "pages_deployment_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages cancel create",
@@ -6381,7 +6518,8 @@
       "availability": "implemented",
       "operation": "github.pages_health",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "private-vulnerability-reporting delete",
@@ -6401,7 +6539,8 @@
       "availability": "implemented",
       "operation": "github.private_vulnerability_reporting2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "private-vulnerability-reporting set",
@@ -6421,7 +6560,8 @@
       "availability": "implemented",
       "operation": "github.properties_values",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "properties values update",
@@ -6447,7 +6587,8 @@
           "type": "integer",
           "summary": "comment_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls reactions create",
@@ -6522,7 +6663,8 @@
           "type": "integer",
           "summary": "pull_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls files view",
@@ -6537,7 +6679,8 @@
           "type": "integer",
           "summary": "pull_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls merge view",
@@ -6552,7 +6695,8 @@
           "type": "integer",
           "summary": "pull_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls requested_reviewers delete",
@@ -6585,7 +6729,8 @@
           "type": "integer",
           "summary": "pull_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls comments view",
@@ -6605,7 +6750,8 @@
           "type": "integer",
           "summary": "review_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "readme view",
@@ -6614,7 +6760,8 @@
       "availability": "implemented",
       "operation": "github.readme",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "readme view-2",
@@ -6629,7 +6776,8 @@
           "type": "string",
           "summary": "dir path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "releases assets view",
@@ -6644,7 +6792,8 @@
           "type": "integer",
           "summary": "asset_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "releases generate-notes view",
@@ -6670,7 +6819,8 @@
           "type": "integer",
           "summary": "release_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "releases assets view-3",
@@ -6703,7 +6853,8 @@
           "type": "integer",
           "summary": "release_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "releases reactions create",
@@ -6754,7 +6905,8 @@
       "availability": "implemented",
       "operation": "github.rulesets_rule_suites",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "rulesets rule-suites view-2",
@@ -6769,7 +6921,8 @@
           "type": "integer",
           "summary": "rule_suite_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "rulesets history view",
@@ -6784,7 +6937,8 @@
           "type": "integer",
           "summary": "ruleset_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "rulesets history view-2",
@@ -6804,7 +6958,8 @@
           "type": "integer",
           "summary": "version_id path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret-scanning locations view",
@@ -6819,7 +6974,8 @@
           "type": "integer",
           "summary": "alert_number path parameter"
         }
-      ]
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret-scanning push-protection-bypasses create",
@@ -6839,7 +6995,8 @@
       "availability": "implemented",
       "operation": "github.secret_scanning_scan_history",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "security-advisories create",
@@ -6924,7 +7081,8 @@
       "availability": "implemented",
       "operation": "github.stats_code_frequency",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats commit_activity view",
@@ -6933,7 +7091,8 @@
       "availability": "implemented",
       "operation": "github.stats_commit_activity",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats contributors view",
@@ -6942,7 +7101,8 @@
       "availability": "implemented",
       "operation": "github.stats_contributors",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats participation view",
@@ -6951,7 +7111,8 @@
       "availability": "implemented",
       "operation": "github.stats_participation",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats punch_card view",
@@ -6960,7 +7121,8 @@
       "availability": "implemented",
       "operation": "github.stats_punch_card",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "statuses create",
@@ -6998,7 +7160,8 @@
       "availability": "implemented",
       "operation": "github.subscription2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "subscription set",
@@ -7015,7 +7178,7 @@
       "path": "repo archive tarball",
       "summary": "Download /repos/{owner}/{repo}/tarball/{ref}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.tarball_ref",
       "source_cli_path": "",
       "flags": [
@@ -7024,7 +7187,8 @@
           "type": "string",
           "summary": "ref path parameter"
         }
-      ]
+      ],
+      "notes": "Binary direct downloads remain planned until the command runner supports bounded binary output policies."
     },
     {
       "path": "teams view",
@@ -7033,7 +7197,8 @@
       "availability": "implemented",
       "operation": "github.teams",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic clones view",
@@ -7042,7 +7207,8 @@
       "availability": "implemented",
       "operation": "github.traffic_clones",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic paths view",
@@ -7051,7 +7217,8 @@
       "availability": "implemented",
       "operation": "github.traffic_popular_paths",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic referrers view",
@@ -7060,7 +7227,8 @@
       "availability": "implemented",
       "operation": "github.traffic_popular_referrers",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic views view",
@@ -7069,7 +7237,8 @@
       "availability": "implemented",
       "operation": "github.traffic_views",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "transfer create",
@@ -7100,7 +7269,8 @@
       "availability": "implemented",
       "operation": "github.vulnerability_alerts2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "output_policy": "json_redacted"
     },
     {
       "path": "vulnerability-alerts set",
@@ -7117,7 +7287,7 @@
       "path": "repo archive zipball",
       "summary": "Download /repos/{owner}/{repo}/zipball/{ref}",
       "intent": "direct_read",
-      "availability": "implemented",
+      "availability": "planned",
       "operation": "github.zipball_ref",
       "source_cli_path": "",
       "flags": [
@@ -7126,7 +7296,8 @@
           "type": "string",
           "summary": "ref path parameter"
         }
-      ]
+      ],
+      "notes": "Binary direct downloads remain planned until the command runner supports bounded binary output policies."
     }
   ],
   "help_topics": [
