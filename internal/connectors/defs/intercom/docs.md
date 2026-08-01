@@ -4,7 +4,7 @@ Reads Intercom contacts, companies, conversations, admins, and tags through the 
 
 Implemented fixture-backed ETL streams: `contacts`, `companies`, `conversations`, `admins`, `tags`.
 
-The official inventory contains 230 operations: 55 ETL/read, 113 reverse-ETL write, 42 direct read/query/search, 7 binary/export, 12 CDC/changefeed-like, and 1 duplicate/not-applicable row. See `OFFICIAL_INVENTORY.md` and `api_surface.json` for the op-level ledger.
+The official inventory contains 231 operations: 55 ETL/read, 114 reverse-ETL write, 42 direct read/query/search, 7 binary/export, 12 CDC/changefeed-like, and 1 duplicate/not-applicable row. See `OFFICIAL_INVENTORY.md` and `api_surface.json` for the op-level ledger.
 
 Service API documentation:
 
@@ -39,7 +39,7 @@ Additional official read/detail/search/binary/changefeed operations are ledgered
 
 ## Write actions & risks
 
-`writes.json` declares 113 typed Intercom reverse-ETL write actions from the official OpenAPI mutation set. They are provider-specific actions, not a generic HTTP write tool.
+`writes.json` declares 114 typed Intercom reverse-ETL write actions from the official OpenAPI mutation set, including `submit_fin_csat` for `POST /fin/csat`. They are provider-specific actions, not a generic HTTP write tool.
 
 Safety requirements for every live write:
 

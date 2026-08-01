@@ -229,7 +229,7 @@
 | `insightly` | [`icons/insightly.svg`](../icons/insightly.svg) | Insightly | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](https://api.na1.insightly.com/v3.1/) | bundle definition |
 | `instagram` | [`icons/instagram.svg`](../icons/instagram.svg) | Instagram | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developers.facebook.com/docs/instagram-platform/changelog) | bundle definition |
 | `instatus` | [`icons/instatus.svg`](../icons/instatus.svg) | Instatus | `api` | ga | check, catalog, read, write | 28 | 63 | [Documentation](https://instatus.com/help/api) | bundle definition |
-| `intercom` | [`icons/intercom.svg`](../icons/intercom.svg) | Intercom | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes) | bundle definition |
+| `intercom` | [`icons/intercom.svg`](../icons/intercom.svg) | Intercom | `api` | ga | check, catalog, read, write | 5 | 114 | [Documentation](https://developers.intercom.com/docs/references/2.16/rest-api/api.intercom.io) | bundle definition |
 | `interzoid` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Interzoid | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.interzoid.com/entries/interzoid-core-apis) | bundle definition |
 | `intruder` | [`icons/intruder.svg`](../icons/intruder.svg) | Intruder | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.intruder.io/docs/welcome) | bundle definition |
 | `invoiced` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Invoiced | `api` | ga | check, catalog, read, write | 40 | 70 | [Documentation](https://developer.invoiced.com/api) | bundle definition |

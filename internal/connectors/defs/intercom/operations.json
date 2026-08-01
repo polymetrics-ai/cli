@@ -17193,6 +17193,51 @@
       }
     },
     {
+      "id": "intercom.fin_agent.submit_fin_csat",
+      "kind": "rest_write",
+      "summary": "Submit a CSAT rating",
+      "description": "Official Intercom POST /fin/csat; lane=reverse_etl_write; operationId=submitFinCsat.",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "risk": "medium",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "update",
+      "rest": {
+        "method": "POST",
+        "path": "/fin/csat",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "conversation_id": {
+              "type": "string",
+              "description": "Your external conversation ID — the same ID you started the conversation with, and the one echoed on the `csat_requested` event."
+            },
+            "rating": {
+              "type": "string",
+              "description": "The rating the user selected — one of the `key` values from the `csat_requested` event's options.",
+              "enum": [
+                "terrible",
+                "bad",
+                "ok",
+                "good",
+                "amazing"
+              ]
+            },
+            "remark": {
+              "type": "string",
+              "description": "Optional free-text comment the user left alongside the rating. Can be added to an already-rated survey, but only once — the rating locks after a remark is recorded."
+            }
+          },
+          "required": [
+            "conversation_id",
+            "rating"
+          ]
+        }
+      }
+    },
+    {
       "id": "intercom.fin_agent.reply_to_fin",
       "kind": "rest_write",
       "summary": "Reply to Fin",
@@ -20266,9 +20311,9 @@
       "description": "Official Intercom PUT /ip_allowlist; lane=reverse_etl_write; operationId=updateIpAllowlist.",
       "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "approval": "reverse ETL plan, preview, explicit approval, execute and typed destructive confirmation",
       "output_policy": "json_redacted",
-      "mutation_class": "update",
+      "mutation_class": "destructive",
       "rest": {
         "method": "PUT",
         "path": "/ip_allowlist",
@@ -20295,7 +20340,8 @@
             }
           }
         }
-      }
+      },
+      "destructive": true
     },
     {
       "id": "intercom.jobs.jobs_status",
