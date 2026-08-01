@@ -12,7 +12,7 @@
     "operation": {
       "type": "string"
     },
-    "response": {
+    "BackupSummaries": {
       "type": [
         "object",
         "array",
@@ -21,6 +21,10 @@
         "boolean",
         "null"
       ]
+    },
+    "LastEvaluatedBackupArn": {
+      "type": "string"
     }
-  }
+  },
+  "additionalProperties": true
 }

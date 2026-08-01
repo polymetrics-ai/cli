@@ -6,13 +6,13 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_kinesis_streaming_destination-fixture-1",
-        "operation": "DescribeKinesisStreamingDestination",
-        "response": {
-          "fixture": true
+      "TableName": "fixture_table",
+      "KinesisDataStreamDestinations": [
+        {
+          "StreamArn": "arn:aws:kinesis:us-east-1:123456789012:stream/fixture",
+          "DestinationStatus": "ACTIVE"
         }
-      }
+      ]
     }
   }
 }

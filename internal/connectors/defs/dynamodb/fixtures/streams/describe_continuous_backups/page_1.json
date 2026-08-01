@@ -6,11 +6,10 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_continuous_backups-fixture-1",
-        "operation": "DescribeContinuousBackups",
-        "response": {
-          "fixture": true
+      "ContinuousBackupsDescription": {
+        "ContinuousBackupsStatus": "ENABLED",
+        "PointInTimeRecoveryDescription": {
+          "PointInTimeRecoveryStatus": "ENABLED"
         }
       }
     }

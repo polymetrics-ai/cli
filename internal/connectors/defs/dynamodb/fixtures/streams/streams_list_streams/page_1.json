@@ -6,13 +6,12 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "streams_list_streams-fixture-1",
-        "operation": "ListStreams",
-        "response": {
-          "fixture": true
+      "Streams": [
+        {
+          "StreamArn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture_table/stream/2026-01-01T00:00:00.000",
+          "TableName": "fixture_table"
         }
-      }
+      ]
     }
   }
 }

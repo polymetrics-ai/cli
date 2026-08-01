@@ -114,46 +114,49 @@ func readRequestBody(op readOperation, req connectors.ReadRequest, pageSize int,
 	cfg := req.Config
 	query := req.Query
 	body := map[string]any{}
-	putString := func(member, key string) {
-		if value := firstConfigOrQuery(cfg, query, key); value != "" {
-			body[member] = value
-		}
-	}
-	putString("TableName", "table_name")
-	if body["TableName"] == nil {
-		putString("TableName", "table")
-	}
-	putString("TableArn", "table_arn")
-	putString("ResourceArn", "resource_arn")
-	putString("BackupArn", "backup_arn")
-	putString("BackupName", "backup_name")
-	putString("ExportArn", "export_arn")
-	putString("ImportArn", "import_arn")
-	putString("GlobalTableName", "global_table_name")
-	putString("IndexName", "index_name")
-	putString("RegionName", "region_name")
-	putString("StreamArn", "stream_arn")
-	putString("ShardId", "shard_id")
 
-	if op.Operation == "DescribeLimits" || op.Operation == "DescribeEndpoints" {
-		return body, nil
-	}
-	if op.Operation == "Scan" {
-		table := tableName(cfg)
-		if table == "" {
-			return nil, fmt.Errorf("dynamodb connector requires config table_name")
+	switch op.Operation {
+	case "DescribeBackup":
+		return body, requireReadString(body, cfg, query, "BackupArn", "backup_arn", "describe_backup requires backup_arn")
+	case "DescribeContinuousBackups", "DescribeKinesisStreamingDestination", "DescribeTable", "DescribeTableReplicaAutoScaling", "DescribeTimeToLive":
+		return body, requireReadTableName(body, cfg, query, strings.ToLower(op.Stream)+" requires table_name")
+	case "DescribeContributorInsights":
+		if err := requireReadTableName(body, cfg, query, "describe_contributor_insights requires table_name"); err != nil {
+			return nil, err
 		}
-		body["TableName"] = table
+		putReadString(body, cfg, query, "IndexName", "index_name")
+		return body, nil
+	case "DescribeEndpoints", "DescribeLimits":
+		return body, nil
+	case "DescribeExport":
+		return body, requireReadString(body, cfg, query, "ExportArn", "export_arn", "describe_export requires export_arn")
+	case "DescribeGlobalTable", "DescribeGlobalTableSettings":
+		return body, requireReadString(body, cfg, query, "GlobalTableName", "global_table_name", strings.ToLower(op.Stream)+" requires global_table_name")
+	case "DescribeImport":
+		return body, requireReadString(body, cfg, query, "ImportArn", "import_arn", "describe_import requires import_arn")
+	case "GetResourcePolicy", "ListTagsOfResource":
+		if err := requireReadString(body, cfg, query, "ResourceArn", "resource_arn", strings.ToLower(op.Stream)+" requires resource_arn"); err != nil {
+			return nil, err
+		}
+		if op.Operation == "ListTagsOfResource" {
+			body["MaxResults"] = pageSize
+			if token != nil {
+				body["NextToken"] = token
+			}
+		}
+		return body, nil
+	case "Scan":
+		if err := requireReadTableName(body, cfg, query, "connector requires config table_name"); err != nil {
+			return nil, err
+		}
 		body["Limit"] = pageSize
 		if token != nil {
 			body["ExclusiveStartKey"] = token
 		}
 		return body, nil
-	}
-	if op.Operation == "Query" {
-		table := tableName(cfg)
-		if table == "" {
-			return nil, fmt.Errorf("dynamodb query_items requires config table_name")
+	case "Query":
+		if err := requireReadTableName(body, cfg, query, "query_items requires config table_name"); err != nil {
+			return nil, err
 		}
 		keyName := firstConfigOrQuery(cfg, query, "query_key_name")
 		keyValue := firstConfigOrQuery(cfg, query, "query_key_value")
@@ -164,37 +167,122 @@ func readRequestBody(op readOperation, req connectors.ReadRequest, pageSize int,
 		if err != nil {
 			return nil, err
 		}
-		body["TableName"] = table
+		putReadString(body, cfg, query, "IndexName", "index_name")
 		body["Limit"] = pageSize
 		body["KeyConditions"] = map[string]any{keyName: map[string]any{"ComparisonOperator": "EQ", "AttributeValueList": []any{av}}}
 		if token != nil {
 			body["ExclusiveStartKey"] = token
 		}
 		return body, nil
-	}
-	if op.Operation == "GetRecords" {
-		putString("ShardIterator", "shard_iterator")
+	case "ListBackups":
+		putReadTableName(body, cfg, query)
+		body["Limit"] = pageSize
+		if token != nil {
+			body["ExclusiveStartBackupArn"] = token
+		}
+		return body, nil
+	case "ListContributorInsights":
+		putReadTableName(body, cfg, query)
+		body["MaxResults"] = pageSize
+		if token != nil {
+			body["NextToken"] = token
+		}
+		return body, nil
+	case "ListExports":
+		putReadString(body, cfg, query, "TableArn", "table_arn")
+		body["MaxResults"] = pageSize
+		if token != nil {
+			body["NextToken"] = token
+		}
+		return body, nil
+	case "ListGlobalTables":
+		putReadString(body, cfg, query, "RegionName", "region_name")
+		body["Limit"] = pageSize
+		if token != nil {
+			body["ExclusiveStartGlobalTableName"] = token
+		}
+		return body, nil
+	case "ListImports":
+		putReadString(body, cfg, query, "TableArn", "table_arn")
+		body["PageSize"] = pageSize
+		if token != nil {
+			body["NextToken"] = token
+		}
+		return body, nil
+	case "ListTables":
+		body["Limit"] = pageSize
+		if token != nil {
+			body["ExclusiveStartTableName"] = token
+		}
+		return body, nil
+	case "DescribeStream":
+		if err := requireReadString(body, cfg, query, "StreamArn", "stream_arn", "streams_describe_stream requires stream_arn"); err != nil {
+			return nil, err
+		}
+		body["Limit"] = pageSize
+		if token != nil {
+			body["ExclusiveStartShardId"] = token
+		}
+		return body, nil
+	case "GetRecords":
+		if err := requireReadString(body, cfg, query, "ShardIterator", "shard_iterator", "streams_get_records requires shard_iterator"); err != nil {
+			return nil, err
+		}
 		body["Limit"] = pageSize
 		return body, nil
-	}
-	if op.Operation == "GetShardIterator" {
-		if body["StreamArn"] == nil || body["ShardId"] == nil {
-			return nil, fmt.Errorf("dynamodb streams_get_shard_iterator requires stream_arn and shard_id")
+	case "GetShardIterator":
+		if err := requireReadString(body, cfg, query, "StreamArn", "stream_arn", "streams_get_shard_iterator requires stream_arn"); err != nil {
+			return nil, err
+		}
+		if err := requireReadString(body, cfg, query, "ShardId", "shard_id", "streams_get_shard_iterator requires shard_id"); err != nil {
+			return nil, err
 		}
 		iteratorType := firstConfigOrQuery(cfg, query, "iterator_type")
 		if iteratorType == "" {
 			iteratorType = "TRIM_HORIZON"
 		}
 		body["ShardIteratorType"] = iteratorType
-		putString("SequenceNumber", "sequence_number")
+		putReadString(body, cfg, query, "SequenceNumber", "sequence_number")
 		return body, nil
+	case "ListStreams":
+		putReadTableName(body, cfg, query)
+		body["Limit"] = pageSize
+		if token != nil {
+			body["ExclusiveStartStreamArn"] = token
+		}
+		return body, nil
+	default:
+		return nil, fmt.Errorf("dynamodb stream operation %q not supported", op.Operation)
 	}
-	if op.Operation == "TransactGetItems" {
-		return transactGetItemsBody(cfg)
-	}
+}
 
-	addLimitAndToken(op.Operation, body, pageSize, token)
-	return body, nil
+func putReadString(body map[string]any, cfg connectors.RuntimeConfig, query map[string]string, member, key string) bool {
+	if value := firstConfigOrQuery(cfg, query, key); value != "" {
+		body[member] = value
+		return true
+	}
+	return false
+}
+
+func requireReadString(body map[string]any, cfg connectors.RuntimeConfig, query map[string]string, member, key, message string) error {
+	if putReadString(body, cfg, query, member, key) {
+		return nil
+	}
+	return fmt.Errorf("dynamodb %s", message)
+}
+
+func putReadTableName(body map[string]any, cfg connectors.RuntimeConfig, query map[string]string) bool {
+	if putReadString(body, cfg, query, "TableName", "table_name") {
+		return true
+	}
+	return putReadString(body, cfg, query, "TableName", "table")
+}
+
+func requireReadTableName(body map[string]any, cfg connectors.RuntimeConfig, query map[string]string, message string) error {
+	if putReadTableName(body, cfg, query) {
+		return nil
+	}
+	return fmt.Errorf("dynamodb %s", message)
 }
 
 func firstConfigOrQuery(cfg connectors.RuntimeConfig, query map[string]string, key string) string {
@@ -207,53 +295,6 @@ func firstConfigOrQuery(cfg connectors.RuntimeConfig, query map[string]string, k
 		return ""
 	}
 	return strings.TrimSpace(cfg.Config[key])
-}
-
-func addLimitAndToken(operation string, body map[string]any, pageSize int, token any) {
-	switch operation {
-	case "ListBackups":
-		body["Limit"] = pageSize
-		if token != nil {
-			body["ExclusiveStartBackupArn"] = token
-		}
-	case "ListTables":
-		body["Limit"] = pageSize
-		if token != nil {
-			body["ExclusiveStartTableName"] = token
-		}
-	case "ListGlobalTables":
-		body["Limit"] = pageSize
-		if token != nil {
-			body["ExclusiveStartGlobalTableName"] = token
-		}
-	case "ListImports":
-		body["PageSize"] = pageSize
-		if token != nil {
-			body["NextToken"] = token
-		}
-	case "ListStreams":
-		body["Limit"] = pageSize
-		if token != nil {
-			body["ExclusiveStartStreamArn"] = token
-		}
-	case "ListContributorInsights", "ListExports", "ListTagsOfResource":
-		body["MaxResults"] = pageSize
-		if token != nil {
-			body["NextToken"] = token
-		}
-	}
-}
-
-func transactGetItemsBody(cfg connectors.RuntimeConfig) (map[string]any, error) {
-	raw := strings.TrimSpace(cfg.Config["transact_get_items"])
-	if raw == "" {
-		return nil, fmt.Errorf("dynamodb transact_get_items requires config transact_get_items JSON fixture")
-	}
-	var items []any
-	if err := json.Unmarshal([]byte(raw), &items); err != nil {
-		return nil, fmt.Errorf("decode transact_get_items: %w", err)
-	}
-	return map[string]any{"TransactItems": items}, nil
 }
 
 func nextTokenForOperation(op readOperation, raw map[string]any) any {
@@ -272,6 +313,8 @@ func nextTokenForOperation(op readOperation, raw map[string]any) any {
 		return raw["NextToken"]
 	case "GetRecords":
 		return raw["NextShardIterator"]
+	case "DescribeStream":
+		return raw["LastEvaluatedShardId"]
 	default:
 		return nil
 	}
@@ -284,20 +327,17 @@ func recordsForOperation(op readOperation, raw map[string]any) []connectors.Reco
 	if op.Operation == "GetRecords" {
 		return streamRecordEvents(raw["Records"])
 	}
-	for _, key := range responseArrayKeys(op.Operation) {
-		if records := arrayRecords(op, key, raw[key]); len(records) > 0 {
-			return records
-		}
+	return []connectors.Record{pageRecordForOperation(op, raw)}
+}
+
+func pageRecordForOperation(op readOperation, raw map[string]any) connectors.Record {
+	rec := make(connectors.Record, len(raw)+2)
+	for key, value := range raw {
+		rec[key] = value
 	}
-	for _, key := range responseObjectKeys(op.Operation) {
-		if obj, ok := raw[key].(map[string]any); ok {
-			rec := connectors.Record(obj)
-			rec["operation"] = op.Operation
-			rec["id"] = recordID(op.Stream, obj)
-			return []connectors.Record{rec}
-		}
-	}
-	return []connectors.Record{{"id": op.Stream + "#response", "operation": op.Operation, "response": raw}}
+	rec["operation"] = op.Operation
+	rec["id"] = recordID(op.Stream+"#response", raw)
+	return rec
 }
 
 func itemRecords(value any) []connectors.Record {
@@ -337,100 +377,19 @@ func streamRecordEvents(value any) []connectors.Record {
 		if !ok {
 			continue
 		}
-		rec := connectors.Record{"id": recordID(fmt.Sprintf("stream-record-%d", i), m), "operation": "GetRecords", "response": m}
-		if name, _ := m["eventName"].(string); name != "" {
-			rec["event_name"] = name
+		rec := make(connectors.Record, len(m)+2)
+		for key, value := range m {
+			rec[key] = value
 		}
+		rec["id"] = recordID(fmt.Sprintf("stream-record-%d", i), m)
+		rec["operation"] = "GetRecords"
 		out = append(out, rec)
 	}
 	return out
 }
 
-func arrayRecords(op readOperation, key string, value any) []connectors.Record {
-	items, ok := value.([]any)
-	if !ok {
-		return nil
-	}
-	out := make([]connectors.Record, 0, len(items))
-	field := strings.TrimSuffix(strings.TrimSuffix(key, "s"), "Summarie")
-	for i, item := range items {
-		switch typed := item.(type) {
-		case map[string]any:
-			rec := connectors.Record(typed)
-			rec["operation"] = op.Operation
-			rec["id"] = recordID(fmt.Sprintf("%s-%d", op.Stream, i), typed)
-			out = append(out, rec)
-		case string:
-			out = append(out, connectors.Record{"id": typed, "operation": op.Operation, strings.ToLower(field): typed})
-		default:
-			out = append(out, connectors.Record{"id": fmt.Sprintf("%s-%d", op.Stream, i), "operation": op.Operation, "response": typed})
-		}
-	}
-	return out
-}
-
-func responseArrayKeys(operation string) []string {
-	switch operation {
-	case "DescribeEndpoints":
-		return []string{"Endpoints"}
-	case "ListBackups":
-		return []string{"BackupSummaries"}
-	case "ListContributorInsights":
-		return []string{"ContributorInsightsSummaries"}
-	case "ListExports":
-		return []string{"ExportSummaries"}
-	case "ListGlobalTables":
-		return []string{"GlobalTables"}
-	case "ListImports":
-		return []string{"ImportSummaryList"}
-	case "ListTables":
-		return []string{"TableNames"}
-	case "ListTagsOfResource":
-		return []string{"Tags"}
-	case "ListStreams":
-		return []string{"Streams"}
-	default:
-		return nil
-	}
-}
-
-func responseObjectKeys(operation string) []string {
-	switch operation {
-	case "DescribeBackup":
-		return []string{"BackupDescription"}
-	case "DescribeContinuousBackups":
-		return []string{"ContinuousBackupsDescription"}
-	case "DescribeContributorInsights":
-		return []string{"ContributorInsightsRuleList"}
-	case "DescribeExport":
-		return []string{"ExportDescription"}
-	case "DescribeGlobalTable":
-		return []string{"GlobalTableDescription"}
-	case "DescribeGlobalTableSettings":
-		return []string{"GlobalTableSettings"}
-	case "DescribeImport":
-		return []string{"ImportTableDescription"}
-	case "DescribeKinesisStreamingDestination":
-		return []string{"KinesisDataStreamDestinations"}
-	case "DescribeLimits":
-		return []string{"AccountMaxReadCapacityUnits"}
-	case "DescribeTable", "DescribeTableReplicaAutoScaling":
-		return []string{"Table"}
-	case "DescribeTimeToLive":
-		return []string{"TimeToLiveDescription"}
-	case "GetResourcePolicy":
-		return []string{"Policy"}
-	case "GetShardIterator":
-		return []string{"ShardIterator"}
-	case "DescribeStream":
-		return []string{"StreamDescription"}
-	default:
-		return nil
-	}
-}
-
 func recordID(fallback string, m map[string]any) string {
-	for _, key := range []string{"TableName", "TableArn", "BackupArn", "BackupName", "ExportArn", "ImportArn", "ResourceArn", "StreamArn", "ShardId", "SequenceNumber", "Arn", "Name", "Policy", "ShardIterator"} {
+	for _, key := range []string{"TableName", "TableArn", "BackupArn", "BackupName", "ExportArn", "ImportArn", "ResourceArn", "StreamArn", "ShardId", "SequenceNumber", "eventID", "EventID", "Arn", "Name", "Policy", "ShardIterator"} {
 		if value, ok := m[key]; ok && fmt.Sprint(value) != "" {
 			return fmt.Sprint(value)
 		}
@@ -505,7 +464,7 @@ func (c Connector) doJSONLimited(ctx context.Context, conn connConfig, target st
 // readFixture emits deterministic records without network access so tests and
 // conformance can exercise native/dynamodb credential-free.
 func readFixture(ctx context.Context, stream, operation string, emit func(connectors.Record) error) error {
-	if stream == itemsStreamName {
+	if stream == itemsStreamName || stream == "query_items" {
 		for i := 1; i <= 2; i++ {
 			if err := ctx.Err(); err != nil {
 				return err
@@ -517,8 +476,73 @@ func readFixture(ctx context.Context, stream, operation string, emit func(connec
 		}
 		return nil
 	}
-	if err := ctx.Err(); err != nil {
-		return err
+	op := readOperation{Stream: stream, Operation: operation}
+	for _, rec := range recordsForOperation(op, fixtureResponseForOperation(operation)) {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		if err := emit(rec); err != nil {
+			return err
+		}
 	}
-	return emit(connectors.Record{"id": stream + "#fixture", "operation": operation, "response": map[string]any{"fixture": true}})
+	return nil
+}
+
+func fixtureResponseForOperation(operation string) map[string]any {
+	tableArn := "arn:aws:dynamodb:us-east-1:123456789012:table/fixture_table"
+	streamArn := tableArn + "/stream/2026-01-01T00:00:00.000"
+	switch operation {
+	case "DescribeBackup":
+		return map[string]any{"BackupDescription": map[string]any{"BackupDetails": map[string]any{"BackupArn": tableArn + "/backup/fixture_backup", "BackupName": "fixture_backup"}}}
+	case "DescribeContinuousBackups":
+		return map[string]any{"ContinuousBackupsDescription": map[string]any{"ContinuousBackupsStatus": "ENABLED", "PointInTimeRecoveryDescription": map[string]any{"PointInTimeRecoveryStatus": "ENABLED"}}}
+	case "DescribeContributorInsights":
+		return map[string]any{"TableName": "fixture_table", "ContributorInsightsStatus": "ENABLED", "ContributorInsightsRuleList": []any{"fixture-rule"}}
+	case "DescribeEndpoints":
+		return map[string]any{"Endpoints": []any{map[string]any{"Address": "dynamodb.us-east-1.amazonaws.com", "CachePeriodInMinutes": float64(60)}}}
+	case "DescribeExport":
+		return map[string]any{"ExportDescription": map[string]any{"ExportArn": tableArn + "/export/fixture_export", "ExportStatus": "COMPLETED"}}
+	case "DescribeGlobalTable":
+		return map[string]any{"GlobalTableDescription": map[string]any{"GlobalTableName": "fixture_global", "GlobalTableStatus": "ACTIVE"}}
+	case "DescribeGlobalTableSettings":
+		return map[string]any{"GlobalTableSettings": map[string]any{"GlobalTableName": "fixture_global", "ReplicaSettings": []any{}}}
+	case "DescribeImport":
+		return map[string]any{"ImportTableDescription": map[string]any{"ImportArn": tableArn + "/import/fixture_import", "ImportStatus": "COMPLETED"}}
+	case "DescribeKinesisStreamingDestination":
+		return map[string]any{"TableName": "fixture_table", "KinesisDataStreamDestinations": []any{map[string]any{"StreamArn": "arn:aws:kinesis:us-east-1:123456789012:stream/fixture", "DestinationStatus": "ACTIVE"}}}
+	case "DescribeLimits":
+		return map[string]any{"AccountMaxReadCapacityUnits": float64(80000), "AccountMaxWriteCapacityUnits": float64(80000), "TableMaxReadCapacityUnits": float64(40000), "TableMaxWriteCapacityUnits": float64(40000)}
+	case "DescribeTable":
+		return map[string]any{"Table": map[string]any{"TableArn": tableArn, "TableName": "fixture_table", "TableStatus": "ACTIVE"}}
+	case "DescribeTableReplicaAutoScaling":
+		return map[string]any{"TableAutoScalingDescription": map[string]any{"TableName": "fixture_table", "TableStatus": "ACTIVE"}}
+	case "DescribeTimeToLive":
+		return map[string]any{"TimeToLiveDescription": map[string]any{"TimeToLiveStatus": "ENABLED", "AttributeName": "ttl"}}
+	case "GetResourcePolicy":
+		return map[string]any{"Policy": `{"Version":"2012-10-17","Statement":[]}`}
+	case "ListBackups":
+		return map[string]any{"BackupSummaries": []any{map[string]any{"BackupArn": tableArn + "/backup/fixture_backup", "BackupName": "fixture_backup", "TableName": "fixture_table"}}}
+	case "ListContributorInsights":
+		return map[string]any{"ContributorInsightsSummaries": []any{map[string]any{"TableName": "fixture_table", "ContributorInsightsStatus": "ENABLED"}}}
+	case "ListExports":
+		return map[string]any{"ExportSummaries": []any{map[string]any{"ExportArn": tableArn + "/export/fixture_export", "ExportStatus": "COMPLETED"}}}
+	case "ListGlobalTables":
+		return map[string]any{"GlobalTables": []any{map[string]any{"GlobalTableName": "fixture_global", "ReplicationGroup": []any{}}}}
+	case "ListImports":
+		return map[string]any{"ImportSummaryList": []any{map[string]any{"ImportArn": tableArn + "/import/fixture_import", "ImportStatus": "COMPLETED"}}}
+	case "ListTables":
+		return map[string]any{"TableNames": []any{"fixture_table"}}
+	case "ListTagsOfResource":
+		return map[string]any{"Tags": []any{map[string]any{"Key": "fixture", "Value": "true"}}}
+	case "DescribeStream":
+		return map[string]any{"StreamDescription": map[string]any{"StreamArn": streamArn, "StreamStatus": "ENABLED", "Shards": []any{map[string]any{"ShardId": "shard-000"}}}}
+	case "GetRecords":
+		return map[string]any{"Records": []any{map[string]any{"eventID": "fixture-event-1", "eventName": "INSERT", "eventVersion": "1.1", "eventSource": "aws:dynamodb", "awsRegion": "us-east-1", "dynamodb": map[string]any{"SequenceNumber": "100", "NewImage": map[string]any{"pk": map[string]any{"S": "fixture#1"}}}}}}
+	case "GetShardIterator":
+		return map[string]any{"ShardIterator": "fixture-shard-iterator"}
+	case "ListStreams":
+		return map[string]any{"Streams": []any{map[string]any{"StreamArn": streamArn, "TableName": "fixture_table"}}}
+	default:
+		return map[string]any{"Fixture": true}
+	}
 }

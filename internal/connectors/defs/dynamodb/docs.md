@@ -44,13 +44,13 @@ The connector declares 27 read/changefeed stream surfaces. Native code builds cl
 DynamoDB read streams:
 
 - `items` (`Scan`) and `query_items` (`Query`) are bounded by `page_size`/`max_pages` and stop on `LastEvaluatedKey`.
-- Metadata/list streams cover `Describe*`, `GetResourcePolicy`, and `List*` operations from the official Smithy model.
+- Metadata/list streams cover `Describe*`, `GetResourcePolicy`, and `List*` operations from the official Smithy model. Records expose the official response member names directly, plus `id` and `operation` metadata; they do not wrap provider responses in a fabricated `response` envelope.
 - `query_items` uses typed `KeyConditions` from `query_key_name`, `query_key_type`, and `query_key_value`; it does not expose raw key-condition expressions.
 
 DynamoDB Streams/changefeed surfaces:
 
 - `streams_list_streams`, `streams_describe_stream`, `streams_get_shard_iterator`, and `streams_get_records` track the official Streams operations.
-- `ReadCDC` uses `GetShardIterator` then bounded `GetRecords`, emits `INSERT`/`MODIFY`/`REMOVE` events, and stores the next shard iterator in event state.
+- `ReadCDC` uses `GetShardIterator` then bounded `GetRecords`, emits `INSERT`/`MODIFY`/`REMOVE` events, and stores each emitted record's `SequenceNumber` with `AFTER_SEQUENCE_NUMBER` resume state.
 
 ## Write actions & risks
 
@@ -65,4 +65,4 @@ The connector intentionally does not expose raw HTTP, raw AWS JSON bodies, raw P
 - Fixture-only verification is not live certification. `certified=0` until a separately approved live executor supplies redacted artifacts.
 - `ExportTableToPointInTime` and `ImportTable` are tracked but blocked because the current shared connector-command runtime has no approved AWS S3 binary/import-export executor for these workflows.
 - `BatchExecuteStatement`, `ExecuteStatement`, and `ExecuteTransaction` are blocked/disallowed because they are raw PartiQL statement surfaces, and this task forbids raw PartiQL/query or arbitrary expressions/bodies.
-- DynamoDB item attributes are table-specific, so item streams expose generic `pk`/operation fields and preserve additional flattened item attributes at runtime.
+- DynamoDB item attributes are table-specific, so item streams expose generic `pk` plus additional flattened item attributes at runtime.

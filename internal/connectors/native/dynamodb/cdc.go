@@ -8,16 +8,12 @@ import (
 	"polymetrics.ai/internal/connectors"
 )
 
-// ReadCDC reads DynamoDB Streams records through the reviewed GetShardIterator
-// -> GetRecords lifecycle. It is bounded by page_size/max_pages and emits only
-// DynamoDB stream event names INSERT/MODIFY/REMOVE. It never starts a live call
-// in fixture mode.
 func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, emit func(connectors.CDCEvent) error) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
 	if fixtureMode(req.Config) {
-		return emit(connectors.CDCEvent{Operation: "INSERT", Record: connectors.Record{"pk": "fixture#1", "fixture": true}, State: connectors.Record{"fixture": true}})
+		return emit(connectors.CDCEvent{Operation: "INSERT", Record: connectors.Record{"pk": "fixture#1", "fixture": true}, State: connectors.Record{"sequence_number": "fixture-seq-1", "iterator_type": "AFTER_SEQUENCE_NUMBER"}})
 	}
 	conn, err := resolveConfig(req.Config)
 	if err != nil {
@@ -37,8 +33,11 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 		return err
 	}
 	iterator := strings.TrimSpace(req.State["shard_iterator"])
+	if strings.TrimSpace(req.State["sequence_number"]) != "" {
+		iterator = ""
+	}
 	if iterator == "" {
-		iterator, err = c.initialShardIterator(ctx, conn, req.Config)
+		iterator, err = c.initialShardIterator(ctx, conn, req.Config, req.State)
 		if err != nil {
 			return err
 		}
@@ -53,7 +52,16 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 			if err := ctx.Err(); err != nil {
 				return err
 			}
-			event.State = connectors.Record{"shard_iterator": fmt.Sprint(out["NextShardIterator"])}
+			if event.State == nil {
+				event.State = connectors.Record{}
+			}
+			if streamArn := firstStateOrConfig(req.State, req.Config, "stream_arn"); streamArn != "" {
+				event.State["stream_arn"] = streamArn
+			}
+			if shardID := firstStateOrConfig(req.State, req.Config, "shard_id"); shardID != "" {
+				event.State["shard_id"] = shardID
+			}
+			event.State["iterator_type"] = "AFTER_SEQUENCE_NUMBER"
 			if err := emit(event); err != nil {
 				return err
 			}
@@ -63,19 +71,25 @@ func (c Connector) ReadCDC(ctx context.Context, req connectors.CDCReadRequest, e
 	return nil
 }
 
-func (c Connector) initialShardIterator(ctx context.Context, conn connConfig, cfg connectors.RuntimeConfig) (string, error) {
-	streamArn := strings.TrimSpace(cfg.Config["stream_arn"])
-	shardID := strings.TrimSpace(cfg.Config["shard_id"])
+func (c Connector) initialShardIterator(ctx context.Context, conn connConfig, cfg connectors.RuntimeConfig, state map[string]string) (string, error) {
+	streamArn := firstStateOrConfig(state, cfg, "stream_arn")
+	shardID := firstStateOrConfig(state, cfg, "shard_id")
 	if streamArn == "" || shardID == "" {
 		return "", fmt.Errorf("dynamodb CDC requires stream_arn and shard_id or a shard_iterator state")
 	}
-	iteratorType := strings.TrimSpace(cfg.Config["iterator_type"])
+	iteratorType := firstStateOrConfig(state, cfg, "iterator_type")
+	sequenceNumber := strings.TrimSpace(state["sequence_number"])
+	if sequenceNumber != "" {
+		iteratorType = "AFTER_SEQUENCE_NUMBER"
+	} else {
+		sequenceNumber = strings.TrimSpace(cfg.Config["sequence_number"])
+	}
 	if iteratorType == "" {
 		iteratorType = "TRIM_HORIZON"
 	}
 	body := map[string]any{"StreamArn": streamArn, "ShardId": shardID, "ShardIteratorType": iteratorType}
-	if seq := strings.TrimSpace(cfg.Config["sequence_number"]); seq != "" {
-		body["SequenceNumber"] = seq
+	if sequenceNumber != "" {
+		body["SequenceNumber"] = sequenceNumber
 	}
 	var out map[string]any
 	if err := c.doJSON(ctx, conn, streamsTargetPrefix+"GetShardIterator", body, &out); err != nil {
@@ -86,6 +100,16 @@ func (c Connector) initialShardIterator(ctx context.Context, conn connConfig, cf
 		return "", fmt.Errorf("dynamodb GetShardIterator returned no ShardIterator")
 	}
 	return iterator, nil
+}
+
+func firstStateOrConfig(state map[string]string, cfg connectors.RuntimeConfig, key string) string {
+	if value := strings.TrimSpace(state[key]); value != "" {
+		return value
+	}
+	if cfg.Config == nil {
+		return ""
+	}
+	return strings.TrimSpace(cfg.Config[key])
 }
 
 func cdcEventsFromRecords(value any) []connectors.CDCEvent {
@@ -104,14 +128,20 @@ func cdcEventsFromRecords(value any) []connectors.CDCEvent {
 			name = "MODIFY"
 		}
 		image := connectors.Record{"event": m}
+		sequenceNumber := ""
 		if dynamodb, ok := m["dynamodb"].(map[string]any); ok {
+			sequenceNumber = strings.TrimSpace(fmt.Sprint(dynamodb["SequenceNumber"]))
 			if name == "REMOVE" {
 				image = flattenImage(dynamodb["OldImage"])
 			} else {
 				image = flattenImage(dynamodb["NewImage"])
 			}
 		}
-		events = append(events, connectors.CDCEvent{Operation: name, Record: image})
+		state := connectors.Record{}
+		if sequenceNumber != "" {
+			state["sequence_number"] = sequenceNumber
+		}
+		events = append(events, connectors.CDCEvent{Operation: name, Record: image, State: state})
 	}
 	return events
 }

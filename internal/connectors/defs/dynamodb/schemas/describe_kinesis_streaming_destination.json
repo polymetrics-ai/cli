@@ -12,7 +12,10 @@
     "operation": {
       "type": "string"
     },
-    "response": {
+    "TableName": {
+      "type": "string"
+    },
+    "KinesisDataStreamDestinations": {
       "type": [
         "object",
         "array",
@@ -22,5 +25,6 @@
         "null"
       ]
     }
-  }
+  },
+  "additionalProperties": true
 }

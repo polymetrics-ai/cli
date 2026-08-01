@@ -6,13 +6,7 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "streams_get_shard_iterator-fixture-1",
-        "operation": "GetShardIterator",
-        "response": {
-          "fixture": true
-        }
-      }
+      "ShardIterator": "fixture-shard-iterator"
     }
   }
 }

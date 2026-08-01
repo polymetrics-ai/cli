@@ -12,7 +12,7 @@
     "operation": {
       "type": "string"
     },
-    "response": {
+    "GlobalTables": {
       "type": [
         "object",
         "array",
@@ -21,6 +21,10 @@
         "boolean",
         "null"
       ]
+    },
+    "LastEvaluatedGlobalTableName": {
+      "type": "string"
     }
-  }
+  },
+  "additionalProperties": true
 }

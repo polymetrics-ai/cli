@@ -12,7 +12,7 @@
     "operation": {
       "type": "string"
     },
-    "response": {
+    "Tags": {
       "type": [
         "object",
         "array",
@@ -21,6 +21,10 @@
         "boolean",
         "null"
       ]
+    },
+    "NextToken": {
+      "type": "string"
     }
-  }
+  },
+  "additionalProperties": true
 }

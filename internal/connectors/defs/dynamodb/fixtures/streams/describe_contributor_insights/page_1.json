@@ -6,13 +6,11 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_contributor_insights-fixture-1",
-        "operation": "DescribeContributorInsights",
-        "response": {
-          "fixture": true
-        }
-      }
+      "TableName": "fixture_table",
+      "ContributorInsightsStatus": "ENABLED",
+      "ContributorInsightsRuleList": [
+        "fixture-rule"
+      ]
     }
   }
 }

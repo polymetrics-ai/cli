@@ -6,12 +6,9 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_table_replica_auto_scaling-fixture-1",
-        "operation": "DescribeTableReplicaAutoScaling",
-        "response": {
-          "fixture": true
-        }
+      "TableAutoScalingDescription": {
+        "TableName": "fixture_table",
+        "TableStatus": "ACTIVE"
       }
     }
   }

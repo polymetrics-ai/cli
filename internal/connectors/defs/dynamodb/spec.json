@@ -113,10 +113,6 @@
     },
     "query_key_value": {
       "type": "string"
-    },
-    "transact_get_items": {
-      "type": "string",
-      "description": "Optional JSON TransactItems fixture/config for TransactGetItems stream tests only; not exposed as a generic CLI passthrough."
     }
   }
 }

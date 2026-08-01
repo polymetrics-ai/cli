@@ -12,7 +12,32 @@
     "operation": {
       "type": "string"
     },
-    "response": {
+    "eventID": {
+      "type": "string"
+    },
+    "eventName": {
+      "type": "string"
+    },
+    "eventVersion": {
+      "type": "string"
+    },
+    "eventSource": {
+      "type": "string"
+    },
+    "awsRegion": {
+      "type": "string"
+    },
+    "dynamodb": {
+      "type": [
+        "object",
+        "array",
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "userIdentity": {
       "type": [
         "object",
         "array",
@@ -22,5 +47,6 @@
         "null"
       ]
     }
-  }
+  },
+  "additionalProperties": true
 }

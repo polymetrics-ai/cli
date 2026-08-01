@@ -8,22 +8,7 @@
   "properties": {
     "pk": {
       "type": "string"
-    },
-    "id": {
-      "type": "string"
-    },
-    "operation": {
-      "type": "string"
-    },
-    "response": {
-      "type": [
-        "object",
-        "array",
-        "string",
-        "number",
-        "boolean",
-        "null"
-      ]
     }
-  }
+  },
+  "additionalProperties": true
 }

@@ -12,15 +12,18 @@
     "operation": {
       "type": "string"
     },
-    "response": {
-      "type": [
-        "object",
-        "array",
-        "string",
-        "number",
-        "boolean",
-        "null"
-      ]
+    "AccountMaxReadCapacityUnits": {
+      "type": "number"
+    },
+    "AccountMaxWriteCapacityUnits": {
+      "type": "number"
+    },
+    "TableMaxReadCapacityUnits": {
+      "type": "number"
+    },
+    "TableMaxWriteCapacityUnits": {
+      "type": "number"
     }
-  }
+  },
+  "additionalProperties": true
 }

@@ -12,7 +12,36 @@
     "operation": {
       "type": "string"
     },
-    "response": {
+    "TableName": {
+      "type": "string"
+    },
+    "IndexName": {
+      "type": "string"
+    },
+    "ContributorInsightsStatus": {
+      "type": "string"
+    },
+    "ContributorInsightsRuleList": {
+      "type": [
+        "object",
+        "array",
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "LastUpdateDateTime": {
+      "type": [
+        "object",
+        "array",
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "FailureException": {
       "type": [
         "object",
         "array",
@@ -22,5 +51,6 @@
         "null"
       ]
     }
-  }
+  },
+  "additionalProperties": true
 }

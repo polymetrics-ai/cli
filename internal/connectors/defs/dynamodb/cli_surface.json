@@ -27,7 +27,7 @@
   "commands": [
     {
       "path": "get-item",
-      "summary": "Get one DynamoDB item by a typed scalar key",
+      "summary": "Get one DynamoDB item by typed partition and optional sort key attributes",
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "get_item",
@@ -40,35 +40,50 @@
           "allow_empty": false
         },
         {
-          "name": "key-name",
+          "name": "partition-key-name",
           "type": "string",
-          "summary": "Partition/full key attribute name for the typed command helper",
-          "maps_to": "body.key_name",
+          "summary": "Partition key attribute name",
+          "maps_to": "body.partition_key_name",
           "allow_empty": false
         },
         {
-          "name": "key-type",
+          "name": "partition-key-type",
           "type": "enum",
-          "values": [
-            "S",
-            "N",
-            "B"
-          ],
-          "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
-          "maps_to": "body.key_type"
+          "values": ["S", "N", "B"],
+          "summary": "DynamoDB AttributeValue scalar type for --partition-key-value",
+          "maps_to": "body.partition_key_type"
+        },
+        {
+          "name": "partition-key-value",
+          "type": "string",
+          "summary": "Partition key scalar value",
+          "maps_to": "body.partition_key_value",
+          "allow_empty": false
+        },
+        {
+          "name": "sort-key-name",
+          "type": "string",
+          "summary": "Optional sort key attribute name for composite-key tables",
+          "maps_to": "body.sort_key_name"
+        },
+        {
+          "name": "sort-key-type",
+          "type": "enum",
+          "values": ["S", "N", "B"],
+          "summary": "DynamoDB AttributeValue scalar type for --sort-key-value",
+          "maps_to": "body.sort_key_type"
+        },
+        {
+          "name": "sort-key-value",
+          "type": "string",
+          "summary": "Optional sort key scalar value for composite-key tables",
+          "maps_to": "body.sort_key_value"
         },
         {
           "name": "consistent-read",
           "type": "boolean",
           "summary": "Request strongly consistent reads where DynamoDB supports it",
           "maps_to": "body.consistent_read"
-        },
-        {
-          "name": "key-value",
-          "type": "string",
-          "summary": "Key attribute value",
-          "maps_to": "body.key_value",
-          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -79,13 +94,15 @@
       ],
       "output_policy": "json_redacted",
       "redact_fields": [
+        "partition_key_value",
+        "sort_key_value",
         "key_value"
       ],
-      "risk": "Reads one item; key values are redacted from errors/output surfaces."
+      "risk": "Reads one item by closed typed scalar key attributes; key values are redacted from errors/output surfaces."
     },
     {
       "path": "batch-get-item",
-      "summary": "Read multiple DynamoDB items by a typed scalar key list",
+      "summary": "Read multiple DynamoDB items by typed partition and optional sort key lists",
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "batch_get_item",
@@ -98,34 +115,50 @@
           "allow_empty": false
         },
         {
-          "name": "key-name",
+          "name": "partition-key-name",
           "type": "string",
-          "summary": "Partition/full key attribute name for the typed command helper",
-          "maps_to": "body.key_name",
+          "summary": "Partition key attribute name",
+          "maps_to": "body.partition_key_name",
           "allow_empty": false
         },
         {
-          "name": "key-type",
+          "name": "partition-key-type",
           "type": "enum",
-          "values": [
-            "S",
-            "N",
-            "B"
-          ],
-          "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
-          "maps_to": "body.key_type"
+          "values": ["S", "N", "B"],
+          "summary": "DynamoDB AttributeValue scalar type for --partition-key-values",
+          "maps_to": "body.partition_key_type"
+        },
+        {
+          "name": "partition-key-values",
+          "type": "string_array",
+          "summary": "Comma-separated/repeated partition key scalar values",
+          "maps_to": "body.partition_key_values",
+          "allow_empty": false
+        },
+        {
+          "name": "sort-key-name",
+          "type": "string",
+          "summary": "Optional sort key attribute name for composite-key tables",
+          "maps_to": "body.sort_key_name"
+        },
+        {
+          "name": "sort-key-type",
+          "type": "enum",
+          "values": ["S", "N", "B"],
+          "summary": "DynamoDB AttributeValue scalar type for --sort-key-values",
+          "maps_to": "body.sort_key_type"
+        },
+        {
+          "name": "sort-key-values",
+          "type": "string_array",
+          "summary": "Comma-separated/repeated sort key scalar values aligned with --partition-key-values",
+          "maps_to": "body.sort_key_values"
         },
         {
           "name": "consistent-read",
           "type": "boolean",
           "summary": "Request strongly consistent reads where DynamoDB supports it",
           "maps_to": "body.consistent_read"
-        },
-        {
-          "name": "key-values",
-          "type": "string_array",
-          "summary": "Comma-separated/repeated key attribute values",
-          "maps_to": "body.key_values"
         }
       ],
       "api_surface": [
@@ -136,13 +169,15 @@
       ],
       "output_policy": "json_redacted",
       "redact_fields": [
+        "partition_key_values",
+        "sort_key_values",
         "key_values"
       ],
-      "risk": "Reads bounded keyed items; key values are redacted from errors/output surfaces."
+      "risk": "Reads bounded keyed items by closed typed scalar key attributes; key values are redacted from errors/output surfaces."
     },
     {
       "path": "transact-get-items",
-      "summary": "Read multiple DynamoDB items by a typed scalar key list",
+      "summary": "Transactionally read multiple DynamoDB items by typed partition and optional sort key lists",
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "transact_get_items",
@@ -155,34 +190,44 @@
           "allow_empty": false
         },
         {
-          "name": "key-name",
+          "name": "partition-key-name",
           "type": "string",
-          "summary": "Partition/full key attribute name for the typed command helper",
-          "maps_to": "body.key_name",
+          "summary": "Partition key attribute name",
+          "maps_to": "body.partition_key_name",
           "allow_empty": false
         },
         {
-          "name": "key-type",
+          "name": "partition-key-type",
           "type": "enum",
-          "values": [
-            "S",
-            "N",
-            "B"
-          ],
-          "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
-          "maps_to": "body.key_type"
+          "values": ["S", "N", "B"],
+          "summary": "DynamoDB AttributeValue scalar type for --partition-key-values",
+          "maps_to": "body.partition_key_type"
         },
         {
-          "name": "consistent-read",
-          "type": "boolean",
-          "summary": "Request strongly consistent reads where DynamoDB supports it",
-          "maps_to": "body.consistent_read"
-        },
-        {
-          "name": "key-values",
+          "name": "partition-key-values",
           "type": "string_array",
-          "summary": "Comma-separated/repeated key attribute values",
-          "maps_to": "body.key_values"
+          "summary": "Comma-separated/repeated partition key scalar values",
+          "maps_to": "body.partition_key_values",
+          "allow_empty": false
+        },
+        {
+          "name": "sort-key-name",
+          "type": "string",
+          "summary": "Optional sort key attribute name for composite-key tables",
+          "maps_to": "body.sort_key_name"
+        },
+        {
+          "name": "sort-key-type",
+          "type": "enum",
+          "values": ["S", "N", "B"],
+          "summary": "DynamoDB AttributeValue scalar type for --sort-key-values",
+          "maps_to": "body.sort_key_type"
+        },
+        {
+          "name": "sort-key-values",
+          "type": "string_array",
+          "summary": "Comma-separated/repeated sort key scalar values aligned with --partition-key-values",
+          "maps_to": "body.sort_key_values"
         }
       ],
       "api_surface": [
@@ -193,9 +238,11 @@
       ],
       "output_policy": "json_redacted",
       "redact_fields": [
+        "partition_key_values",
+        "sort_key_values",
         "key_values"
       ],
-      "risk": "Reads bounded keyed items; key values are redacted from errors/output surfaces."
+      "risk": "Transactionally reads bounded keyed items by closed typed scalar key attributes; key values are redacted from errors/output surfaces."
     }
   ],
   "help_topics": [

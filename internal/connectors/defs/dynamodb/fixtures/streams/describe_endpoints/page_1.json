@@ -6,13 +6,12 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_endpoints-fixture-1",
-        "operation": "DescribeEndpoints",
-        "response": {
-          "fixture": true
+      "Endpoints": [
+        {
+          "Address": "dynamodb.us-east-1.amazonaws.com",
+          "CachePeriodInMinutes": 60
         }
-      }
+      ]
     }
   }
 }

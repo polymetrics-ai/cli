@@ -6,12 +6,9 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_global_table-fixture-1",
-        "operation": "DescribeGlobalTable",
-        "response": {
-          "fixture": true
-        }
+      "GlobalTableDescription": {
+        "GlobalTableName": "fixture_global",
+        "GlobalTableStatus": "ACTIVE"
       }
     }
   }

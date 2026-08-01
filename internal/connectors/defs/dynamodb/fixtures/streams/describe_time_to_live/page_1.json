@@ -6,12 +6,9 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_time_to_live-fixture-1",
-        "operation": "DescribeTimeToLive",
-        "response": {
-          "fixture": true
-        }
+      "TimeToLiveDescription": {
+        "TimeToLiveStatus": "ENABLED",
+        "AttributeName": "ttl"
       }
     }
   }

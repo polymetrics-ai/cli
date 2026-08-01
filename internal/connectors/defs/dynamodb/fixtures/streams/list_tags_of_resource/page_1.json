@@ -6,13 +6,12 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "list_tags_of_resource-fixture-1",
-        "operation": "ListTagsOfResource",
-        "response": {
-          "fixture": true
+      "Tags": [
+        {
+          "Key": "fixture",
+          "Value": "true"
         }
-      }
+      ]
     }
   }
 }

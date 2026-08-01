@@ -53,7 +53,6 @@ Reads, changes, and writes Amazon DynamoDB tables through the AWS JSON API with 
 - table
 - table_arn
 - table_name
-- transact_get_items
 - access_key_id (secret)
 - secret_access_key (secret)
 
@@ -61,85 +60,85 @@ Reads, changes, and writes Amazon DynamoDB tables through the AWS JSON API with 
 
 - describe_backup:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: BackupDescription(), id(), operation()
 - describe_continuous_backups:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: ContinuousBackupsDescription(), id(), operation()
 - describe_contributor_insights:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: ContributorInsightsRuleList(), ContributorInsightsStatus(), FailureException(), IndexName(), LastUpdateDateTime(), TableName(), id(), operation()
 - describe_endpoints:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: Endpoints(), id(), operation()
 - describe_export:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: ExportDescription(), id(), operation()
 - describe_global_table:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: GlobalTableDescription(), id(), operation()
 - describe_global_table_settings:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: GlobalTableSettings(), id(), operation()
 - describe_import:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: ImportTableDescription(), id(), operation()
 - describe_kinesis_streaming_destination:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: KinesisDataStreamDestinations(), TableName(), id(), operation()
 - describe_limits:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: AccountMaxReadCapacityUnits(), AccountMaxWriteCapacityUnits(), TableMaxReadCapacityUnits(), TableMaxWriteCapacityUnits(), id(), operation()
 - describe_table:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: Table(), id(), operation()
 - describe_table_replica_auto_scaling:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: TableAutoScalingDescription(), id(), operation()
 - describe_time_to_live:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: TimeToLiveDescription(), id(), operation()
 - get_resource_policy:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: Policy(), id(), operation()
 - list_backups:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: BackupSummaries(), LastEvaluatedBackupArn(), id(), operation()
 - list_contributor_insights:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: ContributorInsightsSummaries(), NextToken(), id(), operation()
 - list_exports:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: ExportSummaries(), NextToken(), id(), operation()
 - list_global_tables:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: GlobalTables(), LastEvaluatedGlobalTableName(), id(), operation()
 - list_imports:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: ImportSummaryList(), NextToken(), id(), operation()
 - list_tables:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: LastEvaluatedTableName(), TableNames(), id(), operation()
 - list_tags_of_resource:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: NextToken(), Tags(), id(), operation()
 - items:
   - primary key: pk
-  - fields: id(), operation(), pk(), response()
+  - fields: pk()
 - query_items:
   - primary key: pk
-  - fields: id(), operation(), pk(), response()
+  - fields: pk()
 - streams_describe_stream:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: StreamDescription(), id(), operation()
 - streams_get_records:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: awsRegion(), dynamodb(), eventID(), eventName(), eventSource(), eventVersion(), id(), operation(), userIdentity()
 - streams_get_shard_iterator:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: ShardIterator(), id(), operation()
 - streams_list_streams:
   - primary key: id
-  - fields: id(), operation(), response()
+  - fields: LastEvaluatedStreamArn(), Streams(), id(), operation()
 
 ## Sync Modes
 
@@ -267,9 +266,9 @@ Reads, changes, and writes Amazon DynamoDB tables through the AWS JSON API with 
 - Global flags:
   - --max-bytes (integer): Maximum response bytes for direct reads; capped by the CLI runtime
 - Direct reads
-  - get-item - Get one DynamoDB item by a typed scalar key [intent=direct_read availability=implemented]; risk: Reads one item; key values are redacted from errors/output surfaces.; flags: --table-name, --key-name, --key-type, --consistent-read, --key-value
-  - batch-get-item - Read multiple DynamoDB items by a typed scalar key list [intent=direct_read availability=implemented]; risk: Reads bounded keyed items; key values are redacted from errors/output surfaces.; flags: --table-name, --key-name, --key-type, --consistent-read, --key-values
-  - transact-get-items - Read multiple DynamoDB items by a typed scalar key list [intent=direct_read availability=implemented]; risk: Reads bounded keyed items; key values are redacted from errors/output surfaces.; flags: --table-name, --key-name, --key-type, --consistent-read, --key-values
+  - get-item - Get one DynamoDB item by typed partition and optional sort key attributes [intent=direct_read availability=implemented]; risk: Reads one item by closed typed scalar key attributes; key values are redacted from errors/output surfaces.; flags: --table-name, --partition-key-name, --partition-key-type, --partition-key-value, --sort-key-name, --sort-key-type, --sort-key-value, --consistent-read
+  - batch-get-item - Read multiple DynamoDB items by typed partition and optional sort key lists [intent=direct_read availability=implemented]; risk: Reads bounded keyed items by closed typed scalar key attributes; key values are redacted from errors/output surfaces.; flags: --table-name, --partition-key-name, --partition-key-type, --partition-key-values, --sort-key-name, --sort-key-type, --sort-key-values, --consistent-read
+  - transact-get-items - Transactionally read multiple DynamoDB items by typed partition and optional sort key lists [intent=direct_read availability=implemented]; risk: Transactionally reads bounded keyed items by closed typed scalar key attributes; key values are redacted from errors/output surfaces.; flags: --table-name, --partition-key-name, --partition-key-type, --partition-key-values, --sort-key-name, --sort-key-type, --sort-key-values
 - Help topics:
   - dynamodb-safety - DynamoDB connector commands are typed and do not expose raw PartiQL, expressions, or generic HTTP bodies.
 

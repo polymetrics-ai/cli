@@ -6,12 +6,9 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_import-fixture-1",
-        "operation": "DescribeImport",
-        "response": {
-          "fixture": true
-        }
+      "ImportTableDescription": {
+        "ImportArn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture_table/import/fixture_import",
+        "ImportStatus": "COMPLETED"
       }
     }
   }

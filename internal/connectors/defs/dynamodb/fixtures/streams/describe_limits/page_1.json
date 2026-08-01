@@ -6,13 +6,10 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_limits-fixture-1",
-        "operation": "DescribeLimits",
-        "response": {
-          "fixture": true
-        }
-      }
+      "AccountMaxReadCapacityUnits": 80000,
+      "AccountMaxWriteCapacityUnits": 80000,
+      "TableMaxReadCapacityUnits": 40000,
+      "TableMaxWriteCapacityUnits": 40000
     }
   }
 }

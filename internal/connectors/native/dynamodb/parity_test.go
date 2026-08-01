@@ -3,6 +3,7 @@ package dynamodb
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -187,6 +188,36 @@ func TestOperationDirectReadBuildsClosedBodies(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadBuildsCompositeKeys(t *testing.T) {
+	body, _, err := directReadBody(connectors.OperationDirectReadRequest{Operation: "get_item", Body: map[string]any{"table_name": "users", "partition_key_name": "pk", "partition_key_value": "user#1", "sort_key_name": "sk", "sort_key_type": "N", "sort_key_value": "42"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	key := body["Key"].(map[string]any)
+	if key["pk"].(map[string]any)["S"] != "user#1" || key["sk"].(map[string]any)["N"] != "42" {
+		t.Fatalf("composite GetItem key = %v", key)
+	}
+
+	body, _, err = directReadBody(connectors.OperationDirectReadRequest{Operation: "batch_get_item", Body: map[string]any{"table_name": "users", "partition_key_name": "pk", "partition_key_values": []any{"user#1", "user#2"}, "sort_key_name": "sk", "sort_key_values": []any{"profile", "profile"}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	requestItems := body["RequestItems"].(map[string]any)["users"].(map[string]any)
+	keys := requestItems["Keys"].([]any)
+	if len(keys) != 2 || keys[1].(map[string]any)["pk"].(map[string]any)["S"] != "user#2" || keys[1].(map[string]any)["sk"].(map[string]any)["S"] != "profile" {
+		t.Fatalf("composite BatchGetItem keys = %v", keys)
+	}
+
+	_, _, err = directReadBody(connectors.OperationDirectReadRequest{Operation: "batch_get_item", Body: map[string]any{"table_name": "users", "partition_key_name": "pk", "partition_key_values": []any{"user#1", "user#2"}, "sort_key_name": "sk", "sort_key_values": []any{"profile"}}})
+	if err == nil || !strings.Contains(err.Error(), "equal partition_key_values and sort_key_values") {
+		t.Fatalf("mismatched composite keys error = %v", err)
+	}
+	_, _, err = directReadBody(connectors.OperationDirectReadRequest{Operation: "get_item", Body: map[string]any{"table_name": "users", "partition_key_name": "pk", "partition_key_type": "SS", "partition_key_value": "user#1"}})
+	if err == nil || !strings.Contains(err.Error(), "unsupported DynamoDB scalar key type") {
+		t.Fatalf("unsupported scalar type error = %v", err)
+	}
+}
+
 func TestOperationDirectReadRejectsMissingRequiredFields(t *testing.T) {
 	cases := []struct {
 		name      string
@@ -224,6 +255,83 @@ func TestOperationDirectReadEnforcesMaxBytes(t *testing.T) {
 	})
 	if err == nil || !strings.Contains(err.Error(), "max_bytes 8") {
 		t.Fatalf("OperationDirectRead error = %v, want max_bytes limit", err)
+	}
+}
+
+func TestOperationDirectReadAppliesOutputRedaction(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"Item":{"pk":{"S":"user#1"},"password":"clear-password","profile":{"token":"clear-token","email":"ada@example.test","safe":"ok"},"history":[{"secret":"clear-secret"}]}}`))
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client(), Now: func() time.Time { return time.Date(2026, 7, 31, 12, 0, 0, 0, time.UTC) }}
+	result, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation:    "get_item",
+		Config:       testConfig(srv.URL),
+		Body:         map[string]any{"table_name": "users", "partition_key_name": "pk", "partition_key_value": "user#1"},
+		OutputPolicy: "json_redacted",
+		RedactFields: []string{"email"},
+	})
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	encoded, _ := json.Marshal(result.Body)
+	text := string(encoded)
+	for _, leaked := range []string{"clear-password", "clear-token", "clear-secret", "ada@example.test"} {
+		if strings.Contains(text, leaked) {
+			t.Fatalf("direct read result leaked %q in %s", leaked, text)
+		}
+	}
+	for _, want := range []string{"password_redacted", "token_redacted", "secret_redacted", "email_redacted", "\"safe\":\"ok\""} {
+		if !strings.Contains(text, want) {
+			t.Fatalf("direct read result = %s, want %s", text, want)
+		}
+	}
+}
+
+func TestReadBuildsOperationSpecificBodies(t *testing.T) {
+	cases := []struct {
+		name     string
+		stream   string
+		response string
+		want     map[string]any
+	}{
+		{name: "list tables", stream: "list_tables", response: `{"TableNames":["fixture_table"]}`, want: map[string]any{"Limit": float64(7)}},
+		{name: "describe limits", stream: "describe_limits", response: `{}`, want: map[string]any{}},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			var body map[string]any
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+					t.Fatalf("decode request body: %v", err)
+				}
+				_, _ = w.Write([]byte(tc.response))
+			}))
+			defer srv.Close()
+
+			cfg := testConfig(srv.URL)
+			cfg.Config["backup_arn"] = "arn:backup"
+			cfg.Config["export_arn"] = "arn:export"
+			cfg.Config["import_arn"] = "arn:import"
+			cfg.Config["resource_arn"] = "arn:resource"
+			cfg.Config["table_arn"] = "arn:table"
+			cfg.Config["global_table_name"] = "global"
+			cfg.Config["page_size"] = "7"
+			cfg.Config["max_pages"] = "1"
+			c := Connector{Client: srv.Client(), Now: func() time.Time { return time.Date(2026, 7, 31, 12, 0, 0, 0, time.UTC) }}
+			if err := c.Read(context.Background(), connectors.ReadRequest{Stream: tc.stream, Config: cfg}, func(connectors.Record) error { return nil }); err != nil {
+				t.Fatalf("Read: %v", err)
+			}
+			if len(body) != len(tc.want) {
+				t.Fatalf("body = %v, want %v", body, tc.want)
+			}
+			for key, want := range tc.want {
+				if body[key] != want {
+					t.Fatalf("body[%s] = %v, want %v (body=%v)", key, body[key], want, body)
+				}
+			}
+		})
 	}
 }
 
@@ -301,6 +409,73 @@ func TestReadCDCUsesShardIteratorAndEmitsEvents(t *testing.T) {
 	}
 	if strings.Join(calls, ",") != streamsTargetPrefix+"GetShardIterator,"+streamsTargetPrefix+"GetRecords" {
 		t.Fatalf("calls = %v", calls)
+	}
+}
+
+func TestReadCDCResumesAfterPersistedSequence(t *testing.T) {
+	var iteratorBodies []map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		target := r.Header.Get("X-Amz-Target")
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode request body: %v", err)
+		}
+		switch target {
+		case streamsTargetPrefix + "GetShardIterator":
+			iteratorBodies = append(iteratorBodies, body)
+			if body["SequenceNumber"] == "100" {
+				_, _ = w.Write([]byte(`{"ShardIterator":"iterator-after-100"}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"ShardIterator":"iterator-1"}`))
+		case streamsTargetPrefix + "GetRecords":
+			switch body["ShardIterator"] {
+			case "iterator-1":
+				_, _ = w.Write([]byte(`{"Records":[{"eventName":"INSERT","dynamodb":{"SequenceNumber":"100","NewImage":{"pk":{"S":"user#1"}}}},{"eventName":"INSERT","dynamodb":{"SequenceNumber":"101","NewImage":{"pk":{"S":"user#2"}}}}],"NextShardIterator":"iterator-next"}`))
+			case "iterator-after-100":
+				_, _ = w.Write([]byte(`{"Records":[{"eventName":"INSERT","dynamodb":{"SequenceNumber":"101","NewImage":{"pk":{"S":"user#2"}}}}],"NextShardIterator":""}`))
+			default:
+				t.Fatalf("unexpected GetRecords body %v", body)
+			}
+		default:
+			t.Fatalf("unexpected target %s", target)
+		}
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client(), Now: func() time.Time { return time.Date(2026, 7, 31, 12, 0, 0, 0, time.UTC) }}
+	stopAfterFirst := errors.New("stop after first event")
+	var first []connectors.CDCEvent
+	err := c.ReadCDC(context.Background(), connectors.CDCReadRequest{Config: testConfig(srv.URL)}, func(event connectors.CDCEvent) error {
+		first = append(first, event)
+		if len(first) == 1 {
+			return stopAfterFirst
+		}
+		return nil
+	})
+	if !errors.Is(err, stopAfterFirst) {
+		t.Fatalf("ReadCDC first error = %v, want stop", err)
+	}
+	if len(first) != 1 || first[0].State["sequence_number"] != "100" {
+		t.Fatalf("first events = %+v, want sequence 100", first)
+	}
+	if _, ok := first[0].State["shard_iterator"]; ok {
+		t.Fatalf("first event state used page shard iterator: %+v", first[0].State)
+	}
+
+	var second []connectors.CDCEvent
+	err = c.ReadCDC(context.Background(), connectors.CDCReadRequest{Config: testConfig(srv.URL), State: map[string]string{"sequence_number": "100"}}, func(event connectors.CDCEvent) error {
+		second = append(second, event)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ReadCDC second: %v", err)
+	}
+	if len(second) != 1 || second[0].Record["pk"] != "user#2" {
+		t.Fatalf("second events = %+v, want user#2", second)
+	}
+	if len(iteratorBodies) < 2 || iteratorBodies[1]["ShardIteratorType"] != "AFTER_SEQUENCE_NUMBER" || iteratorBodies[1]["SequenceNumber"] != "100" {
+		t.Fatalf("resume iterator bodies = %+v", iteratorBodies)
 	}
 }
 

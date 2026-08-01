@@ -6,12 +6,9 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_export-fixture-1",
-        "operation": "DescribeExport",
-        "response": {
-          "fixture": true
-        }
+      "ExportDescription": {
+        "ExportArn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture_table/export/fixture_export",
+        "ExportStatus": "COMPLETED"
       }
     }
   }

@@ -12,7 +12,7 @@
     "operation": {
       "type": "string"
     },
-    "response": {
+    "TableNames": {
       "type": [
         "object",
         "array",
@@ -21,6 +21,10 @@
         "boolean",
         "null"
       ]
+    },
+    "LastEvaluatedTableName": {
+      "type": "string"
     }
-  }
+  },
+  "additionalProperties": true
 }

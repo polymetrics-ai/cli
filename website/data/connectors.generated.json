@@ -24306,7 +24306,7 @@
       "commands": [
         {
           "path": "get-item",
-          "summary": "Get one DynamoDB item by a typed scalar key",
+          "summary": "Get one DynamoDB item by typed partition and optional sort key attributes",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -24323,23 +24323,56 @@
               "allow_empty": false
             },
             {
-              "name": "key-name",
+              "name": "partition-key-name",
               "type": "string",
-              "summary": "Partition/full key attribute name for the typed command helper",
+              "summary": "Partition key attribute name",
               "values": [],
-              "maps_to": "body.key_name",
+              "maps_to": "body.partition_key_name",
               "allow_empty": false
             },
             {
-              "name": "key-type",
+              "name": "partition-key-type",
               "type": "enum",
-              "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
+              "summary": "DynamoDB AttributeValue scalar type for --partition-key-value",
               "values": [
                 "S",
                 "N",
                 "B"
               ],
-              "maps_to": "body.key_type"
+              "maps_to": "body.partition_key_type"
+            },
+            {
+              "name": "partition-key-value",
+              "type": "string",
+              "summary": "Partition key scalar value",
+              "values": [],
+              "maps_to": "body.partition_key_value",
+              "allow_empty": false
+            },
+            {
+              "name": "sort-key-name",
+              "type": "string",
+              "summary": "Optional sort key attribute name for composite-key tables",
+              "values": [],
+              "maps_to": "body.sort_key_name"
+            },
+            {
+              "name": "sort-key-type",
+              "type": "enum",
+              "summary": "DynamoDB AttributeValue scalar type for --sort-key-value",
+              "values": [
+                "S",
+                "N",
+                "B"
+              ],
+              "maps_to": "body.sort_key_type"
+            },
+            {
+              "name": "sort-key-value",
+              "type": "string",
+              "summary": "Optional sort key scalar value for composite-key tables",
+              "values": [],
+              "maps_to": "body.sort_key_value"
             },
             {
               "name": "consistent-read",
@@ -24347,25 +24380,17 @@
               "summary": "Request strongly consistent reads where DynamoDB supports it",
               "values": [],
               "maps_to": "body.consistent_read"
-            },
-            {
-              "name": "key-value",
-              "type": "string",
-              "summary": "Key attribute value",
-              "values": [],
-              "maps_to": "body.key_value",
-              "allow_empty": false
             }
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "Reads one item; key values are redacted from errors/output surfaces.",
+          "risk": "Reads one item by closed typed scalar key attributes; key values are redacted from errors/output surfaces.",
           "approval": "",
           "notes": ""
         },
         {
           "path": "batch-get-item",
-          "summary": "Read multiple DynamoDB items by a typed scalar key list",
+          "summary": "Read multiple DynamoDB items by typed partition and optional sort key lists",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -24382,23 +24407,56 @@
               "allow_empty": false
             },
             {
-              "name": "key-name",
+              "name": "partition-key-name",
               "type": "string",
-              "summary": "Partition/full key attribute name for the typed command helper",
+              "summary": "Partition key attribute name",
               "values": [],
-              "maps_to": "body.key_name",
+              "maps_to": "body.partition_key_name",
               "allow_empty": false
             },
             {
-              "name": "key-type",
+              "name": "partition-key-type",
               "type": "enum",
-              "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
+              "summary": "DynamoDB AttributeValue scalar type for --partition-key-values",
               "values": [
                 "S",
                 "N",
                 "B"
               ],
-              "maps_to": "body.key_type"
+              "maps_to": "body.partition_key_type"
+            },
+            {
+              "name": "partition-key-values",
+              "type": "string_array",
+              "summary": "Comma-separated/repeated partition key scalar values",
+              "values": [],
+              "maps_to": "body.partition_key_values",
+              "allow_empty": false
+            },
+            {
+              "name": "sort-key-name",
+              "type": "string",
+              "summary": "Optional sort key attribute name for composite-key tables",
+              "values": [],
+              "maps_to": "body.sort_key_name"
+            },
+            {
+              "name": "sort-key-type",
+              "type": "enum",
+              "summary": "DynamoDB AttributeValue scalar type for --sort-key-values",
+              "values": [
+                "S",
+                "N",
+                "B"
+              ],
+              "maps_to": "body.sort_key_type"
+            },
+            {
+              "name": "sort-key-values",
+              "type": "string_array",
+              "summary": "Comma-separated/repeated sort key scalar values aligned with --partition-key-values",
+              "values": [],
+              "maps_to": "body.sort_key_values"
             },
             {
               "name": "consistent-read",
@@ -24406,24 +24464,17 @@
               "summary": "Request strongly consistent reads where DynamoDB supports it",
               "values": [],
               "maps_to": "body.consistent_read"
-            },
-            {
-              "name": "key-values",
-              "type": "string_array",
-              "summary": "Comma-separated/repeated key attribute values",
-              "values": [],
-              "maps_to": "body.key_values"
             }
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "Reads bounded keyed items; key values are redacted from errors/output surfaces.",
+          "risk": "Reads bounded keyed items by closed typed scalar key attributes; key values are redacted from errors/output surfaces.",
           "approval": "",
           "notes": ""
         },
         {
           "path": "transact-get-items",
-          "summary": "Read multiple DynamoDB items by a typed scalar key list",
+          "summary": "Transactionally read multiple DynamoDB items by typed partition and optional sort key lists",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -24440,42 +24491,61 @@
               "allow_empty": false
             },
             {
-              "name": "key-name",
+              "name": "partition-key-name",
               "type": "string",
-              "summary": "Partition/full key attribute name for the typed command helper",
+              "summary": "Partition key attribute name",
               "values": [],
-              "maps_to": "body.key_name",
+              "maps_to": "body.partition_key_name",
               "allow_empty": false
             },
             {
-              "name": "key-type",
+              "name": "partition-key-type",
               "type": "enum",
-              "summary": "DynamoDB AttributeValue scalar type for --key-value(s)",
+              "summary": "DynamoDB AttributeValue scalar type for --partition-key-values",
               "values": [
                 "S",
                 "N",
                 "B"
               ],
-              "maps_to": "body.key_type"
+              "maps_to": "body.partition_key_type"
             },
             {
-              "name": "consistent-read",
-              "type": "boolean",
-              "summary": "Request strongly consistent reads where DynamoDB supports it",
-              "values": [],
-              "maps_to": "body.consistent_read"
-            },
-            {
-              "name": "key-values",
+              "name": "partition-key-values",
               "type": "string_array",
-              "summary": "Comma-separated/repeated key attribute values",
+              "summary": "Comma-separated/repeated partition key scalar values",
               "values": [],
-              "maps_to": "body.key_values"
+              "maps_to": "body.partition_key_values",
+              "allow_empty": false
+            },
+            {
+              "name": "sort-key-name",
+              "type": "string",
+              "summary": "Optional sort key attribute name for composite-key tables",
+              "values": [],
+              "maps_to": "body.sort_key_name"
+            },
+            {
+              "name": "sort-key-type",
+              "type": "enum",
+              "summary": "DynamoDB AttributeValue scalar type for --sort-key-values",
+              "values": [
+                "S",
+                "N",
+                "B"
+              ],
+              "maps_to": "body.sort_key_type"
+            },
+            {
+              "name": "sort-key-values",
+              "type": "string_array",
+              "summary": "Comma-separated/repeated sort key scalar values aligned with --partition-key-values",
+              "values": [],
+              "maps_to": "body.sort_key_values"
             }
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "Reads bounded keyed items; key values are redacted from errors/output surfaces.",
+          "risk": "Transactionally reads bounded keyed items by closed typed scalar key attributes; key values are redacted from errors/output surfaces.",
           "approval": "",
           "notes": ""
         }
@@ -24487,7 +24557,7 @@
         }
       ]
     },
-    "docs_md": "# Overview\n\nDynamoDB is a Tier-3 native connector because the official AWS JSON APIs are not ordinary REST resources: every operation is a `POST /` request with an `X-Amz-Target` operation name and AWS Signature Version 4 signing. The connector keeps that protocol in `internal/connectors/native/dynamodb` while the definition bundle owns the reviewed API ledger, schemas, CLI metadata, docs, fixtures, and write-action contracts.\n\nOfficially reviewed scope: DynamoDB `DynamoDB_20120810` plus DynamoDB Streams `DynamoDBStreams_20120810`, API version 2012-08-10. DAX is a separate AWS service and is not counted.\n\nImplemented fixture-backed surface counts:\n\n| surface | count |\n| --- | ---: |\n| ETL/read + DynamoDB Streams changefeed streams | 27 |\n| Bounded direct/keyed reads | 3 |\n| Reverse-ETL write actions | 26 |\n| Binary/import-export operations blocked on shared runtime | 2 |\n| Raw PartiQL statement operations disallowed | 3 |\n| Certified live operations | 0 |\n\n## Auth setup\n\nRequired secret fields:\n\n- `access_key_id` — AWS access key id used in the SigV4 credential scope.\n- `secret_access_key` — AWS secret access key used only to derive SigV4 HMAC signing keys.\n\nRequired live config:\n\n- `region` — AWS region in the SigV4 scope.\n- `endpoint` or `base_url` — DynamoDB JSON API endpoint, for example `https://dynamodb.us-east-1.amazonaws.com`.\n\nCommon optional config:\n\n- `streams_endpoint` — DynamoDB Streams endpoint when it differs from `endpoint`.\n- `table_name` / `table` — default table for table-scoped streams and writes.\n- `table_arn`, `resource_arn`, `stream_arn`, `shard_id`, and operation-specific ARN/name fields for metadata or Streams operations.\n- `page_size` (default `100`) and `max_pages` (default `100`) bound read/changefeed loops.\n- `mode=fixture` runs deterministic credential-free tests and never contacts AWS.\n\nNever put secret values in prompt text or docs. Load credentials from environment variables, stdin, or the credential store.\n\n## Streams notes\n\nThe connector declares 27 read/changefeed stream surfaces. Native code builds closed JSON-RPC bodies for each stream; there is no raw target/body escape hatch.\n\nDynamoDB read streams:\n\n- `items` (`Scan`) and `query_items` (`Query`) are bounded by `page_size`/`max_pages` and stop on `LastEvaluatedKey`.\n- Metadata/list streams cover `Describe*`, `GetResourcePolicy`, and `List*` operations from the official Smithy model.\n- `query_items` uses typed `KeyConditions` from `query_key_name`, `query_key_type`, and `query_key_value`; it does not expose raw key-condition expressions.\n\nDynamoDB Streams/changefeed surfaces:\n\n- `streams_list_streams`, `streams_describe_stream`, `streams_get_shard_iterator`, and `streams_get_records` track the official Streams operations.\n- `ReadCDC` uses `GetShardIterator` then bounded `GetRecords`, emits `INSERT`/`MODIFY`/`REMOVE` events, and stores the next shard iterator in event state.\n\n## Write actions & risks\n\n`writes.json` declares 26 named reverse-ETL actions. Each action has a closed top-level schema, risk text, dry-run preview support, and connector-local request construction. Reverse ETL remains plan -> preview -> explicit approval -> execute.\n\nDestructive or high-risk actions declare `confirm: destructive`, including table/resource deletion, restore operations, transaction writes, and table/global-table updates. `delete_item` is provider-idempotent when no condition is supplied: deleting a missing item succeeds according to DynamoDB semantics.\n\nThe connector intentionally does not expose raw HTTP, raw AWS JSON bodies, raw PartiQL, unrestricted scans, arbitrary expression strings, generic shell/file operations, or generic SQL/query surfaces. `UpdateItem` uses typed `AttributeUpdates`; `Query` uses typed `KeyConditions`; PartiQL statement operations are disallowed in the ledger.\n\n## Known limits\n\n- Fixture-only verification is not live certification. `certified=0` until a separately approved live executor supplies redacted artifacts.\n- `ExportTableToPointInTime` and `ImportTable` are tracked but blocked because the current shared connector-command runtime has no approved AWS S3 binary/import-export executor for these workflows.\n- `BatchExecuteStatement`, `ExecuteStatement`, and `ExecuteTransaction` are blocked/disallowed because they are raw PartiQL statement surfaces, and this task forbids raw PartiQL/query or arbitrary expressions/bodies.\n- DynamoDB item attributes are table-specific, so item streams expose generic `pk`/operation fields and preserve additional flattened item attributes at runtime.\n",
+    "docs_md": "# Overview\n\nDynamoDB is a Tier-3 native connector because the official AWS JSON APIs are not ordinary REST resources: every operation is a `POST /` request with an `X-Amz-Target` operation name and AWS Signature Version 4 signing. The connector keeps that protocol in `internal/connectors/native/dynamodb` while the definition bundle owns the reviewed API ledger, schemas, CLI metadata, docs, fixtures, and write-action contracts.\n\nOfficially reviewed scope: DynamoDB `DynamoDB_20120810` plus DynamoDB Streams `DynamoDBStreams_20120810`, API version 2012-08-10. DAX is a separate AWS service and is not counted.\n\nImplemented fixture-backed surface counts:\n\n| surface | count |\n| --- | ---: |\n| ETL/read + DynamoDB Streams changefeed streams | 27 |\n| Bounded direct/keyed reads | 3 |\n| Reverse-ETL write actions | 26 |\n| Binary/import-export operations blocked on shared runtime | 2 |\n| Raw PartiQL statement operations disallowed | 3 |\n| Certified live operations | 0 |\n\n## Auth setup\n\nRequired secret fields:\n\n- `access_key_id` — AWS access key id used in the SigV4 credential scope.\n- `secret_access_key` — AWS secret access key used only to derive SigV4 HMAC signing keys.\n\nRequired live config:\n\n- `region` — AWS region in the SigV4 scope.\n- `endpoint` or `base_url` — DynamoDB JSON API endpoint, for example `https://dynamodb.us-east-1.amazonaws.com`.\n\nCommon optional config:\n\n- `streams_endpoint` — DynamoDB Streams endpoint when it differs from `endpoint`.\n- `table_name` / `table` — default table for table-scoped streams and writes.\n- `table_arn`, `resource_arn`, `stream_arn`, `shard_id`, and operation-specific ARN/name fields for metadata or Streams operations.\n- `page_size` (default `100`) and `max_pages` (default `100`) bound read/changefeed loops.\n- `mode=fixture` runs deterministic credential-free tests and never contacts AWS.\n\nNever put secret values in prompt text or docs. Load credentials from environment variables, stdin, or the credential store.\n\n## Streams notes\n\nThe connector declares 27 read/changefeed stream surfaces. Native code builds closed JSON-RPC bodies for each stream; there is no raw target/body escape hatch.\n\nDynamoDB read streams:\n\n- `items` (`Scan`) and `query_items` (`Query`) are bounded by `page_size`/`max_pages` and stop on `LastEvaluatedKey`.\n- Metadata/list streams cover `Describe*`, `GetResourcePolicy`, and `List*` operations from the official Smithy model. Records expose the official response member names directly, plus `id` and `operation` metadata; they do not wrap provider responses in a fabricated `response` envelope.\n- `query_items` uses typed `KeyConditions` from `query_key_name`, `query_key_type`, and `query_key_value`; it does not expose raw key-condition expressions.\n\nDynamoDB Streams/changefeed surfaces:\n\n- `streams_list_streams`, `streams_describe_stream`, `streams_get_shard_iterator`, and `streams_get_records` track the official Streams operations.\n- `ReadCDC` uses `GetShardIterator` then bounded `GetRecords`, emits `INSERT`/`MODIFY`/`REMOVE` events, and stores each emitted record's `SequenceNumber` with `AFTER_SEQUENCE_NUMBER` resume state.\n\n## Write actions & risks\n\n`writes.json` declares 26 named reverse-ETL actions. Each action has a closed top-level schema, risk text, dry-run preview support, and connector-local request construction. Reverse ETL remains plan -> preview -> explicit approval -> execute.\n\nDestructive or high-risk actions declare `confirm: destructive`, including table/resource deletion, restore operations, transaction writes, and table/global-table updates. `delete_item` is provider-idempotent when no condition is supplied: deleting a missing item succeeds according to DynamoDB semantics.\n\nThe connector intentionally does not expose raw HTTP, raw AWS JSON bodies, raw PartiQL, unrestricted scans, arbitrary expression strings, generic shell/file operations, or generic SQL/query surfaces. `UpdateItem` uses typed `AttributeUpdates`; `Query` uses typed `KeyConditions`; PartiQL statement operations are disallowed in the ledger.\n\n## Known limits\n\n- Fixture-only verification is not live certification. `certified=0` until a separately approved live executor supplies redacted artifacts.\n- `ExportTableToPointInTime` and `ImportTable` are tracked but blocked because the current shared connector-command runtime has no approved AWS S3 binary/import-export executor for these workflows.\n- `BatchExecuteStatement`, `ExecuteStatement`, and `ExecuteTransaction` are blocked/disallowed because they are raw PartiQL statement surfaces, and this task forbids raw PartiQL/query or arbitrary expressions/bodies.\n- DynamoDB item attributes are table-specific, so item streams expose generic `pk` plus additional flattened item attributes at runtime.\n",
     "icon": {
       "id": "dynamodb",
       "path": "icons/dynamodb.svg",

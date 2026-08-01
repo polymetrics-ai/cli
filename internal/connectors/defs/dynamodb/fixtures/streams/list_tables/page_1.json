@@ -6,13 +6,9 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "list_tables-fixture-1",
-        "operation": "ListTables",
-        "response": {
-          "fixture": true
-        }
-      }
+      "TableNames": [
+        "fixture_table"
+      ]
     }
   }
 }

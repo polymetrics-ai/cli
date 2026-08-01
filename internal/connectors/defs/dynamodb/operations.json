@@ -15,7 +15,19 @@
         "content_type": "application/json",
         "max_bytes": 16777216,
         "body_schema": {
-          "type": "object"
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["table_name", "partition_key_name", "partition_key_values"],
+          "properties": {
+            "table_name": {"type": "string"},
+            "partition_key_name": {"type": "string"},
+            "partition_key_type": {"type": "string", "enum": ["S", "N", "B"]},
+            "partition_key_values": {"type": "array", "items": {"type": "string"}},
+            "sort_key_name": {"type": "string"},
+            "sort_key_type": {"type": "string", "enum": ["S", "N", "B"]},
+            "sort_key_values": {"type": "array", "items": {"type": "string"}},
+            "consistent_read": {"type": "boolean"}
+          }
         }
       }
     },
@@ -34,7 +46,19 @@
         "content_type": "application/json",
         "max_bytes": 16777216,
         "body_schema": {
-          "type": "object"
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["table_name", "partition_key_name", "partition_key_value"],
+          "properties": {
+            "table_name": {"type": "string"},
+            "partition_key_name": {"type": "string"},
+            "partition_key_type": {"type": "string", "enum": ["S", "N", "B"]},
+            "partition_key_value": {"type": "string"},
+            "sort_key_name": {"type": "string"},
+            "sort_key_type": {"type": "string", "enum": ["S", "N", "B"]},
+            "sort_key_value": {"type": "string"},
+            "consistent_read": {"type": "boolean"}
+          }
         }
       }
     },
@@ -53,7 +77,18 @@
         "content_type": "application/json",
         "max_bytes": 16777216,
         "body_schema": {
-          "type": "object"
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["table_name", "partition_key_name", "partition_key_values"],
+          "properties": {
+            "table_name": {"type": "string"},
+            "partition_key_name": {"type": "string"},
+            "partition_key_type": {"type": "string", "enum": ["S", "N", "B"]},
+            "partition_key_values": {"type": "array", "items": {"type": "string"}},
+            "sort_key_name": {"type": "string"},
+            "sort_key_type": {"type": "string", "enum": ["S", "N", "B"]},
+            "sort_key_values": {"type": "array", "items": {"type": "string"}}
+          }
         }
       }
     }

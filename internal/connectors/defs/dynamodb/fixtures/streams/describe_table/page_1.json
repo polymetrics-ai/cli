@@ -6,12 +6,10 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_table-fixture-1",
-        "operation": "DescribeTable",
-        "response": {
-          "fixture": true
-        }
+      "Table": {
+        "TableArn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture_table",
+        "TableName": "fixture_table",
+        "TableStatus": "ACTIVE"
       }
     }
   }

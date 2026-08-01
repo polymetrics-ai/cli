@@ -6,13 +6,12 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "list_global_tables-fixture-1",
-        "operation": "ListGlobalTables",
-        "response": {
-          "fixture": true
+      "GlobalTables": [
+        {
+          "GlobalTableName": "fixture_global",
+          "ReplicationGroup": []
         }
-      }
+      ]
     }
   }
 }

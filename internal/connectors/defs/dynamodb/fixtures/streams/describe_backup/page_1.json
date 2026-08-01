@@ -6,11 +6,10 @@
   "response": {
     "status": 200,
     "body": {
-      "response": {
-        "id": "describe_backup-fixture-1",
-        "operation": "DescribeBackup",
-        "response": {
-          "fixture": true
+      "BackupDescription": {
+        "BackupDetails": {
+          "BackupArn": "arn:aws:dynamodb:us-east-1:123456789012:table/fixture_table/backup/fixture_backup",
+          "BackupName": "fixture_backup"
         }
       }
     }
