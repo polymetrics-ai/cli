@@ -55780,9 +55780,49 @@
           "write": "",
           "source_cli_path": "",
           "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.invoices.list",
-          "flags": [],
+          "flags": [
+            {
+              "name": "billing-setup",
+              "type": "string",
+              "summary": "Required. The billing setup resource name of the requested invoices.",
+              "values": [],
+              "maps_to": "query.billingSetup",
+              "required": true
+            },
+            {
+              "name": "issue-month",
+              "type": "enum",
+              "summary": "Required. The issue month to retrieve invoices.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "JANUARY",
+                "FEBRUARY",
+                "MARCH",
+                "APRIL",
+                "MAY",
+                "JUNE",
+                "JULY",
+                "AUGUST",
+                "SEPTEMBER",
+                "OCTOBER",
+                "NOVEMBER",
+                "DECEMBER"
+              ],
+              "maps_to": "query.issueMonth",
+              "required": true
+            },
+            {
+              "name": "issue-year",
+              "type": "string",
+              "summary": "Required. The issue year to retrieve invoices, in yyyy format.",
+              "values": [],
+              "maps_to": "query.issueYear",
+              "required": true
+            }
+          ],
           "examples": [
-            "pm google-ads customers invoices list --json"
+            "pm google-ads customers invoices list --billing-setup customers/synthetic-conformance-value/billingSetups/fixture --issue-month JANUARY --issue-year 2026 --json"
           ],
           "output_policy": "json_redacted",
           "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
@@ -56361,7 +56401,7 @@
       ],
       "help_topics": []
     },
-    "docs_md": "# Google Ads connector notes\n\n## Overview\n\nGoogle Ads is implemented as a declarative preview connector against the public Google Ads API v22 REST discovery document. This wave is fixture-only: it does not make live Google Ads calls, request credentials, execute provider writes, or claim certification.\n\nPublic source audit:\n\n- Source: `https://googleads.googleapis.com/$discovery/rest?version=v22`\n- API version: `v22`\n- Discovery revision: `20260721`\n- Raw discovery method count: `163` (`POST=151`, `GET=11`, `DELETE=1`)\n- Local operation ledger rows: `164`. The row count is one greater than the raw method count because the single `customers.googleAds.search` method is intentionally represented by two fixed GAQL stream rows: `campaigns` and `ad_groups`.\n\n## Auth setup\n\nProvide `access_token` and `developer_token` through the credentials layer or environment. Optional `login_customer_id` is sent only when present. `customer_id` is required for customer-scoped streams, fixed direct reads, and reverse/write actions. Do not place secret values in plans, docs, fixtures, or command text.\n\n## Streams notes\n\nImplemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.\n\nDirect reads: `21` fixed connector-owned operations with JSON-redacted output, bounded response size, and typed CLI body fields where a POST body is required.\n\n## Write actions & risks\n\nReverse/write actions: `7` guarded write actions whose request schemas are closed and connector-owned.\n\n- Write actions use closed record schemas derived from public discovery fields that can be represented without raw operation objects.\n- Destructive or account-admin actions carry explicit `confirm: destructive` metadata and remain subject to the platform reverse ETL plan -> preview -> approval -> execute lifecycle.\n- Secret-like fields are redacted; `access_token` and `developer_token` are never stored in fixtures.\n- No generic Google Ads SQL/GAQL shell, generic HTTP write, or raw request passthrough is exposed.\n\n## Known limits\n\nBlocked/planned operations: `133` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, raw GAQL query commands, and direct reads with required complex request bodies remain blocked.\n\nGoogle Ads methods whose REST paths use `{+resourceName}`, `{+name}`, `{+experiment}`, `{+campaignDraft}`, or `{+adGroupAd}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.\n",
+    "docs_md": "# Google Ads connector notes\n\n## Overview\n\nGoogle Ads is implemented as a declarative preview connector against the public Google Ads API v22 REST discovery document. This wave ships sanitized fixture coverage plus executable credential-backed reads, fixed direct reads, and guarded reverse/write actions, but does not claim certification.\n\nPublic source audit:\n\n- Source: `https://googleads.googleapis.com/$discovery/rest?version=v22`\n- API version: `v22`\n- Discovery revision: `20260721`\n- Raw discovery method count: `163` (`POST=151`, `GET=11`, `DELETE=1`)\n- Local operation ledger rows: `164`. The row count is one greater than the raw method count because the single `customers.googleAds.search` method is intentionally represented by two fixed GAQL stream rows: `campaigns` and `ad_groups`.\n\n## Auth setup\n\nProvide `access_token` and `developer_token` through the credentials layer or environment. Optional `login_customer_id` is sent only when present. `customer_id` is required for customer-scoped streams, fixed direct reads, and reverse/write actions. Do not place secret values in plans, docs, fixtures, or command text.\n\n## Streams notes\n\nImplemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.\n\nDirect reads: `21` fixed connector-owned operations with JSON-redacted output, bounded response size, and typed CLI body/query fields where a POST body or GET query parameters are required.\n\n## Write actions & risks\n\nReverse/write actions: `7` guarded write actions whose request schemas are closed and connector-owned.\n\n- Write actions use closed record schemas derived from public discovery fields that can be represented without raw operation objects.\n- Destructive or account-admin actions carry explicit `confirm: destructive` metadata and remain subject to the platform reverse ETL plan -> preview -> approval -> execute lifecycle.\n- Secret-like fields are redacted; `access_token` and `developer_token` are never stored in fixtures.\n- No generic Google Ads SQL/GAQL shell, generic HTTP write, or raw request passthrough is exposed.\n\n## Known limits\n\nBlocked/planned operations: `133` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, raw GAQL query commands, and direct reads with required complex request bodies remain blocked.\n\nGoogle Ads methods whose REST paths use `{+resourceName}`, `{+name}`, `{+experiment}`, `{+campaignDraft}`, or `{+adGroupAd}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.\n",
     "icon": {
       "id": "google-adwords",
       "path": "icons/google-adwords.svg",

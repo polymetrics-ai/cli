@@ -500,6 +500,9 @@ func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.Runtim
 		}
 		allowed[flag.Name] = flag
 	}
+	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+		return connectors.RuntimeConfig{}, nil, err
+	}
 
 	query := map[string]string{}
 	configOverrides := map[string]string{}
@@ -672,6 +675,46 @@ func parseDateTimeValue(value, label string) (time.Time, error) {
 	return parsed, nil
 }
 
+func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags map[string][]string) error {
+	for _, flag := range cmd.Flags {
+		if !flag.Required {
+			continue
+		}
+		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
+			return err
+		}
+		values, ok := flags[flag.Name]
+		if !ok || len(values) == 0 {
+			return missingRequiredFlagError(cmd, flag.Name)
+		}
+		value, err := coerceFlagValue(flag, values)
+		if err != nil {
+			return err
+		}
+		if commandValueEmpty(value) {
+			return missingRequiredFlagError(cmd, flag.Name)
+		}
+	}
+	return nil
+}
+
+func commandValueEmpty(value any) bool {
+	switch typed := value.(type) {
+	case nil:
+		return true
+	case string:
+		return strings.TrimSpace(typed) == ""
+	case []string:
+		return len(typed) == 0
+	default:
+		return false
+	}
+}
+
+func missingRequiredFlagError(cmd connectors.CommandSurfaceCommand, name string) error {
+	return fmt.Errorf("missing required flag --%s for command %q", name, cmd.Path)
+}
+
 func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 	trimmed := strings.TrimSpace(value)
 	if flag.AllowEmpty != nil {
@@ -730,6 +773,9 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 		}
 		allowed[flag.Name] = flag
 	}
+	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+		return nil, nil, err
+	}
 
 	pathParams := map[string]string{}
 	query := map[string]string{}
@@ -783,6 +829,9 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 			return nil, nil, nil, err
 		}
 		allowed[flag.Name] = flag
+	}
+	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+		return nil, nil, nil, err
 	}
 
 	pathParams := map[string]string{}
@@ -941,6 +990,9 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 			return nil, err
 		}
 		allowed[flag.Name] = flag
+	}
+	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+		return nil, err
 	}
 	if err := validateRecordFlagTargets(cmd); err != nil {
 		return nil, err

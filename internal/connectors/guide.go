@@ -198,7 +198,11 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	if len(cmd.Flags) > 0 {
 		flags := make([]string, 0, len(cmd.Flags))
 		for _, flag := range cmd.Flags {
-			flags = append(flags, "--"+strings.TrimLeft(flag.Name, "-"))
+			name := "--" + strings.TrimLeft(flag.Name, "-")
+			if flag.Required {
+				name += " (required)"
+			}
+			flags = append(flags, name)
 		}
 		line += "; flags: " + strings.Join(flags, ", ")
 	}

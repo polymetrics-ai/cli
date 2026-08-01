@@ -450,7 +450,46 @@
         }
       ],
       "examples": [
-        "pm google-ads customers invoices list --json"
+        "pm google-ads customers invoices list --billing-setup customers/synthetic-conformance-value/billingSetups/fixture --issue-month JANUARY --issue-year 2026 --json"
+      ],
+      "flags": [
+        {
+          "name": "billing-setup",
+          "maps_to": "query.billingSetup",
+          "summary": "Required. The billing setup resource name of the requested invoices.",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "issue-month",
+          "maps_to": "query.issueMonth",
+          "summary": "Required. The issue month to retrieve invoices.",
+          "type": "enum",
+          "values": [
+            "UNSPECIFIED",
+            "UNKNOWN",
+            "JANUARY",
+            "FEBRUARY",
+            "MARCH",
+            "APRIL",
+            "MAY",
+            "JUNE",
+            "JULY",
+            "AUGUST",
+            "SEPTEMBER",
+            "OCTOBER",
+            "NOVEMBER",
+            "DECEMBER"
+          ],
+          "required": true
+        },
+        {
+          "name": "issue-year",
+          "maps_to": "query.issueYear",
+          "summary": "Required. The issue year to retrieve invoices, in yyyy format.",
+          "type": "string",
+          "required": true
+        }
       ]
     },
     {

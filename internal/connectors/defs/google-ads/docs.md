@@ -20,7 +20,7 @@ Provide `access_token` and `developer_token` through the credentials layer or en
 
 Implemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.
 
-Direct reads: `21` fixed connector-owned operations with JSON-redacted output, bounded response size, and typed CLI body fields where a POST body is required.
+Direct reads: `21` fixed connector-owned operations with JSON-redacted output, bounded response size, and typed CLI body/query fields where a POST body or GET query parameters are required.
 
 ## Write actions & risks
 

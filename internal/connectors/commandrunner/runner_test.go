@@ -1592,6 +1592,66 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunOperationDirectReadRequiredQueryFlags(t *testing.T) {
+	command := connectors.CommandSurfaceCommand{
+		Path:         "customers invoices list",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "google_ads.customers.invoices.list",
+		APISurface: []connectors.CommandSurfaceEndpointRef{
+			{Method: "GET", Path: "/v22/customers/{customer_id}/invoices"},
+		},
+		OutputPolicy: "json_redacted",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "billing-setup", Type: "string", MapsTo: "query.billingSetup", Required: true},
+			{Name: "issue-month", Type: "enum", Values: []string{"JANUARY", "FEBRUARY"}, MapsTo: "query.issueMonth", Required: true},
+			{Name: "issue-year", Type: "string", MapsTo: "query.issueYear", Required: true},
+		},
+	}
+
+	t.Run("missing required flag", func(t *testing.T) {
+		connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{command}}}
+		_, err := Run(context.Background(), connector, Request{
+			Path: []string{"customers", "invoices", "list"},
+			Flags: map[string][]string{
+				"issue-month": {"JANUARY"},
+				"issue-year":  {"2026"},
+			},
+		}, func(connectors.Record) error {
+			t.Fatal("emit called for rejected operation direct-read command")
+			return nil
+		})
+		if err == nil || !strings.Contains(err.Error(), "missing required flag --billing-setup") {
+			t.Fatalf("Run error = %v, want missing billing setup", err)
+		}
+		if connector.operationDirectReadReq.Operation != "" {
+			t.Fatalf("operation direct read executed: %+v", connector.operationDirectReadReq)
+		}
+	})
+
+	t.Run("maps required query flags", func(t *testing.T) {
+		connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{command}}}
+		_, err := Run(context.Background(), connector, Request{
+			Path: []string{"customers", "invoices", "list"},
+			Flags: map[string][]string{
+				"billing-setup": {"customers/123/billingSetups/456"},
+				"issue-month":   {"JANUARY"},
+				"issue-year":    {"2026"},
+			},
+		}, func(connectors.Record) error {
+			t.Fatal("emit called for operation direct-read command")
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("Run: %v", err)
+		}
+		query := connector.operationDirectReadReq.Query
+		if query["billingSetup"] != "customers/123/billingSetups/456" || query["issueMonth"] != "JANUARY" || query["issueYear"] != "2026" {
+			t.Fatalf("operation query = %#v", query)
+		}
+	})
+}
+
 func TestRunGongTypedPOSTDirectReadsIncludingTranscript(t *testing.T) {
 	tests := []struct {
 		name         string

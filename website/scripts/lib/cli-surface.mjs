@@ -44,6 +44,7 @@ export function mapFlags(flags, options = {}) {
       };
       if (trim(flag.format)) out.format = trim(flag.format);
       if (typeof flag.allow_empty === 'boolean') out[keys.allowEmpty] = flag.allow_empty;
+      if (typeof flag.required === 'boolean') out.required = flag.required;
       return out;
     })
     .filter((flag) => flag.name);
