@@ -221,7 +221,7 @@ metadata = {
     'batch': {'read_page_size': 50, 'write_batch_size': 1},
     'risk': {
         'read': 'bounded AWS CloudTrail JSON-RPC reads using fixed action names, SigV4 authentication, and connector-local resource discovery for parameterized streams',
-        'write': 'blocked/planned: CloudTrail write/admin actions require shared promoted-native manifest, command-surface, validation, and dry-run forwarding before they can be safely exposed.',
+        'write': 'blocked/planned: CloudTrail write/admin actions require typed write metadata plus shared promoted-native command-surface, validation, and dry-run forwarding before they can be safely exposed.',
         'approval': 'No CloudTrail writes are exposed in this scope-corrected connector surface; future writes must preserve plan -> preview -> approval -> execute.'
     },
     'docs_url': 'https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html'
@@ -315,9 +315,9 @@ def blocked_operation(action: str):
         'status': 'blocked',
         'risk': 'critical' if kind == 'destructive_action' else 'high',
         'blocked_by_default': True,
-        'reason': 'Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.',
+        'reason': 'Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.',
         'source_url': source_url(action),
-        'notes': 'No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible.'
+        'notes': 'No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available.'
     }
 
 endpoints = []
@@ -381,7 +381,7 @@ stream_list = ', '.join(f'`{snake(a)}`' for a in STREAMS)
 direct_list = ', '.join(f'`{a}`' for a in DIRECT)
 docs = f"""# Overview
 
-AWS CloudTrail connector parity was audited from the official AWS CloudTrail API Reference Actions page. The scope-corrected bundle still enumerates all 60 official CloudTrail API actions exactly once, and 19 ETL/read stream actions are implemented and runtime-reachable in this connector-local slice. Streams whose AWS read action requires an identifier use connector-local discovery/fan-out from the fixed list/describe streams rather than caller-supplied raw action/path/header/body input. The 10 provider query/direct-read actions and 31 write/admin actions are recorded as blocked/planned in `api_surface.json` because they require shared promoted-native command-surface, manifest, validation, dry-run, and operation-direct-read forwarding that was reverted from this branch. The official CloudTrail event-record contents page documents event record version 1.11 and 31 top-level event fields; those fields are schema payload fields for LookupEvents, not CDC/changefeed operations.
+AWS CloudTrail connector parity was audited from the official AWS CloudTrail API Reference Actions page. The scope-corrected bundle still enumerates all 60 official CloudTrail API actions exactly once, and 19 ETL/read stream actions are implemented and runtime-reachable in this connector-local slice. Streams whose AWS read action requires an identifier use connector-local discovery/fan-out from the fixed list/describe streams rather than caller-supplied raw action/path/header/body input. The 10 provider query/direct-read actions and 31 write/admin actions are recorded as blocked/planned in `api_surface.json` because they require typed operation/write metadata plus shared promoted-native command-surface, write-validation, dry-run, and operation-direct-read forwarding outside this connector-local branch. The official CloudTrail event-record contents page documents event record version 1.11 and 31 top-level event fields; those fields are schema payload fields for LookupEvents, not CDC/changefeed operations.
 
 Implemented readable streams: {stream_list}.
 
@@ -405,7 +405,7 @@ Every implemented stream uses a fixed AWS CloudTrail JSON-RPC action with SigV4 
 
 ## Write actions & risks
 
-No CloudTrail reverse-ETL write actions are exposed by the scope-corrected runtime surface. The audited write/admin API actions remain blocked/planned in `api_surface.json`; they must not be documented as executable until shared promoted-native forwarding exposes bundle manifests, command surfaces, write validation, and dry-run previews. Any future write slice must preserve the standard plan -> preview -> explicit approval -> execute flow, destructive confirmation metadata, fixed CloudTrail `X-Amz-Target` mapping, and no raw AWS action or request-body escape hatch.
+No CloudTrail reverse-ETL write actions are exposed by the scope-corrected runtime surface. The audited write/admin API actions remain blocked/planned in `api_surface.json`; they must not be documented as executable until typed write definitions and shared promoted-native command surfaces, write validation, and dry-run previews are available. Any future write slice must preserve the standard plan -> preview -> explicit approval -> execute flow, destructive confirmation metadata, fixed CloudTrail `X-Amz-Target` mapping, and no raw AWS action or request-body escape hatch.
 
 ## Known limits
 
