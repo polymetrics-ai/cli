@@ -56,4 +56,9 @@ done
 - PASS: `go vet ./...` passed on retry after one transient Go build-cache/std-package lookup failure.
 - PASS: `go build ./cmd/pm`.
 - PASS: `make verify`.
-- Pending: no-mistakes scoped validation after commit/push.
+- PARTIAL/BLOCKED: scoped no-mistakes validation.
+  - `no-mistakes doctor`: pass.
+  - `no-mistakes axi run --intent ...`: review/test/document/lint/push/pr completed with no findings and reported `outcome: checks-passed`, but the pipeline opened wrong-base PR #3592 to `main` instead of the required stacked sub-PR base.
+  - Remediation: commented on and closed duplicate PR #3592; canonical sub-PR is #3589.
+  - Current-code caveat: no-mistakes commit `1093a1f30` touched shared parent artifacts; forward commit `9a0b188c2` restored those out-of-scope changes. No-mistakes was not rerun after the scope-restoring commit to avoid another wrong-base duplicate PR.
+- PASS: Final focused gate after scope restore: `go test ./internal/connectors/boundary ./cmd/connectorgen`.

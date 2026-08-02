@@ -39,3 +39,6 @@
 - 2026-08-02 GATE: first `go vet ./...` attempt failed with transient Go build-cache/std-package lookup errors; immediate retry passed with no output.
 - 2026-08-02 GREEN: `go build ./cmd/pm` passed.
 - 2026-08-02 GREEN: `make verify` passed, including `go test -timeout 20m ./...`, `pm docs validate --connectors-dir docs/connectors`, `golangci-lint`, `connectorgen validate internal/connectors/defs`, `connectorgen boundary . --json`, and Homebrew notification assertions.
+- 2026-08-02 NO-MISTAKES: `no-mistakes doctor` passed. `no-mistakes axi run --intent ...` completed review/test/document/lint/push/pr and reported `outcome: checks-passed` with no findings, but it opened wrong-base PR #3592 to `main` instead of the required parent branch. #3592 was commented and closed; canonical sub-PR remains #3589.
+- 2026-08-02 SCOPE-FIX: no-mistakes added commit `1093a1f30` touching shared parent artifacts; forward commit `9a0b188c2` restored those parent artifacts so final PR diff returns to issue-owned worker artifacts only.
+- 2026-08-02 FINAL GREEN: after scope restore, `go test ./internal/connectors/boundary ./cmd/connectorgen` passed (`boundary` 50.867s, `cmd/connectorgen` 9.068s).
