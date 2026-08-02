@@ -3099,7 +3099,8 @@
       {
         "name": "webhook_payloads",
         "primary_key": [
-          "id"
+          "baseTransactionNumber",
+          "timestamp"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -3154,7 +3155,7 @@
       {
         "name": "shares",
         "primary_key": [
-          "id"
+          "shareId"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -3285,17 +3286,6 @@
       },
       {
         "name": "enterprise_personal_access_tokens",
-        "primary_key": [
-          "id"
-        ],
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
-        ]
-      },
-      {
-        "name": "enterprise_users",
         "primary_key": [
           "id"
         ],
