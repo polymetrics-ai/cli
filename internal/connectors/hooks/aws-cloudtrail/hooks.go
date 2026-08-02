@@ -15,9 +15,9 @@ func init() {
 	engine.RegisterHooks("aws-cloudtrail", func() engine.Hooks { return New() })
 }
 
-// Hooks delegates AWS JSON-RPC streams, writes, and checks to the native
-// SigV4 executor while preserving the declarative bundle for validation,
-// docs, CLI metadata, fixtures, and conformance replay.
+// Hooks delegates AWS JSON-RPC read streams and checks to the native SigV4
+// executor while preserving the declarative bundle for validation, docs, CLI
+// metadata, fixtures, and conformance replay.
 type Hooks struct {
 	Connector connectors.Connector
 }

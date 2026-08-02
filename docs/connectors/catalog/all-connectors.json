@@ -9820,11 +9820,11 @@
         },
         "page_size": {
           "type": "string",
-          "description": "Optional bounded MaxResults value for paginated read/query actions."
+          "description": "Optional bounded MaxResults value for paginated read streams."
         },
         "max_pages": {
           "type": "string",
-          "description": "Optional maximum page count for paginated read/query actions; use a positive integer."
+          "description": "Optional maximum page count for paginated read streams; use a positive integer."
         },
         "mode": {
           "type": "string",
@@ -10046,7 +10046,7 @@
     "risk": {
       "read": "bounded AWS CloudTrail JSON-RPC reads using fixed action names, SigV4 authentication, and connector-local resource discovery for parameterized streams",
       "write": "blocked/planned: CloudTrail write/admin actions require typed write metadata plus shared promoted-native command-surface, validation, and dry-run forwarding before they can be safely exposed.",
-      "approval": "No CloudTrail writes are exposed in this scope-corrected connector surface; future writes must preserve plan -> preview -> approval -> execute."
+      "approval": "No CloudTrail writes are exposed in the current connector surface; future writes must preserve plan -> preview -> approval -> execute."
     },
     "icon": {
       "id": "aws-cloudtrail",
