@@ -5,7 +5,7 @@
   "status": "review_fix_complete_awaiting_outer_validation",
   "verificationPassed": false,
   "reviewFixVerificationPassed": true,
-  "verificationNote": "The focused Airtable definition and conformance gate passed for the final contained tree. Earlier full gates predate review hardening, so the outer pipeline still owns authoritative full-tree validation.",
+  "verificationNote": "The focused Airtable definition/conformance gate and PR issue-link guard repair passed for the final contained tree. Earlier full gates predate review hardening, so the outer pipeline still owns authoritative full-tree validation and hosted CI.",
   "gsd": {
     "doctor": "passed",
     "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase airtable-parity-3070 --dry-run",
@@ -53,6 +53,13 @@
     "directReads": 1,
     "blockedRows": 30,
     "blockedReason": "Unsupported operations remain blocked on named typed-runtime foundations; Sync API CSV import lacks a bounded text/csv body dialect, and attachment upload lacks Airtable-owned base64 and decoded-size enforcement."
+  },
+  "ciRepair": {
+    "pr": 3540,
+    "check": "require-linked-issue",
+    "status": "focused_verification_passed_awaiting_outer_ci",
+    "linkedIssues": [3070, 3071, 3072, 3073, 3074, 3075, 3076, 3077],
+    "result": "issueguard: ok (8 linked issues)"
   },
   "safety": {
     "liveProviderCalls": false,

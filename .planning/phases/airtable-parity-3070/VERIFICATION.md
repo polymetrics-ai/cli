@@ -28,3 +28,15 @@ Implemented fixture-only Airtable parity partition: 103 official OpenAPI operati
 ## Review-hardening gate
 
 - [x] `go test ./internal/connectors/defs ./internal/connectors/conformance -run 'Airtable|Conformance/airtable' -count=1` — passed for both focused packages.
+
+## CI issue-link guard repair — 2026-08-02
+
+- [x] GSD adapter preflight: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase airtable-parity-3070 --dry-run` remained unavailable with `unknown GSD command: programming-loop`, so this slice reused the phase's recorded manual-GSD/TDD fallback.
+- [x] Red: the focused checkpoint regression test failed with the reported `PR body must reference an issue` violation before production changes.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` — passed.
+- [x] `go vet ./internal/coordination/issueguard ./cmd/prissueguard` — passed.
+- [x] Exact PR #3540 title/body through `go run ./cmd/prissueguard` — `issueguard: ok (8 linked issues)`.
+- [x] Negative coverage keeps standalone GitHub issue URLs, incomplete checkpoint wording, and vague `Issue`/`References` relationships rejected; positive coverage passes with LF and CRLF bodies.
+- [x] `git diff --check` — passed.
+
+The outer no-mistakes executor still owns commit, push, PR-body mutation, broader validation phases, and authoritative hosted CI rerun.
