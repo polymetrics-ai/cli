@@ -72,40 +72,6 @@ func TestValidatePRAllowsDeliveryIssueNumberWithoutHash(t *testing.T) {
 	}
 }
 
-func TestValidatePRAcceptsCanonicalIssueLinkSection(t *testing.T) {
-	body := strings.Join([]string{
-		"## Unvalidated cloud checkpoint — do not merge yet",
-		"",
-		"This draft pull request is an unvalidated cloud checkpoint for the completed `cli-amazon-sqs-parity-wave04-r1` connector parity task.",
-		"",
-		"## Canonical issue links preserved from the task record",
-		"",
-		"- https://github.com/polymetrics-ai/cli/issues/3134",
-		"- https://github.com/polymetrics-ai/cli/issues/3135",
-		"- https://github.com/polymetrics-ai/cli/issues/3141",
-		"- https://github.com/polymetrics-ai/cli/issues/3136",
-		"- https://github.com/polymetrics-ai/cli/issues/3137",
-		"- https://github.com/polymetrics-ai/cli/issues/3138",
-		"- https://github.com/polymetrics-ai/cli/issues/3139",
-		"- https://github.com/polymetrics-ai/cli/issues/3140",
-		"",
-	}, "\n")
-	result := ValidatePR("chore(amazon-sqs): stage unvalidated parity checkpoint", body)
-	if !result.OK {
-		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
-	}
-
-	want := []int{3134, 3135, 3136, 3137, 3138, 3139, 3140, 3141}
-	if len(result.Issues) != len(want) {
-		t.Fatalf("ValidatePR() issues = %#v, want %d issues", result.Issues, len(want))
-	}
-	for i, number := range want {
-		if result.Issues[i].Number != number || result.Issues[i].Closing {
-			t.Fatalf("ValidatePR() issues = %#v, want non-closing issue %d at index %d", result.Issues, number, i)
-		}
-	}
-}
-
 func TestValidatePRAllowsNoMistakesDeliveryRecord(t *testing.T) {
 	body := noMistakesDeliveryBody()
 	result := ValidatePR("ci: add dry-run Homebrew tap notification", body)
@@ -183,11 +149,6 @@ func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 		"Implement Issue B\n",
 		"Implement issue a migration\n",
 		"References #123\n",
-		"Related: https://github.com/polymetrics-ai/cli/issues/123\n",
-		"## Issue links\n\n- https://github.com/polymetrics-ai/cli/issues/123\n",
-		"## Canonical issue links preserved from the task record\n\n- https://github.com.evil.example/polymetrics-ai/cli/issues/123\n",
-		"## Canonical issue links preserved from the task record\n\n- https://evil.example/https://github.com/polymetrics-ai/cli/issues/123\n",
-		"## Canonical issue links preserved from the task record\n\n- https://github.com@evil.example/polymetrics-ai/cli/issues/123\n",
 		"Ship this. Issue 123 is unrelated.\n",
 		"Do not implement issue #123\n",
 		"Do not ship issue 123\n",

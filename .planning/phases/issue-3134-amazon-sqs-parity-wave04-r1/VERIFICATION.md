@@ -17,3 +17,20 @@ Optional/focused diagnostics if failures occur:
 - [ ] `go test ./internal/app -run Reverse -count=1`
 
 Results will be recorded before commit.
+
+## 2026-08-02 corrective verification — issueguard removal
+
+Forward corrective commit evidence:
+
+- [x] `git diff --name-status origin/main...HEAD -- internal/coordination/issueguard cmd/prissueguard` showed the forbidden `internal/coordination/issueguard/guard.go` and `guard_test.go` deltas before restoration.
+- [x] After restore, `git diff --exit-code origin/main -- internal/coordination/issueguard cmd/prissueguard` returned 0 for restored working tree content.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1`
+- [x] `go run ./cmd/prissueguard --title "chore(amazon-sqs): stage unvalidated parity checkpoint" --body-file /tmp/pr3541-body-refs-3134.md`
+- [x] `go test ./internal/connectors/native/amazon-sqs -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs/amazon-sqs --json`
+- [x] `go test ./internal/connectors/conformance -run '^TestConformance/amazon-sqs$' -count=1`
+- [x] `git diff --check`
+- [x] `go build ./cmd/pm`
+- [x] `make connector-boundary`
+- [ ] Normal push of corrective commit.
+- [ ] Fresh no-mistakes validation with native Pi `openai-codex/gpt-5.6-sol` at `xhigh`, including post-guardrail revalidation and remote checks.
