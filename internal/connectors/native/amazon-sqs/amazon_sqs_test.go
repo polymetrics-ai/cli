@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -450,6 +451,42 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadRejectsUntypedBodies(t *testing.T) {
+	var calls int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		t.Fatalf("unexpected SQS request for invalid direct-read body")
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	cases := []struct {
+		name      string
+		operation string
+		body      map[string]any
+		want      string
+	}{
+		{name: "unknown field", operation: "list_queues", body: map[string]any{"raw_action": "ListQueues"}, want: "unsupported field"},
+		{name: "string max results", operation: "list_queues", body: map[string]any{"max_results": "25"}, want: "must be integer"},
+		{name: "clamped low max results", operation: "list_queues", body: map[string]any{"max_results": 0}, want: "must be between 1 and 1000"},
+		{name: "clamped high max results", operation: "list_message_move_tasks", body: map[string]any{"source_arn": "arn:aws:sqs:us-east-1:123456789012:orders-dlq", "max_results": 11}, want: "must be between 1 and 10"},
+		{name: "string field wrong type", operation: "get_queue_url", body: map[string]any{"queue_name": 123}, want: "must be string"},
+		{name: "array field wrong type", operation: "get_queue_attributes", body: map[string]any{"attribute_names": "All"}, want: "must be array of strings"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: tc.operation, Config: cfg, Body: tc.body})
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("OperationDirectRead err = %v, want %q", err, tc.want)
+			}
+		})
+	}
+	if calls != 0 {
+		t.Fatalf("invalid direct-read bodies made %d SQS requests, want 0", calls)
+	}
+}
+
 func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 	var actions []string
 	var bodies []string
@@ -502,6 +539,60 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 	}
 	if !strings.Contains(bodies[1], "DeleteMessageBatchRequestEntry.10.ReceiptHandle=rh") || !strings.Contains(bodies[2], "DeleteMessageBatchRequestEntry.1.ReceiptHandle=rh") {
 		t.Fatalf("batch bodies did not chunk at 10: %q / %q", bodies[1], bodies[2])
+	}
+}
+
+func TestWritePreservesMessageAttributeWhitespace(t *testing.T) {
+	var forms []url.Values
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		forms = append(forms, cloneValues(r.Form))
+		switch r.Form.Get("Action") {
+		case "SendMessage":
+			_, _ = w.Write([]byte(`<SendMessageResponse><SendMessageResult><MessageId>m1</MessageId></SendMessageResult></SendMessageResponse>`))
+		case "SendMessageBatch":
+			_, _ = w.Write([]byte(`<SendMessageBatchResponse><SendMessageBatchResult><SendMessageBatchResultEntry><Id>entry_1</Id><MessageId>m1</MessageId></SendMessageBatchResultEntry></SendMessageBatchResult></SendMessageBatchResponse>`))
+		default:
+			t.Fatalf("unexpected Action %q", r.Form.Get("Action"))
+		}
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	attrs := map[string]any{
+		"nested": map[string]any{
+			"data_type":          "String.custom",
+			"string_value":       " x ",
+			"string_list_values": []any{" a ", "b "},
+		},
+		"trace": " v ",
+	}
+	if _, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "body", "message_attributes": attrs}}); err != nil {
+		t.Fatalf("Write send_message: %v", err)
+	}
+	if _, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message_batch", Config: cfg}, []connectors.Record{{"message_body": "body", "message_attributes": map[string]any{"trace": " v "}}}); err != nil {
+		t.Fatalf("Write send_message_batch: %v", err)
+	}
+	if len(forms) != 2 {
+		t.Fatalf("forms = %d, want 2", len(forms))
+	}
+	if got := forms[0].Get("MessageAttribute.1.Value.StringValue"); got != " x " {
+		t.Fatalf("nested string attribute = %q, want whitespace preserved", got)
+	}
+	if got := forms[0].Get("MessageAttribute.1.Value.StringListValue.1"); got != " a " {
+		t.Fatalf("nested string list value 1 = %q, want whitespace preserved", got)
+	}
+	if got := forms[0].Get("MessageAttribute.1.Value.StringListValue.2"); got != "b " {
+		t.Fatalf("nested string list value 2 = %q, want whitespace preserved", got)
+	}
+	if got := forms[0].Get("MessageAttribute.2.Value.StringValue"); got != " v " {
+		t.Fatalf("plain string attribute = %q, want whitespace preserved", got)
+	}
+	if got := forms[1].Get("SendMessageBatchRequestEntry.1.MessageAttribute.1.Value.StringValue"); got != " v " {
+		t.Fatalf("batch string attribute = %q, want whitespace preserved", got)
 	}
 }
 
@@ -656,6 +747,64 @@ func TestValidateWriteClosedSchemas(t *testing.T) {
 	}
 }
 
+func TestWriteSchemasAllowMapOnlySetAttributesAndTags(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller(0) failed")
+	}
+	raw, err := os.ReadFile(filepath.Join(filepath.Dir(thisFile), "..", "..", "defs", "amazon-sqs", "writes.json"))
+	if err != nil {
+		t.Fatalf("Read writes.json: %v", err)
+	}
+	var doc struct {
+		Actions []struct {
+			Name         string `json:"name"`
+			RecordSchema struct {
+				Required      []string                   `json:"required"`
+				MinProperties int                        `json:"minProperties"`
+				Properties    map[string]json.RawMessage `json:"properties"`
+			} `json:"record_schema"`
+		} `json:"actions"`
+	}
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		t.Fatalf("Unmarshal writes.json: %v", err)
+	}
+	actions := map[string]struct {
+		required []string
+		mapField string
+	}{
+		"set_queue_attributes": {required: []string{"attribute_name", "attribute_value"}, mapField: "attributes"},
+		"tag_queue":            {required: []string{"tag_key", "tag_value"}, mapField: "tags"},
+	}
+	seen := map[string]bool{}
+	for _, action := range doc.Actions {
+		want, ok := actions[action.Name]
+		if !ok {
+			continue
+		}
+		seen[action.Name] = true
+		if len(action.RecordSchema.Required) != 0 {
+			t.Fatalf("action %s required = %v, want no single required shape", action.Name, action.RecordSchema.Required)
+		}
+		if action.RecordSchema.MinProperties != 1 {
+			t.Fatalf("action %s minProperties = %d, want 1", action.Name, action.RecordSchema.MinProperties)
+		}
+		if _, ok := action.RecordSchema.Properties[want.mapField]; !ok {
+			t.Fatalf("action %s properties missing %q", action.Name, want.mapField)
+		}
+		for _, required := range want.required {
+			if _, ok := action.RecordSchema.Properties[required]; !ok {
+				t.Fatalf("action %s properties missing legacy field %q", action.Name, required)
+			}
+		}
+	}
+	for name := range actions {
+		if !seen[name] {
+			t.Fatalf("writes.json missing action %s", name)
+		}
+	}
+}
+
 func TestWriteSerializesTagMapsWithKeyValue(t *testing.T) {
 	var bodies []string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -737,6 +886,14 @@ func countAction(actions []string, want string) int {
 		}
 	}
 	return count
+}
+
+func cloneValues(values url.Values) url.Values {
+	out := make(url.Values, len(values))
+	for key, item := range values {
+		out[key] = append([]string(nil), item...)
+	}
+	return out
 }
 
 func hasAllStrings(values []string, wants []string) bool {

@@ -794,7 +794,7 @@ func messageAttributeMapField(rec connectors.Record, key string) map[string]mess
 	out := map[string]messageAttributeValue{}
 	for name, raw := range items {
 		if s, ok := raw.(string); ok {
-			out[name] = messageAttributeValue{DataType: "String", StringValue: strings.TrimSpace(s)}
+			out[name] = messageAttributeValue{DataType: "String", StringValue: s}
 			continue
 		}
 		m, ok := objectItems(raw)
@@ -805,8 +805,8 @@ func messageAttributeMapField(rec connectors.Record, key string) map[string]mess
 			DataType:         stringMapAnyField(m, "data_type"),
 			StringValue:      stringMapAnyField(m, "string_value"),
 			BinaryValue:      stringMapAnyField(m, "binary_value"),
-			StringListValues: valueToStrings(m["string_list_values"]),
-			BinaryListValues: valueToStrings(m["binary_list_values"]),
+			StringListValues: exactStringValues(m["string_list_values"]),
+			BinaryListValues: exactStringValues(m["binary_list_values"]),
 		}
 	}
 	return out
@@ -821,23 +821,21 @@ func stringMapAnyField(values map[string]any, key string) string {
 	if !ok {
 		return ""
 	}
-	return strings.TrimSpace(text)
+	return text
 }
 
-func valueToStrings(value any) []string {
+func exactStringValues(value any) []string {
 	switch typed := value.(type) {
 	case []string:
-		return compactStrings(typed)
+		return append([]string(nil), typed...)
 	case []any:
 		out := make([]string, 0, len(typed))
-		for _, v := range typed {
-			if s, ok := v.(string); ok {
+		for _, item := range typed {
+			if s, ok := item.(string); ok {
 				out = append(out, s)
 			}
 		}
-		return compactStrings(out)
-	case string:
-		return splitCSV(typed)
+		return out
 	default:
 		return nil
 	}
