@@ -349,10 +349,7 @@
       "record_schema": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "attribute_name",
-          "attribute_value"
-        ],
+        "minProperties": 1,
         "properties": {
           "attribute_name": {
             "type": "string"
@@ -405,10 +402,7 @@
       "record_schema": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "tag_key",
-          "tag_value"
-        ],
+        "minProperties": 1,
         "properties": {
           "tag_key": {
             "type": "string"
