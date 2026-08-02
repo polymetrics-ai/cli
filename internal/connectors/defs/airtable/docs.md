@@ -15,7 +15,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 ## Streams notes
 
-29 fixture-backed streams cover executable GET operations. Default pagination uses `offset`; webhook-payload and audit endpoints declare provider cursor parameters where the current runtime can consume the documented token directly. SCIM list endpoints are blocked because Airtable SCIM responses expose `Resources`, `startIndex`, `itemsPerPage`, and `totalResults`, not a `nextStartIndex` token.
+28 fixture-backed streams cover executable GET operations. Default pagination uses `offset`; webhook-payload pagination consumes the documented `cursor` only while `mightHaveMore` is true, and audit endpoints declare provider cursor parameters where the current runtime can consume the documented token directly. SCIM list endpoints are blocked because Airtable SCIM responses expose `Resources`, `startIndex`, `itemsPerPage`, and `totalResults`, not a `nextStartIndex` token. Enterprise user search is blocked because the documented endpoint requires at least one `email[]` or `id[]` query value.
 
 - `scim_group`: GET `/scim/v2/Groups/{{ config.group_id }}` -> `.`.
 
@@ -23,7 +23,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `webhooks`: GET `/v0/bases/{{ config.base_id }}/webhooks` -> `webhooks`.
 
-- `webhook_payloads`: GET `/v0/bases/{{ config.base_id }}/webhooks/{{ config.webhook_id }}/payloads` -> `payloads`; query limit; cursor cursor.
+- `webhook_payloads`: GET `/v0/bases/{{ config.base_id }}/webhooks/{{ config.webhook_id }}/payloads` -> `payloads`; query limit; cursor cursor; stop flag `mightHaveMore`.
 
 - `bases`: GET `/v0/meta/bases` -> `bases`.
 
@@ -58,8 +58,6 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 - `enterprise_packages`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/packages` -> `packages`.
 
 - `enterprise_personal_access_tokens`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/personalAccessTokens` -> `personalAccessTokens`.
-
-- `enterprise_users`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users` -> `users`.
 
 - `enterprise_user`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users/{{ config.user_id }}` -> `.`.
 
@@ -175,12 +173,14 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 ## Known limits
 
-- Blocked row: `post-sync-api-endpoint` (`POST /v0/{baseId}/{apiEndpointSyncId}/sync`) because the official Sync API import is `text/csv`; the shared declarative write runtime has no typed bounded CSV body dialect and generic raw uploads remain disallowed.
+- Blocked row: `post-sync-api-endpoint` (`POST /v0/{baseId}/{tableIdOrName}/sync/{apiEndpointSyncId}`) because the official Sync API import is `text/csv`; the shared declarative write runtime has no typed bounded CSV body dialect and generic raw uploads remain disallowed.
 
 - Blocked foundation: `airtable-scim-pagination-foundation` for SCIM list users/groups. Airtable's documented SCIM list response uses `Resources`, `startIndex`, `itemsPerPage`, and `totalResults`; the current declarative cursor paginator cannot compute the next `startIndex` arithmetically and must not use nonexistent `nextStartIndex`.
 
 - Blocked foundation: `airtable-array-cardinality-foundation` for 25 official mutations that require non-empty request arrays. The current schema subset supports `minProperties` but not `minItems`, so these operations stay blocked instead of accepting `[]` no-op/destructive payloads.
 
-- API-surface ledger rows: 103 total = 29 streams + 45 writes + 1 direct read + 28 blocked operations.
+- Blocked foundation: `airtable-required-query-foundation` for enterprise user search. Airtable requires at least one documented `email[]` or `id[]` query value, so the connector does not expose an unfiltered ETL stream or raw query escape.
+
+- API-surface ledger rows: 103 total = 28 streams + 45 writes + 1 direct read + 29 blocked operations.
 
 - Certification remains fixture-only/uncertified until separately approved live-safe credentials and provider resources are supplied outside this wave.

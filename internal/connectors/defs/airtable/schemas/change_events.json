@@ -3,17 +3,52 @@
   "title": "Airtable change_events record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "timestamp",
+    "eventTimestamp",
+    "actor",
+    "origin",
+    "type",
+    "context",
+    "objectId",
+    "objectType",
+    "payload"
   ],
   "properties": {
-    "id": {
-      "type": "string"
+    "actor": {
+      "type": "object",
+      "additionalProperties": true
     },
-    "createdTime": {
+    "context": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "eventTimestamp": {
       "type": "string",
       "format": "date-time"
     },
-    "eventType": {
+    "id": {
+      "type": "string"
+    },
+    "objectId": {
+      "type": "string"
+    },
+    "objectType": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "type": {
       "type": "string"
     }
   },

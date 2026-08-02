@@ -4,24 +4,65 @@
   "type": "object",
   "required": [
     "id",
+    "latestReleaseId",
+    "sourceApplicationId",
+    "enterpriseAccountId",
     "name",
-    "version"
+    "tagline",
+    "description",
+    "installCount",
+    "type",
+    "createdTime",
+    "createdByUserId",
+    "lastUpdatedTime",
+    "lastUpdatedByUserId"
   ],
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
-    "version": {
+    "createdByUserId": {
       "type": "string"
     },
     "createdTime": {
       "type": "string",
       "format": "date-time"
     },
-    "createdByUserId": {
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enterpriseAccountId": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "installCount": {
+      "type": "number"
+    },
+    "lastUpdatedByUserId": {
+      "type": "string"
+    },
+    "lastUpdatedTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "latestReleaseId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "sourceApplicationId": {
+      "type": "string"
+    },
+    "tagline": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
       "type": "string"
     }
   },

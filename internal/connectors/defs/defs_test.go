@@ -61,6 +61,13 @@ func TestAirtableRuntimeBundleSafetyContract(t *testing.T) {
 			t.Fatalf("airtable stream %q should stay blocked until SCIM startIndex pagination is enforceable", stream)
 		}
 	}
+	if hasAirtableStream(airtable, "enterprise_users") {
+		t.Fatal("airtable stream enterprise_users should stay blocked until required id/email query filtering is enforceable")
+	}
+	webhookPayloads := findAirtableStream(t, airtable, "webhook_payloads")
+	if webhookPayloads.Pagination == nil || webhookPayloads.Pagination.StopPath != "mightHaveMore" {
+		t.Fatalf("webhook_payloads pagination = %+v, want stop_path mightHaveMore", webhookPayloads.Pagination)
+	}
 
 	blockedArrayActions := []string{
 		"add_base_collaborator",
@@ -110,6 +117,7 @@ func TestAirtableRuntimeBundleSafetyContract(t *testing.T) {
 	}{
 		{"update_table", connectors.Record{}},
 		{"update_field", connectors.Record{"table_id": "tbl_fixture", "column_id": "fld_fixture"}},
+		{"update_record", connectors.Record{"id": "rec_fixture", "fields": map[string]any{}}},
 		{"manage_user", connectors.Record{"enterprise_account_id": "ent_fixture", "id": "usr_fixture"}},
 		{"update_workspace_restrictions", connectors.Record{"workspace_id": "wsp_fixture"}},
 	}
@@ -212,6 +220,17 @@ func hasAirtableWrite(bundle engine.Bundle, name string) bool {
 		}
 	}
 	return false
+}
+
+func findAirtableStream(t *testing.T, bundle engine.Bundle, name string) engine.StreamSpec {
+	t.Helper()
+	for _, stream := range bundle.Streams {
+		if stream.Name == name {
+			return stream
+		}
+	}
+	t.Fatalf("airtable stream %q missing", name)
+	return engine.StreamSpec{}
 }
 
 func hasAirtableStream(bundle engine.Bundle, name string) bool {
