@@ -46,26 +46,6 @@
   },
   "streams": [
     {
-      "name": "scim_groups",
-      "path": "/scim/v2/Groups",
-      "records": {
-        "path": "Resources"
-      },
-      "schema": "schemas/scim_groups.json",
-      "projection": "passthrough",
-      "query": {
-        "count": {
-          "template": "{{ config.page_size }}",
-          "default": "100"
-        }
-      },
-      "pagination": {
-        "type": "cursor",
-        "cursor_param": "startIndex",
-        "token_path": "nextStartIndex"
-      }
-    },
-    {
       "name": "scim_group",
       "path": "/scim/v2/Groups/{{ config.group_id }}",
       "records": {
@@ -73,26 +53,6 @@
       },
       "schema": "schemas/scim_group.json",
       "projection": "passthrough"
-    },
-    {
-      "name": "scim_users",
-      "path": "/scim/v2/Users",
-      "records": {
-        "path": "Resources"
-      },
-      "schema": "schemas/scim_users.json",
-      "projection": "passthrough",
-      "query": {
-        "count": {
-          "template": "{{ config.page_size }}",
-          "default": "100"
-        }
-      },
-      "pagination": {
-        "type": "cursor",
-        "cursor_param": "startIndex",
-        "token_path": "nextStartIndex"
-      }
     },
     {
       "name": "scim_user",

@@ -3,7 +3,9 @@
   "title": "Airtable view_metadata record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "name",
+    "type"
   ],
   "properties": {
     "id": {
@@ -11,6 +13,15 @@
     },
     "name": {
       "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "visibleFieldIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": true,

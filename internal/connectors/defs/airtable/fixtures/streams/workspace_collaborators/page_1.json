@@ -6,8 +6,21 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "workspace_collaborators_fixture_1",
-      "name": "Fixture Name"
+      "id": "wsp_fixture_1",
+      "name": "Fixture Workspace",
+      "createdTime": "2026-01-01T00:00:00.000Z",
+      "collaborators": [
+        {
+          "id": "usr_fixture_1",
+          "type": "user",
+          "permissionLevel": "edit",
+          "user": {
+            "id": "usr_fixture_1",
+            "email": "user.fixture@example.invalid",
+            "name": "Fixture User"
+          }
+        }
+      ]
     }
   }
 }

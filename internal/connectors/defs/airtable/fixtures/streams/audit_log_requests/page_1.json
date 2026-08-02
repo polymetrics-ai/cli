@@ -11,8 +11,12 @@
     "body": {
       "auditLogs": [
         {
-          "id": "audit_log_requests_fixture_1",
-          "name": "Fixture Name"
+          "id": "auditrq_fixture_1",
+          "state": "completed",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "completedTime": "2026-01-01T00:01:00.000Z",
+          "createdByUserId": "usr_fixture_1",
+          "url": "https://example.invalid/airtable/audit-log.json"
         }
       ]
     }

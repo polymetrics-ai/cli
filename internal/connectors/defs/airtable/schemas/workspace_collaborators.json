@@ -3,7 +3,9 @@
   "title": "Airtable workspace_collaborators record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "name",
+    "collaborators"
   ],
   "properties": {
     "id": {
@@ -11,6 +13,66 @@
     },
     "name": {
       "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "collaborators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "permissionLevel": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true,
+            "required": [
+              "id"
+            ]
+          },
+          "group": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true,
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "type",
+          "permissionLevel"
+        ]
+      }
     }
   },
   "additionalProperties": true,
