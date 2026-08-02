@@ -2,11 +2,13 @@ package defs
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"io/fs"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -134,6 +136,92 @@ func TestAirtableRuntimeBundleSafetyContract(t *testing.T) {
 	}
 }
 
+func TestAirtableHyperDBDirectReadAllowsDocumentedBodies(t *testing.T) {
+	airtable := loadAirtableBundle(t)
+	op := findAirtableOperation(t, airtable, "hyperdb_table_read_records")
+	if op.REST == nil || op.REST.BodySchema == nil {
+		t.Fatalf("hyperdb_table_read_records REST/body_schema = %+v", op.REST)
+	}
+	var bodySchema struct {
+		Required []string `json:"required"`
+	}
+	if err := json.Unmarshal(op.REST.BodySchema, &bodySchema); err != nil {
+		t.Fatalf("decode hyperdb body schema: %v", err)
+	}
+	if containsString(bodySchema.Required, "primaryKeys") {
+		t.Fatalf("hyperdb body schema required = %v, want optional primaryKeys", bodySchema.Required)
+	}
+
+	cmd := findAirtableCommand(t, airtable, "hyperdb get-records")
+	primaryKeyFlag := findAirtableCommandFlag(t, cmd, "primary-key")
+	if primaryKeyFlag.Required {
+		t.Fatal("hyperdb get-records --primary-key should be optional")
+	}
+
+	tests := []struct {
+		name string
+		body map[string]any
+		want map[string]any
+	}{
+		{
+			name: "empty body",
+			body: map[string]any{},
+			want: map[string]any{},
+		},
+		{
+			name: "cursor only",
+			body: map[string]any{"cursor": "itr_fixture_2"},
+			want: map[string]any{"cursor": "itr_fixture_2"},
+		},
+		{
+			name: "primary keys",
+			body: map[string]any{"primaryKeys": []any{"pk_fixture_1"}},
+			want: map[string]any{"primaryKeys": []any{"pk_fixture_1"}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var sawBody map[string]any
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.Method != http.MethodPost {
+					t.Fatalf("method = %s, want POST", r.Method)
+				}
+				if r.URL.Path != "/v0/ent_fixture/dtbl_fixture/getRecords" {
+					t.Fatalf("path = %s, want /v0/ent_fixture/dtbl_fixture/getRecords", r.URL.Path)
+				}
+				if err := json.NewDecoder(r.Body).Decode(&sawBody); err != nil {
+					t.Fatalf("decode request body: %v", err)
+				}
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(`{"records":[]}`))
+			}))
+			t.Cleanup(srv.Close)
+
+			bundle := airtable
+			bundle.HTTP.URL = srv.URL
+			_, err := engine.OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
+				Operation: "hyperdb_table_read_records",
+				Config: connectors.RuntimeConfig{
+					Secrets: map[string]string{"api_key": "fixture-token"},
+				},
+				PathParams: map[string]string{
+					"enterpriseAccountId": "ent_fixture",
+					"dataTableId":         "dtbl_fixture",
+				},
+				Body:         tt.body,
+				MaxBytes:     1024,
+				OutputPolicy: "json_redacted",
+			}, nil)
+			if err != nil {
+				t.Fatalf("OperationDirectRead: %v", err)
+			}
+			if !reflect.DeepEqual(sawBody, tt.want) {
+				t.Fatalf("request body = %+v, want %+v", sawBody, tt.want)
+			}
+		})
+	}
+}
+
 func TestAirtableDeleteUsersByEmailRedactsPathValue(t *testing.T) {
 	airtable := loadAirtableBundle(t)
 	action := findAirtableWrite(t, airtable, "delete_users_by_email")
@@ -211,6 +299,42 @@ func findAirtableWrite(t *testing.T, bundle engine.Bundle, name string) engine.W
 	}
 	t.Fatalf("airtable write action %q missing", name)
 	return engine.WriteAction{}
+}
+
+func findAirtableOperation(t *testing.T, bundle engine.Bundle, id string) engine.OperationSpec {
+	t.Helper()
+	for _, op := range bundle.Operations {
+		if op.ID == id {
+			return op
+		}
+	}
+	t.Fatalf("airtable operation %q missing", id)
+	return engine.OperationSpec{}
+}
+
+func findAirtableCommand(t *testing.T, bundle engine.Bundle, path string) engine.CLICommand {
+	t.Helper()
+	if bundle.CLISurface == nil {
+		t.Fatal("airtable cli_surface missing")
+	}
+	for _, cmd := range bundle.CLISurface.Commands {
+		if cmd.Path == path {
+			return cmd
+		}
+	}
+	t.Fatalf("airtable command %q missing", path)
+	return engine.CLICommand{}
+}
+
+func findAirtableCommandFlag(t *testing.T, cmd engine.CLICommand, name string) engine.CLIFlag {
+	t.Helper()
+	for _, flag := range cmd.Flags {
+		if flag.Name == name {
+			return flag
+		}
+	}
+	t.Fatalf("airtable command %q flag %q missing", cmd.Path, name)
+	return engine.CLIFlag{}
 }
 
 func hasAirtableWrite(bundle engine.Bundle, name string) bool {
