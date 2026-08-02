@@ -60,16 +60,6 @@
       "projection": "passthrough"
     },
     {
-      "name": "get_insight_selectors",
-      "method": "POST",
-      "path": "/",
-      "records": {
-        "path": "data"
-      },
-      "schema": "schemas/get_insight_selectors.json",
-      "projection": "passthrough"
-    },
-    {
       "name": "list_channels",
       "method": "POST",
       "path": "/",

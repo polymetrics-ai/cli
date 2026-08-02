@@ -43,6 +43,18 @@ func buildActionBody(action string, raw map[string]any, requireRequired bool) (m
 				}
 			}
 		}
+		if alternatives := cloudTrailActionAnyOfRequiredFields[action]; len(alternatives) > 0 {
+			matched := false
+			for _, field := range alternatives {
+				if _, ok := body[field]; ok {
+					matched = true
+					break
+				}
+			}
+			if !matched {
+				return nil, fmt.Errorf("aws-cloudtrail %s requires one of %s", action, strings.Join(alternatives, " or "))
+			}
+		}
 	}
 	return body, nil
 }

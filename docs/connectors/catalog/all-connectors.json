@@ -9856,17 +9856,6 @@
         ]
       },
       {
-        "name": "get_insight_selectors",
-        "primary_key": [
-          "pm_record_id"
-        ],
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
-        ]
-      },
-      {
         "name": "list_channels",
         "primary_key": [
           "pm_record_id"

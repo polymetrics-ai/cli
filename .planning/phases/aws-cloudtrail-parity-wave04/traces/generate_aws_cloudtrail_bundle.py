@@ -40,13 +40,17 @@ WRITES = [
 ]
 PARAMETERIZED_READS = [
     'GetChannel', 'GetDashboard', 'GetEventDataStore', 'GetEventSelectors', 'GetImport',
-    'GetResourcePolicy', 'GetTrail', 'GetTrailStatus', 'ListImportFailures', 'ListTags',
+    'GetInsightSelectors', 'GetResourcePolicy', 'GetTrail', 'GetTrailStatus',
+    'ListImportFailures', 'ListTags',
 ]
+PARAMETERIZED_REQUIREMENTS = {
+    'GetInsightSelectors': ['EventDataStore or TrailName'],
+}
 STREAMS = [a for a in ops if a not in DIRECT and a not in WRITES and a not in PARAMETERIZED_READS]
 assert len(DIRECT) == 10, len(DIRECT)
 assert len(WRITES) == 31, len(WRITES)
-assert len(PARAMETERIZED_READS) == 10, len(PARAMETERIZED_READS)
-assert len(STREAMS) == 9, (len(STREAMS), STREAMS)
+assert len(PARAMETERIZED_READS) == 11, len(PARAMETERIZED_READS)
+assert len(STREAMS) == 8, (len(STREAMS), STREAMS)
 
 EVENT_FIELDS = [
     'eventTime','eventVersion','userIdentity','eventSource','eventName','awsRegion','sourceIPAddress','userAgent',
@@ -240,8 +244,8 @@ spec = {
         'aws_region_name': {'type': 'string', 'description': 'AWS region for CloudTrail, for example us-east-1.'},
         'aws_secret_key': {'type': 'string', 'x-secret': True, 'description': 'AWS secret access key. Provide with --from-env or stdin; never paste the value into chat or logs.'},
         'base_url': {'type': 'string', 'description': 'Optional CloudTrail endpoint override for fixture/local testing. Production defaults to https://cloudtrail.<region>.amazonaws.com.'},
-        'page_size': {'type': 'string', 'description': 'Optional bounded MaxResults value for paginated read actions.'},
-        'max_pages': {'type': 'string', 'description': 'Optional maximum page count for paginated read actions; use a positive integer.'},
+        'page_size': {'type': 'string', 'description': 'Optional bounded MaxResults value for paginated read/query actions.'},
+        'max_pages': {'type': 'string', 'description': 'Optional maximum page count for paginated read/query actions; use a positive integer.'},
         'mode': {'type': 'string', 'description': 'Set to fixture for credential-free native fixture tests.'}
     }
 }
@@ -302,7 +306,7 @@ json_dump(DEF/'operations.json', operations)
 # API surface rows in official action order.
 def blocked_operation(action: str):
     if action in PARAMETERIZED_READS:
-        required = [f['name'] for f in ops[action]['request_fields'] if f['required']]
+        required = PARAMETERIZED_REQUIREMENTS.get(action) or [f['name'] for f in ops[action]['request_fields'] if f['required']]
         return {
             'model': 'direct_read',
             'status': 'blocked',
@@ -316,13 +320,13 @@ def blocked_operation(action: str):
         return {
             'model': 'direct_read',
             'status': 'blocked',
-            'risk': 'high' if action in ('CancelQuery','StartQuery','GenerateQuery') else 'medium',
+            'risk': 'high',
             'blocked_by_default': True,
             'reason': 'Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.',
             'source_url': source_url(action),
             'notes': 'Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors.'
         }
-    kind = 'destructive_action' if action.startswith(('Delete','Deregister','Disable','Remove','Stop')) else 'admin_reverse_etl'
+    kind = 'destructive_action' if action.startswith(('Delete','Disable','Stop')) else 'admin_reverse_etl'
     return {
         'model': kind,
         'status': 'blocked',
@@ -347,7 +351,7 @@ api_surface = {
     'docs': 'https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html',
     'reviewed_at': '2026-07-31',
     'operation_ledger_version': 1,
-    'scope': 'Complete AWS CloudTrail API action inventory from the official Actions page. Scope-corrected surface implements only 9 ETL/read streams through the existing connector-local runtime because they do not require per-call request fields. The 10 provider query/direct-read actions, 10 parameterized read actions, and 31 write/admin actions are blocked/planned because their safe exposure requires shared promoted-native forwarding or a typed request-parameter boundary outside this connector-local slice. Event record fields remain payload schema evidence, not CDC operations.',
+    'scope': 'Complete AWS CloudTrail API action inventory from the official Actions page. Scope-corrected surface implements only 8 ETL/read streams through the existing connector-local runtime because they do not require per-call request fields. The 10 provider query/direct-read actions, 11 parameterized read actions, and 31 write/admin actions are blocked/planned because their safe exposure requires shared promoted-native forwarding or a typed request-parameter boundary outside this connector-local slice. Event record fields remain payload schema evidence, not CDC operations.',
     'endpoints': endpoints
 }
 json_dump(DEF/'api_surface.json', api_surface)
@@ -394,7 +398,7 @@ direct_list = ', '.join(f'`{a}`' for a in DIRECT)
 parameterized_list = ', '.join(f'`{a}`' for a in PARAMETERIZED_READS)
 docs = f"""# Overview
 
-AWS CloudTrail connector parity was audited from the official AWS CloudTrail API Reference Actions page. The scope-corrected bundle still enumerates all 60 official CloudTrail API actions exactly once, but only the 9 ETL/read stream actions that need no required per-call request fields are implemented and runtime-reachable in this connector-local slice. The 10 provider query/direct-read actions, 10 parameterized read actions, and 31 write/admin actions are recorded as blocked/planned in `api_surface.json` because they require shared promoted-native command-surface, manifest, validation, dry-run, operation-direct-read forwarding, or a typed request-parameter boundary that is outside this corrective head. The official CloudTrail event-record contents page documents event record version 1.11 and 31 top-level event fields; those fields are schema payload fields for LookupEvents, not CDC/changefeed operations.
+AWS CloudTrail connector parity was audited from the official AWS CloudTrail API Reference Actions page. The scope-corrected bundle still enumerates all 60 official CloudTrail API actions exactly once, but only the 8 ETL/read stream actions that need no required per-call request fields are implemented and runtime-reachable in this connector-local slice. The 10 provider query/direct-read actions, 11 parameterized read actions, and 31 write/admin actions are recorded as blocked/planned in `api_surface.json` because they require shared promoted-native command-surface, manifest, validation, dry-run, operation-direct-read forwarding, or a typed request-parameter boundary that is outside this corrective head. The official CloudTrail event-record contents page documents event record version 1.11 and 31 top-level event fields; those fields are schema payload fields for LookupEvents, not CDC/changefeed operations.
 
 Implemented readable streams: {stream_list}.
 
