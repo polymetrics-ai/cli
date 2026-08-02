@@ -502,7 +502,19 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 			sentMessageBody = r.Form.Get("MessageBody")
 			_, _ = w.Write([]byte(`<SendMessageResponse><SendMessageResult><MessageId>m1</MessageId></SendMessageResult></SendMessageResponse>`))
 		case "DeleteMessageBatch":
-			_, _ = w.Write([]byte(`<DeleteMessageBatchResponse><DeleteMessageBatchResult><Successful><Id>entry_1</Id></Successful></DeleteMessageBatchResult></DeleteMessageBatchResponse>`))
+			entries := 0
+			for key := range r.Form {
+				if strings.HasPrefix(key, "DeleteMessageBatchRequestEntry.") && strings.HasSuffix(key, ".ReceiptHandle") {
+					entries++
+				}
+			}
+			var response strings.Builder
+			response.WriteString(`<DeleteMessageBatchResponse><DeleteMessageBatchResult>`)
+			for i := 0; i < entries; i++ {
+				response.WriteString(`<Successful><Id>entry</Id></Successful>`)
+			}
+			response.WriteString(`</DeleteMessageBatchResult></DeleteMessageBatchResponse>`)
+			_, _ = w.Write([]byte(response.String()))
 		default:
 			t.Fatalf("unexpected Action %q", r.Form.Get("Action"))
 		}
@@ -534,7 +546,7 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Write delete_message_batch: %v", err)
 	}
-	if res.RecordsWritten != 2 || countAction(actions, "DeleteMessageBatch") != 2 {
+	if res.RecordsWritten != 11 || countAction(actions, "DeleteMessageBatch") != 2 {
 		t.Fatalf("delete batch result=%+v actions=%v", res, actions)
 	}
 	if !strings.Contains(bodies[1], "DeleteMessageBatchRequestEntry.10.ReceiptHandle=rh") || !strings.Contains(bodies[2], "DeleteMessageBatchRequestEntry.1.ReceiptHandle=rh") {
@@ -987,28 +999,65 @@ func TestWriteSerializesTagMapsWithKeyValue(t *testing.T) {
 	}
 }
 
-func TestWriteBatchFailuresReturnError(t *testing.T) {
-	var calls int
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		calls++
-		if err := r.ParseForm(); err != nil {
-			t.Fatalf("ParseForm: %v", err)
-		}
-		if action := r.Form.Get("Action"); action != "SendMessageBatch" {
-			t.Fatalf("Action = %q, want SendMessageBatch", action)
-		}
-		_, _ = w.Write([]byte(`<SendMessageBatchResponse><SendMessageBatchResult><SendMessageBatchResultEntry><Id>entry_1</Id><MessageId>m1</MessageId></SendMessageBatchResultEntry><BatchResultErrorEntry><Id>entry_2</Id><SenderFault>true</SenderFault><Code>InvalidMessageContents</Code><Message>bad</Message></BatchResultErrorEntry></SendMessageBatchResult></SendMessageBatchResponse>`))
-	}))
-	defer srv.Close()
-
-	c := native.New()
-	cfg := testRuntimeConfig(srv.URL)
-	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message_batch", Config: cfg}, []connectors.Record{{"message_body": "first"}, {"message_body": "second"}})
-	if err == nil || !strings.Contains(err.Error(), "batch response reported 1 failed") {
-		t.Fatalf("Write send_message_batch err = %v, want batch failure", err)
+func TestWriteBatchResponsesMustAccountForEntries(t *testing.T) {
+	tests := []struct {
+		name        string
+		response    string
+		wantErr     string
+		wantWritten int
+		wantFailed  int
+	}{
+		{
+			name:        "reported failure",
+			response:    `<SendMessageBatchResponse><SendMessageBatchResult><SendMessageBatchResultEntry><Id>entry_1</Id><MessageId>m1</MessageId></SendMessageBatchResultEntry><BatchResultErrorEntry><Id>entry_2</Id><SenderFault>true</SenderFault><Code>InvalidMessageContents</Code><Message>bad</Message></BatchResultErrorEntry></SendMessageBatchResult></SendMessageBatchResponse>`,
+			wantErr:     "batch response reported 1 failed",
+			wantWritten: 1,
+			wantFailed:  1,
+		},
+		{
+			name:       "malformed xml",
+			response:   `<SendMessageBatchResponse><SendMessageBatchResult>`,
+			wantErr:    "batch response parse failed",
+			wantFailed: 2,
+		},
+		{
+			name:       "unrecognized response",
+			response:   `<ErrorResponse><Error><Code>BadResponse</Code></Error></ErrorResponse>`,
+			wantErr:    "accounted for 0 of 2 entries",
+			wantFailed: 2,
+		},
+		{
+			name:       "missing entry result",
+			response:   `<SendMessageBatchResponse><SendMessageBatchResult><SendMessageBatchResultEntry><Id>entry_1</Id><MessageId>m1</MessageId></SendMessageBatchResultEntry></SendMessageBatchResult></SendMessageBatchResponse>`,
+			wantErr:    "accounted for 1 of 2 entries",
+			wantFailed: 2,
+		},
 	}
-	if res.RecordsWritten != 1 || res.RecordsFailed != 1 || calls != 1 {
-		t.Fatalf("result=%+v calls=%d, want one success and one failure", res, calls)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var calls int
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				calls++
+				if err := r.ParseForm(); err != nil {
+					t.Fatalf("ParseForm: %v", err)
+				}
+				if action := r.Form.Get("Action"); action != "SendMessageBatch" {
+					t.Fatalf("Action = %q, want SendMessageBatch", action)
+				}
+				_, _ = w.Write([]byte(tt.response))
+			}))
+			defer srv.Close()
+
+			c := native.New()
+			cfg := testRuntimeConfig(srv.URL)
+			res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message_batch", Config: cfg}, []connectors.Record{{"message_body": "first"}, {"message_body": "second"}})
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("Write send_message_batch err = %v, want %q", err, tt.wantErr)
+			}
+			if res.RecordsWritten != tt.wantWritten || res.RecordsFailed != tt.wantFailed || calls != 1 {
+				t.Fatalf("result=%+v calls=%d, want written=%d failed=%d", res, calls, tt.wantWritten, tt.wantFailed)
+			}
+		})
 	}
 }
 
