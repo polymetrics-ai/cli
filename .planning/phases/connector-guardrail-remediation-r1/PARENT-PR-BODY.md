@@ -14,17 +14,27 @@ Forward-only connector path ownership guardrail remediation parent PR. Draft rem
 
 ## Integrated sub-issues
 
-None yet. Sub-issues will be linked to #3579 and integrated through stacked sub-PRs targeting this parent branch.
+Planned / pending integration:
 
-## Required slices
+- Refs #3581 — target-scope contract and core validator
+- Refs #3582 — CI, hooks, label, and required remote gate
+- Refs #3583 — PM orchestrator and no-mistakes integration
+- Refs #3584 — HubSpot and Bitbucket forward remediation
+- Refs #3585 — Stripe Freshchat Google Ads shared remediation
+- Refs #3586 — generated and unrelated connector remediation
+- Refs #3587 — first-eight audit ledger and enforcement proof
 
-1. Target-scope contract and core validator
-2. GitHub Actions, tag/label, local hook, and required remote gate
-3. PM orchestrator and no-mistakes integration
-4. HubSpot and Bitbucket forward remediation
-5. Stripe, Freshchat, and Google Ads forward remediation
-6. Zendesk Support and Google Ads unrelated-connector/generated remediation
-7. Historical audit ledger and end-to-end enforcement proof
+No sub-PRs integrated yet.
+
+## Dependency graph / current worker queue
+
+- #3581 ready: core validator; blocks #3582 and #3587.
+- #3583 ready: PM/no-mistakes guidance; disjoint from core/remediation code.
+- #3584 ready: HubSpot/Bitbucket remediation; disjoint from generated remediation.
+- #3586 ready: generated/unrelated connector remediation; disjoint docs/generated scope.
+- #3585 queued: shared engine/runner/connectorgen remediation; `cmd/connectorgen/**` may collide with #3581, so defer implementation until #3581 stabilizes or narrow to ledger-only.
+- #3582 blocked on #3581.
+- #3587 blocked on #3581/#3582 plus remediation rows.
 
 ## Verification status
 
