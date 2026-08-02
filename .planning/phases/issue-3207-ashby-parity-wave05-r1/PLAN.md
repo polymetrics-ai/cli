@@ -63,3 +63,12 @@ This review phase uses the existing manual GSD/TDD fallback because `scripts/gsd
 4. Regenerate only Ashby-owned bundles, native routing, manuals, catalog entries, website data, and phase evidence; do not invoke shared generators or modify shared runtime code.
 
 The repository adapter remains healthy, but `scripts/gsd prompt programming-loop ...` is still unavailable, so this round continues the recorded manual GSD/TDD fallback. Required skills used: `gsd-programming-loop`, `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-lint`, and `golang-documentation`; the CLI help/docs/website parity and connector migration references were reread before edits.
+
+## Review fix round 3
+
+1. Restore every issueguard branch delta under `internal/coordination/issueguard/**` and `cmd/prissueguard/main_test.go` to content equivalent to base commit `5d61794f76c46ca256280eb4166c5285c4b68731` without resetting or rewriting Ashby history.
+2. Preserve the issue-agent contract: ordinary PR linkage must use `Refs #N` or `Closes #N`; only a complete no-mistakes delivery record may satisfy the alternative path.
+3. Audit the complete branch path list after restoration and leave no unrelated shared runtime or coordination change in the Ashby branch.
+4. Verify only `./internal/coordination/issueguard` and `./cmd/prissueguard` after all restoration edits are complete; PR mutation remains owned by the outer delivery phase.
+
+The repository adapter is healthy, but `scripts/gsd prompt programming-loop ...` remains unavailable, so this round uses the existing manual GSD/TDD fallback. Execution decision: `local_critical_path` because the fix is an exact three-file base restoration. Required skills used: `gsd-programming-loop`, `golang-how-to`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, and `golang-lint`.

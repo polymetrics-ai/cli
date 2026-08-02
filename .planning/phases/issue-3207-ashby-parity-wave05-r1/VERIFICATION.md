@@ -39,3 +39,10 @@
 - [x] `user.interviewerSettings` and `report.generate` return bounded `json_redacted` direct-read results and are absent from reverse-ETL actions.
 - [x] Sync-token-capable stream commands use connector-owned full-refresh-only help and name `ashby-sync-token-checkpoint-foundation`.
 - [x] `go test ./internal/connectors/native/ashby -count=1` passed.
+
+## Review fix round 3
+
+- [x] No branch delta remains under `internal/coordination/issueguard/**` or `cmd/prissueguard/main_test.go` relative to the approved base.
+- [x] Complete branch path audit contains only Ashby-owned and required Ashby-generated/planning, CLI-golden, documentation-index, website-catalog, and native-registration paths.
+- [x] PR 3542 issue reference was read-only audited: its body contains only a canonical issue URL, so the outer PR phase must add `Refs #3207`; this review phase did not mutate the PR.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` passed.

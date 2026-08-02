@@ -47,3 +47,14 @@
 - 2026-08-02 red: the focused semantic-contract tests reported 72 streams, 7 direct reads, and 101 writes instead of 71/9/98; `referralForm.info` and `applicationForm.submit` remained executable, `user.interviewerSettings` and `report.generate` lacked direct operations, and sync-token command summaries still copied provider incremental language.
 - 2026-08-02 implementation: Ashby-local semantic overrides block the conditional referral-form creator and typed-multipart application submission, classify the two result-producing endpoints as bounded redacted direct reads, and replace sync-token help at the generator boundary.
 - 2026-08-02 green: `go test ./internal/connectors/native/ashby -count=1` passed.
+
+## Review fix round 3 targets
+
+- The Ashby branch has no delta under `internal/coordination/issueguard/**` or `cmd/prissueguard/main_test.go` relative to base commit `5d61794f76c46ca256280eb4166c5285c4b68731`.
+- A canonical GitHub issue URL alone does not become an accepted issue reference; the approved `Refs #N`, `Closes #N`, explicit delivery wording, or complete no-mistakes delivery-record paths remain unchanged.
+
+## Review fix round 3 evidence
+
+- 2026-08-02 red: `git diff 5d61794f76c46ca256280eb4166c5285c4b68731..HEAD -- internal/coordination/issueguard` showed 47 unrelated changed lines across `guard.go` and `guard_test.go`, including the canonical-URL acceptance path and its permissive regression test.
+- 2026-08-02 implementation: restored `guard.go`, `guard_test.go`, and the related `cmd/prissueguard/main_test.go` delta to approved-base content; the full path audit found no remaining unrelated path outside Ashby-owned files and required Ashby-generated, CLI-golden, documentation-index, website-catalog, and native-registration outputs.
+- 2026-08-02 green: `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` passed.
