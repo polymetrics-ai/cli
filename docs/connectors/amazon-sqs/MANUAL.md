@@ -131,12 +131,12 @@ COMMAND SURFACE
   Typed write/admin actions
   Other Commands
     messages receive - Read bounded messages from the configured queue without deleting them. [intent=etl availability=implemented stream=messages]
-    queue attributes - Read selected attributes for the configured queue. [intent=direct_read availability=implemented]; flags: --attribute-names
-    queue url - Resolve a queue URL by queue name and optional owner account id. [intent=direct_read availability=implemented]; flags: --queue-name, --queue-owner-aws-account-id
-    queues list - List queue URLs in the configured region endpoint. [intent=direct_read availability=implemented]; flags: --queue-name-prefix, --next-token, --max-results
-    queue tags - Read tags for the configured queue. [intent=direct_read availability=implemented]
-    dead-letter-source-queues list - List queues configured with the current queue as a dead-letter queue. [intent=direct_read availability=implemented]; flags: --next-token, --max-results
-    message-move-tasks list - List recent dead-letter message move tasks for a source queue ARN. [intent=direct_read availability=implemented]; flags: --source-arn, --max-results
+    queue attributes - Read selected attributes for the configured queue. [intent=direct_read availability=implemented operation=get_queue_attributes]; flags: --attribute-names
+    queue url - Resolve a queue URL by queue name and optional owner account id. [intent=direct_read availability=implemented operation=get_queue_url]; flags: --queue-name (required), --queue-owner-aws-account-id
+    queues list - List queue URLs in the configured region endpoint. [intent=direct_read availability=implemented operation=list_queues]; flags: --queue-name-prefix, --next-token, --max-results
+    queue tags - Read tags for the configured queue. [intent=direct_read availability=implemented operation=list_queue_tags]
+    dead-letter-source-queues list - List queues configured with the current queue as a dead-letter queue. [intent=direct_read availability=implemented operation=list_dead_letter_source_queues]; flags: --next-token, --max-results
+    message-move-tasks list - List recent dead-letter message move tasks for a source queue ARN. [intent=direct_read availability=implemented operation=list_message_move_tasks]; flags: --source-arn (required), --max-results
     permission add - Plan a typed Amazon SQS add permission operation. [intent=reverse_etl availability=implemented write=add_permission]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: adds an SQS queue resource policy permission statement for listed AWS account ids; flags: --label, --aws-account-ids, --actions
     message-move-task cancel - Plan a typed Amazon SQS cancel message move task operation. [intent=reverse_etl availability=implemented write=cancel_message_move_task]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: cancels an in-flight dead-letter-queue message move task; flags: --task-handle
     message change-visibility - Plan a typed Amazon SQS change message visibility operation. [intent=reverse_etl availability=implemented write=change_message_visibility]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: changes the visibility timeout for one in-flight message; flags: --receipt-handle, --visibility-timeout
