@@ -19,7 +19,7 @@ You are running GSD Core through the repo-local Pi adapter. Follow the official 
 
 - Command: `/gsd-map-codebase`
 - Args: `--fast`
-- Description: Analyze existing codebase with parallel mapper agents. Use `--fast` for a quick single-agent scan, or `--query` to search existing intel. First-time brownfield setup should usually start with `/gsd-onboard`, which hands off to this command 
+- Description: Analyze existing codebase with parallel mapper agents. Use `--fast` for a quick single-agent scan, or `--query` to search existing intel. First-time brownfield setup should usually start with `/gsd-onboard`, which hands off to this command
 
 ## Known flags
 
