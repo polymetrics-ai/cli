@@ -24,6 +24,8 @@ Manual-GSD fallback is limited to executing the generated prompts with Pi tools 
 - `golang-documentation`
 - `golang-troubleshooting`
 - `golang-continuous-integration`
+- `golang-lint`
+- `no-mistakes`
 - `context-mode`
 - References: `required-skills-routing.md`, `cli-help-docs-website-parity.md`, `gsd-pi-adapter.md`, `issue-agent-contract.md`, parent/subissue orchestration references.
 
@@ -82,6 +84,11 @@ Manual-GSD fallback is limited to executing the generated prompts with Pi tools 
    - Preserve the exact regex behavior while constructing the host from split string literals, matching the existing issue-guard convention and avoiding a connector-policy false positive.
    - Verify the focused issue guard, connector-boundary, and full `make verify` gates locally; leave hosted CI and every later pipeline phase to the outer executor.
 
+9. **CI checkpoint-indentation repair slice**
+   - Reproduce the hosted `require-linked-issue` failure with PR #3540's exact body, whose generated canonical-section heading is indented four spaces.
+   - Accept only zero to four leading spaces on the trusted canonical heading and later section boundaries, preserving all existing relationship and standalone-URL rejections.
+   - Cover LF and CRLF variants, run the exact CI-shaped guard invocation, and leave push, PR mutation, and hosted CI to the outer executor.
+
 ## Final implementation state
 
 - `api_surface.json`: 103 official operations tracked exactly once.
@@ -89,6 +96,7 @@ Manual-GSD fallback is limited to executing the generated prompts with Pi tools 
 - Blocked partition: 30 operations, including Sync API CSV import and attachment upload, remain blocked on named typed runtime foundations rather than exposing unsafe or unenforceable request shapes.
 - Comments use the official exact per-record endpoint and require `record_id`; the stream no longer bulk-fans out while ignoring the narrowing flag.
 - The issue-link checkpoint regex retains exact matching behavior without presenting its hosting-domain name as a connector-specific shared-Go literal to the boundary scanner.
+- The generated checkpoint exception handles PR #3540's bounded heading indentation while retaining its completed-task, exact-section, and canonical-list requirements.
 - Validation artifacts: `VERIFICATION.md` distinguishes prior full verification from the focused review-fix gate owned by this phase.
 
 ## Safety constraints
