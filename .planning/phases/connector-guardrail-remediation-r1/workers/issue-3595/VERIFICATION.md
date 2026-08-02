@@ -47,6 +47,16 @@ go test ./internal/cli -run 'Test(GeneratedConnectorIconBlockRequiresExactUnique
 node --test website/scripts/icon-registry.test.mjs
 ```
 
+Review repair round 6 focused gate:
+
+```bash
+gofmt -w internal/cli/connector_docs.go internal/cli/connector_docs_test.go cmd/iconregistrygen/main.go cmd/iconregistrygen/main_test.go
+go test ./internal/cli ./cmd/iconregistrygen -run 'Test(GeneratedConnectorIconBlockRequiresExactUniqueHeading|BuildIconEntriesRejectsDuplicateCuratedKeys|BuildIconEntriesRejectsSharedAssetPathSourceURLConflict|BuildIconEntriesAllowsSharedAssetPathWithIdenticalSourceURL)$'
+node --test website/scripts/icon-registry.test.mjs
+node website/scripts/gen-connector-bundles.mjs
+# Hash bounded generated outputs, run the generator again, and require identical hashes plus a clean output diff.
+```
+
 ## Repository gates before integration
 
 ```bash
@@ -82,3 +92,6 @@ If a gate is not applicable or blocked by environment, record the exact reason a
 - GREEN `go build ./cmd/pm`: pass.
 - GREEN `make connector-boundary`: clean boundary report.
 - GREEN `make verify`: pass, including docs validation, smoke, lint, connectorgen validate, connector boundary, and Homebrew notification checks.
+- GREEN review round 6 focused Go gate: `internal/cli` and `cmd/iconregistrygen` targeted F11/F13/F14 regressions passed.
+- GREEN review round 6 Node gate: all 6 icon-registry tests passed, including F12 invalid unimplemented-row coverage.
+- GREEN review round 6 deterministic generation: two consecutive bundle generations emitted 550 connectors and 334 icons with identical data/public-icon hashes and no checked-in derived-output diff.

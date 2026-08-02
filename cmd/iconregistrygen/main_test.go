@@ -99,6 +99,31 @@ func TestBuildIconEntriesPreservesCuratedAttribution(t *testing.T) {
 	}
 }
 
+func TestBuildIconEntriesRejectsDuplicateCuratedKeys(t *testing.T) {
+	_, _, err := buildIconEntries(registryFile{}, buildOptions{
+		ImplementedConnectors: map[string]bool{"demo": true},
+		CuratedEntries: []iconEntry{
+			{
+				Connector:    "demo",
+				ID:           "simple-icons-demo",
+				Path:         "icons/simple-icons/demo.svg",
+				Source:       connectors.IconSourceSimpleIcons,
+				ReviewStatus: connectors.IconReviewSimpleIconsCC0Trademark,
+			},
+			{
+				Connector:    "demo",
+				ID:           "official-demo",
+				Path:         "icons/demo.svg",
+				Source:       connectors.IconSourceOfficial,
+				ReviewStatus: connectors.IconReviewOfficial,
+			},
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "duplicate curated icon entry") {
+		t.Fatalf("buildIconEntries duplicate curated key error = %v", err)
+	}
+}
+
 func TestBuildIconEntriesRejectsAmbiguousSourceDestinationCollapse(t *testing.T) {
 	_, _, err := buildIconEntries(registryFile{
 		Sources: []map[string]any{{
@@ -168,6 +193,56 @@ func TestBuildIconEntriesRejectsSamePathWithDifferentSourceURLs(t *testing.T) {
 	}, buildOptions{ImplementedConnectors: map[string]bool{"demo": true}})
 	if err == nil || !strings.Contains(err.Error(), "conflicting source URLs") {
 		t.Fatalf("buildIconEntries source URL conflict error = %v", err)
+	}
+}
+
+func TestBuildIconEntriesRejectsSharedAssetPathSourceURLConflict(t *testing.T) {
+	_, _, err := buildIconEntries(registryFile{Sources: []map[string]any{
+		{
+			"public":           true,
+			"dockerRepository": "registry/source-alpha",
+			"documentationUrl": "https://example.com/integrations/sources/alpha",
+			"icon":             "shared.svg",
+			"iconUrl":          "https://example.com/alpha/shared.svg",
+		},
+		{
+			"public":           true,
+			"dockerRepository": "registry/source-beta",
+			"documentationUrl": "https://example.com/integrations/sources/beta",
+			"icon":             "shared.svg",
+			"iconUrl":          "https://example.com/beta/shared.svg",
+		},
+	}}, buildOptions{ImplementedConnectors: map[string]bool{"alpha": true, "beta": true}})
+	if err == nil || !strings.Contains(err.Error(), "conflicting source URLs for shared icon path") {
+		t.Fatalf("buildIconEntries shared path source URL conflict error = %v", err)
+	}
+}
+
+func TestBuildIconEntriesAllowsSharedAssetPathWithIdenticalSourceURL(t *testing.T) {
+	entries, assets, err := buildIconEntries(registryFile{Sources: []map[string]any{
+		{
+			"public":           true,
+			"dockerRepository": "registry/source-alpha",
+			"documentationUrl": "https://example.com/integrations/sources/alpha",
+			"icon":             "shared.svg",
+			"iconUrl":          "https://example.com/shared.svg",
+		},
+		{
+			"public":           true,
+			"dockerRepository": "registry/source-beta",
+			"documentationUrl": "https://example.com/integrations/sources/beta",
+			"icon":             "shared.svg",
+			"iconUrl":          "https://example.com/shared.svg",
+		},
+	}}, buildOptions{ImplementedConnectors: map[string]bool{"alpha": true, "beta": true}})
+	if err != nil {
+		t.Fatalf("buildIconEntries shared path identical source URL: %v", err)
+	}
+	if len(entries) != 2 {
+		t.Fatalf("entries = %+v, want two connectors", entries)
+	}
+	if len(assets) != 1 || assets[0].Path != "icons/shared.svg" || assets[0].SourceURL != "https://example.com/shared.svg" {
+		t.Fatalf("assets = %+v, want one shared asset", assets)
 	}
 }
 

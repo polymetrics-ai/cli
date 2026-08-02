@@ -252,6 +252,12 @@ func TestGeneratedConnectorIconBlockRequiresExactUniqueHeading(t *testing.T) {
 			wantErr:  "duplicate sections",
 		},
 		{
+			name:     "skill rejects duplicate heading without blank line",
+			document: "## Icon\n- id: shadow\n\n## Icon\n\n- id: canonical\n\n## Agent Rules\n",
+			heading:  "## Icon\n\n",
+			wantErr:  "duplicate sections",
+		},
+		{
 			name:     "missing exact section",
 			document: "DESCRIPTION\nFAVICON\n  id: shadow\n\nSECURITY\nSafe.\n",
 			heading:  "ICON\n",

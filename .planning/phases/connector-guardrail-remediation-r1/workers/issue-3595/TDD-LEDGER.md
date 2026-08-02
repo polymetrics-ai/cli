@@ -20,6 +20,10 @@
 | Review F8 full canonical projection | the runtime/docs projection drops ID from guides and drops title, slug, hex, license/attribution, and match metadata from every generated surface | one projection renders and validates all canonical icon metadata while absent optional fields remain omitted |
 | Review F9 generated website propagation | canonical bundle icon updates leave downstream catalog/list objects and output-only SVG copies stale | generated catalog/list icon values match the bundle, the public icon tree exactly matches canonical paths, non-icon values remain byte-equivalent, and a second generation is clean |
 | Review F10 exact unique icon section | first-substring extraction accepts `FAVICON`, embedded heading fragments, and duplicate icon sections | only one exact line-boundary heading is accepted; missing and duplicate headings fail deterministically |
+| Review F11 heading/spacing separation | skill duplicate detection ignores an exact heading when it lacks the canonical following blank line | every exact heading line counts toward uniqueness independently of the section separator |
+| Review F12 complete registry path validation | invalid paths on unimplemented registry rows are filtered out before validation | every registry row is validated before implementation mapping or icon-path collection |
+| Review F13 duplicate curated ownership | duplicate curated connector keys overwrite by iteration order | duplicate curated keys reject before precedence merge |
+| Review F14 shared asset path ownership | different source URLs for one generated asset path overwrite by iteration order | shared asset paths require one identical source URL identity before asset construction |
 
 ## Actual evidence log
 
@@ -47,3 +51,8 @@
 - 2026-08-02: Pre-edit F9 audit reproduced exactly 230 stale icon objects in `website/lib/connectors.catalog.data.generated.json`, 14 stale icons in `website/lib/connectors.generated.ts`, and 61 output-only SVGs under `website/public/connectors/icons/**`; the canonical website bundle itself matches its generator projection.
 - 2026-08-02: Pre-edit F10 inspection confirmed `strings.Index(document, heading)` selects an `ICON` substring inside a line such as `FAVICON` and accepts the first of duplicate exact sections.
 - 2026-08-02: F10 regression edits precede production edits; the active review-fix contract permits only one focused verification after the complete fix round, so no interim RED command is run.
+- 2026-08-02: Review round 6 rechecked `scripts/gsd doctor`; the adapter passed while `scripts/gsd prompt programming-loop init --phase connector-guardrail-remediation-r1/workers/issue-3595 --dry-run` remained unavailable, so the recorded manual GSD fallback and `local_critical_path` execution continue.
+- 2026-08-02: Pre-edit inspection reproduced F11-F14: skill heading counting depends on `\n\n`, registry-only paths are silently filtered, curated keys overwrite in a map, and asset paths overwrite source URLs in a map.
+- 2026-08-02: F11-F14 regression edits precede production edits; the active review-fix contract permits only one focused verification after the complete fix round, so no interim RED command is run.
+- 2026-08-02: GREEN focused Go tests passed for exact heading-line uniqueness, duplicate curated-key rejection, shared-path source-URL conflict rejection, and identical shared-asset acceptance.
+- 2026-08-02: GREEN Node icon-registry tests passed, including invalid unimplemented-row rejection; two consecutive bundle generations produced identical data/public-icon hashes and no derived-output diff.

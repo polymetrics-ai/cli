@@ -14,6 +14,7 @@ import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import {
+  collectConnectorIconPaths,
   syncConnectorIcons,
   validConnectorIconPath,
 } from './lib/connector-icons.mjs';
@@ -133,6 +134,30 @@ test('icon sync rejects escaped paths before mutating generated output', (t) => 
     assert.equal(readFileSync(outsideOutput, 'utf8'), 'outside');
     assert.equal(readFileSync(retainedOutput, 'utf8'), 'retained');
   }
+});
+
+test('registry path collection rejects invalid unimplemented rows', () => {
+  assert.throws(
+    () => collectConnectorIconPaths([
+      {
+        connector: 'registry-only',
+        implemented: false,
+        path: 'icons/../outside.svg',
+      },
+    ]),
+    /Invalid connector icon path for registry-only/,
+  );
+
+  assert.deepEqual(
+    [...collectConnectorIconPaths([
+      {
+        connector: 'registry-only',
+        implemented: false,
+        path: 'icons/registry-only.svg',
+      },
+    ])],
+    ['icons/registry-only.svg'],
+  );
 });
 
 test('website scripts consume only the canonical registry', () => {

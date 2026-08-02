@@ -19,6 +19,23 @@ export const validConnectorIconPath = (value) =>
   posix.normalize(value) === value &&
   /^icons\/(?:[A-Za-z0-9._-]+\/)?[A-Za-z0-9._-]+\.svg$/.test(value);
 
+export function collectConnectorIconPaths(entries) {
+  const paths = new Set();
+  for (const entry of entries) {
+    const connector = typeof entry?.connector === 'string'
+      ? entry.connector.trim()
+      : '';
+    const iconPath = entry?.path;
+    if (!validConnectorIconPath(iconPath)) {
+      throw new Error(
+        `Invalid connector icon path for ${connector || '<unknown>'}: ${iconPath ?? ''}`,
+      );
+    }
+    paths.add(iconPath);
+  }
+  return paths;
+}
+
 function assertInside(root, target, label) {
   const rel = relative(root, target);
   if (rel === '..' || rel.startsWith(`..${sep}`) || rel === '' || isAbsolute(rel)) {

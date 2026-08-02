@@ -122,17 +122,25 @@ func validateGeneratedConnectorIconMetadata(document, expected, heading, name, s
 }
 
 func generatedConnectorIconBlock(document, heading string) (string, error) {
+	headingLine := strings.TrimRight(heading, "\n")
+	if headingLine == "" || strings.Contains(headingLine, "\n") {
+		return "", fmt.Errorf("invalid section heading")
+	}
+	separator := heading[len(headingLine):]
 	starts := make([]int, 0, 1)
-	for offset := 0; offset < len(document); {
-		relativeStart := strings.Index(document[offset:], heading)
-		if relativeStart < 0 {
+	for lineStart := 0; lineStart <= len(document); {
+		relativeEnd := strings.IndexByte(document[lineStart:], '\n')
+		lineEnd := len(document)
+		if relativeEnd >= 0 {
+			lineEnd = lineStart + relativeEnd
+		}
+		if document[lineStart:lineEnd] == headingLine {
+			starts = append(starts, lineStart)
+		}
+		if lineEnd == len(document) {
 			break
 		}
-		start := offset + relativeStart
-		if start == 0 || document[start-1] == '\n' {
-			starts = append(starts, start)
-		}
-		offset = start + 1
+		lineStart = lineEnd + 1
 	}
 	if len(starts) == 0 {
 		return "", fmt.Errorf("missing section")
@@ -141,7 +149,11 @@ func generatedConnectorIconBlock(document, heading string) (string, error) {
 		return "", fmt.Errorf("duplicate sections")
 	}
 	start := starts[0]
-	remainder := document[start+len(heading):]
+	remainder := document[start+len(headingLine):]
+	if !strings.HasPrefix(remainder, separator) {
+		return "", fmt.Errorf("invalid section separator")
+	}
+	remainder = remainder[len(separator):]
 	end := strings.Index(remainder, "\n\n")
 	if end < 0 {
 		return "", fmt.Errorf("unterminated section")

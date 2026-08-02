@@ -91,6 +91,16 @@ No direct PR #3590 R5/R6 response is in scope. PR #3590 remains parked until thi
 - Recheck `scripts/gsd doctor` and the required programming-loop probe; continue the recorded manual GSD fallback and `local_critical_path` execution because the adapter still lacks the command and subagents are prohibited in this review phase.
 - Required skills: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-cli`, `golang-documentation`, and `javascript-testing-patterns`.
 
+## Review repair round 6
+
+- F11 is a section-parser abstraction defect: exact heading identity is coupled to the blank-line separator that follows it. Count exact heading lines independently, then enforce the expected section separator only after uniqueness is established.
+- F12 is a registry-validation ownership defect: invalid icon paths can disappear through implementation filtering. Validate and collect every canonical registry row before connector mapping.
+- F13 is a curated-precedence defect: duplicate curated keys can overwrite each other before one entry overrides upstream metadata. Reject duplicate curated connector keys before inclusion and precedence logic.
+- F14 is a generated-asset ownership defect: different connectors can assign different source URLs to the same destination path. Require one identical source URL identity for every shared path before constructing the download list.
+- Add focused regressions before production edits, run the website bundle generator twice, and use one combined focused Go and Node verification after every fix is applied.
+- Recheck `scripts/gsd doctor` and the required programming-loop probe; continue the recorded manual GSD fallback and `local_critical_path` execution because the adapter still lacks the command and subagents are prohibited in this review phase.
+- Required skills: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-cli`, `golang-documentation`, and `javascript-testing-patterns`.
+
 ## Integration ordering
 
 This child PR must land into the parent branch before PR #3590 is reconciled. After integration, rebase/reconcile PR #3590 so ownership reads only the canonical bare registry, permits the two exact docs catalog outputs, and includes positive/negative collision, orphan, generated-copy, and source-asset tests.

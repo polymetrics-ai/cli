@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url';
 
 import { mapCLISurface } from './lib/cli-surface.mjs';
 import {
+  collectConnectorIconPaths,
   syncConnectorIcons,
   validConnectorIconPath,
 } from './lib/connector-icons.mjs';
@@ -72,8 +73,10 @@ function readSchema(base, schemaPath) {
 }
 
 const iconRaw = readJSON(ICON_DATA) ?? [];
+const iconEntries = Array.isArray(iconRaw) ? iconRaw : [];
+const copiedIconPaths = collectConnectorIconPaths(iconEntries);
 const iconByConnector = new Map();
-for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
+for (const icon of iconEntries) {
   const connector = trim(icon?.connector);
   if (!connector) continue;
   if (/^(source|destination)-/.test(connector)) {
@@ -83,14 +86,6 @@ for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
     throw new Error(`Duplicate connector icon registry key: ${connector}`);
   }
   iconByConnector.set(connector, icon);
-}
-
-const copiedIconPaths = new Set();
-for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
-  const path = trim(icon?.path);
-  if (path && validConnectorIconPath(path)) {
-    copiedIconPaths.add(path);
-  }
 }
 
 function mapIcon(slug) {

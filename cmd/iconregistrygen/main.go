@@ -159,6 +159,14 @@ func buildIconEntries(registry registryFile, opts buildOptions) ([]iconEntry, []
 		}
 	}
 
+	curatedConnectors := make(map[string]struct{}, len(opts.CuratedEntries))
+	for _, entry := range opts.CuratedEntries {
+		if _, exists := curatedConnectors[entry.Connector]; exists {
+			return nil, nil, fmt.Errorf("duplicate curated icon entry for %q", entry.Connector)
+		}
+		curatedConnectors[entry.Connector] = struct{}{}
+	}
+
 	for _, entry := range opts.CuratedEntries {
 		if !includeConnector(entry.Connector, opts.ImplementedConnectors) || !isCuratedIconEntry(entry) {
 			continue
@@ -192,8 +200,26 @@ func buildIconEntries(registry registryFile, opts buildOptions) ([]iconEntry, []
 	}
 	sort.SliceStable(entries, func(i, j int) bool { return entries[i].Connector < entries[j].Connector })
 
+	type assetOwner struct {
+		connector string
+		sourceURL string
+	}
+	assetOwners := map[string]assetOwner{}
 	assetURLs := map[string]string{}
 	for _, entry := range entries {
+		if existing, exists := assetOwners[entry.Path]; exists && existing.sourceURL != entry.SourceURL {
+			return nil, nil, fmt.Errorf(
+				"conflicting source URLs for shared icon path %q: %q (%s) vs %q (%s)",
+				entry.Path,
+				existing.sourceURL,
+				existing.connector,
+				entry.SourceURL,
+				entry.Connector,
+			)
+		}
+		if _, exists := assetOwners[entry.Path]; !exists {
+			assetOwners[entry.Path] = assetOwner{connector: entry.Connector, sourceURL: entry.SourceURL}
+		}
 		if entry.SourceURL != "" {
 			assetURLs[entry.Path] = entry.SourceURL
 		}
