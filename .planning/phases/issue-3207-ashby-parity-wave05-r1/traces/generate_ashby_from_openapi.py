@@ -18,7 +18,7 @@ BINARY_JSON_WRITE_SUMMARIES = {"candidate.uploadResume","candidate.uploadFile"}
 CDC_STREAM_SUMMARIES = {"auditLog.list","application.listHistory"}
 CDC_WRITE_SUMMARIES = {"application.updateHistory"}
 PAGINATION_FIELDS = {"cursor","limit","syncToken"}
-DESTRUCTIVE_WORDS = ("delete","remove","archive","cancel","reject","close","disable","restore","anonymize")
+DESTRUCTIVE_WORDS = ("delete","remove","archive","cancel","discard","reject","close","disable","restore","anonymize")
 REDACT_MARKERS = ("id","email","file","resume","handle","url","name","secret")
 REQUIRED_ANY_FIELDS = {
     "application.info": ["applicationId", "submittedFormInstanceId"],
@@ -27,6 +27,9 @@ REQUIRED_ANY_FIELDS = {
 DIRECT_READ_MIN_PROPERTIES = {"job.search": 1}
 SIGNED_URL_DIRECT_READS = {"file.info", "notetakerTranscript.info"}
 SIGNED_URL_DIRECT_READ_RISK = "bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output"
+FIXED_STREAM_REQUEST_FIELDS = {"hiringTeamRole.list": {"namesOnly": "true"}}
+FIXED_STREAM_REQUEST_FIELD_NOTES = {"hiringTeamRole.list": "Defaults to namesOnly=true role-title results. namesOnly=false object results are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false."}
+SCALAR_RESULT_STREAMS = {"hiring_team_role_list"}
 
 
 def fetch_schema():
@@ -497,9 +500,14 @@ def main():
     for _,op in ops_sorted:
         summary=op.get("summary",""); clean=clean_summary(summary); method=op["method"]; path=op["path"]
         req_props=request_properties(schema, op); req_required=required_fields(schema, op); req_sch=request_schema(schema, op)
+        fixed_request_fields = FIXED_STREAM_REQUEST_FIELDS.get(clean, {})
+        req_required = [field for field in req_required if field not in fixed_request_fields]
         req_types={n:(json_type(schema, req_sch.get("properties",{}).get(n,{})) or ["string"])[0] if isinstance(req_sch,dict) else "string" for n in req_props}
         if is_read_stream(summary):
-            sname=stream_name_for(summary, used_streams); rec_schema,cursor,synthetic=result_record_schema(schema, sname, op); stream_schemas[sname]=rec_schema
+            sname=stream_name_for(summary, used_streams); rec_schema,cursor,synthetic=result_record_schema(schema, sname, op)
+            if sname == "hiring_team_role_list":
+                rec_schema={"$schema":"http://json-schema.org/draft-07/schema#","title":sname,"type":"object","properties":{"value":{"type":"string"}},"x-primary-key":["value"]}; cursor=None; synthetic=[]
+            stream_schemas[sname]=rec_schema
             se={"name":sname,"method":method,"path":path,"records":{"path":"results"},"schema":f"schemas/{sname}.json","projection":"passthrough"}
             if cursor: se["incremental"]={"cursor_field":cursor,"client_filtered":True}
             catalog_fields=[]
@@ -511,10 +519,12 @@ def main():
                     typ="string"
                 catalog_fields.append({"name":fname,"type":typ})
             required_any = REQUIRED_ANY_FIELDS.get(clean, [])
-            stream_entries.append(se); stream_go.append({"name":sname,"path":path,"required":req_required,"required_any":required_any,"fields":list(req_props.keys()),"field_types":req_types,"cursor":cursor or "","synthetic":synthetic,"catalog_fields":catalog_fields,"primary_key":rec_schema.get("x-primary-key", [])})
-            flags=flags_for_props(req_props, "query", PAGINATION_FIELDS)
+            stream_entries.append(se); stream_go.append({"name":sname,"path":path,"required":req_required,"required_any":required_any,"fixed":fixed_request_fields,"fields":list(req_props.keys()),"field_types":req_types,"cursor":cursor or "","synthetic":synthetic,"catalog_fields":catalog_fields,"primary_key":rec_schema.get("x-primary-key", [])})
+            flags=flags_for_props(req_props, "query", set(PAGINATION_FIELDS) | set(fixed_request_fields))
             cpath=command_path(clean, used_commands)
             notes=f"Fixed Ashby stream for {clean}; flags map only to documented request body fields."
+            if clean in FIXED_STREAM_REQUEST_FIELD_NOTES:
+                notes = f"Fixed Ashby stream for {clean}; " + FIXED_STREAM_REQUEST_FIELD_NOTES[clean]
             if required_any:
                 notes += " Requires at least one documented selector: " + ", ".join(required_any) + "."
             cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"etl","availability":"implemented","stream":sname,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"notes":notes})
@@ -530,7 +540,10 @@ def main():
             api_rows.append({"method":method,"path":path,"covered_by":{"direct_read":cpath}}); continue
         if is_write(summary):
             wname=write_name_for(clean, used_writes); req_schema=to_draft_schema(schema, req_sch, close_object=True); destructive=is_destructive(clean)
-            action={"name":wname,"kind":write_kind(clean),"method":method,"path":path,"record_schema":req_schema,"risk":f"Executes Ashby {clean} through the documented {method} {path} endpoint; reverse ETL plan, preview, approval, and execute are required.","redact_fields":redact_fields(req_props, destructive)}
+            risk = f"Executes Ashby {clean} through the documented {method} {path} endpoint; reverse ETL plan, preview, approval, and execute are required."
+            if destructive:
+                risk = f"Executes Ashby {clean} through the documented {method} {path} endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required."
+            action={"name":wname,"kind":write_kind(clean),"method":method,"path":path,"record_schema":req_schema,"risk":risk,"redact_fields":redact_fields(req_props, destructive)}
             if destructive: action["confirm"]="destructive"
             write_actions.append(action)
             flags, complex_required = write_cli_flags(req_schema)
@@ -578,8 +591,11 @@ def main():
     for index, stream in enumerate(stream_entries, start=1):
         stream_name = stream["name"]
         record = fixture_record(stream_name, stream_schemas[stream_name], index)
-        body = {"success": True, "results": [record] if fixture_results_are_array(stream["path"], stream_name) else record}
-        if fixture_results_are_array(stream["path"], stream_name): body["moreDataAvailable"] = False
+        if stream_name in SCALAR_RESULT_STREAMS:
+            body = {"success": True, "results": [record["value"]], "moreDataAvailable": False}
+        else:
+            body = {"success": True, "results": [record] if fixture_results_are_array(stream["path"], stream_name) else record}
+            if fixture_results_are_array(stream["path"], stream_name): body["moreDataAvailable"] = False
         fixture = {"request":{"method":stream.get("method") or "GET","path":stream["path"],"query":{}},"response":{"status":200,"body":body}}
         read_query = fixture_read_query(request_shape_by_stream.get(stream_name))
         if read_query: fixture["read_query"] = read_query
@@ -589,7 +605,7 @@ def main():
     check_record["createdAt"] = "2026-01-01T00:00:00Z"
     if "scopes" in check_record: check_record["scopes"] = ["fixture_scope"]
     write_json(fixture_root/"check.json", {"request":{"method":"POST","path":"/apiKey.info","query":{}},"response":{"status":200,"body":{"success":True,"results":check_record}}})
-    docs = f"""# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference ({DOC_URL}). The parity ledger was reviewed on {REVIEWED_AT}.\n\nCoverage summary:\n\n- REST operations in source: {len(ops)}\n- OpenAPI webhook events in source: {len(schema.get('webhooks',{}))}\n- Implemented ETL/changefeed streams: {len(stream_entries)}\n- Implemented bounded direct reads/search/file metadata operations: {len(operation_entries)}\n- Implemented reverse-ETL write actions: {len(write_actions)}\n- Reverse-ETL CLI commands with scalar flags: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'implemented')}; partial nested-object flag surfaces: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'partial')}\n- Blocked/non-executable ledger rows: {len(api_rows) - len(stream_entries) - len(operation_entries) - len(write_actions)}\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.\n"""
+    docs = f"""# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference ({DOC_URL}). The parity ledger was reviewed on {REVIEWED_AT}.\n\nCoverage summary:\n\n- REST operations in source: {len(ops)}\n- OpenAPI webhook events in source: {len(schema.get('webhooks',{}))}\n- Implemented ETL/changefeed streams: {len(stream_entries)}\n- Implemented bounded direct reads/search/file metadata operations: {len(operation_entries)}\n- Implemented reverse-ETL write actions: {len(write_actions)}\n- Reverse-ETL CLI commands with scalar flags: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'implemented')}; partial nested-object flag surfaces: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'partial')}\n- Blocked/non-executable ledger rows: {len(api_rows) - len(stream_entries) - len(operation_entries) - len(write_actions)}\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. `hiringTeamRole.list` defaults to `namesOnly=true`; the `namesOnly=false` object-result variant is blocked pending variant-schema foundation `ashby_hiring_team_role_list_names_only_false`. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.\n"""
     (DEFS/"docs.md").write_text(docs)
 
     go_lines=[]
@@ -600,7 +616,8 @@ def main():
         ft={k:(v if v in {"string","integer","number","boolean","array","object"} else "string") for k,v in e["field_types"].items()}
         catalog="[]connectors.Field{" + ", ".join("{Name: "+go_quote(f["name"])+", Type: "+go_quote(f["type"])+"}" for f in e["catalog_fields"]) + "}"
         required_any = f", requiredAnyFields: {go_string_slice(e['required_any'])}" if e.get("required_any") else ""
-        go_lines.append(f"\t{go_quote(e['name'])}: {{path: {go_quote(e['path'].lstrip('/'))}, requestFields: {go_map_string(ft)}, requiredFields: {go_string_slice(e['required'])}{required_any}, cursorField: {go_quote(e['cursor'])}, syntheticFields: {go_string_slice(e['synthetic'])}, primaryKey: {go_string_slice(e['primary_key'])}, fields: {catalog}}},\n")
+        fixed_fields = f", fixedRequestFields: {go_map_string(e['fixed'])}" if e.get("fixed") else ""
+        go_lines.append(f"\t{go_quote(e['name'])}: {{path: {go_quote(e['path'].lstrip('/'))}, requestFields: {go_map_string(ft)}{fixed_fields}, requiredFields: {go_string_slice(e['required'])}{required_any}, cursorField: {go_quote(e['cursor'])}, syntheticFields: {go_string_slice(e['synthetic'])}, primaryKey: {go_string_slice(e['primary_key'])}, fields: {catalog}}},\n")
     go_lines.append("}\n")
     (NATIVE/"streams_gen.go").write_text("".join(go_lines))
     print(json.dumps({"rest":len(ops),"webhooks":len(schema.get('webhooks',{})),"streams":len(stream_entries),"writes":len(write_actions),"direct_reads":len(operation_entries),"blocked":len(api_rows)-len(stream_entries)-len(write_actions)-len(operation_entries)}, indent=2))

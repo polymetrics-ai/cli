@@ -630,7 +630,7 @@ REVERSE ETL ACTIONS
   discard_sequence:
     endpoint: POST /sequence.discard
     required fields: sequenceId
-    risk: Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, approval, and execute are required.
+    risk: Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required.
   update_sequence_stage:
     endpoint: POST /sequence.updateStage
     required fields: sequenceId, stageId
@@ -1125,7 +1125,7 @@ This endpoint merges the provided selectable values with the existing values for
 **Requires the [`organizationWrite`](authentication#permissions-hiringtea [intent=reverse_etl availability=implemented write=remove_hiring_team_member]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby hiringTeam.removeMember through the documented POST /hiringTeam.removeMember endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Provide an applicationId, jobId, or openingId target. Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --job-id, --opening-id, --team-member-id, --role-id
     hiring-team-role list - Lists the possible hiring team roles in an organization
 
-**Requires the [`organizationRead`](authentication#permissions-hiringteamrolelist) permission.** [intent=etl availability=implemented stream=hiring_team_role_list]; notes: Fixed Ashby stream for hiringTeamRole.list; flags map only to documented request body fields.; flags: --names-only
+**Requires the [`organizationRead`](authentication#permissions-hiringteamrolelist) permission.** [intent=etl availability=implemented stream=hiring_team_role_list]; notes: Fixed Ashby stream for hiringTeamRole.list; defaults to namesOnly=true role-title results. namesOnly=false object results are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false.
     user info - Retrieves detailed information about a specific user by their ID.
 
 **Requires the [`organizationRead`](authentication#permissions-userinfo) permission.** [intent=etl availability=implemented stream=user_info]; notes: Fixed Ashby stream for user.info; flags map only to documented request body fields.; flags: --user-id
@@ -1178,7 +1178,7 @@ Enrolls a candidate in a reusable sourcing sequence. Set start to false to  [int
 >
 > This endpoint is in beta and may not be available for all organizations.
 
-Permanently discards a NotStarted sourcing sequence draft owned by the acti [intent=reverse_etl availability=implemented write=discard_sequence]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --sequence-id
+Permanently discards a NotStarted sourcing sequence draft owned by the acti [intent=reverse_etl availability=implemented write=discard_sequence]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --sequence-id
     sequence info - > Beta
 >
 > This endpoint is in beta and may not be available for all organizations.

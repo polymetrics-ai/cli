@@ -111,6 +111,7 @@ func TestDestructiveValueWritesRequireConfirmation(t *testing.T) {
 		{name: "set_opening_opening_state"},
 		{name: "update_custom_field_selectable_values"},
 		{name: "update_assessment"},
+		{name: "discard_sequence"},
 		{name: "update_interview_schedule"},
 	}
 	for _, tt := range tests {
@@ -303,6 +304,56 @@ func TestReadOmitsLimitWhenUndocumented(t *testing.T) {
 	}
 	if len(records) != 1 {
 		t.Fatalf("emitted %d records = %+v, want 1", len(records), records)
+	}
+}
+
+func TestHiringTeamRoleListDefaultsNamesOnlyTrue(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/hiringTeamRole.list" {
+			t.Fatalf("path = %q, want /hiringTeamRole.list", r.URL.Path)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		if got := body["namesOnly"]; got != true {
+			t.Fatalf("body[namesOnly] = %v, want true", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"success":true,"results":["Hiring Team Role fixture"],"moreDataAvailable":false}`))
+	}))
+	defer server.Close()
+
+	var records []connectors.Record
+	err := New().Read(context.Background(), connectors.ReadRequest{
+		Stream: "hiring_team_role_list",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL, "max_pages": "1"},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+	}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(records) != 1 || records[0]["value"] != "Hiring Team Role fixture" {
+		t.Fatalf("records = %+v, want scalar role title value", records)
+	}
+}
+
+func TestHiringTeamRoleListBlocksNamesOnlyFalseVariant(t *testing.T) {
+	err := New().Read(context.Background(), connectors.ReadRequest{
+		Stream: "hiring_team_role_list",
+		Config: connectors.RuntimeConfig{Secrets: map[string]string{"api_key": "test_key"}},
+		Query:  map[string]string{"namesOnly": "false"},
+	}, func(connectors.Record) error { return nil })
+	if err == nil {
+		t.Fatal("Read accepted namesOnly=false")
+	}
+	if !strings.Contains(err.Error(), "ashby_hiring_team_role_list_names_only_false") {
+		t.Fatalf("error = %v, want named variant-schema blocker", err)
 	}
 }
 

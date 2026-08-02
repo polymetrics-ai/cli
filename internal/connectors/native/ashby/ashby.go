@@ -293,6 +293,12 @@ func ashbyStreamBody(endpoint streamEndpoint, cfg connectors.RuntimeConfig, quer
 		if raw == "" {
 			raw = strings.TrimSpace(cfg.Config[field])
 		}
+		if fixed := strings.TrimSpace(endpoint.fixedRequestFields[field]); fixed != "" {
+			if raw != "" && !strings.EqualFold(raw, fixed) {
+				return nil, fmt.Errorf("ashby stream %s supports only %s=%s; non-default values are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false", endpoint.path, field, fixed)
+			}
+			raw = fixed
+		}
 		if raw == "" {
 			continue
 		}
