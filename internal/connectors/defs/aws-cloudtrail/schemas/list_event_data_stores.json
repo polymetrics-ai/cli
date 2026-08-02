@@ -12,7 +12,25 @@
     "operation": {
       "type": "string"
     },
-    "EventDataStores": {
+    "EventDataStoreArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "AdvancedEventSelectors": {
       "type": [
         "array",
         "null"
@@ -22,7 +40,53 @@
         "additionalProperties": true
       }
     },
-    "NextToken": {
+    "CreatedTimestamp": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "UpdatedTimestamp": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "MultiRegionEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "OrganizationEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "RetentionPeriod": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "TerminationProtectionEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "BillingMode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "KmsKeyId": {
       "type": [
         "string",
         "null"

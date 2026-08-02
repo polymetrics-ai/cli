@@ -9,9 +9,15 @@
     "body": {
       "Channels": [
         {
-          "pm_record_id": "list_channels_fixture_1",
-          "operation": "ListChannels",
-          "NextToken": "fixture-next-token"
+          "ChannelArn": "arn:aws:cloudtrail:us-east-1:123456789012:channel/fixture-channel",
+          "Name": "fixture-channel",
+          "Source": "aws.partner/fixture",
+          "Destinations": [
+            {
+              "Type": "EVENT_DATA_STORE",
+              "Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
+            }
+          ]
         }
       ]
     }

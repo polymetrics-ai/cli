@@ -12,21 +12,62 @@
     "operation": {
       "type": "string"
     },
-    "Imports": {
+    "ImportId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ImportStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Destinations": {
       "type": [
         "array",
         "null"
       ],
       "items": {
-        "type": "object",
+        "type": [
+          "string",
+          "object"
+        ],
         "additionalProperties": true
       }
     },
-    "NextToken": {
+    "CreatedTimestamp": {
       "type": [
         "string",
+        "integer",
         "null"
-      ]
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "UpdatedTimestamp": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "StartEventTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "EndEventTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
     }
   },
   "additionalProperties": true

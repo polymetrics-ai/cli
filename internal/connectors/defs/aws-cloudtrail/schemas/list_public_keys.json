@@ -12,21 +12,33 @@
     "operation": {
       "type": "string"
     },
-    "NextToken": {
+    "Value": {
       "type": [
         "string",
         "null"
       ]
     },
-    "PublicKeyList": {
+    "ValidityStartTime": {
       "type": [
-        "array",
+        "string",
+        "integer",
         "null"
       ],
-      "items": {
-        "type": "object",
-        "additionalProperties": true
-      }
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "ValidityEndTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "Fingerprint": {
+      "type": [
+        "string",
+        "null"
+      ]
     }
   },
   "additionalProperties": true

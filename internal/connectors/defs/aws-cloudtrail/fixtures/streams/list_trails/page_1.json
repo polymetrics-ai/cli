@@ -9,9 +9,9 @@
     "body": {
       "Trails": [
         {
-          "pm_record_id": "list_trails_fixture_1",
-          "operation": "ListTrails",
-          "NextToken": "fixture-next-token"
+          "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
+          "Name": "fixture-trail",
+          "HomeRegion": "us-east-1"
         }
       ]
     }

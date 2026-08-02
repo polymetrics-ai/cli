@@ -12,21 +12,37 @@
     "operation": {
       "type": "string"
     },
-    "Failures": {
-      "type": [
-        "array",
-        "null"
-      ],
-      "items": {
-        "type": "object",
-        "additionalProperties": true
-      }
-    },
-    "NextToken": {
+    "Location": {
       "type": [
         "string",
         "null"
       ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ErrorType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ErrorMessage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LastUpdatedTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
     }
   },
   "additionalProperties": true
