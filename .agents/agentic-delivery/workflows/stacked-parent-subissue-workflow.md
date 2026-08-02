@@ -130,7 +130,10 @@ sub-PR does not cross a human gate. Agents must stop instead of merging when:
 - Claude is rate-limited and no Copilot or human fallback route has been recorded
 - CI is failing or unavailable without a documented infrastructure reason
 - the PR changes files outside the sub-issue scope
-- a connector implementation PR includes generic shared runtime/tooling or unrelated connector changes without a separate foundation issue/PR
+- a connector implementation PR's own diff includes generic shared runtime/tooling or unrelated
+  connector changes; naming or linking a foundation issue/PR does not authorize those paths in the
+  connector PR, and they must be moved into the foundation PR before target-aware validation and
+  integration
 - the parent branch owner marks the parent issue blocked
 
 The parent PR into `main` always requires human approval.
