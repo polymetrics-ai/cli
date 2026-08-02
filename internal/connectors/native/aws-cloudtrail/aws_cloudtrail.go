@@ -79,7 +79,11 @@ func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 	if err := ctx.Err(); err != nil {
 		return connectors.Catalog{}, err
 	}
-	return connectors.Catalog{Connector: c.Name(), Streams: streams()}, nil
+	streams, err := streams(ctx)
+	if err != nil {
+		return connectors.Catalog{}, err
+	}
+	return connectors.Catalog{Connector: c.Name(), Streams: streams}, nil
 }
 
 func (c Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
