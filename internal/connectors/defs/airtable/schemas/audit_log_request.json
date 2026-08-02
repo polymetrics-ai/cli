@@ -3,13 +3,32 @@
   "title": "Airtable audit_log_request record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "state",
+    "createdTime"
   ],
   "properties": {
     "id": {
       "type": "string"
     },
-    "name": {
+    "state": {
+      "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completedTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "createdByUserId": {
+      "type": "string"
+    },
+    "url": {
       "type": "string"
     }
   },

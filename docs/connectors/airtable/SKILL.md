@@ -3,7 +3,7 @@
 
 ## Purpose
 
-Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/admin, HyperDB direct reads, and executes typed record/schema/admin mutations from fixture-tested declarative definitions.
+Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, enterprise/admin data, and HyperDB direct reads; executes typed single-resource mutations while batch array-cardinality operations stay blocked until enforceable.
 
 ## Icon
 
@@ -42,18 +42,12 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
 
 ## ETL Streams
 
-- scim_groups:
-  - primary key: id
-  - fields: id(), members(), name()
 - scim_group:
   - primary key: id
-  - fields: id(), members(), name()
-- scim_users:
-  - primary key: id
-  - fields: email(), id(), name()
+  - fields: displayName(), id(), members(), schemas()
 - scim_user:
   - primary key: id
-  - fields: email(), id(), name()
+  - fields: active(), emails(), id(), name(), schemas(), userName()
 - webhooks:
   - primary key: id
   - fields: enabled(), id(), notificationUrl()
@@ -65,67 +59,67 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - fields: id(), name(), permissionLevel()
 - base_collaborators:
   - primary key: id
-  - fields: id(), name()
+  - fields: collaborators(), createdTime(), id(), name(), permissionLevel()
 - block_installations:
   - primary key: id
-  - fields: id(), name()
+  - fields: blockId(), createdByUserId(), createdTime(), id(), state()
 - interface:
   - primary key: id
-  - fields: id(), name()
+  - fields: createdTime(), id(), isPublished(), name(), rootTableId()
 - shares:
   - primary key: id
-  - fields: id(), name()
+  - fields: createdByUserId(), createdTime(), id(), state(), type(), url()
 - tables:
   - primary key: id
   - fields: fields(), id(), name()
 - views:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(), name(), type(), visibleFieldIds()
 - view_metadata:
   - primary key: id
-  - fields: id(), name()
+  - fields: id(), name(), type(), visibleFieldIds()
 - enterprise:
   - primary key: id
-  - fields: id(), name()
+  - fields: createdTime(), id(), name(), rootEnterpriseAccountId()
 - audit_log_events:
   - primary key: id
   - fields: createdTime(), eventType(), id()
 - audit_log_requests:
   - primary key: id
-  - fields: id(), name()
+  - fields: completedTime(), createdByUserId(), createdTime(), id(), state(), url()
 - audit_log_request:
   - primary key: id
-  - fields: id(), name()
+  - fields: completedTime(), createdByUserId(), createdTime(), id(), state(), url()
 - change_events:
   - primary key: id
   - fields: createdTime(), eventType(), id()
 - ediscovery_exports:
   - primary key: id
-  - fields: id(), name()
+  - fields: baseId(), completedTime(), createdByUserId(), createdTime(), downloadUrl(), id(), state()
 - ediscovery_export:
   - primary key: id
-  - fields: id(), name()
+  - fields: baseId(), completedTime(), createdByUserId(), createdTime(), downloadUrl(), id(), state()
 - enterprise_packages:
   - primary key: id
-  - fields: id(), name()
+  - fields: createdByUserId(), createdTime(), id(), name(), version()
 - enterprise_personal_access_tokens:
   - primary key: id
-  - fields: id(), name()
+  - fields: createdTime(), id(), lastUsedTime(), scopes(), userId()
 - enterprise_users:
   - primary key: id
-  - fields: email(), id(), name()
+  - fields: createdTime(), email(), id(), isAdmin(), lastActivityTime(), name(), state()
 - enterprise_user:
   - primary key: id
-  - fields: email(), id(), name()
+  - fields: createdTime(), email(), id(), isAdmin(), lastActivityTime(), name(), state()
 - user_group:
   - primary key: id
-  - fields: email(), id(), name()
+  - fields: createdTime(), id(), memberUserIds(), name()
 - whoami:
   - primary key: id
   - fields: email(), id(), scopes()
 - workspace_collaborators:
   - primary key: id
-  - fields: id(), name()
+  - fields: collaborators(), createdTime(), id(), name()
 - records:
   - primary key: id
   - fields: createdTime(), fields(), id()
@@ -142,38 +136,14 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
 
 ## Reverse ETL Actions
 
-- create_scim_group:
-  - endpoint: POST /scim/v2/Groups
-  - required fields: schemas, displayName
-  - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
 - delete_scim_group:
   - endpoint: DELETE /scim/v2/Groups/{{ record.id }}
   - required fields: id
   - risk: destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute
-- patch_scim_group:
-  - endpoint: PATCH /scim/v2/Groups/{{ record.id }}
-  - required fields: id, schemas, Operations
-  - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
-- put_scim_group:
-  - endpoint: PUT /scim/v2/Groups/{{ record.id }}
-  - required fields: id, schemas
-  - risk: replacement/upsert Airtable mutation; may overwrite existing fields or records and requires explicit approval before execute
-- create_scim_user:
-  - endpoint: POST /scim/v2/Users
-  - required fields: schemas, userName
-  - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
 - delete_scim_user:
   - endpoint: DELETE /scim/v2/Users/{{ record.id }}
   - required fields: id
   - risk: destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute
-- patch_scim_user:
-  - endpoint: PATCH /scim/v2/Users/{{ record.id }}
-  - required fields: id, schemas, Operations
-  - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
-- put_scim_user:
-  - endpoint: PUT /scim/v2/Users/{{ record.id }}
-  - required fields: id, schemas, userName
-  - risk: replacement/upsert Airtable mutation; may overwrite existing fields or records and requires explicit approval before execute
 - create_webhook:
   - endpoint: POST /v0/bases/{{ config.base_id }}/webhooks
   - required fields: specification
@@ -190,10 +160,6 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - endpoint: POST /v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}/refresh
   - required fields: id
   - risk: Airtable webhook mutation; may start, stop, or change outbound notifications and must be previewed and approved
-- create_base:
-  - endpoint: POST /v0/meta/bases
-  - required fields: workspaceId, name, tables
-  - risk: typed Airtable API mutation; preview and explicit approval required before execute
 - delete_base:
   - endpoint: DELETE /v0/meta/bases/{{ record.base_id }}
   - required fields: base_id
@@ -206,10 +172,6 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - endpoint: PATCH /v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}
   - required fields: id, state
   - risk: typed Airtable API mutation; preview and explicit approval required before execute
-- add_base_collaborator:
-  - endpoint: POST /v0/meta/bases/{{ config.base_id }}/collaborators
-  - required fields: collaborators
-  - risk: typed Airtable API mutation; preview and explicit approval required before execute
 - delete_base_collaborator:
   - endpoint: DELETE /v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}
   - required fields: user_or_group_id
@@ -217,10 +179,6 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
 - update_collaborator_base_permission:
   - endpoint: PATCH /v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}
   - required fields: user_or_group_id, permissionLevel
-  - risk: typed Airtable API mutation; preview and explicit approval required before execute
-- add_interface_collaborator:
-  - endpoint: POST /v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators
-  - required fields: page_bundle_id, collaborators
   - risk: typed Airtable API mutation; preview and explicit approval required before execute
 - delete_interface_collaborator:
   - endpoint: DELETE /v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators/{{ record.user_or_group_id }}
@@ -246,10 +204,6 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - endpoint: PATCH /v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}
   - required fields: id, state
   - risk: typed Airtable API mutation; preview and explicit approval required before execute
-- create_table:
-  - endpoint: POST /v0/meta/bases/{{ config.base_id }}/tables
-  - required fields: name, fields
-  - risk: Airtable schema mutation visible to collaborators; preview and approval required
 - update_table:
   - endpoint: PATCH /v0/meta/bases/{{ config.base_id }}/tables/{{ config.table_id }}
   - risk: Airtable schema mutation visible to collaborators; preview and approval required
@@ -277,41 +231,13 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - endpoint: POST /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/exports
   - required fields: enterprise_account_id, baseId
   - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
-- move_user_groups:
-  - endpoint: POST /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/moveGroups
-  - required fields: enterprise_account_id, groupIds, targetEnterpriseAccountId
-  - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
-- move_workspaces:
-  - endpoint: POST /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/moveWorkspaces
-  - required fields: enterprise_account_id, workspaceIds, targetEnterpriseAccountId
-  - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
 - create_base_from_package_enterprise:
   - endpoint: POST /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/packages/{{ record.package_id }}/install
   - required fields: enterprise_account_id, package_id, workspaceId, packageReleaseId, name
   - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
-- revoke_enterprise_personal_access_tokens:
-  - endpoint: POST /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/personalAccessTokens/revoke
-  - required fields: enterprise_account_id, tokenIds
-  - risk: destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute
 - delete_users_by_email:
   - endpoint: DELETE /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users?email={{ record.email | urlencode }}
   - required fields: enterprise_account_id, email
-  - risk: destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute
-- manage_user_batched:
-  - endpoint: PATCH /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users
-  - required fields: enterprise_account_id, users
-  - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
-- manage_user_membership:
-  - endpoint: POST /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/claim
-  - required fields: enterprise_account_id, users
-  - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
-- grant_admin_access:
-  - endpoint: POST /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/grantAdminAccess
-  - required fields: enterprise_account_id, users
-  - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
-- revoke_admin_access:
-  - endpoint: POST /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/revokeAdminAccess
-  - required fields: enterprise_account_id, users
   - risk: destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute
 - delete_user_by_id:
   - endpoint: DELETE /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}
@@ -329,10 +255,6 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - endpoint: POST /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}/remove
   - required fields: enterprise_account_id, id
   - risk: destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute
-- update_workspace_ai_allowlist:
-  - endpoint: POST /v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/workspaceAiAllowlist
-  - required fields: enterprise_account_id, workspaces
-  - risk: elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved
 - create_workspace:
   - endpoint: POST /v0/meta/workspaces
   - required fields: enterpriseAccountId, name
@@ -341,10 +263,6 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - endpoint: DELETE /v0/meta/workspaces/{{ record.workspace_id }}
   - required fields: workspace_id
   - risk: destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute
-- add_workspace_collaborator:
-  - endpoint: POST /v0/meta/workspaces/{{ record.workspace_id }}/collaborators
-  - required fields: workspace_id, collaborators
-  - risk: typed Airtable API mutation; preview and explicit approval required before execute
 - delete_workspace_collaborator:
   - endpoint: DELETE /v0/meta/workspaces/{{ record.workspace_id }}/collaborators/{{ record.user_or_group_id }}
   - required fields: workspace_id, user_or_group_id
@@ -369,22 +287,6 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - endpoint: POST /v0/{{ config.base_id }}/{{ record.record_id }}/{{ record.attachment_field_id_or_name }}/uploadAttachment
   - required fields: record_id, attachment_field_id_or_name, contentType, filename, file
   - risk: Airtable schema mutation visible to collaborators; preview and approval required
-- delete_multiple_records:
-  - endpoint: DELETE /v0/{{ config.base_id }}/{{ config.table_id }}?records[]={{ record.records | join:&records[]= }}
-  - required fields: records
-  - risk: destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute
-- update_multiple_records:
-  - endpoint: PATCH /v0/{{ config.base_id }}/{{ config.table_id }}
-  - required fields: records
-  - risk: Airtable schema mutation visible to collaborators; preview and approval required
-- create_records:
-  - endpoint: POST /v0/{{ config.base_id }}/{{ config.table_id }}
-  - required fields: records
-  - risk: Airtable schema mutation visible to collaborators; preview and approval required
-- update_multiple_records_put:
-  - endpoint: PUT /v0/{{ config.base_id }}/{{ config.table_id }}
-  - required fields: records
-  - risk: replacement/upsert Airtable mutation; may overwrite existing fields or records and requires explicit approval before execute
 - delete_record:
   - endpoint: DELETE /v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}
   - required fields: id
@@ -413,19 +315,11 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - endpoint: PATCH /v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}/dateDependencyMetadata
   - required fields: id, predecessorRecordId, dateDependencyMetadata
   - risk: Airtable schema mutation visible to collaborators; preview and approval required
-- hyperdb_delete_records_by_primary_keys:
-  - endpoint: POST /v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/deleteRecords
-  - required fields: enterprise_account_id, data_table_id, primaryKeysForDelete
-  - risk: destructive Airtable HyperDB mutation; deletes records by primary key and requires explicit approval before execute
-- hyperdb_upsert_records_by_primary_keys:
-  - endpoint: PUT /v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/upsertRecords
-  - required fields: enterprise_account_id, data_table_id, records
-  - risk: replacement/upsert Airtable mutation; may overwrite existing fields or records and requires explicit approval before execute
 
 ## Security
 
-- read risk: external Airtable API reads for base, table, record, comment, webhook, SCIM, collaborator, enterprise, audit, eDiscovery, and change-event metadata
-- write risk: typed Airtable API mutations for records, schema, comments, webhooks, SCIM, collaborators, enterprise/admin, HyperDB, and attachment upload; destructive/admin actions require plan, preview, explicit approval, and execute
+- read risk: external Airtable API reads for base, table, record, comment, webhook, SCIM detail, collaborator, enterprise, audit, eDiscovery, and change-event metadata
+- write risk: typed Airtable API mutations for single records, schema fields, comments, webhooks, selected admin actions, and attachment upload; destructive/admin actions require plan, preview, explicit approval, and execute while non-empty array batch operations remain blocked
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Command Surface
@@ -436,9 +330,7 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
 - Read/query commands
 - Reverse ETL/write action references
 - Other Commands
-  - read scim-groups - List groups [intent=etl availability=implemented stream=scim_groups]; flags: --page-size
   - read scim-group - Get group [intent=etl availability=implemented stream=scim_group]; flags: --group-id
-  - read scim-users - List users [intent=etl availability=implemented stream=scim_users]; flags: --page-size
   - read scim-user - Get user [intent=etl availability=implemented stream=scim_user]; flags: --user-id
   - read webhooks - List webhooks [intent=etl availability=implemented stream=webhooks]; flags: --base-id
   - read webhook-payloads - List webhook payloads [intent=etl availability=implemented stream=webhook_payloads]; flags: --base-id, --webhook-id, --page-size
@@ -468,33 +360,23 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - read record - Get record [intent=etl availability=implemented stream=record]; flags: --base-id, --table-id, --record-id
   - read comments - List comments [intent=etl availability=implemented stream=comments]; flags: --base-id, --table-id, --record-id
   - hyperdb get-records - Read HyperDB records by primary key [intent=direct_read availability=implemented operation=hyperdb_table_read_records]; approval: read-only; risk: medium; flags: --enterprise-account-id, --data-table-id, --primary-key (required), --field, --max-records, --cursor
-  - write create-scim-group - Create group [intent=reverse_etl availability=planned write=create_scim_group]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write delete-scim-group - Delete group [intent=reverse_etl availability=planned write=delete_scim_group]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write patch-scim-group - Patch group [intent=reverse_etl availability=planned write=patch_scim_group]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write put-scim-group - Put group [intent=reverse_etl availability=planned write=put_scim_group]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write create-scim-user - Create user [intent=reverse_etl availability=planned write=create_scim_user]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write delete-scim-user - Delete user [intent=reverse_etl availability=planned write=delete_scim_user]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write patch-scim-user - Patch user [intent=reverse_etl availability=planned write=patch_scim_user]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write put-scim-user - Put user [intent=reverse_etl availability=planned write=put_scim_user]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write create-webhook - Create a webhook [intent=reverse_etl availability=planned write=create_webhook]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write delete-webhook - Delete a webhook [intent=reverse_etl availability=planned write=delete_webhook]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write set-webhook-notifications - Enable/disable webhook notifications [intent=reverse_etl availability=planned write=set_webhook_notifications]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write refresh-webhook - Refresh a webhook [intent=reverse_etl availability=planned write=refresh_webhook]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
-  - write create-base - Create base [intent=reverse_etl availability=planned write=create_base]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write delete-base - Delete base [intent=reverse_etl availability=planned write=delete_base]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write delete-block-installation - Delete block installation [intent=reverse_etl availability=planned write=delete_block_installation]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write manage-block-installation - Manage block installation [intent=reverse_etl availability=planned write=manage_block_installation]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
-  - write add-base-collaborator - Add base collaborator [intent=reverse_etl availability=planned write=add_base_collaborator]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write delete-base-collaborator - Delete base collaborator [intent=reverse_etl availability=planned write=delete_base_collaborator]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write update-collaborator-base-permission - Update collaborator base permission [intent=reverse_etl availability=planned write=update_collaborator_base_permission]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
-  - write add-interface-collaborator - Add interface collaborator [intent=reverse_etl availability=planned write=add_interface_collaborator]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write delete-interface-collaborator - Delete interface collaborator [intent=reverse_etl availability=planned write=delete_interface_collaborator]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write update-interface-collaborator - Update interface collaborator [intent=reverse_etl availability=planned write=update_interface_collaborator]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write delete-interface-invite - Delete interface invite [intent=reverse_etl availability=planned write=delete_interface_invite]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write delete-base-invite - Delete base invite [intent=reverse_etl availability=planned write=delete_base_invite]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write delete-share - Delete share [intent=reverse_etl availability=planned write=delete_share]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write manage-share - Manage share [intent=reverse_etl availability=planned write=manage_share]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
-  - write create-table - Create table [intent=reverse_etl availability=planned write=create_table]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write update-table - Update table [intent=reverse_etl availability=planned write=update_table]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write create-field - Create field [intent=reverse_etl availability=planned write=create_field]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write update-field - Update field [intent=reverse_etl availability=planned write=update_field]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
@@ -502,33 +384,20 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - write create-audit-log-request - Create audit log request [intent=reverse_etl availability=planned write=create_audit_log_request]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write create-descendant-enterprise - Create descendant enterprise [intent=reverse_etl availability=planned write=create_descendant_enterprise]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write create-ediscovery-export - Create eDiscovery export [intent=reverse_etl availability=planned write=create_ediscovery_export]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write move-user-groups - Move user groups [intent=reverse_etl availability=planned write=move_user_groups]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write move-workspaces - Move workspaces [intent=reverse_etl availability=planned write=move_workspaces]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write create-base-from-package-enterprise - Create base from package [intent=reverse_etl availability=planned write=create_base_from_package_enterprise]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write revoke-enterprise-personal-access-tokens - Revoke personal access tokens [intent=reverse_etl availability=planned write=revoke_enterprise_personal_access_tokens]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write delete-users-by-email - Delete users by email [intent=reverse_etl availability=planned write=delete_users_by_email]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write manage-user-batched - Manage user batched [intent=reverse_etl availability=planned write=manage_user_batched]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write manage-user-membership - Manage user membership [intent=reverse_etl availability=planned write=manage_user_membership]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write grant-admin-access - Grant admin access [intent=reverse_etl availability=planned write=grant_admin_access]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write revoke-admin-access - Revoke admin access [intent=reverse_etl availability=planned write=revoke_admin_access]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write delete-user-by-id - Delete user by id [intent=reverse_etl availability=planned write=delete_user_by_id]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write manage-user - Manage user [intent=reverse_etl availability=planned write=manage_user]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write logout-user - Logout user [intent=reverse_etl availability=planned write=logout_user]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write remove-user-from-enterprise - Remove user from enterprise [intent=reverse_etl availability=planned write=remove_user_from_enterprise]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write update-workspace-ai-allowlist - Update workspace AI allowlist [intent=reverse_etl availability=planned write=update_workspace_ai_allowlist]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write create-workspace - Create workspace [intent=reverse_etl availability=planned write=create_workspace]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write delete-workspace - Delete workspace [intent=reverse_etl availability=planned write=delete_workspace]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write add-workspace-collaborator - Add workspace collaborator [intent=reverse_etl availability=planned write=add_workspace_collaborator]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write delete-workspace-collaborator - Delete workspace collaborator [intent=reverse_etl availability=planned write=delete_workspace_collaborator]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write update-workspace-collaborator - Update workspace collaborator [intent=reverse_etl availability=planned write=update_workspace_collaborator]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write delete-workspace-invite - Delete workspace invite [intent=reverse_etl availability=planned write=delete_workspace_invite]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write move-base - Move base [intent=reverse_etl availability=planned write=move_base]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write update-workspace-restrictions - Update workspace restrictions [intent=reverse_etl availability=planned write=update_workspace_restrictions]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write upload-attachment - Upload attachment [intent=reverse_etl availability=planned write=upload_attachment]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
-  - write delete-multiple-records - Delete multiple records [intent=reverse_etl availability=planned write=delete_multiple_records]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
-  - write update-multiple-records - Update multiple records [intent=reverse_etl availability=planned write=update_multiple_records]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
-  - write create-records - Create records [intent=reverse_etl availability=planned write=create_records]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
-  - write update-multiple-records-put - Update multiple records (put) [intent=reverse_etl availability=planned write=update_multiple_records_put]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write delete-record - Delete record [intent=reverse_etl availability=planned write=delete_record]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write update-record - Update record [intent=reverse_etl availability=planned write=update_record]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write replace-record - Update record (put) [intent=reverse_etl availability=planned write=replace_record]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
@@ -536,8 +405,6 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - write delete-comment - Delete comment [intent=reverse_etl availability=planned write=delete_comment]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write update-comment - Update comment [intent=reverse_etl availability=planned write=update_comment]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
   - write update-date-dependency-metadata - Update date dependency metadata [intent=reverse_etl availability=planned write=update_date_dependency_metadata]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
-  - write hyperdb-delete-records-by-primary-keys - Delete records [intent=reverse_etl availability=planned write=hyperdb_delete_records_by_primary_keys]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
-  - write hyperdb-upsert-records-by-primary-keys - Update or insert records [intent=reverse_etl availability=planned write=hyperdb_upsert_records_by_primary_keys]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
 - Help topics:
   - airtable-safety - Writes remain reverse ETL only: plan, preview, explicit approval, execute; no generic raw HTTP, SQL, or CSV write escape hatches.
 

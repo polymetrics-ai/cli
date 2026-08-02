@@ -3,14 +3,34 @@
   "title": "Airtable enterprise_personal_access_tokens record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "userId",
+    "createdTime",
+    "scopes"
   ],
   "properties": {
     "id": {
       "type": "string"
     },
-    "name": {
+    "userId": {
       "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lastUsedTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "scopes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": true,

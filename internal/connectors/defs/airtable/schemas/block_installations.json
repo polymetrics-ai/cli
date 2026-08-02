@@ -3,14 +3,28 @@
   "title": "Airtable block_installations record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "state",
+    "blockId",
+    "createdByUserId",
+    "createdTime"
   ],
   "properties": {
     "id": {
       "type": "string"
     },
-    "name": {
+    "state": {
       "type": "string"
+    },
+    "blockId": {
+      "type": "string"
+    },
+    "createdByUserId": {
+      "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
     }
   },
   "additionalProperties": true,
