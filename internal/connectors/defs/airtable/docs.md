@@ -75,7 +75,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 ## Direct read
 
-- `hyperdb get-records`: POST `/v0/{enterpriseAccountId}/{dataTableId}/getRecords`, typed JSON body with `primaryKeys`, optional `fields`, `maxRecords`, and `cursor`; output policy `json_redacted`.
+- `hyperdb get-records`: POST `/v0/{enterpriseAccountId}/{dataTableId}/getRecords`, typed JSON body with optional `primaryKeys`, `fields`, `maxRecords`, and `cursor` (including `{}` and cursor-only reads); output policy `json_redacted`.
 
 ## Write actions & risks
 
