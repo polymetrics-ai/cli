@@ -40,3 +40,9 @@ Forward corrective commit evidence:
 - [x] `go test ./internal/connectors/native/amazon-sqs -count=1`
 - Focused coverage includes required reverse CLI metadata/examples, all ten formerly unexecuted typed operation paths, reachable sanitized certification errors, and pre-preview message-attribute validation.
 - Per review-phase scope, no complete repository test, lint, push, PR, CI, live AWS, or credentialed connector phase was run.
+
+## 2026-08-02 message-attribute semantic verification
+
+- [x] `go test ./internal/connectors/native/amazon-sqs -count=1`
+- Focused coverage validates SQS Number syntax/precision/range, BinaryValue standard base64 encoding, and AWSTraceHeader X-Ray shape before preview.
+- No full repository, lint, push, PR, CI, live AWS, or credentialed connector phase was run.

@@ -449,6 +449,11 @@ func validateMessageAttributeMapValue(value any, system bool) error {
 			if value == "" {
 				return fmt.Errorf("attribute %q value must not be empty", name)
 			}
+			if system {
+				if err := validateSQSXRayTraceHeader(value); err != nil {
+					return fmt.Errorf("system attribute %q %w", name, err)
+				}
+			}
 			continue
 		}
 		attr, ok := objectItems(raw)
@@ -482,12 +487,27 @@ func validateMessageAttributeMapValue(value any, system bool) error {
 		stringValue, hasString := attr["string_value"].(string)
 		binaryValue, hasBinary := attr["binary_value"].(string)
 		switch baseType {
-		case "String", "Number":
+		case "String":
 			if !hasString || stringValue == "" {
 				return fmt.Errorf("attribute %q data_type %s requires non-empty string_value", name, dataType)
 			}
 			if hasBinary {
 				return fmt.Errorf("attribute %q data_type %s does not allow binary_value", name, dataType)
+			}
+			if system {
+				if err := validateSQSXRayTraceHeader(stringValue); err != nil {
+					return fmt.Errorf("system attribute %q %w", name, err)
+				}
+			}
+		case "Number":
+			if !hasString || stringValue == "" {
+				return fmt.Errorf("attribute %q data_type %s requires non-empty string_value", name, dataType)
+			}
+			if hasBinary {
+				return fmt.Errorf("attribute %q data_type %s does not allow binary_value", name, dataType)
+			}
+			if err := validateSQSNumberAttributeValue(stringValue); err != nil {
+				return fmt.Errorf("attribute %q %w", name, err)
 			}
 		case "Binary":
 			if !hasBinary || binaryValue == "" {
@@ -495,6 +515,9 @@ func validateMessageAttributeMapValue(value any, system bool) error {
 			}
 			if hasString {
 				return fmt.Errorf("attribute %q data_type %s does not allow string_value", name, dataType)
+			}
+			if err := validateSQSBinaryAttributeValue(binaryValue); err != nil {
+				return fmt.Errorf("attribute %q %w", name, err)
 			}
 		}
 	}
