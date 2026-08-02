@@ -7,8 +7,9 @@ Task-owned assets for a reproducible local Bahmni Standard lab for connector tes
 - Pinned source: `Bahmni/bahmni-docker` tag `1.0.2-standard`, commit `1dfe62c4e5d6f3d702e65d869729726226fceb56`.
 - Rootless Podman only; no Docker CLI/Engine/Desktop.
 - Loopback-only service binds.
-- Task-prefixed resources: Podman machine `fm-bahmni-lab-r1-machine`, compose project `fm_bahmni_lab_r1`, runtime dir `/tmp/fm-bahmni-lab-r1`. Every explicit compose `container_name` is rewritten with the `fm-bahmni-lab-r1-` prefix, and generation fails closed if any unscoped name remains.
-- `reset`/`cleanup` require `--yes`, target only task-owned resources, and never create or stop the Podman machine. If the task-owned connection is unavailable they report that there is nothing to reset instead of provisioning a machine.
+- Task-prefixed resources: Podman machine/connection `fm-bahmni-lab-r1-machine`, compose project `fm_bahmni_lab_r1`, runtime dir `/tmp/fm-bahmni-lab-r1`. The first safe start writes a durable marker binding those exact values. Later machine, connection, compose, reset, and cleanup paths refuse missing or mismatched markers.
+- Every explicit compose `container_name` is rewritten with the `fm-bahmni-lab-r1-` prefix, every service receives the `io.polymetrics.bahmni-lab.owner` label, and project actions verify compose labels before they run. Generation fails closed if names or labels are unscoped.
+- `reset`/`cleanup` require `--yes`, target only marker-bound resources, and never create, start, or stop the Podman machine. If the task-owned connection is unavailable they report that there is nothing to reset.
 - Local credentials stay under `/tmp/fm-bahmni-lab-r1` and are not committed.
 
 ## Commands
@@ -48,6 +49,7 @@ Fixture: `fixtures/synthetic-seed.json`.
 - Clinical providers use `SYN-PROV-*`; the extended non-patient staff roster uses `SYN-STAFF-*` and is represented as OpenMRS Provider/Person records for connector inspection. Names are fictional and checked against forbidden/source-collision identity patterns.
 - Staff coverage includes consultant/resident doctors, nursing, allied health, lab, radiology, pharmacy, front office, billing, medical records, administration, HR, finance, procurement, IT, biomedical engineering, facilities, housekeeping, security, dietary, ambulance/transport, CSSD, infection control, quality/compliance, and patient relations.
 - Contact defaults are deliberately invalid placeholders: `000-000-0000` and `.invalid` emails.
+- The pre-seed fixture scan and the API write boundary both reject formatted Indian mobile/landline variants and every email outside the reserved `.invalid` domain.
 - Karthik test patient: `SYN-HEN-0009 - Karthik Iyer`.
 - Rohit test patient: `SYN-HEN-0010 - Rohit Nair`; contact data remains the invalid placeholder and no real phone number is stored in fixture/config/log output.
 - Karthik has a completed OPD cold/fever visit, fever temperature observation, chief complaint text, diagnosis text, completed visit stop time, appointments, lab/procedure/radiology/medication orders, allergy placeholder, and FHIR condition presence.
@@ -55,18 +57,7 @@ Fixture: `fixtures/synthetic-seed.json`.
 
 The dataset uses SPARSH Hennur-style taxonomy only structurally. It does not use real people, phone numbers, emails, addresses, or contacts.
 
-## Local-only real contact override path
-
-Real-contact testing is manual and local-only. Do not commit or log real contacts.
-
-1. Copy an override to a gitignored file, e.g. `labs/bahmni-podman-synthetic/local-contact-overrides.json`.
-2. Add human-only values there for manual UI tests.
-3. Keep fixture/config/report output on invalid placeholders by default. The fixture
-   `synthetic_contact` blocks are assertion-only: `check-synthetic` enforces them, and the seed
-   never writes any phone or email attribute to Bahmni.
-4. Delete the local override before handoff.
-
-The repository `.gitignore` and lab `.gitignore` exclude `local-contact-overrides*.json`, `.local-credentials.json`, `.env.local`, and runtime output.
+The seed path does not accept a real-contact override. Local ignored files remain outside the fixture, but the recursive preflight and API write guard refuse their realistic contacts if they are ever merged into a generated payload.
 
 ## Verification
 
@@ -75,6 +66,7 @@ Recommended local checks. During active connector live verification, use only th
 ```bash
 bash -n labs/bahmni-podman-synthetic/bin/bahmni-lab
 python3 -m py_compile labs/bahmni-podman-synthetic/lib/labctl.py
+python3 -m unittest discover -s labs/bahmni-podman-synthetic/tests -v
 labs/bahmni-podman-synthetic/bin/bahmni-lab check-synthetic --json
 labs/bahmni-podman-synthetic/bin/bahmni-lab check-synthetic --json --online-source  # optional network collision check against the public taxonomy page
 labs/bahmni-podman-synthetic/bin/bahmni-lab verify --offline
@@ -85,6 +77,6 @@ labs/bahmni-podman-synthetic/bin/bahmni-lab seed --dry-run --json
 # labs/bahmni-podman-synthetic/bin/bahmni-lab verify
 ```
 
-`verify` checks the fixture, live OpenMRS/FHIR records, Unicode hospital name, Karthik patient, completed visit, fever observation, cold/fever note, and FHIR condition presence.
+`verify` checks exact expected provider/patient display names, one canonical stable appointment per synthetic patient, stable history-event markers, the fixture, live OpenMRS/FHIR records, Unicode hospital name, Karthik patient, completed visit, fever observation, cold/fever note, and FHIR condition presence.
 
 Known API limit: the pinned OpenMRS FHIR2 Condition endpoint accepts code/text on create but does not echo condition code/text back on read. The seed script therefore uses condition presence as the idempotency guard and records cold/fever detail in encounter observations.

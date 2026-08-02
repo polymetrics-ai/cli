@@ -35,7 +35,15 @@ MODULE_SUPPORT_PATH = ROOT / "config" / "module-support.json"
 
 LAB_ID = "fm-bahmni-lab-r1"
 DEFAULT_HOME = Path("/tmp") / LAB_ID
-REAL_PHONE_RE = re.compile(r"(?<!\d)(?:\+91[ -]?\d{10}|[6-9]\d{9})(?!\d)")
+OWNER_LABEL = "io.polymetrics.bahmni-lab.owner"
+OWNER_MARKER_NAME = f".{LAB_ID}-ownership.json"
+STABLE_RECORD_PREFIX = f"urn:polymetrics:bahmni-lab:{LAB_ID}"
+MACHINE_NAME_RE = re.compile(rf"^{re.escape(LAB_ID)}-[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
+PROJECT_NAME_RE = re.compile(r"^fm_bahmni_lab_r1(?:_[a-z0-9](?:[a-z0-9_]*[a-z0-9])?)?$")
+INDIAN_MOBILE_RE = re.compile(r"(?<!\d)(?:(?:\+91|0091|91)[\s().-]*)?[6-9](?:[\s().-]*\d){9}(?!\d)")
+INDIAN_LANDLINE_RE = re.compile(r"(?<!\d)(?:(?:\+91|0091)[\s().-]*)?(?:0[\s().-]*)?[1-8]\d{1,3}[\s().-]+\d(?:[\s().-]*\d){5,7}(?!\d)")
+INDIAN_COMPACT_LANDLINE_RE = re.compile(r"(?<!\d)0[1-8]\d{9}(?!\d)")
+EMAIL_RE = re.compile(r"(?<![\w.+-])([\w.!#$%&'*+/=?^`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?)(?![\w.-])")
 
 
 def eprint(*parts: object) -> None:
@@ -100,6 +108,136 @@ def credentials_path() -> Path:
 
 def podman_wrapper_path() -> Path:
     return runtime_home() / "bin" / "podman-fm"
+
+
+def ownership_marker_path() -> Path:
+    return runtime_home() / OWNER_MARKER_NAME
+
+
+def validate_ownership_config(home: Path, machine: str, connection: str, project: str) -> dict[str, Any]:
+    resolved = home.expanduser().resolve()
+    failures: list[str] = []
+    if resolved.name != LAB_ID or resolved == Path(resolved.anchor):
+        failures.append(f"lab home basename must be exactly {LAB_ID}")
+    if not MACHINE_NAME_RE.fullmatch(machine):
+        failures.append(f"machine name must use the {LAB_ID}- prefix")
+    if not MACHINE_NAME_RE.fullmatch(connection):
+        failures.append(f"connection name must use the {LAB_ID}- prefix")
+    if connection != machine:
+        failures.append("connection name must match the task-owned machine name")
+    if not PROJECT_NAME_RE.fullmatch(project):
+        failures.append("compose project must use the fm_bahmni_lab_r1 prefix")
+    if failures:
+        raise ValueError("; ".join(failures))
+    return {
+        "schema": 1,
+        "owner": LAB_ID,
+        "lab_home": str(resolved),
+        "machine": machine,
+        "connection": connection,
+        "project": project,
+    }
+
+
+def expected_ownership() -> dict[str, Any]:
+    return validate_ownership_config(runtime_home(), machine_name(), connection_name(), project_name())
+
+
+def validate_ownership_marker(actual: dict[str, Any], expected: dict[str, Any]) -> None:
+    if actual != expected:
+        raise ValueError("ownership marker does not match the requested lab resources")
+
+
+def load_ownership_marker() -> dict[str, Any]:
+    path = ownership_marker_path()
+    if not path.is_file() or path.is_symlink():
+        raise ValueError("durable lab ownership marker is missing")
+    if path.stat().st_uid != os.getuid():
+        raise ValueError("durable lab ownership marker belongs to another user")
+    marker = load_json(path)
+    expected = expected_ownership()
+    validate_ownership_marker(marker, expected)
+    return marker
+
+
+def podman_names(command: list[str], fields: tuple[str, ...]) -> set[str]:
+    proc = run(command, check=False)
+    if proc.returncode != 0:
+        raise ValueError("unable to inspect existing Podman ownership inventory")
+    if not proc.stdout.strip():
+        return set()
+    try:
+        values = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise ValueError("Podman returned invalid ownership inventory JSON") from exc
+    names: set[str] = set()
+    for value in values if isinstance(values, list) else []:
+        for field in fields:
+            raw = value.get(field)
+            if isinstance(raw, list):
+                names.update(str(item) for item in raw if item)
+            elif raw:
+                names.add(str(raw))
+    return names
+
+
+def legacy_runtime_is_task_owned(expected: dict[str, Any]) -> bool:
+    if expected != validate_ownership_config(DEFAULT_HOME, "fm-bahmni-lab-r1-machine", "fm-bahmni-lab-r1-machine", "fm_bahmni_lab_r1"):
+        return False
+    compose_path = generated_compose_path()
+    env_path = generated_env_path()
+    wrapper_path = podman_wrapper_path()
+    if not compose_path.is_file() or not env_path.is_file() or not wrapper_path.is_file():
+        return False
+    return LAB_ID in compose_path.read_text(encoding="utf-8") and LAB_ID in wrapper_path.read_text(encoding="utf-8")
+
+
+def claim_ownership() -> dict[str, Any]:
+    expected = expected_ownership()
+    path = ownership_marker_path()
+    if path.exists():
+        validate_ownership_marker(load_ownership_marker(), expected)
+        return expected
+    podman = shutil.which("podman")
+    existing_requested_resources = False
+    if podman:
+        machine_names = podman_names([podman, "machine", "list", "--format", "json"], ("Name", "name"))
+        connection_names = podman_names([podman, "system", "connection", "list", "--format", "json"], ("Name", "name"))
+        existing_requested_resources = expected["machine"] in machine_names or expected["connection"] in connection_names
+    if existing_requested_resources and not legacy_runtime_is_task_owned(expected):
+        raise ValueError("refusing to adopt existing Podman resources without prior task ownership evidence")
+    ensure_dirs()
+    try:
+        with path.open("x", encoding="utf-8") as fh:
+            json.dump(expected, fh, indent=2, sort_keys=True)
+            fh.write("\n")
+    except FileExistsError:
+        validate_ownership_marker(load_ownership_marker(), expected)
+    path.chmod(0o600)
+    return expected
+
+
+def iter_string_values(value: Any, path: str = "$") -> Iterable[tuple[str, str]]:
+    if isinstance(value, str):
+        yield path, value
+    elif isinstance(value, dict):
+        for key, child in value.items():
+            yield from iter_string_values(child, f"{path}.{key}")
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            yield from iter_string_values(child, f"{path}[{index}]")
+
+
+def contact_failures(value: Any) -> list[str]:
+    failures: list[str] = []
+    for path, text in iter_string_values(value):
+        if INDIAN_MOBILE_RE.search(text) or INDIAN_LANDLINE_RE.search(text) or INDIAN_COMPACT_LANDLINE_RE.search(text):
+            failures.append(f"{path} contains a real-looking Indian phone number")
+        for match in EMAIL_RE.finditer(text):
+            domain = match.group(1).rsplit("@", 1)[1].lower().rstrip(".")
+            if not domain.endswith(".invalid"):
+                failures.append(f"{path} contains an email outside the approved .invalid domain")
+    return failures
 
 
 def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -221,6 +359,112 @@ def validate_container_names(compose_text: str) -> None:
         raise SystemExit("generated compose contains container names outside this task: " + ", ".join(unscoped))
 
 
+def service_blocks(compose_text: str) -> list[tuple[int, int]]:
+    lines = compose_text.splitlines(keepends=True)
+    try:
+        services_start = next(index for index, line in enumerate(lines) if line.rstrip("\r\n") == "services:")
+    except StopIteration:
+        return []
+    services_end = len(lines)
+    for index in range(services_start + 1, len(lines)):
+        line = lines[index]
+        if line.strip() and not line.startswith((" ", "\t", "#")):
+            services_end = index
+            break
+    starts = [
+        index
+        for index in range(services_start + 1, services_end)
+        if re.match(r"^  [A-Za-z0-9_.-]+:\s*(?:#.*)?(?:\r?\n)?$", lines[index])
+    ]
+    return [(start, starts[offset + 1] if offset + 1 < len(starts) else services_end) for offset, start in enumerate(starts)]
+
+
+def scope_service_labels(compose_text: str) -> str:
+    lines = compose_text.splitlines(keepends=True)
+    for start, end in reversed(service_blocks(compose_text)):
+        block = "".join(lines[start:end])
+        if OWNER_LABEL in block:
+            continue
+        labels_index = next((index for index in range(start + 1, end) if lines[index].rstrip("\r\n") == "    labels:"), None)
+        if labels_index is None:
+            lines.insert(start + 1, f"    labels:\n      {OWNER_LABEL}: {LAB_ID}\n")
+            continue
+        list_style = any(re.match(r"^      -\s", lines[index]) for index in range(labels_index + 1, end))
+        value = f"      - {OWNER_LABEL}={LAB_ID}\n" if list_style else f"      {OWNER_LABEL}: {LAB_ID}\n"
+        lines.insert(labels_index + 1, value)
+    return "".join(lines)
+
+
+def validate_service_labels(compose_text: str) -> None:
+    blocks = service_blocks(compose_text)
+    if not blocks:
+        raise SystemExit("generated compose has no services to ownership-label")
+    unlabeled = [
+        compose_text.splitlines()[start].strip().rstrip(":")
+        for start, end in blocks
+        if OWNER_LABEL not in "".join(compose_text.splitlines(keepends=True)[start:end])
+    ]
+    if unlabeled:
+        raise SystemExit("generated compose contains services without task ownership labels: " + ", ".join(unlabeled))
+
+
+def normalized_labels(value: Any) -> dict[str, str]:
+    if isinstance(value, dict):
+        return {str(key): str(item) for key, item in value.items()}
+    if isinstance(value, list):
+        labels: dict[str, str] = {}
+        for item in value:
+            key, separator, raw = str(item).partition("=")
+            if separator:
+                labels[key] = raw
+        return labels
+    return {}
+
+
+def resource_names(value: dict[str, Any]) -> list[str]:
+    raw = value.get("Names") or value.get("Name") or value.get("name") or []
+    if isinstance(raw, list):
+        return [str(item).lstrip("/") for item in raw]
+    return [str(raw).lstrip("/")] if raw else []
+
+
+def validate_owned_resources(values: Iterable[dict[str, Any]], project: str) -> None:
+    for value in values:
+        labels = normalized_labels(value.get("Labels") or value.get("labels"))
+        project_label = labels.get("com.docker.compose.project") or labels.get("io.podman.compose.project")
+        owner_label = labels.get(OWNER_LABEL)
+        names = resource_names(value)
+        candidate = project_label == project or any(name.startswith((project + "_", LAB_ID + "-")) for name in names)
+        if not candidate:
+            continue
+        if project_label != project:
+            raise ValueError("task-prefixed Podman resource lacks the matching compose project label")
+        if owner_label not in (None, LAB_ID):
+            raise ValueError("compose project contains a mismatched task ownership label")
+
+
+def verify_owned_podman_resources() -> None:
+    load_ownership_marker()
+    podman = shutil.which("podman")
+    if not podman:
+        raise ValueError("podman not found")
+    base = [podman, "--connection", connection_name()]
+    commands = [
+        base + ["ps", "--all", "--format", "json"],
+        base + ["network", "ls", "--format", "json"],
+        base + ["volume", "ls", "--format", "json"],
+    ]
+    for command in commands:
+        proc = run(command, check=False)
+        if proc.returncode != 0:
+            raise ValueError("unable to inspect Podman ownership labels")
+        try:
+            values = json.loads(proc.stdout or "[]")
+        except json.JSONDecodeError as exc:
+            raise ValueError("Podman returned invalid resource-label inventory JSON") from exc
+        validate_owned_resources(values if isinstance(values, list) else [], project_name())
+
+
 def write_compose(upstream_compose: Path, output_compose: Path) -> None:
     pin = load_json(PIN_PATH)
     defaults = pin["default_ports"]
@@ -238,11 +482,13 @@ def write_compose(upstream_compose: Path, output_compose: Path) -> None:
     # Any explicit container_name bypasses the compose project prefix, so scope
     # every one of them to this lab before the stack can adopt a foreign container.
     text = scope_container_names(text)
+    text = scope_service_labels(text)
     # Official odoo-16 image for the pinned Standard tag is amd64-only as of the
     # research run. Platform pin lets rootless Podman on Apple Silicon use qemu.
     text = add_platform_after_service(text, "odoo", "linux/amd64")
     validate_loopback_ports(text)
     validate_container_names(text)
+    validate_service_labels(text)
     output_compose.write_text(text, encoding="utf-8")
 
 
@@ -421,8 +667,7 @@ def check_synthetic(args: argparse.Namespace) -> dict[str, Any]:
         failures.append("dataset synthetic flag is false")
     if seed.get("organization", {}).get("name") != "Chikitsalayaḥ":
         failures.append("synthetic hospital name must be exactly Chikitsalayaḥ")
-    if REAL_PHONE_RE.search(json.dumps(seed, ensure_ascii=False)):
-        failures.append("fixture contains a real-looking phone number; use invalid placeholders only")
+    failures.extend(contact_failures(seed))
     all_providers = provider_records(seed)
     if "SPARSH" in json.dumps(all_providers, ensure_ascii=False):
         failures.append("staff/provider fixture contains SPARSH")
@@ -532,6 +777,9 @@ class BahmniApi:
         headers = {"Authorization": self.auth_header, "Accept": "application/fhir+json" if fhir else "application/json"}
         data = None
         if body is not None:
+            failures = contact_failures(body)
+            if failures:
+                raise ApiError("refusing API write containing realistic contact data: " + "; ".join(failures))
             data = json.dumps(body).encode("utf-8")
             headers["Content-Type"] = "application/fhir+json" if fhir else "application/json"
         req = urllib.request.Request(url, data=data, headers=headers, method=method)
@@ -571,6 +819,58 @@ def exact_search(api: BahmniApi, path: str, query: str) -> dict[str, Any] | None
     return None
 
 
+def record_identifiers(item: dict[str, Any]) -> set[str]:
+    identifiers: set[str] = set()
+    direct = item.get("identifier")
+    if isinstance(direct, str):
+        identifiers.add(direct)
+    for value in item.get("identifiers") or []:
+        if isinstance(value, dict) and isinstance(value.get("identifier"), str):
+            identifiers.add(value["identifier"])
+    display = item.get("display")
+    if isinstance(display, str) and " - " in display:
+        identifiers.add(display.split(" - ", 1)[0])
+    return identifiers
+
+
+def exact_owned_record(items: Iterable[dict[str, Any]], identifier: str) -> dict[str, Any] | None:
+    matches = [item for item in items if identifier in record_identifiers(item)]
+    if len(matches) > 1:
+        raise ApiError(f"multiple records claim task identifier {identifier}")
+    return matches[0] if matches else None
+
+
+def expected_record_display(record: dict[str, Any]) -> str:
+    return f"{record['identifier']} - {record['given_name']} {record['family_name']}"
+
+
+def exact_display_matches(item: dict[str, Any], record: dict[str, Any]) -> bool:
+    return item.get("display") == expected_record_display(record)
+
+
+def reconcile_person_name(api: BahmniApi, person: dict[str, Any], given_name: str, family_name: str) -> bool:
+    person_uuid = person.get("uuid")
+    if not person_uuid:
+        raise ApiError("owned record does not expose a Person UUID")
+    details = person
+    preferred = details.get("preferredName")
+    if not isinstance(preferred, dict) or not preferred.get("uuid"):
+        _, details = api.rest(f"/person/{person_uuid}", params={"v": "full"})
+        preferred = details.get("preferredName")
+        if not isinstance(preferred, dict) or not preferred.get("uuid"):
+            preferred = next((name for name in details.get("names") or [] if name.get("preferred") and name.get("uuid")), None)
+    if not isinstance(preferred, dict) or not preferred.get("uuid"):
+        raise ApiError("owned Person record does not expose a preferred name UUID")
+    if preferred.get("givenName") == given_name and preferred.get("familyName") == family_name:
+        return False
+    api.rest(
+        f"/person/{person_uuid}/name/{preferred['uuid']}",
+        "POST",
+        {"givenName": given_name, "familyName": family_name, "preferred": True},
+    )
+    return True
+
+
 def ensure_location(api: BahmniApi, name: str, parent: str | None, summary: dict[str, int]) -> str:
     existing = exact_search(api, "/location", name)
     if existing:
@@ -589,10 +889,13 @@ def ensure_location(api: BahmniApi, name: str, parent: str | None, summary: dict
 
 def ensure_provider(api: BahmniApi, provider: dict[str, str], summary: dict[str, int]) -> str:
     ident = provider["identifier"]
-    for item in api.results("/provider", q=ident, v="default", limit=20):
-        if ident in (item.get("display") or ""):
-            summary["providers_existing"] += 1
-            return item["uuid"]
+    item = exact_owned_record(api.results("/provider", q=ident, v="full", limit=20), ident)
+    if item:
+        person = item.get("person") or {}
+        if reconcile_person_name(api, person, provider["given_name"], provider["family_name"]):
+            summary["providers_reconciled"] += 1
+        summary["providers_existing"] += 1
+        return item["uuid"]
     person_body = {
         "names": [{"givenName": provider["given_name"], "familyName": provider["family_name"]}],
         "gender": provider["gender"],
@@ -606,10 +909,13 @@ def ensure_provider(api: BahmniApi, provider: dict[str, str], summary: dict[str,
 
 def ensure_patient(api: BahmniApi, patient: dict[str, str], pid_type: str, location: str, summary: dict[str, int]) -> str:
     ident = patient["identifier"]
-    for item in api.results("/patient", q=ident, v="default", limit=20):
-        if ident in (item.get("display") or ""):
-            summary["patients_existing"] += 1
-            return item["uuid"]
+    item = exact_owned_record(api.results("/patient", q=ident, v="full", limit=20), ident)
+    if item:
+        person = item.get("person") or {"uuid": item["uuid"]}
+        if reconcile_person_name(api, person, patient["given_name"], patient["family_name"]):
+            summary["patients_reconciled"] += 1
+        summary["patients_existing"] += 1
+        return item["uuid"]
     person = {
         "names": [{"givenName": patient["given_name"], "familyName": patient["family_name"]}],
         "gender": patient["gender"],
@@ -632,9 +938,15 @@ def ensure_patient(api: BahmniApi, patient: dict[str, str], pid_type: str, locat
 
 
 def appointment_ms(value: str) -> int:
-    # value is UTC ISO without timezone suffix in fixture generation below.
-    parsed = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+    normalized = value.replace("Z", "+00:00")
+    normalized = re.sub(r"([+-]\d{2})(\d{2})$", r"\1:\2", normalized)
+    parsed = dt.datetime.fromisoformat(normalized)
     return int(parsed.timestamp() * 1000)
+
+
+def stable_record_marker(kind: str, *parts: str) -> str:
+    encoded = [urllib.parse.quote(str(part), safe="-._~") for part in (kind, *parts)]
+    return STABLE_RECORD_PREFIX + "/" + "/".join(encoded)
 
 
 def marker_in_obs(encounter: dict[str, Any], marker: str) -> bool:
@@ -648,6 +960,19 @@ def marker_in_obs(encounter: dict[str, Any], marker: str) -> bool:
                 return True
         return False
     return walk(encounter.get("obs") or [])
+
+
+def marker_observations(encounter: dict[str, Any], markers: set[str]) -> list[dict[str, Any]]:
+    found: list[dict[str, Any]] = []
+
+    def walk(obs_list: list[dict[str, Any]]) -> None:
+        for obs in obs_list:
+            if obs.get("value") in markers:
+                found.append(obs)
+            walk(obs.get("groupMembers") or [])
+
+    walk(encounter.get("obs") or [])
+    return found
 
 
 def ensure_visit(api: BahmniApi, patient_uuid: str, visit_type: str, start: str, location: str, summary: dict[str, int], stop: str | None = None) -> str:
@@ -682,12 +1007,39 @@ def ensure_encounter(
     marker: str,
     document_concept: str,
     summary: dict[str, int],
+    legacy_markers: Iterable[str] = (),
 ) -> str:
     encounters = api.results("/encounter", patient=patient_uuid, v="full", limit=100)
-    for encounter in encounters:
-        if marker_in_obs(encounter, marker):
-            summary["encounters_existing"] += 1
-            return encounter["uuid"]
+    markers = {marker, *legacy_markers}
+    candidates = [
+        (encounter, marker_observations(encounter, markers))
+        for encounter in encounters
+    ]
+    candidates = [(encounter, observations) for encounter, observations in candidates if observations]
+    if candidates:
+        candidates.sort(key=lambda value: (not any(obs.get("value") == marker for obs in value[1]), str(value[0].get("uuid", ""))))
+        canonical_encounter = candidates[0][0]
+        changed = False
+        for encounter_index, (encounter, observations) in enumerate(candidates):
+            observations.sort(key=lambda obs: (obs.get("value") != marker, str(obs.get("uuid", ""))))
+            for obs_index, observation in enumerate(observations):
+                observation_uuid = observation.get("uuid")
+                if not observation_uuid:
+                    raise ApiError("owned encounter marker does not expose an observation UUID")
+                if encounter_index == 0 and obs_index == 0:
+                    desired = marker
+                elif obs_index == 0:
+                    desired = f"{marker}:preserved:{encounter['uuid']}"
+                else:
+                    desired = f"{marker}:preserved-observation:{observation_uuid}"
+                if observation.get("value") != desired:
+                    api.rest(f"/obs/{observation_uuid}", "POST", {"value": desired})
+                    changed = True
+        if changed:
+            summary["encounters_reconciled"] += 1
+        summary["encounter_duplicates_preserved"] += max(0, len(candidates) - 1)
+        summary["encounters_existing"] += 1
+        return canonical_encounter["uuid"]
     full_obs = list(obs) + [{"concept": document_concept, "value": marker, "obsDatetime": when}]
     _, created = api.rest("/encounter", "POST", {
         "patient": patient_uuid,
@@ -701,15 +1053,35 @@ def ensure_encounter(
     return created["uuid"]
 
 
-def ensure_appointment(api: BahmniApi, patient_ident: str, patient_uuid: str, provider_uuid: str, service_uuid: str, location: str, start: str, end: str, comment: str, summary: dict[str, int]) -> None:
+def appointment_comment(comment: str, marker: str) -> str:
+    return f"{comment}\n[{marker}]"
+
+
+def ensure_appointment(
+    api: BahmniApi,
+    patient_ident: str,
+    patient_uuid: str,
+    provider_uuid: str,
+    service_uuid: str,
+    location: str,
+    start: str,
+    end: str,
+    comment: str,
+    marker: str,
+    summary: dict[str, int],
+    legacy_comments: Iterable[str] = (),
+) -> None:
     _, appointments = api.rest("/appointments")
+    start_ms = appointment_ms(start.replace(".000+0000", "+00:00"))
+    accepted_comments = {comment, *legacy_comments}
+    candidates: list[dict[str, Any]] = []
     if isinstance(appointments, list):
-        start_ms = appointment_ms(start.replace(".000+0000", "+00:00"))
         for appt in appointments:
-            if appt.get("patient", {}).get("identifier") == patient_ident and appt.get("comments") == comment and appt.get("startDateTime") == start_ms:
-                summary["appointments_existing"] += 1
-                return
-    body = {
+            comments = str(appt.get("comments") or "")
+            owned_comment = marker in comments or comments in accepted_comments
+            if appt.get("patient", {}).get("identifier") == patient_ident and appt.get("startDateTime") == start_ms and owned_comment:
+                candidates.append(appt)
+    body: dict[str, Any] = {
         "patientUuid": patient_uuid,
         "serviceUuid": service_uuid,
         "appointmentKind": "Scheduled",
@@ -718,8 +1090,26 @@ def ensure_appointment(api: BahmniApi, patient_ident: str, patient_uuid: str, pr
         "endDateTime": end,
         "providers": [{"uuid": provider_uuid, "response": "ACCEPTED"}],
         "locationUuid": location,
-        "comments": comment,
     }
+    if candidates:
+        canonical_token = f"[{marker}]"
+        candidates.sort(key=lambda appt: (canonical_token not in str(appt.get("comments") or ""), str(appt.get("uuid", ""))))
+        changed = False
+        for index, appt in enumerate(candidates):
+            appointment_uuid = appt.get("uuid")
+            if not appointment_uuid:
+                raise ApiError("owned appointment does not expose a UUID")
+            desired_marker = marker if index == 0 else f"{marker}:preserved:{appointment_uuid}"
+            desired_comment = appointment_comment(comment, desired_marker)
+            if appt.get("comments") != desired_comment:
+                api.rest(f"/appointments/{appointment_uuid}", "POST", body | {"comments": desired_comment})
+                changed = True
+        if changed:
+            summary["appointments_reconciled"] += 1
+        summary["appointment_duplicates_preserved"] += max(0, len(candidates) - 1)
+        summary["appointments_existing"] += 1
+        return
+    body["comments"] = appointment_comment(comment, marker)
     api.rest("/appointments", "POST", body)
     summary["appointments_created"] += 1
 
@@ -911,7 +1301,7 @@ def seed_history_event(
     visit_type_uuid = visit_types.get(event.get("visit_type") or patient["visit_type"]) or visit_types.get("OPD") or next(iter(visit_types.values()))
     visit_uuid = ensure_visit(api, patient_uuid, visit_type_uuid, event["start"], location, summary, stop=event.get("stop"))
     when = event.get("encounter_datetime") or event["start"]
-    marker_prefix = f"FM-BAHMNI-LAB-R1 history {patient['identifier']} {event_id}"
+    legacy_marker_prefix = f"FM-BAHMNI-LAB-R1 history {patient['identifier']} {event_id}"
     consultation_obs = history_event_numeric_observations(event, concepts, when) + history_event_text_observations(event, concepts, when)
     ensure_encounter(
         api,
@@ -921,9 +1311,10 @@ def seed_history_event(
         location,
         visit_uuid,
         consultation_obs,
-        f"{marker_prefix} consultation",
+        stable_record_marker("encounter", patient["identifier"], "history", event_id, "consultation"),
         concepts["document_text"],
         summary,
+        legacy_markers=[f"{legacy_marker_prefix} consultation"],
     )
     if event.get("lab_results"):
         ensure_encounter(
@@ -934,9 +1325,10 @@ def seed_history_event(
             location,
             visit_uuid,
             history_event_numeric_observations({"lab_results": event.get("lab_results", {})}, concepts, when),
-            f"{marker_prefix} lab-result",
+            stable_record_marker("encounter", patient["identifier"], "history", event_id, "lab-result"),
             concepts["document_text"],
             summary,
+            legacy_markers=[f"{legacy_marker_prefix} lab-result"],
         )
     if event.get("tests") or event.get("procedures"):
         ensure_encounter(
@@ -947,9 +1339,10 @@ def seed_history_event(
             location,
             visit_uuid,
             history_event_text_observations({"event_id": event_id, "summary": event.get("summary", ""), "tests": event.get("tests", []), "procedures": event.get("procedures", [])}, concepts, when),
-            f"{marker_prefix} investigation",
+            stable_record_marker("encounter", patient["identifier"], "history", event_id, "investigation"),
             concepts["document_text"],
             summary,
+            legacy_markers=[f"{legacy_marker_prefix} investigation"],
         )
     if event.get("billing") or event.get("notes"):
         ensure_encounter(
@@ -960,9 +1353,10 @@ def seed_history_event(
             location,
             visit_uuid,
             history_event_text_observations({"event_id": event_id, "summary": event.get("summary", ""), "billing": event.get("billing", {}), "notes": event.get("notes", [])}, concepts, when),
-            f"{marker_prefix} document-billing",
+            stable_record_marker("encounter", patient["identifier"], "history", event_id, "document-billing"),
             concepts["document_text"],
             summary,
+            legacy_markers=[f"{legacy_marker_prefix} document-billing"],
         )
 
 
@@ -970,6 +1364,8 @@ def new_summary() -> dict[str, int]:
     keys = [
         "locations_created", "locations_existing", "providers_created", "providers_existing", "patients_created", "patients_existing",
         "visits_created", "visits_existing", "encounters_created", "encounters_existing", "appointments_created", "appointments_existing",
+        "providers_reconciled", "patients_reconciled", "encounters_reconciled", "appointments_reconciled",
+        "encounter_duplicates_preserved", "appointment_duplicates_preserved",
         "allergies_created", "allergies_existing", "conditions_created", "conditions_existing", "conditions_skipped",
         "lab_orders_created", "lab_orders_existing", "radiology_orders_created", "radiology_orders_existing", "procedure_orders_created", "procedure_orders_existing",
         "test_orders_created", "test_orders_existing", "medication_orders_created", "medication_orders_existing", "medication_orders_skipped",
@@ -1046,7 +1442,9 @@ def seed(args: argparse.Namespace) -> None:
             visit_stop = (visit_start_dt + dt.timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%S.000+0000")
         visit_uuid = ensure_visit(api, patient_uuid, visit_type_uuid, visit_start, department_location, summary, stop=visit_stop)
 
-        marker = f"{seed_data['records']['encounter_marker_prefix']} {patient['identifier']} consultation"
+        current_consultation_marker = f"{seed_data['records']['encounter_marker_prefix']} {patient['identifier']} consultation"
+        legacy_consultation_marker = f"FM-BAHMNI-LAB-R1 synthetic encounter {patient['identifier']} consultation"
+        marker = stable_record_marker("encounter", patient["identifier"], "baseline", "consultation")
         obs_time = (base_date + dt.timedelta(days=index, minutes=15)).strftime("%Y-%m-%dT%H:%M:%S.000+0000")
         is_cold_fever_visit = patient["identifier"] == "SYN-HEN-0009"
         vitals = [
@@ -1075,24 +1473,47 @@ def seed(args: argparse.Namespace) -> None:
             marker,
             concepts["document_text"],
             summary,
+            legacy_markers=[current_consultation_marker, legacy_consultation_marker],
         )
 
-        lab_marker = f"{seed_data['records']['encounter_marker_prefix']} {patient['identifier']} lab-result"
+        current_lab_marker = f"{seed_data['records']['encounter_marker_prefix']} {patient['identifier']} lab-result"
+        legacy_lab_marker = f"FM-BAHMNI-LAB-R1 synthetic encounter {patient['identifier']} lab-result"
+        lab_marker = stable_record_marker("encounter", patient["identifier"], "baseline", "lab-result")
         lab_obs = [
             {"concept": concepts["serum_glucose"], "value": 90 + index * 3, "obsDatetime": obs_time},
             {"concept": concepts["white_blood_cells"], "value": round(5.0 + index * 0.4, 1), "obsDatetime": obs_time},
             {"concept": concepts["serum_creatinine_mg_dl"], "value": round(0.7 + index * 0.03, 2), "obsDatetime": obs_time},
         ]
-        ensure_encounter(api, patient_uuid, required_encounter_types["LAB_RESULT"], obs_time, department_location, visit_uuid, lab_obs, lab_marker, concepts["document_text"], summary)
+        ensure_encounter(
+            api, patient_uuid, required_encounter_types["LAB_RESULT"], obs_time, department_location, visit_uuid,
+            lab_obs, lab_marker, concepts["document_text"], summary,
+            legacy_markers=[current_lab_marker, legacy_lab_marker],
+        )
 
-        investigation_marker = f"{seed_data['records']['encounter_marker_prefix']} {patient['identifier']} investigation"
-        ensure_encounter(api, patient_uuid, required_encounter_types["INVESTIGATION"], obs_time, department_location, visit_uuid, [], investigation_marker, concepts["document_text"], summary)
+        current_investigation_marker = f"{seed_data['records']['encounter_marker_prefix']} {patient['identifier']} investigation"
+        legacy_investigation_marker = f"FM-BAHMNI-LAB-R1 synthetic encounter {patient['identifier']} investigation"
+        investigation_marker = stable_record_marker("encounter", patient["identifier"], "baseline", "investigation")
+        ensure_encounter(
+            api, patient_uuid, required_encounter_types["INVESTIGATION"], obs_time, department_location, visit_uuid,
+            [], investigation_marker, concepts["document_text"], summary,
+            legacy_markers=[current_investigation_marker, legacy_investigation_marker],
+        )
 
-        document_marker = f"{seed_data['records']['document_note']} for {patient['identifier']}"
-        ensure_encounter(api, patient_uuid, required_encounter_types["Patient Document"], obs_time, department_location, visit_uuid, [], document_marker, concepts["document_text"], summary)
+        current_document_marker = f"{seed_data['records']['document_note']} for {patient['identifier']}"
+        legacy_document_marker = f"FM-BAHMNI-LAB-R1 synthetic document metadata only; no real attachment bytes are stored for {patient['identifier']}"
+        document_marker = stable_record_marker("encounter", patient["identifier"], "baseline", "document")
+        ensure_encounter(
+            api, patient_uuid, required_encounter_types["Patient Document"], obs_time, department_location, visit_uuid,
+            [], document_marker, concepts["document_text"], summary,
+            legacy_markers=[current_document_marker, legacy_document_marker],
+        )
 
         appointment_start_dt = dt.datetime(2026, 1, 20 + index, 9 + (index % 6), 0, tzinfo=dt.timezone.utc)
         appointment_end_dt = appointment_start_dt + dt.timedelta(minutes=15)
+        appointment_start = appointment_start_dt.strftime("%Y-%m-%dT%H:%M:%S.000+0000")
+        appointment_comment_text = f"{seed_data['records']['appointment_comment_prefix']} {patient['identifier']}"
+        legacy_appointment_comment = f"FM-BAHMNI-LAB-R1 synthetic appointment {patient['identifier']}"
+        appointment_marker = stable_record_marker("appointment", patient["identifier"], str(appointment_ms(appointment_start)))
         ensure_appointment(
             api,
             patient["identifier"],
@@ -1100,10 +1521,12 @@ def seed(args: argparse.Namespace) -> None:
             provider_uuid,
             appointment_service_uuid,
             department_location,
-            appointment_start_dt.strftime("%Y-%m-%dT%H:%M:%S.000+0000"),
+            appointment_start,
             appointment_end_dt.strftime("%Y-%m-%dT%H:%M:%S.000+0000"),
-            f"{seed_data['records']['appointment_comment_prefix']} {patient['identifier']}",
+            appointment_comment_text,
+            appointment_marker,
             summary,
+            legacy_comments=[legacy_appointment_comment],
         )
 
         condition_texts = seed_data["records"]["condition_texts"]
@@ -1208,11 +1631,13 @@ def verify(args: argparse.Namespace) -> None:
         "orders": 0,
         "encounters": 0,
     }
+    identity_display_names_exact = True
     for patient in seed_data["patients"]:
         patient_hits = api.results("/patient", q=patient["identifier"], v="default", limit=5)
-        if patient_hits:
+        patient_hit = exact_owned_record(patient_hits, patient["identifier"])
+        if patient_hit and exact_display_matches(patient_hit, patient):
             counts["patients"] += 1
-            patient_uuid = patient_hits[0]["uuid"]
+            patient_uuid = patient_hit["uuid"]
             counts["orders"] += len(api.results("/order", patient=patient_uuid, v="default", limit=100))
             counts["encounters"] += len(api.results("/encounter", patient=patient_uuid, v="default", limit=100))
             try:
@@ -1227,13 +1652,29 @@ def verify(args: argparse.Namespace) -> None:
             if fhir_id:
                 _, condition_bundle = api.fhir("/Condition", params={"patient": fhir_id})
                 counts["conditions"] += int(condition_bundle.get("total", 0) or 0)
+        else:
+            identity_display_names_exact = False
     for provider in provider_records(seed_data):
-        if api.results("/provider", q=provider["identifier"], v="default", limit=5):
+        provider_hit = exact_owned_record(api.results("/provider", q=provider["identifier"], v="default", limit=5), provider["identifier"])
+        if provider_hit and exact_display_matches(provider_hit, provider):
             counts["providers"] += 1
+        else:
+            identity_display_names_exact = False
     _, appointments = api.rest("/appointments")
     appointment_count = 0
+    appointment_identity_ok = True
     if isinstance(appointments, list):
-        appointment_count = sum(1 for item in appointments if str(item.get("comments", "")).startswith(seed_data["records"]["appointment_comment_prefix"]))
+        for index, patient in enumerate(seed_data["patients"]):
+            start = dt.datetime(2026, 1, 20 + index, 9 + (index % 6), 0, tzinfo=dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000+0000")
+            marker = stable_record_marker("appointment", patient["identifier"], str(appointment_ms(start)))
+            matches = [
+                item for item in appointments
+                if item.get("patient", {}).get("identifier") == patient["identifier"] and f"[{marker}]" in str(item.get("comments") or "")
+            ]
+            appointment_count += len(matches)
+            appointment_identity_ok = appointment_identity_ok and len(matches) == 1
+    else:
+        appointment_identity_ok = False
     fhir_patient_ids = {patient["identifier"]: fhir_patient_id(api, patient["identifier"]) for patient in seed_data["patients"]}
     fhir_patient_exact_count = sum(1 for value in fhir_patient_ids.values() if value)
     _, fhir_observations = api.fhir("/Observation", params={"code": seed_data["concepts"]["weight_kg"]})
@@ -1243,10 +1684,11 @@ def verify(args: argparse.Namespace) -> None:
         for item in api.results("/location", q=seed_data["organization"]["name"], v="default", limit=20)
     )
     karthik_live: dict[str, Any] = {"patient_found": False, "completed_visit_found": False, "cold_fever_conditions_found": False, "fever_observation_found": False}
-    karthik_hits = api.results("/patient", q="SYN-HEN-0009", v="default", limit=5)
-    if karthik_hits:
+    karthik_record = next(patient for patient in seed_data["patients"] if patient["identifier"] == "SYN-HEN-0009")
+    karthik_hit = exact_owned_record(api.results("/patient", q="SYN-HEN-0009", v="default", limit=5), "SYN-HEN-0009")
+    if karthik_hit and exact_display_matches(karthik_hit, karthik_record):
         karthik_live["patient_found"] = True
-        karthik_uuid = karthik_hits[0]["uuid"]
+        karthik_uuid = karthik_hit["uuid"]
         visits = api.results("/visit", patient=karthik_uuid, v="full", limit=50)
         karthik_live["completed_visit_found"] = any(bool(visit.get("stopDatetime")) for visit in visits)
         encounters = api.results("/encounter", patient=karthik_uuid, v="full", limit=100)
@@ -1268,17 +1710,18 @@ def verify(args: argparse.Namespace) -> None:
         expected_events = patient.get("history_events", [])
         if not expected_events:
             continue
-        patient_hits = api.results("/patient", q=patient["identifier"], v="default", limit=5)
+        patient_hit = exact_owned_record(api.results("/patient", q=patient["identifier"], v="default", limit=5), patient["identifier"])
         found_events = 0
-        if patient_hits:
-            encounters = api.results("/encounter", patient=patient_hits[0]["uuid"], v="full", limit=100)
+        if patient_hit:
+            encounters = api.results("/encounter", patient=patient_hit["uuid"], v="full", limit=100)
             for event in expected_events:
-                marker_prefix = f"FM-BAHMNI-LAB-R1 history {patient['identifier']} {event['event_id']}"
+                marker_prefix = stable_record_marker("encounter", patient["identifier"], "history", event["event_id"])
                 if any(marker_in_obs(encounter, marker_prefix) for encounter in encounters):
                     found_events += 1
         history_live[patient["identifier"]] = {"expected": len(expected_events), "found": found_events, "ok": found_events == len(expected_events)}
 
     live_ok = counts["patients"] == len(seed_data["patients"]) and counts["providers"] == len(provider_records(seed_data))
+    live_ok = live_ok and identity_display_names_exact and appointment_identity_ok
     live_ok = live_ok and fhir_patient_exact_count == len(seed_data["patients"])
     live_ok = live_ok and int(fhir_observations.get("total", 0) or 0) > 0
     live_ok = live_ok and unicode_location_present and all(karthik_live.values()) and all(item["ok"] for item in history_live.values())
@@ -1286,6 +1729,8 @@ def verify(args: argparse.Namespace) -> None:
         "ok": live_ok,
         "offline": offline,
         "live_counts": counts | {"appointments": appointment_count},
+        "identity_display_names_exact": identity_display_names_exact,
+        "appointment_identity_ok": appointment_identity_ok,
         "unicode_location_present": unicode_location_present,
         "karthik_live": karthik_live,
         "history_live": history_live,
@@ -1338,6 +1783,17 @@ def inventory(args: argparse.Namespace) -> None:
     dump_json(result)
 
 
+def ownership(args: argparse.Namespace) -> None:
+    try:
+        marker = claim_ownership() if args.action == "claim" else load_ownership_marker()
+        if args.resources:
+            verify_owned_podman_resources()
+    except ValueError as exc:
+        raise SystemExit(f"Podman ownership check failed: {exc}") from exc
+    if args.json:
+        dump_json({"ok": True, "owner": marker["owner"], "resources_checked": args.resources})
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Bahmni Podman synthetic lab helper")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -1374,6 +1830,12 @@ def main(argv: list[str] | None = None) -> None:
     p = sub.add_parser("inventory")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=inventory)
+
+    p = sub.add_parser("ownership")
+    p.add_argument("action", choices=("claim", "verify"))
+    p.add_argument("--resources", action="store_true")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=ownership)
 
     args = parser.parse_args(argv)
     args.func(args)

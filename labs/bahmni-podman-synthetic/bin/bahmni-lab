@@ -47,7 +47,20 @@ require_podman_compose() {
   }
 }
 
+claim_ownership() {
+  "${PYTHON_BIN}" "${LABCTL}" ownership claim >/dev/null
+}
+
+verify_ownership() {
+  "${PYTHON_BIN}" "${LABCTL}" ownership verify >/dev/null
+}
+
+verify_owned_resources() {
+  "${PYTHON_BIN}" "${LABCTL}" ownership verify --resources >/dev/null
+}
+
 connection_works() {
+  verify_ownership
   podman --connection "${CONNECTION}" info --format json >/dev/null 2>&1
 }
 
@@ -76,6 +89,7 @@ safe_lab_home() {
 # machine, so teardown paths cannot create the VM they are meant to tear down.
 ensure_existing_connection() {
   require_podman
+  verify_ownership
   if connection_works; then
     ensure_rootless_connection
     return 0
@@ -92,6 +106,7 @@ ensure_existing_connection() {
 }
 
 ensure_connection() {
+  verify_ownership
   if ensure_existing_connection; then
     return 0
   fi
@@ -108,6 +123,8 @@ ensure_connection() {
 
 compose() {
   require_podman_compose
+  verify_ownership
+  verify_owned_resources
   podman-compose --podman-path "${PODMAN_WRAPPER}" -f "${COMPOSE_FILE}" --env-file "${ENV_FILE}" -p "${PROJECT}" "$@"
 }
 
@@ -152,6 +169,7 @@ case "${cmd}" in
     "${PYTHON_BIN}" "${LABCTL}" prepare "$@"
     ;;
   start)
+    claim_ownership
     ensure_connection
     ensure_prepared
     profiles=(--profile bahmni-standard)
@@ -162,6 +180,7 @@ case "${cmd}" in
     wait_for_health
     ;;
   ps)
+    verify_ownership
     ensure_connection
     ensure_prepared
     compose --profile bahmni-standard ps
@@ -186,7 +205,8 @@ case "${cmd}" in
     ;;
   reset)
     require_yes "${1:-}"
-    if ! ensure_existing_connection; then
+    verify_ownership
+    if ! connection_works; then
       echo "task-owned Podman connection ${CONNECTION} is unavailable; nothing to reset"
     elif [[ -f "${COMPOSE_FILE}" && -f "${ENV_FILE}" && -x "${PODMAN_WRAPPER}" ]]; then
       compose --profile emr --profile bahmni-standard --profile bahmni-mart --profile openelis --profile odoo --profile pacs --profile snowstorm-lite --profile cdss down -v

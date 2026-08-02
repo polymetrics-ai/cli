@@ -108,6 +108,14 @@
 - Add realistic clinical content for Karthik and Rohit: medicine names, dosage-style text, lab/radiology/procedure names, nursing instructions, discharge/follow-up, and simulated billing labels clearly documented as lab-only artifacts.
 - Update checks so they enforce `SYN-PROV-*`, `SYN-STAFF-*`, and `SYN-HEN-*` identifiers plus no real-looking phone numbers, rather than requiring fake-looking family-name markers in the clinical display name.
 
+### Slice I — Review hardening and forward reconciliation
+
+- Reconcile preferred Person names only after exact `SYN-PROV-*`, `SYN-STAFF-*`, or `SYN-HEN-*` identifier ownership is proven, using the supported OpenMRS person-name subresource.
+- Replace mutable appointment and encounter prose identities with stable task record markers, migrate both legacy and current prose markers in place, and preserve ambiguous duplicates without creating another canonical record.
+- Scan every fixture and outgoing write string for formatted Indian mobile/landline numbers and reject every email whose domain does not end in `.invalid`.
+- Require task-prefixed machine, connection, and compose-project names plus a matching durable ownership marker before Podman operations; verify compose resource labels before project actions or `down -v`.
+- Add focused standard-library regression tests before production edits. Because the assigned review phase permits only one focused verification after all fixes, record the unexecuted tests as the red specification and run them once after the complete fix round.
+
 ## Risks and mitigations
 
 - **Podman machine absent/stopped:** create/start only the task-owned machine if needed; never change default connection or unrelated machines.

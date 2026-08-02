@@ -69,6 +69,10 @@
 
 ## Final repo gates
 
+- [x] Slice I focused standard-library regression tests passed: 17 tests covering exact-name reconciliation, legacy/ambiguous record upgrades, adversarial contacts, shell parsing, fixture validation, and ownership guards.
+- [x] Slice I source review confirms every Podman mutation path requires matching ownership state and compose resource labels.
+- [x] Slice I live reconciliation is intentionally left to the outer validation/runtime phase; this review phase did not mutate the running lab.
+
 - [x] `gofmt -w cmd internal` not applicable: docs/scripts/lab fixture only, no Go edits.
 - [x] `go test ./...` not run: no Go code changed; targeted script/API/browser verification above is the relevant gate.
 - [x] `make verify` considered but not run because this branch adds an external Podman lab and no production Go code; targeted gates above passed.
