@@ -364,11 +364,11 @@ REVERSE ETL ACTIONS
     risk: Executes Ashby candidate.create through the documented POST /candidate.create endpoint; reverse ETL plan, preview, approval, and execute are required.
   upload_candidate_resume:
     endpoint: POST /candidate.uploadResume
-    required fields: candidateId
+    required fields: candidateId, resumeHandle
     risk: Executes Ashby candidate.uploadResume through the documented POST /candidate.uploadResume endpoint; reverse ETL plan, preview, approval, and execute are required.
   upload_candidate_file:
     endpoint: POST /candidate.uploadFile
-    required fields: candidateId
+    required fields: candidateId, fileHandle
     risk: Executes Ashby candidate.uploadFile through the documented POST /candidate.uploadFile endpoint; reverse ETL plan, preview, approval, and execute are required.
   update_candidate:
     endpoint: POST /candidate.update

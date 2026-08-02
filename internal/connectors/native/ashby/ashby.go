@@ -29,6 +29,7 @@ import (
 const (
 	ashbyDefaultBaseURL  = "https://api.ashbyhq.com"
 	ashbyDefaultPageSize = 100
+	ashbyDefaultMaxPages = 1
 	ashbyMaxPageSize     = 100
 	ashbyUserAgent       = "polymetrics-go-cli"
 	// ashbyAPIVersion is sent in the Accept header per Ashby's docs
@@ -134,6 +135,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 		lowerBound = strings.TrimSpace(req.Config.Config["start_date"])
 	}
 	pageCursor := ""
+	_, supportsCursor := endpoint.requestFields["cursor"]
 	baseBody, err := ashbyStreamBody(endpoint, req.Config, req.Query, pageSize)
 	if err != nil {
 		return err
@@ -143,7 +145,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 			return err
 		}
 		body := cloneMap(baseBody)
-		if pageCursor != "" {
+		if pageCursor != "" && supportsCursor {
 			body["cursor"] = pageCursor
 		}
 		resp, err := r.Do(ctx, http.MethodPost, endpoint.path, nil, body)
@@ -167,7 +169,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 			}
 		}
 		next := strings.TrimSpace(stringValue(pageBody["nextCursor"]))
-		if !boolValue(pageBody["moreDataAvailable"]) || next == "" {
+		if !boolValue(pageBody["moreDataAvailable"]) || next == "" || !supportsCursor {
 			return nil
 		}
 		pageCursor = next
@@ -196,7 +198,10 @@ func (c Connector) readFixture(ctx context.Context, stream string, endpoint stre
 }
 
 func ashbyStreamBody(endpoint streamEndpoint, cfg connectors.RuntimeConfig, query map[string]string, pageSize int) (map[string]any, error) {
-	body := map[string]any{"limit": pageSize}
+	body := map[string]any{}
+	if _, ok := endpoint.requestFields["limit"]; ok {
+		body["limit"] = pageSize
+	}
 	for field, kind := range endpoint.requestFields {
 		if field == "limit" || field == "cursor" {
 			continue
@@ -482,7 +487,10 @@ func ashbyPageSize(cfg connectors.RuntimeConfig) (int, error) {
 
 func ashbyMaxPages(cfg connectors.RuntimeConfig) (int, error) {
 	raw := strings.TrimSpace(strings.ToLower(cfg.Config["max_pages"]))
-	if raw == "" || raw == "all" || raw == "unlimited" {
+	if raw == "" {
+		return ashbyDefaultMaxPages, nil
+	}
+	if raw == "all" || raw == "unlimited" {
 		return 0, nil
 	}
 	value, err := strconv.Atoi(raw)
