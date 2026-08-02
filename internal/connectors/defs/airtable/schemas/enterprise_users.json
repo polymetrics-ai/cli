@@ -3,7 +3,9 @@
   "title": "Airtable enterprise_users record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "email",
+    "state"
   ],
   "properties": {
     "id": {
@@ -14,6 +16,23 @@
     },
     "name": {
       "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "isAdmin": {
+      "type": "boolean"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lastActivityTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
     }
   },
   "additionalProperties": true,

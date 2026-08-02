@@ -6,8 +6,12 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "view_metadata_fixture_1",
-      "name": "Fixture Name"
+      "id": "viw_fixture_1",
+      "name": "Fixture View",
+      "type": "grid",
+      "visibleFieldIds": [
+        "fld_fixture_1"
+      ]
     }
   }
 }

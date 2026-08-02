@@ -3,17 +3,58 @@
   "title": "Airtable scim_user record",
   "type": "object",
   "required": [
-    "id"
+    "schemas",
+    "id",
+    "userName"
   ],
   "properties": {
+    "schemas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "id": {
       "type": "string"
     },
-    "email": {
+    "userName": {
       "type": "string"
     },
     "name": {
-      "type": "string"
+      "type": "object",
+      "properties": {
+        "givenName": {
+          "type": "string"
+        },
+        "familyName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "emails": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "primary": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "value"
+        ]
+      }
+    },
+    "active": {
+      "type": "boolean"
     }
   },
   "additionalProperties": true,

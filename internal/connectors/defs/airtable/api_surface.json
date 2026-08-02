@@ -8,15 +8,25 @@
     {
       "method": "GET",
       "path": "/scim/v2/Groups",
-      "covered_by": {
-        "stream": "scim_groups"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-scim-pagination-foundation can derive SCIM startIndex pagination from Resources, startIndex, itemsPerPage, and totalResults without using a nonexistent nextStartIndex token",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "POST",
       "path": "/scim/v2/Groups",
-      "covered_by": {
-        "write": "create_scim_group"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -36,29 +46,49 @@
     {
       "method": "PATCH",
       "path": "/scim/v2/Groups/{groupId}",
-      "covered_by": {
-        "write": "patch_scim_group"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "PUT",
       "path": "/scim/v2/Groups/{groupId}",
-      "covered_by": {
-        "write": "put_scim_group"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "GET",
       "path": "/scim/v2/Users",
-      "covered_by": {
-        "stream": "scim_users"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-scim-pagination-foundation can derive SCIM startIndex pagination from Resources, startIndex, itemsPerPage, and totalResults without using a nonexistent nextStartIndex token",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "POST",
       "path": "/scim/v2/Users",
-      "covered_by": {
-        "write": "create_scim_user"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -78,15 +108,25 @@
     {
       "method": "PATCH",
       "path": "/scim/v2/Users/{userId}",
-      "covered_by": {
-        "write": "patch_scim_user"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "PUT",
       "path": "/scim/v2/Users/{userId}",
-      "covered_by": {
-        "write": "put_scim_user"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -141,8 +181,13 @@
     {
       "method": "POST",
       "path": "/v0/meta/bases",
-      "covered_by": {
-        "write": "create_base"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -183,8 +228,13 @@
     {
       "method": "POST",
       "path": "/v0/meta/bases/{baseId}/collaborators",
-      "covered_by": {
-        "write": "add_base_collaborator"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -211,8 +261,13 @@
     {
       "method": "POST",
       "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators",
-      "covered_by": {
-        "write": "add_interface_collaborator"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -274,8 +329,13 @@
     {
       "method": "POST",
       "path": "/v0/meta/bases/{baseId}/tables",
-      "covered_by": {
-        "write": "create_table"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -393,15 +453,25 @@
     {
       "method": "POST",
       "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveGroups",
-      "covered_by": {
-        "write": "move_user_groups"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "POST",
       "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveWorkspaces",
-      "covered_by": {
-        "write": "move_workspaces"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -428,8 +498,13 @@
     {
       "method": "POST",
       "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens/revoke",
-      "covered_by": {
-        "write": "revoke_enterprise_personal_access_tokens"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -449,29 +524,49 @@
     {
       "method": "PATCH",
       "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users",
-      "covered_by": {
-        "write": "manage_user_batched"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "POST",
       "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/claim",
-      "covered_by": {
-        "write": "manage_user_membership"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "POST",
       "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/grantAdminAccess",
-      "covered_by": {
-        "write": "grant_admin_access"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "POST",
       "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/revokeAdminAccess",
-      "covered_by": {
-        "write": "revoke_admin_access"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -512,8 +607,13 @@
     {
       "method": "POST",
       "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/workspaceAiAllowlist",
-      "covered_by": {
-        "write": "update_workspace_ai_allowlist"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -554,8 +654,13 @@
     {
       "method": "POST",
       "path": "/v0/meta/workspaces/{workspaceId}/collaborators",
-      "covered_by": {
-        "write": "add_workspace_collaborator"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -603,8 +708,13 @@
     {
       "method": "DELETE",
       "path": "/v0/{baseId}/{tableIdOrName}",
-      "covered_by": {
-        "write": "delete_multiple_records"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -617,22 +727,37 @@
     {
       "method": "PATCH",
       "path": "/v0/{baseId}/{tableIdOrName}",
-      "covered_by": {
-        "write": "update_multiple_records"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "POST",
       "path": "/v0/{baseId}/{tableIdOrName}",
-      "covered_by": {
-        "write": "create_records"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
       "method": "PUT",
       "path": "/v0/{baseId}/{tableIdOrName}",
-      "covered_by": {
-        "write": "update_multiple_records_put"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -714,8 +839,13 @@
     {
       "method": "POST",
       "path": "/v0/{enterpriseAccountId}/{dataTableId}/deleteRecords",
-      "covered_by": {
-        "write": "hyperdb_delete_records_by_primary_keys"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
@@ -728,8 +858,13 @@
     {
       "method": "PUT",
       "path": "/v0/{enterpriseAccountId}/{dataTableId}/upsertRecords",
-      "covered_by": {
-        "write": "hyperdb_upsert_records_by_primary_keys"
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     }
   ]

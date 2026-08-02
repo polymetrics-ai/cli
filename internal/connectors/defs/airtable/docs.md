@@ -1,6 +1,6 @@
 # Overview
 
-Airtable connector bundle expanded to official Web API parity from the embedded OpenAPI specification. It reads Web API, SCIM, metadata, comments, webhook payloads, enterprise/admin, audit/eDiscovery/change-event data, exposes the HyperDB getRecords direct read, and declares typed reverse-ETL write actions for every supportable JSON/no-body mutation.
+Airtable connector bundle expanded to official Web API parity from the embedded OpenAPI specification. It reads Web API metadata, records, comments, webhook payloads, SCIM detail, enterprise/admin, audit/eDiscovery/change-event data, exposes the HyperDB getRecords direct read, and declares typed reverse-ETL write actions for supportable JSON/no-body mutations whose schemas are enforceable by the current runtime.
 
 Official documentation: https://airtable.com/developers/web/api/introduction. OpenAPI SHA-256: `f1506571034500ffb0887e7244f770c0b060a4205e734881bd3de6fa20d6f6b8`. Fixture-only validation; no live provider calls or certification claims.
 
@@ -15,19 +15,15 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 ## Streams notes
 
-31 fixture-backed streams cover all official GET operations. Default pagination uses `offset`; SCIM/webhook-payload/audit endpoints declare their provider-specific cursor parameters where applicable.
-
-- `scim_groups`: GET `/scim/v2/Groups` -> `Resources`; query count.
+29 fixture-backed streams cover executable GET operations. Default pagination uses `offset`; webhook-payload and audit endpoints declare provider cursor parameters where the current runtime can consume the documented token directly. SCIM list endpoints are blocked because Airtable SCIM responses expose `Resources`, `startIndex`, `itemsPerPage`, and `totalResults`, not a `nextStartIndex` token.
 
 - `scim_group`: GET `/scim/v2/Groups/{{ config.group_id }}` -> `.`.
-
-- `scim_users`: GET `/scim/v2/Users` -> `Resources`; query count.
 
 - `scim_user`: GET `/scim/v2/Users/{{ config.user_id }}` -> `.`.
 
 - `webhooks`: GET `/v0/bases/{{ config.base_id }}/webhooks` -> `webhooks`.
 
-- `webhook_payloads`: GET `/v0/bases/{{ config.base_id }}/webhooks/{{ config.webhook_id }}/payloads` -> `payloads`; query limit.
+- `webhook_payloads`: GET `/v0/bases/{{ config.base_id }}/webhooks/{{ config.webhook_id }}/payloads` -> `payloads`; query limit; cursor cursor.
 
 - `bases`: GET `/v0/meta/bases` -> `bases`.
 
@@ -47,7 +43,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `enterprise`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}` -> `.`.
 
-- `audit_log_events`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogEvents` -> `events`; query pageSize.
+- `audit_log_events`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogEvents` -> `events`; query pageSize; cursor pagination.next.
 
 - `audit_log_requests`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogs` -> `auditLogs`; query pageSize.
 
@@ -85,23 +81,11 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 ## Write actions & risks
 
-70 fixture-backed write actions cover supportable JSON/no-body POST/PATCH/PUT/DELETE operations. Every write must use reverse ETL plan -> preview -> explicit approval -> execute. DELETE actions treat 404 as missing-ok idempotent success where supported; DELETE/PUT/revoke/remove/logout actions require destructive confirmation.
-
-- `create_scim_group`: POST `/scim/v2/Groups`; kind `create`; body `json`; path fields `none`; required `schemas, displayName`.
+45 fixture-backed write actions cover supportable JSON/no-body mutations whose closed schemas are enforceable by the current runtime. Every write must use reverse ETL plan -> preview -> explicit approval -> execute. DELETE actions treat 404 as missing-ok idempotent success where supported; DELETE/PUT/revoke/remove/logout actions require destructive confirmation.
 
 - `delete_scim_group`: DELETE `/scim/v2/Groups/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.
 
-- `patch_scim_group`: PATCH `/scim/v2/Groups/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas, Operations`.
-
-- `put_scim_group`: PUT `/scim/v2/Groups/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas`.
-
-- `create_scim_user`: POST `/scim/v2/Users`; kind `create`; body `json`; path fields `none`; required `schemas, userName`.
-
 - `delete_scim_user`: DELETE `/scim/v2/Users/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.
-
-- `patch_scim_user`: PATCH `/scim/v2/Users/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas, Operations`.
-
-- `put_scim_user`: PUT `/scim/v2/Users/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas, userName`.
 
 - `create_webhook`: POST `/v0/bases/{{ config.base_id }}/webhooks`; kind `create`; body `json`; path fields `none`; required `specification`.
 
@@ -111,21 +95,15 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `refresh_webhook`: POST `/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}/refresh`; kind `update`; body `json`; path fields `id`; required `id`.
 
-- `create_base`: POST `/v0/meta/bases`; kind `create`; body `json`; path fields `none`; required `workspaceId, name, tables`.
-
 - `delete_base`: DELETE `/v0/meta/bases/{{ record.base_id }}`; kind `delete`; body `none`; path fields `base_id`; required `base_id`.
 
 - `delete_block_installation`: DELETE `/v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.
 
 - `manage_block_installation`: PATCH `/v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, state`.
 
-- `add_base_collaborator`: POST `/v0/meta/bases/{{ config.base_id }}/collaborators`; kind `create`; body `json`; path fields `none`; required `collaborators`.
-
 - `delete_base_collaborator`: DELETE `/v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `user_or_group_id`; required `user_or_group_id`.
 
 - `update_collaborator_base_permission`: PATCH `/v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}`; kind `update`; body `json`; path fields `user_or_group_id`; required `user_or_group_id, permissionLevel`.
-
-- `add_interface_collaborator`: POST `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators`; kind `create`; body `json`; path fields `page_bundle_id`; required `page_bundle_id, collaborators`.
 
 - `delete_interface_collaborator`: DELETE `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `page_bundle_id, user_or_group_id`; required `page_bundle_id, user_or_group_id`.
 
@@ -138,8 +116,6 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 - `delete_share`: DELETE `/v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.
 
 - `manage_share`: PATCH `/v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, state`.
-
-- `create_table`: POST `/v0/meta/bases/{{ config.base_id }}/tables`; kind `create`; body `json`; path fields `none`; required `name, fields`.
 
 - `update_table`: PATCH `/v0/meta/bases/{{ config.base_id }}/tables/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `none`.
 
@@ -155,23 +131,9 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `create_ediscovery_export`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/exports`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, baseId`.
 
-- `move_user_groups`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/moveGroups`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, groupIds, targetEnterpriseAccountId`.
-
-- `move_workspaces`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/moveWorkspaces`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, workspaceIds, targetEnterpriseAccountId`.
-
 - `create_base_from_package_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/packages/{{ record.package_id }}/install`; kind `create`; body `json`; path fields `enterprise_account_id, package_id`; required `enterprise_account_id, package_id, workspaceId, packageReleaseId, name`.
 
-- `revoke_enterprise_personal_access_tokens`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/personalAccessTokens/revoke`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, tokenIds`.
-
 - `delete_users_by_email`: DELETE `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users?email={{ record.email | urlencode }}`; kind `delete`; body `none`; path fields `enterprise_account_id, email`; required `enterprise_account_id, email`.
-
-- `manage_user_batched`: PATCH `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.
-
-- `manage_user_membership`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/claim`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.
-
-- `grant_admin_access`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/grantAdminAccess`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.
-
-- `revoke_admin_access`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/revokeAdminAccess`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.
 
 - `delete_user_by_id`: DELETE `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}`; kind `delete`; body `none`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.
 
@@ -181,13 +143,9 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `remove_user_from_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}/remove`; kind `update`; body `json`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.
 
-- `update_workspace_ai_allowlist`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/workspaceAiAllowlist`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, workspaces`.
-
 - `create_workspace`: POST `/v0/meta/workspaces`; kind `create`; body `json`; path fields `none`; required `enterpriseAccountId, name`.
 
 - `delete_workspace`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}`; kind `delete`; body `none`; path fields `workspace_id`; required `workspace_id`.
-
-- `add_workspace_collaborator`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/collaborators`; kind `create`; body `json`; path fields `workspace_id`; required `workspace_id, collaborators`.
 
 - `delete_workspace_collaborator`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `workspace_id, user_or_group_id`; required `workspace_id, user_or_group_id`.
 
@@ -200,14 +158,6 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 - `update_workspace_restrictions`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/updateRestrictions`; kind `update`; body `json`; path fields `workspace_id`; required `workspace_id`.
 
 - `upload_attachment`: POST `/v0/{{ config.base_id }}/{{ record.record_id }}/{{ record.attachment_field_id_or_name }}/uploadAttachment`; kind `custom`; body `json`; path fields `record_id, attachment_field_id_or_name`; required `record_id, attachment_field_id_or_name, contentType, filename, file`.
-
-- `delete_multiple_records`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}?records[]={{ record.records | join:&records[]= }}`; kind `delete`; body `none`; path fields `records`; required `records`.
-
-- `update_multiple_records`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `records`.
-
-- `create_records`: POST `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `create`; body `json`; path fields `none`; required `records`.
-
-- `update_multiple_records_put`: PUT `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `records`.
 
 - `delete_record`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.
 
@@ -223,14 +173,14 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `update_date_dependency_metadata`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}/dateDependencyMetadata`; kind `update`; body `json`; path fields `id`; required `id, predecessorRecordId, dateDependencyMetadata`.
 
-- `hyperdb_delete_records_by_primary_keys`: POST `/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/deleteRecords`; kind `custom`; body `json`; path fields `enterprise_account_id, data_table_id`; required `enterprise_account_id, data_table_id, primaryKeysForDelete`.
-
-- `hyperdb_upsert_records_by_primary_keys`: PUT `/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/upsertRecords`; kind `upsert`; body `json`; path fields `enterprise_account_id, data_table_id`; required `enterprise_account_id, data_table_id, records`.
-
 ## Known limits
 
 - Blocked row: `post-sync-api-endpoint` (`POST /v0/{baseId}/{apiEndpointSyncId}/sync`) because the official Sync API import is `text/csv`; the shared declarative write runtime has no typed bounded CSV body dialect and generic raw uploads remain disallowed.
 
-- API-surface ledger rows: 103 total = 31 streams + 70 writes + 1 direct read + 1 blocked operation.
+- Blocked foundation: `airtable-scim-pagination-foundation` for SCIM list users/groups. Airtable's documented SCIM list response uses `Resources`, `startIndex`, `itemsPerPage`, and `totalResults`; the current declarative cursor paginator cannot compute the next `startIndex` arithmetically and must not use nonexistent `nextStartIndex`.
+
+- Blocked foundation: `airtable-array-cardinality-foundation` for 25 official mutations that require non-empty request arrays. The current schema subset supports `minProperties` but not `minItems`, so these operations stay blocked instead of accepting `[]` no-op/destructive payloads.
+
+- API-surface ledger rows: 103 total = 29 streams + 45 writes + 1 direct read + 28 blocked operations.
 
 - Certification remains fixture-only/uncertified until separately approved live-safe credentials and provider resources are supplied outside this wave.

@@ -3,13 +3,29 @@
   "title": "Airtable shares record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "type",
+    "state",
+    "createdTime"
   ],
   "properties": {
     "id": {
       "type": "string"
     },
-    "name": {
+    "type": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "createdByUserId": {
+      "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "url": {
       "type": "string"
     }
   },

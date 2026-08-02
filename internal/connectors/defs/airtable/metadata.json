@@ -1,7 +1,7 @@
 {
   "name": "airtable",
   "display_name": "Airtable",
-  "description": "Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/admin, HyperDB direct reads, and executes typed record/schema/admin mutations from fixture-tested declarative definitions.",
+  "description": "Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, enterprise/admin data, and HyperDB direct reads; executes typed single-resource mutations while batch array-cardinality operations stay blocked until enforceable.",
   "integration_type": "api",
   "docs_url": "https://airtable.com/developers/web/api/introduction",
   "release_stage": "ga",
@@ -17,7 +17,7 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Airtable API reads for base, table, record, comment, webhook, SCIM, collaborator, enterprise, audit, eDiscovery, and change-event metadata",
-    "write": "typed Airtable API mutations for records, schema, comments, webhooks, SCIM, collaborators, enterprise/admin, HyperDB, and attachment upload; destructive/admin actions require plan, preview, explicit approval, and execute"
+    "read": "external Airtable API reads for base, table, record, comment, webhook, SCIM detail, collaborator, enterprise, audit, eDiscovery, and change-event metadata",
+    "write": "typed Airtable API mutations for single records, schema fields, comments, webhooks, selected admin actions, and attachment upload; destructive/admin actions require plan, preview, explicit approval, and execute while non-empty array batch operations remain blocked"
   }
 }

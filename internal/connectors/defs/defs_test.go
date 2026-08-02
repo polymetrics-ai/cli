@@ -56,30 +56,52 @@ func TestAirtableRuntimeBundleSafetyContract(t *testing.T) {
 		t.Fatalf("airtable capabilities query=%v cdc=%v, want both false", airtable.Metadata.Capabilities.Query, airtable.Metadata.Capabilities.CDC)
 	}
 
-	valid := []connectors.Record{{"records": []any{"recA1B2C3D4E5F6G7"}}}
-	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "delete_multiple_records"}, valid); err != nil {
-		t.Fatalf("ValidateWrite valid delete_multiple_records: %v", err)
-	}
-	unsafe := []connectors.Record{{"records": []any{"recA&records[]=recB"}}}
-	err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "delete_multiple_records"}, unsafe)
-	if err == nil {
-		t.Fatal("ValidateWrite unsafe delete_multiple_records = nil, want error")
-	}
-	if !strings.Contains(err.Error(), "pattern") {
-		t.Fatalf("ValidateWrite unsafe error = %q, want pattern validation", err.Error())
+	for _, stream := range []string{"scim_groups", "scim_users"} {
+		if hasAirtableStream(airtable, stream) {
+			t.Fatalf("airtable stream %q should stay blocked until SCIM startIndex pagination is enforceable", stream)
+		}
 	}
 
-	hyperDBDelete := findAirtableWrite(t, airtable, "hyperdb_delete_records_by_primary_keys")
-	if hyperDBDelete.Confirm != "destructive" {
-		t.Fatalf("hyperdb_delete_records_by_primary_keys confirm = %q, want destructive", hyperDBDelete.Confirm)
+	blockedArrayActions := []string{
+		"add_base_collaborator",
+		"add_interface_collaborator",
+		"add_workspace_collaborator",
+		"create_base",
+		"create_records",
+		"create_scim_group",
+		"create_scim_user",
+		"create_table",
+		"delete_multiple_records",
+		"grant_admin_access",
+		"hyperdb_delete_records_by_primary_keys",
+		"hyperdb_upsert_records_by_primary_keys",
+		"manage_user_batched",
+		"manage_user_membership",
+		"move_user_groups",
+		"move_workspaces",
+		"patch_scim_group",
+		"patch_scim_user",
+		"put_scim_group",
+		"put_scim_user",
+		"revoke_admin_access",
+		"revoke_enterprise_personal_access_tokens",
+		"update_multiple_records",
+		"update_multiple_records_put",
+		"update_workspace_ai_allowlist",
 	}
-	validHyperDBDelete := []connectors.Record{{"enterprise_account_id": "ent_fixture", "data_table_id": "dtbl_fixture", "primaryKeysForDelete": []any{"pk_fixture"}}}
-	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "hyperdb_delete_records_by_primary_keys"}, validHyperDBDelete); err != nil {
-		t.Fatalf("ValidateWrite valid hyperdb_delete_records_by_primary_keys: %v", err)
+	for _, action := range blockedArrayActions {
+		if hasAirtableWrite(airtable, action) {
+			t.Fatalf("airtable write %q should stay blocked until non-empty arrays are enforceable", action)
+		}
 	}
-	invalidHyperDBDelete := []connectors.Record{{"enterprise_account_id": "ent_fixture", "data_table_id": "dtbl_fixture", "primaryKeys": []any{"pk_fixture"}}}
-	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "hyperdb_delete_records_by_primary_keys"}, invalidHyperDBDelete); err == nil {
-		t.Fatal("ValidateWrite legacy primaryKeys hyperdb delete = nil, want schema error")
+
+	validCreateField := []connectors.Record{{"table_id": "tbl_fixture", "name": "Fixture Field", "type": "singleLineText"}}
+	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "create_field"}, validCreateField); err != nil {
+		t.Fatalf("ValidateWrite valid create_field: %v", err)
+	}
+	invalidCreateField := []connectors.Record{{"table_id": "tbl_fixture", "name": "Fixture Field", "type": "unsupportedFixtureType"}}
+	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "create_field"}, invalidCreateField); err == nil || !strings.Contains(err.Error(), "enum") {
+		t.Fatalf("ValidateWrite unsupported create_field type error = %v, want enum validation", err)
 	}
 
 	noopCases := []struct {
@@ -181,6 +203,24 @@ func findAirtableWrite(t *testing.T, bundle engine.Bundle, name string) engine.W
 	}
 	t.Fatalf("airtable write action %q missing", name)
 	return engine.WriteAction{}
+}
+
+func hasAirtableWrite(bundle engine.Bundle, name string) bool {
+	for _, action := range bundle.Writes {
+		if action.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
+func hasAirtableStream(bundle engine.Bundle, name string) bool {
+	for _, stream := range bundle.Streams {
+		if stream.Name == name {
+			return true
+		}
+	}
+	return false
 }
 
 func containsString(values []string, want string) bool {

@@ -8,8 +8,11 @@
     "body": {
       "packages": [
         {
-          "id": "enterprise_packages_fixture_1",
-          "name": "Fixture Name"
+          "id": "pkg_fixture_1",
+          "name": "Fixture Package",
+          "version": "1.0.0",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "createdByUserId": "usr_fixture_1"
         }
       ]
     }

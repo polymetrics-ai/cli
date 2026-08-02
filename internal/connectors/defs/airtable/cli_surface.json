@@ -125,28 +125,6 @@
   ],
   "commands": [
     {
-      "path": "read scim-groups",
-      "summary": "List groups",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "scim_groups",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "flags": [
-        {
-          "name": "page-size",
-          "type": "string",
-          "summary": "Bounded Airtable page size",
-          "maps_to": "config.page_size"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/scim/v2/Groups"
-        }
-      ]
-    },
-    {
       "path": "read scim-group",
       "summary": "Get group",
       "intent": "etl",
@@ -165,28 +143,6 @@
         {
           "method": "GET",
           "path": "/scim/v2/Groups/{groupId}"
-        }
-      ]
-    },
-    {
-      "path": "read scim-users",
-      "summary": "List users",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "scim_users",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "flags": [
-        {
-          "name": "page-size",
-          "type": "string",
-          "summary": "Bounded Airtable page size",
-          "maps_to": "config.page_size"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/scim/v2/Users"
         }
       ]
     },
@@ -954,22 +910,6 @@
       ]
     },
     {
-      "path": "write create-scim-group",
-      "summary": "Create group",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "create_scim_group",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/scim/v2/Groups"
-        }
-      ]
-    },
-    {
       "path": "write delete-scim-group",
       "summary": "Delete group",
       "intent": "reverse_etl",
@@ -986,54 +926,6 @@
       ]
     },
     {
-      "path": "write patch-scim-group",
-      "summary": "Patch group",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "patch_scim_group",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "PATCH",
-          "path": "/scim/v2/Groups/{groupId}"
-        }
-      ]
-    },
-    {
-      "path": "write put-scim-group",
-      "summary": "Put group",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "put_scim_group",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/scim/v2/Groups/{groupId}"
-        }
-      ]
-    },
-    {
-      "path": "write create-scim-user",
-      "summary": "Create user",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "create_scim_user",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/scim/v2/Users"
-        }
-      ]
-    },
-    {
       "path": "write delete-scim-user",
       "summary": "Delete user",
       "intent": "reverse_etl",
@@ -1045,38 +937,6 @@
       "api_surface": [
         {
           "method": "DELETE",
-          "path": "/scim/v2/Users/{userId}"
-        }
-      ]
-    },
-    {
-      "path": "write patch-scim-user",
-      "summary": "Patch user",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "patch_scim_user",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "PATCH",
-          "path": "/scim/v2/Users/{userId}"
-        }
-      ]
-    },
-    {
-      "path": "write put-scim-user",
-      "summary": "Put user",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "put_scim_user",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "PUT",
           "path": "/scim/v2/Users/{userId}"
         }
       ]
@@ -1146,22 +1006,6 @@
       ]
     },
     {
-      "path": "write create-base",
-      "summary": "Create base",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "create_base",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "medium",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/bases"
-        }
-      ]
-    },
-    {
       "path": "write delete-base",
       "summary": "Delete base",
       "intent": "reverse_etl",
@@ -1210,22 +1054,6 @@
       ]
     },
     {
-      "path": "write add-base-collaborator",
-      "summary": "Add base collaborator",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "add_base_collaborator",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "medium",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/bases/{baseId}/collaborators"
-        }
-      ]
-    },
-    {
       "path": "write delete-base-collaborator",
       "summary": "Delete base collaborator",
       "intent": "reverse_etl",
@@ -1254,22 +1082,6 @@
         {
           "method": "PATCH",
           "path": "/v0/meta/bases/{baseId}/collaborators/{userOrGroupId}"
-        }
-      ]
-    },
-    {
-      "path": "write add-interface-collaborator",
-      "summary": "Add interface collaborator",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "add_interface_collaborator",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "medium",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators"
         }
       ]
     },
@@ -1366,22 +1178,6 @@
         {
           "method": "PATCH",
           "path": "/v0/meta/bases/{baseId}/shares/{shareId}"
-        }
-      ]
-    },
-    {
-      "path": "write create-table",
-      "summary": "Create table",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "create_table",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "medium",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/bases/{baseId}/tables"
         }
       ]
     },
@@ -1498,38 +1294,6 @@
       ]
     },
     {
-      "path": "write move-user-groups",
-      "summary": "Move user groups",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "move_user_groups",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveGroups"
-        }
-      ]
-    },
-    {
-      "path": "write move-workspaces",
-      "summary": "Move workspaces",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "move_workspaces",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveWorkspaces"
-        }
-      ]
-    },
-    {
       "path": "write create-base-from-package-enterprise",
       "summary": "Create base from package",
       "intent": "reverse_etl",
@@ -1546,22 +1310,6 @@
       ]
     },
     {
-      "path": "write revoke-enterprise-personal-access-tokens",
-      "summary": "Revoke personal access tokens",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "revoke_enterprise_personal_access_tokens",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens/revoke"
-        }
-      ]
-    },
-    {
       "path": "write delete-users-by-email",
       "summary": "Delete users by email",
       "intent": "reverse_etl",
@@ -1574,70 +1322,6 @@
         {
           "method": "DELETE",
           "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users"
-        }
-      ]
-    },
-    {
-      "path": "write manage-user-batched",
-      "summary": "Manage user batched",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "manage_user_batched",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "PATCH",
-          "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users"
-        }
-      ]
-    },
-    {
-      "path": "write manage-user-membership",
-      "summary": "Manage user membership",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "manage_user_membership",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/claim"
-        }
-      ]
-    },
-    {
-      "path": "write grant-admin-access",
-      "summary": "Grant admin access",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "grant_admin_access",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/grantAdminAccess"
-        }
-      ]
-    },
-    {
-      "path": "write revoke-admin-access",
-      "summary": "Revoke admin access",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "revoke_admin_access",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/revokeAdminAccess"
         }
       ]
     },
@@ -1706,22 +1390,6 @@
       ]
     },
     {
-      "path": "write update-workspace-ai-allowlist",
-      "summary": "Update workspace AI allowlist",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "update_workspace_ai_allowlist",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/workspaceAiAllowlist"
-        }
-      ]
-    },
-    {
       "path": "write create-workspace",
       "summary": "Create workspace",
       "intent": "reverse_etl",
@@ -1750,22 +1418,6 @@
         {
           "method": "DELETE",
           "path": "/v0/meta/workspaces/{workspaceId}"
-        }
-      ]
-    },
-    {
-      "path": "write add-workspace-collaborator",
-      "summary": "Add workspace collaborator",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "add_workspace_collaborator",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "medium",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/meta/workspaces/{workspaceId}/collaborators"
         }
       ]
     },
@@ -1862,70 +1514,6 @@
         {
           "method": "POST",
           "path": "/v0/{baseId}/{recordId}/{attachmentFieldIdOrName}/uploadAttachment"
-        }
-      ]
-    },
-    {
-      "path": "write delete-multiple-records",
-      "summary": "Delete multiple records",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "delete_multiple_records",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/v0/{baseId}/{tableIdOrName}"
-        }
-      ]
-    },
-    {
-      "path": "write update-multiple-records",
-      "summary": "Update multiple records",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "update_multiple_records",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "medium",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "PATCH",
-          "path": "/v0/{baseId}/{tableIdOrName}"
-        }
-      ]
-    },
-    {
-      "path": "write create-records",
-      "summary": "Create records",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "create_records",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "medium",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/{baseId}/{tableIdOrName}"
-        }
-      ]
-    },
-    {
-      "path": "write update-multiple-records-put",
-      "summary": "Update multiple records (put)",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "update_multiple_records_put",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/v0/{baseId}/{tableIdOrName}"
         }
       ]
     },
@@ -2038,38 +1626,6 @@
         {
           "method": "PATCH",
           "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/dateDependencyMetadata"
-        }
-      ]
-    },
-    {
-      "path": "write hyperdb-delete-records-by-primary-keys",
-      "summary": "Delete records",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "hyperdb_delete_records_by_primary_keys",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "medium",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/{enterpriseAccountId}/{dataTableId}/deleteRecords"
-        }
-      ]
-    },
-    {
-      "path": "write hyperdb-upsert-records-by-primary-keys",
-      "summary": "Update or insert records",
-      "intent": "reverse_etl",
-      "availability": "planned",
-      "write": "hyperdb_upsert_records_by_primary_keys",
-      "source_url": "https://airtable.com/developers/web/api/introduction",
-      "risk": "high",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/v0/{enterpriseAccountId}/{dataTableId}/upsertRecords"
         }
       ]
     }

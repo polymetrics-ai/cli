@@ -8,8 +8,13 @@
     "body": {
       "personalAccessTokens": [
         {
-          "id": "enterprise_personal_access_tokens_fixture_1",
-          "name": "Fixture Name"
+          "id": "ptok_fixture_1",
+          "userId": "usr_fixture_1",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "lastUsedTime": "2026-01-02T00:00:00.000Z",
+          "scopes": [
+            "data.records:read"
+          ]
         }
       ]
     }

@@ -3,19 +3,39 @@
   "title": "Airtable scim_group record",
   "type": "object",
   "required": [
-    "id"
+    "schemas",
+    "id",
+    "displayName"
   ],
   "properties": {
+    "schemas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "id": {
       "type": "string"
     },
-    "name": {
+    "displayName": {
       "type": "string"
     },
     "members": {
       "type": "array",
       "items": {
-        "type": "object"
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "display": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "value"
+        ]
       }
     }
   },
