@@ -13,9 +13,10 @@ DESCRIPTION
   Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/googleclassroom.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Google%20Classroom
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

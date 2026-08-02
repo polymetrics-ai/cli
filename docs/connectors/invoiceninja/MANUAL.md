@@ -13,9 +13,10 @@ DESCRIPTION
   Reads Invoice Ninja clients, invoices, products, payments, and quotes through the Invoice Ninja v5 REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/invoiceninja.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Invoice%20Ninja
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

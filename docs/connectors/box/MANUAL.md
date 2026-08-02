@@ -13,9 +13,10 @@ DESCRIPTION
   Reads Box users, groups, collections, folder items, webhooks, retention policies, legal hold policies, storage policies, sign requests, terms of services, metadata templates, and pending collaborations, and writes group/webhook/collaboration lifecycle mutations, through the Box REST API using the OAuth2 client-credentials grant.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/box.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Box
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

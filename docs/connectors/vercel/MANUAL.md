@@ -13,9 +13,10 @@ DESCRIPTION
   Reads deployments, projects, teams, domains, aliases, webhooks, log drains, and edge configs from the Vercel REST API, and writes projects, deployments, domains, project environment variables, webhooks, log drains, edge configs, and alias removal.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/vercel.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Vercel
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

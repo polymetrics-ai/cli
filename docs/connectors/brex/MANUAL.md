@@ -13,9 +13,10 @@ DESCRIPTION
   Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, accounts, statements, transfers, and webhooks through the Brex platform REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/brex.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Brex
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

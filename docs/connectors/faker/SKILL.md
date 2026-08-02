@@ -11,9 +11,10 @@ Generates deterministic sample users, purchases, and products without network ac
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/faker.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Faker
 
 ## Capabilities
 

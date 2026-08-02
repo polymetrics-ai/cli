@@ -3581,10 +3581,11 @@
       "approval": "required for both write actions"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-algolia",
+      "path": "icons/simple-icons/algolia.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Algolia"
     }
   },
   {
@@ -8381,10 +8382,11 @@
       "approval": "none; read-only, no reverse-ETL write surface"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-apple",
+      "path": "icons/simple-icons/apple.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Apple"
     }
   },
   {
@@ -12265,10 +12267,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-basecamp",
+      "path": "icons/simple-icons/basecamp.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Basecamp"
     }
   },
   {
@@ -15501,10 +15504,11 @@
       "approval": "required for destructive actions (delete_bitlink, delete_webhook, delete_qr_code, delete_bitlink_tags) and for webhook URL mutations; creates/updates of bitlinks, campaigns, channels, and QR codes are low-risk"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-bitly",
+      "path": "icons/simple-icons/bitly.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Bitly"
     }
   },
   {
@@ -15645,10 +15649,11 @@
       "approval": "none; read-only, no reverse-ETL write surface"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-blogger",
+      "path": "icons/simple-icons/blogger.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Blogger"
     }
   },
   {
@@ -16450,10 +16455,11 @@
       "approval": "required for every write action; read remains unapproved"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-box",
+      "path": "icons/simple-icons/box.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Box"
     }
   },
   {
@@ -17979,10 +17985,11 @@
       "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-brevo",
+      "path": "icons/simple-icons/brevo.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Brevo"
     }
   },
   {
@@ -18329,10 +18336,11 @@
       "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-brex",
+      "path": "icons/simple-icons/brex.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Brex"
     }
   },
   {
@@ -18720,10 +18728,11 @@
       "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-buildkite",
+      "path": "icons/simple-icons/buildkite.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Buildkite"
     }
   },
   {
@@ -19145,10 +19154,11 @@
       "approval": "required for every write action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-caldotcom",
+      "path": "icons/simple-icons/caldotcom.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Cal.com"
     }
   },
   {
@@ -19434,10 +19444,11 @@
       "approval": "required for every write action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-calendly",
+      "path": "icons/simple-icons/calendly.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Calendly"
     }
   },
   {
@@ -20215,10 +20226,11 @@
       "approval": "required for campaign-send and subscriber-delete actions; list/segment/subscriber-add/update mutations are lower risk"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-campaignmonitor",
+      "path": "icons/simple-icons/campaignmonitor.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Campaign%20Monitor"
     }
   },
   {
@@ -23316,11 +23328,11 @@
       "write": "external mutation of Chatwoot contacts, conversations, messages, and labels; agent-visible and customer-visible side effects"
     },
     "icon": {
-      "id": "pm-chatwoot",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics",
-      "review_url": "https://github.com/polymetrics-ai/cli"
+      "id": "simple-icons-chatwoot",
+      "path": "icons/simple-icons/chatwoot.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Chatwoot"
     }
   },
   {
@@ -24477,10 +24489,11 @@
       "write": "external mutation of CircleCI project configuration: schedule/environment-variable/checkout-key create and delete; never triggers, cancels, or approves a live CI run"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-circleci",
+      "path": "icons/simple-icons/circleci.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=CircleCI"
     }
   },
   {
@@ -24904,10 +24917,11 @@
       "approval": "required for update_application and delete_dataset (destructive or full-replace semantics); create_application and create_dataset are low-risk (additive only)"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-clarifai",
+      "path": "icons/simple-icons/clarifai.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Clarifai"
     }
   },
   {
@@ -27627,10 +27641,11 @@
       "approval": "required for all write actions; read is unrestricted"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-codefresh",
+      "path": "icons/simple-icons/codefresh.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Codefresh"
     }
   },
   {
@@ -33656,10 +33671,11 @@
       "approval": "none; read-only source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-discord",
+      "path": "icons/simple-icons/discord.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Discord"
     }
   },
   {
@@ -34372,10 +34388,11 @@
       "approval": "required for every write action; delete_* actions are irreversible in Dolibarr"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-dolibarr",
+      "path": "icons/simple-icons/dolibarr.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Dolibarr"
     }
   },
   {
@@ -35201,10 +35218,11 @@
       "write": "external mutation of signature requests (update/cancel/remind/release_hold/remove), templates (delete/add_user/remove_user), teams (create/update/add_member/remove_member), and account settings; several actions are destructive/not reversible (cancel_signature_request, remove_signature_request, delete_template, remove_team_member) and require approval"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-dropbox",
+      "path": "icons/simple-icons/dropbox.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Dropbox"
     }
   },
   {
@@ -36630,10 +36648,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-ebay-finance",
+      "path": "icons/simple-icons/ebay-finance.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=eBay"
     }
   },
   {
@@ -36764,10 +36783,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-ebay-fulfillment",
+      "path": "icons/simple-icons/ebay-fulfillment.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=eBay"
     }
   },
   {
@@ -40211,10 +40231,11 @@
       "approval": "none required; no external data is read or written"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-faker",
+      "path": "icons/simple-icons/faker.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Faker"
     }
   },
   {
@@ -40437,10 +40458,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-fastly",
+      "path": "icons/simple-icons/fastly.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Fastly"
     }
   },
   {
@@ -40677,10 +40699,11 @@
       "approval": "required for write actions; none for read"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-fillout",
+      "path": "icons/simple-icons/fillout.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Fillout"
     }
   },
   {
@@ -46037,10 +46060,11 @@
       "approval": "reverse ETL writes require plan preview and approval token"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-formbricks",
+      "path": "icons/simple-icons/formbricks.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Formbricks"
     }
   },
   {
@@ -53466,10 +53490,11 @@
       "approval": "none; read-only public media source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-giphy",
+      "path": "icons/simple-icons/giphy.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=GIPHY"
     }
   },
   {
@@ -56992,10 +57017,11 @@
       "approval": "reverse ETL writes require plan preview and approval token before execution"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-gitbook",
+      "path": "icons/simple-icons/gitbook.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=GitBook"
     }
   },
   {
@@ -59841,10 +59867,11 @@
       "approval": "reverse ETL plan approval required before writes; several actions (send_message, send_draft, delete_message, delete_thread, delete_draft, create_delegate, update_auto_forwarding) warrant elevated operator scrutiny -- see docs.md Write actions \u0026 risks"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-gmail",
+      "path": "icons/simple-icons/gmail.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Gmail"
     }
   },
   {
@@ -62444,10 +62471,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googlecalendar",
+      "path": "icons/simple-icons/googlecalendar.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Calendar"
     }
   },
   {
@@ -62571,10 +62599,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googleclassroom",
+      "path": "icons/simple-icons/googleclassroom.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Classroom"
     }
   },
   {
@@ -62803,10 +62832,11 @@
       "approval": "none; read-only source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googleforms",
+      "path": "icons/simple-icons/googleforms.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Forms"
     }
   },
   {
@@ -63213,10 +63243,11 @@
       "read": "external Google Tasks API read of the authenticated user's task lists and tasks"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googletasks",
+      "path": "icons/simple-icons/googletasks.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Tasks"
     }
   },
   {
@@ -65787,10 +65818,11 @@
       "approval": "none; read-only, no obviously-safe reverse-ETL writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-helpscout",
+      "path": "icons/simple-icons/helpscout.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Help%20Scout"
     }
   },
   {
@@ -66369,10 +66401,11 @@
       "approval": "none; read-only, no obviously-safe reverse-ETL writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-huggingface",
+      "path": "icons/simple-icons/huggingface.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Hugging%20Face"
     }
   },
   {
@@ -70292,10 +70325,11 @@
       "approval": "none; read-only, no reverse-ETL writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-invoiceninja",
+      "path": "icons/simple-icons/invoiceninja.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Invoice%20Ninja"
     }
   },
   {
@@ -71766,10 +71800,11 @@
       "read": "external Katana MRP API read of inventory, sales, and customer data"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-katana",
+      "path": "icons/simple-icons/katana.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Katana"
     }
   },
   {
@@ -74484,10 +74519,11 @@
       "approval": "none; read-only source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-linear",
+      "path": "icons/simple-icons/linear.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Linear"
     }
   },
   {
@@ -76883,10 +76919,11 @@
       "read": "external Mailtrap API read of account-management data"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-mailtrap",
+      "path": "icons/simple-icons/mailtrap.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Mailtrap"
     }
   },
   {
@@ -79799,10 +79836,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-mendeley",
+      "path": "icons/simple-icons/mendeley.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Mendeley"
     }
   },
   {
@@ -82802,10 +82840,11 @@
       "approval": "required for every write action; destructive deletes require destructive confirmation"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-miro",
+      "path": "icons/simple-icons/miro.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Miro"
     }
   },
   {
@@ -107614,10 +107653,11 @@
       "approval": "required for update_check/update_contact/update_team/delete_check/delete_contact/delete_team/delete_maintenance; create_check/create_contact/create_team/create_maintenance require no approval (low-risk, non-destructive)"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-pingdom",
+      "path": "icons/simple-icons/pingdom.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Pingdom"
     }
   },
   {
@@ -109464,10 +109504,11 @@
       "approval": "none; read-only analytics sync"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-matomo",
+      "path": "icons/simple-icons/matomo.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Matomo"
     }
   },
   {
@@ -115837,10 +115878,11 @@
       "approval": "none; read-only, caller-supplied OAuth token"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-reddit",
+      "path": "icons/simple-icons/reddit.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Reddit"
     }
   },
   {
@@ -121765,10 +121807,11 @@
       "write": "external Rollbar API mutations for items, projects, teams, assignments, invitations, notification settings/rules, service links, occurrences, and session replay deletes; approval required before execution"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-rollbar",
+      "path": "icons/simple-icons/rollbar.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Rollbar"
     }
   },
   {
@@ -132721,10 +132764,11 @@
       "approval": "required for all write actions; create_transmission sends real, externally-visible email"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-sparkpost",
+      "path": "icons/simple-icons/sparkpost.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=SparkPost"
     }
   },
   {
@@ -133450,10 +133494,11 @@
       "approval": "reverse ETL plan approval required before destructive writes (delete_webhook_subscription); create_webhook_subscription is low-risk"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-squarespace",
+      "path": "icons/simple-icons/squarespace.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Squarespace"
     }
   },
   {
@@ -138724,10 +138769,11 @@
       "approval": "reverse ETL plan approval required before writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-testrail",
+      "path": "icons/simple-icons/testrail.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=TestRail"
     }
   },
   {
@@ -140845,10 +140891,11 @@
       "approval": "required for delete_event_series (confirm: destructive); other writes are low-risk additive/idempotent mutations, no approval required"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-tickettailor",
+      "path": "icons/simple-icons/tickettailor.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Ticket%20Tailor"
     }
   },
   {
@@ -140951,10 +140998,11 @@
       "approval": "reverse ETL plan approval required before writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-ticktick",
+      "path": "icons/simple-icons/ticktick.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=TickTick"
     }
   },
   {
@@ -147581,10 +147629,11 @@
       "approval": "none required; delete_suggestion is UserVoice's own soft-delete/moderation action (reversible via restore_suggestion, not modeled), not an irreversible destructive delete"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-uservoice",
+      "path": "icons/simple-icons/uservoice.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=UserVoice"
     }
   },
   {
@@ -148979,10 +149028,11 @@
       "approval": "read: none; write: required for every action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-vercel",
+      "path": "icons/simple-icons/vercel.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Vercel"
     }
   },
   {
@@ -151257,10 +151307,11 @@
       "approval": "read: none; write: required for every create/update/delete action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-wheniwork",
+      "path": "icons/simple-icons/wheniwork.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=When%20I%20Work"
     }
   },
   {
@@ -151943,10 +151994,11 @@
       "approval": "read: none; write: required for every create/update/delete action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-wordpress",
+      "path": "icons/simple-icons/wordpress.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=WordPress"
     }
   },
   {
@@ -158674,10 +158726,11 @@
       "approval": "required for write actions (sync_datasource/refetch_view_data); read access uses the same OAuth refresh-token grant with no separate approval"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-analytics-metadata-api",
+      "path": "icons/simple-icons/zoho-analytics-metadata-api.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho"
     }
   },
   {
@@ -159026,10 +159079,11 @@
       "read": "external Zoho Billing API read of customer and billing data"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-billing",
+      "path": "icons/simple-icons/zoho-billing.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho"
     }
   },
   {
@@ -165563,10 +165617,11 @@
       "approval": "writes require explicit user approval before execution; destructive deletes are marked destructive"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-books",
+      "path": "icons/simple-icons/zoho-books.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho"
     }
   },
   {
@@ -165661,10 +165716,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-campaign",
+      "path": "icons/simple-icons/zoho-campaign.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho"
     }
   },
   {
@@ -165763,10 +165819,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-desk",
+      "path": "icons/simple-icons/zoho-desk.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho"
     }
   },
   {
@@ -166817,10 +166874,11 @@
       "approval": "writes require explicit operator approval through the reverse ETL approval flow"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-expense",
+      "path": "icons/simple-icons/zoho-expense.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho"
     }
   },
   {
@@ -166919,10 +166977,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-inventory",
+      "path": "icons/simple-icons/zoho-inventory.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho"
     }
   },
   {
@@ -167021,10 +167080,11 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-invoice",
+      "path": "icons/simple-icons/zoho-invoice.svg",
+      "source": "simple-icons",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho"
     }
   },
   {

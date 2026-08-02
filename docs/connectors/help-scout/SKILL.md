@@ -11,9 +11,10 @@ Reads Help Scout conversations, customers, mailboxes, and users through the Mail
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/helpscout.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Help%20Scout
 
 ## Capabilities
 

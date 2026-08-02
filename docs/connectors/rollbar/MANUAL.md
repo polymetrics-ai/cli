@@ -13,9 +13,10 @@ DESCRIPTION
   Reads and writes documented Rollbar API v1 resources through the declarative connector engine.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/rollbar.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Rollbar
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

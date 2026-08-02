@@ -11,9 +11,10 @@ Reads Zoho Billing customers, subscriptions, and invoices through the Zoho Billi
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/zoho-billing.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Zoho
 
 ## Capabilities
 

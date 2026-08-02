@@ -13,9 +13,10 @@ DESCRIPTION
   Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations through the GitBook API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/gitbook.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=GitBook
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

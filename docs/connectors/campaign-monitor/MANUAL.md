@@ -13,9 +13,10 @@ DESCRIPTION
   Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscribers, segments, and templates through the createsend.com v3.3 REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/campaignmonitor.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Campaign%20Monitor
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

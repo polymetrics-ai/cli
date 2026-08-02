@@ -13,9 +13,10 @@ DESCRIPTION
   Reads eBay seller orders, exploded line items, shipping fulfillments, and payment disputes through the eBay Sell Fulfillment REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/ebay-fulfillment.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=eBay
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

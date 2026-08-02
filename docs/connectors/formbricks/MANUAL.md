@@ -13,9 +13,10 @@ DESCRIPTION
   Reads Formbricks surveys, responses, contacts, contact attributes, action classes, webhooks, and account metadata; writes approved management API mutations.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/formbricks.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Formbricks
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

@@ -13,9 +13,10 @@ DESCRIPTION
   Reads and writes events, orders, issued tickets, event series, holds, discounts, memberships, products, stores, and vouchers through the Ticket Tailor API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/tickettailor.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Ticket%20Tailor
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

@@ -11,9 +11,10 @@ Reads and writes Dolibarr ERP/CRM third parties, contacts, products, customer in
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/dolibarr.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Dolibarr
 
 ## Capabilities
 

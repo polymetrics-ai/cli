@@ -11,9 +11,10 @@ Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, ac
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/brex.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Brex
 
 ## Capabilities
 

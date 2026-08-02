@@ -61,6 +61,13 @@ No direct PR #3590 R5/R6 response is in scope. PR #3590 remains parked until thi
 - F4 is a path-domain defect: registry paths are URL-style slash paths, not host filesystem paths. Validate them with `path.Clean` and `path.Ext`.
 - Add focused regressions before production edits; run one combined focused Go and Node verification after the complete fix round.
 
+## Review repair round 2
+
+- F5 is a generated-subtree boundary defect: syntax-only validation accepts non-clean dot-segment paths, and output resolution is anchored above the authorized icon directory. Reject non-clean, absolute, and escaped paths before mutation, then resolve and contain generated files against `website/public/connectors/icons/**` itself.
+- F6 is a generated-metadata validation defect: checked-in catalog, MANUAL, and SKILL icon paths can drift from the canonical registry while docs validation still passes. Validate every generated icon path against registry-backed definitions and regenerate only the 61 affected connector mappings.
+- Preserve all non-icon generated content and keep the generated website reconciliation bounded to its icon subtree.
+- Run one combined focused Node/Go/docs-validation command after both fixes and all generated metadata updates are complete.
+
 ## Integration ordering
 
 This child PR must land into the parent branch before PR #3590 is reconciled. After integration, rebase/reconcile PR #3590 so ownership reads only the canonical bare registry, permits the two exact docs catalog outputs, and includes positive/negative collision, orphan, generated-copy, and source-asset tests.

@@ -13,9 +13,10 @@ DESCRIPTION
   Reads Calendly scheduled events (and their invitees), event types, organization memberships, groups, routing forms and submissions, webhook subscriptions, availability schedules, activity log entries, and the current user, and manages bookings/webhooks/memberships/invitations/event types through the Calendly v2 REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/calendly.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Calendly
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

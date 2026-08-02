@@ -13,7 +13,10 @@ import { dirname, join, relative, resolve, sep } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { syncConnectorIcons } from './lib/connector-icons.mjs';
+import {
+  syncConnectorIcons,
+  validConnectorIconPath,
+} from './lib/connector-icons.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '../..');
@@ -96,6 +99,40 @@ test('icon sync removes stale output after canonical path changes', (t) => {
   syncConnectorIcons(new Set(['icons/simple-icons/replacement.svg']), { sourceRoot, publicRoot });
   assert.equal(existsSync(resolve(publicRoot, 'icons/original.svg')), false);
   assert.equal(existsSync(resolve(publicRoot, 'icons/simple-icons/replacement.svg')), true);
+});
+
+test('icon sync rejects escaped paths before mutating generated output', (t) => {
+  const fixtureRoot = mkdtempSync(join(tmpdir(), 'polymetrics-icon-boundary-'));
+  t.after(() => rmSync(fixtureRoot, { recursive: true, force: true }));
+
+  const sourceRoot = resolve(fixtureRoot, 'docs/connectors');
+  const publicRoot = resolve(fixtureRoot, 'website/public/connectors');
+  const outsideSource = resolve(sourceRoot, 'outside.svg');
+  const insideSource = resolve(sourceRoot, 'icons/outside.svg');
+  const outsideOutput = resolve(publicRoot, 'outside.svg');
+  const retainedOutput = resolve(publicRoot, 'icons/retained.svg');
+  for (const path of [outsideSource, insideSource, outsideOutput, retainedOutput]) {
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, path.endsWith('outside.svg') ? 'outside' : 'retained');
+  }
+
+  for (const iconPath of [
+    'icons/../outside.svg',
+    'icons/./outside.svg',
+    'icons//outside.svg',
+    'icons/simple-icons/../outside.svg',
+    '../icons/outside.svg',
+    '/icons/outside.svg',
+    'icons\\outside.svg',
+  ]) {
+    assert.equal(validConnectorIconPath(iconPath), false, `${iconPath} must be rejected`);
+    assert.throws(
+      () => syncConnectorIcons(new Set([iconPath]), { sourceRoot, publicRoot }),
+      /Invalid connector icon path/,
+    );
+    assert.equal(readFileSync(outsideOutput, 'utf8'), 'outside');
+    assert.equal(readFileSync(retainedOutput, 'utf8'), 'retained');
+  }
 });
 
 test('website scripts consume only the canonical registry', () => {

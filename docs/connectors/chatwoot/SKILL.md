@@ -11,10 +11,10 @@ Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, 
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
-- review_url: https://github.com/polymetrics-ai/cli
+- asset: icons/simple-icons/chatwoot.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Chatwoot
 
 ## Capabilities
 

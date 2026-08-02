@@ -13,10 +13,10 @@ DESCRIPTION
   Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, and conversation-scoped messages, and writes contact/conversation/message/label mutations through the Chatwoot Application API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
-  review_url: https://github.com/polymetrics-ai/cli
+  asset: icons/simple-icons/chatwoot.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Chatwoot
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

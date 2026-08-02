@@ -13,9 +13,10 @@ DESCRIPTION
   Reads and writes Zoho Books API v3 accounting resources using the declarative connector engine.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/zoho-books.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Zoho
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

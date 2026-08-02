@@ -13,9 +13,10 @@ DESCRIPTION
   Reads TestRail projects, suites, cases, milestones, plans, runs, users, and reference data (case types/fields, priorities, statuses, result fields, templates), and writes approved test-management mutations (projects, milestones, suites, cases, plans, runs, results) through the TestRail v2 API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/testrail.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=TestRail
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

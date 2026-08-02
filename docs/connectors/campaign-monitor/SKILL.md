@@ -11,9 +11,10 @@ Reads and writes Campaign Monitor clients, campaigns, subscriber lists, subscrib
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/campaignmonitor.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Campaign%20Monitor
 
 ## Capabilities
 

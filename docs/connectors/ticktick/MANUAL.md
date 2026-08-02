@@ -13,9 +13,10 @@ DESCRIPTION
   Reads projects and project tasks, and writes task create/complete/delete actions, through the TickTick Open API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/ticktick.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=TickTick
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

@@ -11,9 +11,10 @@ Reads documents, folders, groups, and annotations from the Mendeley reference ma
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/mendeley.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Mendeley
 
 ## Capabilities
 

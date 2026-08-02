@@ -11,9 +11,10 @@ Reads Box users, groups, collections, folder items, webhooks, retention policies
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/box.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Box
 
 ## Capabilities
 

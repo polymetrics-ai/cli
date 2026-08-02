@@ -11,9 +11,10 @@ Reads suggestions, forums, users, categories, statuses, labels, comments, notes,
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/uservoice.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=UserVoice
 
 ## Capabilities
 

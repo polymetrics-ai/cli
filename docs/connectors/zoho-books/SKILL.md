@@ -11,9 +11,10 @@ Reads and writes Zoho Books API v3 accounting resources using the declarative co
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/zoho-books.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Zoho
 
 ## Capabilities
 

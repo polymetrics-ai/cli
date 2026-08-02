@@ -11,9 +11,10 @@ Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/gmail.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Gmail
 
 ## Capabilities
 

@@ -11,9 +11,10 @@ Reads subreddit posts and comments through the Reddit OAuth API listing endpoint
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/reddit.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Reddit
 
 ## Capabilities
 

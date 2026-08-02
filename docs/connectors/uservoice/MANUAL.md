@@ -13,9 +13,10 @@ DESCRIPTION
   Reads suggestions, forums, users, categories, statuses, labels, comments, notes, and teams from the UserVoice Admin API, and writes suggestion/comment/label/note lifecycle mutations.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/uservoice.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=UserVoice
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

@@ -11,9 +11,10 @@ Reads Apple Search Ads campaigns, ad groups, targeting keywords, and ads via the
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/apple.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Apple
 
 ## Capabilities
 

@@ -13,9 +13,10 @@ DESCRIPTION
   Reads Bitly organizations, groups, campaigns, channels, bitlinks, branded short domains, webhooks, QR codes, and group tags, and writes bitlink/campaign/group/channel/webhook/custom-bitlink/QR-code mutations, through the Bitly v4 REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/bitly.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Bitly
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

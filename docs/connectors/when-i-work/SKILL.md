@@ -11,9 +11,10 @@ Reads and writes When I Work workforce-scheduling data: users, locations, positi
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/wheniwork.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=When%20I%20Work
 
 ## Capabilities
 

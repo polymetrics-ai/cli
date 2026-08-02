@@ -11,9 +11,10 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/wordpress.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=WordPress
 
 ## Capabilities
 

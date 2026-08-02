@@ -13,9 +13,10 @@ DESCRIPTION
   Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases, delegates, forwarding addresses, and mailbox profile, and writes approved reverse-ETL mutations (send/insert/import/modify/trash/delete messages and threads; draft and label lifecycle; filter, send-as, delegate, and forwarding-address management; vacation/language/IMAP/POP/auto-forwarding settings) via the Google OAuth 2.0 refresh-token grant.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/gmail.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Gmail
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

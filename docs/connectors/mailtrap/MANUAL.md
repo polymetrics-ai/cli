@@ -13,9 +13,10 @@ DESCRIPTION
   Reads Mailtrap accounts, inboxes, projects, and sending domains through the Mailtrap account-management REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/mailtrap.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Mailtrap
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

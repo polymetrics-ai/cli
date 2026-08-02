@@ -13,9 +13,10 @@ DESCRIPTION
   Reads and writes When I Work workforce-scheduling data: users, locations, positions, shifts, sites, shift templates, annotations, availability events, request types, time entries, timezones, payrolls, open-shift approval requests, and shift swaps.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/wheniwork.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=When%20I%20Work
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

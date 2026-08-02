@@ -18,6 +18,12 @@ Review repair focused gate:
 go test ./internal/connectors ./internal/connectors/bundleregistry ./cmd/iconregistrygen && node --test website/scripts/icon-registry.test.mjs
 ```
 
+Review repair round 2 focused gate:
+
+```bash
+node --test website/scripts/icon-registry.test.mjs && go test ./internal/cli -run TestValidateConnectorDocsRejectsStaleIconMetadata && go run ./cmd/pm docs validate --connectors-dir docs/connectors
+```
+
 ## Repository gates before integration
 
 ```bash

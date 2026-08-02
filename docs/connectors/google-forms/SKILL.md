@@ -11,9 +11,10 @@ Reads Google Forms metadata, form items, and submitted responses through the Goo
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/googleforms.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Google%20Forms
 
 ## Capabilities
 

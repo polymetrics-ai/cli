@@ -11,9 +11,10 @@ Reads Blogger (Google Blogger API v3) blogs, posts, pages, comments, and page-vi
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/blogger.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Blogger
 
 ## Capabilities
 

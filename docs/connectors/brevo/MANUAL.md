@@ -13,9 +13,10 @@ DESCRIPTION
   Reads and writes Brevo (formerly Sendinblue) contacts, email campaigns, contact lists, segments, senders, sender domains, CRM companies/deals, and webhooks through the Brevo REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/brevo.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Brevo
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

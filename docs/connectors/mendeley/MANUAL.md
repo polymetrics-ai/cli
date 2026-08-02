@@ -13,9 +13,10 @@ DESCRIPTION
   Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/mendeley.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Mendeley
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

@@ -11,9 +11,10 @@ Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, con
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/codefresh.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Codefresh
 
 ## Capabilities
 

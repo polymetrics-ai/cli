@@ -56,7 +56,7 @@ func writeConnectorDocs(dir string, registry *connectors.Registry) error {
 }
 
 func validateConnectorDocs(dir string, registry *connectors.Registry) error {
-	if err := validateConnectorCatalogDocs(filepath.Join(dir, "catalog"), len(registry.CatalogEntries())); err != nil {
+	if err := validateConnectorCatalogDocs(filepath.Join(dir, "catalog"), registry.CatalogEntries()); err != nil {
 		return err
 	}
 	if err := connectors.ValidateConnectorIcons(dir, registry.CatalogEntries(), registry.List()); err != nil {
@@ -80,14 +80,17 @@ func validateConnectorDocs(dir string, registry *connectors.Registry) error {
 				return fmt.Errorf("connector %s manual missing %s", meta.Name, required)
 			}
 		}
-		if err := validateConnectorSkillFile(dir, meta.Name); err != nil {
+		if err := validateGeneratedConnectorIconPath(string(manual), "ICON\n", "  asset: ", meta.Name, "manual", meta.Icon); err != nil {
+			return err
+		}
+		if err := validateConnectorSkillFile(dir, meta.Name, meta.Icon); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func validateConnectorSkillFile(dir, name string) error {
+func validateConnectorSkillFile(dir, name string, icon *connectors.ConnectorIcon) error {
 	skillPath := filepath.Join(dir, name, "SKILL.md")
 	skill, err := os.ReadFile(skillPath)
 	if err != nil {
@@ -97,6 +100,26 @@ func validateConnectorSkillFile(dir, name string) error {
 		if !strings.Contains(string(skill), required) {
 			return fmt.Errorf("connector %s skill missing %q", name, required)
 		}
+	}
+	return validateGeneratedConnectorIconPath(string(skill), "## Icon\n\n", "- asset: ", name, "skill", icon)
+}
+
+func validateGeneratedConnectorIconPath(document, heading, prefix, name, surface string, icon *connectors.ConnectorIcon) error {
+	if icon == nil || icon.Path == "" {
+		return fmt.Errorf("connector %s canonical icon path is missing", name)
+	}
+	start := strings.Index(document, heading)
+	if start < 0 {
+		return fmt.Errorf("connector %s %s missing icon path", name, surface)
+	}
+	remainder := document[start+len(heading):]
+	line, _, _ := strings.Cut(remainder, "\n")
+	if !strings.HasPrefix(line, prefix) {
+		return fmt.Errorf("connector %s %s missing icon path", name, surface)
+	}
+	got := strings.TrimSpace(strings.TrimPrefix(line, prefix))
+	if got != icon.Path {
+		return fmt.Errorf("connector %s %s icon path is %q, want %q", name, surface, got, icon.Path)
 	}
 	return nil
 }
@@ -127,7 +150,7 @@ func writeConnectorCatalogDocs(dir string, defs []connectors.Definition) error {
 	return nil
 }
 
-func validateConnectorCatalogDocs(dir string, wantDefs int) error {
+func validateConnectorCatalogDocs(dir string, wantDefs []connectors.Definition) error {
 	jsonPath := filepath.Join(dir, "all-connectors.json")
 	mdPath := filepath.Join(dir, "all-connectors.md")
 	data, err := os.ReadFile(jsonPath)
@@ -138,8 +161,26 @@ func validateConnectorCatalogDocs(dir string, wantDefs int) error {
 	if err := json.Unmarshal(data, &defs); err != nil {
 		return fmt.Errorf("decode connector catalog json: %w", err)
 	}
-	if len(defs) != wantDefs {
-		return fmt.Errorf("connector catalog json has %d entries, want %d", len(defs), wantDefs)
+	if len(defs) != len(wantDefs) {
+		return fmt.Errorf("connector catalog json has %d entries, want %d", len(defs), len(wantDefs))
+	}
+	wantByName := make(map[string]connectors.Definition, len(wantDefs))
+	for _, def := range wantDefs {
+		wantByName[def.Name] = def
+	}
+	seen := make(map[string]struct{}, len(defs))
+	for _, def := range defs {
+		want, ok := wantByName[def.Name]
+		if !ok {
+			return fmt.Errorf("connector catalog json has unexpected connector %q", def.Name)
+		}
+		if _, duplicate := seen[def.Name]; duplicate {
+			return fmt.Errorf("connector catalog json has duplicate connector %q", def.Name)
+		}
+		seen[def.Name] = struct{}{}
+		if err := validateCatalogIconPath("json", def.Name, def.Icon, want.Icon); err != nil {
+			return err
+		}
 	}
 	markdown, err := os.ReadFile(mdPath)
 	if err != nil {
@@ -149,6 +190,26 @@ func validateConnectorCatalogDocs(dir string, wantDefs int) error {
 		if !strings.Contains(string(markdown), required) {
 			return fmt.Errorf("connector catalog markdown missing %q", required)
 		}
+	}
+	for _, def := range wantDefs {
+		rowPrefix := "| `" + def.Name + "` | " + catalogIconMarkdown(def.Icon) + " |"
+		if !strings.Contains(string(markdown), rowPrefix) {
+			return fmt.Errorf("connector %s catalog markdown icon path does not match canonical registry", def.Name)
+		}
+	}
+	return nil
+}
+
+func validateCatalogIconPath(surface, name string, got, want *connectors.ConnectorIcon) error {
+	if want == nil || want.Path == "" {
+		return fmt.Errorf("connector %s canonical icon path is missing", name)
+	}
+	if got == nil || got.Path != want.Path {
+		gotPath := ""
+		if got != nil {
+			gotPath = got.Path
+		}
+		return fmt.Errorf("connector %s catalog %s icon path is %q, want %q", name, surface, gotPath, want.Path)
 	}
 	return nil
 }

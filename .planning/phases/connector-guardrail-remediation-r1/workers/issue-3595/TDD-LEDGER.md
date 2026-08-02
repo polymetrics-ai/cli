@@ -14,6 +14,8 @@
 | Review F2 source URL collision | Same ID/path with different source URLs collapses by iteration order | conflicting source URLs reject while identical source URL fixtures still collapse |
 | Review F3 generated icon reconciliation | Deleted or renamed canonical icons leave stale website SVGs | a two-generation path-change fixture proves output-only SVGs are removed inside the bounded generated tree |
 | Review F4 slash path portability | host `filepath` semantics can reject portable registry paths | nested forward-slash registry paths validate through slash-oriented `path` semantics |
+| Review F5 generated subtree containment | `icons/../outside.svg` passes syntax validation and resolves above the generated icon root | non-clean, dot-segment, absolute, and escaped paths reject before any generated-tree mutation |
+| Review F6 generated docs metadata | catalog, MANUAL, and SKILL icon paths can disagree with the canonical registry without failing docs validation | all three generated surfaces validate canonical paths; the exact 61 stale mappings are regenerated |
 
 ## Actual evidence log
 
@@ -28,3 +30,6 @@
 - 2026-08-02: GREEN `go test ./internal/connectors ./cmd/iconregistrygen` passed after implementation: exact bare lookup, Simple Icons mapping, collision rejection, and icon ownership helpers are covered.
 - 2026-08-02: GREEN `node --test website/scripts/icon-registry.test.mjs` plus `node --check website/scripts/gen-connector-bundles.mjs` and `node --check website/scripts/fetch-simple-icons.mjs` passed after implementation: website consumers read the canonical registry only and source/generated icon assets exist under docs and website.
 - 2026-08-02: Focused CLI docs generation exposed one necessary adjacent docs-generator path: `internal/cli/connector_docs.go` copied only top-level SVGs, so nested canonical `icons/simple-icons/**` assets were missing from temp docs. Implemented recursive SVG copy and verified with `go test ./internal/cli ./cmd/pm` and `make verify`.
+- 2026-08-02: Review round 2 rechecked the repo-local GSD adapter; `scripts/gsd doctor` passed and the required `programming-loop` probe remained unavailable, so the recorded manual GSD fallback continues.
+- 2026-08-02: Pre-edit F5 proof confirmed `validConnectorIconPath("icons/../outside.svg")` accepts an escaped path and output resolution is anchored at `website/public/connectors`, above the authorized icon subtree.
+- 2026-08-02: Pre-edit F6 audit compared catalog, MANUAL, and SKILL path fields with `internal/connectors/icon_data.json` and found the same exact 61 stale connector mappings on every surface.

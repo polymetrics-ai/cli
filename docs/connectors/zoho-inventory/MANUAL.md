@@ -13,9 +13,10 @@ DESCRIPTION
   Reads Zoho Inventory contacts, items, and sales orders through the Zoho Inventory REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  asset: icons/simple-icons/zoho-inventory.svg
+  source: simple-icons
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Zoho
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

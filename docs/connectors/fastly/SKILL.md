@@ -11,9 +11,10 @@ Reads Fastly services, the current user, the current customer (account), and dat
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- asset: icons/simple-icons/fastly.svg
+- source: simple-icons
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Fastly
 
 ## Capabilities
 
