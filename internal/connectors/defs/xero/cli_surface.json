@@ -1,0 +1,1493 @@
+{
+  "tagline": "Run bounded Xero Accounting API streams, report reads, and approved reverse-ETL writes.",
+  "usage": "pm connectors command xero <group> <action> --credential <name> [flags] --json",
+  "source_cli": {
+    "name": "Xero Accounting API",
+    "docs": "https://developer.xero.com/documentation/api/accounting/overview",
+    "reference": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+    "source": "official OpenAPI operation ids; no separate provider CLI is required for parity"
+  },
+  "groups": [
+    {
+      "id": "reports",
+      "title": "Bounded report direct reads",
+      "commands": [
+        "reports ten_ninety_nine",
+        "reports aged_payables_by_contact",
+        "reports aged_receivables_by_contact",
+        "reports balance_sheet",
+        "reports bank_summary",
+        "reports get",
+        "reports budget_summary",
+        "reports executive_summary",
+        "reports list",
+        "reports profit_and_loss",
+        "reports trial_balance"
+      ]
+    },
+    {
+      "id": "streams",
+      "title": "ETL stream shortcuts",
+      "commands": [
+        "streams invoices",
+        "streams contacts",
+        "streams accounts",
+        "streams bank_transactions",
+        "streams items",
+        "streams payments",
+        "streams account",
+        "streams account_attachments",
+        "streams bank_transaction",
+        "streams bank_transaction_attachments",
+        "streams bank_transactions_history",
+        "streams bank_transfer"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "credential",
+      "type": "string",
+      "summary": "Named Xero credential; secrets are loaded from the credential store and never from prompt text."
+    },
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON output."
+    },
+    {
+      "name": "max-bytes",
+      "type": "integer",
+      "summary": "Clamp direct-read response size; report reads are capped by the operation definition."
+    }
+  ],
+  "commands": [
+    {
+      "path": "streams invoices",
+      "summary": "Read the Xero `invoices` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "examples": [
+        "pm connectors command xero streams invoices --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams contacts",
+      "summary": "Read the Xero `contacts` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "examples": [
+        "pm connectors command xero streams contacts --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams accounts",
+      "summary": "Read the Xero `accounts` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "examples": [
+        "pm connectors command xero streams accounts --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams bank_transactions",
+      "summary": "Read the Xero `bank_transactions` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_transactions",
+      "examples": [
+        "pm connectors command xero streams bank_transactions --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams items",
+      "summary": "Read the Xero `items` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "items",
+      "examples": [
+        "pm connectors command xero streams items --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams payments",
+      "summary": "Read the Xero `payments` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "payments",
+      "examples": [
+        "pm connectors command xero streams payments --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams account",
+      "summary": "Read the Xero `account` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account",
+      "examples": [
+        "pm connectors command xero streams account --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams account_attachments",
+      "summary": "Read the Xero `account_attachments` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "account_attachments",
+      "examples": [
+        "pm connectors command xero streams account_attachments --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams bank_transaction",
+      "summary": "Read the Xero `bank_transaction` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_transaction",
+      "examples": [
+        "pm connectors command xero streams bank_transaction --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams bank_transaction_attachments",
+      "summary": "Read the Xero `bank_transaction_attachments` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_transaction_attachments",
+      "examples": [
+        "pm connectors command xero streams bank_transaction_attachments --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams bank_transactions_history",
+      "summary": "Read the Xero `bank_transactions_history` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_transactions_history",
+      "examples": [
+        "pm connectors command xero streams bank_transactions_history --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "streams bank_transfer",
+      "summary": "Read the Xero `bank_transfer` stream through the ETL engine.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bank_transfer",
+      "examples": [
+        "pm connectors command xero streams bank_transfer --credential xero-local --limit 100 --json"
+      ]
+    },
+    {
+      "path": "reports ten_ninety_nine",
+      "summary": "Retrieve reports for 1099",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_report_ten_ninety_nine",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [
+        {
+          "name": "report-year",
+          "type": "string",
+          "summary": "The year of the 1099 report",
+          "maps_to": "query.reportYear",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports/TenNinetyNine"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports ten_ninety_nine --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "reports aged_payables_by_contact",
+      "summary": "Retrieves report for aged payables by contact",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_report_aged_payables_by_contact",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [
+        {
+          "name": "contact-id",
+          "type": "string",
+          "summary": "Unique identifier for a Contact",
+          "maps_to": "query.contactId",
+          "allow_empty": false
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "summary": "The date of the Aged Payables By Contact report",
+          "maps_to": "query.date",
+          "allow_empty": false
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "filter by the from date of the report e.g. 2021-02-01",
+          "maps_to": "query.fromDate",
+          "allow_empty": false
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "filter by the to date of the report e.g. 2021-02-28",
+          "maps_to": "query.toDate",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports/AgedPayablesByContact"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports aged_payables_by_contact --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "reports aged_receivables_by_contact",
+      "summary": "Retrieves report for aged receivables by contact",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_report_aged_receivables_by_contact",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [
+        {
+          "name": "contact-id",
+          "type": "string",
+          "summary": "Unique identifier for a Contact",
+          "maps_to": "query.contactId",
+          "allow_empty": false
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "summary": "The date of the Aged Receivables By Contact report",
+          "maps_to": "query.date",
+          "allow_empty": false
+        },
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "filter by the from date of the report e.g. 2021-02-01",
+          "maps_to": "query.fromDate",
+          "allow_empty": false
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "filter by the to date of the report e.g. 2021-02-28",
+          "maps_to": "query.toDate",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports/AgedReceivablesByContact"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports aged_receivables_by_contact --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "reports balance_sheet",
+      "summary": "Retrieves report for balancesheet",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_report_balance_sheet",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [
+        {
+          "name": "date",
+          "type": "string",
+          "summary": "The date of the Balance Sheet report",
+          "maps_to": "query.date",
+          "allow_empty": false
+        },
+        {
+          "name": "periods",
+          "type": "integer",
+          "summary": "The number of periods for the Balance Sheet report",
+          "maps_to": "query.periods"
+        },
+        {
+          "name": "timeframe",
+          "type": "string",
+          "summary": "The period size to compare to (MONTH, QUARTER, YEAR)",
+          "maps_to": "query.timeframe",
+          "allow_empty": false
+        },
+        {
+          "name": "tracking-option-id-1",
+          "type": "string",
+          "summary": "The tracking option 1 for the Balance Sheet report",
+          "maps_to": "query.trackingOptionID1",
+          "allow_empty": false
+        },
+        {
+          "name": "tracking-option-id-2",
+          "type": "string",
+          "summary": "The tracking option 2 for the Balance Sheet report",
+          "maps_to": "query.trackingOptionID2",
+          "allow_empty": false
+        },
+        {
+          "name": "standard-layout",
+          "type": "boolean",
+          "summary": "The standard layout boolean for the Balance Sheet report",
+          "maps_to": "query.standardLayout"
+        },
+        {
+          "name": "payments-only",
+          "type": "boolean",
+          "summary": "return a cash basis for the Balance Sheet report",
+          "maps_to": "query.paymentsOnly"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports/BalanceSheet"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports balance_sheet --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "reports bank_summary",
+      "summary": "Retrieves report for bank summary",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_report_bank_summary",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "filter by the from date of the report e.g. 2021-02-01",
+          "maps_to": "query.fromDate",
+          "allow_empty": false
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "filter by the to date of the report e.g. 2021-02-28",
+          "maps_to": "query.toDate",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports/BankSummary"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports bank_summary --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "reports get",
+      "summary": "Retrieves a specific report using a unique ReportID",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_report_from_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [
+        {
+          "name": "report-id",
+          "type": "string",
+          "summary": "Unique identifier for a Report",
+          "maps_to": "path.ReportID",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports/{ReportID}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports get --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "reports budget_summary",
+      "summary": "Retrieves report for budget summary",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_report_budget_summary",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [
+        {
+          "name": "date",
+          "type": "string",
+          "summary": "The date for the Bank Summary report e.g. 2018-03-31",
+          "maps_to": "query.date",
+          "allow_empty": false
+        },
+        {
+          "name": "periods",
+          "type": "integer",
+          "summary": "The number of periods to compare (integer between 1 and 12)",
+          "maps_to": "query.periods"
+        },
+        {
+          "name": "timeframe",
+          "type": "integer",
+          "summary": "The period size to compare to (1=month, 3=quarter, 12=year)",
+          "maps_to": "query.timeframe"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports/BudgetSummary"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports budget_summary --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "reports executive_summary",
+      "summary": "Retrieves report for executive summary",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_report_executive_summary",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [
+        {
+          "name": "date",
+          "type": "string",
+          "summary": "The date for the Bank Summary report e.g. 2018-03-31",
+          "maps_to": "query.date",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports/ExecutiveSummary"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports executive_summary --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "reports list",
+      "summary": "Retrieves a list of the organistaions unique reports that require a uuid to fetch",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_reports_list",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports list --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "reports profit_and_loss",
+      "summary": "Retrieves report for profit and loss",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_report_profit_and_loss",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [
+        {
+          "name": "from-date",
+          "type": "string",
+          "summary": "filter by the from date of the report e.g. 2021-02-01",
+          "maps_to": "query.fromDate",
+          "allow_empty": false
+        },
+        {
+          "name": "to-date",
+          "type": "string",
+          "summary": "filter by the to date of the report e.g. 2021-02-28",
+          "maps_to": "query.toDate",
+          "allow_empty": false
+        },
+        {
+          "name": "periods",
+          "type": "integer",
+          "summary": "The number of periods to compare (integer between 1 and 12)",
+          "maps_to": "query.periods"
+        },
+        {
+          "name": "timeframe",
+          "type": "string",
+          "summary": "The period size to compare to (MONTH, QUARTER, YEAR)",
+          "maps_to": "query.timeframe",
+          "allow_empty": false
+        },
+        {
+          "name": "tracking-category-id",
+          "type": "string",
+          "summary": "The trackingCategory 1 for the ProfitAndLoss report",
+          "maps_to": "query.trackingCategoryID",
+          "allow_empty": false
+        },
+        {
+          "name": "tracking-category-id-2",
+          "type": "string",
+          "summary": "The trackingCategory 2 for the ProfitAndLoss report",
+          "maps_to": "query.trackingCategoryID2",
+          "allow_empty": false
+        },
+        {
+          "name": "tracking-option-id",
+          "type": "string",
+          "summary": "The tracking option 1 for the ProfitAndLoss report",
+          "maps_to": "query.trackingOptionID",
+          "allow_empty": false
+        },
+        {
+          "name": "tracking-option-id-2",
+          "type": "string",
+          "summary": "The tracking option 2 for the ProfitAndLoss report",
+          "maps_to": "query.trackingOptionID2",
+          "allow_empty": false
+        },
+        {
+          "name": "standard-layout",
+          "type": "boolean",
+          "summary": "Return the standard layout for the ProfitAndLoss report",
+          "maps_to": "query.standardLayout"
+        },
+        {
+          "name": "payments-only",
+          "type": "boolean",
+          "summary": "Return cash only basis for the ProfitAndLoss report",
+          "maps_to": "query.paymentsOnly"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports/ProfitAndLoss"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports profit_and_loss --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "reports trial_balance",
+      "summary": "Retrieves report for trial balance",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "xero.get_report_trial_balance",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "flags": [
+        {
+          "name": "date",
+          "type": "string",
+          "summary": "The date for the Trial Balance report e.g. 2018-03-31",
+          "maps_to": "query.date",
+          "allow_empty": false
+        },
+        {
+          "name": "payments-only",
+          "type": "boolean",
+          "summary": "Return cash only basis for the Trial Balance report",
+          "maps_to": "query.paymentsOnly"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Reports/TrialBalance"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+      "approval": "none",
+      "examples": [
+        "pm connectors command xero reports trial_balance --credential xero-local --json"
+      ]
+    },
+    {
+      "path": "attachments get_account_attachment_by_id",
+      "summary": "Retrieves a specific attachment from a specific account using a unique attachment Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_account_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Accounts/{AccountID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_account_attachment_by_file_name",
+      "summary": "Retrieves an attachment for a specific account by filename",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_account_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Accounts/{AccountID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_account_attachment_by_file_name",
+      "summary": "Updates attachment on a specific account by filename",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_account_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Accounts/{AccountID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_account_attachment_by_file_name",
+      "summary": "Creates an attachment on a specific account",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_account_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Accounts/{AccountID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_bank_transaction_attachment_by_id",
+      "summary": "Retrieves specific attachments from a specific BankTransaction using a unique attachment Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_bank_transaction_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/BankTransactions/{BankTransactionID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_bank_transaction_attachment_by_file_name",
+      "summary": "Retrieves a specific attachment from a specific bank transaction by filename",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_bank_transaction_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_bank_transaction_attachment_by_file_name",
+      "summary": "Updates a specific attachment from a specific bank transaction by filename",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_bank_transaction_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_bank_transaction_attachment_by_file_name",
+      "summary": "Creates an attachment for a specific bank transaction by filename",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_bank_transaction_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/BankTransactions/{BankTransactionID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_bank_transfer_attachment_by_id",
+      "summary": "Retrieves a specific attachment from a specific bank transfer using a unique attachment ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_bank_transfer_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/BankTransfers/{BankTransferID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_bank_transfer_attachment_by_file_name",
+      "summary": "Retrieves a specific attachment on a specific bank transfer by file name",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_bank_transfer_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_bank_transfer_attachment_by_file_name",
+      "summary": "updateBankTransferAttachmentByFileName",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_bank_transfer_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_bank_transfer_attachment_by_file_name",
+      "summary": "createBankTransferAttachmentByFileName",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_bank_transfer_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/BankTransfers/{BankTransferID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_contact_attachment_by_id",
+      "summary": "Retrieves a specific attachment from a specific contact using a unique attachment Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_contact_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Contacts/{ContactID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_contact_attachment_by_file_name",
+      "summary": "Retrieves a specific attachment from a specific contact by file name",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_contact_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Contacts/{ContactID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_contact_attachment_by_file_name",
+      "summary": "updateContactAttachmentByFileName",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_contact_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Contacts/{ContactID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_contact_attachment_by_file_name",
+      "summary": "createContactAttachmentByFileName",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_contact_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Contacts/{ContactID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_credit_note_attachment_by_id",
+      "summary": "Retrieves a specific attachment from a specific credit note using a unique attachment Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_credit_note_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/CreditNotes/{CreditNoteID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_credit_note_attachment_by_file_name",
+      "summary": "Retrieves a specific attachment on a specific credit note by file name",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_credit_note_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_credit_note_attachment_by_file_name",
+      "summary": "Updates attachments on a specific credit note by file name",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_credit_note_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_credit_note_attachment_by_file_name",
+      "summary": "Creates an attachment for a specific credit note",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_credit_note_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/CreditNotes/{CreditNoteID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_credit_note_as_pdf",
+      "summary": "Retrieves credit notes as PDF files",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_credit_note_as_pdf",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/CreditNotes/{CreditNoteID}/pdf"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_invoice_as_pdf",
+      "summary": "Retrieves invoices or purchase bills as PDF files",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_invoice_as_pdf",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Invoices/{InvoiceID}/pdf"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_invoice_attachment_by_id",
+      "summary": "Retrieves a specific attachment from a specific invoices or purchase bills by using a unique attachment Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_invoice_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Invoices/{InvoiceID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_invoice_attachment_by_file_name",
+      "summary": "Retrieves an attachment from a specific invoice or purchase bill by filename",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_invoice_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Invoices/{InvoiceID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_invoice_attachment_by_file_name",
+      "summary": "Updates an attachment from a specific invoices or purchase bill by filename",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_invoice_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Invoices/{InvoiceID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_invoice_attachment_by_file_name",
+      "summary": "Creates an attachment for a specific invoice or purchase bill by filename",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_invoice_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Invoices/{InvoiceID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_manual_journal_attachment_by_id",
+      "summary": "Allows you to retrieve a specific attachment from a specific manual journal using a unique attachment Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_manual_journal_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ManualJournals/{ManualJournalID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_manual_journal_attachment_by_file_name",
+      "summary": "Retrieves a specific attachment from a specific manual journal by file name",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_manual_journal_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_manual_journal_attachment_by_file_name",
+      "summary": "Updates a specific attachment from a specific manual journal by file name",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_manual_journal_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_manual_journal_attachment_by_file_name",
+      "summary": "Creates a specific attachment for a specific manual journal by file name",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_manual_journal_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ManualJournals/{ManualJournalID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_purchase_order_as_pdf",
+      "summary": "Retrieves specific purchase order as PDF files using a unique purchase order Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_purchase_order_as_pdf",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/PurchaseOrders/{PurchaseOrderID}/pdf"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_purchase_order_attachment_by_id",
+      "summary": "Retrieves specific attachment for a specific purchase order using a unique attachment Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_purchase_order_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_purchase_order_attachment_by_file_name",
+      "summary": "Retrieves a specific attachment for a specific purchase order by filename",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_purchase_order_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_purchase_order_attachment_by_file_name",
+      "summary": "Updates a specific attachment for a specific purchase order by filename",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_purchase_order_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_purchase_order_attachment_by_file_name",
+      "summary": "Creates attachment for a specific purchase order",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_purchase_order_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/PurchaseOrders/{PurchaseOrderID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_quote_as_pdf",
+      "summary": "Retrieves a specific quote as a PDF file using a unique quote Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_quote_as_pdf",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Quotes/{QuoteID}/pdf"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_quote_attachment_by_id",
+      "summary": "Retrieves a specific attachment from a specific quote using a unique attachment Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_quote_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Quotes/{QuoteID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_quote_attachment_by_file_name",
+      "summary": "Retrieves a specific attachment from a specific quote by filename",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_quote_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Quotes/{QuoteID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_quote_attachment_by_file_name",
+      "summary": "Updates a specific attachment from a specific quote by filename",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_quote_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Quotes/{QuoteID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_quote_attachment_by_file_name",
+      "summary": "Creates attachment for a specific quote",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_quote_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Quotes/{QuoteID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_receipt_attachment_by_id",
+      "summary": "Retrieves a specific attachments from a specific expense claim receipts by using a unique attachment Id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_receipt_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Receipts/{ReceiptID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_receipt_attachment_by_file_name",
+      "summary": "Retrieves a specific attachment from a specific expense claim receipts by file name",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_receipt_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/Receipts/{ReceiptID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_receipt_attachment_by_file_name",
+      "summary": "Updates a specific attachment on a specific expense claim receipts by file name",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_receipt_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/Receipts/{ReceiptID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_receipt_attachment_by_file_name",
+      "summary": "Creates an attachment on a specific expense claim receipts by file name",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_receipt_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/Receipts/{ReceiptID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_repeating_invoice_attachment_by_id",
+      "summary": "Retrieves a specific attachment from a specific repeating invoice",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_repeating_invoice_attachment_by_id",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{AttachmentID}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments get_repeating_invoice_attachment_by_file_name",
+      "summary": "Retrieves a specific attachment from a specific repeating invoices by file name",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "xero.get_repeating_invoice_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "none",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments update_repeating_invoice_attachment_by_file_name",
+      "summary": "Updates a specific attachment from a specific repeating invoices by file name",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.update_repeating_invoice_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    },
+    {
+      "path": "attachments create_repeating_invoice_attachment_by_file_name",
+      "summary": "Creates an attachment from a specific repeating invoices by file name",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "xero.create_repeating_invoice_attachment_by_file_name",
+      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/RepeatingInvoices/{RepeatingInvoiceID}/Attachments/{FileName}"
+        }
+      ],
+      "risk": "blocked shared-runtime binary/file transfer dependency",
+      "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+      "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "xero reports",
+      "summary": "Bounded direct reads for Xero Accounting report endpoints with typed query/path flags."
+    },
+    {
+      "name": "xero reverse-etl",
+      "summary": "Reverse ETL writes use typed schemas and require plan, preview, explicit approval, and execute."
+    },
+    {
+      "name": "xero attachments",
+      "summary": "Attachment metadata streams are available; binary/PDF download and upload execution is blocked on the shared binary/file runner."
+    }
+  ]
+}

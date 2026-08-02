@@ -2,9 +2,11 @@ package amazonsqs
 
 import (
 	"context"
+	"encoding/json"
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"math"
 	"net/url"
 	"sort"
 	"strconv"
@@ -16,26 +18,27 @@ import (
 const sqsBatchLimit = 10
 
 type writeActionDef struct {
-	name     string
-	method   string
-	path     string
-	kind     string
-	required []string
-	allowed  []string
-	redact   []string
-	risk     string
-	confirm  string
-	batch    bool
-	queue    bool
-	service  bool
-	execute  func(url.Values, connectors.Record, int) error
+	name        string
+	method      string
+	path        string
+	kind        string
+	required    []string
+	requiredAny [][]string
+	allowed     []string
+	redact      []string
+	risk        string
+	confirm     string
+	batch       bool
+	queue       bool
+	service     bool
+	execute     func(url.Values, connectors.Record, int) error
 }
 
 var sqsWriteActions = map[string]writeActionDef{
 	"add_permission":                  {name: "add_permission", method: "POST", path: "SQS.AddPermission", kind: "custom", required: []string{"label", "aws_account_ids", "actions"}, allowed: []string{"label", "aws_account_ids", "actions"}, risk: "adds an SQS queue resource policy permission statement for listed AWS account ids", queue: true, execute: buildAddPermissionForm},
 	"cancel_message_move_task":        {name: "cancel_message_move_task", method: "POST", path: "SQS.CancelMessageMoveTask", kind: "custom", required: []string{"task_handle"}, allowed: []string{"task_handle"}, redact: []string{"task_handle"}, risk: "cancels an in-flight dead-letter-queue message move task", confirm: "destructive", service: true, execute: buildCancelMessageMoveTaskForm},
 	"change_message_visibility":       {name: "change_message_visibility", method: "POST", path: "SQS.ChangeMessageVisibility", kind: "update", required: []string{"receipt_handle", "visibility_timeout"}, allowed: []string{"receipt_handle", "visibility_timeout"}, redact: []string{"receipt_handle"}, risk: "changes the visibility timeout for one in-flight message", queue: true, execute: buildChangeMessageVisibilityForm},
-	"change_message_visibility_batch": {name: "change_message_visibility_batch", method: "POST", path: "SQS.ChangeMessageVisibilityBatch", kind: "update", required: []string{"receipt_handle"}, allowed: []string{"id", "receipt_handle", "visibility_timeout"}, redact: []string{"receipt_handle"}, risk: "changes visibility timeout for up to 10 in-flight messages per SQS batch request", batch: true, queue: true, execute: buildChangeMessageVisibilityBatchEntry},
+	"change_message_visibility_batch": {name: "change_message_visibility_batch", method: "POST", path: "SQS.ChangeMessageVisibilityBatch", kind: "update", required: []string{"receipt_handle", "visibility_timeout"}, allowed: []string{"id", "receipt_handle", "visibility_timeout"}, redact: []string{"receipt_handle"}, risk: "changes visibility timeout for up to 10 in-flight messages per SQS batch request", batch: true, queue: true, execute: buildChangeMessageVisibilityBatchEntry},
 	"create_queue":                    {name: "create_queue", method: "POST", path: "SQS.CreateQueue", kind: "create", required: []string{"queue_name"}, allowed: []string{"queue_name", "attributes", "tags"}, risk: "creates an SQS queue; SQS returns an existing queue URL when name and attributes match", service: true, execute: buildCreateQueueForm},
 	"delete_message":                  {name: "delete_message", method: "POST", path: "SQS.DeleteMessage", kind: "delete", required: []string{"receipt_handle"}, allowed: []string{"receipt_handle"}, redact: []string{"receipt_handle"}, risk: "deletes one received message by receipt handle", confirm: "destructive", queue: true, execute: buildDeleteMessageForm},
 	"delete_message_batch":            {name: "delete_message_batch", method: "POST", path: "SQS.DeleteMessageBatch", kind: "delete", required: []string{"receipt_handle"}, allowed: []string{"id", "receipt_handle"}, redact: []string{"receipt_handle"}, risk: "deletes up to 10 received messages per SQS batch request", confirm: "destructive", batch: true, queue: true, execute: buildDeleteMessageBatchEntry},
@@ -44,9 +47,9 @@ var sqsWriteActions = map[string]writeActionDef{
 	"remove_permission":               {name: "remove_permission", method: "POST", path: "SQS.RemovePermission", kind: "delete", required: []string{"label"}, allowed: []string{"label"}, risk: "removes an SQS queue resource policy permission statement", confirm: "destructive", queue: true, execute: buildRemovePermissionForm},
 	"send_message":                    {name: "send_message", method: "POST", path: "SQS.SendMessage", kind: "create", required: []string{"message_body"}, allowed: []string{"message_body", "delay_seconds", "message_attributes", "message_system_attributes", "message_deduplication_id", "message_group_id"}, redact: []string{"message_body", "message_attributes", "message_system_attributes"}, risk: "sends one message to the configured queue; FIFO queues may use message_deduplication_id for provider-supported idempotency", queue: true, execute: buildSendMessageForm},
 	"send_message_batch":              {name: "send_message_batch", method: "POST", path: "SQS.SendMessageBatch", kind: "create", required: []string{"message_body"}, allowed: []string{"id", "message_body", "delay_seconds", "message_attributes", "message_system_attributes", "message_deduplication_id", "message_group_id"}, redact: []string{"message_body", "message_attributes", "message_system_attributes"}, risk: "sends up to 10 messages per SQS batch request; FIFO queues may use message_deduplication_id for provider-supported idempotency", batch: true, queue: true, execute: buildSendMessageBatchEntry},
-	"set_queue_attributes":            {name: "set_queue_attributes", method: "POST", path: "SQS.SetQueueAttributes", kind: "update", required: []string{"attribute_name", "attribute_value"}, allowed: []string{"attribute_name", "attribute_value", "attributes"}, redact: []string{"attribute_value", "attributes"}, risk: "sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings", queue: true, execute: buildSetQueueAttributesForm},
+	"set_queue_attributes":            {name: "set_queue_attributes", method: "POST", path: "SQS.SetQueueAttributes", kind: "update", requiredAny: [][]string{{"attributes"}, {"attribute_name", "attribute_value"}}, allowed: []string{"attribute_name", "attribute_value", "attributes"}, redact: []string{"attribute_value", "attributes"}, risk: "sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings", queue: true, execute: buildSetQueueAttributesForm},
 	"start_message_move_task":         {name: "start_message_move_task", method: "POST", path: "SQS.StartMessageMoveTask", kind: "custom", required: []string{"source_arn"}, allowed: []string{"source_arn", "destination_arn", "max_number_of_messages_per_second"}, risk: "starts an SQS dead-letter queue redrive message move task", service: true, execute: buildStartMessageMoveTaskForm},
-	"tag_queue":                       {name: "tag_queue", method: "POST", path: "SQS.TagQueue", kind: "update", required: []string{"tag_key", "tag_value"}, allowed: []string{"tag_key", "tag_value", "tags"}, risk: "adds or updates tags on the configured SQS queue", queue: true, execute: buildTagQueueForm},
+	"tag_queue":                       {name: "tag_queue", method: "POST", path: "SQS.TagQueue", kind: "update", requiredAny: [][]string{{"tags"}, {"tag_key", "tag_value"}}, allowed: []string{"tag_key", "tag_value", "tags"}, risk: "adds or updates tags on the configured SQS queue", queue: true, execute: buildTagQueueForm},
 	"untag_queue":                     {name: "untag_queue", method: "POST", path: "SQS.UntagQueue", kind: "delete", required: []string{"tag_keys"}, allowed: []string{"tag_keys"}, risk: "removes tags from the configured SQS queue", confirm: "destructive", queue: true, execute: buildUntagQueueForm},
 }
 
@@ -64,7 +67,7 @@ func (c Connector) Manifest() connectors.Manifest {
 	actions := make([]connectors.WriteActionSpec, 0, len(sqsWriteActions))
 	for _, name := range sortedWriteActionNames() {
 		def := sqsWriteActions[name]
-		actions = append(actions, connectors.WriteActionSpec{Name: def.name, RequiredFields: append([]string(nil), def.required...), OptionalFields: optionalFields(def), Method: def.method, Path: def.path, Risk: def.risk, Confirm: def.confirm})
+		actions = append(actions, connectors.WriteActionSpec{Name: def.name, RequiredFields: append([]string(nil), def.required...), OptionalFields: optionalFields(def), Method: def.method, Path: def.path, RedactFields: append([]string(nil), def.redact...), Risk: def.risk, Confirm: def.confirm})
 	}
 	return connectors.Manifest{
 		Metadata:     c.Metadata(),
@@ -123,10 +126,11 @@ func (c Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest,
 	if err != nil {
 		return connectors.WritePreview{}, err
 	}
-	if err := validateSQSRecords(def, normalizedWriteRecords(records)); err != nil {
+	normalized := normalizedWriteRecords(records)
+	if err := validateSQSRecords(def, normalized); err != nil {
 		return connectors.WritePreview{}, err
 	}
-	staged := len(normalizedWriteRecords(records))
+	staged := len(normalized)
 	warnings := []string{"amazon-sqs writes require reverse ETL plan -> preview -> explicit approval -> execute"}
 	if def.confirm == "destructive" {
 		warnings = append(warnings, "destructive confirmation required")
@@ -147,7 +151,6 @@ func (c Connector) writeSQS(ctx context.Context, req connectors.WriteRequest, re
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
 	written := 0
-	failed := 0
 	if def.batch {
 		for start := 0; start < len(normalized); start += sqsBatchLimit {
 			end := start + sqsBatchLimit
@@ -159,21 +162,23 @@ func (c Connector) writeSQS(ctx context.Context, req connectors.WriteRequest, re
 			addConfiguredQueueURL(form, req.Config)
 			for i, rec := range chunk {
 				if err := def.execute(form, rec, i+1); err != nil {
-					return connectors.WriteResult{RecordsWritten: written, RecordsFailed: failed + len(chunk) - i}, err
+					return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, err
 				}
 			}
 			resp, err := c.doService(ctx, req.Config, form, 16<<20)
 			if err != nil {
-				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: failed + len(chunk)}, err
+				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, err
 			}
 			successes, failures := parseBatchCounts(resp.body)
 			if successes == 0 && failures == 0 {
 				successes = len(chunk)
 			}
 			written += successes
-			failed += failures
+			if failures > 0 {
+				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response reported %d failed entries", def.name, failures)
+			}
 		}
-		return connectors.WriteResult{RecordsWritten: written, RecordsFailed: failed}, nil
+		return connectors.WriteResult{RecordsWritten: written}, nil
 	}
 	for i, rec := range normalized {
 		form := baseActionForm(actionName(def.path))
@@ -202,9 +207,6 @@ func lookupSQSWriteAction(raw string) (writeActionDef, string, error) {
 }
 
 func normalizedWriteRecords(records []connectors.Record) []connectors.Record {
-	if len(records) == 0 {
-		return []connectors.Record{{}}
-	}
 	out := make([]connectors.Record, len(records))
 	for i, rec := range records {
 		if rec == nil {
@@ -216,24 +218,323 @@ func normalizedWriteRecords(records []connectors.Record) []connectors.Record {
 	return out
 }
 
+type sqsRecordFieldType string
+
+const (
+	sqsFieldString              sqsRecordFieldType = "string"
+	sqsFieldInteger             sqsRecordFieldType = "integer"
+	sqsFieldStringList          sqsRecordFieldType = "string_list"
+	sqsFieldStringMap           sqsRecordFieldType = "string_map"
+	sqsFieldMessageAttributeMap sqsRecordFieldType = "message_attribute_map"
+)
+
+type sqsIntegerRange struct {
+	min int
+	max int
+}
+
+var sqsRecordFieldTypes = map[string]sqsRecordFieldType{
+	"actions":                           sqsFieldStringList,
+	"attribute_name":                    sqsFieldString,
+	"attribute_value":                   sqsFieldString,
+	"attributes":                        sqsFieldStringMap,
+	"aws_account_ids":                   sqsFieldStringList,
+	"delay_seconds":                     sqsFieldInteger,
+	"destination_arn":                   sqsFieldString,
+	"id":                                sqsFieldString,
+	"label":                             sqsFieldString,
+	"max_number_of_messages_per_second": sqsFieldInteger,
+	"message_attributes":                sqsFieldMessageAttributeMap,
+	"message_body":                      sqsFieldString,
+	"message_deduplication_id":          sqsFieldString,
+	"message_group_id":                  sqsFieldString,
+	"message_system_attributes":         sqsFieldMessageAttributeMap,
+	"queue_name":                        sqsFieldString,
+	"receipt_handle":                    sqsFieldString,
+	"source_arn":                        sqsFieldString,
+	"tag_key":                           sqsFieldString,
+	"tag_keys":                          sqsFieldStringList,
+	"tag_value":                         sqsFieldString,
+	"tags":                              sqsFieldStringMap,
+	"task_handle":                       sqsFieldString,
+	"visibility_timeout":                sqsFieldInteger,
+}
+
+var sqsIntegerFieldRanges = map[string]sqsIntegerRange{
+	"delay_seconds":                     {min: 0, max: 900},
+	"max_number_of_messages_per_second": {min: 1, max: 500},
+	"visibility_timeout":                {min: 0, max: 43200},
+}
+
+var sqsMessageAttributeFields = map[string]bool{
+	"binary_list_values": true,
+	"binary_value":       true,
+	"data_type":          true,
+	"string_list_values": true,
+	"string_value":       true,
+}
+
+var maxNativeInt = int64(^uint(0) >> 1)
+var minNativeInt = -maxNativeInt - 1
+
 func validateSQSRecords(def writeActionDef, records []connectors.Record) error {
 	allowed := map[string]bool{}
 	for _, field := range def.allowed {
 		allowed[field] = true
 	}
 	for i, rec := range records {
-		for _, field := range def.required {
-			if isEmptyRecordValue(rec[field]) {
-				return fmt.Errorf("amazon-sqs action %s record %d requires field %q", def.name, i, field)
-			}
+		if err := validateSQSRequiredFields(def, rec); err != nil {
+			return fmt.Errorf("amazon-sqs action %s record %d %w", def.name, i, err)
 		}
-		for field := range rec {
+		for field, value := range rec {
 			if !allowed[field] {
 				return fmt.Errorf("amazon-sqs action %s record %d has unsupported field %q", def.name, i, field)
+			}
+			if err := validateSQSFieldValue(field, value); err != nil {
+				return fmt.Errorf("amazon-sqs action %s record %d field %q %w", def.name, i, field, err)
 			}
 		}
 	}
 	return nil
+}
+
+func validateSQSRequiredFields(def writeActionDef, rec connectors.Record) error {
+	for _, field := range def.required {
+		if isEmptyRequiredRecordValue(field, rec[field]) {
+			return fmt.Errorf("requires field %q", field)
+		}
+	}
+	if len(def.requiredAny) == 0 {
+		return nil
+	}
+	anyComplete := false
+	for _, group := range def.requiredAny {
+		present := 0
+		missing := 0
+		for _, field := range group {
+			if isEmptyRequiredRecordValue(field, rec[field]) {
+				missing++
+			} else {
+				present++
+			}
+		}
+		switch {
+		case missing == 0:
+			anyComplete = true
+		case present > 0:
+			return fmt.Errorf("requires fields %s together", formatRequiredGroup(group))
+		}
+	}
+	if anyComplete {
+		return nil
+	}
+	return fmt.Errorf("requires one of %s", formatRequiredAny(def.requiredAny))
+}
+
+func isEmptyRequiredRecordValue(field string, value any) bool {
+	if field == "message_body" {
+		text, ok := value.(string)
+		if ok {
+			return text == ""
+		}
+		return value == nil
+	}
+	return isEmptyRecordValue(value)
+}
+
+func formatRequiredAny(groups [][]string) string {
+	parts := make([]string, 0, len(groups))
+	for _, group := range groups {
+		parts = append(parts, formatRequiredGroup(group))
+	}
+	return strings.Join(parts, " or ")
+}
+
+func formatRequiredGroup(group []string) string {
+	quoted := make([]string, 0, len(group))
+	for _, field := range group {
+		quoted = append(quoted, strconv.Quote(field))
+	}
+	return strings.Join(quoted, " + ")
+}
+
+func validateSQSFieldValue(field string, value any) error {
+	fieldType, ok := sqsRecordFieldTypes[field]
+	if !ok {
+		return errors.New("has no declared schema type")
+	}
+	switch fieldType {
+	case sqsFieldString:
+		if _, ok := value.(string); !ok {
+			return errors.New("must be string")
+		}
+	case sqsFieldInteger:
+		n, ok := sqsIntegerValue(value)
+		if !ok {
+			return errors.New("must be integer")
+		}
+		if r, ok := sqsIntegerFieldRanges[field]; ok && (n < r.min || n > r.max) {
+			return fmt.Errorf("must be between %d and %d", r.min, r.max)
+		}
+	case sqsFieldStringList:
+		if err := validateStringListValue(value); err != nil {
+			return err
+		}
+	case sqsFieldStringMap:
+		if err := validateStringMapValue(value); err != nil {
+			return err
+		}
+	case sqsFieldMessageAttributeMap:
+		if err := validateMessageAttributeMapValue(value); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func validateStringListValue(value any) error {
+	switch typed := value.(type) {
+	case []string:
+		return nil
+	case []any:
+		for _, item := range typed {
+			if _, ok := item.(string); !ok {
+				return errors.New("must be array of strings")
+			}
+		}
+		return nil
+	default:
+		return errors.New("must be array of strings")
+	}
+}
+
+func validateStringMapValue(value any) error {
+	items, ok := objectItems(value)
+	if !ok {
+		return errors.New("must be object with string values")
+	}
+	for _, item := range items {
+		if _, ok := item.(string); !ok {
+			return errors.New("must be object with string values")
+		}
+	}
+	return nil
+}
+
+func validateMessageAttributeMapValue(value any) error {
+	items, ok := objectItems(value)
+	if !ok {
+		return errors.New("must be object")
+	}
+	for name, raw := range items {
+		if _, ok := raw.(string); ok {
+			continue
+		}
+		attr, ok := objectItems(raw)
+		if !ok {
+			return fmt.Errorf("attribute %q must be string or object", name)
+		}
+		for field, item := range attr {
+			if !sqsMessageAttributeFields[field] {
+				return fmt.Errorf("attribute %q has unsupported field %q", name, field)
+			}
+			switch field {
+			case "data_type", "string_value", "binary_value":
+				if _, ok := item.(string); !ok {
+					return fmt.Errorf("attribute %q field %q must be string", name, field)
+				}
+			case "string_list_values", "binary_list_values":
+				if err := validateStringListValue(item); err != nil {
+					return fmt.Errorf("attribute %q field %q %w", name, field, err)
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func objectItems(value any) (map[string]any, bool) {
+	switch typed := value.(type) {
+	case map[string]any:
+		return typed, true
+	case connectors.Record:
+		return map[string]any(typed), true
+	case map[string]string:
+		out := make(map[string]any, len(typed))
+		for key, value := range typed {
+			out[key] = value
+		}
+		return out, true
+	default:
+		return nil, false
+	}
+}
+
+func sqsIntegerValue(value any) (int, bool) {
+	switch typed := value.(type) {
+	case int:
+		return typed, true
+	case int8:
+		return int(typed), true
+	case int16:
+		return int(typed), true
+	case int32:
+		return int(typed), true
+	case int64:
+		return int64ToInt(typed)
+	case uint:
+		return uint64ToInt(uint64(typed))
+	case uint8:
+		return int(typed), true
+	case uint16:
+		return int(typed), true
+	case uint32:
+		return uint64ToInt(uint64(typed))
+	case uint64:
+		return uint64ToInt(typed)
+	case float32:
+		return floatToInt(float64(typed))
+	case float64:
+		return floatToInt(typed)
+	case json.Number:
+		return jsonNumberToInt(typed)
+	case jsonNumber:
+		return jsonNumberToInt(json.Number(typed))
+	default:
+		return 0, false
+	}
+}
+
+func int64ToInt(n int64) (int, bool) {
+	if n < minNativeInt || n > maxNativeInt {
+		return 0, false
+	}
+	return int(n), true
+}
+
+func uint64ToInt(n uint64) (int, bool) {
+	if n > uint64(maxNativeInt) {
+		return 0, false
+	}
+	return int(n), true
+}
+
+func floatToInt(n float64) (int, bool) {
+	if math.IsNaN(n) || math.IsInf(n, 0) || math.Trunc(n) != n || n < float64(minNativeInt) || n > float64(maxNativeInt) {
+		return 0, false
+	}
+	return int(n), true
+}
+
+func jsonNumberToInt(n json.Number) (int, bool) {
+	if parsed, err := n.Int64(); err == nil {
+		return int64ToInt(parsed)
+	}
+	parsed, err := n.Float64()
+	if err != nil {
+		return 0, false
+	}
+	return floatToInt(parsed)
 }
 
 func isEmptyRecordValue(v any) bool {
@@ -293,16 +594,14 @@ func buildChangeMessageVisibilityBatchEntry(form url.Values, rec connectors.Reco
 	prefix := fmt.Sprintf("ChangeMessageVisibilityBatchRequestEntry.%d.", index)
 	form.Set(prefix+"Id", entryID(rec, index))
 	form.Set(prefix+"ReceiptHandle", stringField(rec, "receipt_handle"))
-	if !isEmptyRecordValue(rec["visibility_timeout"]) {
-		form.Set(prefix+"VisibilityTimeout", strconv.Itoa(intField(rec, "visibility_timeout", 0, 0, 43200)))
-	}
+	form.Set(prefix+"VisibilityTimeout", strconv.Itoa(intField(rec, "visibility_timeout", 0, 0, 43200)))
 	return nil
 }
 
 func buildCreateQueueForm(form url.Values, rec connectors.Record, _ int) error {
 	form.Set("QueueName", stringField(rec, "queue_name"))
 	addStringMap(form, "Attribute", stringMapField(rec, "attributes"))
-	addStringMap(form, "Tag", stringMapField(rec, "tags"))
+	addTagMap(form, stringMapField(rec, "tags"))
 	return nil
 }
 
@@ -324,7 +623,7 @@ func buildRemovePermissionForm(form url.Values, rec connectors.Record, _ int) er
 }
 
 func buildSendMessageForm(form url.Values, rec connectors.Record, _ int) error {
-	form.Set("MessageBody", stringField(rec, "message_body"))
+	form.Set("MessageBody", exactStringField(rec, "message_body"))
 	addOptionalInt(form, "DelaySeconds", rec, "delay_seconds", 0, 0, 900)
 	addOptionalString(form, "MessageDeduplicationId", rec, "message_deduplication_id")
 	addOptionalString(form, "MessageGroupId", rec, "message_group_id")
@@ -336,7 +635,7 @@ func buildSendMessageForm(form url.Values, rec connectors.Record, _ int) error {
 func buildSendMessageBatchEntry(form url.Values, rec connectors.Record, index int) error {
 	prefix := fmt.Sprintf("SendMessageBatchRequestEntry.%d.", index)
 	form.Set(prefix+"Id", entryID(rec, index))
-	form.Set(prefix+"MessageBody", stringField(rec, "message_body"))
+	form.Set(prefix+"MessageBody", exactStringField(rec, "message_body"))
 	addOptionalInt(form, prefix+"DelaySeconds", rec, "delay_seconds", 0, 0, 900)
 	addOptionalString(form, prefix+"MessageDeduplicationId", rec, "message_deduplication_id")
 	addOptionalString(form, prefix+"MessageGroupId", rec, "message_group_id")
@@ -347,8 +646,11 @@ func buildSendMessageBatchEntry(form url.Values, rec connectors.Record, index in
 
 func buildSetQueueAttributesForm(form url.Values, rec connectors.Record, _ int) error {
 	attrs := stringMapField(rec, "attributes")
-	if len(attrs) == 0 {
-		attrs = map[string]string{stringField(rec, "attribute_name"): stringField(rec, "attribute_value")}
+	if attrs == nil {
+		attrs = map[string]string{}
+	}
+	if !isEmptyRecordValue(rec["attribute_name"]) && !isEmptyRecordValue(rec["attribute_value"]) {
+		attrs[stringField(rec, "attribute_name")] = stringField(rec, "attribute_value")
 	}
 	addStringMap(form, "Attribute", attrs)
 	return nil
@@ -363,10 +665,13 @@ func buildStartMessageMoveTaskForm(form url.Values, rec connectors.Record, _ int
 
 func buildTagQueueForm(form url.Values, rec connectors.Record, _ int) error {
 	tags := stringMapField(rec, "tags")
-	if len(tags) == 0 {
-		tags = map[string]string{stringField(rec, "tag_key"): stringField(rec, "tag_value")}
+	if tags == nil {
+		tags = map[string]string{}
 	}
-	addStringMap(form, "Tag", tags)
+	if !isEmptyRecordValue(rec["tag_key"]) && !isEmptyRecordValue(rec["tag_value"]) {
+		tags[stringField(rec, "tag_key")] = stringField(rec, "tag_value")
+	}
+	addTagMap(form, tags)
 	return nil
 }
 
@@ -403,33 +708,22 @@ func stringField(rec connectors.Record, key string) string {
 	return strings.TrimSpace(fmt.Sprint(value))
 }
 
+func exactStringField(rec connectors.Record, key string) string {
+	value, ok := rec[key].(string)
+	if !ok {
+		return ""
+	}
+	return value
+}
+
 func intField(rec connectors.Record, key string, def, min, max int) int {
 	value, ok := rec[key]
 	if !ok || value == nil {
 		return def
 	}
-	var n int
-	switch typed := value.(type) {
-	case int:
-		n = typed
-	case int64:
-		n = int(typed)
-	case float64:
-		n = int(typed)
-	case jsonNumber:
-		parsed, err := strconv.Atoi(string(typed))
-		if err != nil {
-			n = def
-		} else {
-			n = parsed
-		}
-	default:
-		parsed, err := strconv.Atoi(strings.TrimSpace(fmt.Sprint(value)))
-		if err != nil {
-			n = def
-		} else {
-			n = parsed
-		}
+	n, ok := sqsIntegerValue(value)
+	if !ok {
+		return def
 	}
 	if n < min {
 		return min
@@ -450,16 +744,15 @@ func stringSliceField(rec connectors.Record, key string) []string {
 	case []any:
 		out := make([]string, 0, len(typed))
 		for _, v := range typed {
-			out = append(out, fmt.Sprint(v))
+			if s, ok := v.(string); ok {
+				out = append(out, s)
+			}
 		}
 		return compactStrings(out)
 	case string:
 		return splitCSV(typed)
 	default:
-		if value == nil {
-			return nil
-		}
-		return compactStrings([]string{fmt.Sprint(value)})
+		return nil
 	}
 }
 
@@ -481,13 +774,17 @@ func stringMapField(rec connectors.Record, key string) map[string]string {
 	case map[string]any:
 		out := map[string]string{}
 		for k, v := range typed {
-			out[k] = fmt.Sprint(v)
+			if s, ok := v.(string); ok {
+				out[k] = s
+			}
 		}
 		return out
 	case connectors.Record:
 		out := map[string]string{}
 		for k, v := range typed {
-			out[k] = fmt.Sprint(v)
+			if s, ok := v.(string); ok {
+				out[k] = s
+			}
 		}
 		return out
 	default:
@@ -512,49 +809,55 @@ type messageAttributeValue struct {
 }
 
 func messageAttributeMapField(rec connectors.Record, key string) map[string]messageAttributeValue {
-	value := rec[key]
-	items, ok := value.(map[string]any)
+	items, ok := objectItems(rec[key])
 	if !ok {
-		if cr, ok := value.(connectors.Record); ok {
-			items = map[string]any(cr)
-		} else {
-			return nil
-		}
+		return nil
 	}
 	out := map[string]messageAttributeValue{}
 	for name, raw := range items {
-		m, ok := raw.(map[string]any)
+		if s, ok := raw.(string); ok {
+			out[name] = messageAttributeValue{DataType: "String", StringValue: s}
+			continue
+		}
+		m, ok := objectItems(raw)
 		if !ok {
-			if cr, ok := raw.(connectors.Record); ok {
-				m = map[string]any(cr)
-			} else {
-				out[name] = messageAttributeValue{DataType: "String", StringValue: fmt.Sprint(raw)}
-				continue
-			}
+			continue
 		}
 		out[name] = messageAttributeValue{
-			DataType:         strings.TrimSpace(fmt.Sprint(m["data_type"])),
-			StringValue:      strings.TrimSpace(fmt.Sprint(m["string_value"])),
-			BinaryValue:      strings.TrimSpace(fmt.Sprint(m["binary_value"])),
-			StringListValues: valueToStrings(m["string_list_values"]),
-			BinaryListValues: valueToStrings(m["binary_list_values"]),
+			DataType:         stringMapAnyField(m, "data_type"),
+			StringValue:      stringMapAnyField(m, "string_value"),
+			BinaryValue:      stringMapAnyField(m, "binary_value"),
+			StringListValues: exactStringValues(m["string_list_values"]),
+			BinaryListValues: exactStringValues(m["binary_list_values"]),
 		}
 	}
 	return out
 }
 
-func valueToStrings(value any) []string {
+func stringMapAnyField(values map[string]any, key string) string {
+	value, ok := values[key]
+	if !ok || value == nil {
+		return ""
+	}
+	text, ok := value.(string)
+	if !ok {
+		return ""
+	}
+	return text
+}
+
+func exactStringValues(value any) []string {
 	switch typed := value.(type) {
 	case []string:
-		return compactStrings(typed)
+		return append([]string(nil), typed...)
 	case []any:
 		out := make([]string, 0, len(typed))
-		for _, v := range typed {
-			out = append(out, fmt.Sprint(v))
+		for _, item := range typed {
+			if s, ok := item.(string); ok {
+				out = append(out, s)
+			}
 		}
-		return compactStrings(out)
-	case string:
-		return splitCSV(typed)
+		return out
 	default:
 		return nil
 	}
@@ -575,6 +878,18 @@ func addStringMap(form url.Values, prefix string, values map[string]string) {
 	for i, key := range keys {
 		form.Set(fmt.Sprintf("%s.%d.Name", prefix, i+1), key)
 		form.Set(fmt.Sprintf("%s.%d.Value", prefix, i+1), values[key])
+	}
+}
+
+func addTagMap(form url.Values, values map[string]string) {
+	keys := make([]string, 0, len(values))
+	for key := range values {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for i, key := range keys {
+		form.Set(fmt.Sprintf("Tag.%d.Key", i+1), key)
+		form.Set(fmt.Sprintf("Tag.%d.Value", i+1), values[key])
 	}
 }
 
@@ -605,12 +920,14 @@ func addMessageAttributeMap(form url.Values, prefix string, values map[string]me
 
 func parseBatchCounts(raw []byte) (int, int) {
 	decoder := xml.NewDecoder(strings.NewReader(string(raw)))
-	successes := 0
-	failures := 0
+	entrySuccesses := 0
+	entryFailures := 0
+	wrapperSuccesses := 0
+	wrapperFailures := 0
 	for {
 		tok, err := decoder.Token()
 		if errors.Is(err, context.Canceled) {
-			return successes, failures
+			break
 		}
 		if err != nil {
 			break
@@ -619,12 +936,19 @@ func parseBatchCounts(raw []byte) (int, int) {
 		if !ok {
 			continue
 		}
-		switch start.Name.Local {
-		case "Successful":
-			successes++
-		case "Failed":
-			failures++
+		switch {
+		case start.Name.Local == "BatchResultErrorEntry":
+			entryFailures++
+		case strings.HasSuffix(start.Name.Local, "BatchResultEntry"):
+			entrySuccesses++
+		case start.Name.Local == "Successful":
+			wrapperSuccesses++
+		case start.Name.Local == "Failed":
+			wrapperFailures++
 		}
 	}
-	return successes, failures
+	if entrySuccesses > 0 || entryFailures > 0 {
+		return entrySuccesses, entryFailures
+	}
+	return wrapperSuccesses, wrapperFailures
 }

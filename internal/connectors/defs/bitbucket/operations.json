@@ -1,0 +1,2128 @@
+{
+  "operations": [
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_addon_addon_key_client_key",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the client key of a Connect addon",
+      "rest": {
+        "method": "GET",
+        "path": "/addon/{addon_key}/client-key"
+      }
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/diff/{spec}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_diff_spec",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Compare two commits"
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_downloads",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List download artifacts",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/downloads"
+      }
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_downloads",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Upload a download artifact"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_downloads_filename",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get a download artifact link"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/export/{repo_name}-issues-{task_id}.zip"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_issues_export_repo_name_issues_task_id_zip",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Check issue export status"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_issues_import",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Import issues"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_issues_issue_id_attachments",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Upload an attachment to an issue"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_issues_issue_id_attachments_path",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get attachment for an issue"
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_issues_issue_id_vote",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Check if current user voted for an issue",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote"
+      }
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_issues_issue_id_watch",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Check if current user is watching a issue",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch"
+      }
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/patch/{spec}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_patch_spec",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get a patch for two commits"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_log",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get log file for a step"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_logs_log_uuid",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the logs for the build container or a service container for a given step of a pipeline."
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_test_reports",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get a summary of test reports for a given step of a pipeline.",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports"
+      }
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_test_reports_test_cases",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get test cases for a given step of a pipeline.",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases"
+      }
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_test_reports_t_65938444",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get test case reasons (output) for a given test case in a step of a pipeline.",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons"
+      }
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_activity",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List a pull request activity log",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/activity"
+      }
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_activity",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List a pull request activity log",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity"
+      }
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_commits",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List commits on a pull request",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits"
+      }
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_conflicts",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get file conflicts for a pull request",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts"
+      }
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_diff",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List changes in a pull request"
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_diffstat",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the diff stat for a pull request",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat"
+      }
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_merge_task_status_task_id",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the merge task status for a pull request",
+      "rest": {
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}"
+      }
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_patch",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the patch for a pull request"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_src",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Create a commit by uploading a file"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/src/{commit}/{path}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_src_commit_path",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get file or directory contents"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/files/{path}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_snippets_workspace_encoded_id_files_path",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get a snippet's raw file at HEAD"
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_snippets_workspace_encoded_id_watch",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Check if the current user is watching a snippet",
+      "rest": {
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/watch"
+      }
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_snippets_workspace_encoded_id_node_id_files_path",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get a snippet's raw file"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/{revision}/diff"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_snippets_workspace_encoded_id_revision_diff",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get snippet changes between versions"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/{revision}/patch"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_snippets_workspace_encoded_id_revision_patch",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get snippet patch between versions"
+    },
+    {
+      "approval": "blocked pending #2985 typed provider-query foundation",
+      "description": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+      "id": "get_teams_username_search_code",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "max_bytes": 1048576,
+        "method": "GET",
+        "path": "/teams/{username}/search/code"
+      },
+      "risk": "low",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Search for code in a team's repositories"
+    },
+    {
+      "approval": "blocked pending provider-backed email-address response schema and fixtures; no generic REST read is exposed",
+      "description": "Bitbucket user-email GET responses have no provider-published 2xx schema in the official OpenAPI document; this connector-local row records the endpoint without exposing a generic user/error stream.",
+      "id": "get_user_emails",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List email addresses for the authenticated user",
+      "rest": {
+        "method": "GET",
+        "path": "/user/emails"
+      }
+    },
+    {
+      "approval": "blocked pending provider-backed email-address response schema and fixtures; no generic REST read is exposed",
+      "description": "Bitbucket user-email GET responses have no provider-published 2xx schema in the official OpenAPI document; this connector-local row records the endpoint without exposing a generic user/error stream.",
+      "id": "get_user_emails_email",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get one authenticated-user email address",
+      "rest": {
+        "method": "GET",
+        "path": "/user/emails/{email}"
+      }
+    },
+    {
+      "approval": "blocked pending #2985 typed provider-query foundation",
+      "description": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+      "id": "get_users_selected_user_search_code",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "max_bytes": 1048576,
+        "method": "GET",
+        "path": "/users/{selected_user}/search/code"
+      },
+      "risk": "low",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Search for code in a user's repositories"
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_workspaces_workspace_pipelines_config_identity_oidc_well_known_openid_configuration",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get OpenID configuration for OIDC in Pipelines",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration"
+      }
+    },
+    {
+      "approval": "blocked pending typed JSON stream or bounded direct-read foundation; no generic REST read is exposed",
+      "description": "JSON/status GET operation needs a typed stream or bounded direct-read contract with fixtures before exposure; this connector-local row records the official operation without misclassifying it as a binary transfer.",
+      "id": "get_workspaces_workspace_pipelines_config_identity_oidc_keys_json",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get keys for OIDC in Pipelines",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/keys.json"
+      }
+    },
+    {
+      "approval": "blocked pending #2985 typed provider-query foundation",
+      "description": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+      "id": "get_workspaces_workspace_search_code",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "max_bytes": 1048576,
+        "method": "GET",
+        "path": "/workspaces/{workspace}/search/code"
+      },
+      "risk": "low",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Search for code in a workspace"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/workspaces/{workspace}/settings/gpg/public-key"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_workspaces_workspace_settings_gpg_public_key",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the workspace system GPG public key(s)"
+    },
+    {
+      "approval": "blocked pending supported Connect JWT/admin auth, typed confirmation, and destructive reverse-ETL contract",
+      "description": "Bitbucket Connect add-on uninstall is a top-level admin mutation with no path or body record fields; it is recorded as blocked evidence instead of an empty unplannable write.",
+      "id": "delete_addon",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "DELETE",
+        "path": "/addon"
+      },
+      "risk": "critical",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: DELETE /addon"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_addon",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/addon"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /addon"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_branch_restrictions",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/branch-restrictions"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_branch_restrictions_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_branching_model_settings",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/branching-model/settings"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_commit_commit_approve",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_commit_commit_comments",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_commit_commit_reports_reportid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_commit_commit_statuses_build",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_commit_commit_statuses_build_key",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_commits",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commits"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commits"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_commits_revision",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commits/{revision}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_default_reviewers_target_username",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_deploy_keys",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/deploy-keys"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/deploy-keys"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_deploy_keys_key_id",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables_variable_uuid",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_environments",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/environments"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/environments"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_environments_environment_uuid_changes",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_forks",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/forks"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/forks"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_hooks",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/hooks",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "secret"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_hooks_uid",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/hooks/{uid}",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "secret"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_issues",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/issues"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/issues"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_issues_export",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/export"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/issues/export"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_issues_issue_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_issues_issue_id_changes",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_issues_issue_id_comments",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_issues_issue_id_vote",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_issues_issue_id_watch",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_override_settings",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/override-settings"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/override-settings"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pipelines",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pipelines_config_runners",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines-config/runners"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pipelines_pipeline_uuid_stoppipeline",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pipelines_config",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pipelines_config_build_number",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/build_number"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config/build_number"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pipelines_config_schedules",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines_config/schedules"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "private_key",
+          "passphrase"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pipelines_config_variables",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines_config/variables",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_properties_app_key_property_name",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pullrequests",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pullrequests_pull_request_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pullrequests_pull_request_id_decline",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pullrequests_pull_request_id_merge",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_refs_branches",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/branches"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/refs/branches"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_repositories_workspace_repo_slug_refs_tags",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/tags"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/refs/tags"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_snippets",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/snippets"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /snippets"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_snippets_workspace",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/snippets/{workspace}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /snippets/{workspace}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_snippets_workspace_encoded_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /snippets/{workspace}/{encoded_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_snippets_workspace_encoded_id_comments",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/snippets/{workspace}/{encoded_id}/comments"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /snippets/{workspace}/{encoded_id}/comments"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_snippets_workspace_encoded_id_comments_comment_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_snippets_workspace_encoded_id_watch",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}/watch"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /snippets/{workspace}/{encoded_id}/watch"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_snippets_workspace_encoded_id_node_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}/{node_id}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /snippets/{workspace}/{encoded_id}/{node_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_teams_username_pipelines_config_variables",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/teams/{username}/pipelines_config/variables"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /teams/{username}/pipelines_config/variables",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_teams_username_pipelines_config_variables_variable_uuid",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /teams/{username}/pipelines_config/variables/{variable_uuid}",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_users_selected_user_gpg_keys",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{selected_user}/gpg-keys"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /users/{selected_user}/gpg-keys"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_users_selected_user_pipelines_config_variables",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{selected_user}/pipelines_config/variables"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /users/{selected_user}/pipelines_config/variables",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_users_selected_user_pipelines_config_variables_variable_uuid",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /users/{selected_user}/pipelines_config/variables/{variable_uuid}",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_users_selected_user_properties_app_key_property_name",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{selected_user}/properties/{app_key}/{property_name}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /users/{selected_user}/properties/{app_key}/{property_name}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_users_selected_user_ssh_keys",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/users/{selected_user}/ssh-keys"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /users/{selected_user}/ssh-keys"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_users_selected_user_ssh_keys_key_id",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{selected_user}/ssh-keys/{key_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /users/{selected_user}/ssh-keys/{key_id}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_workspaces_workspace_hooks",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspace}/hooks"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /workspaces/{workspace}/hooks",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "secret"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_workspaces_workspace_hooks_uid",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/hooks/{uid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/hooks/{uid}",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "secret"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_workspaces_workspace_pipelines_config_runners",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspace}/pipelines-config/runners"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /workspaces/{workspace}/pipelines-config/runners"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_workspaces_workspace_pipelines_config_runners_runner_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_workspaces_workspace_pipelines_config_variables",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspace}/pipelines-config/variables"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /workspaces/{workspace}/pipelines-config/variables",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_workspaces_workspace_pipelines_config_variables_variable_uuid",
+      "kind": "rest_write",
+      "mutation_class": "secret",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "approval_mode": "typed_confirmation",
+        "input_mode": "env_or_stdin",
+        "redact_fields": [
+          "value"
+        ],
+        "transform": "none"
+      }
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_workspaces_workspace_projects",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspace}/projects"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /workspaces/{workspace}/projects"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_workspaces_workspace_projects_project_key",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/projects/{project_key}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_workspaces_workspace_projects_project_key_branching_model_settings",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/projects/{project_key}/branching-model/settings"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+      },
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "post_workspaces_workspace_projects_project_key_deploy_keys",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: POST /workspaces/{workspace}/projects/{project_key}/deploy-keys"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+    },
+    {
+      "approval": "blocked pending closed typed request-body schema and redaction evidence",
+      "description": "JSON mutation is blocked until the connector owns a closed typed request-body schema with required provider fields and redaction for sensitive body fields; no additionalProperties-permissive generic write is exposed.",
+      "id": "put_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+      "kind": "rest_write",
+      "mutation_class": "admin",
+      "output_policy": "none",
+      "rest": {
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+    }
+  ]
+}

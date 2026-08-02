@@ -143,10 +143,10 @@ not a full override by default.
   `x-secret` fields end up in `Schema.SecretKeys()`, which governs secret/config partitioning,
   secret redaction from write previews, and log redaction. Write actions that place sensitive
   non-secret identifiers or clinical values into templated paths must also declare `redact_fields`
-  for those record paths so previews and write errors do not expose them. A field that merely
-  *looks* sensitive but is documentation-only (an optional Bearer-proxy key never wired into `auth`,
-  e.g. searxng's `api_key`) is still marked `x-secret: true` — the marker is about the *field's
-  nature*, not whether this bundle currently exercises it.
+  for those record paths so reverse-plan samples, previews, and write errors do not expose them. A
+  field that merely *looks* sensitive but is documentation-only (an optional Bearer-proxy key never
+  wired into `auth`, e.g. searxng's `api_key`) is still marked `x-secret: true` — the marker is
+  about the field's nature, not whether this bundle currently exercises it.
 - **Schema-as-projection**: a stream's `schemas/<stream>.json` `properties` set is derived
   **field-for-field** from what the legacy connector's own `mapRecord`/record-shaping function
   actually emits — not from guessing the raw API shape. In `"schema"` projection mode (the
@@ -182,22 +182,28 @@ not a full override by default.
 - **`cli_surface.json` validation stays definition-owned**: command-specific flags and constraints
   belong in the connector's CLI surface metadata, never in provider-named shared runner branches.
   Use `flags[].format:"date-time"` for RFC3339/ISO-8601 timestamp flags,
-  `flags[].allow_empty:false` to reject present blank string flags, and `constraints[]` `kind:"order"`
-  / `op:"lt"` / `value_type:"date-time"` over mapped `query.*` or `body.*` targets for provider
+  `flags[].allow_empty:false` to reject present blank string flags, `flags[].required:true` for
+  command inputs that must be present before execution, and `constraints[]` `kind:"order"` /
+  `op:"lt"` / `value_type:"date-time"` over mapped `query.*` or `body.*` targets for provider
   date-range rules. Optional `config.*` fallbacks preserve connection-level defaults when the
-  command flag is absent. `internal/connectors/engine/schema/cli_surface.schema.json` is the schema
-  source of truth, and `connectorgen validate` rejects unsupported formats, operators, fallback
-  namespaces, unmapped constraint targets, and multi-line validation messages. The shared-code
-  boundary guard (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside
-  connector defs/hooks/native escape hatches.
+  command flag is absent. For implemented direct-read POST operations, every required
+  `operations.json` `rest.body_schema` path must either be supplied by static `rest.body` or by a
+  required command flag mapped to `body.*`.
+  `internal/connectors/engine/schema/cli_surface.schema.json` is the schema source of truth, and
+  `connectorgen validate` rejects unsupported formats, operators, fallback namespaces, unmapped
+  constraint targets, missing required body mappings, and multi-line validation messages. The
+  shared-code boundary guard (`docs/migration/connector-boundary-guard.md`) enforces this ownership
+  rule outside connector defs/hooks/native escape hatches.
 - **Direct-read `output_policy` stays generic and bounded**: use `repository_contents_file_metadata`
   for a single repository file metadata response and `repository_contents_directory` for repository
   directory listings. Both policies reject sensitive repository paths before network access and
   redact `content` plus download URLs from returned JSON. Use `json_redacted` or
   `clinical_json_redacted` for non-repository direct reads, paired with `redact_fields` when the
-  operation has connector-specific sensitive response fields. Do not add provider-prefixed output
-  policy names in shared Go; new response families need a generic policy name and regression tests
-  proving reuse by more than one connector shape.
+  operation has connector-specific sensitive response fields. Use `binary_file_bounded` only for
+  reviewed file/binary operation metadata with explicit byte bounds; it must stay blocked until the
+  shared bounded-transfer executor exists. Do not add provider-prefixed output policy names in shared
+  Go; new response families need a generic policy name and regression tests proving reuse by more
+  than one connector shape.
 - **`certification.json` stays definition-owned and harness-only**: connector-specific certify
   contracts belong beside the connector bundle, never in provider-named shared certify branches.
   This optional file may declare `source.default_stream`, source credential defaults,
@@ -729,9 +735,10 @@ at all (pure path-parameterized mutation/delete).
 
 `redact_fields` is an action-local list of record paths whose values must be removed from
 operator-visible write surfaces. It is for non-secret identifiers or clinical values that can appear
-in templated paths or upstream error text; `DryRunWrite` replaces those path values in the resolved
-request preview, and `Write` redacts raw and URL-encoded literal forms from returned write errors
-while preserving typed error wrapping.
+in templated paths or upstream error text; reverse-plan creation persists the list and masks matching
+sample fields, `DryRunWrite` replaces those path values in the resolved request preview, and `Write`
+redacts raw and URL-encoded literal forms from returned write errors while preserving typed error
+wrapping.
 
 **Delete semantics**: `kind: "delete"` + `delete.missing_ok_status: [404, ...]` means those HTTP
 statuses on the delete request count as **written, not failed** (idempotent delete) — any other

@@ -66,8 +66,8 @@ Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue
   - risk: changes the visibility timeout for one in-flight message
 - change_message_visibility_batch:
   - endpoint: POST SQS.ChangeMessageVisibilityBatch
-  - required fields: receipt_handle
-  - optional fields: id, visibility_timeout
+  - required fields: receipt_handle, visibility_timeout
+  - optional fields: id
   - risk: changes visibility timeout for up to 10 in-flight messages per SQS batch request
 - create_queue:
   - endpoint: POST SQS.CreateQueue
@@ -105,8 +105,7 @@ Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue
   - risk: sends up to 10 messages per SQS batch request; FIFO queues may use message_deduplication_id for provider-supported idempotency
 - set_queue_attributes:
   - endpoint: POST SQS.SetQueueAttributes
-  - required fields: attribute_name, attribute_value
-  - optional fields: attributes
+  - required fields: attributes or attribute_name + attribute_value
   - risk: sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings
 - start_message_move_task:
   - endpoint: POST SQS.StartMessageMoveTask
@@ -115,8 +114,7 @@ Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue
   - risk: starts an SQS dead-letter queue redrive message move task
 - tag_queue:
   - endpoint: POST SQS.TagQueue
-  - required fields: tag_key, tag_value
-  - optional fields: tags
+  - required fields: tags or tag_key + tag_value
   - risk: adds or updates tags on the configured SQS queue
 - untag_queue:
   - endpoint: POST SQS.UntagQueue

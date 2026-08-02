@@ -63,12 +63,49 @@ func directReadAction(operation string) string {
 	}
 }
 
+type directReadFieldDef struct {
+	name      string
+	fieldType sqsRecordFieldType
+	min       int
+	max       int
+}
+
+type directReadOperationDef struct {
+	required []string
+	fields   []directReadFieldDef
+}
+
+var sqsDirectReadOperations = map[string]directReadOperationDef{
+	"get_queue_attributes": {fields: []directReadFieldDef{{name: "attribute_names", fieldType: sqsFieldStringList}}},
+	"get_queue_url": {required: []string{"queue_name"}, fields: []directReadFieldDef{
+		{name: "queue_name", fieldType: sqsFieldString},
+		{name: "queue_owner_aws_account_id", fieldType: sqsFieldString},
+	}},
+	"list_dead_letter_source_queues": {fields: []directReadFieldDef{
+		{name: "next_token", fieldType: sqsFieldString},
+		{name: "max_results", fieldType: sqsFieldInteger, min: 1, max: 1000},
+	}},
+	"list_message_move_tasks": {required: []string{"source_arn"}, fields: []directReadFieldDef{
+		{name: "source_arn", fieldType: sqsFieldString},
+		{name: "max_results", fieldType: sqsFieldInteger, min: 1, max: 10},
+	}},
+	"list_queues": {fields: []directReadFieldDef{
+		{name: "queue_name_prefix", fieldType: sqsFieldString},
+		{name: "next_token", fieldType: sqsFieldString},
+		{name: "max_results", fieldType: sqsFieldInteger, min: 1, max: 1000},
+	}},
+	"list_queue_tags": {},
+}
+
 func directReadForm(operation string, cfg connectors.RuntimeConfig, body map[string]any) (url.Values, error) {
+	if err := validateSQSDirectReadBody(operation, body); err != nil {
+		return nil, err
+	}
 	form := baseActionForm(directReadAction(operation))
 	switch operation {
 	case "get_queue_attributes":
 		addConfiguredQueueURL(form, cfg)
-		attrs := valueToStrings(body["attribute_names"])
+		attrs := exactStringValues(body["attribute_names"])
 		if len(attrs) == 0 {
 			attrs = []string{"All"}
 		}
@@ -87,7 +124,7 @@ func directReadForm(operation string, cfg connectors.RuntimeConfig, body map[str
 		if token := bodyString(body, "next_token"); token != "" {
 			form.Set("NextToken", token)
 		}
-		if maxResults, ok := bodyInt(body, "max_results", 0, 1, 1000); ok {
+		if maxResults, ok := bodyInt(body, "max_results"); ok {
 			form.Set("MaxResults", strconv.Itoa(maxResults))
 		}
 	case "list_message_move_tasks":
@@ -96,7 +133,7 @@ func directReadForm(operation string, cfg connectors.RuntimeConfig, body map[str
 			return nil, fmt.Errorf("amazon-sqs direct read %s requires source_arn", operation)
 		}
 		form.Set("SourceArn", sourceArn)
-		if maxResults, ok := bodyInt(body, "max_results", 0, 1, 10); ok {
+		if maxResults, ok := bodyInt(body, "max_results"); ok {
 			form.Set("MaxResults", strconv.Itoa(maxResults))
 		}
 	case "list_queues":
@@ -106,7 +143,7 @@ func directReadForm(operation string, cfg connectors.RuntimeConfig, body map[str
 		if token := bodyString(body, "next_token"); token != "" {
 			form.Set("NextToken", token)
 		}
-		if maxResults, ok := bodyInt(body, "max_results", 0, 1, 1000); ok {
+		if maxResults, ok := bodyInt(body, "max_results"); ok {
 			form.Set("MaxResults", strconv.Itoa(maxResults))
 		}
 	case "list_queue_tags":
@@ -117,28 +154,75 @@ func directReadForm(operation string, cfg connectors.RuntimeConfig, body map[str
 	return form, nil
 }
 
+func validateSQSDirectReadBody(operation string, body map[string]any) error {
+	def, ok := sqsDirectReadOperations[operation]
+	if !ok {
+		return fmt.Errorf("amazon-sqs direct read operation %q not found", operation)
+	}
+	for _, field := range def.required {
+		if isEmptyRecordValue(body[field]) {
+			return fmt.Errorf("amazon-sqs direct read %s requires %s", operation, field)
+		}
+	}
+	allowed := map[string]directReadFieldDef{}
+	for _, field := range def.fields {
+		allowed[field.name] = field
+	}
+	keys := make([]string, 0, len(body))
+	for field := range body {
+		keys = append(keys, field)
+	}
+	sort.Strings(keys)
+	for _, field := range keys {
+		spec, ok := allowed[field]
+		if !ok {
+			return fmt.Errorf("amazon-sqs direct read %s body has unsupported field %q", operation, field)
+		}
+		if err := validateSQSDirectReadFieldValue(spec, body[field]); err != nil {
+			return fmt.Errorf("amazon-sqs direct read %s field %q %w", operation, field, err)
+		}
+	}
+	return nil
+}
+
+func validateSQSDirectReadFieldValue(spec directReadFieldDef, value any) error {
+	switch spec.fieldType {
+	case sqsFieldString:
+		if _, ok := value.(string); !ok {
+			return fmt.Errorf("must be string")
+		}
+	case sqsFieldInteger:
+		n, ok := sqsIntegerValue(value)
+		if !ok {
+			return fmt.Errorf("must be integer")
+		}
+		if spec.max > 0 && (n < spec.min || n > spec.max) {
+			return fmt.Errorf("must be between %d and %d", spec.min, spec.max)
+		}
+	case sqsFieldStringList:
+		return validateStringListValue(value)
+	default:
+		return fmt.Errorf("has no declared schema type")
+	}
+	return nil
+}
+
 func bodyString(body map[string]any, key string) string {
 	if body == nil || body[key] == nil {
 		return ""
 	}
-	return strings.TrimSpace(fmt.Sprint(body[key]))
+	value, ok := body[key].(string)
+	if !ok {
+		return ""
+	}
+	return value
 }
 
-func bodyInt(body map[string]any, key string, def, min, max int) (int, bool) {
+func bodyInt(body map[string]any, key string) (int, bool) {
 	if body == nil || body[key] == nil {
-		return def, false
+		return 0, false
 	}
-	n, err := strconv.Atoi(strings.TrimSpace(fmt.Sprint(body[key])))
-	if err != nil {
-		n = def
-	}
-	if n < min {
-		n = min
-	}
-	if max > min && n > max {
-		n = max
-	}
-	return n, true
+	return sqsIntegerValue(body[key])
 }
 
 type getQueueAttributesXML struct {
@@ -287,11 +371,11 @@ func redactDirectBody(value any, fields []string) any {
 		}
 		explicit[normalizeField(field)] = true
 	}
-	return redactDirectValue("", value, explicit)
+	return redactDirectValue("", value, explicit, 0)
 }
 
-func redactDirectValue(key string, value any, explicit map[string]bool) any {
-	if shouldRedactDirectField(key, explicit) {
+func redactDirectValue(key string, value any, explicit map[string]bool, depth int) any {
+	if key != "" && shouldRedactDirectField(key, explicit, depth == 1) {
 		return "***"
 	}
 	switch typed := value.(type) {
@@ -303,13 +387,13 @@ func redactDirectValue(key string, value any, explicit map[string]bool) any {
 		}
 		sort.Strings(keys)
 		for _, k := range keys {
-			out[k] = redactDirectValue(k, typed[k], explicit)
+			out[k] = redactDirectValue(k, typed[k], explicit, depth+1)
 		}
 		return out
 	case []any:
 		out := make([]any, len(typed))
 		for i, item := range typed {
-			out[i] = redactDirectValue(key, item, explicit)
+			out[i] = redactDirectValue("", item, explicit, depth+1)
 		}
 		return out
 	default:
@@ -317,12 +401,15 @@ func redactDirectValue(key string, value any, explicit map[string]bool) any {
 	}
 }
 
-func shouldRedactDirectField(key string, explicit map[string]bool) bool {
+func shouldRedactDirectField(key string, explicit map[string]bool, topLevel bool) bool {
 	normalized := normalizeField(key)
 	if explicit[normalized] {
 		return true
 	}
-	for _, marker := range []string{"receipt_handle", "task_handle", "policy", "secret", "token", "password"} {
+	if normalized == "next_token" && topLevel {
+		return false
+	}
+	for _, marker := range []string{"receipt_handle", "task_handle", "policy", "secret", "token", "password", "api_key", "apikey", "access_key", "accesskey", "credential"} {
 		if strings.Contains(normalized, marker) {
 			return true
 		}

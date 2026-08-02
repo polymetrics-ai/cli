@@ -170,11 +170,11 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 		}
 	}
 
-	query, err := queryOverrides(cmd, req.Flags)
+	runtimeConfig, query, err := streamOverrides(cmd, req.Config, req.Flags)
 	if err != nil {
 		return Result{}, err
 	}
-	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
+	if err := validateCommandInputs(cmd, runtimeConfig, mappedCommandInputs{Query: query}); err != nil {
 		return Result{}, err
 	}
 	limit := req.Limit
@@ -184,7 +184,7 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	result := Result{Connector: connector.Name(), Command: command, Stream: cmd.Stream}
 	readReq := connectors.ReadRequest{
 		Stream: cmd.Stream,
-		Config: req.Config,
+		Config: runtimeConfig,
 		Query:  query,
 		Limit:  limit,
 	}
@@ -492,49 +492,76 @@ func blockReason(cmd connectors.CommandSurfaceCommand) string {
 	}
 }
 
-func queryOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, error) {
+func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, flags map[string][]string) (connectors.RuntimeConfig, map[string]string, error) {
 	allowed := map[string]connectors.CommandSurfaceFlag{}
 	for _, flag := range cmd.Flags {
 		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
-			return nil, err
+			return connectors.RuntimeConfig{}, nil, err
 		}
 		allowed[flag.Name] = flag
 	}
+	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+		return connectors.RuntimeConfig{}, nil, err
+	}
 
 	query := map[string]string{}
+	configOverrides := map[string]string{}
 	for name, values := range flags {
 		if len(values) == 0 {
 			continue
 		}
 		if err := safety.ValidateIdentifier(name, "flag name"); err != nil {
-			return nil, err
+			return connectors.RuntimeConfig{}, nil, err
 		}
 		flag, ok := allowed[name]
 		if !ok {
-			return nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
+			return connectors.RuntimeConfig{}, nil, fmt.Errorf("unknown flag --%s for command %q", name, cmd.Path)
 		}
 		value := values[len(values)-1]
 		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
-			return nil, err
+			return connectors.RuntimeConfig{}, nil, err
 		}
 		if err := validateFlagValue(flag, value); err != nil {
-			return nil, err
+			return connectors.RuntimeConfig{}, nil, err
 		}
-		target, ok := strings.CutPrefix(flag.MapsTo, "query.")
-		if !ok || target == "" {
-			return nil, &BlockedCommandError{
+		switch {
+		case strings.HasPrefix(flag.MapsTo, "query."):
+			target := strings.TrimPrefix(flag.MapsTo, "query.")
+			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
+				return connectors.RuntimeConfig{}, nil, err
+			}
+			query[target] = value
+		case strings.HasPrefix(flag.MapsTo, "config."):
+			target := strings.TrimPrefix(flag.MapsTo, "config.")
+			if err := safety.ValidateIdentifier(target, "config parameter"); err != nil {
+				return connectors.RuntimeConfig{}, nil, err
+			}
+			configOverrides[target] = value
+		default:
+			return connectors.RuntimeConfig{}, nil, &BlockedCommandError{
 				Command:      cmd.Path,
 				Intent:       cmd.Intent,
 				Availability: cmd.Availability,
 				Reason:       fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo),
 			}
 		}
-		if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
-			return nil, err
-		}
-		query[target] = value
 	}
-	return query, nil
+	return runtimeConfigWithOverrides(cfg, configOverrides), query, nil
+}
+
+func runtimeConfigWithOverrides(cfg connectors.RuntimeConfig, overrides map[string]string) connectors.RuntimeConfig {
+	if len(overrides) == 0 {
+		return cfg
+	}
+	out := cfg
+	out.Config = make(map[string]string, len(cfg.Config)+len(overrides))
+	for key, value := range cfg.Config {
+		out.Config[key] = value
+	}
+	for key, value := range overrides {
+		out.Config[key] = value
+	}
+	return out
 }
 
 type mappedCommandInputs struct {
@@ -648,6 +675,46 @@ func parseDateTimeValue(value, label string) (time.Time, error) {
 	return parsed, nil
 }
 
+func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags map[string][]string) error {
+	for _, flag := range cmd.Flags {
+		if !flag.Required {
+			continue
+		}
+		if err := safety.ValidateIdentifier(flag.Name, "flag name"); err != nil {
+			return err
+		}
+		values, ok := flags[flag.Name]
+		if !ok || len(values) == 0 {
+			return missingRequiredFlagError(cmd, flag.Name)
+		}
+		value, err := coerceFlagValue(flag, values)
+		if err != nil {
+			return err
+		}
+		if commandValueEmpty(value) {
+			return missingRequiredFlagError(cmd, flag.Name)
+		}
+	}
+	return nil
+}
+
+func commandValueEmpty(value any) bool {
+	switch typed := value.(type) {
+	case nil:
+		return true
+	case string:
+		return strings.TrimSpace(typed) == ""
+	case []string:
+		return len(typed) == 0
+	default:
+		return false
+	}
+}
+
+func missingRequiredFlagError(cmd connectors.CommandSurfaceCommand, name string) error {
+	return fmt.Errorf("missing required flag --%s for command %q", name, cmd.Path)
+}
+
 func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 	trimmed := strings.TrimSpace(value)
 	if flag.AllowEmpty != nil {
@@ -706,6 +773,9 @@ func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string]
 		}
 		allowed[flag.Name] = flag
 	}
+	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+		return nil, nil, err
+	}
 
 	pathParams := map[string]string{}
 	query := map[string]string{}
@@ -759,6 +829,9 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 			return nil, nil, nil, err
 		}
 		allowed[flag.Name] = flag
+	}
+	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+		return nil, nil, nil, err
 	}
 
 	pathParams := map[string]string{}
@@ -917,6 +990,9 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 			return nil, err
 		}
 		allowed[flag.Name] = flag
+	}
+	if err := validateRequiredCommandFlags(cmd, flags); err != nil {
+		return nil, err
 	}
 	if err := validateRecordFlagTargets(cmd); err != nil {
 		return nil, err

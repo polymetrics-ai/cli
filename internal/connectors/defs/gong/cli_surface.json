@@ -1570,7 +1570,8 @@
           "name": "call-id",
           "type": "string_array",
           "summary": "Gong call ID; repeat or comma-separate.",
-          "maps_to": "body.filter.callIds"
+          "maps_to": "body.filter.callIds",
+          "required": true
         },
         {
           "name": "from",
@@ -1741,7 +1742,8 @@
           "name": "call-id",
           "type": "string_array",
           "summary": "Gong call ID; repeat or comma-separate.",
-          "maps_to": "body.filter.callIds"
+          "maps_to": "body.filter.callIds",
+          "required": true
         }
       ],
       "examples": [
@@ -1821,25 +1823,29 @@
           "name": "user-id",
           "type": "string",
           "summary": "Owning Gong user ID.",
-          "maps_to": "body.filter.userId"
+          "maps_to": "body.filter.userId",
+          "required": true
         },
         {
           "name": "status",
           "type": "string_array",
           "summary": "Task status: OPEN, DONE, or DISMISSED; repeat or comma-separate.",
-          "maps_to": "body.filter.status"
+          "maps_to": "body.filter.status",
+          "required": true
         },
         {
           "name": "task-action",
           "type": "string_array",
           "summary": "Task action; Gong currently supports CALL.",
-          "maps_to": "body.filter.taskAction"
+          "maps_to": "body.filter.taskAction",
+          "required": true
         },
         {
           "name": "task-type",
           "type": "string_array",
           "summary": "Task type: FLOW or MANUAL; repeat or comma-separate.",
-          "maps_to": "body.filter.types"
+          "maps_to": "body.filter.types",
+          "required": true
         },
         {
           "name": "workspace-id",
@@ -1873,13 +1879,15 @@
           "name": "from-date",
           "type": "string",
           "summary": "Inclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.fromDate"
+          "maps_to": "body.filter.fromDate",
+          "required": true
         },
         {
           "name": "to-date",
           "type": "string",
           "summary": "Exclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.toDate"
+          "maps_to": "body.filter.toDate",
+          "required": true
         },
         {
           "name": "user-id",
@@ -1972,7 +1980,8 @@
           "name": "scorecard-id",
           "type": "string_array",
           "summary": "Scorecard ID; repeat or comma-separate.",
-          "maps_to": "body.filter.scorecardIds"
+          "maps_to": "body.filter.scorecardIds",
+          "required": true
         },
         {
           "name": "cursor",
@@ -2006,13 +2015,15 @@
           "name": "from-date",
           "type": "string",
           "summary": "Inclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.fromDate"
+          "maps_to": "body.filter.fromDate",
+          "required": true
         },
         {
           "name": "to-date",
           "type": "string",
           "summary": "Exclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.toDate"
+          "maps_to": "body.filter.toDate",
+          "required": true
         },
         {
           "name": "user-id",
@@ -2064,13 +2075,15 @@
           "name": "from-date",
           "type": "string",
           "summary": "Inclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.fromDate"
+          "maps_to": "body.filter.fromDate",
+          "required": true
         },
         {
           "name": "to-date",
           "type": "string",
           "summary": "Exclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.toDate"
+          "maps_to": "body.filter.toDate",
+          "required": true
         },
         {
           "name": "user-id",
@@ -2122,13 +2135,15 @@
           "name": "from-date",
           "type": "string",
           "summary": "Inclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.fromDate"
+          "maps_to": "body.filter.fromDate",
+          "required": true
         },
         {
           "name": "to-date",
           "type": "string",
           "summary": "Exclusive date, YYYY-MM-DD.",
-          "maps_to": "body.filter.toDate"
+          "maps_to": "body.filter.toDate",
+          "required": true
         },
         {
           "name": "user-id",
@@ -2165,7 +2180,8 @@
             "MONTH",
             "QUARTER",
             "YEAR"
-          ]
+          ],
+          "required": true
         }
       ],
       "examples": [
@@ -2187,7 +2203,8 @@
           "name": "email",
           "type": "string_array",
           "summary": "Email address to validate. Repeat or comma-separate; max 100 per Gong API.",
-          "maps_to": "body.emails"
+          "maps_to": "body.emails",
+          "required": true
         }
       ],
       "examples": []
@@ -2207,7 +2224,8 @@
           "name": "flow-id",
           "type": "string_array",
           "summary": "Engage flow ID to retrieve steps for. Repeat or comma-separate; max 20 per Gong API.",
-          "maps_to": "body.flowIds"
+          "maps_to": "body.flowIds",
+          "required": true
         }
       ],
       "examples": []
@@ -2259,7 +2277,8 @@
           "name": "call-id",
           "type": "string_array",
           "summary": "Gong call ID; repeat or comma-separate.",
-          "maps_to": "body.filter.callIds"
+          "maps_to": "body.filter.callIds",
+          "required": true
         },
         {
           "name": "from",

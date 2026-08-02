@@ -1,0 +1,23 @@
+{
+  "record": {
+    "account_id": "account_id_fixture_1",
+    "Accounts": [
+      "account_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/account_id_fixture_1",
+    "body": {
+      "Accounts": [
+        "account_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

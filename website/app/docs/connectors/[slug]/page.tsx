@@ -178,6 +178,7 @@ function availabilityVariant(availability: string) {
 function commandMapping(command: ConnectorCliCommand) {
   if (command.stream) return `stream:${command.stream}`;
   if (command.write) return `write:${command.write}`;
+  if (command.operation) return `operation:${command.operation}`;
   if (command.outputPolicy) return `policy:${command.outputPolicy}`;
   return '—';
 }

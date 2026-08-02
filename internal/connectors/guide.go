@@ -180,6 +180,9 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	if cmd.Write != "" {
 		meta = append(meta, "write="+cmd.Write)
 	}
+	if cmd.Operation != "" {
+		meta = append(meta, "operation="+cmd.Operation)
+	}
 	if cmd.Availability == "unsupported_local" || cmd.Intent == "local_workflow" {
 		meta = append(meta, "unsupported local workflow")
 	}
@@ -198,7 +201,11 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	if len(cmd.Flags) > 0 {
 		flags := make([]string, 0, len(cmd.Flags))
 		for _, flag := range cmd.Flags {
-			flags = append(flags, "--"+strings.TrimLeft(flag.Name, "-"))
+			name := "--" + strings.TrimLeft(flag.Name, "-")
+			if flag.Required {
+				name += " (required)"
+			}
+			flags = append(flags, name)
 		}
 		line += "; flags: " + strings.Join(flags, ", ")
 	}
@@ -269,11 +276,11 @@ func ValidateConnectorGuide(c Connector) error {
 func RenderGuideManual(guide ConnectorGuide) string {
 	var b strings.Builder
 	b.WriteString("NAME\n")
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s - %s connector manual\n\n", guide.Name, guide.DisplayName))
+	_, _ = fmt.Fprintf(&b, "  pm connectors inspect %s - %s connector manual\n\n", guide.Name, guide.DisplayName)
 	b.WriteString("SYNOPSIS\n")
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s\n", guide.Name))
-	b.WriteString(fmt.Sprintf("  pm connectors inspect %s --json\n", guide.Name))
-	b.WriteString(fmt.Sprintf("  pm credentials add <name> --connector %s [--config key=value] [--from-env field=ENV] [--value-stdin field]\n\n", guide.Name))
+	_, _ = fmt.Fprintf(&b, "  pm connectors inspect %s\n", guide.Name)
+	_, _ = fmt.Fprintf(&b, "  pm connectors inspect %s --json\n", guide.Name)
+	_, _ = fmt.Fprintf(&b, "  pm credentials add <name> --connector %s [--config key=value] [--from-env field=ENV] [--value-stdin field]\n\n", guide.Name)
 	b.WriteString("DESCRIPTION\n")
 	for _, line := range splitParagraphs(guide.Summary) {
 		b.WriteString("  " + line + "\n")
@@ -319,7 +326,7 @@ func RenderGuideManual(guide ConnectorGuide) string {
 	if len(guide.Links) > 0 {
 		b.WriteString("SEE ALSO\n")
 		for _, link := range guide.Links {
-			b.WriteString(fmt.Sprintf("  %s: %s\n", link.Label, link.URL))
+			_, _ = fmt.Fprintf(&b, "  %s: %s\n", link.Label, link.URL)
 		}
 		b.WriteString("\n")
 	}

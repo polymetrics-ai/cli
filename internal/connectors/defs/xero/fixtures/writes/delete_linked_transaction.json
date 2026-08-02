@@ -1,0 +1,15 @@
+{
+  "record": {
+    "linked_transaction_id": "linked_transaction_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/LinkedTransactions/linked_transaction_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}
