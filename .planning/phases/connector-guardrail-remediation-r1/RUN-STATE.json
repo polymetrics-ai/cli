@@ -22,9 +22,18 @@
   "ready_queue": [
     {
       "number": 3581,
+      "status": "blocked",
+      "dependencies": [
+        "#3595"
+      ],
+      "write_scope": "cmd/connectorgen/**; internal/connectors/boundary/**; focused docs/tests; integration blocked until #3595 canonical icon-registry foundation lands",
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 3595,
       "status": "sub_pr_open",
       "dependencies": [],
-      "write_scope": "cmd/connectorgen/**; internal/connectors/boundary/**; focused docs/tests",
+      "write_scope": "shared icon-registry foundation: internal/connectors/icon_data.json, internal/connectors/icons.go, cmd/iconregistrygen/**, website scripts, canonical docs icon assets, focused tests/docs",
       "decision": "spawned"
     },
     {
@@ -111,6 +120,14 @@
         3583
       ],
       "reason": "captain-authorized parent-orchestrator integration of green stacked sub-PR #3588 into parent branch; provisional parent PR fallback review remains pending before parent PR readiness"
+    },
+    {
+      "timestamp": "2026-08-02T13:58:26Z",
+      "decision": "spawned",
+      "issue_numbers": [
+        3595
+      ],
+      "reason": "captain-approved icon-registry-single-source-bare-identifiers foundation must land before PR #3590 R5/R6 reconciliation and #3582 unblocking"
     }
   ],
   "subissues": [
@@ -120,18 +137,39 @@
       "branch": "fix/3581-target-scope-core-validator",
       "pr_url": "https://github.com/polymetrics-ai/cli/pull/3590",
       "worker": "pm-gsd-worker",
-      "status": "sub_pr_open",
+      "status": "blocked",
       "write_scope": "cmd/connectorgen/**; internal/connectors/boundary/**; focused docs/tests",
       "worker_directory": "pending",
-      "verification": "pending",
+      "verification": "blocked on #3595 canonical icon-registry foundation; existing prior-config no-mistakes run 01KZ14EMZW4HR7X343SXS62X3Q remains parked and must not be used for integration; fresh 5.6 SOL validation required after reconciliation",
       "automated_review": {
         "primary_route": "claude_auto",
-        "status": "pending",
+        "status": "blocked",
         "head_sha": "pending",
         "reviewed_range": "pending",
         "coverage_route": "sub_pr",
         "fallback_route": "none",
-        "disposition_summary": "pending",
+        "disposition_summary": "R5 superseded by #3595 canonical icon-registry foundation; R6 waits for foundation; no response sent to PR #3590 R5/R6 gate",
+        "disposition_url": "https://github.com/polymetrics-ai/cli/issues/3595"
+      }
+    },
+    {
+      "number": 3595,
+      "url": "https://github.com/polymetrics-ai/cli/issues/3595",
+      "branch": "fix/3595-icon-registry-single-source",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3596",
+      "worker": "pm-gsd-worker",
+      "status": "sub_pr_open",
+      "write_scope": "shared icon-registry foundation: canonical bare icon registry, docs/connectors/icons canonical assets, website generated copies, Go/runtime/website/ownership consumers, tests/docs",
+      "worker_directory": "/Users/karthiksivadas/.treehouse/cli-83d592/5/worker-3595-icon-registry",
+      "verification": "planning scaffold pushed at b814e85a6; implementation and 5.6 SOL no-mistakes validation pending",
+      "automated_review": {
+        "primary_route": "claude_auto",
+        "status": "pending",
+        "head_sha": "b814e85a6",
+        "reviewed_range": "pending",
+        "coverage_route": "sub_pr",
+        "fallback_route": "none",
+        "disposition_summary": "pending implementation",
         "disposition_url": "pending"
       }
     },
@@ -274,5 +312,5 @@
     "reverse ETL execution outside plan-preview-approval-execute",
     "branch protection/ruleset permission denial"
   ],
-  "updated_at": "2026-08-02T11:20:57Z"
+  "updated_at": "2026-08-02T13:58:26Z"
 }

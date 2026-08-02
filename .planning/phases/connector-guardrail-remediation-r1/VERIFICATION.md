@@ -46,3 +46,5 @@ If GitHub permissions deny required ruleset/branch-protection configuration, rec
 - #3588 checks at merge time: required/current checks green per captain authority, including `connector-boundary`; sub-PR open, cleanly mergeable into parent before merge.
 - #3588 parent integration: squash-merged into `fix/3579-connector-path-ownership-guardrails` as `86b91fc40f46b8653538531fc40c183913676f05`; parent PR #3580 remains draft and human-gated.
 - Parent roadmap restore/update: this ledger commit restores parent planning/state artifacts after the no-mistakes-generated documentation prune and records #3583 provisional integration plus #3590 as next critical-path child.
+- #3595 icon registry foundation: issue #3595 attached to parent #3579; draft PR #3596 opened against parent branch with planning scaffold `b814e85a6`; implementation and comprehensive native-Codex `gpt-5.6-sol` validation pending.
+- PR #3590 R5/R6 gate remains unanswered. R5's second-registry approach is rejected/superseded by #3595; R6 waits until the foundation lands and #3590 is reconciled.
