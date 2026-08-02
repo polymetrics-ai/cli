@@ -165,6 +165,9 @@
       "method": "POST",
       "path": "/scim/v2/Users",
       "body_type": "json",
+      "redact_fields": [
+        "password"
+      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -300,6 +303,9 @@
         "id"
       ],
       "body_type": "json",
+      "redact_fields": [
+        "Operations"
+      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -354,6 +360,9 @@
         "id"
       ],
       "body_type": "json",
+      "redact_fields": [
+        "password"
+      ],
       "confirm": "destructive",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
