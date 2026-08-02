@@ -236,11 +236,10 @@ func ownershipChangedPaths(root string, opts OwnershipOptions) ([]string, error)
 		return normalizeChangedPaths(root, opts.ChangedPaths)
 	}
 	if opts.BaseRef != "" {
-		limit, err := diffLimit(root, opts.BaseRef)
+		paths, err := baseChangedPaths(root, opts.BaseRef)
 		if err != nil {
 			return nil, &ConfigError{Err: err}
 		}
-		paths := sortedKeys(limit)
 		return normalizeChangedPaths(root, paths)
 	}
 	paths, err := worktreeChangedPaths(root)
@@ -250,9 +249,42 @@ func ownershipChangedPaths(root string, opts OwnershipOptions) ([]string, error)
 	return normalizeChangedPaths(root, paths)
 }
 
+func baseChangedPaths(root, baseRef string) ([]string, error) {
+	if err := validateBaseRef(baseRef); err != nil {
+		return nil, err
+	}
+	changed := map[string]bool{}
+	cmd := exec.Command("git", "-C", root, "diff", "--name-only", "--diff-filter=ACMRTD", "--end-of-options", baseRef, "--")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		message := strings.TrimSpace(string(out))
+		if message == "" {
+			message = err.Error()
+		}
+		return nil, fmt.Errorf("git diff --name-only %s: %s", baseRef, message)
+	}
+	for _, line := range strings.Split(string(out), "\n") {
+		line = strings.TrimSpace(line)
+		if line != "" {
+			changed[line] = true
+		}
+	}
+	untrackedCmd := exec.Command("git", "-C", root, "ls-files", "--others", "--exclude-standard")
+	untrackedOut, err := untrackedCmd.Output()
+	if err == nil {
+		for _, line := range strings.Split(string(untrackedOut), "\n") {
+			line = strings.TrimSpace(line)
+			if line != "" {
+				changed[line] = true
+			}
+		}
+	}
+	return sortedKeys(changed), nil
+}
+
 func worktreeChangedPaths(root string) ([]string, error) {
 	changed := map[string]bool{}
-	cmd := exec.Command("git", "-C", root, "diff", "--name-only", "--diff-filter=ACMRT", "HEAD", "--")
+	cmd := exec.Command("git", "-C", root, "diff", "--name-only", "--diff-filter=ACMRTD", "HEAD", "--")
 	out, err := cmd.Output()
 	if err != nil {
 		return nil, fmt.Errorf("git diff --name-only HEAD: %w", err)
@@ -401,7 +433,7 @@ func classifyOwnershipChangedPath(rel string, lx lexicon) ownershipPathClass {
 	if strings.HasPrefix(rel, ".planning/") || strings.HasPrefix(rel, dotGHPathPrefix()) || strings.HasPrefix(rel, ".agents/") || rel == "go.mod" || rel == "go.sum" || rel == "README.md" || rel == "AGENTS.md" || rel == "CONTRIBUTING.md" || rel == "CHANGELOG.md" {
 		return ownershipPathClass{Path: rel, Class: ownershipClassSharedRepo, Shared: true}
 	}
-	return ownershipPathClass{Path: rel, Class: ownershipClassIgnored, Ignored: true}
+	return ownershipPathClass{Path: rel, Class: ownershipClassSharedRepo, Shared: true}
 }
 
 func evaluateOwnershipPath(raw ownershipPathClass, target string) (OwnershipPath, []Finding) {
@@ -525,11 +557,56 @@ func connectorIconPath(rel, prefix string, lx lexicon) (string, bool) {
 	}
 	rest := strings.TrimPrefix(rel, prefix)
 	base := filepath.Base(rest)
-	name := strings.TrimSuffix(base, filepath.Ext(base))
+	name := strings.ToLower(strings.TrimSuffix(base, filepath.Ext(base)))
+	if connector, ok := connectorIconName(name, lx); ok {
+		return connector, true
+	}
+	return "", false
+}
+
+func connectorIconName(name string, lx lexicon) (string, bool) {
+	name = strings.ToLower(strings.TrimSpace(name))
+	if name == "" {
+		return "", false
+	}
 	if _, ok := lx.byName[name]; ok {
 		return name, true
 	}
-	return "", false
+	owners := map[string]string{}
+	collisions := map[string]bool{}
+	for _, connector := range lx.connectors {
+		for _, alias := range connectorIconAliases(connector) {
+			alias = strings.ToLower(strings.TrimSpace(alias))
+			if alias == "" {
+				continue
+			}
+			owner, exists := owners[alias]
+			if exists && owner != connector.Name {
+				collisions[alias] = true
+				continue
+			}
+			owners[alias] = connector.Name
+		}
+	}
+	connector, ok := owners[name]
+	if !ok || collisions[name] {
+		return "", false
+	}
+	return connector, true
+}
+
+func connectorIconAliases(connector connectorLexeme) []string {
+	aliases := []string{connector.Name}
+	compactName := strings.ReplaceAll(connector.Name, "-", "")
+	if compactName != connector.Name {
+		aliases = append(aliases, compactName)
+	}
+	for _, alias := range connector.tokenAliases {
+		if !alias.Alias {
+			aliases = append(aliases, alias.Lower)
+		}
+	}
+	return aliases
 }
 
 func isIgnoredOwnershipPath(rel string) bool {
