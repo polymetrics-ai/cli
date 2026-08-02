@@ -9,18 +9,20 @@
     },
     "live_unavailable": [
       {
-        "kind": "auth",
+        "kind": "Error",
         "contains": [
-          "missing credentials",
+          "requires secrets access_key and secret_key",
           "InvalidClientTokenId",
-          "SignatureDoesNotMatch"
+          "SignatureDoesNotMatch",
+          "status 401"
         ]
       },
       {
-        "kind": "permission",
+        "kind": "Error",
         "contains": [
           "AccessDenied",
-          "not authorized"
+          "not authorized",
+          "status 403"
         ]
       }
     ]

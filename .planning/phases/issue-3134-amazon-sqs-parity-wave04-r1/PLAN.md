@@ -42,6 +42,8 @@ Confirmed official operations (23): AddPermission, CancelMessageMoveTask, Change
 
 Planned count disposition after this slice: total 23, implemented 23, fixture/native-tested 23, blocked/planned 0, excluded/not-applicable 0, certified 0.
 
+The `fixture/native-tested 23` count means aggregate focused native tests directly execute every fixed typed read, direct-read, and write path with fixture data or synthetic `httptest` endpoints. Bundle conformance dynamic replay remains skipped by design and is not counted as operation execution evidence.
+
 ## Implementation slices
 
 Resume checkpoint after context compaction: connector-local bundle and native implementation are in place, focused native/conformance validation passed once, and the CLI golden transcript fixture was regenerated to reflect the new SQS dynamic command surface. Remaining work is targeted inspection, documentation/generated-surface cleanup, full local gates, issue addendum comments if available, and a clean local commit.
@@ -93,3 +95,12 @@ Implementation steps:
 2. Restore those paths from base into the working tree, preserving all SQS-owned commits in history.
 3. Inspect PR #3541 body and replace forbidden/canonical-link workaround content with the accepted `Refs #3134` issue linkage through `gh-axi pr edit` as Alfred.
 4. Run focused verification for issueguard/prissueguard and SQS gates, commit the forward correction, push normally, then launch the required fresh 5.6 SOL no-mistakes validation.
+
+## 2026-08-02 review-finding corrective slice
+
+- Reproduced and accepted all four SQS-local findings before edits; no shared engine, runner, issueguard, prissueguard, unrelated connector, or generic runtime changes are in scope.
+- Root causes: incomplete CLI command metadata, incomplete operation-execution proof, unreachable certification classifiers plus discarded provider codes, and permissive shared message-attribute boundary validation.
+- Required skills loaded: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-lint`, and `golang-documentation`.
+- `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase issue-3134-amazon-sqs-parity-wave04-r1 --dry-run` returned `unknown GSD command: programming-loop`, so this plan, the TDD ledger, and verification checklist record the required manual GSD/TDD fallback.
+- Execution is local critical path: the review phase is isolated and the fixes/tests share the same SQS-owned bundle and native package, so no subagents are used.
+- Fix forward with required flags plus synthetic examples, exact missing-path tests, safe reachable `Error` classifiers, bounded code-only AWS errors, and strict scalar/system message-attribute validation before preview.

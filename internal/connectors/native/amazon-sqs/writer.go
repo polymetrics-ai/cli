@@ -393,7 +393,7 @@ func validateSQSFieldValue(field string, value any) error {
 			return err
 		}
 	case sqsFieldMessageAttributeMap:
-		if err := validateMessageAttributeMapValue(value); err != nil {
+		if err := validateMessageAttributeMapValue(value, field == "message_system_attributes"); err != nil {
 			return err
 		}
 	}
@@ -429,13 +429,26 @@ func validateStringMapValue(value any) error {
 	return nil
 }
 
-func validateMessageAttributeMapValue(value any) error {
+func validateMessageAttributeMapValue(value any, system bool) error {
 	items, ok := objectItems(value)
 	if !ok {
 		return errors.New("must be object")
 	}
+	maxAttributes := 10
+	if system {
+		maxAttributes = 1
+	}
+	if len(items) > maxAttributes {
+		return fmt.Errorf("must contain at most %d attributes", maxAttributes)
+	}
 	for name, raw := range items {
-		if _, ok := raw.(string); ok {
+		if err := validateMessageAttributeName(name, system); err != nil {
+			return err
+		}
+		if value, ok := raw.(string); ok {
+			if value == "" {
+				return fmt.Errorf("attribute %q value must not be empty", name)
+			}
 			continue
 		}
 		attr, ok := objectItems(raw)
@@ -452,13 +465,77 @@ func validateMessageAttributeMapValue(value any) error {
 					return fmt.Errorf("attribute %q field %q must be string", name, field)
 				}
 			case "string_list_values", "binary_list_values":
-				if err := validateStringListValue(item); err != nil {
-					return fmt.Errorf("attribute %q field %q %w", name, field, err)
-				}
+				return fmt.Errorf("attribute %q field %q is reserved and unsupported", name, field)
+			}
+		}
+		dataType, _ := attr["data_type"].(string)
+		if dataType == "" {
+			return fmt.Errorf("attribute %q data_type must not be empty", name)
+		}
+		baseType, err := validateMessageAttributeDataType(dataType)
+		if err != nil {
+			return fmt.Errorf("attribute %q %w", name, err)
+		}
+		if system && dataType != "String" {
+			return fmt.Errorf("system attribute %q must use data_type String", name)
+		}
+		stringValue, hasString := attr["string_value"].(string)
+		binaryValue, hasBinary := attr["binary_value"].(string)
+		switch baseType {
+		case "String", "Number":
+			if !hasString || stringValue == "" {
+				return fmt.Errorf("attribute %q data_type %s requires non-empty string_value", name, dataType)
+			}
+			if hasBinary {
+				return fmt.Errorf("attribute %q data_type %s does not allow binary_value", name, dataType)
+			}
+		case "Binary":
+			if !hasBinary || binaryValue == "" {
+				return fmt.Errorf("attribute %q data_type %s requires non-empty binary_value", name, dataType)
+			}
+			if hasString {
+				return fmt.Errorf("attribute %q data_type %s does not allow string_value", name, dataType)
 			}
 		}
 	}
 	return nil
+}
+
+func validateMessageAttributeName(name string, system bool) error {
+	if system {
+		if name != "AWSTraceHeader" {
+			return fmt.Errorf("message system attributes only supports AWSTraceHeader, got %q", name)
+		}
+		return nil
+	}
+	invalid := name == "" || len(name) > 256 || name[0] == '.' || name[len(name)-1] == '.' || strings.Contains(name, "..")
+	lower := strings.ToLower(name)
+	invalid = invalid || strings.HasPrefix(lower, "aws.") || strings.HasPrefix(lower, "amazon.")
+	for _, r := range name {
+		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '_' || r == '-' || r == '.' {
+			continue
+		}
+		invalid = true
+		break
+	}
+	if invalid {
+		return fmt.Errorf("message attribute has invalid name %q", name)
+	}
+	return nil
+}
+
+func validateMessageAttributeDataType(dataType string) (string, error) {
+	if len(dataType) > 256 {
+		return "", errors.New("data_type must be at most 256 characters")
+	}
+	baseType, suffix, custom := strings.Cut(dataType, ".")
+	if baseType != "String" && baseType != "Number" && baseType != "Binary" {
+		return "", fmt.Errorf("has unsupported data_type %q", dataType)
+	}
+	if custom && suffix == "" {
+		return "", fmt.Errorf("has invalid data_type %q", dataType)
+	}
+	return baseType, nil
 }
 
 func objectItems(value any) (map[string]any, bool) {
@@ -809,11 +886,9 @@ func cloneStringMap(in map[string]string) map[string]string {
 }
 
 type messageAttributeValue struct {
-	DataType         string
-	StringValue      string
-	BinaryValue      string
-	StringListValues []string
-	BinaryListValues []string
+	DataType    string
+	StringValue string
+	BinaryValue string
 }
 
 func messageAttributeMapField(rec connectors.Record, key string) map[string]messageAttributeValue {
@@ -832,11 +907,9 @@ func messageAttributeMapField(rec connectors.Record, key string) map[string]mess
 			continue
 		}
 		out[name] = messageAttributeValue{
-			DataType:         stringMapAnyField(m, "data_type"),
-			StringValue:      stringMapAnyField(m, "string_value"),
-			BinaryValue:      stringMapAnyField(m, "binary_value"),
-			StringListValues: exactStringValues(m["string_list_values"]),
-			BinaryListValues: exactStringValues(m["binary_list_values"]),
+			DataType:    stringMapAnyField(m, "data_type"),
+			StringValue: stringMapAnyField(m, "string_value"),
+			BinaryValue: stringMapAnyField(m, "binary_value"),
 		}
 	}
 	return out
@@ -921,8 +994,6 @@ func addMessageAttributeMap(form url.Values, prefix string, values map[string]me
 		if attr.BinaryValue != "" {
 			form.Set(base+"Value.BinaryValue", attr.BinaryValue)
 		}
-		addStringList(form, base+"Value.StringListValue", attr.StringListValues)
-		addStringList(form, base+"Value.BinaryListValue", attr.BinaryListValues)
 	}
 }
 

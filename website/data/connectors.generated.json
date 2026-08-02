@@ -4598,25 +4598,28 @@
               "summary": "Permission statement label.",
               "values": [],
               "maps_to": "record.label",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "aws-account-ids",
               "type": "string_array",
               "summary": "AWS account ids to grant.",
               "values": [],
-              "maps_to": "record.aws_account_ids"
+              "maps_to": "record.aws_account_ids",
+              "required": true
             },
             {
               "name": "actions",
               "type": "string_array",
               "summary": "SQS action names to allow.",
               "values": [],
-              "maps_to": "record.actions"
+              "maps_to": "record.actions",
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs permission add --credential sqs-prod --preview"
+            "pm amazon-sqs permission add --credential sqs-prod --label fixture-permission --aws-account-ids 000000000000 --actions SendMessage --preview"
           ],
           "output_policy": "",
           "risk": "adds an SQS queue resource policy permission statement for listed AWS account ids",
@@ -4639,11 +4642,12 @@
               "summary": "Task handle returned by StartMessageMoveTask/ListMessageMoveTasks.",
               "values": [],
               "maps_to": "record.task_handle",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs message-move-task cancel --credential sqs-prod --preview"
+            "pm amazon-sqs message-move-task cancel --credential sqs-prod --task-handle task-handle-placeholder --preview"
           ],
           "output_policy": "",
           "risk": "cancels an in-flight dead-letter-queue message move task",
@@ -4666,18 +4670,20 @@
               "summary": "Receipt handle from ReceiveMessage.",
               "values": [],
               "maps_to": "record.receipt_handle",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "visibility-timeout",
               "type": "integer",
               "summary": "New visibility timeout in seconds.",
               "values": [],
-              "maps_to": "record.visibility_timeout"
+              "maps_to": "record.visibility_timeout",
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs message change-visibility --credential sqs-prod --preview"
+            "pm amazon-sqs message change-visibility --credential sqs-prod --receipt-handle receipt-handle-placeholder --visibility-timeout 30 --preview"
           ],
           "output_policy": "",
           "risk": "changes the visibility timeout for one in-flight message",
@@ -4708,18 +4714,20 @@
               "summary": "Receipt handle from ReceiveMessage.",
               "values": [],
               "maps_to": "record.receipt_handle",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "visibility-timeout",
               "type": "integer",
               "summary": "New visibility timeout in seconds.",
               "values": [],
-              "maps_to": "record.visibility_timeout"
+              "maps_to": "record.visibility_timeout",
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs message change-visibility-batch --credential sqs-prod --preview"
+            "pm amazon-sqs message change-visibility-batch --credential sqs-prod --receipt-handle receipt-handle-placeholder --visibility-timeout 30 --preview"
           ],
           "output_policy": "",
           "risk": "changes visibility timeout for up to 10 in-flight messages per SQS batch request",
@@ -4742,11 +4750,12 @@
               "summary": "Queue name to create.",
               "values": [],
               "maps_to": "record.queue_name",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs queue create --credential sqs-prod --preview"
+            "pm amazon-sqs queue create --credential sqs-prod --queue-name fixture-queue --preview"
           ],
           "output_policy": "",
           "risk": "creates an SQS queue; SQS returns an existing queue URL when name and attributes match",
@@ -4769,11 +4778,12 @@
               "summary": "Receipt handle from ReceiveMessage.",
               "values": [],
               "maps_to": "record.receipt_handle",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs message delete --credential sqs-prod --preview"
+            "pm amazon-sqs message delete --credential sqs-prod --receipt-handle receipt-handle-placeholder --preview"
           ],
           "output_policy": "",
           "risk": "deletes one received message by receipt handle",
@@ -4804,11 +4814,12 @@
               "summary": "Receipt handle from ReceiveMessage.",
               "values": [],
               "maps_to": "record.receipt_handle",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs message delete-batch --credential sqs-prod --preview"
+            "pm amazon-sqs message delete-batch --credential sqs-prod --receipt-handle receipt-handle-placeholder --preview"
           ],
           "output_policy": "",
           "risk": "deletes up to 10 received messages per SQS batch request",
@@ -4867,11 +4878,12 @@
               "summary": "Permission statement label to remove.",
               "values": [],
               "maps_to": "record.label",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs permission remove --credential sqs-prod --preview"
+            "pm amazon-sqs permission remove --credential sqs-prod --label fixture-permission --preview"
           ],
           "output_policy": "",
           "risk": "removes an SQS queue resource policy permission statement",
@@ -4894,7 +4906,8 @@
               "summary": "Message body string.",
               "values": [],
               "maps_to": "record.message_body",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "delay-seconds",
@@ -4921,7 +4934,7 @@
             }
           ],
           "examples": [
-            "pm amazon-sqs message send --credential sqs-prod --preview"
+            "pm amazon-sqs message send --credential sqs-prod --message-body fixture-message --preview"
           ],
           "output_policy": "",
           "risk": "sends one message to the configured queue; FIFO queues may use message_deduplication_id for provider-supported idempotency",
@@ -4952,7 +4965,8 @@
               "summary": "Message body string.",
               "values": [],
               "maps_to": "record.message_body",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "delay-seconds",
@@ -4979,7 +4993,7 @@
             }
           ],
           "examples": [
-            "pm amazon-sqs message send-batch --credential sqs-prod --preview"
+            "pm amazon-sqs message send-batch --credential sqs-prod --message-body fixture-message --preview"
           ],
           "output_policy": "",
           "risk": "sends up to 10 messages per SQS batch request; FIFO queues may use message_deduplication_id for provider-supported idempotency",
@@ -5002,7 +5016,8 @@
               "summary": "Queue attribute name to set, for example VisibilityTimeout or Policy.",
               "values": [],
               "maps_to": "record.attribute_name",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "attribute-value",
@@ -5010,11 +5025,12 @@
               "summary": "Queue attribute value. Sensitive values are redacted in previews/errors.",
               "values": [],
               "maps_to": "record.attribute_value",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs queue set-attributes --credential sqs-prod --preview"
+            "pm amazon-sqs queue set-attributes --credential sqs-prod --attribute-name VisibilityTimeout --attribute-value 30 --preview"
           ],
           "output_policy": "",
           "risk": "sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings",
@@ -5037,7 +5053,8 @@
               "summary": "Source dead-letter queue ARN.",
               "values": [],
               "maps_to": "record.source_arn",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "destination-arn",
@@ -5056,7 +5073,7 @@
             }
           ],
           "examples": [
-            "pm amazon-sqs message-move-task start --credential sqs-prod --preview"
+            "pm amazon-sqs message-move-task start --credential sqs-prod --source-arn arn:aws:sqs:us-east-1:000000000000:fixture-dlq --preview"
           ],
           "output_policy": "",
           "risk": "starts an SQS dead-letter queue redrive message move task",
@@ -5079,7 +5096,8 @@
               "summary": "Tag key to add or update.",
               "values": [],
               "maps_to": "record.tag_key",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "tag-value",
@@ -5087,11 +5105,12 @@
               "summary": "Tag value to add or update.",
               "values": [],
               "maps_to": "record.tag_value",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs queue tag --credential sqs-prod --preview"
+            "pm amazon-sqs queue tag --credential sqs-prod --tag-key environment --tag-value fixture --preview"
           ],
           "output_policy": "",
           "risk": "adds or updates tags on the configured SQS queue",
@@ -5113,11 +5132,12 @@
               "type": "string_array",
               "summary": "Tag keys to remove.",
               "values": [],
-              "maps_to": "record.tag_keys"
+              "maps_to": "record.tag_keys",
+              "required": true
             }
           ],
           "examples": [
-            "pm amazon-sqs queue untag --credential sqs-prod --preview"
+            "pm amazon-sqs queue untag --credential sqs-prod --tag-keys environment --preview"
           ],
           "output_policy": "",
           "risk": "removes tags from the configured SQS queue",

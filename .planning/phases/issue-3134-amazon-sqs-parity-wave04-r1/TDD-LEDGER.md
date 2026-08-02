@@ -36,3 +36,18 @@ Green evidence:
 - `go run ./cmd/prissueguard --title "chore(amazon-sqs): stage unvalidated parity checkpoint" --body-file /tmp/pr3541-body-refs-3134.md` passed with `issueguard: ok (1 linked issue)`.
 - Focused Amazon SQS connector gates passed after restoration.
 - Fresh native-Codex `gpt-5.6-sol` `xhigh` no-mistakes validation remains required after the corrective commit and push.
+
+## 2026-08-02 review-finding fix round
+
+Red evidence was the fresh review reproduction of four SQS-local gaps before production edits: reverse CLI examples omitted mandatory arguments, the 23-operation proof did not directly execute ten typed paths, certification classifiers could not match the emitted error kind or discarded AWS codes, and message-attribute preview validation admitted provider-invalid shapes.
+
+Regression coverage authored before the fixes:
+
+- CLI surface test requires every reverse command's mandatory flags and runnable synthetic example arguments while preserving zero-input delete/purge commands.
+- Focused native tests execute GetQueueUrl and the nine previously uncovered write/admin actions through synthetic `httptest` endpoints.
+- Connection test requires bounded sanitized AWS error-code reporting without exposing provider messages or bodies.
+- Dry-run tests reject missing/incompatible message-attribute scalars, reserved list variants, invalid ordinary names, and unsupported system attributes.
+
+The isolated no-mistakes review phase uses a local critical path because all fixes and tests collide in the SQS-owned bundle/native package; no subagents were used.
+
+Green evidence: `go test ./internal/connectors/native/amazon-sqs -count=1` passed after the complete fix round; no live or credentialed AWS calls were made.

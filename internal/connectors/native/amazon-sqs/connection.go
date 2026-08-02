@@ -6,6 +6,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/xml"
 	"errors"
 	"fmt"
 	"io"
@@ -230,9 +231,60 @@ func (c Connector) doEndpoint(ctx context.Context, conn sqsConfig, endpoint stri
 		return sqsHTTPResponse{}, fmt.Errorf("sqs response too large: %d bytes exceeds limit %d", len(respBody), maxBytes)
 	}
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return sqsHTTPResponse{}, fmt.Errorf("sqs returned %s", resp.Status)
+		return sqsHTTPResponse{}, sqsStatusError(resp.StatusCode, respBody)
 	}
 	return sqsHTTPResponse{status: resp.StatusCode, body: respBody}, nil
+}
+
+func sqsStatusError(statusCode int, body []byte) error {
+	status := fmt.Sprintf("status %d", statusCode)
+	if text := http.StatusText(statusCode); text != "" {
+		status += " " + text
+	}
+	if code := safeSQSErrorCode(body); code != "" {
+		return fmt.Errorf("sqs returned %s (aws error code %s)", status, code)
+	}
+	return fmt.Errorf("sqs returned %s", status)
+}
+
+func safeSQSErrorCode(body []byte) string {
+	const maxErrorBytes = 64 << 10
+	if len(body) > maxErrorBytes {
+		body = body[:maxErrorBytes]
+	}
+	decoder := xml.NewDecoder(bytes.NewReader(body))
+	for {
+		token, err := decoder.Token()
+		if err != nil {
+			return ""
+		}
+		start, ok := token.(xml.StartElement)
+		if !ok || start.Name.Local != "Code" {
+			continue
+		}
+		var code string
+		if err := decoder.DecodeElement(&code, &start); err != nil {
+			return ""
+		}
+		code = strings.TrimSpace(code)
+		if validSQSErrorCode(code) {
+			return code
+		}
+		return ""
+	}
+}
+
+func validSQSErrorCode(code string) bool {
+	if code == "" || len(code) > 128 {
+		return false
+	}
+	for _, r := range code {
+		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') || r == '.' || r == '_' || r == '-' {
+			continue
+		}
+		return false
+	}
+	return true
 }
 
 func addConfiguredQueueURL(form url.Values, cfg connectors.RuntimeConfig) {
