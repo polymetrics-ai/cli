@@ -11,8 +11,10 @@
 ## GSD mode
 
 - Repo-local GSD Core adapter checked with `scripts/gsd doctor`.
-- Prompt trace: `scripts/gsd prompt execute-phase connector-guardrail-remediation-r1 --dry-run` saved under this worker trace directory.
-- Use manual GSD universal loop if a specific programming-loop alias is unavailable; do not weaken TDD, review, or verification.
+- Required programming-loop command probe: `scripts/gsd prompt programming-loop init --phase connector-guardrail-remediation-r1/workers/issue-3595 --dry-run` returned `unknown GSD command: programming-loop`; use the repo-local Pi programming-loop prompt (`.pi/prompts/pm-gsd-loop.md`) as the manual GSD fallback and record this explicitly in PR evidence.
+- Legacy prompt trace remains available from the scaffold: `scripts/gsd prompt execute-phase connector-guardrail-remediation-r1 --dry-run`.
+- Execution decision for this worker cycle: `local_critical_path` because the user explicitly prohibited subagents and this isolated worktree owns the issue #3595 write scope.
+- Do not weaken TDD, review, or verification while using the manual fallback.
 
 ## Required skills / policy
 
@@ -40,14 +42,15 @@ No direct PR #3590 R5/R6 response is in scope. PR #3590 remains parked until thi
 
 ## Implementation outline
 
-1. Audit current icon mappings: prefixed keys, bare keys, source/destination collapses, website overrides, canonical docs assets, and website-only assets.
-2. Add red tests/proofs for prefixed-key rejection, duplicate/ambiguous collapse rejection, Go exact bare lookup, website generation/fetch consumers using the canonical registry, and ownership mapping of canonical source assets plus generated website copies.
-3. Migrate curated website Simple Icons mappings and fetch/review metadata into the canonical registry with bare keys.
-4. Ensure generator emits bare keys and rejects prefixed keys, duplicate bare keys, ambiguous source/destination collapses, invalid paths, and unreviewed collisions.
-5. Update Go runtime and website scripts to read only the canonical registry and exact bare keys. Remove website-only override authority.
-6. Put canonical assets under `docs/connectors/icons/**`; generate/copy website public icons from that tree.
-7. Add documentation describing canonical registry ownership and the audit/collision policy.
-8. Run focused tests, full relevant gates, and comprehensive native-Codex `gpt-5.6-sol` no-mistakes validation at `xhigh` before integration.
+1. Audit current icon mappings: prefixed keys, bare keys, source/destination collapses, website overrides, canonical docs assets, and website-only assets. Record current counts and all non-identical source/destination collapses.
+2. Add red tests/proofs for prefixed-key rejection, ambiguous source/destination collapse rejection, Go exact bare lookup, website generation/fetch consumers using the canonical registry, and canonical source/generated-copy icon ownership helpers.
+3. Migrate curated website Simple Icons mappings and fetch/review metadata into the canonical registry with bare keys, including `apple-search-ads -> icons/simple-icons/apple.svg`.
+4. Convert legacy upstream `source-*`/`destination-*` registry entries to audited bare identifiers; keep reviewed local fallbacks distinct and ensure duplicate bare keys/collisions fail validation instead of being chosen by ordering.
+5. Ensure generator emits bare keys and rejects prefixed keys, duplicate bare keys, ambiguous source/destination collapses, invalid paths, and unreviewed collisions.
+6. Update Go runtime and website scripts to read only the canonical registry and exact bare keys. Remove website-only override authority.
+7. Put canonical assets under `docs/connectors/icons/**`; generate/copy website public icons from that tree.
+8. Add documentation describing canonical registry ownership and the audit/collision policy.
+9. Run focused tests, full relevant gates, and comprehensive native-Codex `gpt-5.6-sol` no-mistakes validation at `xhigh` before integration.
 
 ## Integration ordering
 

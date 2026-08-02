@@ -34,4 +34,5 @@ If a gate is not applicable or blocked by environment, record the exact reason a
 ## Current evidence
 
 - `scripts/gsd doctor`: pass in `/Users/karthiksivadas/.treehouse/cli-83d592/5/worker-3595-icon-registry`.
-- Planning scaffold only; production implementation pending independent worker.
+- `scripts/gsd prompt programming-loop init --phase connector-guardrail-remediation-r1/workers/issue-3595 --dry-run`: failed with `unknown GSD command: programming-loop`; manual GSD fallback uses `.pi/prompts/pm-gsd-loop.md` and must be recorded in PR evidence.
+- Pre-edit audit/proof commands completed without credentialed checks; production red tests pending next step.
