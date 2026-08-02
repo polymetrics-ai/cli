@@ -245,6 +245,168 @@ func TestNativeCloudTrailReadDerivesRequiredStreamFields(t *testing.T) {
 	}
 }
 
+func TestNativeCloudTrailReadStampsDerivedRequestIdentity(t *testing.T) {
+	t.Run("trail status uses request name", func(t *testing.T) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			action := strings.TrimPrefix(r.Header.Get("X-Amz-Target"), cloudTrailTargetPrefix)
+			w.Header().Set("Content-Type", "application/json")
+			switch action {
+			case "DescribeTrails":
+				_, _ = w.Write([]byte(`{"trailList":[{"Name":"trail-fixture"}]}`))
+			case "GetTrailStatus":
+				_, _ = w.Write([]byte(`{"IsLogging":true}`))
+			default:
+				t.Fatalf("unexpected target %s", action)
+			}
+		}))
+		defer srv.Close()
+
+		c := Connector{Client: srv.Client()}
+		var records []connectors.Record
+		err := c.Read(context.Background(), connectors.ReadRequest{Stream: "get_trail_status", Config: fixtureRuntimeConfig(srv.URL)}, func(record connectors.Record) error {
+			records = append(records, record)
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("Read: %v", err)
+		}
+		if len(records) != 1 {
+			t.Fatalf("records = %#v, want 1", records)
+		}
+		if got, want := records[0]["pm_record_id"], "trail-fixture"; got != want {
+			t.Fatalf("pm_record_id = %#v, want %q", got, want)
+		}
+	})
+
+	t.Run("resource policy uses response arn", func(t *testing.T) {
+		resourceArn := "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			action := strings.TrimPrefix(r.Header.Get("X-Amz-Target"), cloudTrailTargetPrefix)
+			w.Header().Set("Content-Type", "application/json")
+			switch action {
+			case "ListChannels":
+				_, _ = w.Write([]byte(`{"Channels":[]}`))
+			case "ListDashboards":
+				_, _ = w.Write([]byte(`{"Dashboards":[]}`))
+			case "ListEventDataStores":
+				_, _ = w.Write([]byte(`{"EventDataStores":[{"EventDataStoreArn":"` + resourceArn + `"}]}`))
+			case "GetResourcePolicy":
+				_, _ = w.Write([]byte(`{"ResourceArn":"` + resourceArn + `","ResourcePolicy":"{}"}`))
+			default:
+				t.Fatalf("unexpected target %s", action)
+			}
+		}))
+		defer srv.Close()
+
+		c := Connector{Client: srv.Client()}
+		var records []connectors.Record
+		err := c.Read(context.Background(), connectors.ReadRequest{Stream: "get_resource_policy", Config: fixtureRuntimeConfig(srv.URL)}, func(record connectors.Record) error {
+			records = append(records, record)
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("Read: %v", err)
+		}
+		if len(records) != 1 {
+			t.Fatalf("records = %#v, want 1", records)
+		}
+		if got := records[0]["pm_record_id"]; got != resourceArn {
+			t.Fatalf("pm_record_id = %#v, want %q", got, resourceArn)
+		}
+	})
+
+	t.Run("import failures include request import id", func(t *testing.T) {
+		importIDs := []string{"11111111-1111-1111-1111-111111111111", "22222222-2222-2222-2222-222222222222"}
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			action := strings.TrimPrefix(r.Header.Get("X-Amz-Target"), cloudTrailTargetPrefix)
+			var body map[string]any
+			if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+				t.Fatalf("decode body: %v", err)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			switch action {
+			case "ListImports":
+				_, _ = w.Write([]byte(`{"Imports":[{"ImportId":"` + importIDs[0] + `"},{"ImportId":"` + importIDs[1] + `"}]}`))
+			case "ListImportFailures":
+				if body["ImportId"] != importIDs[0] && body["ImportId"] != importIDs[1] {
+					t.Fatalf("ImportId body = %#v", body)
+				}
+				_, _ = w.Write([]byte(`{"Failures":[{"Location":"s3://example/failure","Status":"FAILED"}]}`))
+			default:
+				t.Fatalf("unexpected target %s", action)
+			}
+		}))
+		defer srv.Close()
+
+		c := Connector{Client: srv.Client()}
+		var records []connectors.Record
+		err := c.Read(context.Background(), connectors.ReadRequest{Stream: "list_import_failures", Config: fixtureRuntimeConfig(srv.URL)}, func(record connectors.Record) error {
+			records = append(records, record)
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("Read: %v", err)
+		}
+		if len(records) != 2 {
+			t.Fatalf("records = %#v, want 2", records)
+		}
+		wantIDs := map[string]bool{
+			"ImportId=" + importIDs[0] + "|Location=s3://example/failure": true,
+			"ImportId=" + importIDs[1] + "|Location=s3://example/failure": true,
+		}
+		for _, record := range records {
+			gotID, _ := record["pm_record_id"].(string)
+			if !wantIDs[gotID] {
+				t.Fatalf("pm_record_id = %#v, want import-scoped failure id", record["pm_record_id"])
+			}
+		}
+	})
+}
+
+func TestNativeCloudTrailReadSkipsInsightSelectorsNotEnabledTrails(t *testing.T) {
+	var insightRequests []string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action := strings.TrimPrefix(r.Header.Get("X-Amz-Target"), cloudTrailTargetPrefix)
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		switch action {
+		case "DescribeTrails":
+			_, _ = w.Write([]byte(`{"trailList":[{"Name":"plain-trail"},{"Name":"enabled-trail"}]}`))
+		case "GetInsightSelectors":
+			trailName, _ := body["TrailName"].(string)
+			insightRequests = append(insightRequests, trailName)
+			if trailName == "plain-trail" {
+				w.WriteHeader(http.StatusBadRequest)
+				_, _ = w.Write([]byte(`{"__type":"InsightNotEnabledException","Message":"Insights not enabled for trail"}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"InsightSelectors":[{"InsightType":"ApiCallRateInsight"}]}`))
+		default:
+			t.Fatalf("unexpected target %s", action)
+		}
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	var records []connectors.Record
+	err := c.Read(context.Background(), connectors.ReadRequest{Stream: "get_insight_selectors", Config: fixtureRuntimeConfig(srv.URL)}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if got, want := strings.Join(insightRequests, ","), "plain-trail,enabled-trail"; got != want {
+		t.Fatalf("insight requests = %s, want %s", got, want)
+	}
+	if len(records) != 1 || records[0]["pm_record_id"] != "enabled-trail" {
+		t.Fatalf("records = %#v", records)
+	}
+}
+
 func TestNativeCloudTrailRejectsInvalidMaxPages(t *testing.T) {
 	tests := []struct {
 		name  string
