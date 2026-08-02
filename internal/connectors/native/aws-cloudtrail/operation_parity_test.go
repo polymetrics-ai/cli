@@ -3,6 +3,7 @@ package awscloudtrail
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -486,6 +487,69 @@ func TestNativeCloudTrailReadSkipsInsightSelectorsNotEnabledTrails(t *testing.T)
 	}
 	if len(records) != 1 || records[0]["pm_record_id"] != "enabled-trail" {
 		t.Fatalf("records = %#v", records)
+	}
+}
+
+func TestNativeCloudTrailRejectsRepeatedNextToken(t *testing.T) {
+	requests := 0
+	var requestTokens []string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action := strings.TrimPrefix(r.Header.Get("X-Amz-Target"), cloudTrailTargetPrefix)
+		if action != "ListChannels" {
+			t.Fatalf("target = %s, want ListChannels", action)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		token, _ := body["NextToken"].(string)
+		requestTokens = append(requestTokens, token)
+		requests++
+		w.Header().Set("Content-Type", "application/json")
+		if requests > 2 {
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = w.Write([]byte(`{"message":"unexpected third request"}`))
+			return
+		}
+		_, _ = w.Write([]byte(`{"Channels":[{"Name":"channel-fixture"}],"NextToken":"repeat-token"}`))
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	err := c.Read(context.Background(), connectors.ReadRequest{Stream: "list_channels", Config: fixtureRuntimeConfig(srv.URL)}, func(connectors.Record) error {
+		return nil
+	})
+	if !errors.Is(err, errRepeatedPaginationToken) {
+		t.Fatalf("Read error = %v, want repeated pagination token", err)
+	}
+	if requests != 2 {
+		t.Fatalf("requests = %d, want 2", requests)
+	}
+	if got, want := strings.Join(requestTokens, ","), ",repeat-token"; got != want {
+		t.Fatalf("request NextTokens = %q, want %q", got, want)
+	}
+}
+
+func TestNativeCloudTrailMaxPagesStopsBeforeRepeatedTokenReuse(t *testing.T) {
+	requests := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"Channels":[{"Name":"channel-fixture"}],"NextToken":"repeat-token"}`))
+	}))
+	defer srv.Close()
+
+	cfg := fixtureRuntimeConfig(srv.URL)
+	cfg.Config["max_pages"] = "2"
+	c := Connector{Client: srv.Client()}
+	err := c.Read(context.Background(), connectors.ReadRequest{Stream: "list_channels", Config: cfg}, func(connectors.Record) error {
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if requests != 2 {
+		t.Fatalf("requests = %d, want 2", requests)
 	}
 }
 
