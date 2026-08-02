@@ -13,6 +13,7 @@ Canonical SVG assets live under `docs/connectors/icons/**`. Website assets under
 - `website/scripts/fetch-simple-icons.mjs` reads Simple Icons fetch metadata from the canonical registry and writes refreshed SVGs into `docs/connectors/icons/simple-icons/**`; website generation then copies those assets to `website/public/connectors/icons/simple-icons/**`.
 - Connector icon ownership helpers map both `docs/connectors/icons/**` source assets and `website/public/connectors/icons/**` generated copies back to the same canonical bare connector. Ambiguous shared fallback paths, orphan paths, duplicate changed paths, and undeclared icon paths are rejected instead of authorizing connector ownership.
 - Registry rows with `implemented: false` are retained runtime/builtin dispositions only; they do not authorize connector definition ownership.
+- `cmd/iconregistrygen` treats the curated registry (`--curated`, defaulting to `--out`) as authored state: an empty or `source-*`/`destination-*`-prefixed curated connector key is a hard error naming the key and file, not a silently dropped/backfilled row. Prefix collapse is applied only to raw upstream registry records, never to curated rows.
 
 ## Source/destination collapse audit
 

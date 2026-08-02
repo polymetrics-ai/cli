@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -261,5 +263,74 @@ func TestValidateBuiltIconEntryUsesSlashOrientedPaths(t *testing.T) {
 	entry.Path = `icons/simple-icons\demo.svg`
 	if err := validateBuiltIconEntry(entry); err == nil {
 		t.Fatal("validateBuiltIconEntry() accepted backslash path")
+	}
+}
+
+func writeCuratedRegistry(t *testing.T, contents string) string {
+	t.Helper()
+	path := filepath.Join(t.TempDir(), "icon_data.json")
+	if err := os.WriteFile(path, []byte(contents), 0o644); err != nil {
+		t.Fatalf("write curated registry fixture: %v", err)
+	}
+	return path
+}
+
+func TestLoadCuratedIconEntriesRejectsEmptyConnectorKey(t *testing.T) {
+	path := writeCuratedRegistry(t, `[{"connector":"","id":"demo","path":"icons/demo.svg","source":"official_site","review_status":"official"}]`)
+	_, err := loadCuratedIconEntries(path)
+	if err == nil {
+		t.Fatal("loadCuratedIconEntries() accepted an empty curated connector key")
+	}
+	if !strings.Contains(err.Error(), "entry missing connector") || !strings.Contains(err.Error(), path) {
+		t.Fatalf("loadCuratedIconEntries() error = %v, want connector-required error naming %q", err, path)
+	}
+}
+
+func TestLoadCuratedIconEntriesRejectsSourcePrefixedConnectorKey(t *testing.T) {
+	path := writeCuratedRegistry(t, `[{"connector":"source-github","id":"github","path":"icons/github.svg","source":"official_site","review_status":"official"}]`)
+	_, err := loadCuratedIconEntries(path)
+	if err == nil {
+		t.Fatal("loadCuratedIconEntries() accepted a source-prefixed curated connector key")
+	}
+	if !strings.Contains(err.Error(), `"source-github"`) || !strings.Contains(err.Error(), "must be a bare connector identifier") || !strings.Contains(err.Error(), path) {
+		t.Fatalf("loadCuratedIconEntries() error = %v, want bare-identifier error naming the key and %q", err, path)
+	}
+}
+
+func TestLoadCuratedIconEntriesRejectsDestinationPrefixedConnectorKey(t *testing.T) {
+	path := writeCuratedRegistry(t, `[{"connector":"destination-github","id":"github","path":"icons/github.svg","source":"official_site","review_status":"official"}]`)
+	_, err := loadCuratedIconEntries(path)
+	if err == nil {
+		t.Fatal("loadCuratedIconEntries() accepted a destination-prefixed curated connector key")
+	}
+	if !strings.Contains(err.Error(), `"destination-github"`) || !strings.Contains(err.Error(), "must be a bare connector identifier") || !strings.Contains(err.Error(), path) {
+		t.Fatalf("loadCuratedIconEntries() error = %v, want bare-identifier error naming the key and %q", err, path)
+	}
+}
+
+func TestLoadCuratedIconEntriesAcceptsBareConnectorKey(t *testing.T) {
+	path := writeCuratedRegistry(t, `[{"connector":"github","id":"github","path":"icons/github.svg","source":"official_site","review_status":"official","review_url":"https://github.com"}]`)
+	entries, err := loadCuratedIconEntries(path)
+	if err != nil {
+		t.Fatalf("loadCuratedIconEntries() unexpected error = %v", err)
+	}
+	if len(entries) != 1 || entries[0].Connector != "github" || entries[0].ReviewURL != "https://github.com" {
+		t.Fatalf("entries = %+v, want single preserved bare github entry", entries)
+	}
+}
+
+func TestBuildIconEntryStillCollapsesPrefixedRawUpstreamSlug(t *testing.T) {
+	entry, ok, err := buildIconEntry(map[string]any{
+		"public":           true,
+		"dockerRepository": "registry/destination-github",
+		"documentationUrl": "https://example.com/integrations/destinations/github",
+		"icon":             "github.svg",
+		"iconUrl":          "https://example.com/destination-github/icon.svg",
+	})
+	if err != nil || !ok {
+		t.Fatalf("buildIconEntry() ok=%t err=%v", ok, err)
+	}
+	if entry.Connector != "github" {
+		t.Fatalf("entry.Connector = %q, want raw upstream destination- prefix collapsed to bare %q", entry.Connector, "github")
 	}
 }

@@ -15,6 +15,8 @@ Implementation and local verification are green in the isolated worker worktree.
 - Updated website generation/fetch scripts to read only the canonical registry.
 - Updated docs generation to copy nested icon assets recursively for Simple Icons.
 - Added migration documentation with the source/destination collapse audit and #3590 catalog allowance handoff.
+- F15 fix: `loadCuratedIconEntries` now rejects empty or `source-`/`destination-`-prefixed curated connector keys with an error naming the key and file, instead of silently dropping and backfilling them from upstream/fallback data; raw upstream prefix collapse is unaffected.
+- Diagnosed and confirmed resolved the PR #3596 `Website checks` CI failure: the failing run targeted the stale scaffold-only commit, predating the six pipeline review-fix commits already reconciling generated website icon data.
 
 ## GSD / TDD
 

@@ -57,6 +57,13 @@ node website/scripts/gen-connector-bundles.mjs
 # Hash bounded generated outputs, run the generator again, and require identical hashes plus a clean output diff.
 ```
 
+Review repair round 7 (F15) focused gate:
+
+```bash
+go test ./cmd/iconregistrygen -v
+python3 -c "import json; d=json.load(open('internal/connectors/icon_data.json')); print(len([e for e in d if not e.get('connector')]))"
+```
+
 ## Repository gates before integration
 
 ```bash
@@ -95,3 +102,7 @@ If a gate is not applicable or blocked by environment, record the exact reason a
 - GREEN review round 6 focused Go gate: `internal/cli` and `cmd/iconregistrygen` targeted F11/F13/F14 regressions passed.
 - GREEN review round 6 Node gate: all 6 icon-registry tests passed, including F12 invalid unimplemented-row coverage.
 - GREEN review round 6 deterministic generation: two consecutive bundle generations emitted 550 connectors and 334 icons with identical data/public-icon hashes and no checked-in derived-output diff.
+- RED `go test ./cmd/iconregistrygen -run TestLoadCuratedIconEntries`: failed before the F15 fix (empty and `source-`/`destination-`-prefixed curated keys were silently accepted with no error).
+- GREEN review round 7 (F15) focused Go gate: `go test ./cmd/iconregistrygen -v` — all 16 tests pass, including empty/prefixed curated-key rejection, bare curated-key preservation, and continued raw-upstream prefix collapse.
+- GREEN F15 no-regression audit: the committed `internal/connectors/icon_data.json` (554 entries) contains zero empty/prefixed curated connector keys, so the default `--curated`-equals-`--out` regeneration path is unaffected by the stricter check.
+- GREEN `Website checks` root cause: PR #3596's failing CI run targeted stale commit `10829e569`, predating the six pipeline review-fix commits; reproduced at pipeline head `8faa94cc6` with CI-matching pnpm 11.7.0 — `pnpm run gen:website-data` diffed clean, and `lint`/`typecheck`/`test:unit` (76/76)/`build` all passed locally.

@@ -446,8 +446,16 @@ func loadCuratedIconEntries(path string) ([]iconEntry, error) {
 		entry.Source = strings.TrimSpace(entry.Source)
 		entry.ReviewStatus = strings.TrimSpace(entry.ReviewStatus)
 		entry.ReviewURL = strings.TrimSpace(entry.ReviewURL)
-		if entry.Connector == "" || entry.Connector != canonicalConnectorKey(entry.Connector) {
-			continue
+		// Curated entries are authored state, not external input: an empty or
+		// legacy-prefixed connector key must fail loudly rather than being
+		// silently dropped and backfilled from upstream/fallback data, which
+		// would destroy hand-curated review status, review URL, and source
+		// attribution while reporting success.
+		if entry.Connector == "" {
+			return nil, fmt.Errorf("curated icon registry %s: entry missing connector", path)
+		}
+		if entry.Connector != canonicalConnectorKey(entry.Connector) {
+			return nil, fmt.Errorf("curated icon registry %s: connector %q must be a bare connector identifier", path, entry.Connector)
 		}
 		out = append(out, entry)
 	}

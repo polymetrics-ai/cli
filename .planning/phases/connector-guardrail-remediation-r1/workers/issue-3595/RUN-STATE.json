@@ -43,7 +43,11 @@
     "go test ./...",
     "go build ./cmd/pm",
     "make connector-boundary",
-    "make verify"
+    "make verify",
+    "F15 (2026-08-03): go test ./cmd/iconregistrygen -v (RED before fix, GREEN after)",
+    "F15 (2026-08-03): POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli/... -run TestGoldenTranscripts (regenerated stale ICON id: fixture line via the supported generator, reviewed as a single-line additive diff)",
+    "F15 (2026-08-03): gofmt -l cmd internal; go vet ./...; go test ./...; go build ./cmd/pm; make verify — all clean/green",
+    "F15 (2026-08-03): pnpm run gen:website-data / lint / typecheck / test:unit / build with pnpm 11.7.0 (CI-matching) at pipeline head — zero diff, all green (Website checks root cause was a stale CI run against the pre-review-fix scaffold commit, not a defect)"
   ],
   "safety": {
     "secrets": "not requested or used",
