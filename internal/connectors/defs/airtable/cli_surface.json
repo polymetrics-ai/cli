@@ -125,6 +125,54 @@
   ],
   "commands": [
     {
+      "path": "read scim-groups",
+      "summary": "List groups",
+      "intent": "etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "flags": [
+        {
+          "name": "count",
+          "type": "integer",
+          "summary": "SCIM page size",
+          "maps_to": "query.count"
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "SCIM displayName equality filter",
+          "maps_to": "query.filter"
+        }
+      ],
+      "risk": "medium",
+      "approval": "none until airtable-scim-pagination-foundation provides complete startIndex pagination; no live call is available today.",
+      "notes": "Blocked on airtable-scim-pagination-foundation because Airtable SCIM list responses expose Resources, startIndex, itemsPerPage, and totalResults rather than a nextStartIndex token; no partial first-page stream is exposed."
+    },
+    {
+      "path": "read scim-users",
+      "summary": "List users",
+      "intent": "etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "flags": [
+        {
+          "name": "count",
+          "type": "integer",
+          "summary": "SCIM page size",
+          "maps_to": "query.count"
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "summary": "SCIM userName equality filter",
+          "maps_to": "query.filter"
+        }
+      ],
+      "risk": "medium",
+      "approval": "none until airtable-scim-pagination-foundation provides complete startIndex pagination; no live call is available today.",
+      "notes": "Blocked on airtable-scim-pagination-foundation because Airtable SCIM list responses expose Resources, startIndex, itemsPerPage, and totalResults rather than a nextStartIndex token; no partial first-page stream is exposed."
+    },
+    {
       "path": "read scim-group",
       "summary": "Get group",
       "intent": "etl",
@@ -642,9 +690,8 @@
     {
       "path": "read enterprise-users",
       "summary": "Get users by id or email",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "enterprise_users",
+      "intent": "direct_read",
+      "availability": "planned",
       "source_url": "https://airtable.com/developers/web/api/introduction",
       "flags": [
         {
@@ -652,14 +699,23 @@
           "type": "string",
           "summary": "Airtable enterprise account id",
           "maps_to": "config.enterprise_account_id"
+        },
+        {
+          "name": "email",
+          "type": "string_array",
+          "summary": "Documented user email filter; at least one email or id is required before this command can execute.",
+          "maps_to": "query.email"
+        },
+        {
+          "name": "id",
+          "type": "string_array",
+          "summary": "Documented user id filter; at least one email or id is required before this command can execute.",
+          "maps_to": "query.id"
         }
       ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users"
-        }
-      ]
+      "risk": "medium",
+      "approval": "none until airtable-required-query-foundation provides an executable fixed-query read; no live call is available today.",
+      "notes": "Blocked on airtable-required-query-foundation because Airtable requires at least one email[] or id[] query value for GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users; no unfiltered stream or raw query escape is exposed."
     },
     {
       "path": "read enterprise-user",
@@ -908,6 +964,256 @@
       "examples": [
         "pm airtable hyperdb get-records --credential airtable --enterprise-account-id ent... --data-table-id dtbl... --primary-key pk... --json"
       ]
+    },
+    {
+      "path": "write create-scim-group",
+      "summary": "Create group",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official SCIM create-group body contains required non-empty array members; no raw body escape is exposed."
+    },
+    {
+      "path": "write patch-scim-group",
+      "summary": "Patch group",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official SCIM patch body contains required non-empty Operations; no raw body escape is exposed."
+    },
+    {
+      "path": "write put-scim-group",
+      "summary": "Put group",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official SCIM put-group body contains required non-empty member arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write create-scim-user",
+      "summary": "Create user",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official SCIM create-user body contains required non-empty email/name arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write patch-scim-user",
+      "summary": "Patch user",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official SCIM patch body contains required non-empty Operations; no raw body escape is exposed."
+    },
+    {
+      "path": "write put-scim-user",
+      "summary": "Put user",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official SCIM put-user body contains required non-empty email/name arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write create-base",
+      "summary": "Create base",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official create-base body requires non-empty table/field arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write add-base-collaborator",
+      "summary": "Add base collaborator",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official collaborator mutation can require non-empty array inputs; no raw body escape is exposed."
+    },
+    {
+      "path": "write add-interface-collaborator",
+      "summary": "Add interface collaborator",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official collaborator mutation can require non-empty array inputs; no raw body escape is exposed."
+    },
+    {
+      "path": "write create-table",
+      "summary": "Create table",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official create-table body requires non-empty fields; no raw body escape is exposed."
+    },
+    {
+      "path": "write move-user-groups",
+      "summary": "Move user groups",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official move-user-groups body requires non-empty group arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write move-workspaces",
+      "summary": "Move workspaces",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official move-workspaces body requires non-empty workspace arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write revoke-enterprise-personal-access-tokens",
+      "summary": "Revoke personal access tokens",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "critical",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; destructive token revocation requires plan, preview, typed destructive confirmation, explicit approval, and execute before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official revoke body requires non-empty token arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write manage-user-batched",
+      "summary": "Manage user batched",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official batched user body requires non-empty user arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write manage-user-membership",
+      "summary": "Manage user membership",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official user-membership body requires non-empty user arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write grant-admin-access",
+      "summary": "Grant admin access",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official grant-admin body requires non-empty user arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write revoke-admin-access",
+      "summary": "Revoke admin access",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "critical",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; destructive admin revocation requires plan, preview, typed destructive confirmation, explicit approval, and execute before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official revoke-admin body requires non-empty user arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write update-workspace-ai-allowlist",
+      "summary": "Update workspace AI allowlist",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official AI allowlist body requires non-empty workspace arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write add-workspace-collaborator",
+      "summary": "Add workspace collaborator",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official collaborator mutation can require non-empty array inputs; no raw body escape is exposed."
+    },
+    {
+      "path": "write delete-multiple-records",
+      "summary": "Delete multiple records",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "critical",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; destructive record deletion requires plan, preview, typed destructive confirmation, explicit approval, and execute before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official delete-multiple-records request requires non-empty records[] values; no raw body escape is exposed."
+    },
+    {
+      "path": "write update-multiple-records",
+      "summary": "Update multiple records",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "medium",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official update-multiple-records body requires non-empty records arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write create-records",
+      "summary": "Create records",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "medium",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official create-records body requires non-empty records arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write update-multiple-records-put",
+      "summary": "Update multiple records (put)",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official replace-multiple-records body requires non-empty records arrays; no raw body escape is exposed."
+    },
+    {
+      "path": "write hyperdb-delete-records-by-primary-keys",
+      "summary": "Delete records",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "critical",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; destructive HyperDB deletion requires plan, preview, typed destructive confirmation, explicit approval, and execute before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official HyperDB delete body requires non-empty primaryKeysForDelete values; no raw body escape is exposed."
+    },
+    {
+      "path": "write hyperdb-upsert-records-by-primary-keys",
+      "summary": "Update or insert records",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://airtable.com/developers/web/api/introduction",
+      "risk": "high",
+      "approval": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.",
+      "notes": "Blocked on airtable-array-cardinality-foundation because the official HyperDB upsert body requires non-empty records arrays; no raw body escape is exposed."
     },
     {
       "path": "write delete-scim-group",

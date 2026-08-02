@@ -1686,6 +1686,7 @@
         "properties": {
           "fields": {
             "type": "object",
+            "minProperties": 1,
             "additionalProperties": true
           },
           "returnFieldsByFieldId": {

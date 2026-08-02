@@ -11,11 +11,40 @@
     "body": {
       "events": [
         {
-          "id": "audit_log_events_fixture_1",
-          "createdTime": "2026-01-01T00:00:00.000Z",
-          "eventType": "fixture.event"
+          "action": "createBase",
+          "actor": {
+            "type": "user",
+            "user": {
+              "email": "user.fixture@example.invalid",
+              "id": "usr_fixture_1",
+              "name": "Fixture User"
+            }
+          },
+          "context": {
+            "actionId": "act_fixture_1",
+            "baseId": "app_fixture_1",
+            "enterpriseAccountId": "ent_fixture_1",
+            "workspaceId": "wsp_fixture_1"
+          },
+          "id": "evt_fixture_1",
+          "modelId": "app_fixture_1",
+          "modelType": "base",
+          "origin": {
+            "ipAddress": "192.0.2.1",
+            "sessionId": "ses_fixture_1",
+            "userAgent": "fixture-agent"
+          },
+          "payload": {
+            "name": "Fixture Base"
+          },
+          "payloadVersion": "1.0",
+          "timestamp": "2026-01-01T00:00:00.000Z"
         }
-      ]
+      ],
+      "pagination": {
+        "next": null,
+        "previous": null
+      }
     }
   }
 }

@@ -3,18 +3,52 @@
   "title": "Airtable audit_log_events record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "timestamp",
+    "action",
+    "payloadVersion",
+    "payload",
+    "modelId",
+    "modelType",
+    "origin",
+    "context",
+    "actor"
   ],
   "properties": {
+    "action": {
+      "type": "string"
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": true
+    },
     "id": {
       "type": "string"
     },
-    "createdTime": {
+    "modelId": {
+      "type": "string"
+    },
+    "modelType": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "payloadVersion": {
+      "type": "string"
+    },
+    "timestamp": {
       "type": "string",
       "format": "date-time"
-    },
-    "eventType": {
-      "type": "string"
     }
   },
   "additionalProperties": true,

@@ -7,9 +7,26 @@
     "status": 200,
     "body": {
       "id": "ent_fixture_1",
-      "name": "Fixture Enterprise",
+      "rootEnterpriseAccountId": "ent_fixture_1",
+      "userIds": [
+        "usr_fixture_1"
+      ],
+      "groupIds": [
+        "ugp_fixture_1"
+      ],
+      "workspaceIds": [
+        "wsp_fixture_1"
+      ],
+      "emailDomains": [
+        {
+          "emailDomain": "example.invalid",
+          "isSsoRequired": true
+        }
+      ],
       "createdTime": "2026-01-01T00:00:00.000Z",
-      "rootEnterpriseAccountId": "ent_fixture_1"
+      "descendantEnterpriseAccountIds": [
+        "ent_fixture_2"
+      ]
     }
   }
 }

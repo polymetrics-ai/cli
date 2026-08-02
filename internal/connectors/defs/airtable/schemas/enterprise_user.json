@@ -4,28 +4,67 @@
   "type": "object",
   "required": [
     "id",
+    "state",
     "email",
-    "state"
+    "name",
+    "lastActivityTime",
+    "isTwoFactorAuthEnabled",
+    "isSsoRequired",
+    "isServiceAccount"
   ],
   "properties": {
-    "id": {
-      "type": "string"
+    "aggregated": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "collaborations": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "descendants": {
+      "type": "object",
+      "additionalProperties": true
     },
     "email": {
       "type": "string"
     },
-    "name": {
+    "enterpriseUserType": {
       "type": "string"
     },
-    "state": {
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "id": {
+      "type": "string"
+    },
+    "invitedToAirtableByUserId": {
       "type": "string"
     },
     "isAdmin": {
       "type": "boolean"
     },
-    "createdTime": {
-      "type": "string",
-      "format": "date-time"
+    "isManaged": {
+      "type": "boolean"
+    },
+    "isServiceAccount": {
+      "type": "boolean"
+    },
+    "isSsoRequired": {
+      "type": "boolean"
+    },
+    "isSuperAdmin": {
+      "type": "boolean"
+    },
+    "isTwoFactorAuthEnabled": {
+      "type": "boolean"
     },
     "lastActivityTime": {
       "type": [
@@ -33,6 +72,15 @@
         "null"
       ],
       "format": "date-time"
+    },
+    "licenseType": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
     }
   },
   "additionalProperties": true,

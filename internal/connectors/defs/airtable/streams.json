@@ -89,7 +89,8 @@
       "pagination": {
         "type": "cursor",
         "cursor_param": "cursor",
-        "token_path": "cursor"
+        "token_path": "cursor",
+        "stop_path": "mightHaveMore"
       }
     },
     {
@@ -272,15 +273,6 @@
         "path": "personalAccessTokens"
       },
       "schema": "schemas/enterprise_personal_access_tokens.json",
-      "projection": "passthrough"
-    },
-    {
-      "name": "enterprise_users",
-      "path": "/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users",
-      "records": {
-        "path": "users"
-      },
-      "schema": "schemas/enterprise_users.json",
       "projection": "passthrough"
     },
     {
