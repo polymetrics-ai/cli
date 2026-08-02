@@ -3,17 +3,58 @@
   "title": "Airtable webhooks record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "specification",
+    "notificationUrl",
+    "cursorForNextPayload",
+    "areNotificationsEnabled",
+    "lastNotificationResult",
+    "lastSuccessfulNotificationTime",
+    "isHookEnabled"
   ],
   "properties": {
+    "areNotificationsEnabled": {
+      "type": "boolean"
+    },
+    "cursorForNextPayload": {
+      "type": "number"
+    },
+    "expirationTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
     "id": {
       "type": "string"
     },
-    "notificationUrl": {
-      "type": "string"
-    },
-    "enabled": {
+    "isHookEnabled": {
       "type": "boolean"
+    },
+    "lastNotificationResult": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "lastSuccessfulNotificationTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "notificationUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "specification": {
+      "type": "object",
+      "additionalProperties": true
     }
   },
   "additionalProperties": true,

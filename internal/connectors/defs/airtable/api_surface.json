@@ -517,8 +517,13 @@
     {
       "method": "GET",
       "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users",
-      "covered_by": {
-        "stream": "enterprise_users"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-required-query-foundation can require at least one documented email[] or id[] query value without claiming an unfiltered executable stream",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {

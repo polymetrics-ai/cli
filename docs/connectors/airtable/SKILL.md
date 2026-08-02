@@ -50,10 +50,10 @@ Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, ente
   - fields: active(), emails(), id(), name(), schemas(), userName()
 - webhooks:
   - primary key: id
-  - fields: enabled(), id(), notificationUrl()
+  - fields: areNotificationsEnabled(), cursorForNextPayload(), expirationTime(), id(), isHookEnabled(), lastNotificationResult(), lastSuccessfulNotificationTime(), notificationUrl(), specification()
 - webhook_payloads:
-  - primary key: id
-  - fields: baseTransactionNumber(), id(), timestamp()
+  - primary key: baseTransactionNumber, timestamp
+  - fields: actionMetadata(), baseTransactionNumber(), changedTablesById(), code(), createdTablesById(), destroyedTableIds(), error(), payloadFormat(), timestamp()
 - bases:
   - primary key: id
   - fields: id(), name(), permissionLevel()
@@ -67,8 +67,8 @@ Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, ente
   - primary key: id
   - fields: createdTime(), id(), isPublished(), name(), rootTableId()
 - shares:
-  - primary key: id
-  - fields: createdByUserId(), createdTime(), id(), state(), type(), url()
+  - primary key: shareId
+  - fields: blockInstallationId(), canBeSynced(), createdByUserId(), createdTime(), effectiveEmailDomainAllowList(), isPasswordProtected(), restrictedToEmailDomains(), restrictedToEnterpriseMembers(), shareId(), shareTokenPrefix(), state(), type(), viewId()
 - tables:
   - primary key: id
   - fields: fields(), id(), name()
@@ -80,10 +80,10 @@ Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, ente
   - fields: id(), name(), type(), visibleFieldIds()
 - enterprise:
   - primary key: id
-  - fields: createdTime(), id(), name(), rootEnterpriseAccountId()
+  - fields: aggregated(), createdTime(), descendantEnterpriseAccountIds(), descendants(), emailDomains(), groupIds(), id(), rootEnterpriseAccountId(), userIds(), workspaceIds()
 - audit_log_events:
   - primary key: id
-  - fields: createdTime(), eventType(), id()
+  - fields: action(), actor(), context(), id(), modelId(), modelType(), origin(), payload(), payloadVersion(), timestamp()
 - audit_log_requests:
   - primary key: id
   - fields: completedTime(), createdByUserId(), createdTime(), id(), state(), url()
@@ -92,7 +92,7 @@ Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, ente
   - fields: completedTime(), createdByUserId(), createdTime(), id(), state(), url()
 - change_events:
   - primary key: id
-  - fields: createdTime(), eventType(), id()
+  - fields: actor(), context(), eventTimestamp(), id(), objectId(), objectType(), origin(), payload(), timestamp(), type()
 - ediscovery_exports:
   - primary key: id
   - fields: baseId(), completedTime(), createdByUserId(), createdTime(), downloadUrl(), id(), state()
@@ -101,16 +101,13 @@ Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, ente
   - fields: baseId(), completedTime(), createdByUserId(), createdTime(), downloadUrl(), id(), state()
 - enterprise_packages:
   - primary key: id
-  - fields: createdByUserId(), createdTime(), id(), name(), version()
+  - fields: createdByUserId(), createdTime(), description(), enterpriseAccountId(), id(), installCount(), lastUpdatedByUserId(), lastUpdatedTime(), latestReleaseId(), name(), sourceApplicationId(), tagline(), type()
 - enterprise_personal_access_tokens:
   - primary key: id
   - fields: createdTime(), id(), lastUsedTime(), scopes(), userId()
-- enterprise_users:
-  - primary key: id
-  - fields: createdTime(), email(), id(), isAdmin(), lastActivityTime(), name(), state()
 - enterprise_user:
   - primary key: id
-  - fields: createdTime(), email(), id(), isAdmin(), lastActivityTime(), name(), state()
+  - fields: aggregated(), collaborations(), createdTime(), descendants(), email(), enterpriseUserType(), groups(), id(), invitedToAirtableByUserId(), isAdmin(), isManaged(), isServiceAccount(), isSsoRequired(), isSuperAdmin(), isTwoFactorAuthEnabled(), lastActivityTime(), licenseType(), name(), state()
 - user_group:
   - primary key: id
   - fields: createdTime(), id(), memberUserIds(), name()
@@ -330,6 +327,8 @@ Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, ente
 - Read/query commands
 - Reverse ETL/write action references
 - Other Commands
+  - read scim-groups - List groups [intent=etl availability=planned]; approval: none until airtable-scim-pagination-foundation provides complete startIndex pagination; no live call is available today.; risk: medium; notes: Blocked on airtable-scim-pagination-foundation because Airtable SCIM list responses expose Resources, startIndex, itemsPerPage, and totalResults rather than a nextStartIndex token; no partial first-page stream is exposed.; flags: --count, --filter
+  - read scim-users - List users [intent=etl availability=planned]; approval: none until airtable-scim-pagination-foundation provides complete startIndex pagination; no live call is available today.; risk: medium; notes: Blocked on airtable-scim-pagination-foundation because Airtable SCIM list responses expose Resources, startIndex, itemsPerPage, and totalResults rather than a nextStartIndex token; no partial first-page stream is exposed.; flags: --count, --filter
   - read scim-group - Get group [intent=etl availability=implemented stream=scim_group]; flags: --group-id
   - read scim-user - Get user [intent=etl availability=implemented stream=scim_user]; flags: --user-id
   - read webhooks - List webhooks [intent=etl availability=implemented stream=webhooks]; flags: --base-id
@@ -351,7 +350,7 @@ Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, ente
   - read ediscovery-export - Get eDiscovery export [intent=etl availability=implemented stream=ediscovery_export]; flags: --enterprise-account-id, --enterprise-task-id
   - read enterprise-packages - List packages [intent=etl availability=implemented stream=enterprise_packages]; flags: --enterprise-account-id
   - read enterprise-personal-access-tokens - List personal access tokens [intent=etl availability=implemented stream=enterprise_personal_access_tokens]; flags: --enterprise-account-id
-  - read enterprise-users - Get users by id or email [intent=etl availability=implemented stream=enterprise_users]; flags: --enterprise-account-id
+  - read enterprise-users - Get users by id or email [intent=direct_read availability=planned]; approval: none until airtable-required-query-foundation provides an executable fixed-query read; no live call is available today.; risk: medium; notes: Blocked on airtable-required-query-foundation because Airtable requires at least one email[] or id[] query value for GET /v0/meta/enterpriseAccounts/{enterpriseAccountId}/users; no unfiltered stream or raw query escape is exposed.; flags: --enterprise-account-id, --email, --id
   - read enterprise-user - Get user by id [intent=etl availability=implemented stream=enterprise_user]; flags: --enterprise-account-id, --user-id
   - read user-group - Get user group [intent=etl availability=implemented stream=user_group]; flags: --group-id
   - read whoami - Get user info [intent=etl availability=implemented stream=whoami]
@@ -360,6 +359,31 @@ Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, ente
   - read record - Get record [intent=etl availability=implemented stream=record]; flags: --base-id, --table-id, --record-id
   - read comments - List comments [intent=etl availability=implemented stream=comments]; flags: --base-id, --table-id, --record-id
   - hyperdb get-records - Read HyperDB records by primary key [intent=direct_read availability=implemented operation=hyperdb_table_read_records]; approval: read-only; risk: medium; flags: --enterprise-account-id, --data-table-id, --primary-key (required), --field, --max-records, --cursor
+  - write create-scim-group - Create group [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official SCIM create-group body contains required non-empty array members; no raw body escape is exposed.
+  - write patch-scim-group - Patch group [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official SCIM patch body contains required non-empty Operations; no raw body escape is exposed.
+  - write put-scim-group - Put group [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official SCIM put-group body contains required non-empty member arrays; no raw body escape is exposed.
+  - write create-scim-user - Create user [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official SCIM create-user body contains required non-empty email/name arrays; no raw body escape is exposed.
+  - write patch-scim-user - Patch user [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official SCIM patch body contains required non-empty Operations; no raw body escape is exposed.
+  - write put-scim-user - Put user [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official SCIM put-user body contains required non-empty email/name arrays; no raw body escape is exposed.
+  - write create-base - Create base [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official create-base body requires non-empty table/field arrays; no raw body escape is exposed.
+  - write add-base-collaborator - Add base collaborator [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official collaborator mutation can require non-empty array inputs; no raw body escape is exposed.
+  - write add-interface-collaborator - Add interface collaborator [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official collaborator mutation can require non-empty array inputs; no raw body escape is exposed.
+  - write create-table - Create table [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official create-table body requires non-empty fields; no raw body escape is exposed.
+  - write move-user-groups - Move user groups [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official move-user-groups body requires non-empty group arrays; no raw body escape is exposed.
+  - write move-workspaces - Move workspaces [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official move-workspaces body requires non-empty workspace arrays; no raw body escape is exposed.
+  - write revoke-enterprise-personal-access-tokens - Revoke personal access tokens [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; destructive token revocation requires plan, preview, typed destructive confirmation, explicit approval, and execute before any future execution.; risk: critical; notes: Blocked on airtable-array-cardinality-foundation because the official revoke body requires non-empty token arrays; no raw body escape is exposed.
+  - write manage-user-batched - Manage user batched [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official batched user body requires non-empty user arrays; no raw body escape is exposed.
+  - write manage-user-membership - Manage user membership [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official user-membership body requires non-empty user arrays; no raw body escape is exposed.
+  - write grant-admin-access - Grant admin access [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official grant-admin body requires non-empty user arrays; no raw body escape is exposed.
+  - write revoke-admin-access - Revoke admin access [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; destructive admin revocation requires plan, preview, typed destructive confirmation, explicit approval, and execute before any future execution.; risk: critical; notes: Blocked on airtable-array-cardinality-foundation because the official revoke-admin body requires non-empty user arrays; no raw body escape is exposed.
+  - write update-workspace-ai-allowlist - Update workspace AI allowlist [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official AI allowlist body requires non-empty workspace arrays; no raw body escape is exposed.
+  - write add-workspace-collaborator - Add workspace collaborator [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official collaborator mutation can require non-empty array inputs; no raw body escape is exposed.
+  - write delete-multiple-records - Delete multiple records [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; destructive record deletion requires plan, preview, typed destructive confirmation, explicit approval, and execute before any future execution.; risk: critical; notes: Blocked on airtable-array-cardinality-foundation because the official delete-multiple-records request requires non-empty records[] values; no raw body escape is exposed.
+  - write update-multiple-records - Update multiple records [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: medium; notes: Blocked on airtable-array-cardinality-foundation because the official update-multiple-records body requires non-empty records arrays; no raw body escape is exposed.
+  - write create-records - Create records [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: medium; notes: Blocked on airtable-array-cardinality-foundation because the official create-records body requires non-empty records arrays; no raw body escape is exposed.
+  - write update-multiple-records-put - Update multiple records (put) [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official replace-multiple-records body requires non-empty records arrays; no raw body escape is exposed.
+  - write hyperdb-delete-records-by-primary-keys - Delete records [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; destructive HyperDB deletion requires plan, preview, typed destructive confirmation, explicit approval, and execute before any future execution.; risk: critical; notes: Blocked on airtable-array-cardinality-foundation because the official HyperDB delete body requires non-empty primaryKeysForDelete values; no raw body escape is exposed.
+  - write hyperdb-upsert-records-by-primary-keys - Update or insert records [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official HyperDB upsert body requires non-empty records arrays; no raw body escape is exposed.
   - write delete-scim-group - Delete group [intent=reverse_etl availability=planned write=delete_scim_group]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write delete-scim-user - Delete user [intent=reverse_etl availability=planned write=delete_scim_user]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write create-webhook - Create a webhook [intent=reverse_etl availability=planned write=create_webhook]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
