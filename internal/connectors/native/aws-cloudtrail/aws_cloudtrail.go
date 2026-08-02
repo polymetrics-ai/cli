@@ -208,11 +208,11 @@ func (c Connector) derivedActionBodies(ctx context.Context, cfg connectors.Runti
 	case "GetEventDataStore":
 		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "ListEventDataStores", "EventDataStore", []string{"EventDataStoreArn", "EventDataStore", "Arn"})
 	case "GetEventSelectors":
-		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "DescribeTrails", "TrailName", []string{"Name", "TrailName"})
+		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "DescribeTrails", "TrailName", []string{"TrailARN", "TrailArn", "Name", "TrailName"})
 	case "GetImport", "ListImportFailures":
 		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "ListImports", "ImportId", []string{"ImportId"})
 	case "GetInsightSelectors":
-		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "DescribeTrails", "TrailName", []string{"Name", "TrailName"})
+		return c.derivedInsightSelectorBodies(ctx, cfg)
 	case "GetResourcePolicy":
 		values, err := c.discoveredResourceARNs(ctx, cfg)
 		if err != nil {
@@ -220,7 +220,7 @@ func (c Connector) derivedActionBodies(ctx context.Context, cfg connectors.Runti
 		}
 		return validatedDerivedBodies(action, bodiesForValues("ResourceArn", values))
 	case "GetTrail", "GetTrailStatus":
-		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "DescribeTrails", "Name", []string{"Name", "TrailName"})
+		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "DescribeTrails", "Name", []string{"TrailARN", "TrailArn", "Name", "TrailName"})
 	case "ListTags":
 		values, err := c.discoveredTagResourceIDs(ctx, cfg)
 		if err != nil {
@@ -230,6 +230,20 @@ func (c Connector) derivedActionBodies(ctx context.Context, cfg connectors.Runti
 	default:
 		return nil, fmt.Errorf("aws-cloudtrail %s cannot derive required request fields", action)
 	}
+}
+
+func (c Connector) derivedInsightSelectorBodies(ctx context.Context, cfg connectors.RuntimeConfig) ([]map[string]any, error) {
+	trailValues, err := c.discoveryValues(ctx, cfg, "DescribeTrails", "TrailARN", "TrailArn", "Name", "TrailName")
+	if err != nil {
+		return nil, err
+	}
+	eventDataStoreValues, err := c.discoveryValues(ctx, cfg, "ListEventDataStores", "EventDataStoreArn", "EventDataStore", "Arn")
+	if err != nil {
+		return nil, err
+	}
+	bodies := bodiesForValues("TrailName", trailValues)
+	bodies = append(bodies, bodiesForValues("EventDataStore", eventDataStoreValues)...)
+	return validatedDerivedBodies("GetInsightSelectors", bodies)
 }
 
 func (c Connector) derivedBodiesFromDiscovery(ctx context.Context, cfg connectors.RuntimeConfig, action, discoveryAction, requestField string, keys []string) ([]map[string]any, error) {
