@@ -30,6 +30,9 @@ A worker assigned connector `<name>` owns:
   declarative and have no native dir)
 - `docs/connectors/<name>/**` — generated/validated connector docs
 - `internal/connectors/native/<name>/*_test.go` — red-first package tests
+- connector icon assets, only as resolved by `ConnectorIconOwnerForPath`; see
+  `docs/migration/icon-registry-single-source.md` for which icon paths attribute to a connector
+  and which are rejected
 
 ## Rules
 

@@ -389,7 +389,9 @@ Adding a connector is the highest-leverage contribution. The pattern:
    Run `PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate` to seed icons from an upstream registry. If the seeded icon is stale,
    compare it against the vendor website or official documentation, replace the SVG under
    `docs/connectors/icons/`, and update the icon entry in `internal/connectors/icon_data.json`
-   with `review_status` set to `official_verified` or `manual_override`.
+   with `review_status` set to `official_verified` or `manual_override`. Registry keys are bare
+   connector identifiers — `source-*`/`destination-*` keys are rejected — and every connector needs
+   its own entry; see `docs/migration/icon-registry-single-source.md`.
 6. **Validate and regenerate generated sets** — `go run ./cmd/connectorgen validate internal/connectors/defs`
    must report zero findings. Run `go run ./cmd/connectorgen gen` if hook/native package sets
    changed, then `make verify`.

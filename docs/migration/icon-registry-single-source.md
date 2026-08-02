@@ -9,6 +9,7 @@ Canonical SVG assets live under `docs/connectors/icons/**`. Website assets under
 ## Consumer contract
 
 - Go runtime lookup is exact bare-key lookup through `ConnectorIconFor`; it does not synthesize or strip `source-*`/`destination-*` fallbacks.
+- Go registry construction enforces coverage: `Registry.MustValidateIconCoverage` aborts when a compiled connector has no registry row, and `MetadataWithIcon` no longer synthesizes an implicit `pm-sample` fallback icon. An implemented connector with no upstream asset instead gets an explicit generated row pointing at `icons/pm-sample.svg` with `fallback_disposition: reviewed-polymetrics-sample-fallback`, so the fallback is visible registry state rather than an invisible runtime default.
 - Website bundle generation reads only `internal/connectors/icon_data.json` and fails if an implemented connector lacks a canonical registry entry.
 - `website/scripts/fetch-simple-icons.mjs` reads Simple Icons fetch metadata from the canonical registry and writes refreshed SVGs into `docs/connectors/icons/simple-icons/**`; website generation then copies those assets to `website/public/connectors/icons/simple-icons/**`.
 - Connector icon ownership helpers map both `docs/connectors/icons/**` source assets and `website/public/connectors/icons/**` generated copies back to the same canonical bare connector. Ambiguous shared fallback paths, orphan paths, duplicate changed paths, and undeclared icon paths are rejected instead of authorizing connector ownership.
