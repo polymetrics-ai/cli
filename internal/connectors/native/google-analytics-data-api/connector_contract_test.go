@@ -190,6 +190,46 @@ func TestOperationDirectReadFixtureCoversImplementedOperations(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadRejectsNonNumericPropertyIDs(t *testing.T) {
+	ctx := context.Background()
+	reader := New()
+	tests := []struct {
+		name string
+		req  connectors.OperationDirectReadRequest
+	}{
+		{
+			name: "path param",
+			req: connectors.OperationDirectReadRequest{
+				Operation:  "google-analytics-data-api.get_metadata",
+				PathParams: map[string]string{"property_id": "properties/notnumeric"},
+				Config:     connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture", "property_ids": "123456"}},
+			},
+		},
+		{
+			name: "config property id fallback",
+			req: connectors.OperationDirectReadRequest{
+				Operation: "google-analytics-data-api.get_metadata",
+				Config:    connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture", "property_id": "notnumeric", "property_ids": "123456"}},
+			},
+		},
+		{
+			name: "config property ids fallback",
+			req: connectors.OperationDirectReadRequest{
+				Operation: "google-analytics-data-api.get_metadata",
+				Config:    connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture", "property_ids": "properties/notnumeric 123456"}},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := reader.OperationDirectRead(ctx, tt.req)
+			if err == nil || !strings.Contains(err.Error(), "property id must be numeric") {
+				t.Fatalf("OperationDirectRead error = %v, want numeric property id rejection", err)
+			}
+		})
+	}
+}
+
 func TestOperationDirectReadLiveUsesFixedGETEndpoints(t *testing.T) {
 	ctx := context.Background()
 	seen := map[string]bool{}

@@ -255,14 +255,18 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 	if !implementedDirectOperations[req.Operation] {
 		return connectors.DirectReadResult{}, fmt.Errorf("google-analytics-data-api operation %q is not executable in this connector slice: %w", req.Operation, connectors.ErrUnsupportedOperation)
 	}
-	req = normalizeOperationDirectReadRequest(req)
+	var err error
+	req, err = normalizeOperationDirectReadRequest(req)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	if fixtureMode(req.Config) {
 		return operationFixture(ctx, req)
 	}
 	return engine.OperationDirectRead(ctx, c.bundleOrLoad(), req, nil)
 }
 
-func normalizeOperationDirectReadRequest(req connectors.OperationDirectReadRequest) connectors.OperationDirectReadRequest {
+func normalizeOperationDirectReadRequest(req connectors.OperationDirectReadRequest) (connectors.OperationDirectReadRequest, error) {
 	req.PathParams = cloneStringMap(req.PathParams)
 	req.Config.Config = cloneStringMap(req.Config.Config)
 	req.Config.Secrets = cloneStringMap(req.Config.Secrets)
@@ -275,17 +279,44 @@ func normalizeOperationDirectReadRequest(req connectors.OperationDirectReadReque
 	if token := gaSecret(req.Config); strings.TrimSpace(token) != "" {
 		req.Config.Secrets["access_token"] = token
 	}
-	if req.PathParams["property_id"] == "" {
-		if property := firstNonEmpty(req.Config.Config["property_id"], firstPropertyID(req.Config.Config["property_ids"])); property != "" {
-			req.PathParams["property_id"] = strings.TrimPrefix(property, "properties/")
-		}
+	propertyID, ok, err := gaOperationDirectReadPropertyID(req)
+	if err != nil {
+		return req, err
+	}
+	if ok {
+		req.PathParams["property_id"] = propertyID
 	}
 	if req.PathParams["audience_export_id"] == "" {
 		if id := firstNonEmpty(req.Config.Config["audience_export_id"], req.Config.Config["audienceExportsId"]); id != "" {
 			req.PathParams["audience_export_id"] = strings.TrimPrefix(id, "audienceExports/")
 		}
 	}
-	return req
+	return req, nil
+}
+
+func gaOperationDirectReadPropertyID(req connectors.OperationDirectReadRequest) (string, bool, error) {
+	if raw := strings.TrimSpace(req.PathParams["property_id"]); raw != "" {
+		property, err := normalizeGAPropertyID(raw, "path property_id")
+		if err != nil {
+			return "", false, err
+		}
+		return property, true, nil
+	}
+	if raw := strings.TrimSpace(req.Config.Config["property_id"]); raw != "" {
+		property, err := normalizeGAPropertyID(raw, "config property_id")
+		if err != nil {
+			return "", false, err
+		}
+		return property, true, nil
+	}
+	if raw := strings.TrimSpace(req.Config.Config["property_ids"]); raw != "" {
+		property, err := normalizeGAPropertyID(raw, "config property_ids")
+		if err != nil {
+			return "", false, err
+		}
+		return property, true, nil
+	}
+	return "", false, nil
 }
 
 func cloneStringMap(in map[string]string) map[string]string {
@@ -501,17 +532,20 @@ func gaPropertyID(cfg connectors.RuntimeConfig) (string, error) {
 	if raw == "" {
 		return "", errors.New("google-analytics-data-api connector requires config property_ids")
 	}
-	// property_ids may be a comma/space separated list; take the first entry.
+	return normalizeGAPropertyID(raw, "config property_ids")
+}
+
+func normalizeGAPropertyID(raw, field string) (string, error) {
+	raw = strings.TrimSpace(raw)
 	for _, sep := range []string{",", " ", "\n"} {
 		if i := strings.IndexAny(raw, sep); i >= 0 {
 			raw = raw[:i]
 			break
 		}
 	}
-	raw = strings.TrimSpace(raw)
-	raw = strings.TrimPrefix(raw, "properties/")
+	raw = strings.TrimSpace(strings.TrimPrefix(raw, "properties/"))
 	if raw == "" {
-		return "", errors.New("google-analytics-data-api config property_ids is empty")
+		return "", fmt.Errorf("google-analytics-data-api %s is empty", field)
 	}
 	for _, r := range raw {
 		if r < '0' || r > '9' {
@@ -592,20 +626,6 @@ func fixtureMode(cfg connectors.RuntimeConfig) bool {
 		return false
 	}
 	return strings.EqualFold(strings.TrimSpace(cfg.Config["mode"]), "fixture")
-}
-
-func firstPropertyID(raw string) string {
-	raw = strings.TrimSpace(raw)
-	if raw == "" {
-		return ""
-	}
-	for _, sep := range []string{",", " ", "\n"} {
-		if i := strings.IndexAny(raw, sep); i >= 0 {
-			raw = raw[:i]
-			break
-		}
-	}
-	return strings.TrimSpace(raw)
 }
 
 func firstNonEmpty(values ...string) string {
