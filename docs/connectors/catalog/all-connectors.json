@@ -10153,7 +10153,8 @@
         "kind": "custom",
         "method": "POST",
         "path": "/candidate.anonymize",
-        "risk": "Executes Ashby candidate.anonymize through the documented POST /candidate.anonymize endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby candidate.anonymize through the documented POST /candidate.anonymize endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
       },
       {
         "name": "remove_candidate_project",

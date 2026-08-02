@@ -1067,7 +1067,8 @@
       "risk": "Executes Ashby candidate.anonymize through the documented POST /candidate.anonymize endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "redact_fields": [
         "candidateId"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "remove_candidate_project",

@@ -77,6 +77,42 @@ func TestValidateWriteAndDryRun(t *testing.T) {
 	}
 }
 
+func TestAnonymizeCandidateRequiresDestructiveConfirmation(t *testing.T) {
+	def := New().(connectors.DefinitionProvider).Definition()
+	for _, action := range def.WriteActions {
+		if action.Name != "anonymize_candidate" {
+			continue
+		}
+		if action.Confirm != "destructive" {
+			t.Fatalf("anonymize_candidate confirm = %q, want destructive", action.Confirm)
+		}
+		return
+	}
+	t.Fatal("anonymize_candidate write action not found")
+}
+
+func TestCommandSurfaceDocumentsSignedURLPreservation(t *testing.T) {
+	surface := New().(connectors.CommandSurfaceProvider).CommandSurface()
+	want := map[string]bool{"notetaker-transcript info": false, "file info": false}
+	for _, cmd := range surface.Commands {
+		if _, ok := want[cmd.Path]; !ok {
+			continue
+		}
+		if cmd.OutputPolicy != "json_redacted" {
+			t.Fatalf("command %q output policy = %q, want json_redacted", cmd.Path, cmd.OutputPolicy)
+		}
+		if !strings.Contains(cmd.Risk, "signed URL fields are preserved") {
+			t.Fatalf("command %q risk = %q, want signed URL preservation", cmd.Path, cmd.Risk)
+		}
+		want[cmd.Path] = true
+	}
+	for path, found := range want {
+		if !found {
+			t.Fatalf("command %q not found", path)
+		}
+	}
+}
+
 func TestValidateWriteAcceptsCustomFieldValueUnion(t *testing.T) {
 	validator := New().(connectors.WriteValidator)
 	cfg := connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://api.ashbyhq.com"}}
@@ -289,7 +325,7 @@ func TestReadUsesStateAsLowerBoundNotPageCursor(t *testing.T) {
 			if _, ok := body["cursor"]; ok {
 				t.Errorf("first request cursor = %v, want no Ashby page cursor from saved state", body["cursor"])
 			}
-			_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"old","updatedAt":"2026-01-01T00:00:00Z"},{"id":"new","updatedAt":"2026-01-03T00:00:00Z"}],"moreDataAvailable":true,"nextCursor":"opaque-page-2"}`))
+			_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"old","updatedAt":"2026-01-01T00:00:00Z"},{"id":"equal","updatedAt":"2026-01-02T00:00:00Z"},{"id":"new","updatedAt":"2026-01-03T00:00:00Z"}],"moreDataAvailable":true,"nextCursor":"opaque-page-2"}`))
 		case 2:
 			if got := body["cursor"]; got != "opaque-page-2" {
 				t.Errorf("second request cursor = %v, want opaque-page-2", got)
@@ -368,5 +404,138 @@ func TestOperationDirectReadUsesFixedSearchPath(t *testing.T) {
 	}
 	if result.Status != http.StatusOK {
 		t.Fatalf("status = %d, want 200", result.Status)
+	}
+}
+
+func TestOperationDirectReadRejectsEmptyJobSearch(t *testing.T) {
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		t.Fatalf("unexpected provider request %s", r.URL.Path)
+	}))
+	defer server.Close()
+
+	reader := New().(connectors.OperationDirectReader)
+	_, err := reader.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "ashby.direct.job.search",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+		Body:         map[string]any{},
+		OutputPolicy: "json_redacted",
+		MaxBytes:     1 << 20,
+	})
+	if err == nil || !strings.Contains(err.Error(), "minProperties") {
+		t.Fatalf("OperationDirectRead empty job.search error = %v, want minProperties", err)
+	}
+	if requestCount != 0 {
+		t.Fatalf("provider request count = %d, want 0", requestCount)
+	}
+}
+
+func TestReadInfoStreamsRequireOneDocumentedSelector(t *testing.T) {
+	tests := []struct {
+		name       string
+		stream     string
+		wantFields string
+	}{
+		{name: "application info", stream: "application_info", wantFields: "applicationId, submittedFormInstanceId"},
+		{name: "candidate info", stream: "candidate_info", wantFields: "id, externalMappingId"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			requestCount := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				requestCount++
+				t.Fatalf("unexpected provider request %s", r.URL.Path)
+			}))
+			defer server.Close()
+
+			err := New().Read(context.Background(), connectors.ReadRequest{
+				Stream: tt.stream,
+				Config: connectors.RuntimeConfig{
+					Config:  map[string]string{"base_url": server.URL, "max_pages": "1"},
+					Secrets: map[string]string{"api_key": "test_key"},
+				},
+			}, func(record connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), tt.wantFields) {
+				t.Fatalf("Read(%s) error = %v, want required selector %s", tt.stream, err, tt.wantFields)
+			}
+			if requestCount != 0 {
+				t.Fatalf("provider request count = %d, want 0", requestCount)
+			}
+		})
+	}
+}
+
+func TestOperationDirectReadPreservesAshbySignedURLs(t *testing.T) {
+	const transcriptURL = "https://download.example.invalid/transcripts/interview_fixture.json?expires=1893456000&transcript_id=nt_fixture&signature=sanitized"
+	const fileURL = "https://download.example.invalid/files/resume_fixture.pdf?expires=1893456000&file_id=file_fixture&signature=sanitized"
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/notetakerTranscript.info":
+			if body["notetakerTranscriptId"] != "nt_fixture" {
+				t.Fatalf("body[notetakerTranscriptId] = %v, want nt_fixture", body["notetakerTranscriptId"])
+			}
+			_, _ = w.Write([]byte(`{"success":true,"results":{"transcriptUrl":"` + transcriptURL + `","apiToken":"synthetic-response-token"}}`))
+		case "/file.info":
+			if body["fileHandle"] != "file_fixture" {
+				t.Fatalf("body[fileHandle] = %v, want file_fixture", body["fileHandle"])
+			}
+			_, _ = w.Write([]byte(`{"success":true,"results":{"url":"` + fileURL + `","mimeType":"application/pdf","apiToken":"synthetic-response-token"}}`))
+		default:
+			t.Fatalf("path = %q, want Ashby signed URL direct-read endpoint", r.URL.Path)
+		}
+	}))
+	defer server.Close()
+
+	tests := []struct {
+		name      string
+		operation string
+		body      map[string]any
+		field     string
+		wantURL   string
+	}{
+		{name: "notetaker transcript", operation: "ashby.direct.notetaker.transcript.info", body: map[string]any{"notetakerTranscriptId": "nt_fixture"}, field: "transcriptUrl", wantURL: transcriptURL},
+		{name: "file", operation: "ashby.direct.file.info", body: map[string]any{"fileHandle": "file_fixture"}, field: "url", wantURL: fileURL},
+	}
+	reader := New().(connectors.OperationDirectReader)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := reader.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+				Operation: tt.operation,
+				Config: connectors.RuntimeConfig{
+					Config:  map[string]string{"base_url": server.URL},
+					Secrets: map[string]string{"api_key": "test_key"},
+				},
+				Body:         tt.body,
+				OutputPolicy: "json_redacted",
+				MaxBytes:     1 << 20,
+			})
+			if err != nil {
+				t.Fatalf("OperationDirectRead: %v", err)
+			}
+			body, ok := result.Body.(map[string]any)
+			if !ok {
+				t.Fatalf("result body = %T, want object", result.Body)
+			}
+			results, ok := body["results"].(map[string]any)
+			if !ok {
+				t.Fatalf("results = %T, want object", body["results"])
+			}
+			if got := results[tt.field]; got != tt.wantURL {
+				t.Fatalf("results[%s] = %v, want %s", tt.field, got, tt.wantURL)
+			}
+			if _, ok := results["apiToken"]; ok || results["apiToken_redacted"] != true {
+				t.Fatalf("apiToken redaction = %+v, want credential field redacted", results)
+			}
+		})
 	}
 }

@@ -224,6 +224,18 @@ func ashbyStreamBody(endpoint streamEndpoint, cfg connectors.RuntimeConfig, quer
 			return nil, fmt.Errorf("ashby stream %s requires documented request field %q", endpoint.path, field)
 		}
 	}
+	if len(endpoint.requiredAnyFields) > 0 {
+		present := false
+		for _, field := range endpoint.requiredAnyFields {
+			if _, ok := body[field]; ok {
+				present = true
+				break
+			}
+		}
+		if !present {
+			return nil, fmt.Errorf("ashby stream %s requires one of documented request fields %s", endpoint.path, strings.Join(endpoint.requiredAnyFields, ", "))
+		}
+	}
 	return body, nil
 }
 
@@ -374,7 +386,7 @@ func ashbyPassesCursor(record connectors.Record, cursorField, lowerBound string)
 		return true
 	}
 	value := strings.TrimSpace(stringValue(record[cursorField]))
-	return value == "" || value >= lowerBound
+	return value == "" || value > lowerBound
 }
 
 func cloneMap(in map[string]any) map[string]any {

@@ -11,13 +11,14 @@ import (
 // public Ashby OpenAPI. Paths remain fixed constants; caller input can only
 // populate declared request fields.
 type streamEndpoint struct {
-	path            string
-	requestFields   map[string]string
-	requiredFields  []string
-	cursorField     string
-	syntheticFields []string
-	primaryKey      []string
-	fields          []connectors.Field
+	path              string
+	requestFields     map[string]string
+	requiredFields    []string
+	requiredAnyFields []string
+	cursorField       string
+	syntheticFields   []string
+	primaryKey        []string
+	fields            []connectors.Field
 }
 
 // ashbyStreams returns the connector's published stream catalog. The field
