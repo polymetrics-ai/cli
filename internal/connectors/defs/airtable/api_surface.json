@@ -706,8 +706,13 @@
     {
       "method": "POST",
       "path": "/v0/{baseId}/{recordId}/{attachmentFieldIdOrName}/uploadAttachment",
-      "covered_by": {
-        "write": "upload_attachment"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked on airtable-bounded-base64-upload-foundation until an Airtable-owned executor validates official base64 encoding and decoded-size bounds before transmission",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
       }
     },
     {
