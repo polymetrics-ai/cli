@@ -37,8 +37,7 @@ When connector migration work adds or changes a CLI-visible connector surface, c
 ## Rules
 
 - Assign exactly one target connector per implementation agent.
-- Keep writes scoped to the target connector paths declared in the issue or handoff.
-- Do not edit shared/generated files unless the issue explicitly authorizes it.
+- Follow `ownership-rules.md` for coordinator-owned and worker-owned paths; connector lanes stay inside the declared target connector scope.
 - If connector implementation needs shared runtime/tooling, schema, generated-index, or unrelated connector changes, stop and create/link a separate foundation issue/PR before proceeding.
 - Record ownership guard evidence, changed-path compliance, target connector scope, and any foundation PR path in the worker handoff and PR body.
 - Do not commit from migration agents; the coordinator owns commits and merge validation.

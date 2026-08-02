@@ -8,7 +8,7 @@
 - Branch: `fix/3583-pm-no-mistakes-connector-lane`
 - Base branch: `fix/3579-connector-path-ownership-guardrails`
 - Spawn decision for this worker: `spawned`
-- Write scope: `.agents/agentic-delivery/**`, `.agents/connector-migration/**` instructions if needed, `.pi/prompts/**`, `.pi/agents/**`, `.github/ISSUE_TEMPLATE/**`, `.github/PULL_REQUEST_TEMPLATE*`, repo no-mistakes guidance/config if present, and this worker artifact directory only.
+- Write scope: `.agents/agentic-delivery/**`, `.agents/connector-migration/**` instructions if needed, `.pi/prompts/**`, `.pi/agents/**`, `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md`, repo no-mistakes guidance/config if present, and this worker artifact directory only.
 
 ## GSD mode
 
