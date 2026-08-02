@@ -14,10 +14,10 @@ import (
 
 const maxDirectReadBytes = 16 << 20
 
-func emitActionRecords(action string, decoded map[string]any, emit func(connectors.Record) error) error {
+func emitActionRecords(action string, decoded map[string]any, requestBody map[string]any, emit func(connectors.Record) error) error {
 	records := recordsForAction(action, decoded)
 	for _, record := range records {
-		stampRecord(action, record)
+		stampRecord(action, record, requestBody)
 		if err := emit(record); err != nil {
 			return err
 		}
@@ -64,23 +64,122 @@ func recordFromValue(value any) connectors.Record {
 	return connectors.Record{"value": value}
 }
 
-func stampRecord(action string, record connectors.Record) {
+func stampRecord(action string, record connectors.Record, requestBody map[string]any) {
 	if _, ok := record["operation"]; !ok {
 		record["operation"] = action
 	}
 	if _, ok := record["pm_record_id"]; ok {
 		return
 	}
-	for _, key := range []string{"Name", "TrailARN", "TrailArn", "TrailName", "ChannelArn", "Channel", "DashboardId", "DashboardArn", "EventDataStoreArn", "EventDataStore", "Arn", "EventId", "QueryId", "ImportId", "ResourceId", "ResourceARN"} {
-		if value, ok := stringAt(map[string]any(record), key); ok && strings.TrimSpace(value) != "" {
-			record["pm_record_id"] = value
-			return
+	if value, ok := firstIdentityValue(map[string]any(record), recordIdentityKeys()); ok {
+		record["pm_record_id"] = value
+		return
+	}
+	if value, ok := requestScopedRecordID(action, record, requestBody); ok {
+		record["pm_record_id"] = value
+		return
+	}
+	record["pm_record_id"] = hashedRecordID(action, record, nil)
+}
+
+type identityPart struct {
+	Field string `json:"field"`
+	Value string `json:"value"`
+}
+
+func recordIdentityKeys() []string {
+	return []string{"Name", "TrailARN", "TrailArn", "TrailName", "ChannelArn", "Channel", "DashboardId", "DashboardArn", "EventDataStoreArn", "EventDataStore", "Arn", "EventId", "QueryId", "ImportId", "ResourceId", "ResourceARN", "ResourceArn"}
+}
+
+func requestIdentityKeys() []string {
+	return []string{"Name", "TrailName", "Channel", "DashboardId", "EventDataStore", "ImportId", "ResourceArn", "ResourceId", "ResourceIdList", "QueryId"}
+}
+
+func requestScopedRecordKeys() []string {
+	return []string{"Location"}
+}
+
+func firstIdentityValue(obj map[string]any, keys []string) (string, bool) {
+	for _, key := range keys {
+		if value, ok := identityString(obj, key); ok {
+			return value, true
 		}
 	}
-	encoded, _ := json.Marshal(record)
+	return "", false
+}
+
+func requestScopedRecordID(action string, record connectors.Record, requestBody map[string]any) (string, bool) {
+	parts := requestIdentityParts(requestBody)
+	if len(parts) == 0 {
+		return "", false
+	}
+	if !isCollectionAction(action) {
+		return identityPartsString(parts), true
+	}
+	if value, ok := firstIdentityValue(map[string]any(record), requestScopedRecordKeys()); ok {
+		parts = append(append([]identityPart(nil), parts...), identityPart{Field: "Location", Value: value})
+		return identityPartsString(parts), true
+	}
+	return hashedRecordID(action, record, parts), true
+}
+
+func requestIdentityParts(requestBody map[string]any) []identityPart {
+	if len(requestBody) == 0 {
+		return nil
+	}
+	var parts []identityPart
+	for _, key := range requestIdentityKeys() {
+		if value, ok := identityString(requestBody, key); ok {
+			parts = append(parts, identityPart{Field: key, Value: value})
+		}
+	}
+	return parts
+}
+
+func identityPartsString(parts []identityPart) string {
+	if len(parts) == 1 {
+		return parts[0].Value
+	}
+	values := make([]string, 0, len(parts))
+	for _, part := range parts {
+		values = append(values, part.Field+"="+part.Value)
+	}
+	return strings.Join(values, "|")
+}
+
+func identityString(obj map[string]any, key string) (string, bool) {
+	value, ok := obj[key]
+	if !ok || value == nil {
+		return "", false
+	}
+	switch value.(type) {
+	case string, json.Number:
+		stringValue, ok := stringAt(obj, key)
+		if !ok {
+			return "", false
+		}
+		stringValue = strings.TrimSpace(stringValue)
+		return stringValue, stringValue != ""
+	default:
+		encoded, err := json.Marshal(value)
+		if err != nil {
+			stringValue := strings.TrimSpace(fmt.Sprint(value))
+			return stringValue, stringValue != ""
+		}
+		stringValue := strings.TrimSpace(string(encoded))
+		return stringValue, stringValue != "" && stringValue != "null"
+	}
+}
+
+func hashedRecordID(action string, record connectors.Record, requestParts []identityPart) string {
+	payload := map[string]any{"record": map[string]any(record)}
+	if len(requestParts) > 0 {
+		payload["request"] = requestParts
+	}
+	encoded, _ := json.Marshal(payload)
 	h := fnv.New64a()
 	_, _ = h.Write(encoded)
-	record["pm_record_id"] = fmt.Sprintf("%s:%x", action, h.Sum64())
+	return fmt.Sprintf("%s:%x", action, h.Sum64())
 }
 
 func stringAt(obj map[string]any, key string) (string, bool) {

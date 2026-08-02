@@ -170,7 +170,7 @@ func (c Connector) emitActionBody(ctx context.Context, cfg connectors.RuntimeCon
 		if err := decodeJSON(resp.Body, &decoded); err != nil {
 			return fmt.Errorf("decode aws-cloudtrail %s response: %w", action, err)
 		}
-		if err := emitActionRecords(action, decoded, emit); err != nil {
+		if err := emitActionRecords(action, decoded, body, emit); err != nil {
 			return err
 		}
 		next, _ := stringAt(decoded, "NextToken")
@@ -353,11 +353,15 @@ func shouldSkipDerivedActionError(action string, err error) bool {
 	if !errors.As(err, &httpErr) {
 		return false
 	}
-	if action != "GetResourcePolicy" {
+	body := strings.ToLower(httpErr.Body)
+	switch action {
+	case "GetResourcePolicy":
+		return httpErr.Status == 404 || strings.Contains(body, "notfound") || strings.Contains(body, "not found")
+	case "GetInsightSelectors":
+		return httpErr.Status == http.StatusBadRequest && (strings.Contains(body, "insightnotenabledexception") || strings.Contains(body, "insight not enabled") || strings.Contains(body, "insights not enabled"))
+	default:
 		return false
 	}
-	body := strings.ToLower(httpErr.Body)
-	return httpErr.Status == 404 || strings.Contains(body, "notfound") || strings.Contains(body, "not found")
 }
 
 // OperationDirectRead rejects provider query/lookup operations until shared
