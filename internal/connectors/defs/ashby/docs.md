@@ -20,7 +20,7 @@ Authentication uses Ashby's documented HTTP Basic API-key flow: the API key is t
 
 ## Streams notes
 
-Ashby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.
+Ashby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when generated stream metadata explicitly declares an incremental cursor.
 
 ## Write actions & risks
 

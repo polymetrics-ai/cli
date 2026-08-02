@@ -138,11 +138,7 @@
         "path": "results"
       },
       "schema": "schemas/application_list_history.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "enteredStageAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "application_list_criteria_evaluations",

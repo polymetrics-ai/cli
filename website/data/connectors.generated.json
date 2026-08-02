@@ -13359,8 +13359,8 @@
         "primary_key": [
           "id"
         ],
-        "cursor": "enteredStageAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "application_list_criteria_evaluations",
@@ -15416,7 +15416,8 @@
               "summary": "The id of the application to fetch.",
               "values": [],
               "maps_to": "query.applicationId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -15441,7 +15442,8 @@
               "summary": "The id of the application to fetch criteria evaluations for.",
               "values": [],
               "maps_to": "query.applicationId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -15720,7 +15722,7 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
@@ -16122,7 +16124,8 @@
               "summary": "The id of the candidate to fetch client info for",
               "values": [],
               "maps_to": "query.candidateId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -16147,7 +16150,8 @@
               "summary": "The id of the candidate to fetch fraud checks for",
               "values": [],
               "maps_to": "query.candidateId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -16208,7 +16212,8 @@
               "summary": "The id of the candidate to fetch notes for",
               "values": [],
               "maps_to": "query.candidateId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -16511,7 +16516,8 @@
               "summary": "The id of the candidate to fetch projects for",
               "values": [],
               "maps_to": "query.candidateId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -16710,7 +16716,8 @@
               "summary": "The unique id of the feedback form you'd like to fetch.",
               "values": [],
               "maps_to": "query.feedbackFormDefinitionId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -16790,7 +16797,8 @@
               "summary": "The id of the job posting to return",
               "values": [],
               "maps_to": "query.jobPostingId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "job-board-id",
@@ -17010,7 +17018,8 @@
               "summary": "The id of the job to fetch",
               "values": [],
               "maps_to": "query.id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "include-unpublished-job-postings-ids",
@@ -17277,7 +17286,7 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
@@ -17350,7 +17359,8 @@
               "summary": "The id of the job to fetch an interview plan for",
               "values": [],
               "maps_to": "query.jobId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -17490,7 +17500,8 @@
               "summary": "The unique id of the department whose details will be fetched",
               "values": [],
               "maps_to": "query.departmentId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -17763,7 +17774,8 @@
               "summary": "The id of the location to fetch",
               "values": [],
               "maps_to": "query.locationId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -17972,7 +17984,8 @@
               "summary": "The id of the interview plan to list stages for",
               "values": [],
               "maps_to": "query.interviewPlanId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -18189,7 +18202,8 @@
               "summary": "The id of the offer to fetch",
               "values": [],
               "maps_to": "query.offerId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "exclude-form-definition",
@@ -18435,7 +18449,8 @@
               "summary": "The id of the opening",
               "values": [],
               "maps_to": "query.openingId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -18892,7 +18907,7 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
@@ -18912,7 +18927,8 @@
               "summary": "The id of the project",
               "values": [],
               "maps_to": "query.projectId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -18968,7 +18984,7 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
@@ -19251,7 +19267,8 @@
               "summary": "The id of the custom field to fetch",
               "values": [],
               "maps_to": "query.customFieldId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -19652,20 +19669,12 @@
           "write": "",
           "source_cli_path": "",
           "source_url": "https://developers.ashbyhq.com/reference/hiringteamrolelist",
-          "flags": [
-            {
-              "name": "names-only",
-              "type": "boolean",
-              "summary": "When set to true (the default), an array of role titles is returned. When set to false, an array of objects that include the id and title of the role is returned.",
-              "values": [],
-              "maps_to": "query.namesOnly"
-            }
-          ],
+          "flags": [],
           "examples": [],
           "output_policy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for hiringTeamRole.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for hiringTeamRole.list; defaults to namesOnly=true role-title results. namesOnly=false object results are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false."
         },
         {
           "path": "user info",
@@ -19683,7 +19692,8 @@
               "summary": "The unique identifier for the user",
               "values": [],
               "maps_to": "query.userId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -19715,7 +19725,7 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
@@ -19850,7 +19860,8 @@
               "summary": "The id of the user to list pauses for.",
               "values": [],
               "maps_to": "query.userId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -20135,7 +20146,7 @@
           ],
           "examples": [],
           "output_policy": "",
-          "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, approval, and execute are required.",
+          "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
           "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
@@ -20155,7 +20166,8 @@
               "summary": "The unique identifier for the sequence enrollment",
               "values": [],
               "maps_to": "query.sequenceId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -20279,7 +20291,8 @@
               "summary": "The unique identifier for the sequence template",
               "values": [],
               "maps_to": "query.sequenceTemplateId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -20529,7 +20542,8 @@
               "summary": "The id of the take-home assignment",
               "values": [],
               "maps_to": "query.takeHomeAssignmentId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "expand",
@@ -20561,7 +20575,8 @@
               "summary": "The unique ID of the interview schedule, for which to list interview events",
               "values": [],
               "maps_to": "query.interviewScheduleId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "expand",
@@ -20600,7 +20615,8 @@
               "summary": "The id of the interview event whose briefing should be returned.",
               "values": [],
               "maps_to": "query.interviewEventId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "expand",
@@ -20632,7 +20648,8 @@
               "summary": "The unique id of the interview whose details will be fetched",
               "values": [],
               "maps_to": "query.id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -20695,7 +20712,8 @@
               "summary": "The id of the interview stage to retrieve",
               "values": [],
               "maps_to": "query.interviewStageId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -20747,7 +20765,8 @@
               "summary": "The unique identifier of the survey form definition to fetch",
               "values": [],
               "maps_to": "query.surveyFormDefinitionId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -20830,7 +20849,8 @@
               "values": [
                 "CandidateExperience"
               ],
-              "maps_to": "query.surveyType"
+              "maps_to": "query.surveyType",
+              "required": true
             },
             {
               "name": "application-id",
@@ -20922,7 +20942,8 @@
                 "Questionnaire",
                 "HiringManagerExperience"
               ],
-              "maps_to": "query.surveyType"
+              "maps_to": "query.surveyType",
+              "required": true
             },
             {
               "name": "created-after",
@@ -21021,7 +21042,8 @@
               "summary": "The id of the webhook setting to retrieve",
               "values": [],
               "maps_to": "query.webhookId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -21150,7 +21172,8 @@
               "summary": "The id of the interviewer pool",
               "values": [],
               "maps_to": "query.interviewerPoolId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -21445,7 +21468,8 @@
               "summary": "The ID of the report",
               "values": [],
               "maps_to": "query.reportId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "include-headers-in-data",
@@ -21519,7 +21543,7 @@
         }
       ]
     },
-    "docs_md": "# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.\n\nCoverage summary:\n\n- REST operations in source: 185\n- OpenAPI webhook events in source: 27\n- Implemented ETL streams: 72\n- Implemented bounded direct reads/search/file metadata operations: 7\n- Implemented reverse-ETL write actions: 101\n- Reverse-ETL CLI commands with scalar flags: 91; partial nested-object flag surfaces: 10\n- Blocked/non-executable ledger rows: 32\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. The current wave is fixture/static validated only; no live Ashby credentials or provider calls were used.\n",
+    "docs_md": "# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.\n\nCoverage summary:\n\n- REST operations in source: 185\n- OpenAPI webhook events in source: 27\n- Implemented ETL streams: 72\n- Implemented bounded direct reads/search/file metadata operations: 7\n- Implemented reverse-ETL write actions: 101\n- Reverse-ETL CLI commands with scalar flags: 91; partial nested-object flag surfaces: 10\n- Blocked/non-executable ledger rows: 32\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when generated stream metadata explicitly declares an incremental cursor.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. `hiringTeamRole.list` defaults to `namesOnly=true`; the `namesOnly=false` object-result variant is blocked pending variant-schema foundation `ashby_hiring_team_role_list_names_only_false`. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.\n",
     "icon": {
       "id": "ashby",
       "path": "icons/ashby.svg",

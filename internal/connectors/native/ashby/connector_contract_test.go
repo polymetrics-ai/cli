@@ -506,6 +506,110 @@ func TestReadUsesTimeAwareRFC3339CursorOffsets(t *testing.T) {
 	}
 }
 
+func TestApplicationListHistoryIsPaginationOnly(t *testing.T) {
+	if fields := cursorFields(ashbyStreamEndpoints["application_list_history"]); len(fields) != 0 {
+		t.Fatalf("application_list_history cursor fields = %v, want pagination-only stream", fields)
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/application.listHistory" {
+			t.Fatalf("path = %q, want /application.listHistory", r.URL.Path)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		if got := body["applicationId"]; got != "application_fixture" {
+			t.Fatalf("body[applicationId] = %v, want application_fixture", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"old","enteredStageAt":"2026-01-01T00:00:00Z"},{"id":"new","enteredStageAt":"2026-01-03T00:00:00Z"}],"moreDataAvailable":false}`))
+	}))
+	defer server.Close()
+
+	var records []connectors.Record
+	err := New().Read(context.Background(), connectors.ReadRequest{
+		Stream: "application_list_history",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL, "max_pages": "1", "start_date": "2026-01-02T00:00:00Z"},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+		Query: map[string]string{"applicationId": "application_fixture"},
+		State: map[string]string{"cursor": "2026-01-02T00:00:00Z"},
+	}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	wantIDs := []string{"old", "new"}
+	if len(records) != len(wantIDs) {
+		t.Fatalf("emitted %d records = %+v, want ids %v", len(records), records, wantIDs)
+	}
+	for i, wantID := range wantIDs {
+		if got := records[i]["id"]; got != wantID {
+			t.Fatalf("record %d id = %v, want %s", i, got, wantID)
+		}
+	}
+}
+
+func TestCommandSurfaceMarksRequiredStreamSelectors(t *testing.T) {
+	surface := New().(connectors.CommandSurfaceProvider).CommandSurface()
+	commandsByStream := map[string]connectors.CommandSurfaceCommand{}
+	for _, cmd := range surface.Commands {
+		if cmd.Stream != "" {
+			commandsByStream[cmd.Stream] = cmd
+		}
+	}
+	for stream, endpoint := range ashbyStreamEndpoints {
+		for _, field := range endpoint.requiredFields {
+			cmd, ok := commandsByStream[stream]
+			if !ok {
+				t.Fatalf("stream command %s not found", stream)
+			}
+			mapsTo := "query." + field
+			found := false
+			for _, flag := range cmd.Flags {
+				if flag.MapsTo != mapsTo {
+					continue
+				}
+				found = true
+				if !flag.Required {
+					t.Fatalf("stream %s flag --%s required = false, want true", stream, flag.Name)
+				}
+			}
+			if !found {
+				t.Fatalf("stream %s missing CLI flag for %s", stream, mapsTo)
+			}
+		}
+	}
+}
+
+func TestAshbyResultRecordsRejectsErrorEnvelopes(t *testing.T) {
+	tests := []struct {
+		name    string
+		body    string
+		wantErr string
+	}{
+		{name: "false success", body: `{"success":false,"error":"fixture"}`, wantErr: "success=false"},
+		{name: "missing results", body: `{"success":true,"moreDataAvailable":false}`, wantErr: "missing results"},
+		{name: "malformed success", body: `{"success":"false","results":[]}`, wantErr: "success field must be boolean"},
+		{name: "malformed results", body: `{"success":true,"results":1}`, wantErr: "unsupported type"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, records, err := ashbyResultRecords([]byte(tt.body))
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("ashbyResultRecords error = %v, want %q", err, tt.wantErr)
+			}
+			if len(records) != 0 {
+				t.Fatalf("records = %+v, want none on error", records)
+			}
+		})
+	}
+}
+
 func TestCommandSurfaceDirectReadsDoNotRedactNonCredentialFields(t *testing.T) {
 	surface := New().(connectors.CommandSurfaceProvider).CommandSurface()
 	for _, cmd := range surface.Commands {

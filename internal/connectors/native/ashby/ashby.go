@@ -381,9 +381,18 @@ func ashbyResultRecords(body []byte) (map[string]any, []map[string]any, error) {
 	if err := json.Unmarshal(body, &decoded); err != nil {
 		return nil, nil, err
 	}
+	if rawSuccess, ok := decoded["success"]; ok {
+		success, ok := rawSuccess.(bool)
+		if !ok {
+			return nil, nil, errors.New("ashby response success field must be boolean")
+		}
+		if !success {
+			return nil, nil, errors.New("ashby response success=false")
+		}
+	}
 	results, ok := decoded["results"]
 	if !ok || results == nil {
-		return decoded, []map[string]any{decoded}, nil
+		return nil, nil, errors.New("ashby response missing results")
 	}
 	switch typed := results.(type) {
 	case []any:
@@ -399,7 +408,7 @@ func ashbyResultRecords(body []byte) (map[string]any, []map[string]any, error) {
 	case map[string]any:
 		return decoded, []map[string]any{typed}, nil
 	default:
-		return decoded, []map[string]any{{"value": typed}}, nil
+		return nil, nil, fmt.Errorf("ashby response results field has unsupported type %T", results)
 	}
 }
 

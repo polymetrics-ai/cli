@@ -69,7 +69,6 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - fields: id(), title()
 - application_list_history:
   - primary key: id
-  - cursor: enteredStageAt
   - fields: actorId(), allowedActions(), enteredStageAt(), id(), leftStageAt(), stageId(), stageNumber(), title()
 - application_list_criteria_evaluations:
   - primary key: id
@@ -787,10 +786,10 @@ Change the source of an application.
 **Also requires the `Allow updating application history?` s [intent=reverse_etl availability=implemented write=update_application_history]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --application-history-0-stage-id, --application-history-0-stage-number, --application-history-0-entered-stage-at
   - application list-history - Fetch a paginated list of application history items for an application.
 
-This endpoint supports pagination only (not incremental sync). See the [Pagination and  [intent=etl availability=implemented stream=application_list_history]; notes: Fixed Ashby stream for application.listHistory; flags map only to documented request body fields.; flags: --application-id
+This endpoint supports pagination only (not incremental sync). See the [Pagination and  [intent=etl availability=implemented stream=application_list_history]; notes: Fixed Ashby stream for application.listHistory; flags map only to documented request body fields.; flags: --application-id (required)
   - application list-criteria-evaluations - Fetch a paginated list of AI criteria evaluations for an application.
 
-This endpoint returns the AI-generated criteria evaluations that assess how well a candid [intent=etl availability=implemented stream=application_list_criteria_evaluations]; notes: Fixed Ashby stream for application.listCriteriaEvaluations; flags map only to documented request body fields.; flags: --application-id
+This endpoint returns the AI-generated criteria evaluations that assess how well a candid [intent=etl availability=implemented stream=application_list_criteria_evaluations]; notes: Fixed Ashby stream for application.listCriteriaEvaluations; flags map only to documented request body fields.; flags: --application-id (required)
   - application-feedback list - List all interview scorecards and feedback submissions associated with an application.
 
 Each feedback submission contains:
@@ -828,16 +827,16 @@ previously created via  [intent=reverse_etl availability=implemented write=uploa
 **Requires the [`candidatesWrite`](authentication#permissions-candidatecreatenote) permission.** [intent=reverse_etl availability=implemented write=create_candidate_note]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby candidate.createNote through the documented POST /candidate.createNote endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --note-type, --note-value, --send-notifications, --is-private, --created-at
   - candidate list-client-info - Lists client information records (IP, user agent) collected for a candidate.
 
-**Requires the [`candidatesRead`](authentication#permissions-candidatelistclientin [intent=etl availability=implemented stream=candidate_list_client_info]; notes: Fixed Ashby stream for candidate.listClientInfo; flags map only to documented request body fields.; flags: --candidate-id
+**Requires the [`candidatesRead`](authentication#permissions-candidatelistclientin [intent=etl availability=implemented stream=candidate_list_client_info]; notes: Fixed Ashby stream for candidate.listClientInfo; flags map only to documented request body fields.; flags: --candidate-id (required)
   - candidate list-fraud-checks - Lists the fraud checks performed on a candidate.
 
-**Requires the [`candidatesRead`](authentication#permissions-candidatelistfraudchecks) permission.** [intent=etl availability=implemented stream=candidate_list_fraud_checks]; notes: Fixed Ashby stream for candidate.listFraudChecks; flags map only to documented request body fields.; flags: --candidate-id
+**Requires the [`candidatesRead`](authentication#permissions-candidatelistfraudchecks) permission.** [intent=etl availability=implemented stream=candidate_list_fraud_checks]; notes: Fixed Ashby stream for candidate.listFraudChecks; flags map only to documented request body fields.; flags: --candidate-id (required)
   - candidate set-fraud-status - Updates the manual fraud-review status of a candidate.
 
 **Requires the [`candidatesWrite`](authentication#permissions-candidatesetfraudstatus) permission.** [intent=reverse_etl availability=implemented write=set_candidate_fraud_status]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby candidate.setFraudStatus through the documented POST /candidate.setFraudStatus endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --fraud-status
   - candidate list-notes - Lists the notes that have been added to a candidate.
 
-**Requires the [`candidatesRead`](authentication#permissions-candidatelistnotes) permission.** [intent=etl availability=implemented stream=candidate_list_notes]; notes: Fixed Ashby stream for candidate.listNotes; flags map only to documented request body fields.; flags: --candidate-id
+**Requires the [`candidatesRead`](authentication#permissions-candidatelistnotes) permission.** [intent=etl availability=implemented stream=candidate_list_notes]; notes: Fixed Ashby stream for candidate.listNotes; flags map only to documented request body fields.; flags: --candidate-id (required)
   - candidate anonymize - Anonymizes a candidate's personally identifiable information.
 
 **Requires the [`candidatesWrite`](authentication#permissions-candidateanonymize) permission.** [intent=reverse_etl availability=implemented write=anonymize_candidate]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby candidate.anonymize through the documented POST /candidate.anonymize endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id
@@ -858,7 +857,7 @@ previously created via  [intent=reverse_etl availability=implemented write=uploa
 **Requires the [`candidatesWrite`](authentication#permissions-candidateremovetag) permission.** [intent=reverse_etl availability=implemented write=remove_candidate_tag]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby candidate.removeTag through the documented POST /candidate.removeTag endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --tag-id
   - candidate list-projects - Lists the projects a candidate has been added to.
 
-**Requires the [`candidatesRead`](authentication#permissions-candidatelistprojects) permission.** [intent=etl availability=implemented stream=candidate_list_projects]; notes: Fixed Ashby stream for candidate.listProjects; flags map only to documented request body fields.; flags: --candidate-id
+**Requires the [`candidatesRead`](authentication#permissions-candidatelistprojects) permission.** [intent=etl availability=implemented stream=candidate_list_projects]; notes: Fixed Ashby stream for candidate.listProjects; flags map only to documented request body fields.; flags: --candidate-id (required)
   - candidate push-to-hris - > Beta
 >
 > This feature is in beta and may not be available for all organizations.
@@ -887,13 +886,13 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examp [intent=etl availability=implemented stream=feedback_form_definition_list]; notes: Fixed Ashby stream for feedbackFormDefinition.list; flags map only to documented request body fields.; flags: --include-archived
   - feedback-form-definition info - Returns a single feedback form by id
 
-**Requires the [`hiringProcessMetadataRead`](authentication#permissions-feedbackformdefinitioninfo) permission.** [intent=etl availability=implemented stream=feedback_form_definition_info]; notes: Fixed Ashby stream for feedbackFormDefinition.info; flags map only to documented request body fields.; flags: --feedback-form-definition-id
+**Requires the [`hiringProcessMetadataRead`](authentication#permissions-feedbackformdefinitioninfo) permission.** [intent=etl availability=implemented stream=feedback_form_definition_info]; notes: Fixed Ashby stream for feedbackFormDefinition.info; flags map only to documented request body fields.; flags: --feedback-form-definition-id (required)
   - job-posting list - Lists published job postings. By default, only published job postings are returned.
 
 Set `includeUnpublishedJobPostings` to `true` to also include unpublished ( [intent=etl availability=implemented stream=job_posting_list]; notes: Fixed Ashby stream for jobPosting.list; flags map only to documented request body fields.; flags: --location, --department, --listed-only, --include-unpublished-job-postings, --job-board-id
   - job-posting info - Retrieve an individual job posting.
 
-Set `includeUnpublishedJobPostings` to `true` when fetching an unpublished (draft) job posting. This flag is required for d [intent=etl availability=implemented stream=job_posting_info]; notes: Fixed Ashby stream for jobPosting.info; flags map only to documented request body fields.; flags: --job-posting-id, --job-board-id, --include-unpublished-job-postings, --expand
+Set `includeUnpublishedJobPostings` to `true` when fetching an unpublished (draft) job posting. This flag is required for d [intent=etl availability=implemented stream=job_posting_info]; notes: Fixed Ashby stream for jobPosting.info; flags map only to documented request body fields.; flags: --job-posting-id (required), --job-board-id, --include-unpublished-job-postings, --expand
   - job-posting update-compensation - Updates compensation for an existing job posting.
 
 Set `includeUnpublishedJobPostings` to `true` when updating an unpublished (draft) job posting. This flag is  [intent=reverse_etl availability=implemented write=update_job_posting_compensation]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby jobPosting.updateCompensation through the documented POST /jobPosting.updateCompensation endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --job-posting-id, --compensation-tiers-0-components-0-compensation-type, --compensation-tiers-0-components-0-interval, --include-unpublished-job-postings
@@ -905,7 +904,7 @@ Set `includeUnpublishedJobPostings` to `true` when updating an unpublished (draf
 Set `status` to `Published` to publish a draft job posting. The posting must  [intent=reverse_etl availability=implemented write=set_job_posting_status]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby jobPosting.setStatus through the documented POST /jobPosting.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --job-posting-id, --status
   - job info - Fetches details of a single job by id.
 
-**Requires the [`jobsRead`](authentication#permissions-jobinfo) permission.** [intent=etl availability=implemented stream=job_info]; notes: Fixed Ashby stream for job.info; flags map only to documented request body fields.; flags: --id, --include-unpublished-job-postings-ids, --expand
+**Requires the [`jobsRead`](authentication#permissions-jobinfo) permission.** [intent=etl availability=implemented stream=job_info]; notes: Fixed Ashby stream for job.info; flags map only to documented request body fields.; flags: --id (required), --include-unpublished-job-postings-ids, --expand
   - job create - Creates a new job.
 
 **Requires the [`jobsWrite`](authentication#permissions-jobcreate) permission.** [intent=reverse_etl availability=implemented write=create_job]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby job.create through the documented POST /job.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --title, --team-id, --location-id, --default-interview-plan-id, --job-template-id, --employment-type, --brand-id
@@ -926,7 +925,7 @@ Set `status` to `Published` to publish a draft job posting. The posting must  [i
 **Requires the [`jobsRead`](authentication#permissions-jobboardlist) permission.** [intent=etl availability=implemented stream=job_board_list]; notes: Fixed Ashby stream for jobBoard.list; flags map only to documented request body fields.
   - job-interview-plan info - Returns a job's interview plan, including activities and interviews that need to be scheduled at each stage.
 
-**Requires the [`jobsRead`](authentication#permiss [intent=etl availability=implemented stream=job_interview_plan_info]; notes: Fixed Ashby stream for jobInterviewPlan.info; flags map only to documented request body fields.; flags: --job-id
+**Requires the [`jobsRead`](authentication#permiss [intent=etl availability=implemented stream=job_interview_plan_info]; notes: Fixed Ashby stream for jobInterviewPlan.info; flags map only to documented request body fields.; flags: --job-id (required)
   - job-template list - List all active and inactive job templates.
 
 See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usag [intent=etl availability=implemented stream=job_template_list]; notes: Fixed Ashby stream for jobTemplate.list; flags map only to documented request body fields.; flags: --expand
@@ -941,7 +940,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 **Requires the [`organizationWrite`](authentication#permissions-departmentcreate) permission.** [intent=reverse_etl availability=implemented write=create_department]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby department.create through the documented POST /department.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --name, --external-name, --parent-id
   - department info - Fetch department details by id.
 
-**Requires the [`organizationRead`](authentication#permissions-departmentinfo) permission.** [intent=etl availability=implemented stream=department_info]; notes: Fixed Ashby stream for department.info; flags map only to documented request body fields.; flags: --department-id
+**Requires the [`organizationRead`](authentication#permissions-departmentinfo) permission.** [intent=etl availability=implemented stream=department_info]; notes: Fixed Ashby stream for department.info; flags map only to documented request body fields.; flags: --department-id (required)
   - department list - Lists all departments.
 
 See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
@@ -967,7 +966,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed us [intent=etl availability=implemented stream=location_list]; notes: Fixed Ashby stream for location.list; flags map only to documented request body fields.; flags: --include-archived, --include-location-hierarchy
   - location info - Gets details for a single location by id.
 
-**Requires the [`organizationRead`](authentication#permissions-locationinfo) permission.** [intent=etl availability=implemented stream=location_info]; notes: Fixed Ashby stream for location.info; flags map only to documented request body fields.; flags: --location-id
+**Requires the [`organizationRead`](authentication#permissions-locationinfo) permission.** [intent=etl availability=implemented stream=location_info]; notes: Fixed Ashby stream for location.info; flags map only to documented request body fields.; flags: --location-id (required)
   - location move - Moves a location in location hierarchy.
 
 **Requires the [`organizationWrite`](authentication#permissions-locationmove) permission.** [intent=reverse_etl availability=implemented write=move_location]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby location.move through the documented POST /location.move endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --location-id, --parent-location-hierarchy-id
@@ -986,7 +985,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
   - interview-plan list - List published interview plans. Draft interview plans are not returned. If `includeArchived` is true, archived interview plans are also included. Job-specific i [intent=etl availability=implemented stream=interview_plan_list]; notes: Fixed Ashby stream for interviewPlan.list; flags map only to documented request body fields.; flags: --include-archived
   - interview-stage list - List all interview stages for an interview plan in order.
 
-**Requires the [`interviewsRead`](authentication#permissions-interviewstagelist) permission.** [intent=etl availability=implemented stream=interview_stage_list]; notes: Fixed Ashby stream for interviewStage.list; flags map only to documented request body fields.; flags: --interview-plan-id
+**Requires the [`interviewsRead`](authentication#permissions-interviewstagelist) permission.** [intent=etl availability=implemented stream=interview_stage_list]; notes: Fixed Ashby stream for interviewStage.list; flags map only to documented request body fields.; flags: --interview-plan-id (required)
   - interview-stage-group list - List all interview stage groups in the organization in order.
 
 **Requires the [`interviewsRead`](authentication#permissions-interviewstagegrouplist) permission. [intent=etl availability=implemented stream=interview_stage_group_list]; notes: Fixed Ashby stream for interviewStageGroup.list; flags map only to documented request body fields.
@@ -1007,7 +1006,7 @@ Offer forms support a variety of field types. The values accepted for each field
 See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detai [intent=etl availability=implemented stream=offer_list]; notes: Fixed Ashby stream for offer.list; flags map only to documented request body fields.; flags: --created-after, --offer-status, --acceptance-status, --application-id, --approval-status
   - offer info - Returns details about a single offer by id
 
-**Requires the [`offersRead`](authentication#permissions-offerinfo) permission.** [intent=etl availability=implemented stream=offer_info]; notes: Fixed Ashby stream for offer.info; flags map only to documented request body fields.; flags: --offer-id, --exclude-form-definition
+**Requires the [`offersRead`](authentication#permissions-offerinfo) permission.** [intent=etl availability=implemented stream=offer_info]; notes: Fixed Ashby stream for offer.info; flags map only to documented request body fields.; flags: --offer-id (required), --exclude-form-definition
   - offer start - The offer.start endpoint creates and returns an offer version instance that can be filled out and submitted
 using the `offer.create` endpoint.
 
@@ -1032,7 +1031,7 @@ Ashby derives the offer status from the provided acceptance status; `offerStatus
 **Requires the [`offersWrite`](authentication#permissions-offerprocessstart) permission.** [intent=reverse_etl availability=implemented write=start_offer_process]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby offerProcess.start through the documented POST /offerProcess.start endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id
   - opening info - Retrieves an opening by its UUID.
 
-**Requires the [`jobsRead`](authentication#permissions-openinginfo) permission.** [intent=etl availability=implemented stream=opening_info]; notes: Fixed Ashby stream for opening.info; flags map only to documented request body fields.; flags: --opening-id
+**Requires the [`jobsRead`](authentication#permissions-openinginfo) permission.** [intent=etl availability=implemented stream=opening_info]; notes: Fixed Ashby stream for opening.info; flags map only to documented request body fields.; flags: --opening-id (required)
   - opening create - Creates an opening.
 
 To set values of custom fields on Openings, use the [`customField.setValue`](ref:customfieldsetvalue) endpoint.
@@ -1071,7 +1070,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 **Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.** [intent=direct_read availability=implemented operation=ashby.direct.opening.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --identifier (required)
   - project info - Retrieves a project by its UUID.
 
-**Requires the [`candidatesRead`](authentication#permissions-projectinfo) permission.** [intent=etl availability=implemented stream=project_info]; notes: Fixed Ashby stream for project.info; flags map only to documented request body fields.; flags: --project-id
+**Requires the [`candidatesRead`](authentication#permissions-projectinfo) permission.** [intent=etl availability=implemented stream=project_info]; notes: Fixed Ashby stream for project.info; flags map only to documented request body fields.; flags: --project-id (required)
   - project list - Lists projects.
 
 See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
@@ -1106,7 +1105,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 [`customField.setValues`](#operation [intent=reverse_etl availability=partial write=set_custom_field_value]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby customField.setValue through the documented POST /customField.setValue endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.; flags: --object-id, --object-type, --field-id
   - custom-field info - Get information about a custom field.
 
-**Requires the [`hiringProcessMetadataRead`](authentication#permissions-customfieldinfo) permission.** [intent=etl availability=implemented stream=custom_field_info]; notes: Fixed Ashby stream for customField.info; flags map only to documented request body fields.; flags: --custom-field-id
+**Requires the [`hiringProcessMetadataRead`](authentication#permissions-customfieldinfo) permission.** [intent=etl availability=implemented stream=custom_field_info]; notes: Fixed Ashby stream for customField.info; flags map only to documented request body fields.; flags: --custom-field-id (required)
   - custom-field set-values - Set the values of multiple custom fields for a given object in a single call.
 This is the recommended approach when updating multiple fields on the same object
  [intent=reverse_etl availability=partial write=set_custom_field_values]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby customField.setValues through the documented POST /customField.setValues endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has a documented fieldValue union/nested input that is implemented by the reverse-ETL action schema but is not safely expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.; flags: --object-id, --object-type, --values-0-field-id
@@ -1134,7 +1133,7 @@ This endpoint merges the provided selectable values with the existing values for
 **Requires the [`organizationRead`](authentication#permissions-hiringteamrolelist) permission.** [intent=etl availability=implemented stream=hiring_team_role_list]; notes: Fixed Ashby stream for hiringTeamRole.list; defaults to namesOnly=true role-title results. namesOnly=false object results are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false.
   - user info - Retrieves detailed information about a specific user by their ID.
 
-**Requires the [`organizationRead`](authentication#permissions-userinfo) permission.** [intent=etl availability=implemented stream=user_info]; notes: Fixed Ashby stream for user.info; flags map only to documented request body fields.; flags: --user-id
+**Requires the [`organizationRead`](authentication#permissions-userinfo) permission.** [intent=etl availability=implemented stream=user_info]; notes: Fixed Ashby stream for user.info; flags map only to documented request body fields.; flags: --user-id (required)
   - user search - Searches for users by email address.
 
 Returns an array containing the user if found, or an empty array if no user with the given email exists.
@@ -1151,7 +1150,7 @@ Either limit can be provided, or both can be provided. If only one is provided, 
 A user can only have one interviewer pause at a time (whe [intent=reverse_etl availability=implemented write=create_user_interviewer_pause]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby user.createInterviewerPause through the documented POST /user.createInterviewerPause endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --user-id, --starts-at, --ends-at, --comment
   - user list-interviewer-pauses - Lists all active or scheduled interviewer pauses for a user.
 
-**Requires the [`organizationRead`](authentication#permissions-userlistinterviewerpauses) permissi [intent=etl availability=implemented stream=user_list_interviewer_pauses]; notes: Fixed Ashby stream for user.listInterviewerPauses; flags map only to documented request body fields.; flags: --user-id
+**Requires the [`organizationRead`](authentication#permissions-userlistinterviewerpauses) permissi [intent=etl availability=implemented stream=user_list_interviewer_pauses]; notes: Fixed Ashby stream for user.listInterviewerPauses; flags map only to documented request body fields.; flags: --user-id (required)
   - user delete-interviewer-pause - Deletes an interviewer pause.
 
 **Requires the [`organizationWrite`](authentication#permissions-userdeleteinterviewerpause) permission.** [intent=reverse_etl availability=implemented write=delete_user_interviewer_pause]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby user.deleteInterviewerPause through the documented POST /user.deleteInterviewerPause endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --interviewer-pause-id
@@ -1189,7 +1188,7 @@ Permanently discards a NotStarted sourcing sequence draft owned by the acti [int
 >
 > This endpoint is in beta and may not be available for all organizations.
 
-Retrieves a candidate's sourcing sequence enrollment when it is visible to  [intent=etl availability=implemented stream=sequence_info]; notes: Fixed Ashby stream for sequence.info; flags map only to documented request body fields.; flags: --sequence-id
+Retrieves a candidate's sourcing sequence enrollment when it is visible to  [intent=etl availability=implemented stream=sequence_info]; notes: Fixed Ashby stream for sequence.info; flags map only to documented request body fields.; flags: --sequence-id (required)
   - sequence list - > Beta
 >
 > This endpoint is in beta and may not be available for all organizations.
@@ -1205,7 +1204,7 @@ Replaces the supplied subject or HTML body of one email stage in a not-star [int
 > This endpoint is in beta and may not be available for all organizations.
 
 Validates and starts an existing NotStarted sourcing sequence draft owned b [intent=reverse_etl availability=implemented write=start_sequence]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby sequence.start through the documented POST /sequence.start endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --sequence-id
-  - sequence-template info - Retrieves metadata for a reusable sourcing sequence template visible to the caller. Archived templates may be returned. Message subjects and bodies are not expo [intent=etl availability=implemented stream=sequence_template_info]; notes: Fixed Ashby stream for sequenceTemplate.info; flags map only to documented request body fields.; flags: --sequence-template-id
+  - sequence-template info - Retrieves metadata for a reusable sourcing sequence template visible to the caller. Archived templates may be returned. Message subjects and bodies are not expo [intent=etl availability=implemented stream=sequence_template_info]; notes: Fixed Ashby stream for sequenceTemplate.info; flags map only to documented request body fields.; flags: --sequence-template-id (required)
   - sequence-template list - Lists reusable sourcing sequence templates visible to the caller. Returns template and cadence metadata only; message subjects and bodies are not exposed.
 
 Arch [intent=etl availability=implemented stream=sequence_template_list]; notes: Fixed Ashby stream for sequenceTemplate.list; flags map only to documented request body fields.; flags: --include-archived
@@ -1230,16 +1229,16 @@ Lists take-home assignments visible to the caller, including candidate subm [int
 >
 > This endpoint is in beta and may not be available for all organizations.
 
-Retrieves a single take-home assignment by id and links it to its interview [intent=etl availability=implemented stream=take_home_assignment_info]; notes: Fixed Ashby stream for takeHomeAssignment.info; flags map only to documented request body fields.; flags: --take-home-assignment-id, --expand
+Retrieves a single take-home assignment by id and links it to its interview [intent=etl availability=implemented stream=take_home_assignment_info]; notes: Fixed Ashby stream for takeHomeAssignment.info; flags map only to documented request body fields.; flags: --take-home-assignment-id (required), --expand
   - interview-event list - Lists interview events associated with an interview schedule.
 
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide [intent=etl availability=implemented stream=interview_event_list]; notes: Fixed Ashby stream for interviewEvent.list; flags map only to documented request body fields.; flags: --interview-schedule-id, --expand, --created-after
+See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide [intent=etl availability=implemented stream=interview_event_list]; notes: Fixed Ashby stream for interviewEvent.list; flags map only to documented request body fields.; flags: --interview-schedule-id (required), --expand, --created-after
   - interview-briefing info - Fetch the briefing data for an interview event. Returns the application,
 interview, per-interviewer status, and the feedback form definition id
-needed to render [intent=etl availability=implemented stream=interview_briefing_info]; notes: Fixed Ashby stream for interviewBriefing.info; flags map only to documented request body fields.; flags: --interview-event-id, --expand
+needed to render [intent=etl availability=implemented stream=interview_briefing_info]; notes: Fixed Ashby stream for interviewBriefing.info; flags map only to documented request body fields.; flags: --interview-event-id (required), --expand
   - interview info - Fetch interview details by id.
 
-**Requires the [`interviewsRead`](authentication#permissions-interviewinfo) permission.** [intent=etl availability=implemented stream=interview_info]; notes: Fixed Ashby stream for interview.info; flags map only to documented request body fields.; flags: --id
+**Requires the [`interviewsRead`](authentication#permissions-interviewinfo) permission.** [intent=etl availability=implemented stream=interview_info]; notes: Fixed Ashby stream for interview.info; flags map only to documented request body fields.; flags: --id (required)
   - interview list - List all interviews.
 
 See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
@@ -1247,13 +1246,13 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 **Requires [intent=etl availability=implemented stream=interview_list]; notes: Fixed Ashby stream for interview.list; flags map only to documented request body fields.; flags: --include-archived, --include-non-shared-interviews, --exclude-archived-schedule-template-interviews
   - interview-stage info - Retrieves detailed information about a specific interview stage by its ID.
 
-**Requires the [`interviewsRead`](authentication#permissions-interviewstageinfo) per [intent=etl availability=implemented stream=interview_stage_info]; notes: Fixed Ashby stream for interviewStage.info; flags map only to documented request body fields.; flags: --interview-stage-id
+**Requires the [`interviewsRead`](authentication#permissions-interviewstageinfo) per [intent=etl availability=implemented stream=interview_stage_info]; notes: Fixed Ashby stream for interviewStage.info; flags map only to documented request body fields.; flags: --interview-stage-id (required)
   - file info - Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files).
 
 **Please note** that [intent=direct_read availability=implemented operation=ashby.direct.file.info]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --file-handle (required)
   - survey-form-definition info - Returns details about a single survey form definition by id.
 
-**Requires the [`hiringProcessMetadataRead`](authentication#permissions-surveyformdefinitioninfo)  [intent=etl availability=implemented stream=survey_form_definition_info]; notes: Fixed Ashby stream for surveyFormDefinition.info; flags map only to documented request body fields.; flags: --survey-form-definition-id
+**Requires the [`hiringProcessMetadataRead`](authentication#permissions-surveyformdefinitioninfo)  [intent=etl availability=implemented stream=survey_form_definition_info]; notes: Fixed Ashby stream for surveyFormDefinition.info; flags map only to documented request body fields.; flags: --survey-form-definition-id (required)
   - survey-form-definition list - Lists all survey form definitions.
 
 See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage example [intent=etl availability=implemented stream=survey_form_definition_list]; notes: Fixed Ashby stream for surveyFormDefinition.list; flags map only to documented request body fields.
@@ -1264,19 +1263,19 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 
 See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
 
-**Re [intent=etl availability=implemented stream=survey_request_list]; notes: Fixed Ashby stream for surveyRequest.list; flags map only to documented request body fields.; flags: --survey-type, --application-id, --candidate-id, --created-after
+**Re [intent=etl availability=implemented stream=survey_request_list]; notes: Fixed Ashby stream for surveyRequest.list; flags map only to documented request body fields.; flags: --survey-type (required), --application-id, --candidate-id, --created-after
   - survey-submission create - Creates a survey submission for a candidate and application.
 
 **Requires the [`candidatesWrite`](authentication#permissions-surveysubmissioncreate) permission.* [intent=reverse_etl availability=partial write=create_survey_submission]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby surveySubmission.create through the documented POST /surveySubmission.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.; flags: --survey-form-definition-id, --candidate-id, --application-id
   - survey-submission list - Lists all survey submissions of a given `surveyType`.
 
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for det [intent=etl availability=implemented stream=survey_submission_list]; notes: Fixed Ashby stream for surveySubmission.list; flags map only to documented request body fields.; flags: --survey-type, --created-after
+See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for det [intent=etl availability=implemented stream=survey_submission_list]; notes: Fixed Ashby stream for surveySubmission.list; flags map only to documented request body fields.; flags: --survey-type (required), --created-after
   - webhook create - Creates a webhook setting.
 
 **Requires the [`apiKeysWrite`](authentication#permissions-webhookcreate) permission.** [intent=reverse_etl availability=implemented write=create_webhook]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby webhook.create through the documented POST /webhook.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --webhook-type, --request-url, --secret-token
   - webhook info - Retrieves information about a specific webhook setting by its ID.
 
-**Requires the [`apiKeysRead`](authentication#permissions-webhookinfo) permission.** [intent=etl availability=implemented stream=webhook_info]; notes: Fixed Ashby stream for webhook.info; flags map only to documented request body fields.; flags: --webhook-id
+**Requires the [`apiKeysRead`](authentication#permissions-webhookinfo) permission.** [intent=etl availability=implemented stream=webhook_info]; notes: Fixed Ashby stream for webhook.info; flags map only to documented request body fields.; flags: --webhook-id (required)
   - webhook update - Updates a webhook setting. One of `enabled`, `requestUrl`, or `secretToken` must be provided.
 
 **Requires the [`apiKeysWrite`](authentication#permissions-webhoo [intent=reverse_etl availability=implemented write=update_webhook]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby webhook.update through the documented POST /webhook.update endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --webhook-id, --enabled, --request-url, --secret-token
@@ -1290,7 +1289,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 **R [intent=etl availability=implemented stream=interviewer_pool_list]; notes: Fixed Ashby stream for interviewerPool.list; flags map only to documented request body fields.; flags: --include-archived-pools, --include-archived-training-stages
   - interviewer-pool info - Get information about an interviewer pool.
 
-**Requires the [`hiringProcessMetadataRead`](authentication#permissions-interviewerpoolinfo) permission.** [intent=etl availability=implemented stream=interviewer_pool_info]; notes: Fixed Ashby stream for interviewerPool.info; flags map only to documented request body fields.; flags: --interviewer-pool-id
+**Requires the [`hiringProcessMetadataRead`](authentication#permissions-interviewerpoolinfo) permission.** [intent=etl availability=implemented stream=interviewer_pool_info]; notes: Fixed Ashby stream for interviewerPool.info; flags map only to documented request body fields.; flags: --interviewer-pool-id (required)
   - interviewer-pool archive - Archives an interviewer pool.
 
 **Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolarchive) permission.** [intent=reverse_etl availability=implemented write=archive_interviewer_pool]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby interviewerPool.archive through the documented POST /interviewerPool.archive endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --interviewer-pool-id
@@ -1325,7 +1324,7 @@ Generates a new report or polls the status of an existing report generation.
 
 Retrieves report data synchronously.
 
-**Timeout:** 30 seconds. If a report is timi [intent=etl availability=implemented stream=report_synchronous]; notes: Fixed Ashby stream for report.synchronous; flags map only to documented request body fields.; flags: --report-id, --include-headers-in-data, --result-style
+**Timeout:** 30 seconds. If a report is timi [intent=etl availability=implemented stream=report_synchronous]; notes: Fixed Ashby stream for report.synchronous; flags map only to documented request body fields.; flags: --report-id (required), --include-headers-in-data, --result-style
   - approval list - Gets all approvals in the organization. You can optionally filter by entity type and entity ID.
 
 See the [Pagination and Incremental Synchronization](/docs/pagi [intent=etl availability=implemented stream=approval_list]; notes: Fixed Ashby stream for approval.list; flags map only to documented request body fields.; flags: --entity-type, --entity-id
