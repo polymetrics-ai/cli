@@ -18,7 +18,7 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
 
 ## Capabilities
 
-- check=true catalog=true read=true write=true query=true
+- check=true catalog=true read=true write=true query=false
 - Integration type: api
 
 ## Authentication
@@ -383,7 +383,7 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - risk: Airtable schema mutation visible to collaborators; preview and approval required
 - create_records:
   - endpoint: POST /v0/{{ config.base_id }}/{{ config.table_id }}
-  - required fields: fields
+  - required fields: records
   - risk: Airtable schema mutation visible to collaborators; preview and approval required
 - update_multiple_records_put:
   - endpoint: PUT /v0/{{ config.base_id }}/{{ config.table_id }}
