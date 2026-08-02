@@ -12,21 +12,23 @@
     "operation": {
       "type": "string"
     },
-    "NextToken": {
+    "TrailARN": {
       "type": [
         "string",
         "null"
       ]
     },
-    "Trails": {
+    "Name": {
       "type": [
-        "array",
+        "string",
         "null"
-      ],
-      "items": {
-        "type": "object",
-        "additionalProperties": true
-      }
+      ]
+    },
+    "HomeRegion": {
+      "type": [
+        "string",
+        "null"
+      ]
     }
   },
   "additionalProperties": true

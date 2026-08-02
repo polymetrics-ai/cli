@@ -12,21 +12,58 @@
     "operation": {
       "type": "string"
     },
-    "Imports": {
+    "ImportId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ImportStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Destinations": {
       "type": [
         "array",
         "null"
       ],
       "items": {
-        "type": "object",
+        "type": [
+          "string",
+          "object"
+        ],
         "additionalProperties": true
       }
     },
-    "NextToken": {
+    "CreatedTimestamp": {
       "type": [
-        "string",
+        "number",
         "null"
-      ]
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "UpdatedTimestamp": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "StartEventTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "EndEventTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     }
   },
   "additionalProperties": true

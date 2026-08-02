@@ -26,11 +26,10 @@
     },
     "LatestCloudWatchLogsDeliveryTime": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "LatestDeliveryAttemptSucceeded": {
       "type": [
@@ -52,11 +51,10 @@
     },
     "LatestDeliveryTime": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "LatestDigestDeliveryError": {
       "type": [
@@ -66,11 +64,10 @@
     },
     "LatestDigestDeliveryTime": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "LatestNotificationAttemptSucceeded": {
       "type": [
@@ -92,27 +89,24 @@
     },
     "LatestNotificationTime": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "StartLoggingTime": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "StopLoggingTime": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "TimeLoggingStarted": {
       "type": [

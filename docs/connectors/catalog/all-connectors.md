@@ -191,7 +191,7 @@
 | `goldcast` | [`icons/goldcast.svg`](../icons/goldcast.svg) | Goldcast | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.goldcast.io/api-docs) | bundle definition |
 | `gologin` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | GoLogin | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://api.gologin.com/docs) | bundle definition |
 | `gong` | [`icons/gong.svg`](../icons/gong.svg) | Gong | `api` | ga | check, catalog, read, write | 12 | 26 | [Documentation](https://us-66463.app.gong.io/settings/api/documentation) | bundle definition |
-| `google-ads` | [`icons/google-adwords.svg`](../icons/google-adwords.svg) | Google Ads | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developers.google.com/google-ads/api/rest/overview) | bundle definition |
+| `google-ads` | [`icons/google-adwords.svg`](../icons/google-adwords.svg) | Google Ads | `api` | ga | check, catalog, read, write | 3 | 7 | [Documentation](https://developers.google.com/google-ads/api/rest/overview) | bundle definition |
 | `google-analytics-data-api` | [`icons/google-analytics.svg`](../icons/google-analytics.svg) | Google Analytics 4 (GA4) | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.google.com/analytics/devguides/reporting/data/v1/changelog) | bundle definition |
 | `google-calendar` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Google Calendar | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://developers.google.com/calendar/api/v3/reference) | bundle definition |
 | `google-classroom` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Google Classroom | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.google.com/classroom/reference/rest) | bundle definition |
@@ -530,7 +530,7 @@
 | `workramp` | [`icons/workramp.svg`](../icons/workramp.svg) | WorkRamp | `api` | ga | check, catalog, read, write | 5 | 5 | [Documentation](https://developers.workramp.com/) | bundle definition |
 | `wrike` | [`icons/wrike.svg`](../icons/wrike.svg) | Wrike | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developers.wrike.com/api/v4/) | bundle definition |
 | `wufoo` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Wufoo | `api` | ga | check, catalog, read, write | 8 | 3 | [Documentation](https://wufoo.github.io/docs/) | bundle definition |
-| `xero` | [`icons/xero.svg`](../icons/xero.svg) | Xero | `api` | ga | check, catalog, read, write | 100 | 85 | [Documentation](https://developer.xero.com/documentation/) | bundle definition |
+| `xero` | [`icons/xero.svg`](../icons/xero.svg) | Xero | `api` | ga | check, catalog, read, write | 100 | 87 | [Documentation](https://developer.xero.com/documentation/) | bundle definition |
 | `xkcd` | [`icons/xkcd.svg`](../icons/xkcd.svg) | XKCD | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://xkcd.com/json.html) | bundle definition |
 | `xsolla` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Xsolla | `api` | ga | check, catalog, read, write | 8 | 2 | [Documentation](https://developers.xsolla.com/) | bundle definition |
 | `yahoo-finance-price` | [`icons/yahoo-finance-price.svg`](../icons/yahoo-finance-price.svg) | Yahoo Finance Price | `api` | alpha | check, catalog, read | 1 | 0 | [Documentation](https://www.yahoofinanceapi.com/) | bundle definition |

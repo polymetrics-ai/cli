@@ -34,6 +34,7 @@ type CommandSurfaceFlag struct {
 	MapsTo     string
 	Format     string
 	AllowEmpty *bool
+	Required   bool
 }
 
 type CommandSurfaceConstraint struct {

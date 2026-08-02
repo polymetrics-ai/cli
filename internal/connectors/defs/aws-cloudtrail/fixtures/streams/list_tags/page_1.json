@@ -9,9 +9,13 @@
     "body": {
       "ResourceTagList": [
         {
-          "pm_record_id": "list_tags_fixture_1",
-          "operation": "ListTags",
-          "NextToken": "fixture-next-token"
+          "ResourceId": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
+          "TagsList": [
+            {
+              "Key": "Environment",
+              "Value": "fixture"
+            }
+          ]
         }
       ]
     }

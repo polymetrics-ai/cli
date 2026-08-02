@@ -12,21 +12,31 @@
     "operation": {
       "type": "string"
     },
-    "NextToken": {
+    "Value": {
       "type": [
         "string",
         "null"
       ]
     },
-    "PublicKeyList": {
+    "ValidityStartTime": {
       "type": [
-        "array",
+        "number",
         "null"
       ],
-      "items": {
-        "type": "object",
-        "additionalProperties": true
-      }
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "ValidityEndTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "Fingerprint": {
+      "type": [
+        "string",
+        "null"
+      ]
     }
   },
   "additionalProperties": true

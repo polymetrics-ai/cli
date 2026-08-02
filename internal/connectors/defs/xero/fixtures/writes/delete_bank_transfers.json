@@ -1,0 +1,28 @@
+{
+  "record": {
+    "BankTransfers": [
+      {
+        "BankTransferID": "bank_transfer_id_fixture_1",
+        "Status": "DELETED"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/BankTransfers",
+    "body": {
+      "BankTransfers": [
+        {
+          "BankTransferID": "bank_transfer_id_fixture_1",
+          "Status": "DELETED"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

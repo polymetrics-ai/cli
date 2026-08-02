@@ -12,7 +12,7 @@ SYNOPSIS
 DESCRIPTION
   Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC read streams.
 
-  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, 19 read-stream actions are exposed as executable connector-local runtime behavior, and the 10 provider query/direct-read actions plus 31 write/admin actions are blocked/planned until typed operation/write metadata and shared promoted-native command surfaces, validation, dry-run previews, and operation-direct reads are available safely.
+  Current status: 60 official CloudTrail API actions remain inventoried, 19 read-stream actions are exposed as executable connector-local runtime behavior, and the 10 provider query/direct-read actions plus 31 write/admin actions are blocked/planned until typed operation/write metadata and shared promoted-native command surfaces, validation, dry-run previews, and operation-direct reads are available safely.
 
 ICON
   asset: icons/aws-cloudtrail.svg
@@ -64,7 +64,7 @@ BLOCKED / PLANNED OPERATIONS
 SECURITY
   Read streams use fixed AWS CloudTrail JSON-RPC action names and SigV4 authentication. Resource-detail streams derive identifiers through connector-local discovery/fan-out; no raw AWS action, path, header, body, shell, file, SQL, or generic HTTP escape hatch is exposed.
 
-  No CloudTrail write action is executable in this corrective head. Future write enablement must preserve plan -> preview -> approval -> execute plus destructive confirmation metadata.
+  No CloudTrail write action is executable in the current connector surface. Future write enablement must preserve plan -> preview -> approval -> execute plus destructive confirmation metadata.
 
 AGENT WORKFLOW
   1. Inspect metadata with pm connectors inspect aws-cloudtrail --json; this does not read credentials.

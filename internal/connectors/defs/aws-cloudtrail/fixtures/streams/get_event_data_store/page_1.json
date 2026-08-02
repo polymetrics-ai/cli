@@ -15,7 +15,7 @@
         }
       ],
       "BillingMode": "fixture-billing-mode",
-      "CreatedTimestamp": "2026-01-01T00:00:00Z",
+      "CreatedTimestamp": 1767225600.25,
       "EventDataStoreArn": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
       "FederationRoleArn": "arn:aws:iam::123456789012:role/fixture-cloudtrail-federation",
       "FederationStatus": "fixture-federation-status",
@@ -31,7 +31,7 @@
       "RetentionPeriod": 90,
       "Status": "fixture-status",
       "TerminationProtectionEnabled": true,
-      "UpdatedTimestamp": "2026-01-01T00:00:00Z"
+      "UpdatedTimestamp": 1767225600.25
     }
   },
   "read_query": {

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "newManager": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v22/customers/synthetic-conformance-value/customerManagerLinks:moveManagerLink",
+    "body": {
+      "newManager": "fixture_value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -9,9 +9,11 @@
     "body": {
       "Failures": [
         {
-          "pm_record_id": "list_import_failures_fixture_1",
-          "operation": "ListImportFailures",
-          "NextToken": "fixture-next-token"
+          "Location": "s3://fixture-cloudtrail-bucket/imports/failure.json.gz",
+          "Status": "FAILED",
+          "ErrorType": "InvalidEventData",
+          "ErrorMessage": "fixture import failure",
+          "LastUpdatedTime": 1767225600.25
         }
       ]
     }

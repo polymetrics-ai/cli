@@ -9,13 +9,12 @@
     "body": {
       "trailList": [
         {
-          "pm_record_id": "describe_trails_fixture_1",
-          "operation": "DescribeTrails",
-          "trailList": [
-            {
-              "Name": "fixture"
-            }
-          ]
+          "Name": "fixture-trail",
+          "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
+          "HomeRegion": "us-east-1",
+          "S3BucketName": "fixture-cloudtrail-bucket",
+          "IncludeGlobalServiceEvents": true,
+          "IsMultiRegionTrail": false
         }
       ]
     }

@@ -1,0 +1,30 @@
+{
+  "record": {
+    "pagination": {},
+    "Warnings": [
+      "warning_fixture"
+    ],
+    "PurchaseOrders": [
+      "purchase_order_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/PurchaseOrders",
+    "body": {
+      "pagination": {},
+      "Warnings": [
+        "warning_fixture"
+      ],
+      "PurchaseOrders": [
+        "purchase_order_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

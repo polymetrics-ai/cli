@@ -896,6 +896,9 @@ func writeConnectorFlag(b *strings.Builder, flag connectors.CommandSurfaceFlag) 
 	if flag.Type != "" {
 		fmt.Fprintf(b, " (%s)", flag.Type)
 	}
+	if flag.Required {
+		b.WriteString(" required")
+	}
 	if flag.Summary != "" {
 		fmt.Fprintf(b, ": %s", flag.Summary)
 	}

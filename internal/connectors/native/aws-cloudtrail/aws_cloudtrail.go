@@ -33,6 +33,8 @@ const (
 	userAgent       = "polymetrics-go-cli"
 )
 
+var errRepeatedPaginationToken = errors.New("repeated pagination next token")
+
 // New returns the AWS CloudTrail connector as a connectors.Connector.
 func New() connectors.Connector { return Connector{} }
 
@@ -79,7 +81,11 @@ func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 	if err := ctx.Err(); err != nil {
 		return connectors.Catalog{}, err
 	}
-	return connectors.Catalog{Connector: c.Name(), Streams: streams()}, nil
+	streams, err := streams(ctx)
+	if err != nil {
+		return connectors.Catalog{}, err
+	}
+	return connectors.Catalog{Connector: c.Name(), Streams: streams}, nil
 }
 
 func (c Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
@@ -158,6 +164,12 @@ func (c Connector) emitActionBody(ctx context.Context, cfg connectors.RuntimeCon
 	if err != nil {
 		return err
 	}
+	seenTokens := map[string]bool{}
+	if token, ok := stringAt(body, "NextToken"); ok {
+		if token = strings.TrimSpace(token); token != "" {
+			seenTokens[token] = true
+		}
+	}
 	for page := 0; maxPageLimit == 0 || page < maxPageLimit; page++ {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -174,9 +186,17 @@ func (c Connector) emitActionBody(ctx context.Context, cfg connectors.RuntimeCon
 			return err
 		}
 		next, _ := stringAt(decoded, "NextToken")
-		if strings.TrimSpace(next) == "" {
+		trimmedNext := strings.TrimSpace(next)
+		if trimmedNext == "" {
 			return nil
 		}
+		if maxPageLimit > 0 && page+1 >= maxPageLimit {
+			return nil
+		}
+		if seenTokens[trimmedNext] {
+			return fmt.Errorf("read aws-cloudtrail %s: %w %q", action, errRepeatedPaginationToken, trimmedNext)
+		}
+		seenTokens[trimmedNext] = true
 		body["NextToken"] = next
 	}
 	return nil

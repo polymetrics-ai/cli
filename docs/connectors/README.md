@@ -33,7 +33,7 @@
 - [apple-search-ads](apple-search-ads/MANUAL.md): Reads Apple Search Ads campaigns, ad groups, targeting keywords, and ads via the Apple Search Ads Campaign Management API using an OAuth2 client-credentials grant scoped to an organization. Read-only.
 - [appsflyer](appsflyer/MANUAL.md): Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through the AppsFlyer Pull API. Read-only.
 - [apptivo](apptivo/MANUAL.md): Reads Apptivo CRM customers, contacts, leads, and opportunities through the Apptivo REST DAO API (full refresh); deletes CRM customer records via the documented deleteCustomer DAO action.
-- [asana](asana/MANUAL.md): Reads Asana workspaces, projects, tasks, sections, tags, stories, users, teams, custom fields, project statuses, and team/workspace memberships through the Asana v1 REST API. Writes task/project/section/tag create-update-delete and task comments.
+- [asana](asana/MANUAL.md): Reads implemented Asana project-management streams and safely plans implemented task/project/section/tag reverse-ETL actions. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.
 - [ashby](ashby/MANUAL.md): Reads Ashby applicant-tracking data — candidates, jobs, applications, and users — through the Ashby REST API.
 - [assemblyai](assemblyai/MANUAL.md): Reads AssemblyAI transcripts, per-transcript detail, sentences, paragraphs, and word-search matches, and submits new transcription jobs, through the AssemblyAI REST API.
 - [auth0](auth0/MANUAL.md): Reads Auth0 users, clients, connections, roles, organizations, role assignments, and organization memberships, and creates/updates users, clients, roles, and organizations, through the Auth0 Management API v2.
@@ -195,7 +195,7 @@
 - [goldcast](goldcast/MANUAL.md): Reads Goldcast organizations, events, agenda items, discussion groups, and tracks through the Goldcast customapi REST API.
 - [gologin](gologin/MANUAL.md): Reads GoLogin browser profiles, folders, tags, and account information through the GoLogin REST API.
 - [gong](gong/MANUAL.md): Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.
-- [google-ads](google-ads/MANUAL.md): Reads accessible customers and allow-listed Google Ads GAQL search resources (campaigns, ad groups) through the Google Ads REST API. Read-only; arbitrary GAQL is not accepted.
+- [google-ads](google-ads/MANUAL.md): Declarative Google Ads connector for v22 customer, campaign, ad group, direct-read, and limited guarded reverse-ETL API surfaces.
 - [google-analytics-data-api](google-analytics-data-api/MANUAL.md): Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only.
 - [google-calendar](google-calendar/MANUAL.md): Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token.
 - [google-classroom](google-classroom/MANUAL.md): Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token.
@@ -548,7 +548,7 @@
 - [zapsign](zapsign/MANUAL.md): Reads and writes ZapSign documents, signers, templates, and webhooks.
 - [zendesk-chat](zendesk-chat/MANUAL.md): Reads Zendesk Chat agents, chats, departments, shortcuts, and triggers through the Zendesk Chat REST API v2.
 - [zendesk-sunshine](zendesk-sunshine/MANUAL.md): Reads and writes Zendesk Sunshine legacy custom object types, objects, relationship types, and relationships.
-- [zendesk-support](zendesk-support/MANUAL.md): Reads and writes allow-listed Zendesk Support resources through the Zendesk Support REST API v2; Pass B expands top-level read streams from the public Airbyte/Zendesk surface.
+- [zendesk-support](zendesk-support/MANUAL.md): Reads and writes allow-listed Zendesk Support resources and carries a complete blocked-by-default operation ledger for the Zendesk Support REST API v2 official OAS.
 - [zendesk-talk](zendesk-talk/MANUAL.md): Reads Zendesk Talk phone numbers, greetings, greeting categories, IVRs, and agent activity statistics through the Zendesk Talk (voice) REST API.
 - [zenefits](zenefits/MANUAL.md): Reads Zenefits people, companies, departments, locations, employments, custom fields/values, bank accounts, labor groups, and time-off data.
 - [zoho-analytics-metadata-api](zoho-analytics-metadata-api/MANUAL.md): Reads Zoho Analytics workspace/view/table/organization/folder/query-table/datasource metadata and triggers datasource/view data syncs, via the Zoho OAuth 2.0 refresh-token grant.

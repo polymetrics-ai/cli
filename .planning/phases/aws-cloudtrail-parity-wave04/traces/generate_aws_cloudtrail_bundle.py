@@ -63,8 +63,10 @@ def schema_type(aws_type: str, nullable: bool = True):
         return {'type': typed_type('boolean', nullable)}
     if 'integer' in t:
         return {'type': typed_type('integer', nullable)}
+    if 'array of timestamps' in t:
+        return {'type': typed_type('array', nullable), 'items': {'type': 'number'}}
     if 'timestamp' in t:
-        return {'type': ['string', 'integer', 'null'] if nullable else ['string', 'integer'], 'description': 'AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds.'}
+        return {'type': typed_type('number', nullable), 'description': 'AWS JSON timestamp as Unix epoch seconds.'}
     if 'array of strings' in t:
         return {'type': typed_type('array', nullable), 'items': {'type': 'string'}}
     if 'array of' in t:
@@ -92,8 +94,10 @@ def sample_value(field: dict):
         if name == 'RetentionPeriod':
             return 90
         return 1
+    if 'array of timestamps' in t:
+        return [1767225600.25]
     if 'timestamp' in t:
-        return '2026-01-01T00:00:00Z'
+        return 1767225600.25
     if 'array of strings' in t:
         return [sample_string(name)]
     if 'array of tag objects' in t.lower():

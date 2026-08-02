@@ -12,7 +12,32 @@
     "operation": {
       "type": "string"
     },
-    "Channels": {
+    "ChannelArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SourceConfig": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "Destinations": {
       "type": [
         "array",
         "null"
@@ -21,12 +46,6 @@
         "type": "object",
         "additionalProperties": true
       }
-    },
-    "NextToken": {
-      "type": [
-        "string",
-        "null"
-      ]
     }
   },
   "additionalProperties": true

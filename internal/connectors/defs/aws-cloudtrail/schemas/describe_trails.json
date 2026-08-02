@@ -12,15 +12,101 @@
     "operation": {
       "type": "string"
     },
-    "trailList": {
+    "Name": {
       "type": [
-        "array",
+        "string",
         "null"
-      ],
-      "items": {
-        "type": "object",
-        "additionalProperties": true
-      }
+      ]
+    },
+    "TrailARN": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "S3BucketName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "S3KeyPrefix": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SnsTopicName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SnsTopicARN": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "IncludeGlobalServiceEvents": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "IsMultiRegionTrail": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "HomeRegion": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LogFileValidationEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "CloudWatchLogsLogGroupArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CloudWatchLogsRoleArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "KmsKeyId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "HasCustomEventSelectors": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "HasInsightSelectors": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "IsOrganizationTrail": {
+      "type": [
+        "boolean",
+        "null"
+      ]
     }
   },
   "additionalProperties": true

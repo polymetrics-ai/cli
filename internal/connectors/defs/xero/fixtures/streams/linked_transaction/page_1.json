@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/LinkedTransactions/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "LinkedTransactions": [
+        {
+          "SourceTransactionID": "source_transaction_id_fixture_1",
+          "SourceLineItemID": "source_line_item_id_fixture_1",
+          "ContactID": "contact_id_fixture_1",
+          "TargetTransactionID": "target_transaction_id_fixture_1",
+          "TargetLineItemID": "target_line_item_id_fixture_1",
+          "LinkedTransactionID": "linked_transaction_id_fixture_1",
+          "Status": "ACTIVE",
+          "Type": "STANDARD",
+          "UpdatedDateUTC": "2026-01-02T00:00:00Z",
+          "SourceTransactionTypeCode": "STANDARD",
+          "ValidationErrors": [
+            "validation_error_fixture_1"
+          ],
+          "linked_transaction_id": "linked_transaction_id_fixture_1"
+        }
+      ]
+    }
+  }
+}

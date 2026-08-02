@@ -12,7 +12,44 @@
     "operation": {
       "type": "string"
     },
-    "Dashboards": {
+    "DashboardArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "DashboardId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "RefreshSchedule": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "Widgets": {
       "type": [
         "array",
         "null"
@@ -21,12 +58,6 @@
         "type": "object",
         "additionalProperties": true
       }
-    },
-    "NextToken": {
-      "type": [
-        "string",
-        "null"
-      ]
     }
   },
   "additionalProperties": true

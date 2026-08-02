@@ -28,11 +28,11 @@
     },
     "page_size": {
       "type": "string",
-      "description": "Optional bounded MaxResults value for paginated read/query actions."
+      "description": "Optional bounded MaxResults value for paginated read streams."
     },
     "max_pages": {
       "type": "string",
-      "description": "Optional maximum page count for paginated read/query actions; use a positive integer."
+      "description": "Optional maximum page count for paginated read streams; use a positive integer."
     },
     "mode": {
       "type": "string",

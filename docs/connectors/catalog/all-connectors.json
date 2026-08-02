@@ -8583,7 +8583,7 @@
   {
     "name": "asana",
     "display_name": "Asana",
-    "description": "Reads Asana workspaces, projects, tasks, sections, tags, stories, users, teams, custom fields, project statuses, and team/workspace memberships through the Asana v1 REST API. Writes task/project/section/tag create-update-delete and task comments.",
+    "description": "Reads implemented Asana project-management streams and safely plans implemented task/project/section/tag reverse-ETL actions. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.",
     "integration_type": "api",
     "docs_url": "https://developers.asana.com/reference/rest-api-reference",
     "release_stage": "ga",
@@ -8775,21 +8775,21 @@
         "kind": "create",
         "method": "POST",
         "path": "/tasks",
-        "risk": "external mutation; creates a new task visible to the whole team/project; low risk, no approval required"
+        "risk": "external mutation; creates a new task visible to the configured workspace/project; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "update_task",
         "kind": "update",
         "method": "PUT",
         "path": "/tasks/{{ record.gid }}",
-        "risk": "external mutation; overwrites task fields (e.g. can mark completed, reassign, reschedule); approval required"
+        "risk": "external mutation; overwrites task fields such as completion, assignee, or due dates; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "delete_task",
         "kind": "delete",
         "method": "DELETE",
         "path": "/tasks/{{ record.gid }}",
-        "risk": "irreversible external deletion of a task; approval required",
+        "risk": "destructive mutation; deletes a task; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
         "confirm": "destructive"
       },
       {
@@ -8797,21 +8797,21 @@
         "kind": "create",
         "method": "POST",
         "path": "/projects",
-        "risk": "external mutation; creates a new project visible to the team/workspace; low risk, no approval required"
+        "risk": "external mutation; creates a new project visible to the team/workspace; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "update_project",
         "kind": "update",
         "method": "PUT",
         "path": "/projects/{{ record.gid }}",
-        "risk": "external mutation; overwrites project fields (can archive, reassign owner); approval required"
+        "risk": "external mutation; overwrites project fields such as archived state or owner; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "delete_project",
         "kind": "delete",
         "method": "DELETE",
         "path": "/projects/{{ record.gid }}",
-        "risk": "irreversible external deletion of a project and its association with its tasks; approval required",
+        "risk": "destructive mutation; deletes a project; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
         "confirm": "destructive"
       },
       {
@@ -8819,21 +8819,21 @@
         "kind": "create",
         "method": "POST",
         "path": "/projects/{{ record.project_gid }}/sections",
-        "risk": "external mutation; creates a new section in a project's board/list view; low risk, no approval required"
+        "risk": "external mutation; creates a new section in a project; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "update_section",
         "kind": "update",
         "method": "PUT",
         "path": "/sections/{{ record.gid }}",
-        "risk": "external mutation; renames a section; low risk, no approval required"
+        "risk": "external mutation; renames a section; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "delete_section",
         "kind": "delete",
         "method": "DELETE",
         "path": "/sections/{{ record.gid }}",
-        "risk": "irreversible external deletion of a section (Asana requires the section be empty of tasks first); approval required",
+        "risk": "destructive mutation; deletes an empty section; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
         "confirm": "destructive"
       },
       {
@@ -8841,21 +8841,21 @@
         "kind": "create",
         "method": "POST",
         "path": "/tags",
-        "risk": "external mutation; creates a new workspace-visible tag; low risk, no approval required"
+        "risk": "external mutation; creates a workspace-visible tag; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "update_tag",
         "kind": "update",
         "method": "PUT",
         "path": "/tags/{{ record.gid }}",
-        "risk": "external mutation; renames/recolors a tag visible workspace-wide; low risk, no approval required"
+        "risk": "external mutation; renames or recolors a workspace-visible tag; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "delete_tag",
         "kind": "delete",
         "method": "DELETE",
         "path": "/tags/{{ record.gid }}",
-        "risk": "irreversible external deletion of a tag, removed from every task that carries it; approval required",
+        "risk": "destructive mutation; deletes a tag and removes it from tasks; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute and typed confirm destructive",
         "confirm": "destructive"
       },
       {
@@ -8863,13 +8863,13 @@
         "kind": "create",
         "method": "POST",
         "path": "/tasks/{{ record.task_gid }}/stories",
-        "risk": "external mutation; posts a comment visible to everyone with access to the task; approval required"
+        "risk": "external mutation; posts a task story/comment visible to task collaborators; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       }
     ],
     "risk": {
-      "read": "external Asana API read of workspace, project, task, and PM metadata",
-      "write": "external mutations: creates/updates/deletes tasks, projects, sections, and tags, and posts task comments",
-      "approval": "required for every write action; deletes are flagged destructive/irreversible in writes.json's per-action risk field"
+      "read": "external Asana API reads use fixed declared streams or blocked/planned fixed-target command metadata; no raw provider query/path passthrough",
+      "write": "external mutations require named reverse-ETL actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin",
+      "approval": "all write execution follows plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive actions also require confirm: destructive"
     },
     "icon": {
       "id": "asana",
@@ -9820,11 +9820,11 @@
         },
         "page_size": {
           "type": "string",
-          "description": "Optional bounded MaxResults value for paginated read/query actions."
+          "description": "Optional bounded MaxResults value for paginated read streams."
         },
         "max_pages": {
           "type": "string",
-          "description": "Optional maximum page count for paginated read/query actions; use a positive integer."
+          "description": "Optional maximum page count for paginated read streams; use a positive integer."
         },
         "mode": {
           "type": "string",
@@ -10046,7 +10046,7 @@
     "risk": {
       "read": "bounded AWS CloudTrail JSON-RPC reads using fixed action names, SigV4 authentication, and connector-local resource discovery for parameterized streams",
       "write": "blocked/planned: CloudTrail write/admin actions require typed write metadata plus shared promoted-native command-surface, validation, and dry-run forwarding before they can be safely exposed.",
-      "approval": "No CloudTrail writes are exposed in this scope-corrected connector surface; future writes must preserve plan -> preview -> approval -> execute."
+      "approval": "No CloudTrail writes are exposed in the current connector surface; future writes must preserve plan -> preview -> approval -> execute."
     },
     "icon": {
       "id": "aws-cloudtrail",
@@ -46686,7 +46686,7 @@
         "base_url": {
           "type": "string",
           "format": "uri",
-          "description": "Freshchat API base URL, e.g. https://<account_name>.freshchat.com/v2. This bundle requires the full base URL directly: legacy derives it from an account_name config value (https://<account_name>.freshchat.com/v2), but that cross-key derivation has no engine mechanism today (see docs.md Known limits) \u2014 spec.json's default materialization only supports a fixed literal, never one derived from another config value."
+          "description": "Freshchat API base URL, e.g. https://\u003caccount_name\u003e.freshchat.com/v2. This bundle requires the full base URL directly: legacy derives it from an account_name config value (https://\u003caccount_name\u003e.freshchat.com/v2), but that cross-key derivation has no engine mechanism today (see docs.md Known limits) \u2014 spec.json's default materialization only supports a fixed literal, never one derived from another config value."
         },
         "user_id": {
           "type": "string",
@@ -46747,6 +46747,99 @@
         "metrics_summary": {
           "type": "string",
           "description": "Optional instant metrics summary query value."
+        },
+        "agents_is_deactivated": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "description": "Optional /agents filter for is_deactivated; values true or false."
+        },
+        "agents_groups": {
+          "type": "string",
+          "description": "Optional /agents filter for a Freshchat group id."
+        },
+        "agents_availability_status": {
+          "type": "string",
+          "enum": [
+            "AVAILABLE",
+            "UNAVAILABLE"
+          ],
+          "description": "Optional /agents filter for availability_status."
+        },
+        "agents_sort_order": {
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "description": "Optional /agents pagination sort_order value."
+        },
+        "agents_sort_by": {
+          "type": "string",
+          "description": "Optional /agents sort_by value."
+        },
+        "users_first_name": {
+          "type": "string",
+          "description": "Optional /users first_name filter. Freshchat requires at least one user filter for live list responses."
+        },
+        "users_last_name": {
+          "type": "string",
+          "description": "Optional /users last_name filter."
+        },
+        "users_email": {
+          "type": "string",
+          "description": "Optional /users email filter."
+        },
+        "users_reference_id": {
+          "type": "string",
+          "description": "Optional /users reference_id filter."
+        },
+        "users_phone_no": {
+          "type": "string",
+          "description": "Optional /users phone_no filter."
+        },
+        "users_created_from": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional /users created_from UTC timestamp filter."
+        },
+        "users_created_to": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional /users created_to UTC timestamp filter."
+        },
+        "users_updated_from": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional /users updated_from UTC timestamp filter."
+        },
+        "users_updated_to": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional /users updated_to UTC timestamp filter."
+        },
+        "conversation_messages_from_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional /conversations/{conversation_id}/messages from_time UTC timestamp filter."
+        },
+        "groups_sort_order": {
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "description": "Optional /groups sort_order value."
+        },
+        "groups_sort_by": {
+          "type": "string",
+          "description": "Optional /groups sort_by value."
+        },
+        "channels_locale": {
+          "type": "string",
+          "description": "Optional /channels locale filter in ISO-639 format."
         },
         "mode": {
           "type": "string",
@@ -46985,7 +47078,7 @@
         "kind": "delete",
         "method": "DELETE",
         "path": "/users/{{ record.user_id }}",
-        "risk": "deletes a Freshchat user/contact",
+        "risk": "deletes a Freshchat user/contact; destructive and idempotent for configured missing statuses",
         "confirm": "destructive"
       },
       {
@@ -47014,28 +47107,31 @@
         "kind": "create",
         "method": "POST",
         "path": "/agents",
-        "risk": "creates a Freshchat agent account"
+        "risk": "creates a Freshchat admin/agent account; requires typed destructive confirmation because this is an administrative user-management action",
+        "confirm": "destructive"
       },
       {
         "name": "update_agent",
         "kind": "update",
         "method": "PUT",
         "path": "/agents/{{ record.agent_id }}",
-        "risk": "updates an existing Freshchat agent"
+        "risk": "updates a Freshchat admin/agent account; requires typed destructive confirmation because this mutates administrative access metadata",
+        "confirm": "destructive"
       },
       {
         "name": "update_agent_status",
         "kind": "update",
         "method": "PATCH",
         "path": "/agents/{{ record.agent_id }}",
-        "risk": "updates an agent's Freshchat availability status"
+        "risk": "updates a Freshchat agent availability status; requires typed destructive confirmation for administrative agent-state mutation",
+        "confirm": "destructive"
       },
       {
         "name": "delete_agent",
         "kind": "delete",
         "method": "DELETE",
         "path": "/agents/{{ record.agent_id }}",
-        "risk": "deletes a Freshchat agent",
+        "risk": "deletes a Freshchat admin/agent account; destructive and idempotent for configured missing statuses",
         "confirm": "destructive"
       },
       {
@@ -62060,7 +62156,7 @@
   {
     "name": "google-ads",
     "display_name": "Google Ads",
-    "description": "Reads accessible customers and allow-listed Google Ads GAQL search resources (campaigns, ad groups) through the Google Ads REST API. Read-only; arbitrary GAQL is not accepted.",
+    "description": "Declarative Google Ads connector for v22 customer, campaign, ad group, direct-read, and limited guarded reverse-ETL API surfaces.",
     "integration_type": "api",
     "docs_url": "https://developers.google.com/google-ads/api/rest/overview",
     "release_stage": "ga",
@@ -62068,7 +62164,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -62083,7 +62179,7 @@
         "access_token": {
           "type": "string",
           "x-secret": true,
-          "description": "Google OAuth 2.0 access token with Google Ads read scope. Used only for Bearer auth; never logged. Acquisition/refresh is out of scope for this connector (credentials layer already owns it)."
+          "description": "Google OAuth 2.0 access token with Google Ads API scopes. Used only for Bearer auth; never logged. Acquisition/refresh is out of scope for this connector (credentials layer already owns it)."
         },
         "developer_token": {
           "type": "string",
@@ -62097,12 +62193,12 @@
         "base_url": {
           "type": "string",
           "format": "uri",
-          "default": "https://googleads.googleapis.com/v24",
-          "description": "Google Ads REST API base URL override for tests or proxies."
+          "default": "https://googleads.googleapis.com",
+          "description": "Google Ads REST API root URL override for tests or proxies; declarative paths include /v22."
         },
         "customer_id": {
           "type": "string",
-          "description": "Google Ads customer id to query GAQL search resources (campaigns, ad_groups) against. Required for those streams only; accessible_customers is account-scoped and does not reference it."
+          "description": "Google Ads customer id without dashes. Required for customer-scoped streams, direct reads, and reverse/write actions."
         },
         "page_size": {
           "type": "integer",
@@ -62154,9 +62250,68 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "move_manager_link_customer_manager_links",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerManagerLinks:moveManagerLink",
+        "risk": "Executes Google Ads API v22 method customers.customerManagerLinks.moveManagerLink against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_data_links",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/dataLinks:remove",
+        "risk": "Executes Google Ads API v22 method customers.dataLinks.remove against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_data_links",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/dataLinks:update",
+        "risk": "Executes Google Ads API v22 method customers.dataLinks.update against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_product_link_invitations",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/productLinkInvitations:remove",
+        "risk": "Executes Google Ads API v22 method customers.productLinkInvitations.remove against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_product_link_invitations",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/productLinkInvitations:update",
+        "risk": "Executes Google Ads API v22 method customers.productLinkInvitations.update against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_product_links",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/productLinks:remove",
+        "risk": "Executes Google Ads API v22 method customers.productLinks.remove against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "start_identity_verification_customers",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}:startIdentityVerification",
+        "risk": "Executes Google Ads API v22 method customers.startIdentityVerification against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
-      "read": "external Google Ads API read of customer/campaign/ad-group metadata",
-      "approval": "none; read-only, no reverse-ETL write surface"
+      "read": "external Google Ads API reads of customer, campaign, ad-group, and bounded direct-read metadata",
+      "write": "limited guarded Google Ads API reverse/write actions with closed record schemas; destructive/admin actions require explicit approval",
+      "approval": "reads require no approval; writes remain gated by plan -\u003e preview -\u003e explicit approval -\u003e execute"
     },
     "icon": {
       "id": "google-adwords",
@@ -154873,6 +155028,22 @@
         "risk": "creates Xero bank transfer resources in the connected tenant; approval required"
       },
       {
+        "name": "delete_bank_transfers",
+        "kind": "delete",
+        "method": "POST",
+        "path": "BankTransfers",
+        "risk": "Destructive Xero Accounting API action: sets one or more bank transfers to DELETED; reverse ETL must preview records and require explicit approval before execute.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_bank_transfer",
+        "kind": "delete",
+        "method": "POST",
+        "path": "BankTransfers/{{ record.bank_transfer_id }}",
+        "risk": "Destructive Xero Accounting API action: sets a bank transfer to DELETED; reverse ETL must preview the resolved bank_transfer_id and require explicit approval before execute.",
+        "confirm": "destructive"
+      },
+      {
         "name": "create_bank_transfer_history_record",
         "kind": "create",
         "method": "PUT",
@@ -157511,7 +157682,7 @@
   {
     "name": "zendesk-support",
     "display_name": "Zendesk Support",
-    "description": "Reads and writes allow-listed Zendesk Support resources through the Zendesk Support REST API v2; Pass B expands top-level read streams from the public Airbyte/Zendesk surface.",
+    "description": "Reads and writes allow-listed Zendesk Support resources and carries a complete blocked-by-default operation ledger for the Zendesk Support REST API v2 official OAS.",
     "integration_type": "api",
     "docs_url": "https://developer.zendesk.com/api-reference/ticketing/introduction/",
     "release_stage": "ga",
@@ -158142,7 +158313,7 @@
     ],
     "risk": {
       "read": "external Zendesk Support API read across tickets, users, organizations, groups, satisfaction ratings, admin metadata, business rules, and Guide/community top-level resources",
-      "write": "allow-listed Zendesk Support mutations for tickets, users, organizations, groups, macros, triggers, automations, views, and ticket fields; destructive deletes require approval",
+      "write": "allow-listed Zendesk Support mutations for tickets, users, organizations, groups, macros, triggers, automations, views, and ticket fields; documented destructive/delete operations remain in scope only through typed confirmation metadata or existing approved write actions",
       "approval": "writes require reverse-ETL approval; reads require normal connector access"
     },
     "icon": {

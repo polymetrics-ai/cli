@@ -14,11 +14,10 @@
     },
     "CreatedTimestamp": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "DashboardArn": {
       "type": [
@@ -65,11 +64,10 @@
     },
     "UpdatedTimestamp": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "Widgets": {
       "type": [

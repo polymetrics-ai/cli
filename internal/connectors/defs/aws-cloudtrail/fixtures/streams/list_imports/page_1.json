@@ -9,9 +9,15 @@
     "body": {
       "Imports": [
         {
-          "pm_record_id": "list_imports_fixture_1",
-          "operation": "ListImports",
-          "NextToken": "fixture-next-token"
+          "ImportId": "11111111-1111-1111-1111-111111111111",
+          "ImportStatus": "COMPLETED",
+          "Destinations": [
+            "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
+          ],
+          "CreatedTimestamp": 1767225600.25,
+          "UpdatedTimestamp": 1767225600.25,
+          "StartEventTime": 1767225600.25,
+          "EndEventTime": 1767225600.25
         }
       ]
     }

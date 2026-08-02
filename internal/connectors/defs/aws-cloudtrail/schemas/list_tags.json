@@ -12,13 +12,13 @@
     "operation": {
       "type": "string"
     },
-    "NextToken": {
+    "ResourceId": {
       "type": [
         "string",
         "null"
       ]
     },
-    "ResourceTagList": {
+    "TagsList": {
       "type": [
         "array",
         "null"

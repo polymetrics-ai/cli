@@ -182,14 +182,18 @@ not a full override by default.
 - **`cli_surface.json` validation stays definition-owned**: command-specific flags and constraints
   belong in the connector's CLI surface metadata, never in provider-named shared runner branches.
   Use `flags[].format:"date-time"` for RFC3339/ISO-8601 timestamp flags,
-  `flags[].allow_empty:false` to reject present blank string flags, and `constraints[]` `kind:"order"`
-  / `op:"lt"` / `value_type:"date-time"` over mapped `query.*` or `body.*` targets for provider
+  `flags[].allow_empty:false` to reject present blank string flags, `flags[].required:true` for
+  command inputs that must be present before execution, and `constraints[]` `kind:"order"` /
+  `op:"lt"` / `value_type:"date-time"` over mapped `query.*` or `body.*` targets for provider
   date-range rules. Optional `config.*` fallbacks preserve connection-level defaults when the
-  command flag is absent. `internal/connectors/engine/schema/cli_surface.schema.json` is the schema
-  source of truth, and `connectorgen validate` rejects unsupported formats, operators, fallback
-  namespaces, unmapped constraint targets, and multi-line validation messages. The shared-code
-  boundary guard (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside
-  connector defs/hooks/native escape hatches.
+  command flag is absent. For implemented direct-read POST operations, every required
+  `operations.json` `rest.body_schema` path must either be supplied by static `rest.body` or by a
+  required command flag mapped to `body.*`.
+  `internal/connectors/engine/schema/cli_surface.schema.json` is the schema source of truth, and
+  `connectorgen validate` rejects unsupported formats, operators, fallback namespaces, unmapped
+  constraint targets, missing required body mappings, and multi-line validation messages. The
+  shared-code boundary guard (`docs/migration/connector-boundary-guard.md`) enforces this ownership
+  rule outside connector defs/hooks/native escape hatches.
 - **Direct-read `output_policy` stays generic and bounded**: use `repository_contents_file_metadata`
   for a single repository file metadata response and `repository_contents_directory` for repository
   directory listings. Both policies reject sensitive repository paths before network access and

@@ -9,9 +9,10 @@
     "body": {
       "PublicKeyList": [
         {
-          "pm_record_id": "list_public_keys_fixture_1",
-          "operation": "ListPublicKeys",
-          "NextToken": "fixture-next-token"
+          "Fingerprint": "fixture-public-key-fingerprint",
+          "ValidityStartTime": 1767225600.25,
+          "ValidityEndTime": 1767312000.5,
+          "Value": "fixture-public-key-value"
         }
       ]
     }

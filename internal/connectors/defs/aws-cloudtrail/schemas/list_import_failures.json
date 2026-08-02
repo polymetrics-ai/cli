@@ -12,21 +12,36 @@
     "operation": {
       "type": "string"
     },
-    "Failures": {
-      "type": [
-        "array",
-        "null"
-      ],
-      "items": {
-        "type": "object",
-        "additionalProperties": true
-      }
-    },
-    "NextToken": {
+    "Location": {
       "type": [
         "string",
         "null"
       ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ErrorType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ErrorMessage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LastUpdatedTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     }
   },
   "additionalProperties": true

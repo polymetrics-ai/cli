@@ -1,63 +1,38 @@
-# Overview
+# Google Ads connector notes
 
-Reads accessible customers and allow-listed Google Ads GAQL search resources (campaigns, ad groups)
-through the Google Ads REST API. Read-only; arbitrary GAQL is not accepted.
+## Overview
 
-Readable streams: `accessible_customers`, `campaigns`, `ad_groups`.
+Google Ads is implemented as a declarative preview connector against the public Google Ads API v22 REST discovery document. This wave ships sanitized fixture coverage plus executable credential-backed reads, fixed direct reads, and guarded reverse/write actions, but does not claim certification.
 
-This connector is read-only; no write actions are declared.
+Public source audit:
 
-Service API documentation: https://developers.google.com/google-ads/api/rest/overview.
+- Source: `https://googleads.googleapis.com/$discovery/rest?version=v22`
+- API version: `v22`
+- Discovery revision: `20260721`
+- Raw discovery method count: `163` (`POST=151`, `GET=11`, `DELETE=1`)
+- Local operation ledger rows: `164`. The row count is one greater than the raw method count because the single `customers.googleAds.search` method is intentionally represented by two fixed GAQL stream rows: `campaigns` and `ad_groups`.
 
 ## Auth setup
 
-Connection fields:
-
-- `access_token` (required, secret, string); Google OAuth 2.0 access token with Google Ads read
-  scope. Used only for Bearer auth; never logged. Acquisition/refresh is out of scope for this
-  connector (credentials layer already owns it).
-- `base_url` (optional, string); default `https://googleads.googleapis.com/v24`; format `uri`;
-  Google Ads REST API base URL override for tests or proxies.
-- `customer_id` (optional, string); Google Ads customer id to query GAQL search resources
-  (campaigns, ad_groups) against. Required for those streams only; accessible_customers is
-  account-scoped and does not reference it.
-- `developer_token` (required, secret, string); Google Ads developer token, sent as the
-  developer-token header on every request. Never logged.
-- `login_customer_id` (optional, string); Optional manager (MCC) customer id sent as the
-  login-customer-id header. Omitted entirely when unset.
-- `max_pages` (optional, string); Maximum pages fetched per GAQL search stream. A positive integer,
-  or 'all'/'unlimited' (default) for no cap.
-- `mode` (optional, string).
-- `page_size` (optional, integer); default `1000`; GAQL search pageSize (1-10000).
-
-Secret fields are redacted in logs and write previews: `access_token`, `developer_token`.
-
-Default configuration values: `base_url=https://googleads.googleapis.com/v24`, `page_size=1000`.
-
-Authentication behavior:
-
-- Bearer token authentication using `secrets.access_token`.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `customers:listAccessibleCustomers`.
+Provide `access_token` and `developer_token` through the credentials layer or environment. Optional `login_customer_id` is sent only when present. `customer_id` is required for customer-scoped streams, fixed direct reads, and reverse/write actions. Do not place secret values in plans, docs, fixtures, or command text.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
+Implemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.
 
-- `accessible_customers`: GET `customers:listAccessibleCustomers` - records path `resourceNames`.
-- `campaigns`: POST `customers/{{ config.customer_id }}/googleAds:search` - records path `results`.
-- `ad_groups`: POST `customers/{{ config.customer_id }}/googleAds:search` - records path `results`.
+Direct reads: `21` fixed connector-owned operations with JSON-redacted output, bounded response size, and typed CLI body/query fields where a POST body or GET query parameters are required.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Google Ads API read of
-customer/campaign/ad-group metadata.
+Reverse/write actions: `7` guarded write actions whose request schemas are closed and connector-owned.
+
+- Write actions use closed record schemas derived from public discovery fields that can be represented without raw operation objects.
+- Destructive or account-admin actions carry explicit `confirm: destructive` metadata and remain subject to the platform reverse ETL plan -> preview -> approval -> execute lifecycle.
+- Secret-like fields are redacted; `access_token` and `developer_token` are never stored in fixtures.
+- No generic Google Ads SQL/GAQL shell, generic HTTP write, or raw request passthrough is exposed.
 
 ## Known limits
 
-- Batch defaults: read_page_size=1000.
-- API coverage includes 3 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  duplicate_of=1, out_of_scope=7, requires_elevated_scope=1.
+Blocked/planned operations: `133` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, raw GAQL query commands, and direct reads with required complex request bodies remain blocked.
+
+Google Ads methods whose REST paths use `{+resourceName}`, `{+name}`, `{+experiment}`, `{+campaignDraft}`, or `{+adGroupAd}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.

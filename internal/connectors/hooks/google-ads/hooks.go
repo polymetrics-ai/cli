@@ -35,6 +35,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -122,12 +123,12 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 	return true, h.search(ctx, rt.Requester, customerID, gs, pageSize, maxPages, emit)
 }
 
-// readAccessibleCustomers ports google_ads.go's readAccessibleCustomers
-// verbatim: GET customers:listAccessibleCustomers, then derive customer_id
+// readAccessibleCustomers ports google_ads.go's readAccessibleCustomers:
+// GET v22/customers:listAccessibleCustomers, then derive customer_id
 // from the trailing "/"-delimited segment of each raw resource name (a bare
 // scalar string array element -- see package doc reason 1).
 func (h Hooks) readAccessibleCustomers(ctx context.Context, r *connsdk.Requester, emit func(connectors.Record) error) error {
-	resp, err := r.Do(ctx, http.MethodGet, "customers:listAccessibleCustomers", nil, nil)
+	resp, err := r.Do(ctx, http.MethodGet, "v22/customers:listAccessibleCustomers", nil, nil)
 	if err != nil {
 		return fmt.Errorf("read google-ads accessible customers: %w", err)
 	}
@@ -153,12 +154,15 @@ func (h Hooks) readAccessibleCustomers(ctx context.Context, r *connsdk.Requester
 	return nil
 }
 
-// search ports google_ads.go's search verbatim: POST
-// customers/{customerID}/googleAds:search with a JSON body carrying
+// search ports google_ads.go's search: POST
+// v22/customers/{customerID}/googleAds:search with a JSON body carrying
 // query/pageSize/pageToken, following nextPageToken until it is empty or
 // maxPages (0 = unbounded) is reached.
 func (h Hooks) search(ctx context.Context, r *connsdk.Requester, customerID string, gs gaqlStream, pageSize, maxPages int, emit func(connectors.Record) error) error {
-	path := "customers/" + customerID + "/googleAds:search"
+	if err := validateCustomerID(customerID); err != nil {
+		return err
+	}
+	path := "v22/customers/" + url.PathEscape(customerID) + "/googleAds:search"
 	pageToken := ""
 	for page := 0; maxPages == 0 || page < maxPages; page++ {
 		if err := ctx.Err(); err != nil {
@@ -244,6 +248,18 @@ func first(values ...any) any {
 // googleAdsPageSize/googleAdsMaxPages+intConfig/maxPagesConfig verbatim:
 // page_size is bounded [1,10000] (default 1000); max_pages accepts
 // ""/"all"/"unlimited" (unbounded, 0) or a non-negative integer.
+func validateCustomerID(customerID string) error {
+	if customerID == "" {
+		return fmt.Errorf("google-ads connector requires config customer_id for GAQL streams")
+	}
+	for _, r := range customerID {
+		if r < '0' || r > '9' {
+			return fmt.Errorf("google-ads customer_id must contain digits only")
+		}
+	}
+	return nil
+}
+
 func resolvePageSize(cfg connectors.RuntimeConfig) (int, error) {
 	raw := strings.TrimSpace(cfg.Config["page_size"])
 	if raw == "" {
