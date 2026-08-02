@@ -342,6 +342,5 @@
   },
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "submittedAt"
+  ]
 }

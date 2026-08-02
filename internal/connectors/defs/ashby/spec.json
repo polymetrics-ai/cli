@@ -3,19 +3,13 @@
   "title": "Ashby Connection Specification",
   "type": "object",
   "required": [
-    "api_key",
-    "start_date"
+    "api_key"
   ],
   "properties": {
     "api_key": {
       "type": "string",
       "x-secret": true,
       "description": "Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."
-    },
-    "start_date": {
-      "type": "string",
-      "format": "date-time",
-      "description": "Lower bound used by client-side incremental filtering when a stream has a timestamp cursor."
     },
     "base_url": {
       "type": "string",

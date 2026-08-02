@@ -44,3 +44,13 @@ Parent #3207 and children #3208-#3214: refresh the Ashby official OpenAPI invent
 - Build/boundary/diff/make verify pass or any blocker is documented with exact evidence.
 - Parent and children receive one final gh-axi comment with truthful counts and verification.
 - Clean commit on `fm/cli-ashby-parity-wave05-r1`; no push/PR/no-mistakes final pipeline.
+
+## Review fix round 1
+
+1. Withdraw inferred timestamp incremental metadata and reject `syncToken` input until `ashby-sync-token-checkpoint-foundation` provides an Ashby-owned persisted opaque-state seam.
+2. Route native reads, checks, engine-backed direct reads, and engine-backed writes through one credential-safe Ashby success-envelope validator.
+3. Close every modeled nested request object generated for writes while preserving explicitly documented map-valued schemas.
+4. Reject repeated Ashby page cursors before another request can reuse the token.
+5. Remove executable repeatable array flags from Ashby stream commands and record `connector-stream-repeatable-array-foundation` as the blocked capability; direct-read and write arrays retain their existing supported runner paths.
+
+This review phase uses the existing manual GSD/TDD fallback because `scripts/gsd prompt programming-loop ...` is unavailable. Production changes remain confined to Ashby-owned native code, bundle generation inputs/outputs, tests, and phase evidence.

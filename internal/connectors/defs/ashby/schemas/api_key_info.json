@@ -22,6 +22,5 @@
   },
   "x-primary-key": [
     "title"
-  ],
-  "x-cursor-field": "createdAt"
+  ]
 }

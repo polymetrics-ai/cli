@@ -14631,56 +14631,56 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "jobs",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "applications",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "users",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "api_key_info",
         "primaryKey": [
           "title"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "audit_log_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "timestamp",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "application_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "application_hiring_team_role_list",
@@ -14703,56 +14703,56 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "evaluatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "application_feedback_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "submittedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "candidate_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "candidate_list_client_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "candidate_list_fraud_checks",
         "primaryKey": [
           "id"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "candidate_list_notes",
         "primaryKey": [
           "id"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "candidate_list_projects",
         "primaryKey": [
           "id"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "candidate_tag_list",
@@ -14767,8 +14767,8 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "feedback_form_definition_list",
@@ -14791,24 +14791,24 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "job_posting_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "job_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "job_board_list",
@@ -14831,24 +14831,24 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "department_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "department_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "location_list",
@@ -14871,8 +14871,8 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "interview_stage_list",
@@ -14895,48 +14895,48 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "decidedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "offer_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "decidedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "opening_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "openedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "opening_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "openedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "project_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "project_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "source_list",
@@ -14999,16 +14999,16 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "user_list_interviewer_pauses",
         "primaryKey": [
           "id"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "referral_form_info",
@@ -15031,64 +15031,64 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "sequence_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "sequence_template_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "sequence_template_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "interview_schedule_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "take_home_assignment_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "take_home_assignment_info",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "interview_event_list",
         "primaryKey": [
           "id"
         ],
-        "cursor": "updatedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "interview_briefing_info",
@@ -15151,8 +15151,8 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "submittedAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       },
       {
         "name": "webhook_info",
@@ -15199,8 +15199,8 @@
         "primaryKey": [
           "id"
         ],
-        "cursor": "createdAt",
-        "incremental": true
+        "cursor": "",
+        "incremental": false
       }
     ],
     "writeActions": [
@@ -15950,7 +15950,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for candidate.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "job list",
@@ -15962,13 +15962,6 @@
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/joblist",
           "flags": [
-            {
-              "name": "status",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.status"
-            },
             {
               "name": "created-after",
               "type": "integer",
@@ -16010,20 +16003,13 @@
               "summary": "",
               "values": [],
               "mapsTo": "query.includeUnpublishedJobPostingsIds"
-            },
-            {
-              "name": "expand",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for job.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for job.list; flags map only to documented request body fields. Repeatable array request variants (--status, --expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "application list",
@@ -16064,20 +16050,13 @@
               "values": [],
               "mapsTo": "query.jobId",
               "allowEmpty": false
-            },
-            {
-              "name": "expand",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for application.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for application.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "user list",
@@ -16101,7 +16080,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for user.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for user.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "api-key info",
@@ -16117,7 +16096,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for apiKey.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for apiKey.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "audit-log list",
@@ -16146,41 +16125,13 @@
               "mapsTo": "query.endDate",
               "format": "date-time",
               "allowEmpty": false
-            },
-            {
-              "name": "actor-ids",
-              "type": "string_array",
-              "summary": "Restricts results to entries whose actor id is one of these values. An empty array is ignored, same as omitting this field. Max 100 items.",
-              "values": [],
-              "mapsTo": "query.actorIds"
-            },
-            {
-              "name": "target-ids",
-              "type": "string_array",
-              "summary": "Restricts results to entries whose target object id is one of these values. Combined with other filters using AND (all conditions must match). An empty array is ignored. Max 100 it",
-              "values": [],
-              "mapsTo": "query.targetIds"
-            },
-            {
-              "name": "target-types",
-              "type": "string_array",
-              "summary": "Restricts results to entries whose target type is one of these values (e.g. \"job\", \"app_user\"). When both targetTypes and categories are supplied, matching uses OR (entries that ma",
-              "values": [],
-              "mapsTo": "query.targetTypes"
-            },
-            {
-              "name": "categories",
-              "type": "string_array",
-              "summary": "Restricts results to entries in one of categories (e.g. \"JobStatusChanged\"). Max 100 items. See the Audit Log Vocabulary guide.",
-              "values": [],
-              "mapsTo": "query.categories"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for auditLog.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for auditLog.list; flags map only to documented request body fields. Repeatable array request variants (--actor-ids, --target-ids, --target-types, --categories) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "application create",
@@ -16370,20 +16321,13 @@
               "values": [],
               "mapsTo": "query.submittedFormInstanceId",
               "allowEmpty": false
-            },
-            {
-              "name": "expand",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for application.info; flags map only to documented request body fields. Requires at least one documented selector: applicationId, submittedFormInstanceId."
+          "notes": "Fixed Ashby stream for application.info; flags map only to documented request body fields. Requires at least one documented selector: applicationId, submittedFormInstanceId. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "application add-hiring-team-member",
@@ -16786,7 +16730,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for application.listCriteriaEvaluations; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for application.listCriteriaEvaluations; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "application-feedback list",
@@ -16818,7 +16762,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for applicationFeedback.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for applicationFeedback.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "application-feedback submit",
@@ -17093,7 +17037,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.info; flags map only to documented request body fields. Requires at least one documented selector: id, externalMappingId."
+          "notes": "Fixed Ashby stream for candidate.info; flags map only to documented request body fields. Requires at least one documented selector: id, externalMappingId. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "candidate create",
@@ -17468,7 +17412,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.listClientInfo; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for candidate.listClientInfo; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "candidate list-fraud-checks",
@@ -17494,7 +17438,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.listFraudChecks; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for candidate.listFraudChecks; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "candidate set-fraud-status",
@@ -17556,7 +17500,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.listNotes; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for candidate.listNotes; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "candidate anonymize",
@@ -17860,7 +17804,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.listProjects; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for candidate.listProjects; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "candidate push-to-hris",
@@ -18010,7 +17954,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for communicationTemplate.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for communicationTemplate.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "feedback-form-definition list",
@@ -18115,7 +18059,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for jobPosting.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for jobPosting.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "job-posting info",
@@ -18150,20 +18094,13 @@
               "summary": "",
               "values": [],
               "mapsTo": "query.includeUnpublishedJobPostings"
-            },
-            {
-              "name": "expand",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for jobPosting.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for jobPosting.info; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "job-posting update-compensation",
@@ -18363,20 +18300,13 @@
               "summary": "",
               "values": [],
               "mapsTo": "query.includeUnpublishedJobPostingsIds"
-            },
-            {
-              "name": "expand",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for job.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for job.info; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "job create",
@@ -18714,20 +18644,12 @@
           "write": "",
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/jobtemplatelist",
-          "flags": [
-            {
-              "name": "expand",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.expand"
-            }
-          ],
+          "flags": [],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for jobTemplate.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for jobTemplate.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "department archive",
@@ -18844,7 +18766,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for department.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for department.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "department list",
@@ -18868,7 +18790,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for department.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for department.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "department move",
@@ -19302,7 +19224,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for interviewPlan.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for interviewPlan.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "interview-stage list",
@@ -19487,40 +19409,19 @@
               "mapsTo": "query.createdAfter"
             },
             {
-              "name": "offer-status",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.offerStatus"
-            },
-            {
-              "name": "acceptance-status",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.acceptanceStatus"
-            },
-            {
               "name": "application-id",
               "type": "string",
               "summary": "",
               "values": [],
               "mapsTo": "query.applicationId",
               "allowEmpty": false
-            },
-            {
-              "name": "approval-status",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.approvalStatus"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for offer.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for offer.list; flags map only to documented request body fields. Repeatable array request variants (--offer-status, --acceptance-status, --approval-status) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "offer info",
@@ -19553,7 +19454,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for offer.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for offer.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "offer start",
@@ -19793,7 +19694,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for opening.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for opening.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "opening create",
@@ -20218,7 +20119,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for opening.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for opening.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "opening search",
@@ -20271,7 +20172,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for project.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for project.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "project list",
@@ -20295,7 +20196,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for project.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for project.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "project search",
@@ -21036,7 +20937,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for user.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for user.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "user search",
@@ -21204,7 +21105,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for user.listInterviewerPauses; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for user.listInterviewerPauses; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "user delete-interviewer-pause",
@@ -21510,7 +21411,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for sequence.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for sequence.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "sequence list",
@@ -21535,7 +21436,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for sequence.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for sequence.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "sequence update-stage",
@@ -21635,7 +21536,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for sequenceTemplate.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for sequenceTemplate.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "sequence-template list",
@@ -21659,7 +21560,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for sequenceTemplate.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for sequenceTemplate.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "interview-schedule list",
@@ -21699,7 +21600,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for interviewSchedule.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for interviewSchedule.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "interview-schedule create",
@@ -21847,20 +21748,13 @@
               "values": [],
               "mapsTo": "query.candidateId",
               "allowEmpty": false
-            },
-            {
-              "name": "expand",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for takeHomeAssignment.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for takeHomeAssignment.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "take-home-assignment info",
@@ -21880,20 +21774,13 @@
               "mapsTo": "query.takeHomeAssignmentId",
               "allowEmpty": false,
               "required": true
-            },
-            {
-              "name": "expand",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for takeHomeAssignment.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for takeHomeAssignment.info; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "interview-event list",
@@ -21915,13 +21802,6 @@
               "required": true
             },
             {
-              "name": "expand",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.expand"
-            },
-            {
               "name": "created-after",
               "type": "integer",
               "summary": "",
@@ -21933,7 +21813,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for interviewEvent.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for interviewEvent.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "interview-briefing info",
@@ -21953,20 +21833,13 @@
               "mapsTo": "query.interviewEventId",
               "allowEmpty": false,
               "required": true
-            },
-            {
-              "name": "expand",
-              "type": "string_array",
-              "summary": "",
-              "values": [],
-              "mapsTo": "query.expand"
             }
           ],
           "examples": [],
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for interviewBriefing.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for interviewBriefing.info; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation."
         },
         {
           "path": "interview info",
@@ -22293,7 +22166,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for surveySubmission.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for surveySubmission.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         },
         {
           "path": "webhook create",
@@ -22865,7 +22738,7 @@
           "outputPolicy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for approval.list; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for approval.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
         }
       ],
       "helpTopics": [
@@ -22879,7 +22752,7 @@
         }
       ]
     },
-    "docsMd": "# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.\n\nCoverage summary:\n\n- REST operations in source: 185\n- OpenAPI webhook events in source: 27\n- Implemented ETL streams: 72\n- Implemented bounded direct reads/search/file metadata operations: 7\n- Implemented reverse-ETL write actions: 101\n- Reverse-ETL CLI commands with scalar flags: 91; partial nested-object flag surfaces: 10\n- Blocked/non-executable ledger rows: 32\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when generated stream metadata explicitly declares an incremental cursor.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. `hiringTeamRole.list` defaults to `namesOnly=true`; the `namesOnly=false` object-result variant is blocked pending variant-schema foundation `ashby_hiring_team_role_list_names_only_false`. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.",
+    "docsMd": "# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.\n\nCoverage summary:\n\n- REST operations in source: 185\n- OpenAPI webhook events in source: 27\n- Implemented ETL streams: 72\n- Implemented bounded direct reads/search/file metadata operations: 7\n- Implemented reverse-ETL write actions: 101\n- Reverse-ETL CLI commands with scalar flags: 91; partial nested-object flag surfaces: 10\n- Blocked/non-executable ledger rows: 32\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination and applies page-size, max-pages, and repeated-cursor bounds. Streams are full-refresh only until `ashby-sync-token-checkpoint-foundation` supplies an Ashby-owned persisted opaque-token state seam; timestamp fields are not used as lossy substitutes. Repeatable array stream flags are withheld until `connector-stream-repeatable-array-foundation` preserves every supplied value.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with recursively closed modeled JSON schemas and the normal plan → preview → explicit approval → execute gate. Explicitly documented map-valued fields retain their map schemas; all other modeled objects reject undeclared fields. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. Opaque incremental state is blocked pending `ashby-sync-token-checkpoint-foundation`, and repeatable array stream-command variants are blocked pending `connector-stream-repeatable-array-foundation`. `hiringTeamRole.list` defaults to `namesOnly=true`; the `namesOnly=false` object-result variant is blocked pending variant-schema foundation `ashby_hiring_team_role_list_names_only_false`. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.",
     "docs": [
       {
         "title": "Service API documentation",

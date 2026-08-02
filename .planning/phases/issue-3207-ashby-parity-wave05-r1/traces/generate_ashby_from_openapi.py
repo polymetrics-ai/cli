@@ -19,6 +19,15 @@ CDC_STREAM_SUMMARIES = {"auditLog.list","application.listHistory"}
 CDC_WRITE_SUMMARIES = {"application.updateHistory"}
 NON_INCREMENTAL_STREAM_SUMMARIES = {"application.listHistory"}
 PAGINATION_FIELDS = {"cursor","limit","syncToken"}
+SYNC_TOKEN_FOUNDATION = "ashby-sync-token-checkpoint-foundation"
+STREAM_ARRAY_FOUNDATION = "connector-stream-repeatable-array-foundation"
+DOCUMENTED_WRITE_MAP_SCHEMAS = {
+    "create_department": {("properties", "extraData"): True},
+    "update_department": {("properties", "extraData"): True},
+    "create_location": {("properties", "extraData"): True},
+    "create_interview_schedule": {("properties", "interviewEvents", "items", "properties", "extraData"): True},
+    "create_survey_submission": {("properties", "submittedValues"): True},
+}
 DESTRUCTIVE_WORDS = ("delete","remove","archive","cancel","discard","reject","close","disable","restore","anonymize")
 REDACT_MARKERS = ("id","email","file","resume","handle","url","name","secret")
 REQUIRED_ANY_FIELDS = {
@@ -128,18 +137,40 @@ def to_draft_schema(schema: dict[str, Any], node: Any, *, close_object: bool=Fal
     if node.get("format") in {"date-time","date","uri","email"}: out["format"] = node["format"]
     if isinstance(node.get("enum"), list) and len(node["enum"]) <= 100: out["enum"] = node["enum"]
     props = node.get("properties") if isinstance(node.get("properties"), dict) else None
-    if props is not None and not preserve_union:
+    if props is not None:
         out.setdefault("type", "object")
-        out["properties"] = {n: to_draft_schema(schema, p, close_object=False, depth=depth+1) for n,p in props.items()}
+        out["properties"] = {n: to_draft_schema(schema, p, close_object=close_object, depth=depth+1) for n,p in props.items()}
         req = [r for r in node.get("required", []) if isinstance(r, str)]
         if req: out["required"] = req
-        if close_object and depth == 0: out["additionalProperties"] = False
-    elif "items" in node and not preserve_union:
+        if close_object:
+            additional = node.get("additionalProperties", False)
+            if isinstance(additional, dict):
+                out["additionalProperties"] = {} if not additional else to_draft_schema(schema, additional, close_object=True, depth=depth+1)
+            else:
+                out["additionalProperties"] = bool(additional)
+    elif "items" in node:
         out.setdefault("type", "array")
-        out["items"] = to_draft_schema(schema, node.get("items"), close_object=False, depth=depth+1)
+        out["items"] = to_draft_schema(schema, node.get("items"), close_object=close_object, depth=depth+1)
+    elif close_object and out.get("type") == "object":
+        additional = node.get("additionalProperties", False)
+        if isinstance(additional, dict):
+            out["additionalProperties"] = {} if not additional else to_draft_schema(schema, additional, close_object=True, depth=depth+1)
+        else:
+            out["additionalProperties"] = bool(additional)
     elif not out:
         out["type"] = ["string","number","integer","boolean","object","array","null"]
     return out
+
+def preserve_documented_write_maps(action_name: str, schema: dict[str, Any]) -> None:
+    for path, additional_properties in DOCUMENTED_WRITE_MAP_SCHEMAS.get(action_name, {}).items():
+        node: Any = schema
+        for part in path:
+            if not isinstance(node, dict) or part not in node:
+                node = None
+                break
+            node = node[part]
+        if isinstance(node, dict):
+            node["additionalProperties"] = additional_properties
 
 def request_schema(schema, op):
     body = op.get("requestBody",{}).get("content",{}).get("application/json",{}).get("schema")
@@ -178,23 +209,25 @@ def choose_pk(props):
     for n in props:
         if n.endswith("Id") or n.endswith("ID") or n.lower()=="email": return n
     return next(iter(props), "_ashby_row_id")
-def choose_cursor(props):
-    for n in ("updatedAt","createdAt","submittedAt","completedAt","sentAt","date","timestamp"):
-        if n in props: return n
-    for n in props:
-        lo=n.lower()
-        if lo.endswith("at") or "date" in lo or "time" in lo: return n
-    return None
+
+def name_words(name: str) -> list[str]:
+    return [w.lower() for w in re.findall(r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])|\d+", name.replace("_", " ").replace("-", " "))]
+
+def is_time_like_name(name: str) -> bool:
+    lower = name.lower()
+    if lower in {"date", "timestamp"}: return True
+    words = name_words(name)
+    if not words: return False
+    if words[-1] in {"date", "time", "timestamp", "after", "before"}: return True
+    return words[-1] == "at" and len(words) > 1
 
 def result_record_schema(schema, stream_name, op):
     node,_ = response_result_schema(schema, op); props = properties_of(schema, node)
     pk = choose_pk(props); synthetic=[]
     if pk not in props:
         props[pk] = {"type":"string","description":"Synthetic stable key added by the Ashby connector when the response object has no documented id field."}; synthetic=[pk]
-    cursor = choose_cursor(props)
     out = {"$schema":"http://json-schema.org/draft-07/schema#","title":stream_name,"type":"object","properties":props,"x-primary-key":[pk]}
-    if cursor: out["x-cursor-field"] = cursor
-    return out, cursor, synthetic
+    return out, None, synthetic
 
 def cli_flag_type(prop_schema):
     typ = prop_schema.get("type")
@@ -508,6 +541,13 @@ def main():
                 notes = f"Fixed Ashby stream for {clean}; " + FIXED_STREAM_REQUEST_FIELD_NOTES[clean]
             if required_any:
                 notes += " Requires at least one documented selector: " + ", ".join(required_any) + "."
+            array_flags = [flag for flag in flags if flag.get("type") == "string_array"]
+            if array_flags:
+                blocked_names = ", ".join("--" + flag["name"] for flag in array_flags)
+                flags = [flag for flag in flags if flag.get("type") != "string_array"]
+                notes += f" Repeatable array request variants ({blocked_names}) are blocked pending {STREAM_ARRAY_FOUNDATION}."
+            if "syncToken" in req_props:
+                notes += f" Opaque syncToken incremental checkpointing is blocked pending {SYNC_TOKEN_FOUNDATION}; this stream is full-refresh only."
             cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"etl","availability":"implemented","stream":sname,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"notes":notes})
             api_rows.append({"method":method,"path":path,"covered_by":{"stream":sname}}); continue
         if is_direct(summary):
@@ -521,6 +561,7 @@ def main():
             api_rows.append({"method":method,"path":path,"covered_by":{"direct_read":cpath}}); continue
         if is_write(summary):
             wname=write_name_for(clean, used_writes); req_schema=to_draft_schema(schema, req_sch, close_object=True); destructive=is_destructive(clean)
+            preserve_documented_write_maps(wname, req_schema)
             risk = f"Executes Ashby {clean} through the documented {method} {path} endpoint; reverse ETL plan, preview, approval, and execute are required."
             if destructive:
                 risk = f"Executes Ashby {clean} through the documented {method} {path} endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required."
@@ -550,7 +591,7 @@ def main():
         if sub.exists():
             for f in sub.glob("*.json"): f.unlink()
     write_json(DEFS/"metadata.json", {"name":"ashby","display_name":"Ashby","description":"Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.","integration_type":"api","release_stage":"alpha","capabilities":{"check":True,"read":True,"write":True,"query":False,"cdc":False,"dynamic_schema":False},"batch":{"read_page_size":100,"write_batch_size":1},"risk":{"read":"bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and sanitized replay fixtures","write":"named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation","approval":"reverse ETL writes require plan -> preview -> explicit approval -> execute"},"docs_url":"https://developers.ashbyhq.com/"})
-    write_json(DEFS/"spec.json", {"$schema":"http://json-schema.org/draft-07/schema#","title":"Ashby Connection Specification","type":"object","required":["api_key","start_date"],"properties":{"api_key":{"type":"string","x-secret":True,"description":"Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."},"start_date":{"type":"string","format":"date-time","description":"Lower bound used by client-side incremental filtering when a stream has a timestamp cursor."},"base_url":{"type":"string","default":"https://api.ashbyhq.com","description":"Ashby API base URL; override only for local tests."},"page_size":{"type":"string","default":"100","description":"Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector."},"max_pages":{"type":"string","default":"1","description":"Maximum pages to read per stream. Use 0, all, or unlimited for an exhaustive read."},"mode":{"type":"string","description":"Set to fixture for credential-free native tests."}}})
+    write_json(DEFS/"spec.json", {"$schema":"http://json-schema.org/draft-07/schema#","title":"Ashby Connection Specification","type":"object","required":["api_key"],"properties":{"api_key":{"type":"string","x-secret":True,"description":"Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."},"base_url":{"type":"string","default":"https://api.ashbyhq.com","description":"Ashby API base URL; override only for local tests."},"page_size":{"type":"string","default":"100","description":"Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector."},"max_pages":{"type":"string","default":"1","description":"Maximum pages to read per stream. Use 0, all, or unlimited for an exhaustive read."},"mode":{"type":"string","description":"Set to fixture for credential-free native tests."}}})
     write_json(DEFS/"streams.json", {"base":{"url":"{{ config.base_url }}","user_agent":"polymetrics-go-cli","headers":{"Accept":"application/json; version=1","Content-Type":"application/json"},"auth":[{"mode":"basic","username":"{{ secrets.api_key }}","password":""}],"check":{"method":"POST","path":"/apiKey.info"},"pagination":{"type":"none"}},"streams":stream_entries})
     for name, sch in stream_schemas.items(): write_json(DEFS/"schemas"/f"{name}.json", sch)
     write_json(DEFS/"writes.json", {"actions":write_actions})
@@ -586,7 +627,7 @@ def main():
     check_record["createdAt"] = "2026-01-01T00:00:00Z"
     if "scopes" in check_record: check_record["scopes"] = ["fixture_scope"]
     write_json(fixture_root/"check.json", {"request":{"method":"POST","path":"/apiKey.info","query":{}},"response":{"status":200,"body":{"success":True,"results":check_record}}})
-    docs = f"""# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference ({DOC_URL}). The parity ledger was reviewed on {REVIEWED_AT}.\n\nCoverage summary:\n\n- REST operations in source: {len(ops)}\n- OpenAPI webhook events in source: {len(schema.get('webhooks',{}))}\n- Implemented ETL/changefeed streams: {len(stream_entries)}\n- Implemented bounded direct reads/search/file metadata operations: {len(operation_entries)}\n- Implemented reverse-ETL write actions: {len(write_actions)}\n- Reverse-ETL CLI commands with scalar flags: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'implemented')}; partial nested-object flag surfaces: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'partial')}\n- Blocked/non-executable ledger rows: {len(api_rows) - len(stream_entries) - len(operation_entries) - len(write_actions)}\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when generated stream metadata explicitly declares an incremental cursor.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. `hiringTeamRole.list` defaults to `namesOnly=true`; the `namesOnly=false` object-result variant is blocked pending variant-schema foundation `ashby_hiring_team_role_list_names_only_false`. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.\n"""
+    docs = f"""# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference ({DOC_URL}). The parity ledger was reviewed on {REVIEWED_AT}.\n\nCoverage summary:\n\n- REST operations in source: {len(ops)}\n- OpenAPI webhook events in source: {len(schema.get('webhooks',{}))}\n- Implemented ETL/changefeed streams: {len(stream_entries)}\n- Implemented bounded direct reads/search/file metadata operations: {len(operation_entries)}\n- Implemented reverse-ETL write actions: {len(write_actions)}\n- Reverse-ETL CLI commands with scalar flags: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'implemented')}; partial nested-object flag surfaces: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'partial')}\n- Blocked/non-executable ledger rows: {len(api_rows) - len(stream_entries) - len(operation_entries) - len(write_actions)}\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination and applies page-size, max-pages, and repeated-cursor bounds. Streams are full-refresh only until `{SYNC_TOKEN_FOUNDATION}` supplies an Ashby-owned persisted opaque-token state seam; timestamp fields are not used as lossy substitutes. Repeatable array stream flags are withheld until `{STREAM_ARRAY_FOUNDATION}` preserves every supplied value.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with recursively closed modeled JSON schemas and the normal plan → preview → explicit approval → execute gate. Explicitly documented map-valued fields retain their map schemas. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. Opaque incremental state is blocked pending `{SYNC_TOKEN_FOUNDATION}`, and repeatable array stream-command variants are blocked pending `{STREAM_ARRAY_FOUNDATION}`. `hiringTeamRole.list` defaults to `namesOnly=true`; the `namesOnly=false` object-result variant is blocked pending variant-schema foundation `ashby_hiring_team_role_list_names_only_false`. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.\n"""
     (DEFS/"docs.md").write_text(docs)
 
     go_lines=[]

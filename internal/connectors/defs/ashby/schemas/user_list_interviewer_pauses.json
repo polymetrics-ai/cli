@@ -31,6 +31,5 @@
   },
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "createdAt"
+  ]
 }

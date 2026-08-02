@@ -30,11 +30,7 @@
         "path": "results"
       },
       "schema": "schemas/candidates.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "jobs",
@@ -44,11 +40,7 @@
         "path": "results"
       },
       "schema": "schemas/jobs.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "applications",
@@ -58,11 +50,7 @@
         "path": "results"
       },
       "schema": "schemas/applications.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "users",
@@ -72,11 +60,7 @@
         "path": "results"
       },
       "schema": "schemas/users.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "api_key_info",
@@ -86,11 +70,7 @@
         "path": "results"
       },
       "schema": "schemas/api_key_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "audit_log_list",
@@ -100,11 +80,7 @@
         "path": "results"
       },
       "schema": "schemas/audit_log_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "timestamp",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "application_info",
@@ -114,11 +90,7 @@
         "path": "results"
       },
       "schema": "schemas/application_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "application_hiring_team_role_list",
@@ -148,11 +120,7 @@
         "path": "results"
       },
       "schema": "schemas/application_list_criteria_evaluations.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "evaluatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "application_feedback_list",
@@ -162,11 +130,7 @@
         "path": "results"
       },
       "schema": "schemas/application_feedback_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "submittedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "candidate_info",
@@ -176,11 +140,7 @@
         "path": "results"
       },
       "schema": "schemas/candidate_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "candidate_list_client_info",
@@ -190,11 +150,7 @@
         "path": "results"
       },
       "schema": "schemas/candidate_list_client_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "candidate_list_fraud_checks",
@@ -204,11 +160,7 @@
         "path": "results"
       },
       "schema": "schemas/candidate_list_fraud_checks.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "candidate_list_notes",
@@ -218,11 +170,7 @@
         "path": "results"
       },
       "schema": "schemas/candidate_list_notes.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "candidate_list_projects",
@@ -232,11 +180,7 @@
         "path": "results"
       },
       "schema": "schemas/candidate_list_projects.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "candidate_tag_list",
@@ -256,11 +200,7 @@
         "path": "results"
       },
       "schema": "schemas/communication_template_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "feedback_form_definition_list",
@@ -290,11 +230,7 @@
         "path": "results"
       },
       "schema": "schemas/job_posting_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "job_posting_info",
@@ -304,11 +240,7 @@
         "path": "results"
       },
       "schema": "schemas/job_posting_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "job_info",
@@ -318,11 +250,7 @@
         "path": "results"
       },
       "schema": "schemas/job_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "job_board_list",
@@ -352,11 +280,7 @@
         "path": "results"
       },
       "schema": "schemas/job_template_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "department_info",
@@ -366,11 +290,7 @@
         "path": "results"
       },
       "schema": "schemas/department_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "department_list",
@@ -380,11 +300,7 @@
         "path": "results"
       },
       "schema": "schemas/department_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "location_list",
@@ -414,11 +330,7 @@
         "path": "results"
       },
       "schema": "schemas/interview_plan_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "interview_stage_list",
@@ -448,11 +360,7 @@
         "path": "results"
       },
       "schema": "schemas/offer_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "decidedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "offer_info",
@@ -462,11 +370,7 @@
         "path": "results"
       },
       "schema": "schemas/offer_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "decidedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "opening_info",
@@ -476,11 +380,7 @@
         "path": "results"
       },
       "schema": "schemas/opening_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "openedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "opening_list",
@@ -490,11 +390,7 @@
         "path": "results"
       },
       "schema": "schemas/opening_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "openedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "project_info",
@@ -504,11 +400,7 @@
         "path": "results"
       },
       "schema": "schemas/project_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "project_list",
@@ -518,11 +410,7 @@
         "path": "results"
       },
       "schema": "schemas/project_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "source_list",
@@ -602,11 +490,7 @@
         "path": "results"
       },
       "schema": "schemas/user_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "user_list_interviewer_pauses",
@@ -616,11 +500,7 @@
         "path": "results"
       },
       "schema": "schemas/user_list_interviewer_pauses.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "referral_form_info",
@@ -650,11 +530,7 @@
         "path": "results"
       },
       "schema": "schemas/sequence_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "sequence_list",
@@ -664,11 +540,7 @@
         "path": "results"
       },
       "schema": "schemas/sequence_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "sequence_template_info",
@@ -678,11 +550,7 @@
         "path": "results"
       },
       "schema": "schemas/sequence_template_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "sequence_template_list",
@@ -692,11 +560,7 @@
         "path": "results"
       },
       "schema": "schemas/sequence_template_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "interview_schedule_list",
@@ -706,11 +570,7 @@
         "path": "results"
       },
       "schema": "schemas/interview_schedule_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "take_home_assignment_list",
@@ -720,11 +580,7 @@
         "path": "results"
       },
       "schema": "schemas/take_home_assignment_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "take_home_assignment_info",
@@ -734,11 +590,7 @@
         "path": "results"
       },
       "schema": "schemas/take_home_assignment_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "interview_event_list",
@@ -748,11 +600,7 @@
         "path": "results"
       },
       "schema": "schemas/interview_event_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "updatedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "interview_briefing_info",
@@ -840,11 +688,7 @@
         "path": "results"
       },
       "schema": "schemas/survey_submission_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "submittedAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "webhook_info",
@@ -904,11 +748,7 @@
         "path": "results"
       },
       "schema": "schemas/approval_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "createdAt",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     }
   ]
 }

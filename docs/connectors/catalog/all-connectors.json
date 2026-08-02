@@ -9046,19 +9046,13 @@
       "title": "Ashby Connection Specification",
       "type": "object",
       "required": [
-        "api_key",
-        "start_date"
+        "api_key"
       ],
       "properties": {
         "api_key": {
           "type": "string",
           "x-secret": true,
           "description": "Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."
-        },
-        "start_date": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Lower bound used by client-side incremental filtering when a stream has a timestamp cursor."
         },
         "base_url": {
           "type": "string",
@@ -9087,13 +9081,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9101,13 +9092,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9115,13 +9103,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9129,13 +9114,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9143,13 +9125,10 @@
         "primary_key": [
           "title"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9157,13 +9136,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "timestamp",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9171,13 +9147,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9207,13 +9180,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "evaluatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9221,13 +9191,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "submittedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9235,13 +9202,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9249,13 +9213,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9263,13 +9224,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9277,13 +9235,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9291,13 +9246,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9316,13 +9268,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9352,13 +9301,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9366,13 +9312,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9380,13 +9323,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9416,13 +9356,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9430,13 +9367,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9444,13 +9378,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9480,13 +9411,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9516,13 +9444,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "decidedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9530,13 +9455,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "decidedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9544,13 +9466,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "openedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9558,13 +9477,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "openedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9572,13 +9488,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9586,13 +9499,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9677,13 +9587,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9691,13 +9598,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9727,13 +9631,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9741,13 +9642,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9755,13 +9653,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9769,13 +9664,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9783,13 +9675,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9797,13 +9686,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9811,13 +9697,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9825,13 +9708,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9916,13 +9796,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "submittedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9985,13 +9862,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "createdAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],

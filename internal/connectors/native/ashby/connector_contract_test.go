@@ -3,6 +3,7 @@ package ashby
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -74,6 +75,35 @@ func TestValidateWriteAndDryRun(t *testing.T) {
 	}
 	if preview.RecordsStaged != 1 || preview.Action != "add_candidate_tag" {
 		t.Fatalf("preview = %+v, want one staged add_candidate_tag", preview)
+	}
+}
+
+func TestValidateWriteRejectsNestedArbitraryFields(t *testing.T) {
+	validator := New().(connectors.WriteValidator)
+	record := connectors.Record{
+		"candidateId": "candidate_fixture",
+		"jobId":       "job_fixture",
+		"applicationHistory": []any{map[string]any{
+			"stageId":        "stage_fixture",
+			"stageNumber":    1,
+			"enteredStageAt": "2026-01-01T00:00:00Z",
+			"arbitrary":      "blocked",
+		}},
+	}
+	err := validator.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "create_application"}, []connectors.Record{record})
+	if err == nil || !strings.Contains(err.Error(), "additional property") {
+		t.Fatalf("ValidateWrite nested arbitrary field error = %v, want additional property rejection", err)
+	}
+}
+
+func TestValidateWritePreservesDocumentedMapFields(t *testing.T) {
+	validator := New().(connectors.WriteValidator)
+	record := connectors.Record{
+		"name":      "Fixture Department",
+		"extraData": map[string]any{"documented_map_key": "fixture value"},
+	}
+	if err := validator.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "create_department"}, []connectors.Record{record}); err != nil {
+		t.Fatalf("ValidateWrite documented map field: %v", err)
 	}
 }
 
@@ -394,7 +424,7 @@ func TestReadDefaultsToOnePage(t *testing.T) {
 	}
 }
 
-func TestReadUsesStateAsLowerBoundNotPageCursor(t *testing.T) {
+func TestReadDoesNotInferIncrementalStateFromTimestamps(t *testing.T) {
 	var requestBodies []map[string]any
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/candidate.list" {
@@ -442,7 +472,7 @@ func TestReadUsesStateAsLowerBoundNotPageCursor(t *testing.T) {
 	if len(requestBodies) != 2 {
 		t.Fatalf("request count = %d, want 2", len(requestBodies))
 	}
-	wantIDs := []string{"new", "next"}
+	wantIDs := []string{"old", "equal", "new", "next"}
 	if len(records) != len(wantIDs) {
 		t.Fatalf("emitted %d records = %+v, want ids %v", len(records), records, wantIDs)
 	}
@@ -450,6 +480,95 @@ func TestReadUsesStateAsLowerBoundNotPageCursor(t *testing.T) {
 		if got := records[i]["id"]; got != wantID {
 			t.Fatalf("record %d id = %v, want %s", i, got, wantID)
 		}
+	}
+}
+
+func TestReadBlocksSyncTokenWithoutCheckpointFoundation(t *testing.T) {
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		_, _ = w.Write([]byte(`{"success":true,"results":[],"moreDataAvailable":false}`))
+	}))
+	defer server.Close()
+
+	tests := []struct {
+		name   string
+		query  map[string]string
+		state  map[string]string
+		config map[string]string
+	}{
+		{name: "query", query: map[string]string{"syncToken": "opaque-sync-token"}},
+		{name: "state", state: map[string]string{"syncToken": "opaque-sync-token"}},
+		{name: "config", config: map[string]string{"sync_token": "opaque-sync-token"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			config := map[string]string{"base_url": server.URL}
+			for key, value := range tt.config {
+				config[key] = value
+			}
+			err := New().Read(context.Background(), connectors.ReadRequest{
+				Stream: "candidates",
+				Config: connectors.RuntimeConfig{
+					Config:  config,
+					Secrets: map[string]string{"api_key": "test_key"},
+				},
+				Query: tt.query,
+				State: tt.state,
+			}, func(connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), "ashby-sync-token-checkpoint-foundation") {
+				t.Fatalf("Read syncToken error = %v, want named checkpoint foundation blocker", err)
+			}
+		})
+	}
+	if requestCount != 0 {
+		t.Fatalf("provider request count = %d, want 0", requestCount)
+	}
+}
+
+func TestReadStopsAtPageBoundBeforeCursorReuse(t *testing.T) {
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		_, _ = w.Write([]byte(`{"success":true,"results":[],"moreDataAvailable":true,"nextCursor":"bounded-page-token"}`))
+	}))
+	defer server.Close()
+
+	err := New().Read(context.Background(), connectors.ReadRequest{
+		Stream: "candidates",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL, "max_pages": "2"},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+	}, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Read bounded repeated cursor: %v", err)
+	}
+	if requestCount != 2 {
+		t.Fatalf("provider request count = %d, want bounded 2", requestCount)
+	}
+}
+
+func TestReadRejectsRepeatedPageCursorBeforeReuse(t *testing.T) {
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestCount++
+		_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"candidate_fixture"}],"moreDataAvailable":true,"nextCursor":"repeated-page-token"}`))
+	}))
+	defer server.Close()
+
+	err := New().Read(context.Background(), connectors.ReadRequest{
+		Stream: "candidates",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL, "max_pages": "3"},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+	}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "repeated pagination cursor") {
+		t.Fatalf("Read repeated cursor error = %v, want cycle rejection", err)
+	}
+	if requestCount != 2 {
+		t.Fatalf("provider request count = %d, want 2 before cursor reuse", requestCount)
 	}
 }
 
@@ -476,33 +595,21 @@ func TestFixtureModeReadsEveryDeclaredAshbyStream(t *testing.T) {
 	}
 }
 
-func TestReadUsesTimeAwareRFC3339CursorOffsets(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/candidate.list" {
-			t.Fatalf("path = %q, want /candidate.list", r.URL.Path)
-		}
-		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"equal-offset","updatedAt":"2026-01-02T06:00:00Z"},{"id":"older-offset","updatedAt":"2026-01-02T05:30:00Z"},{"id":"newer-offset","updatedAt":"2026-01-02T00:30:00-06:00"}],"moreDataAvailable":false}`))
-	}))
-	defer server.Close()
-
-	var records []connectors.Record
-	err := New().Read(context.Background(), connectors.ReadRequest{
-		Stream: "candidates",
-		Config: connectors.RuntimeConfig{
-			Config:  map[string]string{"base_url": server.URL, "max_pages": "1"},
-			Secrets: map[string]string{"api_key": "test_key"},
-		},
-		State: map[string]string{"cursor": "2026-01-02T01:00:00-05:00"},
-	}, func(record connectors.Record) error {
-		records = append(records, record)
-		return nil
-	})
+func TestAshbyCatalogAdvertisesFullRefreshOnly(t *testing.T) {
+	c := New()
+	catalog, err := c.Catalog(context.Background(), connectors.RuntimeConfig{})
 	if err != nil {
-		t.Fatalf("Read: %v", err)
+		t.Fatalf("Catalog: %v", err)
 	}
-	if len(records) != 1 || records[0]["id"] != "newer-offset" {
-		t.Fatalf("records = %+v, want only newer-offset", records)
+	for _, stream := range catalog.Streams {
+		if len(stream.CursorFields) != 0 {
+			t.Fatalf("stream %s cursor fields = %v, want none until opaque syncToken checkpointing exists", stream.Name, stream.CursorFields)
+		}
+	}
+	for _, mode := range connectors.ManifestOf(c).SyncModes {
+		if strings.HasPrefix(mode, "incremental_") {
+			t.Fatalf("manifest sync mode %q advertises unsupported Ashby incremental state", mode)
+		}
 	}
 }
 
@@ -586,6 +693,27 @@ func TestCommandSurfaceMarksRequiredStreamSelectors(t *testing.T) {
 	}
 }
 
+func TestCommandSurfaceBlocksRepeatableStreamArrayVariants(t *testing.T) {
+	surface := New().(connectors.CommandSurfaceProvider).CommandSurface()
+	blocked := 0
+	for _, cmd := range surface.Commands {
+		if cmd.Intent != "etl" {
+			continue
+		}
+		for _, flag := range cmd.Flags {
+			if flag.Type == "string_array" {
+				t.Fatalf("stream command %q exposes unsupported repeatable flag --%s", cmd.Path, flag.Name)
+			}
+		}
+		if strings.Contains(cmd.Notes, "connector-stream-repeatable-array-foundation") {
+			blocked++
+		}
+	}
+	if blocked == 0 {
+		t.Fatal("no Ashby stream command records the repeatable-array foundation blocker")
+	}
+}
+
 func TestAshbyResultRecordsRejectsErrorEnvelopes(t *testing.T) {
 	tests := []struct {
 		name    string
@@ -593,6 +721,7 @@ func TestAshbyResultRecordsRejectsErrorEnvelopes(t *testing.T) {
 		wantErr string
 	}{
 		{name: "false success", body: `{"success":false,"error":"fixture"}`, wantErr: "success=false"},
+		{name: "missing success", body: `{"results":[]}`, wantErr: "missing success"},
 		{name: "missing results", body: `{"success":true,"moreDataAvailable":false}`, wantErr: "missing results"},
 		{name: "malformed success", body: `{"success":"false","results":[]}`, wantErr: "success field must be boolean"},
 		{name: "malformed results", body: `{"success":true,"results":1}`, wantErr: "unsupported type"},
@@ -607,6 +736,84 @@ func TestAshbyResultRecordsRejectsErrorEnvelopes(t *testing.T) {
 				t.Fatalf("records = %+v, want none on error", records)
 			}
 		})
+	}
+}
+
+func TestAshbySiblingPathsRejectCredentialSafeErrorEnvelopes(t *testing.T) {
+	const sensitive = "synthetic-sensitive-response-token"
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"success":false,"error":{"apiToken":"` + sensitive + `"}}`))
+	}))
+	defer server.Close()
+	cfg := connectors.RuntimeConfig{
+		Config:  map[string]string{"base_url": server.URL},
+		Secrets: map[string]string{"api_key": "test_key"},
+	}
+
+	tests := []struct {
+		name string
+		run  func() error
+	}{
+		{name: "check", run: func() error { return New().Check(context.Background(), cfg) }},
+		{name: "direct read", run: func() error {
+			_, err := New().(connectors.OperationDirectReader).OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+				Operation:    "ashby.direct.candidate.search",
+				Config:       cfg,
+				Body:         map[string]any{"email": "candidate@example.invalid"},
+				OutputPolicy: "json_redacted",
+			})
+			return err
+		}},
+		{name: "write", run: func() error {
+			result, err := New().Write(context.Background(), connectors.WriteRequest{Action: "create_candidate_tag", Config: cfg}, []connectors.Record{{"title": "Fixture Tag"}})
+			if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
+				return fmt.Errorf("write result = %+v, want one failed record", result)
+			}
+			return err
+		}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := tt.run()
+			if err == nil || !strings.Contains(err.Error(), "ashby response success=false") {
+				t.Fatalf("error = %v, want Ashby success-envelope rejection", err)
+			}
+			if strings.Contains(err.Error(), sensitive) {
+				t.Fatalf("error persisted sensitive response content: %v", err)
+			}
+		})
+	}
+}
+
+func TestWriteAcceptsSuccessfulAshbyEnvelope(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/candidateTag.create" {
+			t.Fatalf("path = %q, want /candidateTag.create", r.URL.Path)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		if body["title"] != "Fixture Tag" {
+			t.Fatalf("body[title] = %v, want Fixture Tag", body["title"])
+		}
+		_, _ = w.Write([]byte(`{"success":true,"results":{"id":"tag_fixture"}}`))
+	}))
+	defer server.Close()
+
+	result, err := New().Write(context.Background(), connectors.WriteRequest{
+		Action: "create_candidate_tag",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+	}, []connectors.Record{{"title": "Fixture Tag"}})
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
+		t.Fatalf("write result = %+v, want one successful record", result)
 	}
 }
 

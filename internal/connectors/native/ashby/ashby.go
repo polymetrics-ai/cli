@@ -85,7 +85,11 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 	}
 	// A bounded apiKey.info request confirms auth and connectivity without
 	// mutating anything.
-	if _, err := r.Do(ctx, http.MethodPost, "apiKey.info", nil, map[string]any{}); err != nil {
+	resp, err := r.Do(ctx, http.MethodPost, "apiKey.info", nil, map[string]any{})
+	if err != nil {
+		return fmt.Errorf("check ashby: %w", err)
+	}
+	if err := ashbyValidateSuccessEnvelope(resp.Body); err != nil {
 		return fmt.Errorf("check ashby: %w", err)
 	}
 	return nil
@@ -101,6 +105,9 @@ func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	if err := ctx.Err(); err != nil {
 		return err
+	}
+	if ashbyHasSyncToken(req.Query) || ashbyHasSyncToken(req.State) || ashbyHasSyncToken(req.Config.Config) {
+		return errors.New("ashby syncToken reads are blocked pending ashby-sync-token-checkpoint-foundation")
 	}
 	stream := req.Stream
 	if stream == "" {
@@ -133,13 +140,10 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 // harvest drives Ashby's POST cursor-in-body pagination. Each stream has a
 // fixed path and an allow-list of documented request body fields generated from
 // Ashby's OpenAPI. Caller input can populate only those fields; cursor, limit,
-// page count, and client-side incremental filtering stay bounded here.
+// and page count stay bounded here.
 func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint streamEndpoint, req connectors.ReadRequest, pageSize, maxPages int, emit func(connectors.Record) error) error {
-	lowerBound := connsdk.Cursor(req.State)
-	if lowerBound == "" {
-		lowerBound = strings.TrimSpace(req.Config.Config["start_date"])
-	}
 	pageCursor := ""
+	seenPageCursors := map[string]struct{}{}
 	_, supportsCursor := endpoint.requestFields["cursor"]
 	baseBody, err := ashbyStreamBody(endpoint, req.Config, req.Query, pageSize)
 	if err != nil {
@@ -166,9 +170,6 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 				return err
 			}
 			record := ashbyProjectRecord(endpoint, item, page, i)
-			if !ashbyPassesCursor(record, endpoint.cursorField, lowerBound) {
-				continue
-			}
 			if err := emit(record); err != nil {
 				return err
 			}
@@ -177,6 +178,13 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 		if !boolValue(pageBody["moreDataAvailable"]) || next == "" || !supportsCursor {
 			return nil
 		}
+		if maxPages > 0 && page+1 >= maxPages {
+			return nil
+		}
+		if _, seen := seenPageCursors[next]; seen {
+			return fmt.Errorf("read ashby %s: repeated pagination cursor", endpoint.path)
+		}
+		seenPageCursors[next] = struct{}{}
 		pageCursor = next
 	}
 	return nil
@@ -194,10 +202,6 @@ func (c Connector) readFixture(ctx context.Context, stream string, endpoint stre
 	if len(pages) == 0 {
 		return fmt.Errorf("ashby stream %q has no replay fixtures", stream)
 	}
-	lowerBound := connsdk.Cursor(req.State)
-	if lowerBound == "" {
-		lowerBound = strings.TrimSpace(req.Config.Config["start_date"])
-	}
 	for pageIndex, body := range pages {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -208,9 +212,6 @@ func (c Connector) readFixture(ctx context.Context, stream string, endpoint stre
 		}
 		for recordIndex, item := range records {
 			record := ashbyProjectRecord(endpoint, item, pageIndex, recordIndex)
-			if !ashbyPassesCursor(record, endpoint.cursorField, lowerBound) {
-				continue
-			}
 			if err := emit(record); err != nil {
 				return err
 			}
@@ -281,6 +282,9 @@ func ashbyFixtureBody(raw []byte) ([]byte, error) {
 }
 
 func ashbyStreamBody(endpoint streamEndpoint, cfg connectors.RuntimeConfig, query map[string]string, pageSize int) (map[string]any, error) {
+	if ashbyHasSyncToken(query) || ashbyHasSyncToken(cfg.Config) {
+		return nil, errors.New("ashby syncToken reads are blocked pending ashby-sync-token-checkpoint-foundation")
+	}
 	body := map[string]any{}
 	if _, ok := endpoint.requestFields["limit"]; ok {
 		body["limit"] = pageSize
@@ -326,6 +330,10 @@ func ashbyStreamBody(endpoint streamEndpoint, cfg connectors.RuntimeConfig, quer
 		}
 	}
 	return body, nil
+}
+
+func ashbyHasSyncToken(values map[string]string) bool {
+	return strings.TrimSpace(values["syncToken"]) != "" || strings.TrimSpace(values["sync_token"]) != ""
 }
 
 func ashbyCoerceRequestValue(field, kind, raw string) (any, error) {
@@ -381,14 +389,8 @@ func ashbyResultRecords(body []byte) (map[string]any, []map[string]any, error) {
 	if err := json.Unmarshal(body, &decoded); err != nil {
 		return nil, nil, err
 	}
-	if rawSuccess, ok := decoded["success"]; ok {
-		success, ok := rawSuccess.(bool)
-		if !ok {
-			return nil, nil, errors.New("ashby response success field must be boolean")
-		}
-		if !success {
-			return nil, nil, errors.New("ashby response success=false")
-		}
+	if err := ashbyValidateSuccessEnvelopeValue(decoded); err != nil {
+		return nil, nil, err
 	}
 	results, ok := decoded["results"]
 	if !ok || results == nil {
@@ -412,6 +414,33 @@ func ashbyResultRecords(body []byte) (map[string]any, []map[string]any, error) {
 	}
 }
 
+func ashbyValidateSuccessEnvelope(body []byte) error {
+	var decoded map[string]any
+	if err := json.Unmarshal(body, &decoded); err != nil {
+		return fmt.Errorf("decode ashby response envelope: %w", err)
+	}
+	return ashbyValidateSuccessEnvelopeValue(decoded)
+}
+
+func ashbyValidateSuccessEnvelopeValue(value any) error {
+	decoded, ok := value.(map[string]any)
+	if !ok {
+		return errors.New("ashby response envelope must be an object")
+	}
+	rawSuccess, ok := decoded["success"]
+	if !ok {
+		return errors.New("ashby response missing success field")
+	}
+	success, ok := rawSuccess.(bool)
+	if !ok {
+		return errors.New("ashby response success field must be boolean")
+	}
+	if !success {
+		return errors.New("ashby response success=false")
+	}
+	return nil
+}
+
 func ashbyProjectRecord(endpoint streamEndpoint, item map[string]any, page, index int) connectors.Record {
 	record := connectors.Record{}
 	if len(endpoint.fields) == 0 {
@@ -431,14 +460,6 @@ func ashbyProjectRecord(endpoint streamEndpoint, item map[string]any, page, inde
 		}
 	}
 	return record
-}
-
-func ashbyPassesCursor(record connectors.Record, cursorField, lowerBound string) bool {
-	if cursorField == "" || lowerBound == "" {
-		return true
-	}
-	value := strings.TrimSpace(stringValue(record[cursorField]))
-	return value == "" || (value != lowerBound && connsdk.MaxCursor(lowerBound, value) == value)
 }
 
 func cloneMap(in map[string]any) map[string]any {

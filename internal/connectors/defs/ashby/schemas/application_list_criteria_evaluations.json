@@ -73,6 +73,5 @@
   },
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "evaluatedAt"
+  ]
 }
