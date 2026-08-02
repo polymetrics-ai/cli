@@ -43,7 +43,7 @@ Create and integrate a parent remediation PR that enforces connector implementat
 
 - Parent issue: #3579
 - Parent branch: `fix/3579-connector-path-ownership-guardrails`
-- Parent PR: #3580 draft PR to `main`
+- Parent PR: pending draft PR to `main` after seed commit
 - State ledger: `.planning/phases/connector-guardrail-remediation-r1/RUN-STATE.json`
 
 ## Slice plan
