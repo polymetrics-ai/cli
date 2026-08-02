@@ -81,10 +81,7 @@
       "schema": "schemas/webhook_payloads.json",
       "projection": "passthrough",
       "query": {
-        "limit": {
-          "template": "{{ config.page_size }}",
-          "default": "100"
-        }
+        "limit": "50"
       },
       "pagination": {
         "type": "cursor",
