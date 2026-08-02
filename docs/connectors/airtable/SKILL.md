@@ -415,8 +415,8 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - risk: Airtable schema mutation visible to collaborators; preview and approval required
 - hyperdb_delete_records_by_primary_keys:
   - endpoint: POST /v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/deleteRecords
-  - required fields: enterprise_account_id, data_table_id, primaryKeys
-  - risk: Airtable schema mutation visible to collaborators; preview and approval required
+  - required fields: enterprise_account_id, data_table_id, primaryKeysForDelete
+  - risk: destructive Airtable HyperDB mutation; deletes records by primary key and requires explicit approval before execute
 - hyperdb_upsert_records_by_primary_keys:
   - endpoint: PUT /v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/upsertRecords
   - required fields: enterprise_account_id, data_table_id, records
@@ -467,7 +467,7 @@ Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/a
   - read records - List records [intent=etl availability=implemented stream=records]; flags: --base-id, --table-id, --page-size
   - read record - Get record [intent=etl availability=implemented stream=record]; flags: --base-id, --table-id, --record-id
   - read comments - List comments [intent=etl availability=implemented stream=comments]; flags: --base-id, --table-id, --record-id
-  - hyperdb get-records - Read HyperDB records by primary key [intent=direct_read availability=implemented]; approval: read-only; risk: medium; flags: --enterprise-account-id, --data-table-id, --primary-key, --field, --max-records, --cursor
+  - hyperdb get-records - Read HyperDB records by primary key [intent=direct_read availability=implemented operation=hyperdb_table_read_records]; approval: read-only; risk: medium; flags: --enterprise-account-id, --data-table-id, --primary-key (required), --field, --max-records, --cursor
   - write create-scim-group - Create group [intent=reverse_etl availability=planned write=create_scim_group]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write delete-scim-group - Delete group [intent=reverse_etl availability=planned write=delete_scim_group]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
   - write patch-scim-group - Patch group [intent=reverse_etl availability=planned write=patch_scim_group]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high

@@ -2,7 +2,7 @@
   "record": {
     "enterprise_account_id": "enterprise_account_id_fixture",
     "data_table_id": "data_table_id_fixture",
-    "primaryKeys": [
+    "primaryKeysForDelete": [
       "pk_fixture_1"
     ]
   },
@@ -10,7 +10,7 @@
     "method": "POST",
     "path": "/v0/enterprise_account_id_fixture/data_table_id_fixture/deleteRecords",
     "body": {
-      "primaryKeys": [
+      "primaryKeysForDelete": [
         "pk_fixture_1"
       ]
     }

@@ -3,7 +3,8 @@
     "id": "id_fixture",
     "predecessorRecordId": "predecessorRecordId_fixture",
     "dateDependencyMetadata": {
-      "sample": "value"
+      "dependencyType": "finishToStart",
+      "buffer": 1
     }
   },
   "expect": {
@@ -12,7 +13,8 @@
     "body": {
       "predecessorRecordId": "predecessorRecordId_fixture",
       "dateDependencyMetadata": {
-        "sample": "value"
+        "dependencyType": "finishToStart",
+        "buffer": 1
       }
     }
   }

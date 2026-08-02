@@ -4,7 +4,13 @@
     "name": "Fixture Name",
     "tables": [
       {
-        "sample": "value"
+        "name": "Imported table",
+        "fields": [
+          {
+            "name": "Name",
+            "type": "singleLineText"
+          }
+        ]
       }
     ]
   },
@@ -16,7 +22,13 @@
       "name": "Fixture Name",
       "tables": [
         {
-          "sample": "value"
+          "name": "Imported table",
+          "fields": [
+            {
+              "name": "Name",
+              "type": "singleLineText"
+            }
+          ]
         }
       ]
     }
