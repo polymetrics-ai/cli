@@ -371,11 +371,11 @@ func redactDirectBody(value any, fields []string) any {
 		}
 		explicit[normalizeField(field)] = true
 	}
-	return redactDirectValue("", value, explicit)
+	return redactDirectValue("", value, explicit, 0)
 }
 
-func redactDirectValue(key string, value any, explicit map[string]bool) any {
-	if shouldRedactDirectField(key, explicit) {
+func redactDirectValue(key string, value any, explicit map[string]bool, depth int) any {
+	if key != "" && shouldRedactDirectField(key, explicit, depth == 1) {
 		return "***"
 	}
 	switch typed := value.(type) {
@@ -387,13 +387,13 @@ func redactDirectValue(key string, value any, explicit map[string]bool) any {
 		}
 		sort.Strings(keys)
 		for _, k := range keys {
-			out[k] = redactDirectValue(k, typed[k], explicit)
+			out[k] = redactDirectValue(k, typed[k], explicit, depth+1)
 		}
 		return out
 	case []any:
 		out := make([]any, len(typed))
 		for i, item := range typed {
-			out[i] = redactDirectValue(key, item, explicit)
+			out[i] = redactDirectValue("", item, explicit, depth+1)
 		}
 		return out
 	default:
@@ -401,12 +401,12 @@ func redactDirectValue(key string, value any, explicit map[string]bool) any {
 	}
 }
 
-func shouldRedactDirectField(key string, explicit map[string]bool) bool {
+func shouldRedactDirectField(key string, explicit map[string]bool, topLevel bool) bool {
 	normalized := normalizeField(key)
 	if explicit[normalized] {
 		return true
 	}
-	if normalized == "next_token" {
+	if normalized == "next_token" && topLevel {
 		return false
 	}
 	for _, marker := range []string{"receipt_handle", "task_handle", "policy", "secret", "token", "password", "api_key", "apikey", "access_key", "accesskey", "credential"} {

@@ -405,7 +405,7 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 		case "GetQueueAttributes":
 			_, _ = w.Write([]byte(`<GetQueueAttributesResponse><GetQueueAttributesResult><Attribute><Name>Policy</Name><Value>{"Statement":"fixture"}</Value></Attribute><Attribute><Name>QueueArn</Name><Value>arn:aws:sqs:us-east-1:123:orders</Value></Attribute></GetQueueAttributesResult></GetQueueAttributesResponse>`))
 		case "ListQueueTags":
-			_, _ = w.Write([]byte(`<ListQueueTagsResponse><ListQueueTagsResult><Tag><Key>api_key</Key><Value>abc</Value></Tag><Tag><Key>access_key</Key><Value>def</Value></Tag><Tag><Key>credential_id</Key><Value>ghi</Value></Tag><Tag><Key>environment</Key><Value>prod</Value></Tag></ListQueueTagsResult></ListQueueTagsResponse>`))
+			_, _ = w.Write([]byte(`<ListQueueTagsResponse><ListQueueTagsResult><Tag><Key>api_key</Key><Value>abc</Value></Tag><Tag><Key>access_key</Key><Value>def</Value></Tag><Tag><Key>credential_id</Key><Value>ghi</Value></Tag><Tag><Key>next_token</Key><Value>nested-secret-token</Value></Tag><Tag><Key>environment</Key><Value>prod</Value></Tag></ListQueueTagsResult></ListQueueTagsResponse>`))
 		default:
 			t.Fatalf("unexpected Action %q", r.Form.Get("Action"))
 		}
@@ -443,7 +443,7 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 		t.Fatalf("OperationDirectRead list_queue_tags: %v", err)
 	}
 	tags := res.Body.(map[string]any)["tags"].(map[string]any)
-	if tags["api_key"] != "***" || tags["access_key"] != "***" || tags["credential_id"] != "***" || tags["environment"] != "prod" {
+	if tags["api_key"] != "***" || tags["access_key"] != "***" || tags["credential_id"] != "***" || tags["next_token"] != "***" || tags["environment"] != "prod" {
 		t.Fatalf("tag redaction = %#v", tags)
 	}
 	if strings.Join(sawActions, ",") != "ListQueues,ListDeadLetterSourceQueues,GetQueueAttributes,ListQueueTags" {
@@ -539,6 +539,31 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 	}
 	if !strings.Contains(bodies[1], "DeleteMessageBatchRequestEntry.10.ReceiptHandle=rh") || !strings.Contains(bodies[2], "DeleteMessageBatchRequestEntry.1.ReceiptHandle=rh") {
 		t.Fatalf("batch bodies did not chunk at 10: %q / %q", bodies[1], bodies[2])
+	}
+}
+
+func TestWriteAllowsWhitespaceOnlyMessageBody(t *testing.T) {
+	var sentMessageBody string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		if action := r.Form.Get("Action"); action != "SendMessage" {
+			t.Fatalf("Action = %q, want SendMessage", action)
+		}
+		sentMessageBody = r.Form.Get("MessageBody")
+		_, _ = w.Write([]byte(`<SendMessageResponse><SendMessageResult><MessageId>m1</MessageId></SendMessageResult></SendMessageResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "   "}})
+	if err != nil {
+		t.Fatalf("Write send_message: %v", err)
+	}
+	if res.RecordsWritten != 1 || sentMessageBody != "   " {
+		t.Fatalf("result=%+v message_body=%q, want whitespace payload sent unchanged", res, sentMessageBody)
 	}
 }
 
@@ -707,6 +732,18 @@ func TestValidateWriteClosedSchemas(t *testing.T) {
 			want:    "must be object with string values",
 		},
 		{
+			name:    "set queue attributes rejects partial scalar with map",
+			action:  "set_queue_attributes",
+			records: []connectors.Record{{"attributes": map[string]any{"Policy": "{}"}, "attribute_name": "VisibilityTimeout"}},
+			want:    "requires fields \"attribute_name\" + \"attribute_value\" together",
+		},
+		{
+			name:    "tag queue rejects partial scalar with map",
+			action:  "tag_queue",
+			records: []connectors.Record{{"tags": map[string]any{"team": "platform"}, "tag_key": "env"}},
+			want:    "requires fields \"tag_key\" + \"tag_value\" together",
+		},
+		{
 			name:    "message attribute map rejects scalar",
 			action:  "send_message",
 			records: []connectors.Record{{"message_body": "ok", "message_attributes": "trace=abc"}},
@@ -801,6 +838,31 @@ func TestWriteSchemasAllowMapOnlySetAttributesAndTags(t *testing.T) {
 	for name := range actions {
 		if !seen[name] {
 			t.Fatalf("writes.json missing action %s", name)
+		}
+	}
+}
+
+func TestAmazonSQSGeneratedDocsDescribeMapOnlyWrites(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller(0) failed")
+	}
+	docsDir := filepath.Join(filepath.Dir(thisFile), "..", "..", "..", "..", "docs", "connectors", "amazon-sqs")
+	for _, name := range []string{"MANUAL.md", "SKILL.md"} {
+		raw, err := os.ReadFile(filepath.Join(docsDir, name))
+		if err != nil {
+			t.Fatalf("Read %s: %v", name, err)
+		}
+		text := string(raw)
+		for _, stale := range []string{"required fields: attribute_name, attribute_value", "required fields: tag_key, tag_value"} {
+			if strings.Contains(text, stale) {
+				t.Fatalf("%s contains stale scalar-only requirement %q", name, stale)
+			}
+		}
+		for _, want := range []string{"required fields: attributes or attribute_name + attribute_value", "required fields: tags or tag_key + tag_value"} {
+			if !strings.Contains(text, want) {
+				t.Fatalf("%s missing %q", name, want)
+			}
 		}
 	}
 }

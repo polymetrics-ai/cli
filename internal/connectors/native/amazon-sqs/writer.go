@@ -300,38 +300,62 @@ func validateSQSRecords(def writeActionDef, records []connectors.Record) error {
 
 func validateSQSRequiredFields(def writeActionDef, rec connectors.Record) error {
 	for _, field := range def.required {
-		if isEmptyRecordValue(rec[field]) {
+		if isEmptyRequiredRecordValue(field, rec[field]) {
 			return fmt.Errorf("requires field %q", field)
 		}
 	}
 	if len(def.requiredAny) == 0 {
 		return nil
 	}
+	anyComplete := false
 	for _, group := range def.requiredAny {
-		complete := true
+		present := 0
+		missing := 0
 		for _, field := range group {
-			if isEmptyRecordValue(rec[field]) {
-				complete = false
-				break
+			if isEmptyRequiredRecordValue(field, rec[field]) {
+				missing++
+			} else {
+				present++
 			}
 		}
-		if complete {
-			return nil
+		switch {
+		case missing == 0:
+			anyComplete = true
+		case present > 0:
+			return fmt.Errorf("requires fields %s together", formatRequiredGroup(group))
 		}
 	}
+	if anyComplete {
+		return nil
+	}
 	return fmt.Errorf("requires one of %s", formatRequiredAny(def.requiredAny))
+}
+
+func isEmptyRequiredRecordValue(field string, value any) bool {
+	if field == "message_body" {
+		text, ok := value.(string)
+		if ok {
+			return text == ""
+		}
+		return value == nil
+	}
+	return isEmptyRecordValue(value)
 }
 
 func formatRequiredAny(groups [][]string) string {
 	parts := make([]string, 0, len(groups))
 	for _, group := range groups {
-		quoted := make([]string, 0, len(group))
-		for _, field := range group {
-			quoted = append(quoted, strconv.Quote(field))
-		}
-		parts = append(parts, strings.Join(quoted, " + "))
+		parts = append(parts, formatRequiredGroup(group))
 	}
 	return strings.Join(parts, " or ")
+}
+
+func formatRequiredGroup(group []string) string {
+	quoted := make([]string, 0, len(group))
+	for _, field := range group {
+		quoted = append(quoted, strconv.Quote(field))
+	}
+	return strings.Join(quoted, " + ")
 }
 
 func validateSQSFieldValue(field string, value any) error {
