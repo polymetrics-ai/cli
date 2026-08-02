@@ -5153,17 +5153,59 @@
       "availability": "implemented",
       "write": "add_hiring_team_member",
       "source_url": "https://developers.ashbyhq.com/reference/hiringteamaddmember",
-      "flags": [],
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "maps_to": "record.applicationId",
+          "summary": "The application to assign the user a role on",
+          "allow_empty": false
+        },
+        {
+          "name": "job-id",
+          "type": "string",
+          "maps_to": "record.jobId",
+          "summary": "The job to assign the user a role on",
+          "allow_empty": false
+        },
+        {
+          "name": "opening-id",
+          "type": "string",
+          "maps_to": "record.openingId",
+          "summary": "The opening to assign the user a role on",
+          "allow_empty": false
+        },
+        {
+          "name": "team-member-id",
+          "type": "string",
+          "maps_to": "record.teamMemberId",
+          "summary": "The id of the user to assign the role to",
+          "allow_empty": false
+        },
+        {
+          "name": "role-id",
+          "type": "string",
+          "maps_to": "record.roleId",
+          "summary": "The id of the hiring team role to assign",
+          "allow_empty": false
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/hiringTeam.addMember"
         }
       ],
-      "redact_fields": [],
+      "redact_fields": [
+        "applicationId",
+        "jobId",
+        "openingId",
+        "teamMemberId",
+        "roleId"
+      ],
       "risk": "Executes Ashby hiringTeam.addMember through the documented POST /hiringTeam.addMember endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+      "notes": "Provide an applicationId, jobId, or openingId target. Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
     {
       "path": "hiring-team remove-member",
@@ -5172,17 +5214,59 @@
       "availability": "implemented",
       "write": "remove_hiring_team_member",
       "source_url": "https://developers.ashbyhq.com/reference/hiringteamremovemember",
-      "flags": [],
+      "flags": [
+        {
+          "name": "application-id",
+          "type": "string",
+          "maps_to": "record.applicationId",
+          "summary": "The application to unassign the user role from",
+          "allow_empty": false
+        },
+        {
+          "name": "job-id",
+          "type": "string",
+          "maps_to": "record.jobId",
+          "summary": "The job to unassign the user role from",
+          "allow_empty": false
+        },
+        {
+          "name": "opening-id",
+          "type": "string",
+          "maps_to": "record.openingId",
+          "summary": "The opening to unassign the user role from",
+          "allow_empty": false
+        },
+        {
+          "name": "team-member-id",
+          "type": "string",
+          "maps_to": "record.teamMemberId",
+          "summary": "The id of the user to unassign the role from",
+          "allow_empty": false
+        },
+        {
+          "name": "role-id",
+          "type": "string",
+          "maps_to": "record.roleId",
+          "summary": "The id of the hiring team role to unassign from",
+          "allow_empty": false
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/hiringTeam.removeMember"
         }
       ],
-      "redact_fields": [],
+      "redact_fields": [
+        "applicationId",
+        "jobId",
+        "openingId",
+        "teamMemberId",
+        "roleId"
+      ],
       "risk": "Executes Ashby hiringTeam.removeMember through the documented POST /hiringTeam.removeMember endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+      "notes": "Provide an applicationId, jobId, or openingId target. Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
     {
       "path": "hiring-team-role list",

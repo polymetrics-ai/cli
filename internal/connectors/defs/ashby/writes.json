@@ -3500,18 +3500,44 @@
       "method": "POST",
       "path": "/hiringTeam.addMember",
       "record_schema": {
-        "type": [
-          "string",
-          "number",
-          "integer",
-          "boolean",
-          "object",
-          "array",
-          "null"
-        ]
+        "type": "object",
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "description": "The application to assign the user a role on"
+          },
+          "jobId": {
+            "type": "string",
+            "description": "The job to assign the user a role on"
+          },
+          "openingId": {
+            "type": "string",
+            "description": "The opening to assign the user a role on"
+          },
+          "teamMemberId": {
+            "type": "string",
+            "description": "The id of the user to assign the role to"
+          },
+          "roleId": {
+            "type": "string",
+            "description": "The id of the hiring team role to assign"
+          }
+        },
+        "required": [
+          "teamMemberId",
+          "roleId"
+        ],
+        "minProperties": 3,
+        "additionalProperties": false
       },
       "risk": "Executes Ashby hiringTeam.addMember through the documented POST /hiringTeam.addMember endpoint; reverse ETL plan, preview, approval, and execute are required.",
-      "redact_fields": []
+      "redact_fields": [
+        "applicationId",
+        "jobId",
+        "openingId",
+        "teamMemberId",
+        "roleId"
+      ]
     },
     {
       "name": "remove_hiring_team_member",
@@ -3519,18 +3545,44 @@
       "method": "POST",
       "path": "/hiringTeam.removeMember",
       "record_schema": {
-        "type": [
-          "string",
-          "number",
-          "integer",
-          "boolean",
-          "object",
-          "array",
-          "null"
-        ]
+        "type": "object",
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "description": "The application to unassign the user role from"
+          },
+          "jobId": {
+            "type": "string",
+            "description": "The job to unassign the user role from"
+          },
+          "openingId": {
+            "type": "string",
+            "description": "The opening to unassign the user role from"
+          },
+          "teamMemberId": {
+            "type": "string",
+            "description": "The id of the user to unassign the role from"
+          },
+          "roleId": {
+            "type": "string",
+            "description": "The id of the hiring team role to unassign from"
+          }
+        },
+        "required": [
+          "teamMemberId",
+          "roleId"
+        ],
+        "minProperties": 3,
+        "additionalProperties": false
       },
       "risk": "Executes Ashby hiringTeam.removeMember through the documented POST /hiringTeam.removeMember endpoint; reverse ETL plan, preview, approval, and execute are required.",
-      "redact_fields": [],
+      "redact_fields": [
+        "applicationId",
+        "jobId",
+        "openingId",
+        "teamMemberId",
+        "roleId"
+      ],
       "confirm": "destructive"
     },
     {
