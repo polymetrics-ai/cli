@@ -12,7 +12,7 @@ SYNOPSIS
 DESCRIPTION
   Reads AWS CloudTrail configuration lists through fixed AWS JSON-RPC streams that need no per-call resource identifiers. Provider query/direct-read, parameterized read, and write/admin actions remain planned until safe shared forwarding exists.
 
-  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, but only 9 read-stream actions are currently exposed as executable connector-local runtime behavior. The 10 provider query/direct-read actions, 10 parameterized read actions, and 31 write/admin actions are blocked/planned until shared promoted-native forwarding or a typed request-parameter boundary exposes them safely.
+  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, but only 8 read-stream actions are currently exposed as executable connector-local runtime behavior. The 10 provider query/direct-read actions, 11 parameterized read actions, and 31 write/admin actions are blocked/planned until shared promoted-native forwarding or a typed request-parameter boundary exposes them safely.
 
 ICON
   asset: icons/aws-cloudtrail.svg
@@ -38,7 +38,6 @@ CONFIGURATION
 ETL STREAMS
   describe_trails
   get_event_configuration
-  get_insight_selectors
   list_channels
   list_dashboards
   list_event_data_stores
@@ -47,7 +46,7 @@ ETL STREAMS
   list_trails
 
 BLOCKED / PLANNED OPERATIONS
-  Parameterized read actions blocked: GetChannel, GetDashboard, GetEventDataStore, GetEventSelectors, GetImport, GetResourcePolicy, GetTrail, GetTrailStatus, ListImportFailures, ListTags.
+  Parameterized read actions blocked: GetChannel, GetDashboard, GetEventDataStore, GetEventSelectors, GetImport, GetInsightSelectors, GetResourcePolicy, GetTrail, GetTrailStatus, ListImportFailures, ListTags.
 
   Provider query/direct-read actions blocked: CancelQuery, DescribeQuery, GenerateQuery, GetQueryResults, ListInsightsData, ListInsightsMetricData, ListQueries, LookupEvents, SearchSampleQueries, StartQuery.
 
@@ -61,6 +60,6 @@ SECURITY
 AGENT WORKFLOW
   1. Inspect metadata with pm connectors inspect aws-cloudtrail --json; this does not read credentials.
   2. Add credentials from environment variables or stdin only.
-  3. Use pm etl catalog/read/run for the 9 implemented read streams.
+  3. Use pm etl catalog/read/run for the 8 implemented read streams.
   4. Treat parameterized reads, provider query/direct-read commands, and all write/admin actions as blocked/planned until a shared-runtime forwarding or typed request-parameter slice lands.
 ```

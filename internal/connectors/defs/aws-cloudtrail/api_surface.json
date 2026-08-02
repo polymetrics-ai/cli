@@ -3,7 +3,7 @@
   "docs": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
   "reviewed_at": "2026-07-31",
   "operation_ledger_version": 1,
-  "scope": "Complete AWS CloudTrail API action inventory from the official Actions page. Scope-corrected surface implements only 9 ETL/read streams through the existing connector-local runtime because they do not require per-call request fields. The 10 provider query/direct-read actions, 10 parameterized read actions, and 31 write/admin actions are blocked/planned because their safe exposure requires shared promoted-native forwarding or a typed request-parameter boundary outside this connector-local slice. Event record fields remain payload schema evidence, not CDC operations.",
+  "scope": "Complete AWS CloudTrail API action inventory from the official Actions page. Scope-corrected surface implements only 8 ETL/read streams through the existing connector-local runtime because they do not require per-call request fields. The 10 provider query/direct-read actions, 11 parameterized read actions, and 31 write/admin actions are blocked/planned because their safe exposure requires shared promoted-native forwarding or a typed request-parameter boundary outside this connector-local slice. Event record fields remain payload schema evidence, not CDC operations.",
   "endpoints": [
     {
       "method": "POST",
@@ -293,10 +293,16 @@
       }
     },
     {
-      "method": "READ_POST",
+      "method": "POST",
       "path": "cloudtrail_api_action:GetInsightSelectors",
-      "covered_by": {
-        "stream": "get_insight_selectors"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: EventDataStore or TrailName.",
+        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetInsightSelectors.html",
+        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
       }
     },
     {

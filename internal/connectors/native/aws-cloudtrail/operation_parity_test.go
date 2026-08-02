@@ -21,7 +21,7 @@ func TestOperationLedgerCounts(t *testing.T) {
 	if got, want := len(bundle.Surface.Endpoints), 60; got != want {
 		t.Fatalf("api_surface rows = %d, want %d", got, want)
 	}
-	if got, want := len(bundle.Streams), 9; got != want {
+	if got, want := len(bundle.Streams), 8; got != want {
 		t.Fatalf("streams = %d, want %d", got, want)
 	}
 	if got, want := len(bundle.Operations), 0; got != want {
@@ -40,10 +40,10 @@ func TestOperationLedgerCounts(t *testing.T) {
 			blocked++
 		}
 	}
-	if got, want := coveredStreams, 9; got != want {
+	if got, want := coveredStreams, 8; got != want {
 		t.Fatalf("stream-covered operations = %d, want %d", got, want)
 	}
-	if got, want := blocked, 51; got != want {
+	if got, want := blocked, 52; got != want {
 		t.Fatalf("blocked/planned operations = %d, want %d", got, want)
 	}
 }
@@ -61,6 +61,9 @@ func TestPublishedStreamsNeedNoRequiredRequestFields(t *testing.T) {
 				t.Fatalf("published stream %s action %s requires %s", stream, action, field.Name)
 			}
 		}
+		if alternatives := cloudTrailActionAnyOfRequiredFields[action]; len(alternatives) > 0 {
+			t.Fatalf("published stream %s action %s requires one of %s", stream, action, strings.Join(alternatives, " or "))
+		}
 	}
 	if len(cloudTrailStreamActions) != len(cloudTrailPublishedStreams) {
 		t.Fatalf("stream action map has %d entries, want %d", len(cloudTrailStreamActions), len(cloudTrailPublishedStreams))
@@ -69,6 +72,21 @@ func TestPublishedStreamsNeedNoRequiredRequestFields(t *testing.T) {
 		if !published[stream] {
 			t.Fatalf("unpublished stream %s is dispatchable", stream)
 		}
+	}
+}
+
+func TestGetInsightSelectorsRequiresTypedRequestBoundary(t *testing.T) {
+	if _, err := buildActionBodyFromStrings("GetInsightSelectors", nil, true); err == nil {
+		t.Fatal("GetInsightSelectors unexpectedly accepted an empty request body")
+	} else if !strings.Contains(err.Error(), "EventDataStore or TrailName") {
+		t.Fatalf("GetInsightSelectors error = %v, want alternate request field requirement", err)
+	}
+	body, err := buildActionBodyFromStrings("GetInsightSelectors", map[string]string{"TrailName": "trail-fixture"}, true)
+	if err != nil {
+		t.Fatalf("GetInsightSelectors with TrailName: %v", err)
+	}
+	if got := body["TrailName"]; got != "trail-fixture" {
+		t.Fatalf("TrailName = %#v, want fixture", got)
 	}
 }
 
@@ -204,6 +222,7 @@ func TestNativeCloudTrailRejectsBlockedReadStreams(t *testing.T) {
 		"get_event_data_store",
 		"get_event_selectors",
 		"get_import",
+		"get_insight_selectors",
 		"get_resource_policy",
 		"get_trail",
 		"get_trail_status",

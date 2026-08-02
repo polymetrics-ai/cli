@@ -8,8 +8,8 @@ description: Use the Polymetrics AWS CloudTrail connector for implemented read-s
 ## Implemented surface
 
 - Connector: `aws-cloudtrail`
-- Implemented counts: 9 ETL/read streams, 0 direct-read commands, 0 reverse-ETL write actions.
-- Blocked/planned counts: 10 parameterized read actions, 10 provider query/direct-read actions, and 31 write/admin actions.
+- Implemented counts: 8 ETL/read streams, 0 direct-read commands, 0 reverse-ETL write actions.
+- Blocked/planned counts: 11 parameterized read actions, 10 provider query/direct-read actions, and 31 write/admin actions.
 - Reason blocked: required per-call request fields, command surface, manifest write metadata, write validation, dry-run preview, and operation-direct-read exposure require shared promoted-native forwarding or a typed request-parameter boundary that is intentionally not part of this connector-local corrective head.
 
 ## Agent Rules
@@ -25,11 +25,11 @@ description: Use the Polymetrics AWS CloudTrail connector for implemented read-s
 
 ## Implemented ETL streams
 
-`describe_trails`, `get_event_configuration`, `get_insight_selectors`, `list_channels`, `list_dashboards`, `list_event_data_stores`, `list_imports`, `list_public_keys`, `list_trails`.
+`describe_trails`, `get_event_configuration`, `list_channels`, `list_dashboards`, `list_event_data_stores`, `list_imports`, `list_public_keys`, `list_trails`.
 
 ## Blocked/planned operations
 
-Parameterized read operations: `GetChannel`, `GetDashboard`, `GetEventDataStore`, `GetEventSelectors`, `GetImport`, `GetResourcePolicy`, `GetTrail`, `GetTrailStatus`, `ListImportFailures`, `ListTags`.
+Parameterized read operations: `GetChannel`, `GetDashboard`, `GetEventDataStore`, `GetEventSelectors`, `GetImport`, `GetInsightSelectors`, `GetResourcePolicy`, `GetTrail`, `GetTrailStatus`, `ListImportFailures`, `ListTags`.
 
 Direct/provider query operations: `CancelQuery`, `DescribeQuery`, `GenerateQuery`, `GetQueryResults`, `ListInsightsData`, `ListInsightsMetricData`, `ListQueries`, `LookupEvents`, `SearchSampleQueries`, `StartQuery`.
 
