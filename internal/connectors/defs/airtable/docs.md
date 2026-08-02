@@ -81,7 +81,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 ## Direct read
 
-- `hyperdb get-records`: POST `/v0/meta/enterpriseAccounts/{enterpriseAccountId}/hyperdb/dataTables/{dataTableId}/records`, typed JSON body with `primaryKeys`, optional `fields`, `maxRecords`, and `cursor`; output policy `json_redacted`.
+- `hyperdb get-records`: POST `/v0/{enterpriseAccountId}/{dataTableId}/getRecords`, typed JSON body with `primaryKeys`, optional `fields`, `maxRecords`, and `cursor`; output policy `json_redacted`.
 
 ## Write actions & risks
 
@@ -223,7 +223,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `update_date_dependency_metadata`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}/dateDependencyMetadata`; kind `update`; body `json`; path fields `id`; required `id, predecessorRecordId, dateDependencyMetadata`.
 
-- `hyperdb_delete_records_by_primary_keys`: POST `/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/deleteRecords`; kind `custom`; body `json`; path fields `enterprise_account_id, data_table_id`; required `enterprise_account_id, data_table_id, primaryKeys`.
+- `hyperdb_delete_records_by_primary_keys`: POST `/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/deleteRecords`; kind `custom`; body `json`; path fields `enterprise_account_id, data_table_id`; required `enterprise_account_id, data_table_id, primaryKeysForDelete`.
 
 - `hyperdb_upsert_records_by_primary_keys`: PUT `/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/upsertRecords`; kind `upsert`; body `json`; path fields `enterprise_account_id, data_table_id`; required `enterprise_account_id, data_table_id, records`.
 

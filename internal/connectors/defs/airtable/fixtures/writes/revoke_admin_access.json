@@ -3,7 +3,7 @@
     "enterprise_account_id": "enterprise_account_id_fixture",
     "users": [
       {
-        "sample": "value"
+        "email": "user.fixture@example.invalid"
       }
     ]
   },
@@ -13,7 +13,7 @@
     "body": {
       "users": [
         {
-          "sample": "value"
+          "email": "user.fixture@example.invalid"
         }
       ]
     }

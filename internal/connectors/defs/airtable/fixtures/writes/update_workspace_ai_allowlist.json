@@ -3,7 +3,8 @@
     "enterprise_account_id": "enterprise_account_id_fixture",
     "workspaces": [
       {
-        "sample": "value"
+        "workspaceId": "wsp00000000000000",
+        "isAllowed": true
       }
     ],
     "includeDescendantWorkspaces": true
@@ -14,7 +15,8 @@
     "body": {
       "workspaces": [
         {
-          "sample": "value"
+          "workspaceId": "wsp00000000000000",
+          "isAllowed": true
         }
       ],
       "includeDescendantWorkspaces": true

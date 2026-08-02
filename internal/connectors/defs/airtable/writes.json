@@ -491,11 +491,144 @@
         ],
         "properties": {
           "notificationUrl": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "specification": {
             "type": "object",
-            "additionalProperties": true
+            "required": [
+              "options"
+            ],
+            "properties": {
+              "options": {
+                "type": "object",
+                "required": [
+                  "filters"
+                ],
+                "properties": {
+                  "filters": {
+                    "type": "object",
+                    "required": [
+                      "dataTypes"
+                    ],
+                    "properties": {
+                      "changeTypes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "add",
+                            "remove",
+                            "update"
+                          ]
+                        }
+                      },
+                      "dataTypes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "tableData",
+                            "tableFields",
+                            "tableMetadata"
+                          ]
+                        }
+                      },
+                      "fromSources": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "client",
+                            "publicApi",
+                            "formSubmission",
+                            "formPageSubmission",
+                            "automation",
+                            "system",
+                            "sync",
+                            "anonymousUser",
+                            "unknown"
+                          ]
+                        }
+                      },
+                      "recordChangeScope": {
+                        "type": "string"
+                      },
+                      "sourceOptions": {
+                        "type": "object",
+                        "minProperties": 1,
+                        "properties": {
+                          "formPageSubmission": {
+                            "type": "object",
+                            "required": [
+                              "pageId"
+                            ],
+                            "properties": {
+                              "pageId": {
+                                "type": "string"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "formSubmission": {
+                            "type": "object",
+                            "required": [
+                              "viewId"
+                            ],
+                            "properties": {
+                              "viewId": {
+                                "type": "string"
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "watchDataInFieldIds": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "watchSchemasOfFieldIds": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "includes": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "properties": {
+                      "includeCellValuesInFieldIds": {
+                        "type": [
+                          "array",
+                          "string"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "includePreviousCellValues": {
+                        "type": "boolean"
+                      },
+                      "includePreviousFieldDefinitions": {
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
           }
         },
         "additionalProperties": false
@@ -607,6 +740,10 @@
             "type": "array",
             "items": {
               "type": "object",
+              "required": [
+                "name",
+                "fields"
+              ],
               "properties": {
                 "description": {
                   "type": "string"
@@ -615,13 +752,196 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "additionalProperties": true
+                    "required": [
+                      "name",
+                      "type"
+                    ],
+                    "properties": {
+                      "description": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "options": {
+                        "type": "object",
+                        "minProperties": 1,
+                        "properties": {
+                          "choices": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "minProperties": 1,
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "color": {
+                                  "type": "string"
+                                }
+                              },
+                              "additionalProperties": false
+                            }
+                          },
+                          "color": {
+                            "type": "string",
+                            "enum": [
+                              "greenBright",
+                              "tealBright",
+                              "cyanBright",
+                              "blueBright",
+                              "purpleBright",
+                              "pinkBright",
+                              "redBright",
+                              "orangeBright",
+                              "yellowBright",
+                              "grayBright"
+                            ]
+                          },
+                          "dateFormat": {
+                            "type": "object",
+                            "minProperties": 1,
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "format": {
+                                "type": "string"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "durationFormat": {
+                            "type": "string"
+                          },
+                          "fieldIdInLinkedTable": {
+                            "type": "string"
+                          },
+                          "formula": {
+                            "type": "string"
+                          },
+                          "icon": {
+                            "type": "string",
+                            "enum": [
+                              "check",
+                              "xCheckbox",
+                              "star",
+                              "heart",
+                              "thumbsUp",
+                              "flag",
+                              "dot"
+                            ]
+                          },
+                          "isValid": {
+                            "type": "boolean"
+                          },
+                          "linkedTableId": {
+                            "type": "string"
+                          },
+                          "max": {
+                            "type": "number"
+                          },
+                          "precision": {
+                            "type": "number"
+                          },
+                          "prompt": {
+                            "type": "string"
+                          },
+                          "recordLinkFieldId": {
+                            "type": "string"
+                          },
+                          "referencedFieldIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "result": {
+                            "type": "object",
+                            "minProperties": 1,
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "symbol": {
+                            "type": "string"
+                          },
+                          "timeFormat": {
+                            "type": "object",
+                            "minProperties": 1,
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "format": {
+                                "type": "string"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "timeZone": {
+                            "type": "string"
+                          },
+                          "viewIdForRecordSelection": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "autoNumber",
+                          "barcode",
+                          "button",
+                          "checkbox",
+                          "createdBy",
+                          "createdTime",
+                          "count",
+                          "formula",
+                          "lastModifiedTime",
+                          "lastModifiedBy",
+                          "lookup",
+                          "number",
+                          "percent",
+                          "currency",
+                          "duration",
+                          "multilineText",
+                          "phoneNumber",
+                          "rating",
+                          "richText",
+                          "rollup",
+                          "singleLineText",
+                          "email",
+                          "url",
+                          "externalSyncSource",
+                          "aiText",
+                          "multipleRecordLinks",
+                          "singleSelect",
+                          "multipleSelects",
+                          "singleCollaborator",
+                          "multipleCollaborators",
+                          "date",
+                          "dateTime",
+                          "multipleAttachments",
+                          "multipleLookupValues"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
                   }
                 },
                 "name": {
                   "type": "string"
                 }
-              }
+              },
+              "additionalProperties": false
             }
           },
           "workspaceId": {
@@ -743,7 +1063,48 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": true
+              "required": [
+                "permissionLevel"
+              ],
+              "minProperties": 2,
+              "properties": {
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "A user group ID"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "permissionLevel": {
+                  "type": "string",
+                  "enum": [
+                    "read",
+                    "comment",
+                    "edit",
+                    "create"
+                  ]
+                },
+                "user": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "A user ID"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
             }
           }
         },
@@ -837,7 +1198,47 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": true
+              "required": [
+                "permissionLevel"
+              ],
+              "minProperties": 2,
+              "properties": {
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "A user group ID"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "permissionLevel": {
+                  "type": "string",
+                  "enum": [
+                    "read",
+                    "comment",
+                    "edit"
+                  ]
+                },
+                "user": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "A user ID"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
             }
           },
           "page_bundle_id": {
@@ -1073,7 +1474,189 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": true
+              "required": [
+                "name",
+                "type"
+              ],
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "options": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "properties": {
+                    "choices": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "minProperties": 1,
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "color": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "color": {
+                      "type": "string",
+                      "enum": [
+                        "greenBright",
+                        "tealBright",
+                        "cyanBright",
+                        "blueBright",
+                        "purpleBright",
+                        "pinkBright",
+                        "redBright",
+                        "orangeBright",
+                        "yellowBright",
+                        "grayBright"
+                      ]
+                    },
+                    "dateFormat": {
+                      "type": "object",
+                      "minProperties": 1,
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "format": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "durationFormat": {
+                      "type": "string"
+                    },
+                    "fieldIdInLinkedTable": {
+                      "type": "string"
+                    },
+                    "formula": {
+                      "type": "string"
+                    },
+                    "icon": {
+                      "type": "string",
+                      "enum": [
+                        "check",
+                        "xCheckbox",
+                        "star",
+                        "heart",
+                        "thumbsUp",
+                        "flag",
+                        "dot"
+                      ]
+                    },
+                    "isValid": {
+                      "type": "boolean"
+                    },
+                    "linkedTableId": {
+                      "type": "string"
+                    },
+                    "max": {
+                      "type": "number"
+                    },
+                    "precision": {
+                      "type": "number"
+                    },
+                    "prompt": {
+                      "type": "string"
+                    },
+                    "recordLinkFieldId": {
+                      "type": "string"
+                    },
+                    "referencedFieldIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "result": {
+                      "type": "object",
+                      "minProperties": 1,
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "symbol": {
+                      "type": "string"
+                    },
+                    "timeFormat": {
+                      "type": "object",
+                      "minProperties": 1,
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "format": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "timeZone": {
+                      "type": "string"
+                    },
+                    "viewIdForRecordSelection": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "autoNumber",
+                    "barcode",
+                    "button",
+                    "checkbox",
+                    "createdBy",
+                    "createdTime",
+                    "count",
+                    "formula",
+                    "lastModifiedTime",
+                    "lastModifiedBy",
+                    "lookup",
+                    "number",
+                    "percent",
+                    "currency",
+                    "duration",
+                    "multilineText",
+                    "phoneNumber",
+                    "rating",
+                    "richText",
+                    "rollup",
+                    "singleLineText",
+                    "email",
+                    "url",
+                    "externalSyncSource",
+                    "aiText",
+                    "multipleRecordLinks",
+                    "singleSelect",
+                    "multipleSelects",
+                    "singleCollaborator",
+                    "multipleCollaborators",
+                    "date",
+                    "dateTime",
+                    "multipleAttachments",
+                    "multipleLookupValues"
+                  ]
+                }
+              },
+              "additionalProperties": false
             }
           },
           "name": {
@@ -1096,6 +1679,16 @@
         "properties": {
           "dateDependencySettings": {
             "type": "object",
+            "required": [
+              "startDateFieldId",
+              "endDateFieldId",
+              "durationFieldId",
+              "predecessorFieldId",
+              "isEnabled",
+              "shouldSkipWeekendsAndHolidays",
+              "holidays",
+              "reschedulingMode"
+            ],
             "properties": {
               "durationFieldId": {
                 "type": "string"
@@ -1113,10 +1706,16 @@
                 "type": "boolean"
               },
               "isForwardOnly": {
-                "type": "boolean"
+                "type": [
+                  "boolean",
+                  "null"
+                ]
               },
               "predecessorFieldId": {
-                "type": "object"
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "reschedulingMode": {
                 "type": "string",
@@ -1132,7 +1731,8 @@
               "startDateFieldId": {
                 "type": "string"
               }
-            }
+            },
+            "additionalProperties": false
           },
           "description": {
             "type": "string"
@@ -1141,7 +1741,8 @@
             "type": "string"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "minProperties": 1
       },
       "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
     },
@@ -1174,7 +1775,134 @@
           },
           "options": {
             "type": "object",
-            "additionalProperties": true
+            "minProperties": 1,
+            "properties": {
+              "choices": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "color": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "color": {
+                "type": "string",
+                "enum": [
+                  "greenBright",
+                  "tealBright",
+                  "cyanBright",
+                  "blueBright",
+                  "purpleBright",
+                  "pinkBright",
+                  "redBright",
+                  "orangeBright",
+                  "yellowBright",
+                  "grayBright"
+                ]
+              },
+              "dateFormat": {
+                "type": "object",
+                "minProperties": 1,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "format": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "durationFormat": {
+                "type": "string"
+              },
+              "fieldIdInLinkedTable": {
+                "type": "string"
+              },
+              "formula": {
+                "type": "string"
+              },
+              "icon": {
+                "type": "string",
+                "enum": [
+                  "check",
+                  "xCheckbox",
+                  "star",
+                  "heart",
+                  "thumbsUp",
+                  "flag",
+                  "dot"
+                ]
+              },
+              "isValid": {
+                "type": "boolean"
+              },
+              "linkedTableId": {
+                "type": "string"
+              },
+              "max": {
+                "type": "number"
+              },
+              "precision": {
+                "type": "number"
+              },
+              "prompt": {
+                "type": "string"
+              },
+              "recordLinkFieldId": {
+                "type": "string"
+              },
+              "referencedFieldIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "result": {
+                "type": "object",
+                "minProperties": 1,
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "timeFormat": {
+                "type": "object",
+                "minProperties": 1,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "format": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "timeZone": {
+                "type": "string"
+              },
+              "viewIdForRecordSelection": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           },
           "table_id": {
             "type": "string"
@@ -1210,7 +1938,13 @@
           },
           "options": {
             "type": "object",
-            "additionalProperties": true
+            "minProperties": 1,
+            "properties": {
+              "formula": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           },
           "table_id": {
             "type": "string"
@@ -1219,7 +1953,8 @@
             "type": "string"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "minProperties": 3
       },
       "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
     },
@@ -1530,7 +2265,10 @@
         },
         "additionalProperties": false
       },
-      "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute"
+      "risk": "destructive Airtable mutation; delete/revoke/logout/remove semantics are idempotent where Airtable returns 404 and require explicit approval before execute",
+      "redact_fields": [
+        "email"
+      ]
     },
     {
       "name": "manage_user_batched",
@@ -1553,6 +2291,7 @@
             "type": "array",
             "items": {
               "type": "object",
+              "minProperties": 1,
               "properties": {
                 "email": {
                   "type": "string"
@@ -1573,7 +2312,8 @@
                     "deactivated"
                   ]
                 }
-              }
+              },
+              "additionalProperties": false
             }
           },
           "enterprise_account_id": {
@@ -1605,6 +2345,10 @@
             "type": "array",
             "items": {
               "type": "object",
+              "required": [
+                "state"
+              ],
+              "minProperties": 2,
               "properties": {
                 "email": {
                   "type": "string"
@@ -1619,7 +2363,8 @@
                     "unmanaged"
                   ]
                 }
-              }
+              },
+              "additionalProperties": false
             }
           },
           "enterprise_account_id": {
@@ -1651,6 +2396,7 @@
             "type": "array",
             "items": {
               "type": "object",
+              "minProperties": 1,
               "properties": {
                 "email": {
                   "type": "string"
@@ -1658,7 +2404,8 @@
                 "id": {
                   "type": "string"
                 }
-              }
+              },
+              "additionalProperties": false
             }
           },
           "enterprise_account_id": {
@@ -1691,6 +2438,7 @@
             "type": "array",
             "items": {
               "type": "object",
+              "minProperties": 1,
               "properties": {
                 "email": {
                   "type": "string"
@@ -1698,7 +2446,8 @@
                 "id": {
                   "type": "string"
                 }
-              }
+              },
+              "additionalProperties": false
             }
           },
           "enterprise_account_id": {
@@ -1786,7 +2535,8 @@
             "type": "string"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "minProperties": 3
       },
       "risk": "elevated Airtable admin/SCIM mutation; affects enterprise identity, collaborators, packages, workspaces, or access controls and must be previewed and approved"
     },
@@ -1840,13 +2590,19 @@
         ],
         "properties": {
           "isDryRun": {
-            "type": "boolean"
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "removeFromDescendants": {
             "type": "boolean"
           },
           "replacementOwnerId": {
-            "type": "object"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "enterprise_account_id": {
             "type": "string"
@@ -1883,6 +2639,10 @@
             "type": "array",
             "items": {
               "type": "object",
+              "required": [
+                "workspaceId",
+                "isAllowed"
+              ],
               "properties": {
                 "isAllowed": {
                   "type": "boolean"
@@ -1890,7 +2650,8 @@
                 "workspaceId": {
                   "type": "string"
                 }
-              }
+              },
+              "additionalProperties": false
             }
           },
           "enterprise_account_id": {
@@ -1978,7 +2739,49 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": true
+              "required": [
+                "permissionLevel"
+              ],
+              "minProperties": 2,
+              "properties": {
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "A user group ID"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "permissionLevel": {
+                  "type": "string",
+                  "enum": [
+                    "owner",
+                    "read",
+                    "comment",
+                    "edit",
+                    "create"
+                  ]
+                },
+                "user": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "A user ID"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
             }
           },
           "workspace_id": {
@@ -2163,7 +2966,8 @@
             "type": "string"
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "minProperties": 2
       },
       "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
     },
@@ -2575,6 +3379,10 @@
         "properties": {
           "dateDependencyMetadata": {
             "type": "object",
+            "required": [
+              "dependencyType",
+              "buffer"
+            ],
             "properties": {
               "buffer": {
                 "type": "number"
@@ -2588,7 +3396,8 @@
                   "finishToFinish"
                 ]
               }
-            }
+            },
+            "additionalProperties": false
           },
           "predecessorRecordId": {
             "type": "string"
@@ -2617,25 +3426,26 @@
         "required": [
           "enterprise_account_id",
           "data_table_id",
-          "primaryKeys"
+          "primaryKeysForDelete"
         ],
         "properties": {
-          "primaryKeys": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "enterprise_account_id": {
             "type": "string"
           },
           "data_table_id": {
             "type": "string"
+          },
+          "primaryKeysForDelete": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "additionalProperties": false
       },
-      "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+      "risk": "destructive Airtable HyperDB mutation; deletes records by primary key and requires explicit approval before execute",
+      "confirm": "destructive"
     },
     {
       "name": "hyperdb_upsert_records_by_primary_keys",
