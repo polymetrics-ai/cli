@@ -20871,12 +20871,53 @@
           "write": "add_hiring_team_member",
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/hiringteamaddmember",
-          "flags": [],
+          "flags": [
+            {
+              "name": "application-id",
+              "type": "string",
+              "summary": "The application to assign the user a role on",
+              "values": [],
+              "mapsTo": "record.applicationId",
+              "allowEmpty": false
+            },
+            {
+              "name": "job-id",
+              "type": "string",
+              "summary": "The job to assign the user a role on",
+              "values": [],
+              "mapsTo": "record.jobId",
+              "allowEmpty": false
+            },
+            {
+              "name": "opening-id",
+              "type": "string",
+              "summary": "The opening to assign the user a role on",
+              "values": [],
+              "mapsTo": "record.openingId",
+              "allowEmpty": false
+            },
+            {
+              "name": "team-member-id",
+              "type": "string",
+              "summary": "The id of the user to assign the role to",
+              "values": [],
+              "mapsTo": "record.teamMemberId",
+              "allowEmpty": false
+            },
+            {
+              "name": "role-id",
+              "type": "string",
+              "summary": "The id of the hiring team role to assign",
+              "values": [],
+              "mapsTo": "record.roleId",
+              "allowEmpty": false
+            }
+          ],
           "examples": [],
           "outputPolicy": "",
           "risk": "Executes Ashby hiringTeam.addMember through the documented POST /hiringTeam.addMember endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+          "notes": "Provide an applicationId, jobId, or openingId target. Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "hiring-team remove-member",
@@ -20887,12 +20928,53 @@
           "write": "remove_hiring_team_member",
           "sourceCliPath": "",
           "sourceUrl": "https://developers.ashbyhq.com/reference/hiringteamremovemember",
-          "flags": [],
+          "flags": [
+            {
+              "name": "application-id",
+              "type": "string",
+              "summary": "The application to unassign the user role from",
+              "values": [],
+              "mapsTo": "record.applicationId",
+              "allowEmpty": false
+            },
+            {
+              "name": "job-id",
+              "type": "string",
+              "summary": "The job to unassign the user role from",
+              "values": [],
+              "mapsTo": "record.jobId",
+              "allowEmpty": false
+            },
+            {
+              "name": "opening-id",
+              "type": "string",
+              "summary": "The opening to unassign the user role from",
+              "values": [],
+              "mapsTo": "record.openingId",
+              "allowEmpty": false
+            },
+            {
+              "name": "team-member-id",
+              "type": "string",
+              "summary": "The id of the user to unassign the role from",
+              "values": [],
+              "mapsTo": "record.teamMemberId",
+              "allowEmpty": false
+            },
+            {
+              "name": "role-id",
+              "type": "string",
+              "summary": "The id of the hiring team role to unassign from",
+              "values": [],
+              "mapsTo": "record.roleId",
+              "allowEmpty": false
+            }
+          ],
           "examples": [],
           "outputPolicy": "",
           "risk": "Executes Ashby hiringTeam.removeMember through the documented POST /hiringTeam.removeMember endpoint; reverse ETL plan, preview, approval, and execute are required.",
           "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-          "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+          "notes": "Provide an applicationId, jobId, or openingId target. Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
         },
         {
           "path": "hiring-team-role list",
@@ -22768,7 +22850,7 @@
         }
       ]
     },
-    "docsMd": "# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.\n\nCoverage summary:\n\n- REST operations in source: 185\n- OpenAPI webhook events in source: 27\n- Implemented ETL/changefeed streams: 72\n- Implemented bounded direct reads/search/file metadata operations: 7\n- Implemented reverse-ETL write actions: 101\n- Reverse-ETL CLI commands with scalar flags: 91; partial nested-object flag surfaces: 10\n- Blocked/non-executable ledger rows: 32\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. The current wave is fixture/static validated only; no live Ashby credentials or provider calls were used.",
+    "docsMd": "# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.\n\nCoverage summary:\n\n- REST operations in source: 185\n- OpenAPI webhook events in source: 27\n- Implemented ETL streams: 72\n- Implemented bounded direct reads/search/file metadata operations: 7\n- Implemented reverse-ETL write actions: 101\n- Reverse-ETL CLI commands with scalar flags: 91; partial nested-object flag surfaces: 10\n- Blocked/non-executable ledger rows: 32\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. The current wave is fixture/static validated only; no live Ashby credentials or provider calls were used.",
     "docs": [
       {
         "title": "Service API documentation",

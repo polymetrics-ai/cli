@@ -1,4 +1,4 @@
-// Package ashby bridges the ashby quarantine bundle to the native connector.
+// Package ashby bridges the Ashby bundle to the native connector.
 package ashby
 
 import (
