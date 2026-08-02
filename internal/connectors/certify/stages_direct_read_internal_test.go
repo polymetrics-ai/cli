@@ -42,6 +42,30 @@ func TestDirectReadCandidateForGitHub(t *testing.T) {
 	}
 }
 
+func TestDirectReadCandidateForAirtable(t *testing.T) {
+	candidate, ok := directReadCandidateFor("airtable", map[string]string{
+		"enterprise_account_id": "ent_fixture",
+		"data_table_id":         "dtbl_fixture",
+		"primary_key":           "pk_fixture",
+	})
+	if !ok {
+		t.Fatal("directReadCandidateFor(airtable) ok = false, want true")
+	}
+	want := []string{
+		"airtable", "hyperdb", "get-records", "--credential", sourceCredentialName,
+		"--enterprise-account-id", "ent_fixture", "--data-table-id", "dtbl_fixture",
+		"--primary-key", "pk_fixture", "--json",
+	}
+	if len(candidate.Args) != len(want) {
+		t.Fatalf("Args len = %d, want %d: %v", len(candidate.Args), len(want), candidate.Args)
+	}
+	for i := range want {
+		if candidate.Args[i] != want[i] {
+			t.Fatalf("Args[%d] = %q, want %q; args=%v", i, candidate.Args[i], want[i], candidate.Args)
+		}
+	}
+}
+
 func TestDirectReadCandidateForUnknownConnector(t *testing.T) {
 	if candidate, ok := directReadCandidateFor("sample", nil); ok {
 		t.Fatalf("directReadCandidateFor(sample) = %+v, true; want no candidate", candidate)

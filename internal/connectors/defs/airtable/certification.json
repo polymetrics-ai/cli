@@ -33,6 +33,15 @@
           "connector": true
         },
         {
+          "literal": "hyperdb"
+        },
+        {
+          "literal": "get-records"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
           "source_credential": true
         },
         {
@@ -53,6 +62,9 @@
         {
           "config_key": "primary_key",
           "default": "fixture-primary-key"
+        },
+        {
+          "literal": "--json"
         }
       ]
     }
