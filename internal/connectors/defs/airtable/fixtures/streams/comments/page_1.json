@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/v0/synthetic-conformance-value/synthetic-conformance-value/rec_fixture_parent/comments"
+    "path": "/v0/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/comments"
   },
   "response": {
     "status": 200,

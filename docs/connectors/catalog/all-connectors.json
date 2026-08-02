@@ -3652,13 +3652,6 @@
         "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
       },
       {
-        "name": "upload_attachment",
-        "kind": "custom",
-        "method": "POST",
-        "path": "/v0/{{ config.base_id }}/{{ record.record_id }}/{{ record.attachment_field_id_or_name }}/uploadAttachment",
-        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
-      },
-      {
         "name": "delete_record",
         "kind": "delete",
         "method": "DELETE",
@@ -3713,7 +3706,7 @@
     ],
     "risk": {
       "read": "external Airtable API reads for base, table, record, comment, webhook, SCIM detail, collaborator, enterprise, audit, eDiscovery, and change-event metadata",
-      "write": "typed Airtable API mutations for single records, schema fields, comments, webhooks, selected admin actions, and attachment upload; destructive/admin actions require plan, preview, explicit approval, and execute while non-empty array batch operations remain blocked"
+      "write": "typed Airtable API mutations for single records, schema fields, comments, webhooks, and selected admin actions; destructive/admin actions require plan, preview, explicit approval, and execute while non-empty arrays and unbounded attachment uploads remain blocked"
     },
     "icon": {
       "id": "airtable",

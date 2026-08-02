@@ -70,6 +70,21 @@ func TestAirtableRuntimeBundleSafetyContract(t *testing.T) {
 	if webhookPayloads.Pagination == nil || webhookPayloads.Pagination.StopPath != "mightHaveMore" {
 		t.Fatalf("webhook_payloads pagination = %+v, want stop_path mightHaveMore", webhookPayloads.Pagination)
 	}
+	comments := findAirtableStream(t, airtable, "comments")
+	if comments.FanOut != nil {
+		t.Fatalf("comments fan_out = %+v, want exact per-record request", comments.FanOut)
+	}
+	if comments.Path != "/v0/{{ config.base_id }}/{{ config.table_id }}/{{ config.record_id }}/comments" {
+		t.Fatalf("comments path = %q, want config.record_id path", comments.Path)
+	}
+	commentsCommand := findAirtableCommand(t, airtable, "read comments")
+	recordIDFlag := findAirtableCommandFlag(t, commentsCommand, "record-id")
+	if !recordIDFlag.Required || recordIDFlag.MapsTo != "config.record_id" {
+		t.Fatalf("read comments --record-id = %+v, want required config.record_id mapping", recordIDFlag)
+	}
+	if hasAirtableWrite(airtable, "upload_attachment") {
+		t.Fatal("airtable write upload_attachment should stay blocked until bounded base64 validation is Airtable-owned")
+	}
 
 	blockedArrayActions := []string{
 		"add_base_collaborator",
@@ -164,6 +179,47 @@ func TestAirtableRuntimeBundleSafetyContract(t *testing.T) {
 				t.Fatalf("ValidateWrite %s no-op error = %q, want minProperties", tt.action, err.Error())
 			}
 		})
+	}
+}
+
+func TestAirtableCommentsUsesExactRecordID(t *testing.T) {
+	airtable := loadAirtableBundle(t)
+	requests := make(chan string, 2)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests <- r.URL.Path
+		if r.URL.Path != "/v0/app_fixture/tbl_fixture/rec_requested/comments" {
+			http.Error(w, "unexpected path", http.StatusBadRequest)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"comments":[{"id":"com_fixture","text":"Fixture comment"}]}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	airtable.HTTP.URL = srv.URL
+	var records []connectors.Record
+	err := engine.Read(context.Background(), airtable, connectors.ReadRequest{
+		Stream: "comments",
+		Config: connectors.RuntimeConfig{
+			Config: map[string]string{
+				"base_id":   "app_fixture",
+				"table_id":  "tbl_fixture",
+				"record_id": "rec_requested",
+			},
+			Secrets: map[string]string{"api_key": "fixture-token"},
+		},
+	}, nil, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read comments: %v", err)
+	}
+	if len(requests) != 1 {
+		t.Fatalf("comments requests = %d, want one exact request", len(requests))
+	}
+	if len(records) != 1 || records[0]["record_id"] != "rec_requested" {
+		t.Fatalf("comments records = %+v, want requested record id", records)
 	}
 }
 

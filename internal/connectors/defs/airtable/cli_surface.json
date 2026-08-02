@@ -869,7 +869,7 @@
     },
     {
       "path": "read comments",
-      "summary": "List comments",
+      "summary": "List comments for one record",
       "intent": "etl",
       "availability": "implemented",
       "stream": "comments",
@@ -890,8 +890,10 @@
         {
           "name": "record-id",
           "type": "string",
-          "summary": "Airtable record id",
-          "maps_to": "config.record_id"
+          "summary": "Airtable record id whose comments are read",
+          "maps_to": "config.record_id",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1808,10 +1810,10 @@
       "summary": "Upload attachment",
       "intent": "reverse_etl",
       "availability": "planned",
-      "write": "upload_attachment",
       "source_url": "https://airtable.com/developers/web/api/introduction",
       "risk": "medium",
-      "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
+      "approval": "blocked until airtable-bounded-base64-upload-foundation validates the official base64 and decoded-size limits before transmission; no live write is available today.",
+      "notes": "Blocked on airtable-bounded-base64-upload-foundation because the current Airtable definition has no target-owned executor that can validate decoded attachment bytes; no unbounded base64 body is exposed.",
       "api_surface": [
         {
           "method": "POST",
