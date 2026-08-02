@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -542,8 +543,10 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 			}
 			var response strings.Builder
 			response.WriteString(`<DeleteMessageBatchResponse><DeleteMessageBatchResult>`)
-			for i := 0; i < entries; i++ {
-				response.WriteString(`<Successful><Id>entry</Id></Successful>`)
+			for i := 1; i <= entries; i++ {
+				response.WriteString(`<DeleteMessageBatchResultEntry><Id>`)
+				response.WriteString(r.Form.Get("DeleteMessageBatchRequestEntry." + strconv.Itoa(i) + ".Id"))
+				response.WriteString(`</Id></DeleteMessageBatchResultEntry>`)
 			}
 			response.WriteString(`</DeleteMessageBatchResult></DeleteMessageBatchResponse>`)
 			_, _ = w.Write([]byte(response.String()))
@@ -1124,6 +1127,30 @@ func TestWriteBatchResponsesMustAccountForEntries(t *testing.T) {
 			name:       "missing entry result",
 			response:   `<SendMessageBatchResponse><SendMessageBatchResult><SendMessageBatchResultEntry><Id>entry_1</Id><MessageId>m1</MessageId></SendMessageBatchResultEntry></SendMessageBatchResult></SendMessageBatchResponse>`,
 			wantErr:    "accounted for 1 of 2 entries",
+			wantFailed: 2,
+		},
+		{
+			name:       "duplicate success id",
+			response:   `<SendMessageBatchResponse><SendMessageBatchResult><SendMessageBatchResultEntry><Id>entry_1</Id><MessageId>m1</MessageId></SendMessageBatchResultEntry><SendMessageBatchResultEntry><Id>entry_1</Id><MessageId>m2</MessageId></SendMessageBatchResultEntry></SendMessageBatchResult></SendMessageBatchResponse>`,
+			wantErr:    "duplicate batch response id",
+			wantFailed: 2,
+		},
+		{
+			name:       "unknown success id",
+			response:   `<SendMessageBatchResponse><SendMessageBatchResult><SendMessageBatchResultEntry><Id>entry_1</Id><MessageId>m1</MessageId></SendMessageBatchResultEntry><SendMessageBatchResultEntry><Id>entry_99</Id><MessageId>m2</MessageId></SendMessageBatchResultEntry></SendMessageBatchResult></SendMessageBatchResponse>`,
+			wantErr:    "unknown batch response id",
+			wantFailed: 2,
+		},
+		{
+			name:       "missing result id",
+			response:   `<SendMessageBatchResponse><SendMessageBatchResult><SendMessageBatchResultEntry><MessageId>m1</MessageId></SendMessageBatchResultEntry><SendMessageBatchResultEntry><Id>entry_2</Id><MessageId>m2</MessageId></SendMessageBatchResultEntry></SendMessageBatchResult></SendMessageBatchResponse>`,
+			wantErr:    "batch response parse failed",
+			wantFailed: 2,
+		},
+		{
+			name:       "wrapper only results",
+			response:   `<SendMessageBatchResponse><SendMessageBatchResult><Successful><Id>entry_1</Id></Successful><Successful><Id>entry_2</Id></Successful></SendMessageBatchResult></SendMessageBatchResponse>`,
+			wantErr:    "accounted for 0 of 2 entries",
 			wantFailed: 2,
 		},
 	}
