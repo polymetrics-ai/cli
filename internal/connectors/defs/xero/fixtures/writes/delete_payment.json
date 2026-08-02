@@ -1,0 +1,19 @@
+{
+  "record": {
+    "payment_id": "payment_id_fixture_1",
+    "Status": "DELETED"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Payments/payment_id_fixture_1",
+    "body": {
+      "Status": "DELETED"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

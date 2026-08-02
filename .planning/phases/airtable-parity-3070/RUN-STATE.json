@@ -2,9 +2,9 @@
   "phase": "airtable-parity-3070",
   "issue": 3070,
   "branch": "fm/cli-airtable-parity-wave03-r1",
-  "status": "verified_ready_to_commit",
+  "status": "recovery_merge_validation_in_progress",
   "verificationPassed": true,
-  "verificationNote": "Exact single-bundle command `go run ./cmd/connectorgen validate internal/connectors/defs/airtable` is recorded as a tooling mismatch: current connectorgen validates directories of bundle directories and treats fixtures/schemas as connectors. Effective root validation plus conformance, CLI, build, boundary, make verify, and diff-check gates passed.",
+  "verificationNote": "Forward-only recovery merge preserved local and pipeline heads; exact single-bundle `go run ./cmd/connectorgen validate internal/connectors/defs/airtable` now passes after requiring HyperDB `--primary-key` for typed `body.primaryKeys`; focused conformance and CLI/golden gates passed fixture-only before merge commit.",
   "gsd": {
     "doctor": "passed",
     "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase airtable-parity-3070 --dry-run",
@@ -25,8 +25,20 @@
     "openapiVersion": "3.1.0",
     "openapiSHA256": "f1506571034500ffb0887e7244f770c0b060a4205e734881bd3de6fa20d6f6b8",
     "operationCount": 103,
-    "methodCounts": { "GET": 31, "POST": 33, "DELETE": 19, "PATCH": 15, "PUT": 5 },
-    "laneCounts": { "etl_read": 27, "reverse_etl_write": 69, "direct_read_query_search": 1, "binary_file": 1, "cdc_changefeed": 5 }
+    "methodCounts": {
+      "GET": 31,
+      "POST": 33,
+      "DELETE": 19,
+      "PATCH": 15,
+      "PUT": 5
+    },
+    "laneCounts": {
+      "etl_read": 27,
+      "reverse_etl_write": 69,
+      "direct_read_query_search": 1,
+      "binary_file": 1,
+      "cdc_changefeed": 5
+    }
   },
   "implementation": {
     "apiSurfaceRows": 103,
@@ -42,5 +54,19 @@
     "providerWrites": false,
     "noMistakes": false,
     "pushOrPR": false
+  },
+  "recovery": {
+    "localHead": "69f87c4976a0dbd225eb74d9768f4e74294e120e",
+    "pipelineHead": "325d7ea1148969327eb369c0b3062edcf00e6cda",
+    "mergeBase": "86d510927a05aa56b184bf5a8778b5444c69b9b1",
+    "run": "01KZ0FXWMF7XAMXADPFY2HTQ7N",
+    "strategy": "forward-only no-ff merge; conflicts resolved to pipeline Airtable/generated tree plus required HyperDB primary-key CLI flag fix",
+    "preCommitFocusedGates": [
+      "git diff --check",
+      "git diff --cached --check",
+      "go run ./cmd/connectorgen validate internal/connectors/defs/airtable",
+      "go test ./internal/connectors/conformance -run 'TestConformance/airtable' -count=1",
+      "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1"
+    ]
   }
 }

@@ -123,6 +123,33 @@ func TestValidate_AcceptsGoodBundle(t *testing.T) {
 	}
 }
 
+func TestValidatePath_AcceptsSingleBundleDirectory(t *testing.T) {
+	report, err := validatePath(filepath.Join("testdata", "valid", "goodconn"))
+	if err != nil {
+		t.Fatalf("validatePath: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for the good bundle, got %+v", report.Findings)
+	}
+	if report.ConnectorsChecked != 1 {
+		t.Fatalf("ConnectorsChecked = %d, want 1", report.ConnectorsChecked)
+	}
+}
+
+func TestValidatePath_AcceptsCurrentWorkingBundleDirectory(t *testing.T) {
+	t.Chdir(filepath.Join("testdata", "valid", "goodconn"))
+	report, err := validatePath(".")
+	if err != nil {
+		t.Fatalf("validatePath(.): %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for the good bundle, got %+v", report.Findings)
+	}
+	if report.ConnectorsChecked != 1 {
+		t.Fatalf("ConnectorsChecked = %d, want 1", report.ConnectorsChecked)
+	}
+}
+
 // TestValidate_WhenClauseEqualityAndMembershipAgainstSpecKnownKeyPasses is the
 // S3 engine mini-wave item 2 regression case (wave1-pilot SUMMARY.md carried
 // queue / REVIEW-A.md re-review R1/R3): a `when` clause using the `==`/`in`
@@ -577,6 +604,151 @@ func TestValidate_CLISurfaceOperationReferencePasses(t *testing.T) {
 	}
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for valid operation-backed cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T) {
+	cliSurface := `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget preview",
+				"summary": "Preview widget metadata",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.preview",
+				"api_surface": [
+					{ "method": "POST", "path": "/widgets:preview" }
+				],
+				"output_policy": "json_redacted",
+				"examples": ["pm cli-surface widget preview --json"]
+			}
+		]
+	}`
+	operations := `{
+		"operations": [
+			{
+				"id": "cli-surface.widgets.preview",
+				"kind": "rest_read",
+				"summary": "Preview widget metadata",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json_redacted",
+				"rest": {
+					"method": "POST",
+					"path": "/widgets:preview",
+					"content_type": "application/json",
+					"max_bytes": 1024,
+					"body_schema": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["payload"],
+						"properties": {
+							"payload": { "type": "string" }
+						}
+					},
+					"body": {}
+				}
+			}
+		]
+	}`
+	apiSurface := `{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "POST", "path": "/widgets:preview", "covered_by": { "direct_read": "widget preview" } }
+		]
+	}`
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *testing.T) {
+	cliSurface := `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget preview",
+				"summary": "Preview widget metadata",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.preview",
+				"api_surface": [
+					{ "method": "POST", "path": "/widgets:preview" }
+				],
+				"output_policy": "json_redacted",
+				"flags": [
+					{ "name": "payload", "type": "string", "maps_to": "body.payload" }
+				],
+				"examples": ["pm cli-surface widget preview --payload fixture --json"]
+			}
+		]
+	}`
+	operations := `{
+		"operations": [
+			{
+				"id": "cli-surface.widgets.preview",
+				"kind": "rest_read",
+				"summary": "Preview widget metadata",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json_redacted",
+				"rest": {
+					"method": "POST",
+					"path": "/widgets:preview",
+					"content_type": "application/json",
+					"max_bytes": 1024,
+					"body_schema": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["payload"],
+						"properties": {
+							"payload": { "type": "string" }
+						}
+					},
+					"body": {}
+				}
+			}
+		]
+	}`
+	apiSurface := `{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "POST", "path": "/widgets:preview", "covered_by": { "direct_read": "widget preview" } }
+		]
+	}`
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+
+	fixed := strings.Replace(cliSurface, `"maps_to": "body.payload"`, `"maps_to": "body.payload", "required": true`, 1)
+	fsys = cliSurfaceBundleFS(fixed)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err = validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir fixed: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for required body flag, got %+v", report.Findings)
 	}
 }
 

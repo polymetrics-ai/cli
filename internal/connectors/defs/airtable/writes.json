@@ -68,6 +68,9 @@
         "id"
       ],
       "body_type": "json",
+      "redact_fields": [
+        "Operations"
+      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -94,7 +97,14 @@
                   "type": "string"
                 },
                 "value": {
-                  "type": "string"
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "object",
+                    "array",
+                    "null"
+                  ]
                 }
               }
             }
@@ -165,6 +175,9 @@
       "method": "POST",
       "path": "/scim/v2/Users",
       "body_type": "json",
+      "redact_fields": [
+        "password"
+      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -300,6 +313,9 @@
         "id"
       ],
       "body_type": "json",
+      "redact_fields": [
+        "Operations"
+      ],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -326,7 +342,14 @@
                   "type": "string"
                 },
                 "value": {
-                  "type": "string"
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "object",
+                    "array",
+                    "null"
+                  ]
                 }
               }
             }
@@ -354,6 +377,9 @@
         "id"
       ],
       "body_type": "json",
+      "redact_fields": [
+        "password"
+      ],
       "confirm": "destructive",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -2211,7 +2237,8 @@
           "records": {
             "type": "array",
             "items": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^rec[A-Za-z0-9]{14}$"
             }
           }
         },
@@ -2264,15 +2291,20 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "properties": {
-          "fields": {
-            "type": "object",
-            "additionalProperties": true
-          },
           "records": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": true
+              "required": [
+                "fields"
+              ],
+              "properties": {
+                "fields": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "additionalProperties": false
             }
           },
           "typecast": {
@@ -2284,7 +2316,7 @@
         },
         "additionalProperties": false,
         "required": [
-          "fields"
+          "records"
         ]
       },
       "risk": "Airtable schema mutation visible to collaborators; preview and approval required"

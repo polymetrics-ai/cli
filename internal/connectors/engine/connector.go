@@ -245,6 +245,7 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			OptionalFields: writeActionOptionalFields(a),
 			Method:         a.Method,
 			Path:           a.Path,
+			RedactFields:   append([]string(nil), a.RedactFields...),
 			Risk:           a.Risk,
 			Confirm:        a.Confirm,
 		})
@@ -438,6 +439,7 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		MapsTo:     flag.MapsTo,
 		Format:     flag.Format,
 		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
+		Required:   flag.Required,
 	}
 }
 

@@ -3,7 +3,10 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "page_number",
@@ -15,121 +18,281 @@
     "check": {
       "method": "GET",
       "path": "/agents",
-      "query": { "page": "1", "items_per_page": "1" }
+      "query": {
+        "page": "1",
+        "items_per_page": "1"
+      }
     },
     "error_map": [
-      { "status": 401, "hint": "freshchat api_key is missing or invalid; re-run pm credentials add freshchat" },
-      { "status": 403, "hint": "freshchat account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "freshchat rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "freshchat api_key is missing or invalid; re-run pm credentials add freshchat"
+      },
+      {
+        "status": 403,
+        "hint": "freshchat account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "freshchat rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "account_configuration",
       "path": "/accounts/configuration",
-      "records": { "path": ".", "single_object": true },
-      "pagination": { "type": "none" },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
       "schema": "schemas/account_configuration.json"
     },
     {
       "name": "agents",
       "path": "/agents",
-      "records": { "path": "agents" },
-      "incremental": { "cursor_field": "updated_time" },
-      "schema": "schemas/agents.json"
+      "records": {
+        "path": "agents"
+      },
+      "incremental": {
+        "cursor_field": "updated_time"
+      },
+      "schema": "schemas/agents.json",
+      "query": {
+        "is_deactivated": {
+          "template": "{{ config.agents_is_deactivated }}",
+          "omit_when_absent": true
+        },
+        "groups": {
+          "template": "{{ config.agents_groups }}",
+          "omit_when_absent": true
+        },
+        "availability_status": {
+          "template": "{{ config.agents_availability_status }}",
+          "omit_when_absent": true
+        },
+        "sort_order": {
+          "template": "{{ config.agents_sort_order }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.agents_sort_by }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "agent_details",
       "path": "/agents/{{ config.agent_id }}",
-      "records": { "path": ".", "single_object": true },
-      "pagination": { "type": "none" },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
       "schema": "schemas/agents.json"
     },
     {
       "name": "agent_statuses",
       "path": "/agents/status",
-      "records": { "path": "statuses" },
-      "pagination": { "type": "none" },
+      "records": {
+        "path": "statuses"
+      },
+      "pagination": {
+        "type": "none"
+      },
       "schema": "schemas/agent_statuses.json"
     },
     {
       "name": "users",
       "path": "/users",
-      "records": { "path": "users" },
-      "incremental": { "cursor_field": "updated_time" },
-      "schema": "schemas/users.json"
+      "records": {
+        "path": "users"
+      },
+      "incremental": {
+        "cursor_field": "updated_time"
+      },
+      "schema": "schemas/users.json",
+      "query": {
+        "first_name": {
+          "template": "{{ config.users_first_name }}",
+          "omit_when_absent": true
+        },
+        "last_name": {
+          "template": "{{ config.users_last_name }}",
+          "omit_when_absent": true
+        },
+        "email": {
+          "template": "{{ config.users_email }}",
+          "omit_when_absent": true
+        },
+        "reference_id": {
+          "template": "{{ config.users_reference_id }}",
+          "omit_when_absent": true
+        },
+        "phone_no": {
+          "template": "{{ config.users_phone_no }}",
+          "omit_when_absent": true
+        },
+        "created_from": {
+          "template": "{{ config.users_created_from }}",
+          "omit_when_absent": true
+        },
+        "created_to": {
+          "template": "{{ config.users_created_to }}",
+          "omit_when_absent": true
+        },
+        "updated_from": {
+          "template": "{{ config.users_updated_from }}",
+          "omit_when_absent": true
+        },
+        "updated_to": {
+          "template": "{{ config.users_updated_to }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "user_details",
       "path": "/users/{{ config.user_id }}",
-      "records": { "path": ".", "single_object": true },
-      "pagination": { "type": "none" },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
       "schema": "schemas/users.json"
     },
     {
       "name": "user_conversations",
       "path": "/users/{{ config.user_id }}/conversations",
-      "records": { "path": "conversations" },
-      "computed_fields": { "user_id": "{{ config.user_id }}" },
+      "records": {
+        "path": "conversations"
+      },
+      "computed_fields": {
+        "user_id": "{{ config.user_id }}"
+      },
       "schema": "schemas/conversations.json"
     },
     {
       "name": "conversation_detail",
       "path": "/conversations/{{ config.conversation_id }}",
-      "records": { "path": ".", "single_object": true },
-      "pagination": { "type": "none" },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
       "schema": "schemas/conversations.json"
     },
     {
       "name": "conversation_messages",
       "path": "/conversations/{{ config.conversation_id }}/messages",
-      "records": { "path": "messages" },
-      "computed_fields": { "conversation_id": "{{ config.conversation_id }}" },
-      "schema": "schemas/messages.json"
+      "records": {
+        "path": "messages"
+      },
+      "computed_fields": {
+        "conversation_id": "{{ config.conversation_id }}"
+      },
+      "schema": "schemas/messages.json",
+      "query": {
+        "from_time": {
+          "template": "{{ config.conversation_messages_from_time }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "conversation_fields",
       "path": "/conversations/fields",
-      "records": { "path": "." },
-      "pagination": { "type": "none" },
+      "records": {
+        "path": "."
+      },
+      "pagination": {
+        "type": "none"
+      },
       "schema": "schemas/conversation_fields.json"
     },
     {
       "name": "groups",
       "path": "/groups",
-      "records": { "path": "groups" },
-      "schema": "schemas/groups.json"
+      "records": {
+        "path": "groups"
+      },
+      "schema": "schemas/groups.json",
+      "query": {
+        "sort_order": {
+          "template": "{{ config.groups_sort_order }}",
+          "omit_when_absent": true
+        },
+        "sort_by": {
+          "template": "{{ config.groups_sort_by }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "channels",
       "path": "/channels",
-      "records": { "path": "channels" },
-      "incremental": { "cursor_field": "updated_time" },
-      "schema": "schemas/channels.json"
+      "records": {
+        "path": "channels"
+      },
+      "incremental": {
+        "cursor_field": "updated_time"
+      },
+      "schema": "schemas/channels.json",
+      "query": {
+        "locale": {
+          "template": "{{ config.channels_locale }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "roles",
       "path": "/roles",
-      "records": { "path": "roles" },
+      "records": {
+        "path": "roles"
+      },
       "schema": "schemas/roles.json"
     },
     {
       "name": "outbound_messages",
       "path": "/outbound-messages",
       "query": {
-        "request_id": { "template": "{{ config.outbound_request_id }}", "omit_when_absent": true }
+        "request_id": {
+          "template": "{{ config.outbound_request_id }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": "outbound_messages" },
+      "records": {
+        "path": "outbound_messages"
+      },
       "schema": "schemas/outbound_messages.json"
     },
     {
       "name": "report_status",
       "path": "/reports/raw/{{ config.report_id }}",
       "query": {
-        "status": { "template": "{{ config.report_status }}", "omit_when_absent": true }
+        "status": {
+          "template": "{{ config.report_status }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": ".", "single_object": true },
-      "pagination": { "type": "none" },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
       "schema": "schemas/reports.json"
     },
     {
@@ -139,14 +302,33 @@
         "metric": "{{ config.metrics_metric }}",
         "start": "{{ config.metrics_start }}",
         "end": "{{ config.metrics_end }}",
-        "group_by": { "template": "{{ config.metrics_group_by }}", "omit_when_absent": true },
-        "filter_by": { "template": "{{ config.metrics_filter_by }}", "omit_when_absent": true },
-        "aggregator": { "template": "{{ config.metrics_aggregator }}", "omit_when_absent": true },
-        "interval": { "template": "{{ config.metrics_interval }}", "omit_when_absent": true }
+        "group_by": {
+          "template": "{{ config.metrics_group_by }}",
+          "omit_when_absent": true
+        },
+        "filter_by": {
+          "template": "{{ config.metrics_filter_by }}",
+          "omit_when_absent": true
+        },
+        "aggregator": {
+          "template": "{{ config.metrics_aggregator }}",
+          "omit_when_absent": true
+        },
+        "interval": {
+          "template": "{{ config.metrics_interval }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": ".", "single_object": true },
-      "pagination": { "type": "none" },
-      "computed_fields": { "metric_type": "historical" },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "metric_type": "historical"
+      },
       "projection": "passthrough",
       "schema": "schemas/metrics.json"
     },
@@ -155,23 +337,48 @@
       "path": "/metrics/instant",
       "query": {
         "metric": "{{ config.metrics_metric }}",
-        "group_by": { "template": "{{ config.metrics_group_by }}", "omit_when_absent": true },
-        "filter_by": { "template": "{{ config.metrics_filter_by }}", "omit_when_absent": true },
-        "summary": { "template": "{{ config.metrics_summary }}", "omit_when_absent": true }
+        "group_by": {
+          "template": "{{ config.metrics_group_by }}",
+          "omit_when_absent": true
+        },
+        "filter_by": {
+          "template": "{{ config.metrics_filter_by }}",
+          "omit_when_absent": true
+        },
+        "summary": {
+          "template": "{{ config.metrics_summary }}",
+          "omit_when_absent": true
+        }
       },
-      "records": { "path": ".", "single_object": true },
-      "pagination": { "type": "none" },
-      "computed_fields": { "metric_type": "instant" },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "metric_type": "instant"
+      },
       "projection": "passthrough",
       "schema": "schemas/metrics.json"
     },
     {
       "name": "business_hours_status",
       "path": "/business-hours/within-bh",
-      "query": { "group_id": "{{ config.business_hours_group_id }}" },
-      "records": { "path": ".", "single_object": true },
-      "pagination": { "type": "none" },
-      "computed_fields": { "group_id": "{{ config.business_hours_group_id }}" },
+      "query": {
+        "group_id": "{{ config.business_hours_group_id }}"
+      },
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "computed_fields": {
+        "group_id": "{{ config.business_hours_group_id }}"
+      },
       "projection": "passthrough",
       "schema": "schemas/business_hours_status.json"
     }

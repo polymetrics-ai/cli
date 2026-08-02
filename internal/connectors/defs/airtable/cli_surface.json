@@ -921,7 +921,8 @@
           "name": "primary-key",
           "type": "string_array",
           "summary": "Primary key to fetch; repeat for multiple keys",
-          "maps_to": "body.primaryKeys"
+          "maps_to": "body.primaryKeys",
+          "required": true
         },
         {
           "name": "field",

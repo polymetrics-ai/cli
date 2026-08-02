@@ -44,6 +44,7 @@ export function mapFlags(flags, options = {}) {
       };
       if (trim(flag.format)) out.format = trim(flag.format);
       if (typeof flag.allow_empty === 'boolean') out[keys.allowEmpty] = flag.allow_empty;
+      if (typeof flag.required === 'boolean') out.required = flag.required;
       return out;
     })
     .filter((flag) => flag.name);
@@ -54,22 +55,29 @@ export function mapCLISurface(surface, options = {}) {
   if (!surface || typeof surface !== 'object') return null;
 
   const commands = (Array.isArray(surface.commands) ? surface.commands : [])
-    .map((command) => ({
-      path: trim(command.path),
-      summary: trim(command.summary),
-      intent: trim(command.intent),
-      availability: trim(command.availability),
-      stream: trim(command.stream),
-      write: trim(command.write),
-      [keys.sourceCliPath]: trim(command.source_cli_path),
-      [keys.sourceUrl]: trim(command.source_url),
-      flags: mapFlags(command.flags, options),
-      examples: Array.isArray(command.examples) ? command.examples.map((example) => trim(example)).filter(Boolean) : [],
-      [keys.outputPolicy]: trim(command.output_policy),
-      risk: trim(command.risk),
-      approval: trim(command.approval),
-      notes: trim(command.notes),
-    }))
+    .map((command) => {
+      const operation = trim(command.operation);
+      const out = {
+        path: trim(command.path),
+        summary: trim(command.summary),
+        intent: trim(command.intent),
+        availability: trim(command.availability),
+        stream: trim(command.stream),
+        write: trim(command.write),
+      };
+      if (operation) out.operation = operation;
+      Object.assign(out, {
+        [keys.sourceCliPath]: trim(command.source_cli_path),
+        [keys.sourceUrl]: trim(command.source_url),
+        flags: mapFlags(command.flags, options),
+        examples: Array.isArray(command.examples) ? command.examples.map((example) => trim(example)).filter(Boolean) : [],
+        [keys.outputPolicy]: trim(command.output_policy),
+        risk: trim(command.risk),
+        approval: trim(command.approval),
+        notes: trim(command.notes),
+      });
+      return out;
+    })
     .filter((command) => command.path);
 
   for (const command of commands) {

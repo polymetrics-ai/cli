@@ -1,0 +1,30 @@
+{
+  "record": {
+    "pagination": {},
+    "Warnings": [
+      "warning_fixture"
+    ],
+    "CreditNotes": [
+      "credit_note_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/CreditNotes",
+    "body": {
+      "pagination": {},
+      "Warnings": [
+        "warning_fixture"
+      ],
+      "CreditNotes": [
+        "credit_note_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

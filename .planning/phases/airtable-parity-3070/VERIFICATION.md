@@ -2,7 +2,7 @@
 
 ## Required gates
 
-- [!] `go run ./cmd/connectorgen validate internal/connectors/defs/airtable` — current `connectorgen validate` treats the argument as a directory of bundle directories, so this exact single-bundle path validates `fixtures/` and `schemas/` as fake connectors and exits 1 with missing `metadata.json`. No tooling/runtime behavior was changed for this local-only connector wave.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs/airtable` — `connectorgen validate: 1 connector(s) checked, 0 findings` after marking the HyperDB `--primary-key` direct-read flag required to match the typed `body.primaryKeys` schema.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — `connectorgen validate: 549 connector(s) checked, 0 findings`.
 - [x] `go test ./internal/connectors/conformance -run 'TestConformance/airtable' -count=1` — `ok polymetrics.ai/internal/connectors/conformance`.
 - [x] `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` — `ok polymetrics.ai/internal/cli`.
@@ -18,6 +18,13 @@
 - No Airtable writes executed.
 - Certification metadata is fixture/candidate-only; no live certification claim was made.
 - No push, PR, `/no-mistakes`, VPS, Thaalam, or provider-side operations were run.
+
+## Recovery reconciliation — 2026-08-02
+
+- Forward-only recovery merge preserved local head `69f87c4976a0dbd225eb74d9768f4e74294e120e` and imported pipeline head `325d7ea1148969327eb369c0b3062edcf00e6cda` from the private no-mistakes recovery ref.
+- Merge base `86d510927a05aa56b184bf5a8778b5444c69b9b1`; left-only inventory was the original Airtable parity commit, right-only inventory was the rebased Airtable parity commit, four Airtable no-mistakes review fixes, and current-main connector commits carried by the pipeline rebase.
+- Changed-in-both conflicts were resolved to the pipeline Airtable/generated tree to preserve the review fixes, then amended only with `cli_surface.json` `required: true` on `hyperdb get-records --primary-key` because single-bundle validation proved the required typed body field was otherwise not reachable through CLI validation.
+- Conflict proof before merge commit: no unmerged paths, `git diff --check`, `git diff --cached --check`, `go run ./cmd/connectorgen validate internal/connectors/defs/airtable`, `go test ./internal/connectors/conformance -run 'TestConformance/airtable' -count=1`, and `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` passed fixture-only.
 
 ## Results
 

@@ -22,4 +22,4 @@
 
 ## Verification ledger
 
-See `VERIFICATION.md` for command results. The exact single-bundle validate command from the task is recorded as a current-tooling mismatch because `connectorgen validate` expects a definitions root, not one bundle directory; the effective root validation and all local fixture gates passed.
+See `VERIFICATION.md` for command results. The recovered tree now passes the exact single-bundle validate command after the HyperDB direct-read CLI flag was marked required to match the typed `body.primaryKeys` schema; root validation and all local fixture gates also passed before the recovery merge commit.

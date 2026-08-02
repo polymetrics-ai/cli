@@ -1,0 +1,39 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/BatchPayments/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "BatchPayments": [
+        {
+          "Account": {},
+          "Reference": "reference_fixture",
+          "Particulars": "particulars_fixture",
+          "Code": "FIXTURE",
+          "Details": "details_fixture",
+          "Narrative": "narrative_fixture",
+          "BatchPaymentID": "batch_payment_id_fixture_1",
+          "DateString": "2026-01-01T00:00:00Z",
+          "Date": "2026-01-01T00:00:00Z",
+          "Amount": 12.34,
+          "Payments": [
+            "payment_fixture"
+          ],
+          "Type": "STANDARD",
+          "Status": "ACTIVE",
+          "TotalAmount": 12.34,
+          "UpdatedDateUTC": "2026-01-02T00:00:00Z",
+          "IsReconciled": false,
+          "ValidationErrors": [
+            "validation_error_fixture_1"
+          ],
+          "batch_payment_id": "batch_payment_id_fixture_1"
+        }
+      ]
+    }
+  }
+}

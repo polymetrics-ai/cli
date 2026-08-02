@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "Accounts": [
+        {
+          "Code": "FIXTURE",
+          "Name": "name_fixture",
+          "AccountID": "account_id_fixture_1",
+          "Type": "STANDARD",
+          "BankAccountNumber": "bank_account_number_fixture",
+          "Status": "ACTIVE",
+          "Description": "description_fixture",
+          "BankAccountType": "STANDARD",
+          "CurrencyCode": "FIXTURE",
+          "TaxType": "STANDARD",
+          "EnablePaymentsToAccount": false,
+          "ShowInExpenseClaims": false,
+          "Class": "class_fixture",
+          "SystemAccount": "system_account_fixture",
+          "ReportingCode": "FIXTURE",
+          "ReportingCodeName": "FIXTURE",
+          "HasAttachments": false,
+          "UpdatedDateUTC": "2026-01-02T00:00:00Z",
+          "AddToWatchlist": false,
+          "ValidationErrors": [
+            "validation_error_fixture_1"
+          ],
+          "account_id": "account_id_fixture_1"
+        }
+      ]
+    }
+  }
+}

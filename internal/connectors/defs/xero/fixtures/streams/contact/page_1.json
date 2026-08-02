@@ -1,0 +1,77 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Contacts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "Contacts": [
+        {
+          "ContactID": "contact_id_fixture_1",
+          "MergedToContactID": "merged_to_contact_id_fixture_1",
+          "ContactNumber": "contact_number_fixture",
+          "AccountNumber": "account_number_fixture",
+          "ContactStatus": "ACTIVE",
+          "Name": "name_fixture",
+          "FirstName": "first_name_fixture",
+          "LastName": "last_name_fixture",
+          "CompanyNumber": "company_number_fixture",
+          "EmailAddress": "fixture@example.invalid",
+          "ContactPersons": [
+            "contact_person_fixture"
+          ],
+          "BankAccountDetails": "bank_account_details_fixture",
+          "TaxNumber": "tax_number_fixture",
+          "TaxNumberType": "STANDARD",
+          "AccountsReceivableTaxType": "STANDARD",
+          "AccountsPayableTaxType": "STANDARD",
+          "Addresses": [
+            "addresse_fixture"
+          ],
+          "Phones": [
+            "phone_fixture"
+          ],
+          "IsSupplier": false,
+          "IsCustomer": false,
+          "SalesDefaultLineAmountType": "STANDARD",
+          "PurchasesDefaultLineAmountType": "STANDARD",
+          "DefaultCurrency": "default_currency_fixture",
+          "XeroNetworkKey": "xero_network_key_fixture",
+          "SalesDefaultAccountCode": "FIXTURE",
+          "PurchasesDefaultAccountCode": "FIXTURE",
+          "SalesTrackingCategories": [
+            "sales_tracking_categorie_fixture"
+          ],
+          "PurchasesTrackingCategories": [
+            "purchases_tracking_categorie_fixture"
+          ],
+          "TrackingCategoryName": "tracking_category_name_fixture",
+          "TrackingCategoryOption": "tracking_category_option_fixture",
+          "PaymentTerms": {},
+          "UpdatedDateUTC": "2026-01-02T00:00:00Z",
+          "ContactGroups": [
+            "contact_group_fixture"
+          ],
+          "Website": "website_fixture",
+          "BrandingTheme": {},
+          "BatchPayments": {},
+          "Discount": 12.34,
+          "Balances": {},
+          "Attachments": [
+            "attachment_fixture"
+          ],
+          "HasAttachments": false,
+          "ValidationErrors": [
+            "validation_error_fixture_1"
+          ],
+          "HasValidationErrors": false,
+          "StatusAttributeString": "ACTIVE",
+          "contact_id": "contact_id_fixture_1"
+        }
+      ]
+    }
+  }
+}

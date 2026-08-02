@@ -1,11 +1,7 @@
 {
   "record": {
-    "fields": {
-      "Name": "Fixture value"
-    },
     "records": [
       {
-        "id": "rec_fixture_1",
         "fields": {
           "Name": "Fixture value"
         }
@@ -16,12 +12,8 @@
     "method": "POST",
     "path": "/v0/synthetic-conformance-value/synthetic-conformance-value",
     "body": {
-      "fields": {
-        "Name": "Fixture value"
-      },
       "records": [
         {
-          "id": "rec_fixture_1",
           "fields": {
             "Name": "Fixture value"
           }

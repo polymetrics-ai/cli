@@ -896,6 +896,9 @@ func writeConnectorFlag(b *strings.Builder, flag connectors.CommandSurfaceFlag) 
 	if flag.Type != "" {
 		fmt.Fprintf(b, " (%s)", flag.Type)
 	}
+	if flag.Required {
+		b.WriteString(" required")
+	}
 	if flag.Summary != "" {
 		fmt.Fprintf(b, ": %s", flag.Summary)
 	}
@@ -1255,6 +1258,7 @@ func safeReversePlanForOutput(plan app.ReversePlan) app.ReversePlan {
 	plan.ApprovalToken = ""
 	plan.ApprovalTokenHash = ""
 	plan.ConnectorCommandRecord = nil
+	plan.Sample = app.RedactReversePlanRecords(plan.Sample, plan.RedactFields)
 	return plan
 }
 

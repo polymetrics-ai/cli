@@ -885,6 +885,8 @@ func checkCLISurfaceOperationSafety(
 		}
 		if len(op.REST.BodySchema) == 0 {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare body_schema", i, cmd.Path, cmd.Operation)})
+		} else {
+			findings = append(findings, checkCLISurfaceOperationBodyMappings(b, i, cmd, op)...)
 		}
 	}
 	if !directReadOutputPolicies[cmd.OutputPolicy] {
@@ -907,6 +909,89 @@ func checkCLISurfaceOperationSafety(
 		}
 	}
 	return findings
+}
+
+func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	if op.REST == nil || len(op.REST.BodySchema) == 0 {
+		return nil
+	}
+	schema, err := parseCLIRecordSchema(op.REST.BodySchema)
+	if err != nil {
+		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q has invalid body_schema for CLI validation: %v", op.ID, err)}}
+	}
+	requiredPaths := schema.requiredMappingPaths("")
+	if len(requiredPaths) == 0 {
+		return nil
+	}
+	mappedTargets := make([]cliBodyFlagMapping, 0, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		target, ok := strings.CutPrefix(flag.MapsTo, "body.")
+		if ok && target != "" {
+			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
+		}
+	}
+	var findings []Finding
+	for _, requiredPath := range requiredPaths {
+		if operationStaticBodyProvidesPath(op.REST.Body, requiredPath) {
+			continue
+		}
+		mapping, ok := commandBodyFlagCoveringRequiredPath(schema, mappedTargets, requiredPath)
+		if !ok {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but no command flag maps to it and rest.body does not provide it", i, cmd.Path, op.ID, requiredPath)})
+			continue
+		}
+		if !mapping.required {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but flag --%s is not marked required", i, cmd.Path, op.ID, requiredPath, mapping.name)})
+		}
+	}
+	return findings
+}
+
+type cliBodyFlagMapping struct {
+	target   string
+	name     string
+	required bool
+}
+
+func operationStaticBodyProvidesPath(body map[string]any, path string) bool {
+	if len(body) == 0 || strings.TrimSpace(path) == "" {
+		return false
+	}
+	var current any = body
+	for _, part := range strings.Split(path, ".") {
+		object, ok := current.(map[string]any)
+		if !ok {
+			return false
+		}
+		current, ok = object[part]
+		if !ok {
+			return false
+		}
+	}
+	return true
+}
+
+func commandBodyFlagCoveringRequiredPath(schema *cliRecordSchemaNode, mappedTargets []cliBodyFlagMapping, requiredPath string) (cliBodyFlagMapping, bool) {
+	requiredNode, err := schema.recordPath(requiredPath)
+	var optional cliBodyFlagMapping
+	optionalFound := false
+	for _, mapping := range mappedTargets {
+		covers := mapping.target == requiredPath
+		if !covers && err == nil && requiredNode != nil && (requiredNode.isObject() || requiredNode.isArray()) && dottedPathPrefix(requiredPath, mapping.target) {
+			covers = true
+		}
+		if !covers {
+			continue
+		}
+		if mapping.required {
+			return mapping, true
+		}
+		if !optionalFound {
+			optional = mapping
+			optionalFound = true
+		}
+	}
+	return optional, optionalFound
 }
 
 func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
