@@ -17,6 +17,8 @@ Implementation and local verification are green in the isolated worker worktree.
 - Added migration documentation with the source/destination collapse audit and #3590 catalog allowance handoff.
 - F15 fix: `loadCuratedIconEntries` now rejects empty or `source-`/`destination-`-prefixed curated connector keys with an error naming the key and file, instead of silently dropping and backfilling them from upstream/fallback data; raw upstream prefix collapse is unaffected.
 - Diagnosed and confirmed resolved the PR #3596 `Website checks` CI failure: the failing run targeted the stale scaffold-only commit, predating the six pipeline review-fix commits already reconciling generated website icon data.
+- Review round 8: no-mistakes run `01KZ2661QR8MTV33B5WDB7S1HV` fixed all 8 review-round findings (curated-builtin merge-layer silent drop, Go/JS icon-ownership divergence, unwired Node test suite, panic-on-icon-coverage-drift, shared-path empty-source-URL false conflict, plus 3 mechanical cleanups) and 1 follow-up CI path-filter finding; document gate approved as-is with doc-migration-dir-consolidation deferred to `cli-docs-migration-dir-consolidation-r1`.
+- CodeQL fix: added `website/scripts/lib/simple-icons.mjs` (`validSimpleIconSlug`, `resolveSimpleIconRequest`) so `fetch-simple-icons.mjs` validates the registry-authored slug and output path immediately before the CDN `fetch` and the `docs/connectors` filesystem write, closing both CodeQL alerts without weakening the existing SVG-payload/duplicate-path guards.
 
 ## GSD / TDD
 

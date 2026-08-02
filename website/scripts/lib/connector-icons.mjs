@@ -36,7 +36,7 @@ export function collectConnectorIconPaths(entries) {
   return paths;
 }
 
-function assertInside(root, target, label) {
+export function assertInside(root, target, label) {
   const rel = relative(root, target);
   if (rel === '..' || rel.startsWith(`..${sep}`) || rel === '' || isAbsolute(rel)) {
     throw new Error(`${label} escapes expected root: ${target}`);

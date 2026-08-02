@@ -9,10 +9,11 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { resolveSimpleIconRequest, validSimpleIconSlug } from './lib/simple-icons.mjs';
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ICON_DATA = resolve(__dirname, '../../internal/connectors/icon_data.json');
 const DOCS_CONNECTORS = resolve(__dirname, '../../docs/connectors');
-const SIMPLE_ICON_CDN = 'https://cdn.simpleicons.org';
 
 function fail(message) {
   console.error(`fetch-simple-icons: ${message}`);
@@ -50,7 +51,7 @@ for (const icon of registry) {
   }
   seenConnectors.add(connector);
   if (!slug && icon.source !== 'simple-icons') continue;
-  if (!slug || !/^[A-Za-z0-9._-]+$/.test(slug)) fail(`invalid simple_icon_slug for ${connector}: ${slug}`);
+  if (!slug || !validSimpleIconSlug(slug)) fail(`invalid simple_icon_slug for ${connector}: ${slug}`);
   if (!validIconPath(path)) fail(`invalid Simple Icons path for ${connector}: ${path}`);
   if (seenPaths.has(path)) fail(`duplicate Simple Icons path: ${path}`);
   seenPaths.add(path);
@@ -59,7 +60,15 @@ for (const icon of registry) {
 
 let written = 0;
 for (const icon of simpleIcons) {
-  const response = await fetch(`${SIMPLE_ICON_CDN}/${icon.slug}`);
+  let request;
+  try {
+    request = resolveSimpleIconRequest(DOCS_CONNECTORS, icon);
+  } catch (error) {
+    fail(error.message);
+  }
+  const { url, outputPath } = request;
+
+  const response = await fetch(url);
   if (!response.ok) {
     fail(`could not fetch ${icon.slug}: HTTP ${response.status}`);
   }
@@ -69,9 +78,8 @@ for (const icon of simpleIcons) {
     fail(`unexpected SVG payload for ${icon.slug}`);
   }
 
-  const out = resolve(DOCS_CONNECTORS, icon.path);
-  mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, tintSvg(svg, icon.hex), 'utf8');
+  mkdirSync(dirname(outputPath), { recursive: true });
+  writeFileSync(outputPath, tintSvg(svg, icon.hex), 'utf8');
   written += 1;
 }
 

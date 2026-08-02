@@ -18,6 +18,10 @@ import {
   syncConnectorIcons,
   validConnectorIconPath,
 } from './lib/connector-icons.mjs';
+import {
+  resolveSimpleIconRequest,
+  validSimpleIconSlug,
+} from './lib/simple-icons.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '../..');
@@ -169,4 +173,61 @@ test('website scripts consume only the canonical registry', () => {
   assert.match(fetchScript, /internal\/connectors\/icon_data\.json/);
   assert.match(fetchScript, /docs\/connectors/);
   assert.equal(fetchScript.includes('icon_overrides'), false, 'Simple Icons fetcher must read canonical registry only');
+  assert.match(
+    fetchScript,
+    /resolveSimpleIconRequest/,
+    'Simple Icons fetcher must validate the slug and output path before any fetch or write',
+  );
+});
+
+test('Simple Icons slug validation accepts only bare lowercase alphanumeric identifiers', () => {
+  assert.equal(validSimpleIconSlug('github'), true);
+  assert.equal(validSimpleIconSlug('1password'), true);
+  assert.equal(validSimpleIconSlug(''), false, 'empty slug must be rejected');
+  assert.equal(validSimpleIconSlug('foo/bar'), false, 'slug with a path separator must be rejected');
+  assert.equal(validSimpleIconSlug('https://evil.example/x'), false, 'slug with a scheme must be rejected');
+  assert.equal(validSimpleIconSlug('foo bar'), false, 'slug with whitespace must be rejected');
+  assert.equal(validSimpleIconSlug('foo.bar'), false, 'slug with a dot must be rejected');
+  assert.equal(validSimpleIconSlug('Foo'), false, 'slug with uppercase must be rejected');
+  assert.equal(validSimpleIconSlug(undefined), false, 'non-string slug must be rejected');
+});
+
+test('Simple Icons request resolution enforces the CodeQL-flagged input boundaries', () => {
+  const root = resolve(repoRoot, 'docs/connectors');
+  const validIcon = { slug: 'github', path: 'icons/simple-icons/github.svg' };
+
+  assert.throws(
+    () => resolveSimpleIconRequest(root, { ...validIcon, path: '../outside.svg' }),
+    /escapes/,
+    '../-traversing path must be rejected before anything is written',
+  );
+  assert.throws(
+    () => resolveSimpleIconRequest(root, { ...validIcon, path: 'icons/simple-icons/../../../etc/passwd.svg' }),
+    /escapes/,
+    'nested ../-traversing path must be rejected before anything is written',
+  );
+  assert.throws(
+    () => resolveSimpleIconRequest(root, { ...validIcon, path: '/etc/passwd' }),
+    /escapes/,
+    'absolute path must be rejected',
+  );
+  assert.throws(
+    () => resolveSimpleIconRequest(root, { ...validIcon, slug: 'foo/bar' }),
+    /Invalid Simple Icons slug/,
+    'slug containing / must be rejected before any fetch',
+  );
+  assert.throws(
+    () => resolveSimpleIconRequest(root, { ...validIcon, slug: 'https://evil.example/x' }),
+    /Invalid Simple Icons slug/,
+    'slug containing a scheme must be rejected before any fetch',
+  );
+  assert.throws(
+    () => resolveSimpleIconRequest(root, { ...validIcon, slug: '' }),
+    /Invalid Simple Icons slug/,
+    'empty slug must be rejected',
+  );
+
+  const { url, outputPath } = resolveSimpleIconRequest(root, validIcon);
+  assert.equal(url, 'https://cdn.simpleicons.org/github', 'valid bare slug must resolve unchanged');
+  assert.equal(outputPath, resolve(root, validIcon.path), 'valid in-tree path must resolve unchanged');
 });

@@ -64,6 +64,19 @@ go test ./cmd/iconregistrygen -v
 python3 -c "import json; d=json.load(open('internal/connectors/icon_data.json')); print(len([e for e in d if not e.get('connector')]))"
 ```
 
+Review repair round 8 (CodeQL fetch-simple-icons input validation) focused gate:
+
+```bash
+cd website
+node --test scripts/icon-registry.test.mjs
+node --check scripts/fetch-simple-icons.mjs
+node --check scripts/lib/simple-icons.mjs
+node --check scripts/lib/connector-icons.mjs
+pnpm run lint
+pnpm run typecheck
+pnpm run gen:website-data   # must diff clean
+```
+
 ## Repository gates before integration
 
 ```bash
@@ -106,3 +119,7 @@ If a gate is not applicable or blocked by environment, record the exact reason a
 - GREEN review round 7 (F15) focused Go gate: `go test ./cmd/iconregistrygen -v` — all 16 tests pass, including empty/prefixed curated-key rejection, bare curated-key preservation, and continued raw-upstream prefix collapse.
 - GREEN F15 no-regression audit: the committed `internal/connectors/icon_data.json` (554 entries) contains zero empty/prefixed curated connector keys, so the default `--curated`-equals-`--out` regeneration path is unaffected by the stricter check.
 - GREEN `Website checks` root cause: PR #3596's failing CI run targeted stale commit `10829e569`, predating the six pipeline review-fix commits; reproduced at pipeline head `8faa94cc6` with CI-matching pnpm 11.7.0 — `pnpm run gen:website-data` diffed clean, and `lint`/`typecheck`/`test:unit` (76/76)/`build` all passed locally.
+- Review round 8 (no-mistakes run `01KZ2661QR8MTV33B5WDB7S1HV`) fixed all 8 review findings plus 1 follow-up CI path-filter finding; document gate approved as-is (doc-migration-dir-consolidation deferred to `cli-docs-migration-dir-consolidation-r1`); PR #3596 reached 27 passed / 0 failed / 8 skipped, `mergeable_state: clean`, before the two CodeQL threads below were raised.
+- RED `node --test scripts/icon-registry.test.mjs` (from `website/`): failed before the CodeQL input-validation fix — `website/scripts/lib/simple-icons.mjs` did not exist.
+- GREEN CodeQL fetch-simple-icons input validation gate: `node --test scripts/icon-registry.test.mjs` (8/8, equivalently `pnpm run test:scripts`) — `../`-traversal path rejected, nested `../` path rejected, absolute path rejected, slug containing `/` rejected before any fetch, slug containing a scheme rejected before any fetch, empty slug rejected, valid bare slug + in-tree path resolves unchanged.
+- GREEN `pnpm run lint`, `pnpm run typecheck`, `pnpm run gen:website-data` (zero diff): pass after the CodeQL fix, confirming no regression to generated website data.
