@@ -9196,13 +9196,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "enteredStageAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -10611,7 +10608,8 @@
         "kind": "custom",
         "method": "POST",
         "path": "/sequence.discard",
-        "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required.",
+        "confirm": "destructive"
       },
       {
         "name": "update_sequence_stage",

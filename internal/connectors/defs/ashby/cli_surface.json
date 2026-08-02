@@ -1017,7 +1017,8 @@
           "type": "string",
           "maps_to": "query.applicationId",
           "summary": "The id of the application to fetch.",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1041,7 +1042,8 @@
           "type": "string",
           "maps_to": "query.applicationId",
           "summary": "The id of the application to fetch criteria evaluations for.",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1701,8 +1703,8 @@
           "type": "string",
           "maps_to": "query.candidateId",
           "summary": "The id of the candidate to fetch client info for",
-          "format": "date-time",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1726,8 +1728,8 @@
           "type": "string",
           "maps_to": "query.candidateId",
           "summary": "The id of the candidate to fetch fraud checks for",
-          "format": "date-time",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -1792,8 +1794,8 @@
           "type": "string",
           "maps_to": "query.candidateId",
           "summary": "The id of the candidate to fetch notes for",
-          "format": "date-time",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -2111,8 +2113,8 @@
           "type": "string",
           "maps_to": "query.candidateId",
           "summary": "The id of the candidate to fetch projects for",
-          "format": "date-time",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -2316,7 +2318,8 @@
           "type": "string",
           "maps_to": "query.feedbackFormDefinitionId",
           "summary": "The unique id of the feedback form you'd like to fetch.",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -2385,7 +2388,8 @@
           "type": "string",
           "maps_to": "query.jobPostingId",
           "summary": "The id of the job posting to return",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "job-board-id",
@@ -2597,7 +2601,8 @@
           "type": "string",
           "maps_to": "query.id",
           "summary": "The id of the job to fetch",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "include-unpublished-job-postings-ids",
@@ -2938,7 +2943,8 @@
           "type": "string",
           "maps_to": "query.jobId",
           "summary": "The id of the job to fetch an interview plan for",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -3085,7 +3091,8 @@
           "type": "string",
           "maps_to": "query.departmentId",
           "summary": "The unique id of the department whose details will be fetched",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -3364,7 +3371,8 @@
           "type": "string",
           "maps_to": "query.locationId",
           "summary": "The id of the location to fetch",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -3588,7 +3596,8 @@
           "type": "string",
           "maps_to": "query.interviewPlanId",
           "summary": "The id of the interview plan to list stages for",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -3796,7 +3805,8 @@
           "type": "string",
           "maps_to": "query.offerId",
           "summary": "The id of the offer to fetch",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "exclude-form-definition",
@@ -4052,7 +4062,8 @@
           "type": "string",
           "maps_to": "query.openingId",
           "summary": "The id of the opening",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4532,7 +4543,8 @@
           "type": "string",
           "maps_to": "query.projectId",
           "summary": "The id of the project",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4857,7 +4869,8 @@
           "type": "string",
           "maps_to": "query.customFieldId",
           "summary": "The id of the custom field to fetch",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -5286,7 +5299,8 @@
           "type": "string",
           "maps_to": "query.userId",
           "summary": "The unique identifier for the user",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -5455,7 +5469,8 @@
           "type": "string",
           "maps_to": "query.userId",
           "summary": "The id of the user to list pauses for.",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -5783,7 +5798,8 @@
           "type": "string",
           "maps_to": "query.sequenceId",
           "summary": "The unique identifier for the sequence enrollment",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -5912,7 +5928,8 @@
           "type": "string",
           "maps_to": "query.sequenceTemplateId",
           "summary": "The unique identifier for the sequence template",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -6153,7 +6170,8 @@
           "type": "string",
           "maps_to": "query.takeHomeAssignmentId",
           "summary": "The id of the take-home assignment",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "expand",
@@ -6182,7 +6200,8 @@
           "type": "string",
           "maps_to": "query.interviewScheduleId",
           "summary": "The unique ID of the interview schedule, for which to list interview events",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "expand",
@@ -6216,7 +6235,8 @@
           "type": "string",
           "maps_to": "query.interviewEventId",
           "summary": "The id of the interview event whose briefing should be returned.",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "expand",
@@ -6245,7 +6265,8 @@
           "type": "string",
           "maps_to": "query.id",
           "summary": "The unique id of the interview whose details will be fetched",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -6301,7 +6322,8 @@
           "type": "string",
           "maps_to": "query.interviewStageId",
           "summary": "The id of the interview stage to retrieve",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -6353,7 +6375,8 @@
           "type": "string",
           "maps_to": "query.surveyFormDefinitionId",
           "summary": "The unique identifier of the survey form definition to fetch",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -6441,7 +6464,8 @@
           "summary": "Returns only the survey requests of the given type. Currently, only `CandidateExperience` is supported.",
           "values": [
             "CandidateExperience"
-          ]
+          ],
+          "required": true
         },
         {
           "name": "application-id",
@@ -6533,7 +6557,8 @@
             "CandidateExperience",
             "Questionnaire",
             "HiringManagerExperience"
-          ]
+          ],
+          "required": true
         },
         {
           "name": "created-after",
@@ -6632,7 +6657,8 @@
           "type": "string",
           "maps_to": "query.webhookId",
           "summary": "The id of the webhook setting to retrieve",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -6761,7 +6787,8 @@
           "type": "string",
           "maps_to": "query.interviewerPoolId",
           "summary": "The id of the interviewer pool",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -7068,7 +7095,8 @@
           "type": "string",
           "maps_to": "query.reportId",
           "summary": "The ID of the report",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "include-headers-in-data",
