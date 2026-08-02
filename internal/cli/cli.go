@@ -658,7 +658,10 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError
 		if errors.As(err, &blocked) {
-			return connectorCommandBlockedError(withConnectorCommandSuggestion(blocked, surface, path))
+			if blocked.Reason == "unknown command" {
+				return connectorCommandUsageError(surface, path)
+			}
+			return connectorCommandBlockedError(blocked)
 		}
 		return err
 	}
@@ -965,16 +968,12 @@ func commandSurfacePrefix(path string) string {
 	return fields[0]
 }
 
-func withConnectorCommandSuggestion(blocked *commandrunner.BlockedCommandError, surface *connectors.CommandSurface, path []string) error {
-	if blocked == nil || blocked.Reason != "unknown command" {
-		return blocked
-	}
+func connectorCommandUsageError(surface *connectors.CommandSurface, path []string) error {
+	message := fmt.Sprintf("unknown command %q", strings.Join(path, " "))
 	if suggestion := connectorCommandSuggestion(surface, path); suggestion != "" {
-		copy := *blocked
-		copy.Reason = fmt.Sprintf("%s; did you mean %q", copy.Reason, suggestion)
-		return &copy
+		message = fmt.Sprintf("%s; did you mean %q", message, suggestion)
 	}
-	return blocked
+	return usageErrorf("%s", message)
 }
 
 func connectorCommandSuggestion(surface *connectors.CommandSurface, path []string) string {
