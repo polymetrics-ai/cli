@@ -12,6 +12,33 @@ make connector-boundary
 `--base <ref>` limits the primary scan to Go files changed from that git ref, including untracked
 files, while exception-ledger contracts are still checked against the whole tree.
 
+## Connector implementation ownership
+
+`connectorgen ownership` validates changed paths for connector implementation PRs. It requires one
+connector target, either from a machine-readable scope file or inferred from changed connector-owned
+paths so label/tag omission cannot skip the check.
+
+```bash
+go run ./cmd/connectorgen ownership . --base origin/main --scope-file connector-scope.json
+go run ./cmd/connectorgen ownership . --base origin/main --json --scope-file connector-scope.json
+```
+
+Scope file contract:
+
+```json
+{
+  "api_version": "polymetrics.ai/v1",
+  "kind": "ConnectorImplementationScope",
+  "connectors": ["target-slug"]
+}
+```
+
+The `connectors` array must contain exactly one connector slug. The validator allows target
+`internal/connectors/defs/<slug>/`, target hooks/native/legacy connector paths, target generated
+connector docs/icons/manual outputs, and a narrow set of shared generated indexes/goldens. It rejects
+shared runtime/tooling, unrelated connectors, unrelated generated docs/website churn, and guardrail
+exception/config edits; use a separate foundation PR for those changes.
+
 ## Output and exit status
 
 - Exit `0`: clean boundary report.
