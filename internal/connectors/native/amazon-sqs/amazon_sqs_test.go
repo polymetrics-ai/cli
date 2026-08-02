@@ -358,13 +358,20 @@ func TestManifestWriteActionsAndDestructiveConfirmations(t *testing.T) {
 		"untag_queue":              true,
 	}
 	seen := map[string]bool{}
+	redactFields := map[string][]string{}
 	for _, action := range manifest.WriteActions {
 		seen[action.Name] = true
+		redactFields[action.Name] = action.RedactFields
 		if destructive[action.Name] && action.Confirm != "destructive" {
 			t.Fatalf("action %s Confirm = %q, want destructive", action.Name, action.Confirm)
 		}
 		if action.Risk == "" || action.Method != http.MethodPost || !strings.HasPrefix(action.Path, "SQS.") {
 			t.Fatalf("action %+v missing risk/method/path", action)
+		}
+	}
+	for actionName, field := range map[string]string{"send_message": "message_body", "delete_message": "receipt_handle", "cancel_message_move_task": "task_handle", "set_queue_attributes": "attribute_value"} {
+		if !containsString(redactFields[actionName], field) {
+			t.Fatalf("action %s RedactFields = %v, want %q", actionName, redactFields[actionName], field)
 		}
 	}
 	for name := range destructive {
@@ -490,19 +497,91 @@ func TestWriteNormalizesActionAndSendsQueueURL(t *testing.T) {
 
 	c := native.New()
 	cfg := testRuntimeConfig(srv.URL)
-	preview, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: " purge_queue ", Config: cfg}, nil)
+	preview, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: " purge_queue ", Config: cfg}, []connectors.Record{{}})
 	if err != nil {
 		t.Fatalf("DryRunWrite purge_queue: %v", err)
 	}
 	if preview.Action != "purge_queue" || !strings.Contains(strings.Join(preview.Warnings, " "), "destructive") {
 		t.Fatalf("preview = %+v, want normalized destructive action", preview)
 	}
-	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: " purge_queue ", Config: cfg}, nil)
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: " purge_queue ", Config: cfg}, []connectors.Record{{}})
 	if err != nil {
 		t.Fatalf("Write purge_queue: %v", err)
 	}
 	if res.RecordsWritten != 1 || sawQueueURL != cfg.Config["queue_url"] {
 		t.Fatalf("result=%+v QueueUrl=%q, want one write to configured queue", res, sawQueueURL)
+	}
+}
+
+func TestWriteWithNoSourceRowsDoesNotExecuteDestructiveZeroFieldAction(t *testing.T) {
+	var calls int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		t.Fatalf("unexpected SQS request for empty source rows: %s", r.URL.String())
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	preview, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "purge_queue", Config: cfg}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite purge_queue empty rows: %v", err)
+	}
+	if preview.RecordsStaged != 0 {
+		t.Fatalf("preview.RecordsStaged = %d, want 0", preview.RecordsStaged)
+	}
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "purge_queue", Config: cfg}, nil)
+	if err != nil {
+		t.Fatalf("Write purge_queue empty rows: %v", err)
+	}
+	if res.RecordsWritten != 0 || res.RecordsFailed != 0 || calls != 0 {
+		t.Fatalf("result=%+v calls=%d, want no-op", res, calls)
+	}
+}
+
+func TestWriteSendMessagePreservesMessageBodyWhitespace(t *testing.T) {
+	var gotBody string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		gotBody = r.Form.Get("MessageBody")
+		_, _ = w.Write([]byte(`<SendMessageResponse><SendMessageResult><MessageId>m1</MessageId></SendMessageResult></SendMessageResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	wantBody := "  hello sqs\n"
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": wantBody}})
+	if err != nil {
+		t.Fatalf("Write send_message: %v", err)
+	}
+	if res.RecordsWritten != 1 || gotBody != wantBody {
+		t.Fatalf("result=%+v MessageBody=%q, want %q", res, gotBody, wantBody)
+	}
+}
+
+func TestWriteDeleteBatchReportsSQSBatchEntryFailures(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		if action := r.Form.Get("Action"); action != "DeleteMessageBatch" {
+			t.Fatalf("Action = %q, want DeleteMessageBatch", action)
+		}
+		_, _ = w.Write([]byte(`<DeleteMessageBatchResponse><DeleteMessageBatchResult><DeleteMessageBatchResultEntry><Id>entry_1</Id></DeleteMessageBatchResultEntry><BatchResultErrorEntry><Id>entry_2</Id><SenderFault>true</SenderFault><Code>ReceiptHandleIsInvalid</Code><Message>invalid handle</Message></BatchResultErrorEntry></DeleteMessageBatchResult></DeleteMessageBatchResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "delete_message_batch", Config: cfg}, []connectors.Record{{"receipt_handle": "rh1"}, {"receipt_handle": "rh2"}})
+	if err == nil || !strings.Contains(err.Error(), "batch request failed") {
+		t.Fatalf("Write delete_message_batch err = %v, want batch failure", err)
+	}
+	if res.RecordsWritten != 1 || res.RecordsFailed != 1 {
+		t.Fatalf("result=%+v, want one success and one failure", res)
 	}
 }
 
@@ -515,8 +594,17 @@ func TestValidateWriteClosedSchemas(t *testing.T) {
 	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{}}); err == nil || !strings.Contains(err.Error(), "requires field") {
 		t.Fatalf("ValidateWrite missing field err = %v, want requires field", err)
 	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": " "}}); err != nil {
+		t.Fatalf("ValidateWrite whitespace message body: %v", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "change_message_visibility", Config: cfg}, []connectors.Record{{"receipt_handle": "rh", "visibility_timeout": "eventually"}}); err == nil || !strings.Contains(err.Error(), "must be an integer") {
+		t.Fatalf("ValidateWrite malformed visibility_timeout err = %v, want integer error", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "ok", "delay_seconds": 901}}); err == nil || !strings.Contains(err.Error(), "between 0 and 900") {
+		t.Fatalf("ValidateWrite out-of-range delay_seconds err = %v, want range error", err)
+	}
 	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "purge_queue", Config: cfg}, nil); err != nil {
-		t.Fatalf("ValidateWrite purge_queue empty record: %v", err)
+		t.Fatalf("ValidateWrite purge_queue zero records: %v", err)
 	}
 }
 
@@ -539,4 +627,13 @@ func countAction(actions []string, want string) int {
 		}
 	}
 	return count
+}
+
+func containsString(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
 }

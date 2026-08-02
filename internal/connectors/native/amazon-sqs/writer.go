@@ -2,9 +2,11 @@ package amazonsqs
 
 import (
 	"context"
+	"encoding/json"
 	"encoding/xml"
-	"errors"
 	"fmt"
+	"io"
+	"math"
 	"net/url"
 	"sort"
 	"strconv"
@@ -14,6 +16,17 @@ import (
 )
 
 const sqsBatchLimit = 10
+
+type sqsIntFieldRule struct {
+	min int
+	max int
+}
+
+var sqsIntFieldRules = map[string]sqsIntFieldRule{
+	"delay_seconds":                     {min: 0, max: 900},
+	"max_number_of_messages_per_second": {min: 1, max: 500},
+	"visibility_timeout":                {min: 0, max: 43200},
+}
 
 type writeActionDef struct {
 	name     string
@@ -64,7 +77,16 @@ func (c Connector) Manifest() connectors.Manifest {
 	actions := make([]connectors.WriteActionSpec, 0, len(sqsWriteActions))
 	for _, name := range sortedWriteActionNames() {
 		def := sqsWriteActions[name]
-		actions = append(actions, connectors.WriteActionSpec{Name: def.name, RequiredFields: append([]string(nil), def.required...), OptionalFields: optionalFields(def), Method: def.method, Path: def.path, Risk: def.risk, Confirm: def.confirm})
+		actions = append(actions, connectors.WriteActionSpec{
+			Name:           def.name,
+			RequiredFields: append([]string(nil), def.required...),
+			OptionalFields: optionalFields(def),
+			Method:         def.method,
+			Path:           def.path,
+			RedactFields:   append([]string(nil), def.redact...),
+			Risk:           def.risk,
+			Confirm:        def.confirm,
+		})
 	}
 	return connectors.Manifest{
 		Metadata:     c.Metadata(),
@@ -123,10 +145,11 @@ func (c Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest,
 	if err != nil {
 		return connectors.WritePreview{}, err
 	}
-	if err := validateSQSRecords(def, normalizedWriteRecords(records)); err != nil {
+	normalized := normalizedWriteRecords(records)
+	if err := validateSQSRecords(def, normalized); err != nil {
 		return connectors.WritePreview{}, err
 	}
-	staged := len(normalizedWriteRecords(records))
+	staged := len(normalized)
 	warnings := []string{"amazon-sqs writes require reverse ETL plan -> preview -> explicit approval -> execute"}
 	if def.confirm == "destructive" {
 		warnings = append(warnings, "destructive confirmation required")
@@ -166,12 +189,18 @@ func (c Connector) writeSQS(ctx context.Context, req connectors.WriteRequest, re
 			if err != nil {
 				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: failed + len(chunk)}, err
 			}
-			successes, failures := parseBatchCounts(resp.body)
-			if successes == 0 && failures == 0 {
+			successes, failures, err := parseBatchCounts(resp.body)
+			if successes == 0 && failures == 0 && err == nil {
 				successes = len(chunk)
 			}
 			written += successes
 			failed += failures
+			if err != nil {
+				if unknown := len(chunk) - successes - failures; unknown > 0 {
+					failed += unknown
+				}
+				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: failed}, err
+			}
 		}
 		return connectors.WriteResult{RecordsWritten: written, RecordsFailed: failed}, nil
 	}
@@ -202,9 +231,6 @@ func lookupSQSWriteAction(raw string) (writeActionDef, string, error) {
 }
 
 func normalizedWriteRecords(records []connectors.Record) []connectors.Record {
-	if len(records) == 0 {
-		return []connectors.Record{{}}
-	}
 	out := make([]connectors.Record, len(records))
 	for i, rec := range records {
 		if rec == nil {
@@ -223,17 +249,47 @@ func validateSQSRecords(def writeActionDef, records []connectors.Record) error {
 	}
 	for i, rec := range records {
 		for _, field := range def.required {
-			if isEmptyRecordValue(rec[field]) {
+			if isEmptyRequiredRecordValue(field, rec[field]) {
 				return fmt.Errorf("amazon-sqs action %s record %d requires field %q", def.name, i, field)
 			}
 		}
-		for field := range rec {
+		for field, value := range rec {
 			if !allowed[field] {
 				return fmt.Errorf("amazon-sqs action %s record %d has unsupported field %q", def.name, i, field)
+			}
+			if err := validateSQSFieldValue(field, value); err != nil {
+				return fmt.Errorf("amazon-sqs action %s record %d field %q: %w", def.name, i, field, err)
 			}
 		}
 	}
 	return nil
+}
+
+func validateSQSFieldValue(field string, value any) error {
+	rule, ok := sqsIntFieldRules[field]
+	if !ok || isEmptyRecordValue(value) {
+		return nil
+	}
+	_, err := parseSQSInt(value, rule.min, rule.max)
+	return err
+}
+
+func isEmptyRequiredRecordValue(field string, v any) bool {
+	if field == "message_body" {
+		return isEmptyPayloadValue(v)
+	}
+	return isEmptyRecordValue(v)
+}
+
+func isEmptyPayloadValue(v any) bool {
+	switch typed := v.(type) {
+	case nil:
+		return true
+	case string:
+		return typed == ""
+	default:
+		return fmt.Sprint(v) == ""
+	}
 }
 
 func isEmptyRecordValue(v any) bool {
@@ -285,7 +341,11 @@ func buildCancelMessageMoveTaskForm(form url.Values, rec connectors.Record, _ in
 
 func buildChangeMessageVisibilityForm(form url.Values, rec connectors.Record, _ int) error {
 	form.Set("ReceiptHandle", stringField(rec, "receipt_handle"))
-	form.Set("VisibilityTimeout", strconv.Itoa(intField(rec, "visibility_timeout", 0, 0, 43200)))
+	visibilityTimeout, err := intField(rec, "visibility_timeout", 0, 43200)
+	if err != nil {
+		return err
+	}
+	form.Set("VisibilityTimeout", strconv.Itoa(visibilityTimeout))
 	return nil
 }
 
@@ -294,7 +354,11 @@ func buildChangeMessageVisibilityBatchEntry(form url.Values, rec connectors.Reco
 	form.Set(prefix+"Id", entryID(rec, index))
 	form.Set(prefix+"ReceiptHandle", stringField(rec, "receipt_handle"))
 	if !isEmptyRecordValue(rec["visibility_timeout"]) {
-		form.Set(prefix+"VisibilityTimeout", strconv.Itoa(intField(rec, "visibility_timeout", 0, 0, 43200)))
+		visibilityTimeout, err := intField(rec, "visibility_timeout", 0, 43200)
+		if err != nil {
+			return err
+		}
+		form.Set(prefix+"VisibilityTimeout", strconv.Itoa(visibilityTimeout))
 	}
 	return nil
 }
@@ -324,8 +388,10 @@ func buildRemovePermissionForm(form url.Values, rec connectors.Record, _ int) er
 }
 
 func buildSendMessageForm(form url.Values, rec connectors.Record, _ int) error {
-	form.Set("MessageBody", stringField(rec, "message_body"))
-	addOptionalInt(form, "DelaySeconds", rec, "delay_seconds", 0, 0, 900)
+	form.Set("MessageBody", rawStringField(rec, "message_body"))
+	if err := addOptionalInt(form, "DelaySeconds", rec, "delay_seconds", 0, 900); err != nil {
+		return err
+	}
 	addOptionalString(form, "MessageDeduplicationId", rec, "message_deduplication_id")
 	addOptionalString(form, "MessageGroupId", rec, "message_group_id")
 	addMessageAttributeMap(form, "MessageAttribute", messageAttributeMapField(rec, "message_attributes"))
@@ -336,8 +402,10 @@ func buildSendMessageForm(form url.Values, rec connectors.Record, _ int) error {
 func buildSendMessageBatchEntry(form url.Values, rec connectors.Record, index int) error {
 	prefix := fmt.Sprintf("SendMessageBatchRequestEntry.%d.", index)
 	form.Set(prefix+"Id", entryID(rec, index))
-	form.Set(prefix+"MessageBody", stringField(rec, "message_body"))
-	addOptionalInt(form, prefix+"DelaySeconds", rec, "delay_seconds", 0, 0, 900)
+	form.Set(prefix+"MessageBody", rawStringField(rec, "message_body"))
+	if err := addOptionalInt(form, prefix+"DelaySeconds", rec, "delay_seconds", 0, 900); err != nil {
+		return err
+	}
 	addOptionalString(form, prefix+"MessageDeduplicationId", rec, "message_deduplication_id")
 	addOptionalString(form, prefix+"MessageGroupId", rec, "message_group_id")
 	addMessageAttributeMap(form, prefix+"MessageAttribute", messageAttributeMapField(rec, "message_attributes"))
@@ -357,7 +425,9 @@ func buildSetQueueAttributesForm(form url.Values, rec connectors.Record, _ int) 
 func buildStartMessageMoveTaskForm(form url.Values, rec connectors.Record, _ int) error {
 	form.Set("SourceArn", stringField(rec, "source_arn"))
 	addOptionalString(form, "DestinationArn", rec, "destination_arn")
-	addOptionalInt(form, "MaxNumberOfMessagesPerSecond", rec, "max_number_of_messages_per_second", 0, 1, 500)
+	if err := addOptionalInt(form, "MaxNumberOfMessagesPerSecond", rec, "max_number_of_messages_per_second", 1, 500); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -381,11 +451,16 @@ func addOptionalString(form url.Values, name string, rec connectors.Record, fiel
 	}
 }
 
-func addOptionalInt(form url.Values, name string, rec connectors.Record, field string, def, min, max int) {
+func addOptionalInt(form url.Values, name string, rec connectors.Record, field string, minValue, maxValue int) error {
 	if isEmptyRecordValue(rec[field]) {
-		return
+		return nil
 	}
-	form.Set(name, strconv.Itoa(intField(rec, field, def, min, max)))
+	value, err := intField(rec, field, minValue, maxValue)
+	if err != nil {
+		return err
+	}
+	form.Set(name, strconv.Itoa(value))
+	return nil
 }
 
 func entryID(rec connectors.Record, index int) string {
@@ -396,51 +471,98 @@ func entryID(rec connectors.Record, index int) string {
 }
 
 func stringField(rec connectors.Record, key string) string {
+	return strings.TrimSpace(rawStringField(rec, key))
+}
+
+func rawStringField(rec connectors.Record, key string) string {
 	value, ok := rec[key]
 	if !ok || value == nil {
 		return ""
 	}
-	return strings.TrimSpace(fmt.Sprint(value))
+	return fmt.Sprint(value)
 }
 
-func intField(rec connectors.Record, key string, def, min, max int) int {
+func intField(rec connectors.Record, key string, minValue, maxValue int) (int, error) {
 	value, ok := rec[key]
 	if !ok || value == nil {
-		return def
+		return 0, fmt.Errorf("field %q is required", key)
 	}
-	var n int
-	switch typed := value.(type) {
-	case int:
-		n = typed
-	case int64:
-		n = int(typed)
-	case float64:
-		n = int(typed)
-	case jsonNumber:
-		parsed, err := strconv.Atoi(string(typed))
-		if err != nil {
-			n = def
-		} else {
-			n = parsed
-		}
-	default:
-		parsed, err := strconv.Atoi(strings.TrimSpace(fmt.Sprint(value)))
-		if err != nil {
-			n = def
-		} else {
-			n = parsed
-		}
-	}
-	if n < min {
-		return min
-	}
-	if max > min && n > max {
-		return max
-	}
-	return n
+	return parseSQSInt(value, minValue, maxValue)
 }
 
-type jsonNumber string
+func parseSQSInt(value any, minValue, maxValue int) (int, error) {
+	rangeErr := func() error {
+		return fmt.Errorf("must be between %d and %d", minValue, maxValue)
+	}
+	integerErr := func() error {
+		return fmt.Errorf("must be an integer")
+	}
+	switch typed := value.(type) {
+	case int:
+		if typed < minValue || typed > maxValue {
+			return 0, rangeErr()
+		}
+		return typed, nil
+	case int8:
+		return parseSQSInt(int(typed), minValue, maxValue)
+	case int16:
+		return parseSQSInt(int(typed), minValue, maxValue)
+	case int32:
+		return parseSQSInt(int(typed), minValue, maxValue)
+	case int64:
+		if typed < int64(minValue) || typed > int64(maxValue) {
+			return 0, rangeErr()
+		}
+		return int(typed), nil
+	case uint:
+		if typed > uint(maxValue) {
+			return 0, rangeErr()
+		}
+		return int(typed), nil
+	case uint8:
+		return parseSQSInt(uint(typed), minValue, maxValue)
+	case uint16:
+		return parseSQSInt(uint(typed), minValue, maxValue)
+	case uint32:
+		return parseSQSInt(uint(typed), minValue, maxValue)
+	case uint64:
+		if typed > uint64(maxValue) {
+			return 0, rangeErr()
+		}
+		return int(typed), nil
+	case float32:
+		return parseSQSFloat(float64(typed), minValue, maxValue, integerErr, rangeErr)
+	case float64:
+		return parseSQSFloat(typed, minValue, maxValue, integerErr, rangeErr)
+	case json.Number:
+		return parseSQSIntString(typed.String(), minValue, maxValue, integerErr, rangeErr)
+	case string:
+		return parseSQSIntString(typed, minValue, maxValue, integerErr, rangeErr)
+	default:
+		return parseSQSIntString(fmt.Sprint(value), minValue, maxValue, integerErr, rangeErr)
+	}
+}
+
+func parseSQSFloat(value float64, minValue, maxValue int, integerErr func() error, rangeErr func() error) (int, error) {
+	if math.IsNaN(value) || math.IsInf(value, 0) || math.Trunc(value) != value {
+		return 0, integerErr()
+	}
+	if value < float64(minValue) || value > float64(maxValue) {
+		return 0, rangeErr()
+	}
+	return int(value), nil
+}
+
+func parseSQSIntString(raw string, minValue, maxValue int, integerErr func() error, rangeErr func() error) (int, error) {
+	parsed, err := strconv.ParseInt(strings.TrimSpace(raw), 10, 64)
+	if err != nil {
+		return 0, integerErr()
+	}
+	if parsed < int64(minValue) || parsed > int64(maxValue) {
+		return 0, rangeErr()
+	}
+	return int(parsed), nil
+}
 
 func stringSliceField(rec connectors.Record, key string) []string {
 	value := rec[key]
@@ -603,28 +725,46 @@ func addMessageAttributeMap(form url.Values, prefix string, values map[string]me
 	}
 }
 
-func parseBatchCounts(raw []byte) (int, int) {
+type sqsBatchFailure struct {
+	Code string `xml:"Code"`
+}
+
+func parseBatchCounts(raw []byte) (int, int, error) {
 	decoder := xml.NewDecoder(strings.NewReader(string(raw)))
 	successes := 0
 	failures := 0
+	firstFailureCode := ""
 	for {
 		tok, err := decoder.Token()
-		if errors.Is(err, context.Canceled) {
-			return successes, failures
+		if err == io.EOF {
+			break
 		}
 		if err != nil {
-			break
+			return successes, failures, fmt.Errorf("parse amazon-sqs batch response: %w", err)
 		}
 		start, ok := tok.(xml.StartElement)
 		if !ok {
 			continue
 		}
 		switch start.Name.Local {
-		case "Successful":
+		case "SendMessageBatchResultEntry", "DeleteMessageBatchResultEntry", "ChangeMessageVisibilityBatchResultEntry", "Successful":
 			successes++
-		case "Failed":
+		case "BatchResultErrorEntry", "Failed":
 			failures++
+			var failure sqsBatchFailure
+			if err := decoder.DecodeElement(&failure, &start); err != nil {
+				return successes, failures, fmt.Errorf("parse amazon-sqs batch failure entry: %w", err)
+			}
+			if firstFailureCode == "" {
+				firstFailureCode = strings.TrimSpace(failure.Code)
+			}
 		}
 	}
-	return successes, failures
+	if failures == 0 {
+		return successes, failures, nil
+	}
+	if firstFailureCode != "" {
+		return successes, failures, fmt.Errorf("amazon-sqs batch request failed for %d entries with first code %s", failures, firstFailureCode)
+	}
+	return successes, failures, fmt.Errorf("amazon-sqs batch request failed for %d entries", failures)
 }
