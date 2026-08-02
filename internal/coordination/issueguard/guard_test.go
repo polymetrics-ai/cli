@@ -104,6 +104,8 @@ func TestValidatePRAcceptsUnvalidatedCheckpointCanonicalIssueLinks(t *testing.T)
 	}{
 		{name: "LF", body: unvalidatedCheckpointBody()},
 		{name: "CRLF", body: strings.ReplaceAll(unvalidatedCheckpointBody(), "\n", "\r\n")},
+		{name: "GitHub-indented body", body: unvalidatedCheckpointBodyWithGitHubIndentation()},
+		{name: "GitHub-indented CRLF body", body: strings.ReplaceAll(unvalidatedCheckpointBodyWithGitHubIndentation(), "\n", "\r\n")},
 	}
 
 	for _, tt := range tests {
@@ -294,4 +296,21 @@ func unvalidatedCheckpointBody() string {
 		"- https://github.com/polymetrics-ai/cli/issues/3076",
 		"",
 	}, "\n")
+}
+
+func unvalidatedCheckpointBodyWithGitHubIndentation() string {
+	lines := strings.Split(unvalidatedCheckpointBody(), "\n")
+	indent := false
+	for i, line := range lines {
+		if strings.HasPrefix(line, "This draft pull request") {
+			indent = true
+		}
+		if indent && line != "" {
+			lines[i] = "    " + line
+		}
+		if line == "- https://github.com/polymetrics-ai/cli/issues/3070" {
+			indent = false
+		}
+	}
+	return strings.Join(lines, "\n")
 }

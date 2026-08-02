@@ -30,10 +30,10 @@ var letteredDeliveryIssuePhrasePattern = regexp.MustCompile(`\b(?:[Dd]eliver(?:s
 var parentIssuePattern = regexp.MustCompile(`(?i)\bparent\s+(?:issue\s+)?(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 var markdownH2Pattern = regexp.MustCompile(`(?m)^##\s+([A-Za-z][A-Za-z ]*)\s*$`)
 var unvalidatedCheckpointHeadingPattern = regexp.MustCompile(`(?im)^##[ \t]+unvalidated cloud checkpoint[ \t]+—[ \t]+do not merge yet[ \t]*\r?$`)
-var canonicalIssueSectionPattern = regexp.MustCompile(`(?im)^##[ \t]+canonical issue links preserved from the task record[ \t]*\r?$`)
+var canonicalIssueSectionPattern = regexp.MustCompile(`(?im)^[ \t]{0,4}##[ \t]+canonical issue links preserved from the task record[ \t]*\r?$`)
 var markdownIssueURLPattern = regexp.MustCompile(`(?im)^[ \t]*-[ \t]+https://git` + `hub\.com/[a-z0-9_.-]+/[a-z0-9_.-]+/issues/([1-9][0-9]*)[ \t]*\r?$`)
 var completedTaskPattern = regexp.MustCompile(`(?i)\bunvalidated cloud checkpoint for the completed\b[^.\n\r]{0,160}\btask\b`)
-var markdownH2StartPattern = regexp.MustCompile(`(?m)^##[ \t]+`)
+var markdownH2StartPattern = regexp.MustCompile(`(?m)^[ \t]{0,4}##[ \t]+`)
 
 const noMistakesDeliveryMarker = "Updates from [git push no-mistakes](https://" + "git" + "hub.com/kunchenguid/no-mistakes)"
 

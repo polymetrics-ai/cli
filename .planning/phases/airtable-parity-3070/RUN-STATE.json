@@ -5,7 +5,7 @@
   "status": "ci_repair_complete_awaiting_outer_ci",
   "verificationPassed": true,
   "reviewFixVerificationPassed": true,
-  "verificationNote": "The focused Airtable definition/conformance and PR issue-link guard checks pass, the connector-boundary false positive is repaired without changing regex behavior, and full make verify passes. The outer pipeline still owns commit, push, and authoritative hosted CI.",
+  "verificationNote": "The exact hosted PR body now yields eight linked issues despite its bounded heading indentation, focused guard and connector-boundary checks pass, and full make verify passes. The outer pipeline still owns commit, push, and authoritative hosted CI.",
   "gsd": {
     "doctor": "passed",
     "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase airtable-parity-3070 --dry-run",
@@ -29,6 +29,11 @@
       "cycle": "ci",
       "decision": "local_critical_path",
       "reason": "the failing connector-boundary and verify gates share one deterministic false positive in the existing PR issue-link guard repair"
+    },
+    {
+      "cycle": "ci-checkpoint-indentation",
+      "decision": "local_critical_path",
+      "reason": "the hosted require-linked-issue failure is isolated to four-space indentation in the generated checkpoint body and requires one bounded parser regression"
     }
   ],
   "sourceAudit": {
@@ -64,7 +69,8 @@
     "checks": ["connector-boundary", "require-linked-issue", "verify"],
     "status": "local_verification_passed_awaiting_outer_ci",
     "linkedIssues": [3070, 3071, 3072, 3073, 3074, 3075, 3076, 3077],
-    "issueGuardResult": "focused packages pass with 8 non-closing linked issues for the exact checkpoint body",
+    "hostedCanonicalHeadingIndentation": 4,
+    "issueGuardResult": "focused packages and LF/CRLF regressions pass with 8 non-closing linked issues for the exact hosted checkpoint body",
     "connectorBoundaryResult": "clean: 130 shared files and 550 connectors checked with zero findings or warnings",
     "fullVerifyPassed": true
   },

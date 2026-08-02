@@ -55,3 +55,14 @@ The outer no-mistakes executor still owns commit, push, PR-body mutation, broade
 - [x] `make connector-boundary` — `outcome: clean`, 130 shared files and 550 connectors checked with zero findings or warnings.
 - [x] `make verify` — passed end-to-end: format, tidy check, vet, full tests, build, docs validation, smoke, lint, connector validation, connector boundary, and release notification assertions.
 - [x] No live Airtable calls, provider credentials, provider writes, dependency changes, PR mutation, push, or pipeline-control commands were used.
+
+## CI checkpoint-indentation repair — 2026-08-02
+
+- [x] Live read-only PR inspection confirmed the hosted body indents the exact canonical-section heading and first issue URL by four spaces.
+- [x] Red: `go test ./internal/coordination/issueguard -run TestValidatePRAcceptsUnvalidatedCheckpointCanonicalIssueLinks/GitHub-indented_body -count=1` failed with the reported missing-issue violation before the production regex changed.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` — passed with standard and GitHub-indented LF/CRLF fixtures.
+- [x] `go vet ./internal/coordination/issueguard ./cmd/prissueguard` — passed.
+- [x] Exact PR #3540 title/body through `go run ./cmd/prissueguard` — `issueguard: ok (8 linked issues)`.
+- [x] `make connector-boundary` — passed with a clean report.
+- [x] `make verify` — passed end-to-end on the final tree.
+- [x] No live Airtable calls, credentials, provider writes, dependencies, PR mutation, push, or no-mistakes pipeline-control commands were used.
