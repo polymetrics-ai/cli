@@ -34,7 +34,8 @@ Audit scope:
 
 | Issue | Milestone | Branch | PR base | Intent | Dependencies | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| #3581 | guardrail core | `fix/3581-target-scope-core-validator` | `fix/3579-connector-path-ownership-guardrails` | Target-scope contract and core changed-path validator | none | Sub-PR #3590 open; next critical path |
+| #3595 | icon registry foundation | `fix/3595-icon-registry-single-source` | `fix/3579-connector-path-ownership-guardrails` | Canonical bare connector icon registry and docs-icon asset authority | none | Draft sub-PR #3596 open; next critical path |
+| #3581 | guardrail core | `fix/3581-target-scope-core-validator` | `fix/3579-connector-path-ownership-guardrails` | Target-scope contract and core changed-path validator | #3595 before R5/R6 reconciliation | Sub-PR #3590 open; integration blocked on #3595 |
 | #3582 | guardrail gate | `fix/3582-connector-ownership-ci-gate` | `fix/3579-connector-path-ownership-guardrails` | GitHub Actions, label/tag, local hook, and required remote gate | #3581 | Dependency-blocked |
 | #3583 | PM/no-mistakes | `fix/3583-pm-no-mistakes-connector-lane` | `fix/3579-connector-path-ownership-guardrails` | PM orchestrator, issue/PR templates, connector instructions, no-mistakes guidance | none | Provisionally integrated via #3588; parent review/final gate pending |
 | #3584 | forward remediation A | `fix/3584-hubspot-bitbucket-forward-remediation` | `fix/3579-connector-path-ownership-guardrails` | HubSpot and Bitbucket shared path dispositions | none | Sub-PR #3591 open; fresh no-mistakes recovery pending |
@@ -48,7 +49,8 @@ State ledger lives in the parent branch under `.planning/phases/connector-guardr
 
 | Issue | Worker | Branch | PR | Latest SHA | Verification | Automated review coverage | Merge state | Blocker |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| #3581 | pm-gsd-worker | `fix/3581-target-scope-core-validator` | #3590 | pending current-head validation | GitHub checks green; current no-mistakes/review validation pending | pending | Sub-PR open; next critical path | None |
+| #3595 | pm-gsd-worker | `fix/3595-icon-registry-single-source` | #3596 | `b814e85a6` | Planning scaffold pushed; implementation and 5.6 SOL validation pending | pending | Draft sub-PR open; next critical path | None |
+| #3581 | pm-gsd-worker | `fix/3581-target-scope-core-validator` | #3590 | pending after #3595 | Prior-config no-mistakes run parked; fresh 5.6 SOL validation required after #3595 reconciliation | blocked | Sub-PR open; blocked | #3595 canonical icon registry foundation |
 | #3582 | deferred | `fix/3582-connector-ownership-ci-gate` | pending | pending | Pending | pending | Planned | Blocks on #3581 |
 | #3583 | pm-gsd-worker | `fix/3583-pm-no-mistakes-connector-lane` | #3588 | `0c321595d7ae4852550a5012a895c3e11f7e8298` / parent `86b91fc40f46b8653538531fc40c183913676f05` | no-mistakes `01KZ0SEAKBB9TG7N3SMG97XKJS` passed | parent PR fallback/human final gate pending | Provisionally integrated | Parent PR final review/readiness pending |
 | #3584 | pm-gsd-worker | `fix/3584-hubspot-bitbucket-forward-remediation` | #3591 | pending current validation | Checks green; fresh no-mistakes recovery pending | pending | Sub-PR open | Recovery pending |
