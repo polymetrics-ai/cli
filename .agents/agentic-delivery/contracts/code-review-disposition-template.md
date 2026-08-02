@@ -22,9 +22,19 @@ Follow-up:
 
 ## Rules
 
+- Leave a disposition reply on every finding, including the ones you fix. No finding is silently
+  actioned or ignored: for each finding a reader must be able to see whether it was fixed and why,
+  or why it was not. "I fixed it" still requires a reply stating the fix and the reason.
 - Do not resolve a review thread before leaving a disposition reply. Resolve the conversation in
   GitHub after findings are addressed; there is no bot resolve command.
 - Do not silently dismiss a finding as false positive. Explain why.
+- Update docs as part of the disposition. If an `Accepted` or `Accepted with modification` fix
+  changes behavior, CLI surface, flags, output, config, or a shared contract, update the
+  corresponding docs and website in the same PR per
+  `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`, and record it in the
+  Action/Evidence fields. If you `Decline` a finding because the current behavior is intended, cite
+  the doc that records that intent in Evidence — and if no such doc exists or it is stale, update it
+  so the intended behavior is documented rather than left implicit.
 - Do not accept a suggestion that crosses a hard stop. Mark it `Needs human`.
 - Create or reference a follow-up issue for valid work that is outside the current PR.
 - Ensure accepted fix commits are reviewed. Claude auto-reviews a PR when a trusted author opens,
