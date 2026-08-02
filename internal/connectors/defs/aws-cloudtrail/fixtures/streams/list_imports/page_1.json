@@ -14,8 +14,10 @@
           "Destinations": [
             "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
           ],
-          "CreatedTimestamp": "2026-01-01T00:00:00Z",
-          "UpdatedTimestamp": "2026-01-01T00:00:00Z"
+          "CreatedTimestamp": 1767225600.25,
+          "UpdatedTimestamp": 1767225600.25,
+          "StartEventTime": 1767225600.25,
+          "EndEventTime": 1767225600.25
         }
       ]
     }

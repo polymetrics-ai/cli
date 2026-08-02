@@ -10,8 +10,8 @@
       "PublicKeyList": [
         {
           "Fingerprint": "fixture-public-key-fingerprint",
-          "ValidityStartTime": "2026-01-01T00:00:00Z",
-          "ValidityEndTime": "2026-01-02T00:00:00Z",
+          "ValidityStartTime": 1767225600.25,
+          "ValidityEndTime": 1767312000.5,
           "Value": "fixture-public-key-value"
         }
       ]

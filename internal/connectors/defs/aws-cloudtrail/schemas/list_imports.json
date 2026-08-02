@@ -39,35 +39,31 @@
     },
     "CreatedTimestamp": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "UpdatedTimestamp": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "StartEventTime": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     },
     "EndEventTime": {
       "type": [
-        "string",
-        "integer",
+        "number",
         "null"
       ],
-      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+      "description": "AWS JSON timestamp as Unix epoch seconds."
     }
   },
   "additionalProperties": true

@@ -9,7 +9,7 @@
     "body": {
       "pm_record_id": "get_dashboard_fixture_1",
       "operation": "GetDashboard",
-      "CreatedTimestamp": "2026-01-01T00:00:00Z",
+      "CreatedTimestamp": 1767225600.25,
       "DashboardArn": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
       "LastRefreshFailureReason": "fixture-last-refresh-failure-reason",
       "LastRefreshId": "fixture-last-refresh-id",
@@ -19,7 +19,7 @@
       "Status": "fixture-status",
       "TerminationProtectionEnabled": true,
       "Type": "fixture-type",
-      "UpdatedTimestamp": "2026-01-01T00:00:00Z",
+      "UpdatedTimestamp": 1767225600.25,
       "Widgets": [
         {
           "Name": "fixture"

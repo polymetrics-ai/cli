@@ -12,7 +12,8 @@
           "Location": "s3://fixture-cloudtrail-bucket/imports/failure.json.gz",
           "Status": "FAILED",
           "ErrorType": "InvalidEventData",
-          "ErrorMessage": "fixture import failure"
+          "ErrorMessage": "fixture import failure",
+          "LastUpdatedTime": 1767225600.25
         }
       ]
     }
