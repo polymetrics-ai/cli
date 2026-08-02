@@ -72,6 +72,26 @@ func TestValidatePRAllowsDeliveryIssueNumberWithoutHash(t *testing.T) {
 	}
 }
 
+func TestValidatePRAllowsCanonicalIssueURLSection(t *testing.T) {
+	body := strings.Join([]string{
+		"## Unvalidated cloud checkpoint — do not merge yet",
+		"",
+		"This draft pull request is an unvalidated cloud checkpoint for a completed connector parity task.",
+		"",
+		"## Canonical issue links preserved from the task record",
+		"",
+		"- https://github.com/polymetrics-ai/cli/issues/3207",
+		"",
+	}, "\n")
+	result := ValidatePR("chore(ashby): stage unvalidated parity checkpoint", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if len(result.Issues) != 1 || result.Issues[0].Number != 3207 || result.Issues[0].Closing {
+		t.Fatalf("ValidatePR() issues = %#v, want non-closing issue 3207", result.Issues)
+	}
+}
+
 func TestValidatePRAllowsNoMistakesDeliveryRecord(t *testing.T) {
 	body := noMistakesDeliveryBody()
 	result := ValidatePR("ci: add dry-run Homebrew tap notification", body)
@@ -256,6 +276,7 @@ func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 		"Implement issue a migration\n",
 		"References #123\n",
 		"https://github.com/polymetrics-ai/cli/issues/123\n",
+		"Related to https://github.com/polymetrics-ai/cli/issues/123\n",
 		"Ship this. Issue 123 is unrelated.\n",
 		"Do not implement issue #123\n",
 		"Do not ship issue 123\n",

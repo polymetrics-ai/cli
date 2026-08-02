@@ -21,6 +21,12 @@ func TestRunExitCodes(t *testing.T) {
 			wantStdout: "issueguard: ok (1 linked issue)",
 		},
 		{
+			name:       "canonical issue URL section passes",
+			args:       []string{"--title", "chore(ashby): stage unvalidated parity checkpoint", "--body", canonicalIssueURLBody()},
+			wantCode:   0,
+			wantStdout: "issueguard: ok (1 linked issue)",
+		},
+		{
 			name:       "no-mistakes delivery record passes",
 			args:       []string{"--title", "ci: add dry-run Homebrew tap notification", "--body", noMistakesDeliveryBody()},
 			wantCode:   0,
@@ -63,6 +69,19 @@ func TestRunExitCodes(t *testing.T) {
 			}
 		})
 	}
+}
+
+func canonicalIssueURLBody() string {
+	return strings.Join([]string{
+		"## Unvalidated cloud checkpoint — do not merge yet",
+		"",
+		"This draft pull request is an unvalidated cloud checkpoint for a completed connector parity task.",
+		"",
+		"## Canonical issue links preserved from the task record",
+		"",
+		"- https://github.com/polymetrics-ai/cli/issues/3207",
+		"",
+	}, "\n")
 }
 
 func noMistakesDeliveryBody() string {

@@ -3635,7 +3635,8 @@
           "type": "string",
           "maps_to": "body.notetakerTranscriptId",
           "summary": "The unique id of the notetaker transcript to fetch",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4513,7 +4514,8 @@
           "type": "string",
           "maps_to": "body.identifier",
           "summary": "The identifier of the opening you want to search for",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4589,7 +4591,8 @@
           "type": "string",
           "maps_to": "body.title",
           "summary": "The project's title",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -5328,7 +5331,8 @@
           "type": "string",
           "maps_to": "body.email",
           "summary": "The email address to search for",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -6345,7 +6349,8 @@
           "type": "string",
           "maps_to": "body.fileHandle",
           "summary": "A file handle retrieved from the public API",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [

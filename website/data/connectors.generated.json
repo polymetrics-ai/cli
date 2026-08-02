@@ -18936,7 +18936,8 @@
               "summary": "The unique id of the notetaker transcript to fetch",
               "values": [],
               "maps_to": "body.notetakerTranscriptId",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -19807,7 +19808,8 @@
               "summary": "The identifier of the opening you want to search for",
               "values": [],
               "maps_to": "body.identifier",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -19882,7 +19884,8 @@
               "summary": "The project's title",
               "values": [],
               "maps_to": "body.title",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -20628,7 +20631,8 @@
               "summary": "The email address to search for",
               "values": [],
               "maps_to": "body.email",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -21639,7 +21643,8 @@
               "summary": "A file handle retrieved from the public API",
               "values": [],
               "maps_to": "body.fileHandle",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
