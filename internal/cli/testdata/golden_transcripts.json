@@ -880,9 +880,9 @@
       "definitely-not-command",
       "--json"
     ],
-    "exit_code": 7,
-    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"policy\",\n    \"code\": \"connector_command_blocked\",\n    \"message\": \"connector command \\\"definitely-not-command\\\" is blocked: unknown command\"\n  },\n  \"kind\": \"Error\"\n}\n",
-    "stderr": "error: connector command \"definitely-not-command\" is blocked: unknown command\n"
+    "exit_code": 2,
+    "stdout": "{\n  \"api_version\": \"polymetrics.ai/v1\",\n  \"error\": {\n    \"category\": \"usage\",\n    \"code\": \"usage_error\",\n    \"message\": \"unknown command \\\"definitely-not-command\\\"\"\n  },\n  \"kind\": \"Error\"\n}\n",
+    "stderr": "error: unknown command \"definitely-not-command\"\n"
   },
   {
     "name": "hidden_extract_help_json",
