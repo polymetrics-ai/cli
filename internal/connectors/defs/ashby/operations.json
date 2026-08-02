@@ -209,6 +209,79 @@
           "additionalProperties": false
         }
       }
+    },
+    {
+      "id": "ashby.direct.user.interviewer.settings",
+      "kind": "rest_read",
+      "summary": "user.interviewerSettings",
+      "description": "Get interviewer settings for a user.",
+      "source_url": "https://developers.ashbyhq.com/reference/userinterviewersettings",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/user.interviewerSettings",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "userId": {
+              "type": "string",
+              "description": "The id of the user to get interviewer settings for"
+            }
+          },
+          "required": [
+            "userId"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "ashby.direct.report.generate",
+      "kind": "rest_read",
+      "summary": "report.generate",
+      "description": "Generates a new report or polls the status of an existing report generation.",
+      "source_url": "https://developers.ashbyhq.com/reference/reportgenerate",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/report.generate",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body": {},
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "reportId": {
+              "type": "string",
+              "description": "The ID of the report"
+            },
+            "includeHeadersInData": {
+              "type": "boolean"
+            },
+            "resultStyle": {
+              "type": "string",
+              "enum": [
+                "inline",
+                "url"
+              ]
+            },
+            "requestId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "reportId"
+          ],
+          "additionalProperties": false
+        }
+      }
     }
   ]
 }

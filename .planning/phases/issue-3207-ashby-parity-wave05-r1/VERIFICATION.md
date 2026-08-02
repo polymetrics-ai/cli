@@ -4,8 +4,8 @@
 
 - [x] Official Ashby inventory generated from the public ReadMe/OpenAPI page without credentials.
   - Source counts: REST operations=185, OpenAPI webhook events=27, total=212.
-  - Implemented counts: streams/changefeed=72, bounded direct reads/search/file metadata=7, reverse-ETL write actions=101.
-  - Blocked ledger rows=32 (27 webhooks, 4 inbound assessment-partner endpoints, 1 presigned external upload-handle workflow).
+  - Implemented counts: streams/changefeed=71, bounded direct reads/search/file metadata=9, reverse-ETL write actions=98.
+  - Blocked ledger rows=34 (27 webhooks, 4 inbound assessment-partner endpoints, 1 presigned external upload-handle workflow, 1 conditional side-effect read, 1 typed-multipart submission).
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs`
   - `connectorgen validate: 550 connector(s) checked, 0 findings`.
   - Note: `connectorgen validate internal/connectors/defs/ashby` treats `ashby/` as a defs root and tries to validate `schemas/` and `fixtures/` as connector directories; the usable command for this repo-local tool is the full defs root.
@@ -31,3 +31,11 @@
   - After final docs-count and `--message-body` flag-safety regenerations, `go run ./cmd/connectorgen validate internal/connectors/defs`, `go test ./internal/cli -run 'TestGolden' -count=1`, `go build ./cmd/pm`, `git diff --check`, `./pm docs validate --connectors-dir docs/connectors`, and Ashby command-help smoke checks still passed.
 - [ ] One gh-axi final update across parent/subissues with counts and evidence.
 - [ ] Clean commit only; no push, no PR, no no-mistakes final pipeline.
+
+## Review fix round 2
+
+- [x] `referralForm.info` is blocked on `ashby-referral-form-info-side-effect-foundation` and has no executable stream or CLI command.
+- [x] `applicationForm.submit` is blocked on `ashby-application-form-typed-multipart-foundation` and has no JSON write or CLI command.
+- [x] `user.interviewerSettings` and `report.generate` return bounded `json_redacted` direct-read results and are absent from reverse-ETL actions.
+- [x] Sync-token-capable stream commands use connector-owned full-refresh-only help and name `ashby-sync-token-checkpoint-foundation`.
+- [x] `go test ./internal/connectors/native/ashby -count=1` passed.

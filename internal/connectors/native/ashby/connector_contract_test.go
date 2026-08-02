@@ -6,14 +6,208 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestConnectorContract(t *testing.T) {
 	assertConnectorContract(t, New(), "ashby")
+}
+
+func TestOperationClassificationsMatchAshbySemantics(t *testing.T) {
+	bundle, err := engine.Load(os.DirFS("../../defs"), "ashby")
+	if err != nil {
+		t.Fatalf("load Ashby disk bundle: %v", err)
+	}
+	if len(bundle.Streams) != 71 || len(bundle.Operations) != 9 || len(bundle.Writes) != 98 {
+		t.Fatalf("implemented counts = streams:%d direct_reads:%d writes:%d, want 71/9/98", len(bundle.Streams), len(bundle.Operations), len(bundle.Writes))
+	}
+
+	for _, stream := range bundle.Streams {
+		if stream.Name == "referral_form_info" {
+			t.Fatal("referralForm.info remains executable as an ETL stream")
+		}
+	}
+	blockedWritePaths := map[string]bool{
+		"/applicationForm.submit":   false,
+		"/report.generate":          false,
+		"/user.interviewerSettings": false,
+	}
+	for _, action := range bundle.Writes {
+		if _, blocked := blockedWritePaths[action.Path]; blocked {
+			t.Fatalf("%s remains executable as write action %s", action.Path, action.Name)
+		}
+	}
+
+	wantDirect := map[string]string{
+		"user.interviewerSettings": "/user.interviewerSettings",
+		"report.generate":          "/report.generate",
+	}
+	for _, operation := range bundle.Operations {
+		wantPath, ok := wantDirect[operation.Summary]
+		if !ok {
+			continue
+		}
+		if operation.Kind != "rest_read" || operation.OutputPolicy != "json_redacted" || operation.Approval != "none" || operation.REST == nil || operation.REST.Path != wantPath || operation.REST.MaxBytes != 1<<20 {
+			t.Fatalf("operation %s = %+v, want bounded json_redacted REST read", operation.Summary, operation)
+		}
+		delete(wantDirect, operation.Summary)
+	}
+	if len(wantDirect) != 0 {
+		t.Fatalf("missing direct-read operation classifications: %v", wantDirect)
+	}
+
+	wantBlocked := map[string]string{
+		"/referralForm.info":      "ashby-referral-form-info-side-effect-foundation",
+		"/applicationForm.submit": "ashby-application-form-typed-multipart-foundation",
+	}
+	blockedCount := 0
+	for _, endpoint := range bundle.Surface.Endpoints {
+		if endpoint.Operation != nil {
+			blockedCount++
+		}
+		foundation, ok := wantBlocked[endpoint.Path]
+		if !ok {
+			continue
+		}
+		if endpoint.Operation == nil || endpoint.Operation.Status != "blocked" || !endpoint.Operation.BlockedByDefault || !strings.Contains(endpoint.Operation.Reason, foundation) {
+			t.Fatalf("surface %s = %+v, want named blocked foundation %s", endpoint.Path, endpoint.Operation, foundation)
+		}
+		delete(wantBlocked, endpoint.Path)
+	}
+	if blockedCount != 34 || len(wantBlocked) != 0 {
+		t.Fatalf("blocked ledger count = %d, missing = %v; want 34 and both named blockers", blockedCount, wantBlocked)
+	}
+
+	commands := map[string]connectors.CommandSurfaceCommand{}
+	for _, command := range New().(connectors.CommandSurfaceProvider).CommandSurface().Commands {
+		commands[command.Path] = command
+	}
+	for _, path := range []string{"referral-form info", "application-form submit"} {
+		if _, ok := commands[path]; ok {
+			t.Fatalf("blocked command %q remains executable", path)
+		}
+	}
+	for path, operation := range map[string]string{
+		"user interviewer-settings": "ashby.direct.user.interviewer.settings",
+		"report generate":           "ashby.direct.report.generate",
+	} {
+		command, ok := commands[path]
+		if !ok {
+			t.Fatalf("direct-read command %q not found", path)
+		}
+		if command.Intent != "direct_read" || command.Operation != operation || command.Write != "" || command.OutputPolicy != "json_redacted" || command.Approval != "none" {
+			t.Fatalf("command %q = %+v, want direct read %s", path, command, operation)
+		}
+		if path == "report generate" && command.Summary != "Start an Ashby report generation or check an existing request." {
+			t.Fatalf("command %q summary = %q, want bounded report help", path, command.Summary)
+		}
+		for _, flag := range command.Flags {
+			if !strings.HasPrefix(flag.MapsTo, "body.") {
+				t.Fatalf("command %q flag --%s maps to %q, want body field", path, flag.Name, flag.MapsTo)
+			}
+		}
+	}
+}
+
+func TestSyncTokenCommandsUseFullRefreshHelp(t *testing.T) {
+	commands := map[string]connectors.CommandSurfaceCommand{}
+	for _, command := range New().(connectors.CommandSurfaceProvider).CommandSurface().Commands {
+		if command.Stream != "" {
+			commands[command.Stream] = command
+		}
+	}
+	found := 0
+	for stream, endpoint := range ashbyStreamEndpoints {
+		if _, ok := endpoint.requestFields["syncToken"]; !ok {
+			continue
+		}
+		found++
+		command, ok := commands[stream]
+		if !ok {
+			t.Fatalf("sync-token stream command %s not found", stream)
+		}
+		if !strings.Contains(command.Summary, "Full-refresh-only") || !strings.Contains(command.Summary, "ashby-sync-token-checkpoint-foundation") || strings.Contains(strings.ToLower(command.Summary), "incremental") {
+			t.Fatalf("stream %s summary = %q, want connector-owned full-refresh blocker help", stream, command.Summary)
+		}
+		if !strings.Contains(command.Notes, "ashby-sync-token-checkpoint-foundation") {
+			t.Fatalf("stream %s notes = %q, want sync-token foundation", stream, command.Notes)
+		}
+	}
+	if found == 0 {
+		t.Fatal("no sync-token-capable Ashby stream endpoints found")
+	}
+}
+
+func TestSemanticDirectReadsReturnAshbyResults(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/user.interviewerSettings":
+			if body["userId"] != "user_fixture" {
+				t.Fatalf("body[userId] = %v, want user_fixture", body["userId"])
+			}
+			_, _ = w.Write([]byte(`{"success":true,"results":{"timezone":"UTC","apiToken":"synthetic-response-token"}}`))
+		case "/report.generate":
+			if body["reportId"] != "report_fixture" {
+				t.Fatalf("body[reportId] = %v, want report_fixture", body["reportId"])
+			}
+			_, _ = w.Write([]byte(`{"success":true,"results":{"status":"pending","requestId":"request_fixture"}}`))
+		default:
+			t.Fatalf("unexpected direct-read path %q", r.URL.Path)
+		}
+	}))
+	defer server.Close()
+
+	tests := []struct {
+		name      string
+		operation string
+		body      map[string]any
+		wantField string
+		wantValue any
+	}{
+		{name: "interviewer settings", operation: "ashby.direct.user.interviewer.settings", body: map[string]any{"userId": "user_fixture"}, wantField: "timezone", wantValue: "UTC"},
+		{name: "report generation result", operation: "ashby.direct.report.generate", body: map[string]any{"reportId": "report_fixture"}, wantField: "requestId", wantValue: "request_fixture"},
+	}
+	reader := New().(connectors.OperationDirectReader)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := reader.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+				Operation: tt.operation,
+				Config: connectors.RuntimeConfig{
+					Config:  map[string]string{"base_url": server.URL},
+					Secrets: map[string]string{"api_key": "test_key"},
+				},
+				Body:         tt.body,
+				OutputPolicy: "json_redacted",
+				MaxBytes:     1 << 20,
+			})
+			if err != nil {
+				t.Fatalf("OperationDirectRead: %v", err)
+			}
+			body, ok := result.Body.(map[string]any)
+			if !ok {
+				t.Fatalf("result body = %T, want object", result.Body)
+			}
+			results, ok := body["results"].(map[string]any)
+			if !ok || results[tt.wantField] != tt.wantValue {
+				t.Fatalf("results = %+v, want %s=%v", body["results"], tt.wantField, tt.wantValue)
+			}
+			if tt.operation == "ashby.direct.user.interviewer.settings" {
+				if _, ok := results["apiToken"]; ok || results["apiToken_redacted"] != true {
+					t.Fatalf("results = %+v, want credential field redacted", results)
+				}
+			}
+		})
+	}
 }
 
 func assertConnectorContract(t *testing.T, c connectors.Connector, wantName string) {

@@ -60,7 +60,6 @@
         "hiring-team-role list",
         "user info",
         "user list-interviewer-pauses",
-        "referral-form info",
         "email-sender list",
         "sequence info",
         "sequence list",
@@ -96,7 +95,9 @@
         "opening search",
         "project search",
         "user search",
-        "file info"
+        "user interviewer-settings",
+        "file info",
+        "report generate"
       ]
     },
     {
@@ -116,7 +117,6 @@
         "application update-history",
         "application-feedback submit",
         "application-feedback-request create",
-        "application-form submit",
         "approval-definition update",
         "candidate create",
         "candidate upload-resume",
@@ -177,7 +177,6 @@
         "assessment add-completed-to-candidate",
         "hiring-team add-member",
         "hiring-team remove-member",
-        "user interviewer-settings",
         "user update-interviewer-settings",
         "user create-interviewer-pause",
         "user delete-interviewer-pause",
@@ -202,15 +201,14 @@
         "interviewer-pool create",
         "interviewer-pool update",
         "interviewer-pool add-user",
-        "interviewer-pool remove-user",
-        "report generate"
+        "interviewer-pool remove-user"
       ]
     }
   ],
   "commands": [
     {
       "path": "candidate list",
-      "summary": "Lists all candidates in the organization with pagination and incremental sync support.\n\nUse the `syncToken` parameter to retrieve only candidates updated since ",
+      "summary": "Full-refresh-only Ashby candidate list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidates",
@@ -233,11 +231,11 @@
           "path": "/candidate.list"
         }
       ],
-      "notes": "Fixed Ashby stream for candidate.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for candidate.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "job list",
-      "summary": "Lists all jobs.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requires the ",
+      "summary": "Full-refresh-only Ashby job list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "jobs",
@@ -280,11 +278,11 @@
           "path": "/job.list"
         }
       ],
-      "notes": "Fixed Ashby stream for job.list; flags map only to documented request body fields. Repeatable array request variants (--status, --expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for job.list; flags map only to documented request body fields. Repeatable array request variants (--status, --expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "application list",
-      "summary": "Gets all applications in the organization.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage",
+      "summary": "Full-refresh-only Ashby application list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "applications",
@@ -319,11 +317,11 @@
           "path": "/application.list"
         }
       ],
-      "notes": "Fixed Ashby stream for application.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for application.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "user list",
-      "summary": "Lists all users in the organization with pagination support.\n\nBy default, only active (enabled) users are returned. Use `includeDeactivated: true` to include de",
+      "summary": "Full-refresh-only Ashby user list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "users",
@@ -342,7 +340,7 @@
           "path": "/user.list"
         }
       ],
-      "notes": "Fixed Ashby stream for user.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for user.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "api-key info",
@@ -1012,7 +1010,7 @@
     },
     {
       "path": "application-feedback list",
-      "summary": "List all interview scorecards and feedback submissions associated with an application.\n\nEach feedback submission contains:\n- **formDefinition**: The structure o",
+      "summary": "Full-refresh-only Ashby application-feedback list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "application_feedback_list",
@@ -1036,7 +1034,7 @@
           "path": "/applicationFeedback.list"
         }
       ],
-      "notes": "Fixed Ashby stream for applicationFeedback.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for applicationFeedback.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "application-feedback submit",
@@ -1140,53 +1138,6 @@
       "risk": "Executes Ashby applicationFeedbackRequest.create through the documented POST /applicationFeedbackRequest.create endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
-    },
-    {
-      "path": "application-form submit",
-      "summary": "Submits a completed application form for a job posting.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationformsubmit) permission.**",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "submit_application_form",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationformsubmit",
-      "flags": [
-        {
-          "name": "job-posting-id",
-          "type": "string",
-          "maps_to": "record.jobPostingId",
-          "summary": "The id of the job posting to submit the application for",
-          "allow_empty": false
-        },
-        {
-          "name": "application-form-field-submissions-0-path",
-          "type": "string",
-          "maps_to": "record.applicationForm.fieldSubmissions.0.path",
-          "summary": "The path of the application form field being submitted",
-          "allow_empty": false
-        },
-        {
-          "name": "allow-submission-for-unpublished-job-posting",
-          "type": "boolean",
-          "maps_to": "record.allowSubmissionForUnpublishedJobPosting"
-        },
-        {
-          "name": "tag-ids",
-          "type": "string_array",
-          "maps_to": "record.tagIds"
-        }
-      ],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/applicationForm.submit"
-        }
-      ],
-      "redact_fields": [
-        "jobPostingId",
-        "tagIds"
-      ],
-      "risk": "Executes Ashby applicationForm.submit through the documented POST /applicationForm.submit endpoint; reverse ETL plan, preview, approval, and execute are required.",
-      "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
     },
     {
       "path": "approval-definition update",
@@ -1648,7 +1599,7 @@
     },
     {
       "path": "candidate list-client-info",
-      "summary": "Lists client information records (IP, user agent) collected for a candidate.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatelistclientin",
+      "summary": "Full-refresh-only Ashby candidate list-client-info read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate_list_client_info",
@@ -1669,7 +1620,7 @@
           "path": "/candidate.listClientInfo"
         }
       ],
-      "notes": "Fixed Ashby stream for candidate.listClientInfo; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for candidate.listClientInfo; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "candidate list-fraud-checks",
@@ -1739,7 +1690,7 @@
     },
     {
       "path": "candidate list-notes",
-      "summary": "Lists the notes that have been added to a candidate.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatelistnotes) permission.**",
+      "summary": "Full-refresh-only Ashby candidate list-notes read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate_list_notes",
@@ -1760,7 +1711,7 @@
           "path": "/candidate.listNotes"
         }
       ],
-      "notes": "Fixed Ashby stream for candidate.listNotes; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for candidate.listNotes; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "candidate anonymize",
@@ -2203,7 +2154,7 @@
     },
     {
       "path": "candidate-tag list",
-      "summary": "Lists all candidate tags.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Req",
+      "summary": "Full-refresh-only Ashby candidate-tag list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate_tag_list",
@@ -2221,7 +2172,7 @@
           "path": "/candidateTag.list"
         }
       ],
-      "notes": "Fixed Ashby stream for candidateTag.list; flags map only to documented request body fields."
+      "notes": "Fixed Ashby stream for candidateTag.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "communication-template list",
@@ -2241,7 +2192,7 @@
     },
     {
       "path": "feedback-form-definition list",
-      "summary": "Lists all feedback form definitions.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examp",
+      "summary": "Full-refresh-only Ashby feedback-form-definition list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "feedback_form_definition_list",
@@ -2259,7 +2210,7 @@
           "path": "/feedbackFormDefinition.list"
         }
       ],
-      "notes": "Fixed Ashby stream for feedbackFormDefinition.list; flags map only to documented request body fields."
+      "notes": "Fixed Ashby stream for feedbackFormDefinition.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "feedback-form-definition info",
@@ -2903,7 +2854,7 @@
     },
     {
       "path": "job-template list",
-      "summary": "List all active and inactive job templates.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usag",
+      "summary": "Full-refresh-only Ashby job-template list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_template_list",
@@ -2915,7 +2866,7 @@
           "path": "/jobTemplate.list"
         }
       ],
-      "notes": "Fixed Ashby stream for jobTemplate.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for jobTemplate.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "department archive",
@@ -3045,7 +2996,7 @@
     },
     {
       "path": "department list",
-      "summary": "Lists all departments.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requir",
+      "summary": "Full-refresh-only Ashby department list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "department_list",
@@ -3063,7 +3014,7 @@
           "path": "/department.list"
         }
       ],
-      "notes": "Fixed Ashby stream for department.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for department.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "department move",
@@ -3273,7 +3224,7 @@
     },
     {
       "path": "location list",
-      "summary": "List all locations. Regions are not returned.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed us",
+      "summary": "Full-refresh-only Ashby location list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "location_list",
@@ -3296,7 +3247,7 @@
           "path": "/location.list"
         }
       ],
-      "notes": "Fixed Ashby stream for location.list; flags map only to documented request body fields."
+      "notes": "Fixed Ashby stream for location.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "location info",
@@ -3503,7 +3454,7 @@
     },
     {
       "path": "interview-plan list",
-      "summary": "List published interview plans. Draft interview plans are not returned. If `includeArchived` is true, archived interview plans are also included. Job-specific i",
+      "summary": "Full-refresh-only Ashby interview-plan list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_plan_list",
@@ -3521,7 +3472,7 @@
           "path": "/interviewPlan.list"
         }
       ],
-      "notes": "Fixed Ashby stream for interviewPlan.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for interviewPlan.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "interview-stage list",
@@ -3691,7 +3642,7 @@
     },
     {
       "path": "offer list",
-      "summary": "Get a list of all offers with their latest version.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detai",
+      "summary": "Full-refresh-only Ashby offer list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "offer_list",
@@ -3715,7 +3666,7 @@
           "path": "/offer.list"
         }
       ],
-      "notes": "Fixed Ashby stream for offer.list; flags map only to documented request body fields. Repeatable array request variants (--offer-status, --acceptance-status, --approval-status) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for offer.list; flags map only to documented request body fields. Repeatable array request variants (--offer-status, --acceptance-status, --approval-status) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "offer info",
@@ -4407,7 +4358,7 @@
     },
     {
       "path": "opening list",
-      "summary": "Lists openings.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requires the ",
+      "summary": "Full-refresh-only Ashby opening list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "opening_list",
@@ -4425,7 +4376,7 @@
           "path": "/opening.list"
         }
       ],
-      "notes": "Fixed Ashby stream for opening.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for opening.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "opening search",
@@ -4482,7 +4433,7 @@
     },
     {
       "path": "project list",
-      "summary": "Lists projects.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requires the ",
+      "summary": "Full-refresh-only Ashby project list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "project_list",
@@ -4500,7 +4451,7 @@
           "path": "/project.list"
         }
       ],
-      "notes": "Fixed Ashby stream for project.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for project.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "project search",
@@ -4554,7 +4505,7 @@
     },
     {
       "path": "source-tracking-link list",
-      "summary": "List all source custom tracking links\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-sourcetrackinglinklist) permission.**",
+      "summary": "Full-refresh-only Ashby source-tracking-link list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "source_tracking_link_list",
@@ -4578,7 +4529,7 @@
           "path": "/sourceTrackingLink.list"
         }
       ],
-      "notes": "Fixed Ashby stream for sourceTrackingLink.list; flags map only to documented request body fields."
+      "notes": "Fixed Ashby stream for sourceTrackingLink.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "archive-reason list",
@@ -4620,7 +4571,7 @@
     },
     {
       "path": "custom-field list",
-      "summary": "Lists all custom fields.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requ",
+      "summary": "Full-refresh-only Ashby custom-field list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "custom_field_list",
@@ -4638,7 +4589,7 @@
           "path": "/customField.list"
         }
       ],
-      "notes": "Fixed Ashby stream for customField.list; flags map only to documented request body fields."
+      "notes": "Fixed Ashby stream for customField.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "custom-field create",
@@ -5267,17 +5218,17 @@
     {
       "path": "user interviewer-settings",
       "summary": "Get interviewer settings for a user.\n\n**Requires the [`organizationRead`](authentication#permissions-userinterviewersettings) permission.**",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "interviewer_user_settings",
       "source_url": "https://developers.ashbyhq.com/reference/userinterviewersettings",
       "flags": [
         {
           "name": "user-id",
           "type": "string",
-          "maps_to": "record.userId",
+          "maps_to": "body.userId",
           "summary": "The id of the user to get interviewer settings for",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -5286,12 +5237,11 @@
           "path": "/user.interviewerSettings"
         }
       ],
-      "redact_fields": [
-        "userId"
-      ],
-      "risk": "Executes Ashby user.interviewerSettings through the documented POST /user.interviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required.",
-      "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+      "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential interviewer settings remain complete in trusted live local output",
+      "approval": "none",
+      "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed.",
+      "operation": "ashby.direct.user.interviewer.settings",
+      "output_policy": "json_redacted"
     },
     {
       "path": "user update-interviewer-settings",
@@ -5560,22 +5510,6 @@
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
     },
     {
-      "path": "referral-form info",
-      "summary": "Fetches the default referral form or creates a default referral form if none exists.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-re",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "referral_form_info",
-      "source_url": "https://developers.ashbyhq.com/reference/referralforminfo",
-      "flags": [],
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/referralForm.info"
-        }
-      ],
-      "notes": "Fixed Ashby stream for referralForm.info; flags map only to documented request body fields."
-    },
-    {
       "path": "email-sender list",
       "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nLists the email addresses available to the acting identity for sending emai",
       "intent": "etl",
@@ -5737,7 +5671,7 @@
     },
     {
       "path": "sequence list",
-      "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nLists visible started and ended sourcing sequence enrollments across the or",
+      "summary": "Full-refresh-only Ashby sequence list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "sequence_list",
@@ -5758,7 +5692,7 @@
           "path": "/sequence.list"
         }
       ],
-      "notes": "Fixed Ashby stream for sequence.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for sequence.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "sequence update-stage",
@@ -5867,7 +5801,7 @@
     },
     {
       "path": "sequence-template list",
-      "summary": "Lists reusable sourcing sequence templates visible to the caller. Returns template and cadence metadata only; message subjects and bodies are not exposed.\n\nArch",
+      "summary": "Full-refresh-only Ashby sequence-template list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "sequence_template_list",
@@ -5886,11 +5820,11 @@
           "path": "/sequenceTemplate.list"
         }
       ],
-      "notes": "Fixed Ashby stream for sequenceTemplate.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for sequenceTemplate.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "interview-schedule list",
-      "summary": "Gets all interview schedules in the organization.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detaile",
+      "summary": "Full-refresh-only Ashby interview-schedule list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_schedule_list",
@@ -5920,7 +5854,7 @@
           "path": "/interviewSchedule.list"
         }
       ],
-      "notes": "Fixed Ashby stream for interviewSchedule.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for interviewSchedule.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "interview-schedule create",
@@ -6049,7 +5983,7 @@
     },
     {
       "path": "take-home-assignment list",
-      "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nLists take-home assignments visible to the caller, including candidate subm",
+      "summary": "Full-refresh-only Ashby take-home-assignment list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "take_home_assignment_list",
@@ -6075,7 +6009,7 @@
           "path": "/takeHomeAssignment.list"
         }
       ],
-      "notes": "Fixed Ashby stream for takeHomeAssignment.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for takeHomeAssignment.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "take-home-assignment info",
@@ -6104,7 +6038,7 @@
     },
     {
       "path": "interview-event list",
-      "summary": "Lists interview events associated with an interview schedule.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide",
+      "summary": "Full-refresh-only Ashby interview-event list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_event_list",
@@ -6130,7 +6064,7 @@
           "path": "/interviewEvent.list"
         }
       ],
-      "notes": "Fixed Ashby stream for interviewEvent.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for interviewEvent.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "interview-briefing info",
@@ -6184,7 +6118,7 @@
     },
     {
       "path": "interview list",
-      "summary": "List all interviews.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Requires",
+      "summary": "Full-refresh-only Ashby interview list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_list",
@@ -6212,7 +6146,7 @@
           "path": "/interview.list"
         }
       ],
-      "notes": "Fixed Ashby stream for interview.list; flags map only to documented request body fields."
+      "notes": "Fixed Ashby stream for interview.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "interview-stage info",
@@ -6294,7 +6228,7 @@
     },
     {
       "path": "survey-form-definition list",
-      "summary": "Lists all survey form definitions.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage example",
+      "summary": "Full-refresh-only Ashby survey-form-definition list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "survey_form_definition_list",
@@ -6306,7 +6240,7 @@
           "path": "/surveyFormDefinition.list"
         }
       ],
-      "notes": "Fixed Ashby stream for surveyFormDefinition.list; flags map only to documented request body fields."
+      "notes": "Fixed Ashby stream for surveyFormDefinition.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "survey-request create",
@@ -6356,7 +6290,7 @@
     },
     {
       "path": "survey-request list",
-      "summary": "Lists all survey requests.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**Re",
+      "summary": "Full-refresh-only Ashby survey-request list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "survey_request_list",
@@ -6397,7 +6331,7 @@
           "path": "/surveyRequest.list"
         }
       ],
-      "notes": "Fixed Ashby stream for surveyRequest.list; flags map only to documented request body fields."
+      "notes": "Fixed Ashby stream for surveyRequest.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "survey-submission create",
@@ -6447,7 +6381,7 @@
     },
     {
       "path": "survey-submission list",
-      "summary": "Lists all survey submissions of a given `surveyType`.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for det",
+      "summary": "Full-refresh-only Ashby survey-submission list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "survey_submission_list",
@@ -6477,7 +6411,7 @@
           "path": "/surveySubmission.list"
         }
       ],
-      "notes": "Fixed Ashby stream for surveySubmission.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for surveySubmission.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "webhook create",
@@ -6654,7 +6588,7 @@
     },
     {
       "path": "interviewer-pool list",
-      "summary": "List all interviewer pools.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.\n\n**R",
+      "summary": "Full-refresh-only Ashby interviewer-pool list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "interviewer_pool_list",
@@ -6677,7 +6611,7 @@
           "path": "/interviewerPool.list"
         }
       ],
-      "notes": "Fixed Ashby stream for interviewerPool.list; flags map only to documented request body fields."
+      "notes": "Fixed Ashby stream for interviewerPool.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     },
     {
       "path": "interviewer-pool info",
@@ -6939,28 +6873,28 @@
     },
     {
       "path": "report generate",
-      "summary": "> Beta\n>\n> This endpoint is currently in beta and may change without notice.\n\nGenerates a new report or polls the status of an existing report generation.\n\n**Tw",
-      "intent": "reverse_etl",
+      "summary": "Start an Ashby report generation or check an existing request.",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "generate_report",
       "source_url": "https://developers.ashbyhq.com/reference/reportgenerate",
       "flags": [
         {
           "name": "report-id",
           "type": "string",
-          "maps_to": "record.reportId",
+          "maps_to": "body.reportId",
           "summary": "The ID of the report",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "include-headers-in-data",
           "type": "boolean",
-          "maps_to": "record.includeHeadersInData"
+          "maps_to": "body.includeHeadersInData"
         },
         {
           "name": "result-style",
           "type": "enum",
-          "maps_to": "record.resultStyle",
+          "maps_to": "body.resultStyle",
           "values": [
             "inline",
             "url"
@@ -6969,7 +6903,7 @@
         {
           "name": "request-id",
           "type": "string",
-          "maps_to": "record.requestId",
+          "maps_to": "body.requestId",
           "allow_empty": false
         }
       ],
@@ -6979,13 +6913,11 @@
           "path": "/report.generate"
         }
       ],
-      "redact_fields": [
-        "reportId",
-        "requestId"
-      ],
-      "risk": "Executes Ashby report.generate through the documented POST /report.generate endpoint; reverse ETL plan, preview, approval, and execute are required.",
-      "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
-      "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
+      "risk": "bounded JSON direct read that starts or polls a documented Ashby report generation and returns at most 1 MiB of redacted JSON; the connector does not fetch returned report URLs or poll automatically",
+      "approval": "none",
+      "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed.",
+      "operation": "ashby.direct.report.generate",
+      "output_policy": "json_redacted"
     },
     {
       "path": "report synchronous",
@@ -7028,7 +6960,7 @@
     },
     {
       "path": "approval list",
-      "summary": "Gets all approvals in the organization. You can optionally filter by entity type and entity ID.\n\nSee the [Pagination and Incremental Synchronization](/docs/pagi",
+      "summary": "Full-refresh-only Ashby approval list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation.",
       "intent": "etl",
       "availability": "implemented",
       "stream": "approval_list",
@@ -7057,7 +6989,7 @@
           "path": "/approval.list"
         }
       ],
-      "notes": "Fixed Ashby stream for approval.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
+      "notes": "Fixed Ashby stream for approval.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only."
     }
   ],
   "help_topics": [

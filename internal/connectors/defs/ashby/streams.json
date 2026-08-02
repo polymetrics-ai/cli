@@ -503,16 +503,6 @@
       "projection": "passthrough"
     },
     {
-      "name": "referral_form_info",
-      "method": "POST",
-      "path": "/referralForm.info",
-      "records": {
-        "path": "results"
-      },
-      "schema": "schemas/referral_form_info.json",
-      "projection": "passthrough"
-    },
-    {
       "name": "email_sender_list",
       "method": "POST",
       "path": "/emailSender.list",

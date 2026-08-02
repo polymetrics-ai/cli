@@ -9605,17 +9605,6 @@
         ]
       },
       {
-        "name": "referral_form_info",
-        "primary_key": [
-          "id"
-        ],
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
-        ]
-      },
-      {
         "name": "email_sender_list",
         "primary_key": [
           "email"
@@ -9966,13 +9955,6 @@
         "method": "POST",
         "path": "/applicationFeedbackRequest.create",
         "risk": "Executes Ashby applicationFeedbackRequest.create through the documented POST /applicationFeedbackRequest.create endpoint; reverse ETL plan, preview, approval, and execute are required."
-      },
-      {
-        "name": "submit_application_form",
-        "kind": "create",
-        "method": "POST",
-        "path": "/applicationForm.submit",
-        "risk": "Executes Ashby applicationForm.submit through the documented POST /applicationForm.submit endpoint; reverse ETL plan, preview, approval, and execute are required."
       },
       {
         "name": "update_approval_definition",
@@ -10413,13 +10395,6 @@
         "confirm": "destructive"
       },
       {
-        "name": "interviewer_user_settings",
-        "kind": "custom",
-        "method": "POST",
-        "path": "/user.interviewerSettings",
-        "risk": "Executes Ashby user.interviewerSettings through the documented POST /user.interviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required."
-      },
-      {
         "name": "update_user_interviewer_settings",
         "kind": "update",
         "method": "POST",
@@ -10602,13 +10577,6 @@
         "path": "/interviewerPool.removeUser",
         "risk": "Executes Ashby interviewerPool.removeUser through the documented POST /interviewerPool.removeUser endpoint; reverse ETL plan, preview, approval, and execute are required.",
         "confirm": "destructive"
-      },
-      {
-        "name": "generate_report",
-        "kind": "custom",
-        "method": "POST",
-        "path": "/report.generate",
-        "risk": "Executes Ashby report.generate through the documented POST /report.generate endpoint; reverse ETL plan, preview, approval, and execute are required."
       }
     ],
     "risk": {

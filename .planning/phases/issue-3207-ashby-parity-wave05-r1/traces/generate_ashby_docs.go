@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
+	"strings"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/native/ashby"
@@ -41,6 +43,38 @@ func main() {
 		panic(fmt.Errorf("encode connector catalog: %w", err))
 	}
 	mustWrite(catalogPath, append(data, '\n'))
+	updateCatalogMarkdown(
+		filepath.Join("docs", "connectors", "catalog", "all-connectors.md"),
+		len(definition.Streams),
+		len(definition.WriteActions),
+	)
+}
+
+func updateCatalogMarkdown(path string, streamCount, writeCount int) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		panic(fmt.Errorf("read %s: %w", path, err))
+	}
+	lines := strings.Split(string(data), "\n")
+	found := false
+	for index, line := range lines {
+		if !strings.HasPrefix(line, "| `ashby` |") {
+			continue
+		}
+		columns := strings.Split(line, "|")
+		if len(columns) != 12 {
+			panic(fmt.Errorf("unexpected Ashby catalog row: %s", line))
+		}
+		columns[7] = " " + strconv.Itoa(streamCount) + " "
+		columns[8] = " " + strconv.Itoa(writeCount) + " "
+		lines[index] = strings.Join(columns, "|")
+		found = true
+		break
+	}
+	if !found {
+		panic("ashby is missing from the connector markdown catalog")
+	}
+	mustWrite(path, []byte(strings.Join(lines, "\n")))
 }
 
 func mustDecode(path string, target any) {

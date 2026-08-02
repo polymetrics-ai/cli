@@ -12,7 +12,7 @@ DOC_URL = "https://developers.ashbyhq.com/reference/candidateaddtag"
 REVIEWED_AT = "2026-08-01"
 HTTP_METHODS = {"get", "post", "put", "patch", "delete"}
 LEGACY_STREAM_NAMES = {"candidate.list":"candidates","job.list":"jobs","application.list":"applications","user.list":"users"}
-DIRECT_READ_SUMMARIES = {"candidate.search","job.search","opening.search","project.search","user.search","file.info","notetakerTranscript.info"}
+DIRECT_READ_SUMMARIES = {"candidate.search","job.search","opening.search","project.search","user.search","file.info","notetakerTranscript.info","user.interviewerSettings","report.generate"}
 BINARY_BLOCKED_SUMMARIES = {"file.createFileUploadHandle"}
 BINARY_JSON_WRITE_SUMMARIES = {"candidate.uploadResume","candidate.uploadFile"}
 CDC_STREAM_SUMMARIES = {"auditLog.list","application.listHistory"}
@@ -37,6 +37,24 @@ REQUIRED_ANY_FIELDS = {
 DIRECT_READ_MIN_PROPERTIES = {"job.search": 1}
 SIGNED_URL_DIRECT_READS = {"file.info", "notetakerTranscript.info"}
 SIGNED_URL_DIRECT_READ_RISK = "bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output"
+DIRECT_READ_RISK_OVERRIDES = {
+    "report.generate": "bounded JSON direct read that starts or polls a documented Ashby report generation and returns at most 1 MiB of redacted JSON; the connector does not fetch returned report URLs or poll automatically",
+}
+DIRECT_READ_COMMAND_SUMMARY_OVERRIDES = {
+    "report.generate": "Start an Ashby report generation or check an existing request.",
+}
+BLOCKED_OPERATION_RULES = {
+    "referralForm.info": {
+        "model": "admin_reverse_etl",
+        "risk": "medium",
+        "reason": "fetches the default referral form but conditionally creates one when absent; blocked pending ashby-referral-form-info-side-effect-foundation so an apparent read cannot mutate Ashby without a typed confirmation path",
+    },
+    "applicationForm.submit": {
+        "model": "sensitive_reverse_etl",
+        "risk": "high",
+        "reason": "requires multipart/form-data with typed file parts for application fields; blocked pending ashby-application-form-typed-multipart-foundation because the Ashby write executor is JSON-only",
+    },
+}
 FIXED_STREAM_REQUEST_FIELDS = {"hiringTeamRole.list": {"namesOnly": "true"}}
 FIXED_STREAM_REQUEST_FIELD_NOTES = {"hiringTeamRole.list": "Defaults to namesOnly=true role-title results. namesOnly=false object results are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false."}
 SCALAR_RESULT_STREAMS = {"hiring_team_role_list"}
@@ -370,13 +388,13 @@ def command_path(summary, used):
 def is_partner(summary): return "Implemented by Partner" in summary
 def is_read_stream(summary):
     c=clean_summary(summary)
-    return (c in CDC_STREAM_SUMMARIES or any(t in c for t in (".list",".info",".fetch",".synchronous"))) and c not in DIRECT_READ_SUMMARIES and not is_partner(summary) and c not in BINARY_BLOCKED_SUMMARIES
+    return (c in CDC_STREAM_SUMMARIES or any(t in c for t in (".list",".info",".fetch",".synchronous"))) and c not in DIRECT_READ_SUMMARIES and c not in BLOCKED_OPERATION_RULES and not is_partner(summary) and c not in BINARY_BLOCKED_SUMMARIES
 def is_direct(summary): return clean_summary(summary) in DIRECT_READ_SUMMARIES and not is_partner(summary)
 def is_write(summary):
     c=clean_summary(summary)
     if is_partner(summary): return False
     if c in BINARY_JSON_WRITE_SUMMARIES or c in CDC_WRITE_SUMMARIES: return True
-    if c in DIRECT_READ_SUMMARIES or c in BINARY_BLOCKED_SUMMARIES or c in CDC_STREAM_SUMMARIES: return False
+    if c in DIRECT_READ_SUMMARIES or c in BLOCKED_OPERATION_RULES or c in BINARY_BLOCKED_SUMMARIES or c in CDC_STREAM_SUMMARIES: return False
     if any(t in c for t in (".list",".info",".fetch",".synchronous",".search")): return False
     return True
 
@@ -513,6 +531,10 @@ def main():
         fixed_request_fields = FIXED_STREAM_REQUEST_FIELDS.get(clean, {})
         req_required = [field for field in req_required if field not in fixed_request_fields]
         req_types={n:(json_type(schema, req_sch.get("properties",{}).get(n,{})) or ["string"])[0] if isinstance(req_sch,dict) else "string" for n in req_props}
+        if clean in BLOCKED_OPERATION_RULES:
+            rule = BLOCKED_OPERATION_RULES[clean]
+            api_rows.append({"method":method,"path":path,"operation":{"model":rule["model"],"status":"blocked","risk":rule["risk"],"blocked_by_default":True,"reason":rule["reason"],"source_url":source_url(op),"notes":clean}})
+            continue
         if is_read_stream(summary):
             sname=stream_name_for(summary, used_streams); rec_schema,cursor,synthetic=result_record_schema(schema, sname, op)
             if sname == "hiring_team_role_list":
@@ -547,17 +569,21 @@ def main():
                 flags = [flag for flag in flags if flag.get("type") != "string_array"]
                 notes += f" Repeatable array request variants ({blocked_names}) are blocked pending {STREAM_ARRAY_FOUNDATION}."
             if "syncToken" in req_props:
-                notes += f" Opaque syncToken incremental checkpointing is blocked pending {SYNC_TOKEN_FOUNDATION}; this stream is full-refresh only."
-            cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"etl","availability":"implemented","stream":sname,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"notes":notes})
+                notes += f" Opaque syncToken checkpointing is blocked pending {SYNC_TOKEN_FOUNDATION}; this stream is full-refresh only."
+            command_summary = op.get("description","")[:160] or clean
+            if "syncToken" in req_props:
+                command_summary = f"Full-refresh-only Ashby {clean} read. Opaque syncToken checkpointing is unavailable pending {SYNC_TOKEN_FOUNDATION}."
+            cli_commands.append({"path":cpath,"summary":command_summary,"intent":"etl","availability":"implemented","stream":sname,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"notes":notes})
             api_rows.append({"method":method,"path":path,"covered_by":{"stream":sname}}); continue
         if is_direct(summary):
             cpath=command_path(clean, used_commands); opid=operation_id_for("direct", clean, used_ops); body_schema=to_draft_schema(schema, req_sch, close_object=True)
             if clean in DIRECT_READ_MIN_PROPERTIES:
                 body_schema["minProperties"] = DIRECT_READ_MIN_PROPERTIES[clean]
-            operation_entries.append({"id":opid,"kind":"rest_read","summary":clean,"description":op.get("description","")[:1000],"source_url":source_url(op),"risk":"medium" if ("file" in clean.lower() or "transcript" in clean.lower()) else "low","approval":"none","output_policy":"json_redacted","rest":{"method":method,"path":path,"content_type":"application/json","max_bytes":1048576,"body":default_body_for(req_props),"body_schema":body_schema}})
+            operation_entries.append({"id":opid,"kind":"rest_read","summary":clean,"description":op.get("description","")[:1000],"source_url":source_url(op),"risk":"medium" if ("file" in clean.lower() or "transcript" in clean.lower() or clean == "report.generate") else "low","approval":"none","output_policy":"json_redacted","rest":{"method":method,"path":path,"content_type":"application/json","max_bytes":1048576,"body":default_body_for(req_props),"body_schema":body_schema}})
             flags=flags_for_props(req_props, "body", PAGINATION_FIELDS, set(req_required))
-            direct_risk = SIGNED_URL_DIRECT_READ_RISK if clean in SIGNED_URL_DIRECT_READS else "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output"
-            cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"direct_read","availability":"implemented","operation":opid,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"output_policy":"json_redacted","risk":direct_risk,"approval":"none","notes":"Fixed Ashby POST direct read; no raw method/path/body override is exposed."})
+            direct_risk = DIRECT_READ_RISK_OVERRIDES.get(clean, SIGNED_URL_DIRECT_READ_RISK if clean in SIGNED_URL_DIRECT_READS else "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output")
+            command_summary = DIRECT_READ_COMMAND_SUMMARY_OVERRIDES.get(clean, op.get("description","")[:160] or clean)
+            cli_commands.append({"path":cpath,"summary":command_summary,"intent":"direct_read","availability":"implemented","operation":opid,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"output_policy":"json_redacted","risk":direct_risk,"approval":"none","notes":"Fixed Ashby POST direct read; no raw method/path/body override is exposed."})
             api_rows.append({"method":method,"path":path,"covered_by":{"direct_read":cpath}}); continue
         if is_write(summary):
             wname=write_name_for(clean, used_writes); req_schema=to_draft_schema(schema, req_sch, close_object=True); destructive=is_destructive(clean)
@@ -596,7 +622,7 @@ def main():
     for name, sch in stream_schemas.items(): write_json(DEFS/"schemas"/f"{name}.json", sch)
     write_json(DEFS/"writes.json", {"actions":write_actions})
     write_json(DEFS/"operations.json", {"operations":operation_entries})
-    write_json(DEFS/"api_surface.json", {"api":"Official Ashby developer ReadMe OpenAPI 3.1 schema embedded in the public reference page","docs":DOC_URL,"reviewed_at":REVIEWED_AT,"operation_ledger_version":1,"scope":"Complete public Ashby inventory: REST operations plus OpenAPI webhook events. Supported REST read/write/direct surfaces are fixed and typed; inbound partner/webhook and presigned external file-transfer workflows remain blocked with source-backed reasons.","endpoints":api_rows})
+    write_json(DEFS/"api_surface.json", {"api":"Official Ashby developer ReadMe OpenAPI 3.1 schema embedded in the public reference page","docs":DOC_URL,"reviewed_at":REVIEWED_AT,"operation_ledger_version":1,"scope":"Complete public Ashby inventory: REST operations plus OpenAPI webhook events. Supported REST read/write/direct surfaces are fixed and typed; conditional side-effect reads, multipart submissions, inbound partner/webhook, and presigned external file-transfer workflows remain blocked with source-backed reasons.","endpoints":api_rows})
     grouped={"streams":[],"direct":[],"writes":[]}
     for c in cli_commands:
         if c["intent"]=="etl": grouped["streams"].append(c["path"])
@@ -627,7 +653,7 @@ def main():
     check_record["createdAt"] = "2026-01-01T00:00:00Z"
     if "scopes" in check_record: check_record["scopes"] = ["fixture_scope"]
     write_json(fixture_root/"check.json", {"request":{"method":"POST","path":"/apiKey.info","query":{}},"response":{"status":200,"body":{"success":True,"results":check_record}}})
-    docs = f"""# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference ({DOC_URL}). The parity ledger was reviewed on {REVIEWED_AT}.\n\nCoverage summary:\n\n- REST operations in source: {len(ops)}\n- OpenAPI webhook events in source: {len(schema.get('webhooks',{}))}\n- Implemented ETL/changefeed streams: {len(stream_entries)}\n- Implemented bounded direct reads/search/file metadata operations: {len(operation_entries)}\n- Implemented reverse-ETL write actions: {len(write_actions)}\n- Reverse-ETL CLI commands with scalar flags: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'implemented')}; partial nested-object flag surfaces: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'partial')}\n- Blocked/non-executable ledger rows: {len(api_rows) - len(stream_entries) - len(operation_entries) - len(write_actions)}\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination and applies page-size, max-pages, and repeated-cursor bounds. Streams are full-refresh only until `{SYNC_TOKEN_FOUNDATION}` supplies an Ashby-owned persisted opaque-token state seam; timestamp fields are not used as lossy substitutes. Repeatable array stream flags are withheld until `{STREAM_ARRAY_FOUNDATION}` preserves every supplied value.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with recursively closed modeled JSON schemas and the normal plan → preview → explicit approval → execute gate. Explicitly documented map-valued fields retain their map schemas. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. Opaque incremental state is blocked pending `{SYNC_TOKEN_FOUNDATION}`, and repeatable array stream-command variants are blocked pending `{STREAM_ARRAY_FOUNDATION}`. `hiringTeamRole.list` defaults to `namesOnly=true`; the `namesOnly=false` object-result variant is blocked pending variant-schema foundation `ashby_hiring_team_role_list_names_only_false`. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.\n"""
+    docs = f"""# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference ({DOC_URL}). The parity ledger was reviewed on {REVIEWED_AT}.\n\nCoverage summary:\n\n- REST operations in source: {len(ops)}\n- OpenAPI webhook events in source: {len(schema.get('webhooks',{}))}\n- Implemented ETL/changefeed streams: {len(stream_entries)}\n- Implemented bounded direct reads/search/file metadata operations: {len(operation_entries)}\n- Implemented reverse-ETL write actions: {len(write_actions)}\n- Reverse-ETL CLI commands with scalar flags: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'implemented')}; partial nested-object flag surfaces: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'partial')}\n- Blocked/non-executable ledger rows: {len(api_rows) - len(stream_entries) - len(operation_entries) - len(write_actions)}\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination and applies page-size, max-pages, and repeated-cursor bounds. Streams are full-refresh only until `{SYNC_TOKEN_FOUNDATION}` supplies an Ashby-owned persisted opaque-token state seam; timestamp fields are not used as lossy substitutes. Runtime help replaces provider incremental descriptions with full-refresh-only blocker text for every documented sync-token request. Repeatable array stream flags are withheld until `{STREAM_ARRAY_FOUNDATION}` preserves every supplied value.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with recursively closed modeled JSON schemas and the normal plan → preview → explicit approval → execute gate. Explicitly documented map-valued fields retain their map schemas. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. `referralForm.info` is blocked pending `ashby-referral-form-info-side-effect-foundation` because it conditionally creates a default form. `applicationForm.submit` is blocked pending `ashby-application-form-typed-multipart-foundation` because the documented request requires multipart form data and typed file parts. Opaque incremental state is blocked pending `{SYNC_TOKEN_FOUNDATION}`, and repeatable array stream-command variants are blocked pending `{STREAM_ARRAY_FOUNDATION}`. `hiringTeamRole.list` defaults to `namesOnly=true`; the `namesOnly=false` object-result variant is blocked pending variant-schema foundation `ashby_hiring_team_role_list_names_only_false`. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.\n"""
     (DEFS/"docs.md").write_text(docs)
 
     go_lines=[]

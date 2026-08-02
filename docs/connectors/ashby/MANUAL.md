@@ -177,9 +177,6 @@ ETL STREAMS
   user_list_interviewer_pauses:
     primary key: id
     fields: comment(), createdAt(), endsAt(), id(), startsAt(), userId()
-  referral_form_info:
-    primary key: id
-    fields: formDefinition(), id(), isArchived(), isDefaultForm(), organizationId(), title()
   email_sender_list:
     primary key: email
     fields: displayName(), email(), type()
@@ -306,10 +303,6 @@ REVERSE ETL ACTIONS
     endpoint: POST /applicationFeedbackRequest.create
     required fields: applicationId, interviewId, interviewerUserId
     risk: Executes Ashby applicationFeedbackRequest.create through the documented POST /applicationFeedbackRequest.create endpoint; reverse ETL plan, preview, approval, and execute are required.
-  submit_application_form:
-    endpoint: POST /applicationForm.submit
-    required fields: jobPostingId, applicationForm, allowSubmissionForUnpublishedJobPosting
-    risk: Executes Ashby applicationForm.submit through the documented POST /applicationForm.submit endpoint; reverse ETL plan, preview, approval, and execute are required.
   update_approval_definition:
     endpoint: POST /approvalDefinition.update
     required fields: entityType, entityId, approvalStepDefinitions
@@ -549,10 +542,6 @@ REVERSE ETL ACTIONS
     endpoint: POST /hiringTeam.removeMember
     required fields: teamMemberId, roleId
     risk: Executes Ashby hiringTeam.removeMember through the documented POST /hiringTeam.removeMember endpoint; reverse ETL plan, preview, approval, and execute are required.
-  interviewer_user_settings:
-    endpoint: POST /user.interviewerSettings
-    required fields: userId
-    risk: Executes Ashby user.interviewerSettings through the documented POST /user.interviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required.
   update_user_interviewer_settings:
     endpoint: POST /user.updateInterviewerSettings
     required fields: userId
@@ -653,10 +642,6 @@ REVERSE ETL ACTIONS
     endpoint: POST /interviewerPool.removeUser
     required fields: interviewerPoolId, userId
     risk: Executes Ashby interviewerPool.removeUser through the documented POST /interviewerPool.removeUser endpoint; reverse ETL plan, preview, approval, and execute are required.
-  generate_report:
-    endpoint: POST /report.generate
-    required fields: reportId
-    risk: Executes Ashby report.generate through the documented POST /report.generate endpoint; reverse ETL plan, preview, approval, and execute are required.
 
 SECURITY
   read risk: bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and sanitized replay fixtures
@@ -672,20 +657,10 @@ COMMAND SURFACE
   Bounded direct reads
   Reverse ETL writes
   Other Commands
-    candidate list - Lists all candidates in the organization with pagination and incremental sync support.
-
-Use the `syncToken` parameter to retrieve only candidates updated since  [intent=etl availability=implemented stream=candidates]; notes: Fixed Ashby stream for candidate.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after, --created-before
-    job list - Lists all jobs.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
-
-**Requires the  [intent=etl availability=implemented stream=jobs]; notes: Fixed Ashby stream for job.list; flags map only to documented request body fields. Repeatable array request variants (--status, --expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after, --opened-after, --opened-before, --closed-after, --closed-before, --include-unpublished-job-postings-ids
-    application list - Gets all applications in the organization.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage [intent=etl availability=implemented stream=applications]; notes: Fixed Ashby stream for application.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after, --created-before, --status, --job-id
-    user list - Lists all users in the organization with pagination support.
-
-By default, only active (enabled) users are returned. Use `includeDeactivated: true` to include de [intent=etl availability=implemented stream=users]; notes: Fixed Ashby stream for user.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-deactivated
+    candidate list - Full-refresh-only Ashby candidate list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=candidates]; notes: Fixed Ashby stream for candidate.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after, --created-before
+    job list - Full-refresh-only Ashby job list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=jobs]; notes: Fixed Ashby stream for job.list; flags map only to documented request body fields. Repeatable array request variants (--status, --expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after, --opened-after, --opened-before, --closed-after, --closed-before, --include-unpublished-job-postings-ids
+    application list - Full-refresh-only Ashby application list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=applications]; notes: Fixed Ashby stream for application.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after, --created-before, --status, --job-id
+    user list - Full-refresh-only Ashby user list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=users]; notes: Fixed Ashby stream for user.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-deactivated
     api-key info - Returns details for the API key used to make the request.
 
 **Requires the [`apiKeysRead`](authentication#permissions-apikeyinfo) permission.** [intent=etl availability=implemented stream=api_key_info]; notes: Fixed Ashby stream for apiKey.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.
@@ -743,19 +718,13 @@ This endpoint supports pagination only (not incremental sync). See the [Paginati
     application list-criteria-evaluations - Fetch a paginated list of AI criteria evaluations for an application.
 
 This endpoint returns the AI-generated criteria evaluations that assess how well a candid [intent=etl availability=implemented stream=application_list_criteria_evaluations]; notes: Fixed Ashby stream for application.listCriteriaEvaluations; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --application-id (required)
-    application-feedback list - List all interview scorecards and feedback submissions associated with an application.
-
-Each feedback submission contains:
-- **formDefinition**: The structure o [intent=etl availability=implemented stream=application_feedback_list]; notes: Fixed Ashby stream for applicationFeedback.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --application-id, --created-after
+    application-feedback list - Full-refresh-only Ashby application-feedback list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=application_feedback_list]; notes: Fixed Ashby stream for applicationFeedback.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --application-id, --created-after
     application-feedback submit - Application feedback forms support a variety of field types.
 
 The values accepted for each field depend on the type of field that's being filled out:
 - `Boolean [intent=reverse_etl availability=partial write=submit_application_feedback]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby applicationFeedback.submit through the documented POST /applicationFeedback.submit endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.; flags: --feedback-form-field-submissions-0-path, --form-definition-id, --application-id, --user-id, --interview-event-id
     application-feedback-request create - Request feedback on an application without scheduling an interview.
 The `interviewEventId` returned in the response can be provided to `applicationFeedback.subm [intent=reverse_etl availability=implemented write=create_application_feedback_request]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby applicationFeedbackRequest.create through the documented POST /applicationFeedbackRequest.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --interview-id, --interviewer-user-id
-    application-form submit - Submits a completed application form for a job posting.
-
-**Requires the [`candidatesWrite`](authentication#permissions-applicationformsubmit) permission.** [intent=reverse_etl availability=partial write=submit_application_form]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby applicationForm.submit through the documented POST /applicationForm.submit endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.; flags: --job-posting-id, --application-form-field-submissions-0-path, --allow-submission-for-unpublished-job-posting, --tag-ids
     approval-definition update - Create or update an approval definition for a specific entity that requires approval. The entity requiring approval must be within scope of an approval in Ashby [intent=reverse_etl availability=implemented write=update_approval_definition]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby approvalDefinition.update through the documented POST /approvalDefinition.update endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --entity-type, --entity-id, --approval-step-definitions-0-approvals-required, --approval-step-definitions-0-approvers-0-user-id, --approval-step-definitions-0-approvers-0-type, --submit-approval-request
     candidate search - Searches for candidates by email and/or name.
 
@@ -778,18 +747,14 @@ previously created via  [intent=reverse_etl availability=implemented write=uploa
     candidate create-note - Creates a note on a candidate.
 
 **Requires the [`candidatesWrite`](authentication#permissions-candidatecreatenote) permission.** [intent=reverse_etl availability=implemented write=create_candidate_note]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby candidate.createNote through the documented POST /candidate.createNote endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --note-type, --note-value, --send-notifications, --is-private, --created-at
-    candidate list-client-info - Lists client information records (IP, user agent) collected for a candidate.
-
-**Requires the [`candidatesRead`](authentication#permissions-candidatelistclientin [intent=etl availability=implemented stream=candidate_list_client_info]; notes: Fixed Ashby stream for candidate.listClientInfo; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --candidate-id (required)
+    candidate list-client-info - Full-refresh-only Ashby candidate list-client-info read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=candidate_list_client_info]; notes: Fixed Ashby stream for candidate.listClientInfo; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --candidate-id (required)
     candidate list-fraud-checks - Lists the fraud checks performed on a candidate.
 
 **Requires the [`candidatesRead`](authentication#permissions-candidatelistfraudchecks) permission.** [intent=etl availability=implemented stream=candidate_list_fraud_checks]; notes: Fixed Ashby stream for candidate.listFraudChecks; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --candidate-id (required)
     candidate set-fraud-status - Updates the manual fraud-review status of a candidate.
 
 **Requires the [`candidatesWrite`](authentication#permissions-candidatesetfraudstatus) permission.** [intent=reverse_etl availability=implemented write=set_candidate_fraud_status]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby candidate.setFraudStatus through the documented POST /candidate.setFraudStatus endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --fraud-status
-    candidate list-notes - Lists the notes that have been added to a candidate.
-
-**Requires the [`candidatesRead`](authentication#permissions-candidatelistnotes) permission.** [intent=etl availability=implemented stream=candidate_list_notes]; notes: Fixed Ashby stream for candidate.listNotes; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --candidate-id (required)
+    candidate list-notes - Full-refresh-only Ashby candidate list-notes read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=candidate_list_notes]; notes: Fixed Ashby stream for candidate.listNotes; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --candidate-id (required)
     candidate anonymize - Anonymizes a candidate's personally identifiable information.
 
 **Requires the [`candidatesWrite`](authentication#permissions-candidateanonymize) permission.** [intent=reverse_etl availability=implemented write=anonymize_candidate]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby candidate.anonymize through the documented POST /candidate.anonymize endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id
@@ -826,17 +791,11 @@ If a tag already exists with the given title, the existing tag will be returned.
     candidate-tag archive - Archives a candidate tag.
 
 **Requires the [`hiringProcessMetadataWrite`](authentication#permissions-candidatetagarchive) permission.** [intent=reverse_etl availability=implemented write=archive_candidate_tag]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby candidateTag.archive through the documented POST /candidateTag.archive endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --tag-id
-    candidate-tag list - Lists all candidate tags.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
-
-**Req [intent=etl availability=implemented stream=candidate_tag_list]; notes: Fixed Ashby stream for candidateTag.list; flags map only to documented request body fields.; flags: --include-archived
+    candidate-tag list - Full-refresh-only Ashby candidate-tag list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=candidate_tag_list]; notes: Fixed Ashby stream for candidateTag.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived
     communication-template list - List all enabled communication templates.
 
 **Requires the [`hiringProcessMetadataRead`](authentication#permissions-communicationtemplatelist) permission.** [intent=etl availability=implemented stream=communication_template_list]; notes: Fixed Ashby stream for communicationTemplate.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.
-    feedback-form-definition list - Lists all feedback form definitions.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examp [intent=etl availability=implemented stream=feedback_form_definition_list]; notes: Fixed Ashby stream for feedbackFormDefinition.list; flags map only to documented request body fields.; flags: --include-archived
+    feedback-form-definition list - Full-refresh-only Ashby feedback-form-definition list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=feedback_form_definition_list]; notes: Fixed Ashby stream for feedbackFormDefinition.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived
     feedback-form-definition info - Returns a single feedback form by id
 
 **Requires the [`hiringProcessMetadataRead`](authentication#permissions-feedbackformdefinitioninfo) permission.** [intent=etl availability=implemented stream=feedback_form_definition_info]; notes: Fixed Ashby stream for feedbackFormDefinition.info; flags map only to documented request body fields.; flags: --feedback-form-definition-id (required)
@@ -879,9 +838,7 @@ Set `status` to `Published` to publish a draft job posting. The posting must  [i
     job-interview-plan info - Returns a job's interview plan, including activities and interviews that need to be scheduled at each stage.
 
 **Requires the [`jobsRead`](authentication#permiss [intent=etl availability=implemented stream=job_interview_plan_info]; notes: Fixed Ashby stream for jobInterviewPlan.info; flags map only to documented request body fields.; flags: --job-id (required)
-    job-template list - List all active and inactive job templates.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usag [intent=etl availability=implemented stream=job_template_list]; notes: Fixed Ashby stream for jobTemplate.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.
+    job-template list - Full-refresh-only Ashby job-template list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=job_template_list]; notes: Fixed Ashby stream for jobTemplate.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.
     department archive - Archives a department.
 
 **Requires the [`organizationWrite`](authentication#permissions-departmentarchive) permission.** [intent=reverse_etl availability=implemented write=archive_department]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby department.archive through the documented POST /department.archive endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --department-id
@@ -894,11 +851,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
     department info - Fetch department details by id.
 
 **Requires the [`organizationRead`](authentication#permissions-departmentinfo) permission.** [intent=etl availability=implemented stream=department_info]; notes: Fixed Ashby stream for department.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --department-id (required)
-    department list - Lists all departments.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
-
-**Requir [intent=etl availability=implemented stream=department_list]; notes: Fixed Ashby stream for department.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived
+    department list - Full-refresh-only Ashby department list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=department_list]; notes: Fixed Ashby stream for department.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived
     department move - Moves a department to another parent.
 
 **Requires the [`organizationWrite`](authentication#permissions-departmentmove) permission.** [intent=reverse_etl availability=implemented write=move_department]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby department.move through the documented POST /department.move endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --department-id, --parent-id
@@ -914,9 +867,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
     location restore - Restores an archived location or location hierarchy.
 
 **Requires the [`organizationWrite`](authentication#permissions-locationrestore) permission.** [intent=reverse_etl availability=implemented write=restore_location]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby location.restore through the documented POST /location.restore endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --location-id
-    location list - List all locations. Regions are not returned.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed us [intent=etl availability=implemented stream=location_list]; notes: Fixed Ashby stream for location.list; flags map only to documented request body fields.; flags: --include-archived, --include-location-hierarchy
+    location list - Full-refresh-only Ashby location list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=location_list]; notes: Fixed Ashby stream for location.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived, --include-location-hierarchy
     location info - Gets details for a single location by id.
 
 **Requires the [`organizationRead`](authentication#permissions-locationinfo) permission.** [intent=etl availability=implemented stream=location_info]; notes: Fixed Ashby stream for location.info; flags map only to documented request body fields.; flags: --location-id (required)
@@ -935,7 +886,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
     location update-external-name - Update a location's external (candidate-facing) name.
 
 **Requires the [`organizationWrite`](authentication#permissions-locationupdateexternalname) permission.** [intent=reverse_etl availability=implemented write=update_location_external_name]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby location.updateExternalName through the documented POST /location.updateExternalName endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --location-id, --external-name
-    interview-plan list - List published interview plans. Draft interview plans are not returned. If `includeArchived` is true, archived interview plans are also included. Job-specific i [intent=etl availability=implemented stream=interview_plan_list]; notes: Fixed Ashby stream for interviewPlan.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived
+    interview-plan list - Full-refresh-only Ashby interview-plan list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=interview_plan_list]; notes: Fixed Ashby stream for interviewPlan.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived
     interview-stage list - List all interview stages for an interview plan in order.
 
 **Requires the [`interviewsRead`](authentication#permissions-interviewstagelist) permission.** [intent=etl availability=implemented stream=interview_stage_list]; notes: Fixed Ashby stream for interviewStage.list; flags map only to documented request body fields.; flags: --interview-plan-id (required)
@@ -954,9 +905,7 @@ This endpoint mimics the behavior of the "Force Approve" function in the Ashb [i
 
 Offer forms support a variety of field types. The values accepted for each field depend on the type of field that's being filled out:
 - `Bo [intent=reverse_etl availability=partial write=create_offer]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby offer.create through the documented POST /offer.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.; flags: --offer-process-id, --offer-form-id, --offer-form-field-submissions-0-path, --exclude-form-definition
-    offer list - Get a list of all offers with their latest version.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detai [intent=etl availability=implemented stream=offer_list]; notes: Fixed Ashby stream for offer.list; flags map only to documented request body fields. Repeatable array request variants (--offer-status, --acceptance-status, --approval-status) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after, --application-id
+    offer list - Full-refresh-only Ashby offer list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=offer_list]; notes: Fixed Ashby stream for offer.list; flags map only to documented request body fields. Repeatable array request variants (--offer-status, --acceptance-status, --approval-status) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after, --application-id
     offer info - Returns details about a single offer by id
 
 **Requires the [`offersRead`](authentication#permissions-offerinfo) permission.** [intent=etl availability=implemented stream=offer_info]; notes: Fixed Ashby stream for offer.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --offer-id (required), --exclude-form-definition
@@ -1013,42 +962,28 @@ To set values for custom fields on Openings, use the [`customField.setValue`](re
     opening remove-location - Removes a location from an opening.
 
 **Requires the [`jobsWrite`](authentication#permissions-openingremovelocation) permission.** [intent=reverse_etl availability=implemented write=remove_opening_location]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.removeLocation through the documented POST /opening.removeLocation endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --opening-id, --location-id
-    opening list - Lists openings.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
-
-**Requires the  [intent=etl availability=implemented stream=opening_list]; notes: Fixed Ashby stream for opening.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after
+    opening list - Full-refresh-only Ashby opening list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=opening_list]; notes: Fixed Ashby stream for opening.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after
     opening search - Searches for openings by identifier.
 
 **Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.** [intent=direct_read availability=implemented operation=ashby.direct.opening.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --identifier (required)
     project info - Retrieves a project by its UUID.
 
 **Requires the [`candidatesRead`](authentication#permissions-projectinfo) permission.** [intent=etl availability=implemented stream=project_info]; notes: Fixed Ashby stream for project.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --project-id (required)
-    project list - Lists projects.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
-
-**Requires the  [intent=etl availability=implemented stream=project_list]; notes: Fixed Ashby stream for project.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after
+    project list - Full-refresh-only Ashby project list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=project_list]; notes: Fixed Ashby stream for project.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --created-after
     project search - Search for projects by title.
 
 Responses are limited to 100 results. Consider refining your search or using /project.list to paginate through all projects, if y [intent=direct_read availability=implemented operation=ashby.direct.project.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title (required)
     source list - List all sources
 
 **Requires the [`hiringProcessMetadataRead`](authentication#permissions-sourcelist) permission.** [intent=etl availability=implemented stream=source_list]; notes: Fixed Ashby stream for source.list; flags map only to documented request body fields.; flags: --include-archived
-    source-tracking-link list - List all source custom tracking links
-
-**Requires the [`hiringProcessMetadataRead`](authentication#permissions-sourcetrackinglinklist) permission.** [intent=etl availability=implemented stream=source_tracking_link_list]; notes: Fixed Ashby stream for sourceTrackingLink.list; flags map only to documented request body fields.; flags: --include-disabled, --source-id
+    source-tracking-link list - Full-refresh-only Ashby source-tracking-link list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=source_tracking_link_list]; notes: Fixed Ashby stream for sourceTrackingLink.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-disabled, --source-id
     archive-reason list - Lists archive reasons.
 
 **Requires the [`hiringProcessMetadataRead`](authentication#permissions-archivereasonlist) permission.** [intent=etl availability=implemented stream=archive_reason_list]; notes: Fixed Ashby stream for archiveReason.list; flags map only to documented request body fields.; flags: --include-archived
     brand list - Lists all brands for the organization.
 
 **Requires the [`organizationRead`](authentication#permissions-brandlist) permission.** [intent=etl availability=implemented stream=brand_list]; notes: Fixed Ashby stream for brand.list; flags map only to documented request body fields.
-    custom-field list - Lists all custom fields.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
-
-**Requ [intent=etl availability=implemented stream=custom_field_list]; notes: Fixed Ashby stream for customField.list; flags map only to documented request body fields.; flags: --include-archived
+    custom-field list - Full-refresh-only Ashby custom-field list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=custom_field_list]; notes: Fixed Ashby stream for customField.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived
     custom-field create - Create a new custom field.
 
 **Requires the [`hiringProcessMetadataWrite`](authentication#permissions-customfieldcreate) permission.** [intent=reverse_etl availability=implemented write=create_custom_field]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby customField.create through the documented POST /customField.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --field-type, --object-type, --title, --description, --selectable-values, --is-date-only-field, --is-exposable-to-candidate, --is-private
@@ -1094,7 +1029,7 @@ Returns an array containing the user if found, or an empty array if no user with
 **Requires the [ [intent=direct_read availability=implemented operation=ashby.direct.user.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email (required)
     user interviewer-settings - Get interviewer settings for a user.
 
-**Requires the [`organizationRead`](authentication#permissions-userinterviewersettings) permission.** [intent=reverse_etl availability=implemented write=interviewer_user_settings]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby user.interviewerSettings through the documented POST /user.interviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --user-id
+**Requires the [`organizationRead`](authentication#permissions-userinterviewersettings) permission.** [intent=direct_read availability=implemented operation=ashby.direct.user.interviewer.settings]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential interviewer settings remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --user-id (required)
     user update-interviewer-settings - Update interviewer settings for a user.
 
 Either limit can be provided, or both can be provided. If only one is provided, the other will remain unchanged. If a l [intent=reverse_etl availability=implemented write=update_user_interviewer_settings]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby user.updateInterviewerSettings through the documented POST /user.updateInterviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --user-id, --daily-limit, --weekly-limit
@@ -1116,9 +1051,6 @@ to [intent=reverse_etl availability=partial write=set_user_custom_field_values];
     referral create - Creates a referral
 
 **Requires the [`candidatesWrite`](authentication#permissions-referralcreate) permission.** [intent=reverse_etl availability=partial write=create_referral]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby referral.create through the documented POST /referral.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.; flags: --id, --credited-to-user-id, --field-submissions-0-path, --created-at
-    referral-form info - Fetches the default referral form or creates a default referral form if none exists.
-
-**Requires the [`hiringProcessMetadataRead`](authentication#permissions-re [intent=etl availability=implemented stream=referral_form_info]; notes: Fixed Ashby stream for referralForm.info; flags map only to documented request body fields.
     email-sender list - > Beta
 >
 > This endpoint is in beta and may not be available for all organizations.
@@ -1142,11 +1074,7 @@ Permanently discards a NotStarted sourcing sequence draft owned by the acti [int
 > This endpoint is in beta and may not be available for all organizations.
 
 Retrieves a candidate's sourcing sequence enrollment when it is visible to  [intent=etl availability=implemented stream=sequence_info]; notes: Fixed Ashby stream for sequence.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --sequence-id (required)
-    sequence list - > Beta
->
-> This endpoint is in beta and may not be available for all organizations.
-
-Lists visible started and ended sourcing sequence enrollments across the or [intent=etl availability=implemented stream=sequence_list]; notes: Fixed Ashby stream for sequence.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --candidate-id
+    sequence list - Full-refresh-only Ashby sequence list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=sequence_list]; notes: Fixed Ashby stream for sequence.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --candidate-id
     sequence update-stage - > Beta
 >
 > This endpoint is in beta and may not be available for all organizations.
@@ -1158,12 +1086,8 @@ Replaces the supplied subject or HTML body of one email stage in a not-star [int
 
 Validates and starts an existing NotStarted sourcing sequence draft owned b [intent=reverse_etl availability=implemented write=start_sequence]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby sequence.start through the documented POST /sequence.start endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --sequence-id
     sequence-template info - Retrieves metadata for a reusable sourcing sequence template visible to the caller. Archived templates may be returned. Message subjects and bodies are not expo [intent=etl availability=implemented stream=sequence_template_info]; notes: Fixed Ashby stream for sequenceTemplate.info; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --sequence-template-id (required)
-    sequence-template list - Lists reusable sourcing sequence templates visible to the caller. Returns template and cadence metadata only; message subjects and bodies are not exposed.
-
-Arch [intent=etl availability=implemented stream=sequence_template_list]; notes: Fixed Ashby stream for sequenceTemplate.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived
-    interview-schedule list - Gets all interview schedules in the organization.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detaile [intent=etl availability=implemented stream=interview_schedule_list]; notes: Fixed Ashby stream for interviewSchedule.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --application-id, --interview-stage-id, --created-after
+    sequence-template list - Full-refresh-only Ashby sequence-template list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=sequence_template_list]; notes: Fixed Ashby stream for sequenceTemplate.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived
+    interview-schedule list - Full-refresh-only Ashby interview-schedule list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=interview_schedule_list]; notes: Fixed Ashby stream for interviewSchedule.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --application-id, --interview-stage-id, --created-after
     interview-schedule create - Create a scheduled interview in Ashby.
 
 **Requires the [`interviewsWrite`](authentication#permissions-interviewschedulecreate) permission.** [intent=reverse_etl availability=implemented write=create_interview_schedule]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby interviewSchedule.create through the documented POST /interviewSchedule.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --interview-events-0-start-time, --interview-events-0-end-time, --interview-events-0-interviewers-0-email
@@ -1173,30 +1097,20 @@ In order to update an  [intent=reverse_etl availability=implemented write=update
     interview-schedule cancel - Cancel an interview schedule by id.
 
 **Requires the [`interviewsWrite`](authentication#permissions-interviewschedulecancel) permission.** [intent=reverse_etl availability=implemented write=cancel_interview_schedule]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby interviewSchedule.cancel through the documented POST /interviewSchedule.cancel endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --id, --allow-reschedule
-    take-home-assignment list - > Beta
->
-> This endpoint is in beta and may not be available for all organizations.
-
-Lists take-home assignments visible to the caller, including candidate subm [intent=etl availability=implemented stream=take_home_assignment_list]; notes: Fixed Ashby stream for takeHomeAssignment.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --application-id, --candidate-id
+    take-home-assignment list - Full-refresh-only Ashby take-home-assignment list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=take_home_assignment_list]; notes: Fixed Ashby stream for takeHomeAssignment.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --application-id, --candidate-id
     take-home-assignment info - > Beta
 >
 > This endpoint is in beta and may not be available for all organizations.
 
 Retrieves a single take-home assignment by id and links it to its interview [intent=etl availability=implemented stream=take_home_assignment_info]; notes: Fixed Ashby stream for takeHomeAssignment.info; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --take-home-assignment-id (required)
-    interview-event list - Lists interview events associated with an interview schedule.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide [intent=etl availability=implemented stream=interview_event_list]; notes: Fixed Ashby stream for interviewEvent.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --interview-schedule-id (required), --created-after
+    interview-event list - Full-refresh-only Ashby interview-event list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=interview_event_list]; notes: Fixed Ashby stream for interviewEvent.list; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --interview-schedule-id (required), --created-after
     interview-briefing info - Fetch the briefing data for an interview event. Returns the application,
 interview, per-interviewer status, and the feedback form definition id
 needed to render [intent=etl availability=implemented stream=interview_briefing_info]; notes: Fixed Ashby stream for interviewBriefing.info; flags map only to documented request body fields. Repeatable array request variants (--expand) are blocked pending connector-stream-repeatable-array-foundation.; flags: --interview-event-id (required)
     interview info - Fetch interview details by id.
 
 **Requires the [`interviewsRead`](authentication#permissions-interviewinfo) permission.** [intent=etl availability=implemented stream=interview_info]; notes: Fixed Ashby stream for interview.info; flags map only to documented request body fields.; flags: --id (required)
-    interview list - List all interviews.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
-
-**Requires [intent=etl availability=implemented stream=interview_list]; notes: Fixed Ashby stream for interview.list; flags map only to documented request body fields.; flags: --include-archived, --include-non-shared-interviews, --exclude-archived-schedule-template-interviews
+    interview list - Full-refresh-only Ashby interview list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=interview_list]; notes: Fixed Ashby stream for interview.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived, --include-non-shared-interviews, --exclude-archived-schedule-template-interviews
     interview-stage info - Retrieves detailed information about a specific interview stage by its ID.
 
 **Requires the [`interviewsRead`](authentication#permissions-interviewstageinfo) per [intent=etl availability=implemented stream=interview_stage_info]; notes: Fixed Ashby stream for interviewStage.info; flags map only to documented request body fields.; flags: --interview-stage-id (required)
@@ -1206,23 +1120,15 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
     survey-form-definition info - Returns details about a single survey form definition by id.
 
 **Requires the [`hiringProcessMetadataRead`](authentication#permissions-surveyformdefinitioninfo)  [intent=etl availability=implemented stream=survey_form_definition_info]; notes: Fixed Ashby stream for surveyFormDefinition.info; flags map only to documented request body fields.; flags: --survey-form-definition-id (required)
-    survey-form-definition list - Lists all survey form definitions.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage example [intent=etl availability=implemented stream=survey_form_definition_list]; notes: Fixed Ashby stream for surveyFormDefinition.list; flags map only to documented request body fields.
+    survey-form-definition list - Full-refresh-only Ashby survey-form-definition list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=survey_form_definition_list]; notes: Fixed Ashby stream for surveyFormDefinition.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.
     survey-request create - This endpoint generates a survey request and returns a survey URL. You can send this URL to a candidate to allow them to complete a survey.
 
 **Note that calling [intent=reverse_etl availability=implemented write=create_survey_request]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby surveyRequest.create through the documented POST /surveyRequest.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --application-id, --survey-form-definition-id
-    survey-request list - Lists all survey requests.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
-
-**Re [intent=etl availability=implemented stream=survey_request_list]; notes: Fixed Ashby stream for surveyRequest.list; flags map only to documented request body fields.; flags: --survey-type (required), --application-id, --candidate-id, --created-after
+    survey-request list - Full-refresh-only Ashby survey-request list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=survey_request_list]; notes: Fixed Ashby stream for surveyRequest.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --survey-type (required), --application-id, --candidate-id, --created-after
     survey-submission create - Creates a survey submission for a candidate and application.
 
 **Requires the [`candidatesWrite`](authentication#permissions-surveysubmissioncreate) permission.* [intent=reverse_etl availability=partial write=create_survey_submission]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby surveySubmission.create through the documented POST /surveySubmission.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed. This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution.; flags: --survey-form-definition-id, --candidate-id, --application-id
-    survey-submission list - Lists all survey submissions of a given `surveyType`.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for det [intent=etl availability=implemented stream=survey_submission_list]; notes: Fixed Ashby stream for surveySubmission.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --survey-type (required), --created-after
+    survey-submission list - Full-refresh-only Ashby survey-submission list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=survey_submission_list]; notes: Fixed Ashby stream for surveySubmission.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --survey-type (required), --created-after
     webhook create - Creates a webhook setting.
 
 **Requires the [`apiKeysWrite`](authentication#permissions-webhookcreate) permission.** [intent=reverse_etl availability=implemented write=create_webhook]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby webhook.create through the documented POST /webhook.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --webhook-type, --request-url, --secret-token
@@ -1235,11 +1141,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
     webhook delete - Deletes a webhook setting.
 
 **Requires the [`apiKeysWrite`](authentication#permissions-webhookdelete) permission.** [intent=reverse_etl availability=implemented write=delete_webhook]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby webhook.delete through the documented POST /webhook.delete endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --webhook-id
-    interviewer-pool list - List all interviewer pools.
-
-See the [Pagination and Incremental Synchronization](/docs/pagination-and-incremental-sync) guide for detailed usage examples.
-
-**R [intent=etl availability=implemented stream=interviewer_pool_list]; notes: Fixed Ashby stream for interviewerPool.list; flags map only to documented request body fields.; flags: --include-archived-pools, --include-archived-training-stages
+    interviewer-pool list - Full-refresh-only Ashby interviewer-pool list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=interviewer_pool_list]; notes: Fixed Ashby stream for interviewerPool.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --include-archived-pools, --include-archived-training-stages
     interviewer-pool info - Get information about an interviewer pool.
 
 **Requires the [`hiringProcessMetadataRead`](authentication#permissions-interviewerpoolinfo) permission.** [intent=etl availability=implemented stream=interviewer_pool_info]; notes: Fixed Ashby stream for interviewerPool.info; flags map only to documented request body fields.; flags: --interviewer-pool-id (required)
@@ -1264,13 +1166,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
     close-reason list - Lists all close reasons for jobs or openings.
 
 **Requires the [`hiringProcessMetadataRead`](authentication#permissions-closereasonlist) permission.** [intent=etl availability=implemented stream=close_reason_list]; notes: Fixed Ashby stream for closeReason.list; flags map only to documented request body fields.; flags: --include-archived
-    report generate - > Beta
->
-> This endpoint is currently in beta and may change without notice.
-
-Generates a new report or polls the status of an existing report generation.
-
-**Tw [intent=reverse_etl availability=implemented write=generate_report]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby report.generate through the documented POST /report.generate endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --report-id, --include-headers-in-data, --result-style, --request-id
+    report generate - Start an Ashby report generation or check an existing request. [intent=direct_read availability=implemented operation=ashby.direct.report.generate]; approval: none; risk: bounded JSON direct read that starts or polls a documented Ashby report generation and returns at most 1 MiB of redacted JSON; the connector does not fetch returned report URLs or poll automatically; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --report-id (required), --include-headers-in-data, --result-style, --request-id
     report synchronous - > Beta
 >
 > This endpoint is currently in beta and may change without notice.
@@ -1278,9 +1174,7 @@ Generates a new report or polls the status of an existing report generation.
 Retrieves report data synchronously.
 
 **Timeout:** 30 seconds. If a report is timi [intent=etl availability=implemented stream=report_synchronous]; notes: Fixed Ashby stream for report.synchronous; flags map only to documented request body fields.; flags: --report-id (required), --include-headers-in-data, --result-style
-    approval list - Gets all approvals in the organization. You can optionally filter by entity type and entity ID.
-
-See the [Pagination and Incremental Synchronization](/docs/pagi [intent=etl availability=implemented stream=approval_list]; notes: Fixed Ashby stream for approval.list; flags map only to documented request body fields. Incremental execution is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --entity-type, --entity-id
+    approval list - Full-refresh-only Ashby approval list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=approval_list]; notes: Fixed Ashby stream for approval.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --entity-type, --entity-id
   Help topics:
     ashby safety - Ashby writes are named, schema-validated actions only; reverse ETL must use plan, preview, explicit approval, and execute.
     ashby parity - Public Ashby OpenAPI coverage ledger is recorded in api_surface.json with blocked webhook/partner/binary workflow reasons.

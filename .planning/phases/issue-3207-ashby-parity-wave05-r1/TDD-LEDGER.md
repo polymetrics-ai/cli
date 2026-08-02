@@ -34,3 +34,16 @@
 - 2026-08-02 red: focused Ashby regression command failed on nested arbitrary-field acceptance, timestamp-state filtering, unblocked `syncToken`, repeated page cursor acceptance, advertised incremental modes, executable stream array flags, missing success acceptance, and sibling check/direct-read/write false-success acceptance; the documented map-field and successful-envelope controls remained green.
 - 2026-08-02 focused verification first exposed that the existing schema compiler accepts only boolean `additionalProperties`; documented Ashby map fields were adjusted to explicit `true` while every other modeled object remains closed, without changing shared engine code.
 - 2026-08-02 green: `go test ./internal/connectors/native/ashby` passed.
+
+## Review fix round 2 targets
+
+- `referralForm.info` and `applicationForm.submit` have no executable stream/write/CLI route and carry named blocked-operation foundations in the complete API ledger.
+- `user.interviewerSettings` and `report.generate` are bounded `json_redacted` direct reads that return validated Ashby response envelopes and are absent from reverse-ETL actions.
+- Every executable stream whose documented request accepts `syncToken` uses connector-owned full-refresh help and names `ashby-sync-token-checkpoint-foundation`, with no provider incremental marketing copied into runtime help.
+- Generated Ashby counts and manuals reflect 71 streams, 9 bounded direct reads, 98 writes, and 34 blocked rows.
+
+## Review fix round 2 evidence
+
+- 2026-08-02 red: the focused semantic-contract tests reported 72 streams, 7 direct reads, and 101 writes instead of 71/9/98; `referralForm.info` and `applicationForm.submit` remained executable, `user.interviewerSettings` and `report.generate` lacked direct operations, and sync-token command summaries still copied provider incremental language.
+- 2026-08-02 implementation: Ashby-local semantic overrides block the conditional referral-form creator and typed-multipart application submission, classify the two result-producing endpoints as bounded redacted direct reads, and replace sync-token help at the generator boundary.
+- 2026-08-02 green: `go test ./internal/connectors/native/ashby -count=1` passed.

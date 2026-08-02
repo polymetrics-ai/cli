@@ -54,3 +54,12 @@ Parent #3207 and children #3208-#3214: refresh the Ashby official OpenAPI invent
 5. Remove executable repeatable array flags from Ashby stream commands and record `connector-stream-repeatable-array-foundation` as the blocked capability; direct-read and write arrays retain their existing supported runner paths.
 
 This review phase uses the existing manual GSD/TDD fallback because `scripts/gsd prompt programming-loop ...` is unavailable. Production changes remain confined to Ashby-owned native code, bundle generation inputs/outputs, tests, and phase evidence.
+
+## Review fix round 2
+
+1. Replace name-inferred operation semantics with Ashby-local overrides: block conditionally mutating `referralForm.info`, return `user.interviewerSettings` and `report.generate` through bounded direct reads, and remove their write classifications.
+2. Block `applicationForm.submit` on `ashby-application-form-typed-multipart-foundation` because the documented endpoint requires multipart form data and file parts that the Ashby JSON-only write hook cannot represent.
+3. Replace provider incremental marketing for every sync-token-capable command with connector-owned full-refresh help and the `ashby-sync-token-checkpoint-foundation` blocker.
+4. Regenerate only Ashby-owned bundles, native routing, manuals, catalog entries, website data, and phase evidence; do not invoke shared generators or modify shared runtime code.
+
+The repository adapter remains healthy, but `scripts/gsd prompt programming-loop ...` is still unavailable, so this round continues the recorded manual GSD/TDD fallback. Required skills used: `gsd-programming-loop`, `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, `golang-lint`, and `golang-documentation`; the CLI help/docs/website parity and connector migration references were reread before edits.

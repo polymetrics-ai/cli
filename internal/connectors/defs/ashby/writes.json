@@ -588,94 +588,6 @@
       ]
     },
     {
-      "name": "submit_application_form",
-      "kind": "create",
-      "method": "POST",
-      "path": "/applicationForm.submit",
-      "record_schema": {
-        "type": "object",
-        "properties": {
-          "jobPostingId": {
-            "type": "string",
-            "description": "The id of the job posting to submit the application for"
-          },
-          "applicationForm": {
-            "type": "object",
-            "description": "The application form data containing field submissions",
-            "properties": {
-              "fieldSubmissions": {
-                "type": "array",
-                "description": "The list of field values to submit for the application form",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "path": {
-                      "type": "string",
-                      "description": "The path of the application form field being submitted"
-                    },
-                    "value": {
-                      "description": "The value to submit for the application form field"
-                    }
-                  },
-                  "required": [
-                    "path",
-                    "value"
-                  ],
-                  "additionalProperties": false
-                }
-              }
-            },
-            "required": [
-              "fieldSubmissions"
-            ],
-            "additionalProperties": false
-          },
-          "utmData": {
-            "type": "object",
-            "properties": {
-              "utm_source": {
-                "type": "string"
-              },
-              "utm_medium": {
-                "type": "string"
-              },
-              "utm_campaign": {
-                "type": "string"
-              },
-              "utm_term": {
-                "type": "string"
-              },
-              "utm_content": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false
-          },
-          "tagIds": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "description": "The id of a candidate tag to apply"
-            }
-          },
-          "allowSubmissionForUnpublishedJobPosting": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "jobPostingId",
-          "applicationForm",
-          "allowSubmissionForUnpublishedJobPosting"
-        ],
-        "additionalProperties": false
-      },
-      "risk": "Executes Ashby applicationForm.submit through the documented POST /applicationForm.submit endpoint; reverse ETL plan, preview, approval, and execute are required.",
-      "redact_fields": [
-        "jobPostingId",
-        "tagIds"
-      ]
-    },
-    {
       "name": "update_approval_definition",
       "kind": "update",
       "method": "POST",
@@ -3640,29 +3552,6 @@
       "confirm": "destructive"
     },
     {
-      "name": "interviewer_user_settings",
-      "kind": "custom",
-      "method": "POST",
-      "path": "/user.interviewerSettings",
-      "record_schema": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string",
-            "description": "The id of the user to get interviewer settings for"
-          }
-        },
-        "required": [
-          "userId"
-        ],
-        "additionalProperties": false
-      },
-      "risk": "Executes Ashby user.interviewerSettings through the documented POST /user.interviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required.",
-      "redact_fields": [
-        "userId"
-      ]
-    },
-    {
       "name": "update_user_interviewer_settings",
       "kind": "update",
       "method": "POST",
@@ -4564,43 +4453,6 @@
         "userId"
       ],
       "confirm": "destructive"
-    },
-    {
-      "name": "generate_report",
-      "kind": "custom",
-      "method": "POST",
-      "path": "/report.generate",
-      "record_schema": {
-        "type": "object",
-        "properties": {
-          "reportId": {
-            "type": "string",
-            "description": "The ID of the report"
-          },
-          "includeHeadersInData": {
-            "type": "boolean"
-          },
-          "resultStyle": {
-            "type": "string",
-            "enum": [
-              "inline",
-              "url"
-            ]
-          },
-          "requestId": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "reportId"
-        ],
-        "additionalProperties": false
-      },
-      "risk": "Executes Ashby report.generate through the documented POST /report.generate endpoint; reverse ETL plan, preview, approval, and execute are required.",
-      "redact_fields": [
-        "reportId",
-        "requestId"
-      ]
     }
   ]
 }

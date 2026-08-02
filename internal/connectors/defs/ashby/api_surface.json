@@ -3,7 +3,7 @@
   "docs": "https://developers.ashbyhq.com/reference/candidateaddtag",
   "reviewed_at": "2026-08-01",
   "operation_ledger_version": 1,
-  "scope": "Complete public Ashby inventory: REST operations plus OpenAPI webhook events. Supported REST read/write/direct surfaces are fixed and typed; inbound partner/webhook and presigned external file-transfer workflows remain blocked with source-backed reasons.",
+  "scope": "Complete public Ashby inventory: REST operations plus OpenAPI webhook events. Supported REST read/write/direct surfaces are fixed and typed; conditional side-effect reads, multipart submissions, inbound partner/webhook, and presigned external file-transfer workflows remain blocked with source-backed reasons.",
   "endpoints": [
     {
       "method": "POST",
@@ -176,8 +176,14 @@
     {
       "method": "POST",
       "path": "/applicationForm.submit",
-      "covered_by": {
-        "write": "submit_application_form"
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "requires multipart/form-data with typed file parts for application fields; blocked pending ashby-application-form-typed-multipart-foundation because the Ashby write executor is JSON-only",
+        "source_url": "https://developers.ashbyhq.com/reference/applicationformsubmit-1",
+        "notes": "applicationForm.submit"
       }
     },
     {
@@ -898,7 +904,7 @@
       "method": "POST",
       "path": "/user.interviewerSettings",
       "covered_by": {
-        "write": "interviewer_user_settings"
+        "direct_read": "user interviewer-settings"
       }
     },
     {
@@ -953,8 +959,14 @@
     {
       "method": "POST",
       "path": "/referralForm.info",
-      "covered_by": {
-        "stream": "referral_form_info"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "fetches the default referral form but conditionally creates one when absent; blocked pending ashby-referral-form-info-side-effect-foundation so an apparent read cannot mutate Ashby without a typed confirmation path",
+        "source_url": "https://developers.ashbyhq.com/reference/referralforminfo",
+        "notes": "referralForm.info"
       }
     },
     {
@@ -1261,7 +1273,7 @@
       "method": "POST",
       "path": "/report.generate",
       "covered_by": {
-        "write": "generate_report"
+        "direct_read": "report generate"
       }
     },
     {
