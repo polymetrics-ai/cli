@@ -10,7 +10,7 @@ description: Use the Polymetrics AWS CloudTrail connector for implemented read-s
 - Connector: `aws-cloudtrail`
 - Implemented counts: 19 ETL/read streams, 0 direct-read commands, 0 reverse-ETL write actions.
 - Blocked/planned counts: 10 provider query/direct-read actions and 31 write/admin actions.
-- Reason blocked: the command surface, manifest write metadata, write validation, dry-run preview, and operation-direct-read exposure require shared promoted-native forwarding that is intentionally not part of this connector-local corrective head.
+- Reason blocked: typed operation/write metadata plus command-surface, write-validation, dry-run preview, and operation-direct-read exposure require shared promoted-native forwarding that is intentionally not part of this connector-local corrective head.
 
 ## Agent Rules
 

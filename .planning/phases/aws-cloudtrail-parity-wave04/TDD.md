@@ -34,24 +34,24 @@
 
 ## Scope correction 2026-08-01
 
-Correction target: preserve CloudTrail-owned parity work while proving the six shared files are restored to pre-task contents in a new commit.
+Correction target: preserve CloudTrail-owned parity work while keeping shared command/direct/write forwarding out of this branch.
 
-Expected red risk after restoring shared files:
+Expected red risk after restoring shared command/direct/write files:
 
 - Focused `connectorgen validate internal/connectors/defs/aws-cloudtrail --json` may regress because the removed shared validator enhancement accepted a connector directory directly.
-- Runtime command-surface or manifest checks expose a genuine shared-runtime dependency if promoted native connectors cannot surface bundle-owned `Manifest`, `CommandSurface`, `OperationDirectRead`, `ValidateWrite`, `DryRunWrite`, or `InitialState` without edits in `nativeset/promoted.go` and `engine/connector.go`.
+- Runtime command-surface, operation-direct-read, write-validation, or dry-run checks expose a genuine shared-runtime dependency without promoted-native `CommandSurface`, `OperationDirectRead`, `ValidateWrite`, `DryRunWrite`, or `InitialState` forwarding in the shared runtime.
 
 Green criteria:
 
-- Focused native/hook/conformance checks and `make verify` pass with only the six shared files restored and no shared edits reintroduced.
+- Focused native/hook/conformance checks and `make verify` pass without reintroducing shared command/direct/write forwarding.
 - The operation ledger and generated docs/catalog/help show 19 implemented streams, 0 executable direct reads, 0 executable writes, and 41 blocked/planned operations.
 
-Evidence after restoring the six shared files:
+Evidence after restoring shared command/direct/write files and the final manifest fix:
 
-- `git diff --exit-code HEAD^ -- <six shared files>` passed, proving the six files match pre-task contents.
+- The final head keeps only bundle-backed promoted-native `Manifest()` forwarding for catalog/inspect truthfulness; CloudTrail command-surface, operation-direct-read, write-validation, and dry-run forwarding remain blocked/planned.
 - `go test ./internal/connectors/native/aws-cloudtrail ./internal/connectors/hooks/aws-cloudtrail -count=1` passed.
 - `go test ./internal/connectors/conformance -run 'TestConformance/aws-cloudtrail' -count=1` passed.
 - `go run ./cmd/connectorgen validate internal/connectors/defs/aws-cloudtrail --json` failed because reverted `connectorgen` no longer treats a connector dir as a single bundle and instead checks nested `fixtures/` and `schemas/` as connector roots. Full `go run ./cmd/connectorgen validate internal/connectors/defs` is the final validator gate and passes.
 - `go run ./cmd/pm connectors catalog --json` reports AWS CloudTrail as read-only with 19 streams and 0 write actions.
-- `go run ./cmd/pm connectors inspect aws-cloudtrail --json` reports runtime metadata `write=false` and manifest 0/0 because promoted-native manifest forwarding is reverted; connector docs note that ETL streams remain reachable through `pm etl`/catalog surfaces.
+- `go run ./cmd/pm connectors inspect aws-cloudtrail --json` reports runtime metadata `write=false` and a bundle-backed manifest with 19 streams and 0 write actions.
 - `go run ./cmd/pm aws-cloudtrail --help` fails with `help topic "aws-cloudtrail" not found`, which is now the truthful help surface because `cli_surface.json` was removed.

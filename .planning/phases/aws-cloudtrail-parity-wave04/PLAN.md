@@ -42,7 +42,7 @@ Parent issue #3142 with subissues #3143-#3149. Branch `fm/cli-aws-cloudtrail-par
 
 - Official AWS CloudTrail API action inventory remains 60 actions.
 - Event record contents page still reports eventVersion current version 1.11 and 31 top-level record fields; those fields are schema/data fields, not separate connector operations.
-- Final scope-corrected lane allocation: implemented ETL/read 19, implemented direct/provider query 0, implemented reverse ETL write 0, binary 0, CDC 0, excluded 0, blocked/planned 41 (10 direct/provider query + 31 write/admin requiring shared promoted-native forwarding).
+- Final scope-corrected lane allocation: implemented ETL/read 19, implemented direct/provider query 0, implemented reverse ETL write 0, binary 0, CDC 0, excluded 0, blocked/planned 41 (10 direct/provider query + 31 write/admin requiring shared promoted-native command/direct/write forwarding).
 
 ## Implementation slices
 
@@ -56,7 +56,7 @@ Parent issue #3142 with subissues #3143-#3149. Branch `fm/cli-aws-cloudtrail-par
    - `streams.json`, stream schemas, metadata, and docs reflect the implemented 19/0/0 + 41 blocked/planned split.
 3. Native/hook runtime:
    - Keep AWS CloudTrail JSON-RPC read streams with per-action `X-Amz-Target`, bounded POST body, SigV4, max pages, fixture mode, and no-live-provider tests.
-   - Revert all shared runtime edits; direct-read and write maps are empty so hidden native paths do not expose blocked operations.
+   - Revert shared command/direct/write runtime edits; direct-read and write maps are empty so hidden native paths do not expose blocked operations.
 4. Generated surfaces:
    - Regenerate root help golden transcripts, connector catalog/docs, and website connector data so CloudTrail has no command surface and no write actions.
 5. Issue addendum:
@@ -79,12 +79,15 @@ Required skills for this corrective slice: `gsd-core`, `golang-how-to`, `golang-
 Plan:
 
 1. Preserve CloudTrail commit history; do not amend/reset/rebase.
-2. Restore only these shared files to `3dd65b20d^` contents in the working tree: `cmd/connectorgen/main.go`, `cmd/connectorgen/validate.go`, `internal/cli/cli_test.go`, `internal/connectors/bundleregistry/registry.go`, `internal/connectors/engine/connector.go`, `internal/connectors/native/nativeset/promoted.go`.
-3. Keep CloudTrail-owned/generated surfaces and dedicated tests intact.
-4. Reclassify any CloudTrail command depending on reverted shared forwarding as blocked/planned rather than restoring shared runtime or leaving stale direct/write claims.
-5. Rerun focused CloudTrail checks and `make verify`.
-6. Commit the corrective scope revert as a new commit and append the clean corrected head to the external status file.
+2. Restore the out-of-scope shared command/direct/write forwarding edits while keeping CloudTrail-owned/generated surfaces and dedicated tests intact.
+3. Reclassify any CloudTrail command depending on reverted shared forwarding as blocked/planned rather than restoring shared runtime or leaving stale direct/write claims.
+4. Rerun focused CloudTrail checks and `make verify`.
+5. Commit the corrective scope revert as a new commit and append the clean corrected head to the external status file.
+
+Final head note:
+
+- The later manifest-fix commit keeps a narrow `internal/connectors/native/nativeset/promoted.go` wrapper so promoted-native connectors expose bundle-backed `Manifest()` data for catalog/inspect truthfulness. It does not re-enable CloudTrail command-surface, operation-direct-read, write-validation, dry-run, or generic request forwarding.
 
 Shared-runtime dependency documented by this correction:
 
-- Future enablement of the 10 provider query/direct-read actions and 31 write/admin actions needs a separate shared-runtime slice for promoted-native `Manifest`, `CommandSurface`, `OperationDirectRead`, `WriteValidator`, and `DryRunWriter` forwarding plus focused connector-dir validation. This corrective commit does not include that shared work.
+- Future enablement of the 10 provider query/direct-read actions and 31 write/admin actions needs a separate shared-runtime slice for promoted-native `CommandSurface`, `OperationDirectRead`, `WriteValidator`, and `DryRunWriter` forwarding plus focused connector-dir validation and typed operation/write metadata. This corrective branch does not include that shared command/direct/write work.

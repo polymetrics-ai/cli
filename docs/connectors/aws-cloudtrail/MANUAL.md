@@ -12,7 +12,7 @@ SYNOPSIS
 DESCRIPTION
   Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC read streams.
 
-  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, 19 read-stream actions are exposed as executable connector-local runtime behavior, and the 10 provider query/direct-read actions plus 31 write/admin actions are blocked/planned until shared promoted-native forwarding exposes command surfaces, manifests, validation, dry-run previews, and operation-direct reads safely.
+  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, 19 read-stream actions are exposed as executable connector-local runtime behavior, and the 10 provider query/direct-read actions plus 31 write/admin actions are blocked/planned until typed operation/write metadata and shared promoted-native command surfaces, validation, dry-run previews, and operation-direct reads are available safely.
 
 ICON
   asset: icons/aws-cloudtrail.svg

@@ -13,9 +13,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_AddTags.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -39,9 +39,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateChannel.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -52,9 +52,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateDashboard.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -65,9 +65,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateEventDataStore.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -78,9 +78,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateTrail.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -91,9 +91,9 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeleteChannel.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -104,9 +104,9 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeleteDashboard.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -117,9 +117,9 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeleteEventDataStore.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -130,9 +130,9 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeleteResourcePolicy.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -143,9 +143,9 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeleteTrail.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -156,9 +156,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeregisterOrganizationDelegatedAdmin.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -189,9 +189,9 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DisableFederation.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -202,9 +202,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_EnableFederation.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -419,9 +419,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_PutEventConfiguration.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -432,9 +432,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_PutEventSelectors.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -445,9 +445,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_PutInsightSelectors.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -458,9 +458,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_PutResourcePolicy.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -471,9 +471,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_RegisterOrganizationDelegatedAdmin.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -484,9 +484,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_RemoveTags.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -497,9 +497,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_RestoreEventDataStore.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -523,9 +523,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartDashboardRefresh.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -536,9 +536,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartEventDataStoreIngestion.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -549,9 +549,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartImport.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -562,9 +562,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartLogging.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -588,9 +588,9 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StopEventDataStoreIngestion.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -601,9 +601,9 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StopImport.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -614,9 +614,9 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StopLogging.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -627,9 +627,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateChannel.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -640,9 +640,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateDashboard.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -653,9 +653,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateEventDataStore.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     },
     {
@@ -666,9 +666,9 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires shared promoted-native Manifest/CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared runtime support was reverted, so the action is not exposed as an executable write.",
+        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateTrail.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata is runtime-visible."
+        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
     }
   ]

@@ -19,15 +19,15 @@ Final implemented/blocked counts:
 
 ## Scope correction 2026-08-01
 
-Verification after restoring the six shared files and reclassifying dependent CloudTrail commands:
+Verification after restoring shared command/direct/write files, keeping a bundle-backed manifest wrapper, and reclassifying dependent CloudTrail commands:
 
-- [x] `git diff --exit-code HEAD^ -- cmd/connectorgen/main.go cmd/connectorgen/validate.go internal/cli/cli_test.go internal/connectors/bundleregistry/registry.go internal/connectors/engine/connector.go internal/connectors/native/nativeset/promoted.go` -> pass; the six shared files match pre-task contents.
+- [x] The final head keeps only promoted-native bundle-backed `Manifest()` forwarding for catalog/inspect truthfulness; CloudTrail command-surface, operation-direct-read, write-validation, and dry-run forwarding remain blocked/planned.
 - [x] `go test ./internal/connectors/native/aws-cloudtrail ./internal/connectors/hooks/aws-cloudtrail -count=1` -> pass.
 - [x] `go test ./internal/connectors/conformance -run 'TestConformance/aws-cloudtrail' -count=1` -> pass.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs` -> pass, 549 connectors checked, 0 findings.
 - [x] `go build ./cmd/pm` -> pass.
 - [x] `go run ./cmd/pm connectors catalog --json` -> AWS CloudTrail reports read-only, 19 streams, 0 write actions.
-- [x] `go run ./cmd/pm connectors inspect aws-cloudtrail --json` -> runtime metadata reports `write=false`; manifest remains 0/0 because shared Manifest forwarding is reverted.
+- [x] `go run ./cmd/pm connectors inspect aws-cloudtrail --json` -> runtime metadata reports `write=false`; manifest reports 19 streams and 0 write actions from the bundle-backed promoted-native wrapper.
 - [x] `go run ./cmd/pm aws-cloudtrail --help` -> fails with `help topic "aws-cloudtrail" not found`, which is the truthful reduced help surface because `cli_surface.json` is removed.
 - [x] `POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1 go test ./internal/cli -run TestGoldenTranscripts -count=1` -> pass and refreshes root help to remove `pm aws-cloudtrail`.
 - [x] `./pm docs generate --dir docs/cli --connectors-dir docs/connectors` plus connector docs/catalog truthfulness edits -> CloudTrail generated catalog/docs no longer claim 31 writes.
@@ -41,4 +41,4 @@ Verification after restoring the six shared files and reclassifying dependent Cl
 Blocked shared-runtime dependencies documented by this scope correction:
 
 1. Focused connector-dir validation depends on the reverted `cmd/connectorgen` shared enhancement; the final supported local gate is whole-defs validation.
-2. Runtime-visible CloudTrail dynamic commands, direct/provider queries, and typed reverse-ETL write/admin actions depend on the reverted `internal/connectors/native/nativeset/promoted.go` and `internal/connectors/engine/connector.go` shared forwarding. They are now blocked/planned in the ledger and generated surfaces rather than claimed executable.
+2. Runtime-visible CloudTrail dynamic commands, direct/provider queries, and typed reverse-ETL write/admin actions depend on separate promoted-native command-surface, operation-direct-read, write-validation, and dry-run forwarding. They are now blocked/planned in the ledger and generated surfaces rather than claimed executable.
