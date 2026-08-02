@@ -399,6 +399,8 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 		switch r.Form.Get("Action") {
 		case "ListQueues":
 			_, _ = w.Write([]byte(`<ListQueuesResponse><ListQueuesResult><QueueUrl>https://sqs.us-east-1.amazonaws.com/123/orders</QueueUrl><NextToken>next</NextToken></ListQueuesResult></ListQueuesResponse>`))
+		case "ListDeadLetterSourceQueues":
+			_, _ = w.Write([]byte(`<ListDeadLetterSourceQueuesResponse><ListDeadLetterSourceQueuesResult><QueueUrl>https://sqs.us-east-1.amazonaws.com/123/orders-dlq</QueueUrl><NextToken>dead-letter-next</NextToken></ListDeadLetterSourceQueuesResult></ListDeadLetterSourceQueuesResponse>`))
 		case "GetQueueAttributes":
 			_, _ = w.Write([]byte(`<GetQueueAttributesResponse><GetQueueAttributesResult><Attribute><Name>Policy</Name><Value>{"Statement":"fixture"}</Value></Attribute><Attribute><Name>QueueArn</Name><Value>arn:aws:sqs:us-east-1:123:orders</Value></Attribute></GetQueueAttributesResult></GetQueueAttributesResponse>`))
 		default:
@@ -414,8 +416,16 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 		t.Fatalf("OperationDirectRead list_queues: %v", err)
 	}
 	body := res.Body.(map[string]any)
-	if urls := body["queue_urls"].([]string); len(urls) != 1 || body["next_token"] != "***" {
+	if urls := body["queue_urls"].([]string); len(urls) != 1 || body["next_token"] != "next" {
 		t.Fatalf("list_queues body = %#v", body)
+	}
+	res, err = c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_dead_letter_source_queues", Config: cfg, Body: map[string]any{"max_results": 25}, RedactFields: []string{"policy"}})
+	if err != nil {
+		t.Fatalf("OperationDirectRead list_dead_letter_source_queues: %v", err)
+	}
+	body = res.Body.(map[string]any)
+	if urls := body["queue_urls"].([]string); len(urls) != 1 || body["next_token"] != "dead-letter-next" {
+		t.Fatalf("list_dead_letter_source_queues body = %#v", body)
 	}
 	res, err = c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "get_queue_attributes", Config: cfg, RedactFields: []string{"policy"}})
 	if err != nil {
@@ -425,7 +435,7 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	if attrs["Policy"] != "***" || attrs["QueueArn"] == "***" {
 		t.Fatalf("attributes redaction = %#v", attrs)
 	}
-	if strings.Join(sawActions, ",") != "ListQueues,GetQueueAttributes" {
+	if strings.Join(sawActions, ",") != "ListQueues,ListDeadLetterSourceQueues,GetQueueAttributes" {
 		t.Fatalf("actions = %v", sawActions)
 	}
 }
