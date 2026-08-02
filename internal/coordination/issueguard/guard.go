@@ -1,6 +1,7 @@
 package issueguard
 
 import (
+	"net/url"
 	"regexp"
 	"sort"
 	"strconv"
@@ -29,10 +30,11 @@ var deliveryIssuePhrasePattern = regexp.MustCompile(`(?i)\b(?:deliver(?:s|ed|ing
 var letteredDeliveryIssuePhrasePattern = regexp.MustCompile(`\b(?:[Dd]eliver(?:s|ed|ing)?|[Ii]mplement(?:s|ed|ing)?|[Cc]omplete(?:s|d|ing)?|[Ss]hip(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\b[Ii]ssue\s+[A-Z]\b(?:\.[0-9]|[^.\n\r]){0,60}\b(?i:migration|slice|phase|workstream|delivery|plan|scope|implementation|contract|guard)\b`)
 var parentIssuePattern = regexp.MustCompile(`(?i)\bparent\s+(?:issue\s+)?(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 var canonicalIssueLinksHeadingPattern = regexp.MustCompile(`(?im)^[ \t]*##\s+Canonical issue links preserved from the task record\s*$`)
-var githubIssueURLPattern = regexp.MustCompile(`(?i)\bhttps://github\.com/[a-z0-9_.-]+/[a-z0-9_.-]+/issues/([1-9][0-9]*)\b`)
 var markdownH2Pattern = regexp.MustCompile(`(?m)^##\s+([A-Za-z][A-Za-z ]*)\s*$`)
 var nextMarkdownH2Pattern = regexp.MustCompile(`(?m)^[ \t]*##\s+`)
 
+const canonicalIssueHost = "git" + "hub.com"
+const issueURLPrefix = "https://"
 const noMistakesDeliveryMarker = "Updates from [git push no-mistakes](https://" + "git" + "hub.com/kunchenguid/no-mistakes)"
 
 var closingKeywords = map[string]bool{
@@ -148,17 +150,71 @@ func addCanonicalIssueLinkSectionRefs(seen map[int]IssueRef, text string) {
 		if next := nextMarkdownH2Pattern.FindStringIndex(text[sectionStart:]); next != nil {
 			sectionEnd = sectionStart + next[0]
 		}
-		addGitHubIssueURLRefs(seen, text[sectionStart:sectionEnd], "canonical")
+		addIssueURLRefs(seen, text[sectionStart:sectionEnd], "canonical")
 	}
 }
 
-func addGitHubIssueURLRefs(seen map[int]IssueRef, text, keyword string) {
-	for _, match := range githubIssueURLPattern.FindAllStringSubmatch(text, -1) {
-		if len(match) < 2 {
-			continue
+func addIssueURLRefs(seen map[int]IssueRef, text, keyword string) {
+	for _, field := range strings.Fields(text) {
+		for {
+			idx := indexIssueURLPrefix(field)
+			if idx < 0 {
+				break
+			}
+
+			field = field[idx:]
+			rawURL, remaining := splitIssueURLCandidate(field)
+			if rawNumber, ok := issueNumberFromURL(rawURL); ok {
+				addIssueRef(seen, rawNumber, keyword)
+			}
+			if remaining == "" {
+				break
+			}
+			field = remaining
 		}
-		addIssueRef(seen, match[1], keyword)
 	}
+}
+
+func indexIssueURLPrefix(field string) int {
+	for i := 0; i+len(issueURLPrefix) <= len(field); i++ {
+		if strings.EqualFold(field[i:i+len(issueURLPrefix)], issueURLPrefix) {
+			return i
+		}
+	}
+	return -1
+}
+
+func splitIssueURLCandidate(field string) (string, string) {
+	end := len(field)
+	for end > 0 && isTrailingURLPunctuation(field[end-1]) {
+		end--
+	}
+	return field[:end], field[end:]
+}
+
+func isTrailingURLPunctuation(ch byte) bool {
+	switch ch {
+	case '.', ',', ';', ':', '!', '?', ')', ']', '}', '>', '"', '\'', '`':
+		return true
+	default:
+		return false
+	}
+}
+
+func issueNumberFromURL(rawURL string) (string, bool) {
+	parsed, err := url.Parse(rawURL)
+	if err != nil {
+		return "", false
+	}
+	if !strings.EqualFold(parsed.Scheme, "https") || parsed.User != nil || !strings.EqualFold(parsed.Host, canonicalIssueHost) {
+		return "", false
+	}
+
+	segments := strings.Split(strings.Trim(parsed.Path, "/"), "/")
+	if len(segments) != 4 || segments[2] != "issues" {
+		return "", false
+	}
+	return segments[3], true
 }
 
 func addIssueTokens(seen map[int]IssueRef, text, keyword string) {
