@@ -54,3 +54,9 @@
 - [x] `go run ./cmd/prissueguard --title 'chore(ashby): stage unvalidated parity checkpoint' --body-file .planning/phases/issue-3207-ashby-parity-wave05-r1/PR-BODY.md` returned `issueguard: ok (1 linked issue)`.
 - [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` and `git diff --check` passed.
 - [ ] Outer PR phase applies `PR-BODY.md` to PR #3542 and reruns `require-linked-issue`.
+
+## CI repair handoff round 2
+
+- [x] Read-only inspection confirmed PR #3542 still uses the old checkpoint body with a bare `https://github.com/polymetrics-ai/cli/issues/3207` URL and no accepted issue keyword.
+- [x] Made `PR-BODY.md` an explicit verbatim replacement input for the outer PR phase, retaining `Refs #3207` and aligning the evidence headings with the issue-first delivery contract.
+- [ ] Outer PR phase replaces PR #3542's live body with `PR-BODY.md`; source-only pushes cannot repair pull-request metadata.

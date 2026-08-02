@@ -1,4 +1,6 @@
-## Summary
+<!-- CI repair handoff: the outer PR phase must replace PR #3542's live body with this file verbatim. -->
+
+## Intent
 
 Complete the documented Ashby connector parity slice against the current official API inventory.
 The connector now records all 212 documented REST and webhook operations exactly once: 71 fixture-backed streams, 9 bounded direct reads, 98 typed reverse-ETL writes, and 34 explicitly blocked operations.
@@ -14,7 +16,7 @@ Refs #3207
 - kept destructive writes behind plan, preview, explicit approval, and execute safeguards; and
 - documented unsupported webhook, multipart, upload-handle, conditional-side-effect, and checkpoint-foundation operations without exposing generic request escape hatches.
 
-## Verification
+## Testing
 
 - `go run ./cmd/connectorgen validate internal/connectors/defs`
 - `go test ./internal/connectors/conformance -run 'TestConformance/ashby' -count=1`
@@ -31,4 +33,4 @@ No provider credentials, live provider calls, provider writes, infrastructure ch
 
 ## Pipeline
 
-This body is the CI-phase handoff for draft PR #3542. The outer PR phase owns applying it and rerunning GitHub checks.
+Draft PR #3542's live body currently contains only a bare issue URL, which does not satisfy the issue-first guard. The outer PR phase must replace the live body with this file so `Refs #3207` is present before rerunning `require-linked-issue`.
