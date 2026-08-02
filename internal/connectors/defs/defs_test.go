@@ -112,6 +112,37 @@ func TestAirtableRuntimeBundleSafetyContract(t *testing.T) {
 	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "create_field"}, invalidCreateField); err == nil || !strings.Contains(err.Error(), "enum") {
 		t.Fatalf("ValidateWrite unsupported create_field type error = %v, want enum validation", err)
 	}
+	checkboxCreateField := []connectors.Record{{"table_id": "tbl_fixture", "name": "Visited", "type": "checkbox"}}
+	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "create_field"}, checkboxCreateField); err == nil || !strings.Contains(err.Error(), "enum") {
+		t.Fatalf("ValidateWrite checkbox create_field error = %v, want variant block enum validation", err)
+	}
+
+	validAuditLogRequest := []connectors.Record{{"enterprise_account_id": "ent00000000000000", "timePeriod": "2021-01-31"}}
+	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "create_audit_log_request"}, validAuditLogRequest); err != nil {
+		t.Fatalf("ValidateWrite valid create_audit_log_request: %v", err)
+	}
+	invalidAuditLogRequest := []connectors.Record{{"enterprise_account_id": "ent00000000000000", "timePeriod": "2021/01"}}
+	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "create_audit_log_request"}, invalidAuditLogRequest); err == nil || !strings.Contains(err.Error(), "pattern") {
+		t.Fatalf("ValidateWrite invalid create_audit_log_request timePeriod error = %v, want pattern validation", err)
+	}
+
+	validWebhookIncludeAll := airtableWebhookIncludeRecord("all")
+	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "create_webhook"}, validWebhookIncludeAll); err != nil {
+		t.Fatalf("ValidateWrite valid create_webhook include all: %v", err)
+	}
+	validWebhookIncludeArray := airtableWebhookIncludeRecord([]any{"fld_fixture"})
+	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "create_webhook"}, validWebhookIncludeArray); err != nil {
+		t.Fatalf("ValidateWrite valid create_webhook include array: %v", err)
+	}
+	invalidWebhookInclude := airtableWebhookIncludeRecord("everything")
+	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "create_webhook"}, invalidWebhookInclude); err == nil || !strings.Contains(err.Error(), "pattern") {
+		t.Fatalf("ValidateWrite invalid create_webhook include string error = %v, want pattern validation", err)
+	}
+
+	invalidWorkspacePermission := []connectors.Record{{"workspace_id": "wsp_fixture", "user_or_group_id": "usr_fixture", "permissionLevel": "admin"}}
+	if err := engine.ValidateWrite(context.Background(), airtable, connectors.WriteRequest{Action: "update_workspace_collaborator"}, invalidWorkspacePermission); err == nil || !strings.Contains(err.Error(), "enum") {
+		t.Fatalf("ValidateWrite invalid update_workspace_collaborator permission error = %v, want enum validation", err)
+	}
 
 	noopCases := []struct {
 		action string
@@ -141,6 +172,9 @@ func TestAirtableHyperDBDirectReadAllowsDocumentedBodies(t *testing.T) {
 	op := findAirtableOperation(t, airtable, "hyperdb_table_read_records")
 	if op.REST == nil || op.REST.BodySchema == nil {
 		t.Fatalf("hyperdb_table_read_records REST/body_schema = %+v", op.REST)
+	}
+	if !containsString(op.AuthScopes, "hyperDB.records:read") || containsString(op.AuthScopes, "data.records:read") {
+		t.Fatalf("hyperdb_table_read_records auth scopes = %v, want hyperDB.records:read only", op.AuthScopes)
 	}
 	var bodySchema struct {
 		Required []string `json:"required"`
@@ -288,6 +322,17 @@ func loadAirtableBundle(t *testing.T) engine.Bundle {
 	}
 	t.Fatal("LoadAll(FS) missing airtable bundle")
 	return engine.Bundle{}
+}
+
+func airtableWebhookIncludeRecord(include any) []connectors.Record {
+	return []connectors.Record{{
+		"specification": map[string]any{
+			"options": map[string]any{
+				"filters":  map[string]any{"dataTypes": []any{"tableData"}},
+				"includes": map[string]any{"includeCellValuesInFieldIds": include},
+			},
+		},
+	}}
 }
 
 func findAirtableWrite(t *testing.T, bundle engine.Bundle, name string) engine.WriteAction {
