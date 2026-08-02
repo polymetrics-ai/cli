@@ -70,6 +70,11 @@ Manual-GSD fallback is limited to executing the generated prompts with Pi tools 
    - Issue-comment addenda are not executed in this local-only resume because the requested stopping point is the tested local commit with no shipping/noise actions; actual post-change counts are preserved in this phase artifact for a coordinator to serialize externally if desired.
    - Commit the clean slice locally; do not push, invoke `/no-mistakes`, open/update PRs, or merge.
 
+7. **CI issue-link guard repair slice**
+   - Capture PR #3540's generated unvalidated-checkpoint body as a regression test before changing guard behavior.
+   - Recognize canonical GitHub issue URLs only inside the generated `Canonical issue links preserved from the task record` section of an explicitly completed-task checkpoint; keep standalone bare URLs and vague `Issue`/`References` wording rejected.
+   - Verify the focused guard packages and the exact CI-shaped `prissueguard` invocation locally; leave push, PR mutation, and pipeline control to the outer no-mistakes executor.
+
 ## Final implementation state
 
 - `api_surface.json`: 103 official operations tracked exactly once.
