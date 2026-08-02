@@ -908,7 +908,7 @@
     },
     {
       "path": "hyperdb get-records",
-      "summary": "Read HyperDB records by primary key",
+      "summary": "Read HyperDB records",
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "hyperdb_table_read_records",
@@ -932,9 +932,8 @@
         {
           "name": "primary-key",
           "type": "string_array",
-          "summary": "Primary key to fetch; repeat for multiple keys",
-          "maps_to": "body.primaryKeys",
-          "required": true
+          "summary": "Optional primary key to fetch; repeat for multiple keys",
+          "maps_to": "body.primaryKeys"
         },
         {
           "name": "field",
@@ -962,7 +961,9 @@
         }
       ],
       "examples": [
-        "pm airtable hyperdb get-records --credential airtable --enterprise-account-id ent... --data-table-id dtbl... --primary-key pk... --json"
+        "pm airtable hyperdb get-records --credential airtable --enterprise-account-id ent... --data-table-id dtbl... --json",
+        "pm airtable hyperdb get-records --credential airtable --enterprise-account-id ent... --data-table-id dtbl... --primary-key pk... --json",
+        "pm airtable hyperdb get-records --credential airtable --enterprise-account-id ent... --data-table-id dtbl... --cursor itr... --json"
       ]
     },
     {
