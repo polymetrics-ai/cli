@@ -34,3 +34,9 @@ Forward corrective commit evidence:
 - [x] `make connector-boundary`
 - [ ] Normal push of corrective commit.
 - [ ] Fresh no-mistakes validation with native Pi `openai-codex/gpt-5.6-sol` at `xhigh`, including post-guardrail revalidation and remote checks.
+
+## 2026-08-02 review-finding fix verification
+
+- [x] `go test ./internal/connectors/native/amazon-sqs -count=1`
+- Focused coverage includes required reverse CLI metadata/examples, all ten formerly unexecuted typed operation paths, reachable sanitized certification errors, and pre-preview message-attribute validation.
+- Per review-phase scope, no complete repository test, lint, push, PR, CI, live AWS, or credentialed connector phase was run.

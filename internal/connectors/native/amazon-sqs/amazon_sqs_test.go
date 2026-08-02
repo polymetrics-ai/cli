@@ -171,6 +171,26 @@ func TestCheckRejectsUnsafeURLs(t *testing.T) {
 	}
 }
 
+func TestCheckReportsSanitizedAWSErrorCode(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusForbidden)
+		_, _ = w.Write([]byte(`<ErrorResponse><Error><Code>AccessDenied</Code><Message>sensitive provider detail</Message></Error></ErrorResponse>`))
+	}))
+	defer srv.Close()
+
+	err := native.New().Check(context.Background(), testRuntimeConfig(srv.URL))
+	if err == nil {
+		t.Fatal("Check: want provider error, got nil")
+	}
+	text := err.Error()
+	if !strings.Contains(text, "status 403 Forbidden") || !strings.Contains(text, "AccessDenied") {
+		t.Fatalf("Check error = %q, want safe status and AWS error code", text)
+	}
+	if strings.Contains(text, "sensitive provider detail") || strings.Contains(text, "<ErrorResponse>") {
+		t.Fatalf("Check error exposed provider response body: %q", text)
+	}
+}
+
 func TestCatalogHasMessagesStream(t *testing.T) {
 	c := native.New()
 	cat, err := c.Catalog(context.Background(), connectors.RuntimeConfig{})
@@ -344,6 +364,83 @@ func TestAPISurfaceCoversAllOfficialSQSOperations(t *testing.T) {
 	}
 }
 
+func TestCLIReverseExamplesContainRequiredFlags(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller(0) failed")
+	}
+	raw, err := os.ReadFile(filepath.Join(filepath.Dir(thisFile), "..", "..", "defs", "amazon-sqs", "cli_surface.json"))
+	if err != nil {
+		t.Fatalf("Read cli_surface.json: %v", err)
+	}
+	var surface struct {
+		Commands []struct {
+			Path     string   `json:"path"`
+			Intent   string   `json:"intent"`
+			Examples []string `json:"examples"`
+			Flags    []struct {
+				Name     string `json:"name"`
+				Required bool   `json:"required"`
+			} `json:"flags"`
+		} `json:"commands"`
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("Unmarshal cli_surface.json: %v", err)
+	}
+	want := map[string][]string{
+		"permission add":                  {"label", "aws-account-ids", "actions"},
+		"message-move-task cancel":        {"task-handle"},
+		"message change-visibility":       {"receipt-handle", "visibility-timeout"},
+		"message change-visibility-batch": {"receipt-handle", "visibility-timeout"},
+		"queue create":                    {"queue-name"},
+		"message delete":                  {"receipt-handle"},
+		"message delete-batch":            {"receipt-handle"},
+		"queue delete":                    {},
+		"queue purge":                     {},
+		"permission remove":               {"label"},
+		"message send":                    {"message-body"},
+		"message send-batch":              {"message-body"},
+		"queue set-attributes":            {"attribute-name", "attribute-value"},
+		"message-move-task start":         {"source-arn"},
+		"queue tag":                       {"tag-key", "tag-value"},
+		"queue untag":                     {"tag-keys"},
+	}
+	seen := map[string]bool{}
+	for _, command := range surface.Commands {
+		if command.Intent != "reverse_etl" {
+			continue
+		}
+		required, ok := want[command.Path]
+		if !ok {
+			t.Fatalf("unexpected reverse command %q", command.Path)
+		}
+		seen[command.Path] = true
+		if len(command.Examples) != 1 {
+			t.Fatalf("command %q examples = %v, want one", command.Path, command.Examples)
+		}
+		example := command.Examples[0]
+		for _, name := range required {
+			var marked bool
+			for _, flag := range command.Flags {
+				if flag.Name == name {
+					marked = flag.Required
+				}
+			}
+			if !marked {
+				t.Fatalf("command %q flag --%s is not required", command.Path, name)
+			}
+			if !strings.Contains(example, "--"+name+" ") {
+				t.Fatalf("command %q example %q omits --%s value", command.Path, example, name)
+			}
+		}
+	}
+	for path := range want {
+		if !seen[path] {
+			t.Fatalf("missing reverse command %q", path)
+		}
+	}
+}
+
 func TestManifestWriteActionsAndDestructiveConfirmations(t *testing.T) {
 	c := native.New()
 	manifest := c.Manifest()
@@ -453,6 +550,32 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadGetQueueURL(t *testing.T) {
+	const queueURL = "https://sqs.us-east-1.amazonaws.com/000000000000/fixture-queue"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		if r.Form.Get("Action") != "GetQueueUrl" || r.Form.Get("QueueName") != "fixture-queue" || r.Form.Get("QueueOwnerAWSAccountId") != "000000000000" {
+			t.Fatalf("unexpected GetQueueUrl form: %s", r.Form.Encode())
+		}
+		_, _ = w.Write([]byte(`<GetQueueUrlResponse><GetQueueUrlResult><QueueUrl>` + queueURL + `</QueueUrl></GetQueueUrlResult></GetQueueUrlResponse>`))
+	}))
+	defer srv.Close()
+
+	res, err := native.New().OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "get_queue_url",
+		Config:    testRuntimeConfig(srv.URL),
+		Body:      map[string]any{"queue_name": "fixture-queue", "queue_owner_aws_account_id": "000000000000"},
+	})
+	if err != nil {
+		t.Fatalf("OperationDirectRead get_queue_url: %v", err)
+	}
+	if res.Path != "SQS.GetQueueUrl" || res.Body.(map[string]any)["queue_url"] != queueURL {
+		t.Fatalf("get_queue_url result = %+v", res)
+	}
+}
+
 func TestOperationDirectReadListMessageMoveTasksDecodesResults(t *testing.T) {
 	sourceArn := "arn:aws:sqs:us-east-1:123456789012:orders-dlq"
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -517,6 +640,54 @@ func TestOperationDirectReadRejectsUntypedBodies(t *testing.T) {
 	}
 	if calls != 0 {
 		t.Fatalf("invalid direct-read bodies made %d SQS requests, want 0", calls)
+	}
+}
+
+func TestWriteExecutesPreviouslyUncoveredTypedActions(t *testing.T) {
+	tests := []struct {
+		action    string
+		awsAction string
+		record    connectors.Record
+		wantForm  map[string]string
+	}{
+		{action: "add_permission", awsAction: "AddPermission", record: connectors.Record{"label": "fixture-permission", "aws_account_ids": []string{"000000000000"}, "actions": []string{"SendMessage"}}, wantForm: map[string]string{"Label": "fixture-permission", "AWSAccountId.1": "000000000000", "ActionName.1": "SendMessage"}},
+		{action: "cancel_message_move_task", awsAction: "CancelMessageMoveTask", record: connectors.Record{"task_handle": "task-handle-placeholder"}, wantForm: map[string]string{"TaskHandle": "task-handle-placeholder"}},
+		{action: "change_message_visibility", awsAction: "ChangeMessageVisibility", record: connectors.Record{"receipt_handle": "receipt-handle-placeholder", "visibility_timeout": 30}, wantForm: map[string]string{"ReceiptHandle": "receipt-handle-placeholder", "VisibilityTimeout": "30"}},
+		{action: "delete_message", awsAction: "DeleteMessage", record: connectors.Record{"receipt_handle": "receipt-handle-placeholder"}, wantForm: map[string]string{"ReceiptHandle": "receipt-handle-placeholder"}},
+		{action: "delete_queue", awsAction: "DeleteQueue", record: connectors.Record{}, wantForm: map[string]string{}},
+		{action: "remove_permission", awsAction: "RemovePermission", record: connectors.Record{"label": "fixture-permission"}, wantForm: map[string]string{"Label": "fixture-permission"}},
+		{action: "set_queue_attributes", awsAction: "SetQueueAttributes", record: connectors.Record{"attribute_name": "VisibilityTimeout", "attribute_value": "30"}, wantForm: map[string]string{"Attribute.1.Name": "VisibilityTimeout", "Attribute.1.Value": "30"}},
+		{action: "start_message_move_task", awsAction: "StartMessageMoveTask", record: connectors.Record{"source_arn": "arn:aws:sqs:us-east-1:000000000000:fixture-dlq"}, wantForm: map[string]string{"SourceArn": "arn:aws:sqs:us-east-1:000000000000:fixture-dlq"}},
+		{action: "untag_queue", awsAction: "UntagQueue", record: connectors.Record{"tag_keys": []string{"environment"}}, wantForm: map[string]string{"TagKey.1": "environment"}},
+	}
+	for _, tc := range tests {
+		t.Run(tc.action, func(t *testing.T) {
+			var calls int
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				calls++
+				if err := r.ParseForm(); err != nil {
+					t.Fatalf("ParseForm: %v", err)
+				}
+				if got := r.Form.Get("Action"); got != tc.awsAction {
+					t.Fatalf("Action = %q, want %q", got, tc.awsAction)
+				}
+				for name, want := range tc.wantForm {
+					if got := r.Form.Get(name); got != want {
+						t.Fatalf("%s = %q, want %q; form=%s", name, got, want, r.Form.Encode())
+					}
+				}
+				_, _ = w.Write([]byte(`<Response/>`))
+			}))
+			defer srv.Close()
+
+			res, err := native.New().Write(context.Background(), connectors.WriteRequest{Action: tc.action, Config: testRuntimeConfig(srv.URL)}, []connectors.Record{tc.record})
+			if err != nil {
+				t.Fatalf("Write %s: %v", tc.action, err)
+			}
+			if res.RecordsWritten != 1 || res.RecordsFailed != 0 || calls != 1 {
+				t.Fatalf("result=%+v calls=%d, want one successful request", res, calls)
+			}
+		})
 	}
 }
 
@@ -674,9 +845,8 @@ func TestWritePreservesMessageAttributeWhitespace(t *testing.T) {
 	cfg := testRuntimeConfig(srv.URL)
 	attrs := map[string]any{
 		"nested": map[string]any{
-			"data_type":          "String.custom",
-			"string_value":       " x ",
-			"string_list_values": []any{" a ", "b "},
+			"data_type":    "String.custom",
+			"string_value": " x ",
 		},
 		"trace": " v ",
 	}
@@ -691,12 +861,6 @@ func TestWritePreservesMessageAttributeWhitespace(t *testing.T) {
 	}
 	if got := forms[0].Get("MessageAttribute.1.Value.StringValue"); got != " x " {
 		t.Fatalf("nested string attribute = %q, want whitespace preserved", got)
-	}
-	if got := forms[0].Get("MessageAttribute.1.Value.StringListValue.1"); got != " a " {
-		t.Fatalf("nested string list value 1 = %q, want whitespace preserved", got)
-	}
-	if got := forms[0].Get("MessageAttribute.1.Value.StringListValue.2"); got != "b " {
-		t.Fatalf("nested string list value 2 = %q, want whitespace preserved", got)
 	}
 	if got := forms[0].Get("MessageAttribute.2.Value.StringValue"); got != " v " {
 		t.Fatalf("plain string attribute = %q, want whitespace preserved", got)
@@ -773,39 +937,32 @@ func TestWriteNormalizesActionAndSendsQueueURL(t *testing.T) {
 	}
 }
 
-func TestWriteMessageAttributesTreatMissingNestedValuesAsEmpty(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if err := r.ParseForm(); err != nil {
-			t.Fatalf("ParseForm: %v", err)
-		}
-		if got := r.Form.Get("MessageAttribute.1.Value.DataType"); got != "String" {
-			t.Fatalf("DataType = %q, want String", got)
-		}
-		if _, ok := r.Form["MessageAttribute.1.Value.StringValue"]; ok {
-			t.Fatalf("StringValue sent for nil nested value: %s", r.Form.Encode())
-		}
-		if _, ok := r.Form["MessageAttribute.1.Value.BinaryValue"]; ok {
-			t.Fatalf("BinaryValue sent for missing nested value: %s", r.Form.Encode())
-		}
-		for key, values := range r.Form {
-			for _, value := range values {
-				if value == "<nil>" {
-					t.Fatalf("form %s contains <nil>: %s", key, r.Form.Encode())
-				}
-			}
-		}
-		_, _ = w.Write([]byte(`<SendMessageResponse><SendMessageResult><MessageId>m1</MessageId></SendMessageResult></SendMessageResponse>`))
-	}))
-	defer srv.Close()
-
+func TestDryRunRejectsInvalidMessageAttributes(t *testing.T) {
 	c := native.New()
-	cfg := testRuntimeConfig(srv.URL)
-	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "hello", "message_attributes": map[string]any{"trace": map[string]any{"string_value": nil}}}})
-	if err != nil {
-		t.Fatalf("Write send_message: %v", err)
+	cfg := testRuntimeConfig("https://sqs.example.test")
+	tests := []struct {
+		name   string
+		field  string
+		values map[string]any
+		want   string
+	}{
+		{name: "empty shorthand value", field: "message_attributes", values: map[string]any{"trace": ""}, want: "value must not be empty"},
+		{name: "missing data type", field: "message_attributes", values: map[string]any{"trace": map[string]any{"string_value": "value"}}, want: "data_type must not be empty"},
+		{name: "missing scalar value", field: "message_attributes", values: map[string]any{"trace": map[string]any{"data_type": "String"}}, want: "requires non-empty string_value"},
+		{name: "wrong scalar for String", field: "message_attributes", values: map[string]any{"trace": map[string]any{"data_type": "String", "binary_value": "value"}}, want: "requires non-empty string_value"},
+		{name: "wrong scalar for Binary", field: "message_attributes", values: map[string]any{"trace": map[string]any{"data_type": "Binary", "string_value": "value"}}, want: "requires non-empty binary_value"},
+		{name: "reserved string list", field: "message_attributes", values: map[string]any{"trace": map[string]any{"data_type": "String", "string_value": "value", "string_list_values": []any{"reserved"}}}, want: "reserved and unsupported"},
+		{name: "reserved provider name", field: "message_attributes", values: map[string]any{"AWS.trace": "value"}, want: "invalid name"},
+		{name: "unsupported system name", field: "message_system_attributes", values: map[string]any{"trace": "value"}, want: "only supports AWSTraceHeader"},
+		{name: "invalid system type", field: "message_system_attributes", values: map[string]any{"AWSTraceHeader": map[string]any{"data_type": "String.custom", "string_value": "value"}}, want: "must use data_type String"},
 	}
-	if res.RecordsWritten != 1 {
-		t.Fatalf("result=%+v, want one written record", res)
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "hello", tc.field: tc.values}})
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("DryRunWrite err = %v, want %q", err, tc.want)
+			}
+		})
 	}
 }
 
