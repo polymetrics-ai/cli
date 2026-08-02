@@ -1813,13 +1813,7 @@
       "source_url": "https://airtable.com/developers/web/api/introduction",
       "risk": "medium",
       "approval": "blocked until airtable-bounded-base64-upload-foundation validates the official base64 and decoded-size limits before transmission; no live write is available today.",
-      "notes": "Blocked on airtable-bounded-base64-upload-foundation because the current Airtable definition has no target-owned executor that can validate decoded attachment bytes; no unbounded base64 body is exposed.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/v0/{baseId}/{recordId}/{attachmentFieldIdOrName}/uploadAttachment"
-        }
-      ]
+      "notes": "Blocked on airtable-bounded-base64-upload-foundation because the current Airtable definition has no target-owned executor that can validate decoded attachment bytes; no unbounded base64 body is exposed."
     },
     {
       "path": "write delete-record",
