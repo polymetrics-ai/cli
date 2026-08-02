@@ -1,0 +1,45 @@
+{
+  "parent_issue": {
+    "number": 3579,
+    "url": "https://github.com/polymetrics-ai/cli/issues/3579",
+    "title": "Connector path ownership guardrail remediation",
+    "state": "open"
+  },
+  "parent_branch": "fix/3579-connector-path-ownership-guardrails",
+  "parent_pr": {
+    "url": "pending",
+    "base": "main",
+    "head": "fix/3579-connector-path-ownership-guardrails",
+    "draft": true,
+    "state": "pending"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi",
+    "status": "running"
+  },
+  "ready_queue": [],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-08-02T00:00:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [3579],
+      "reason": "created parent issue, parent branch, and seed planning artifacts before sub-issue workers; sub-issues not yet created, so no worker-ready issue exists"
+    }
+  ],
+  "subissues": [],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "secret handling changes",
+    "new dependencies",
+    "destructive external actions",
+    "production deploys",
+    "quality gate reductions",
+    "generic raw write tooling",
+    "reverse ETL execution outside plan-preview-approval-execute",
+    "branch protection/ruleset permission denial"
+  ],
+  "updated_at": "2026-08-02T00:00:00Z"
+}
