@@ -452,7 +452,7 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	}
 }
 
-func TestOperationDirectReadListMessageMoveTasksDecodesResultEntries(t *testing.T) {
+func TestOperationDirectReadListMessageMoveTasksDecodesResults(t *testing.T) {
 	sourceArn := "arn:aws:sqs:us-east-1:123456789012:orders-dlq"
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
@@ -464,7 +464,7 @@ func TestOperationDirectReadListMessageMoveTasksDecodesResultEntries(t *testing.
 		if got := r.Form.Get("SourceArn"); got != sourceArn {
 			t.Fatalf("SourceArn = %q, want %q", got, sourceArn)
 		}
-		_, _ = w.Write([]byte(`<ListMessageMoveTasksResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/"><ListMessageMoveTasksResult><ListMessageMoveTasksResultEntry><TaskHandle>task-handle-fixture</TaskHandle><Status>RUNNING</Status><SourceArn>arn:aws:sqs:us-east-1:123456789012:orders-dlq</SourceArn><DestinationArn>arn:aws:sqs:us-east-1:123456789012:orders</DestinationArn><MaxNumberOfMessagesPerSecond>10</MaxNumberOfMessagesPerSecond><ApproximateNumberOfMessagesMoved>42</ApproximateNumberOfMessagesMoved><ApproximateNumberOfMessagesToMove>100</ApproximateNumberOfMessagesToMove><StartedTimestamp>1767225600</StartedTimestamp></ListMessageMoveTasksResultEntry></ListMessageMoveTasksResult><ResponseMetadata><RequestId>synthetic-request</RequestId></ResponseMetadata></ListMessageMoveTasksResponse>`))
+		_, _ = w.Write([]byte(`<ListMessageMoveTasksResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/"><ListMessageMoveTasksResult><Result><TaskHandle>task-handle-fixture</TaskHandle><Status>RUNNING</Status><SourceArn>arn:aws:sqs:us-east-1:123456789012:orders-dlq</SourceArn><DestinationArn>arn:aws:sqs:us-east-1:123456789012:orders</DestinationArn><MaxNumberOfMessagesPerSecond>10</MaxNumberOfMessagesPerSecond><ApproximateNumberOfMessagesMoved>42</ApproximateNumberOfMessagesMoved><ApproximateNumberOfMessagesToMove>100</ApproximateNumberOfMessagesToMove><StartedTimestamp>1767225600</StartedTimestamp></Result></ListMessageMoveTasksResult><ResponseMetadata><RequestId>synthetic-request</RequestId></ResponseMetadata></ListMessageMoveTasksResponse>`))
 	}))
 	defer srv.Close()
 
@@ -479,7 +479,7 @@ func TestOperationDirectReadListMessageMoveTasksDecodesResultEntries(t *testing.
 	}
 	task := results[0].(map[string]any)
 	if task["task_handle"] != "***" || task["status"] != "RUNNING" || task["source_arn"] != sourceArn || task["approximate_number_of_messages_moved"] != "42" {
-		t.Fatalf("task = %#v, want decoded redacted ListMessageMoveTasksResultEntry", task)
+		t.Fatalf("task = %#v, want decoded redacted ListMessageMoveTasks result", task)
 	}
 }
 
