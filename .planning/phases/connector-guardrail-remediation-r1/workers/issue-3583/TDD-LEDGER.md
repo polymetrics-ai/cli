@@ -36,7 +36,11 @@ Skill rules applied:
 | 2026-08-02 | GSD prompt | `scripts/gsd prompt execute-phase connector-guardrail-remediation-r1 --dry-run` | prompt generated | pass; `/tmp/gsd-execute-phase-3583.prompt.md` (87 lines) |
 | 2026-08-02 | GSD fallback | `scripts/gsd prompt programming-loop init --phase connector-guardrail-remediation-r1 --dry-run` | alias if available | fallback; `scripts/gsd: unknown GSD command: programming-loop` |
 | 2026-08-02 | Red docs validation | `rg` checks for `exactly one target connector`, `ownership guard evidence`, `foundation issue/PR|foundation PR`, and `no-mistakes.*foundation split|foundation split.*no-mistakes` across `.agents .pi .github` | fail before production edits | failed as expected: all four checks reported `RED missing ...`; command exited 1 |
-| pending | Green docs validation | issue verification grep | pass after production edits | pending |
+| 2026-08-02 | Green docs validation | `rg` checks for target connector, ownership guard evidence, foundation issue/PR path, and no-mistakes foundation split across `.agents .pi .github` | pass after production edits | pass; all four required patterns found |
+| 2026-08-02 | Issue verification grep | `rg -n "connector implementation|foundation|target connector|ownership guard|no-mistakes" .agents .pi .github docs` | pass | pass; exit 0, 779 lines captured at `/tmp/issue-3583-verification-rg.txt` |
+| 2026-08-02 | YAML/template parse | `python3` PyYAML load for edited YAML templates/specs | pass | pass; 5 edited YAML files loaded |
+| 2026-08-02 | Hygiene | `git diff --check` | pass | pass; no output |
+| 2026-08-02 | GSD verification | `scripts/gsd doctor` | pass | pass |
 
 ## Planned red validation
 

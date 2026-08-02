@@ -40,6 +40,8 @@ make verify
 | `scripts/gsd prompt execute-phase connector-guardrail-remediation-r1 --dry-run` | pass | Prompt generated |
 | `scripts/gsd prompt programming-loop init --phase connector-guardrail-remediation-r1 --dry-run` | fallback | `scripts/gsd: unknown GSD command: programming-loop` |
 | red docs validation | pass (expected failure captured) | all four required grep checks missing before production edits; command exited 1 |
-| issue verification grep | pending | run after edits |
-| `git diff --check` | pending | run after edits |
+| issue verification grep | pass | `rg -n "connector implementation|foundation|target connector|ownership guard|no-mistakes" .agents .pi .github docs` exited 0; 779 lines captured at `/tmp/issue-3583-verification-rg.txt` |
+| scoped docs grep | pass | required target connector / ownership guard / foundation issue/PR / no-mistakes foundation split patterns found after edits |
+| YAML/template parse | pass | PyYAML loaded edited YAML templates/specs |
+| `git diff --check` | pass | no output |
 | no-mistakes scoped validation | pending | run after commit if feasible; stop on daemon error or ask-user finding |

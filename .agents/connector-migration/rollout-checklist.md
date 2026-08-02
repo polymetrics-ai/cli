@@ -6,8 +6,9 @@ connector's slice is considered integrated.
 
 ## 1. Inputs and scope
 
-- [ ] One connector assigned to one implementation agent (no shared-file collisions).
-- [ ] Issue names the connector, branch, PR base, primary agent, verification, and human gates.
+- [ ] Exactly one target connector assigned to one implementation agent (no shared-file collisions).
+- [ ] Issue names the target connector scope, branch, PR base, primary agent, verification, and human gates.
+- [ ] Shared runtime/tooling, schema, generated-index, or unrelated connector needs are routed to a separate foundation issue/PR before connector implementation proceeds.
 - [ ] Branch starts from `feat/44-github-cli-parity` (or the active rollout parent branch), not `main`.
 - [ ] Worker has an isolated working directory or git worktree before any edit.
 - [ ] No production `internal/connectors/defs/<name>/` edits unless the issue explicitly assigns this connector.
@@ -35,6 +36,7 @@ connector's slice is considered integrated.
 ## 5. Validation gates (must all pass)
 
 - [ ] `jq .` on every edited JSON file (JSON parses).
+- [ ] Ownership guard evidence is recorded for the target connector, including changed-path compliance and any foundation PR path or blocker.
 - [ ] `go run ./cmd/connectorgen validate internal/connectors/defs --json` → 0 findings, 0 warnings.
 - [ ] `go run ./cmd/connectorgen boundary . --json` → clean when shared Go or the boundary exception ledger changed.
 - [ ] Secret scan: no secret values, tokens, or PEMs in any artifact (docs, examples, previews, fixtures, errors).
@@ -46,6 +48,8 @@ connector's slice is considered integrated.
 ## 6. Handoff and merge
 
 - [ ] Worker handoff uses `.agents/agentic-delivery/contracts/worker-handoff-template.md`.
+- [ ] Handoff and PR body list target connector scope, ownership guard evidence, changed-path compliance, and the foundation PR path when shared work was needed.
+- [ ] no-mistakes guidance was followed: connector PRs do not auto-absorb generic shared runtime/tooling or unrelated connector changes; stop/ask for a foundation split instead.
 - [ ] Sub-PR targets the parent branch with `Refs #<sub-issue>` and `Refs #44` (no closing keywords).
 - [ ] Claude review threads dispositioned before merge (or parent-PR review coverage recorded when Claude skips the sub-PR).
 - [ ] Shared/generated files remain coordinator-owned; the worker did not commit generated files unless authorized.

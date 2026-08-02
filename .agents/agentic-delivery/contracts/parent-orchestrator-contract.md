@@ -57,7 +57,8 @@ The orchestrator owns:
 - creating a deliberate parent seed commit when GitHub needs a diff to open the parent PR
 - maintaining the parent issue status and orchestration state ledger
 - selecting sub-issues that can run in parallel without write-scope collisions
-- spawning or assigning worker agents with bounded prompts that name the `/gsd ...` or `scripts/gsd prompt ...` command path and required Go/design skills from `required-skills-routing.md`
+- for connector implementation lanes, requiring exactly one target connector before spawn and stopping the lane when shared runtime/tooling, schema, generated-index, or unrelated connector work is needed; legitimate shared work becomes a separate foundation issue/PR before the connector worker proceeds
+- spawning or assigning worker agents with bounded prompts that name the `/gsd ...` or `scripts/gsd prompt ...` command path, required Go/design skills from `required-skills-routing.md`, target connector scope when applicable, ownership guard evidence expected, changed-path compliance evidence expected, and the foundation PR path for legitimate shared work
 - receiving worker handoffs
 - deciding whether a sub-PR can merge into the parent branch
 - requesting or observing parent PR Claude coverage after integrated batches
@@ -151,7 +152,7 @@ A sub-PR may merge into the parent branch only when:
 - targeted and issue-level verification pass
 - CI checks pass or an infrastructure blocker is recorded
 - automated review findings on the sub-PR are resolved, or the parent PR fallback path is recorded
-- the diff is within the sub-issue scope
+- the diff is within the sub-issue scope; connector implementation diffs declare exactly one target connector and contain no shared runtime/tooling or unrelated connector changes unless a separate foundation issue/PR owns those paths
 - no requested-changes review is open
 - no human gate is triggered
 

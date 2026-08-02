@@ -77,7 +77,10 @@ keywords for PRs targeting the default branch.
    missing and no human gate blocks creation. If the parent branch has no diff against `main`, add
    the parent seed commit described above first.
 4. Create the sub-issue branch from the parent branch.
-5. Follow the issue-to-PR contract and test-first loop.
+5. Follow the issue-to-PR contract and test-first loop. For connector implementation lanes,
+   confirm exactly one target connector, ownership guard evidence, changed-path compliance, and any
+   foundation issue/PR path before production edits; split shared runtime/tooling or unrelated
+   connector work before the connector sub-PR proceeds.
 6. Open the sub-PR against the parent branch with `Refs #<sub-issue>` and `Refs #<parent-issue>`.
 7. Run targeted verification and broader issue verification.
 8. Run the Claude review loop and reply to every actionable finding with a disposition. Use
@@ -127,6 +130,7 @@ sub-PR does not cross a human gate. Agents must stop instead of merging when:
 - Claude is rate-limited and no Copilot or human fallback route has been recorded
 - CI is failing or unavailable without a documented infrastructure reason
 - the PR changes files outside the sub-issue scope
+- a connector implementation PR includes generic shared runtime/tooling or unrelated connector changes without a separate foundation issue/PR
 - the parent branch owner marks the parent issue blocked
 
 The parent PR into `main` always requires human approval.

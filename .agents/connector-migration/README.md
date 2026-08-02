@@ -36,9 +36,11 @@ When connector migration work adds or changes a CLI-visible connector surface, c
 
 ## Rules
 
-- Assign exactly one connector per implementation agent.
-- Keep writes scoped to the connector paths declared in the issue or handoff.
+- Assign exactly one target connector per implementation agent.
+- Keep writes scoped to the target connector paths declared in the issue or handoff.
 - Do not edit shared/generated files unless the issue explicitly authorizes it.
+- If connector implementation needs shared runtime/tooling, schema, generated-index, or unrelated connector changes, stop and create/link a separate foundation issue/PR before proceeding.
+- Record ownership guard evidence, changed-path compliance, target connector scope, and any foundation PR path in the worker handoff and PR body.
 - Do not commit from migration agents; the coordinator owns commits and merge validation.
 - Stop for new dependencies, auth scope changes, secrets, destructive external actions, or quality
   gate reductions.

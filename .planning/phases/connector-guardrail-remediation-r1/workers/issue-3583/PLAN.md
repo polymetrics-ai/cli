@@ -59,6 +59,12 @@ Applied skill rules for this docs/guidance slice:
 - Update worker handoff and PR/issue templates to expose target connector scope, changed-path compliance, ownership guard evidence, and foundation PR path.
 - Add no-mistakes guidance in repo templates/contracts so connector PR validation stops/asks for foundation split instead of auto-absorbing generic shared changes.
 
+## Implementation status
+
+- Slice A: implemented in PM parent orchestration contracts/workflows and Pi orchestrator/worker/planner prompts.
+- Slice B: implemented in connector migration rollout prompt, ownership rules, checklist, validation gates, README, and passb-expander metadata.
+- Slice C: implemented in worker handoff, issue prompt, issue template, PR template, issue-agent contract, and task-skill matrix.
+
 ## TDD / validation strategy
 
 Use grep-based docs validation because this slice updates orchestration/template guidance and no executable schema exists for these markdown/YAML prompt contracts. Red evidence must fail before production guidance edits, then pass after edits.
