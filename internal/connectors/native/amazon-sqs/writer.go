@@ -160,9 +160,11 @@ func (c Connector) writeSQS(ctx context.Context, req connectors.WriteRequest, re
 				end = len(normalized)
 			}
 			chunk := normalized[start:end]
+			chunkEntryIDs := make([]string, 0, len(chunk))
 			form := baseActionForm(actionName(def.path))
 			addConfiguredQueueURL(form, req.Config)
 			for i, rec := range chunk {
+				chunkEntryIDs = append(chunkEntryIDs, entryID(rec, i+1))
 				if err := def.execute(form, rec, i+1); err != nil {
 					return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, err
 				}
@@ -171,12 +173,13 @@ func (c Connector) writeSQS(ctx context.Context, req connectors.WriteRequest, re
 			if err != nil {
 				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, err
 			}
-			successes, failures, err := parseBatchCounts(resp.body)
+			batchIDs, err := parseBatchResultIDs(resp.body)
 			if err != nil {
 				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response parse failed: %w", def.name, err)
 			}
-			if successes+failures != len(chunk) {
-				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response accounted for %d of %d entries", def.name, successes+failures, len(chunk))
+			successes, failures, err := verifyBatchResultIDs(batchIDs, chunkEntryIDs)
+			if err != nil {
+				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response %w", def.name, err)
 			}
 			written += successes
 			if failures > 0 {
@@ -923,19 +926,21 @@ func addMessageAttributeMap(form url.Values, prefix string, values map[string]me
 	}
 }
 
-func parseBatchCounts(raw []byte) (int, int, error) {
+type sqsBatchResultIDs struct {
+	successful []string
+	failed     []string
+}
+
+func parseBatchResultIDs(raw []byte) (sqsBatchResultIDs, error) {
 	decoder := xml.NewDecoder(bytes.NewReader(raw))
-	entrySuccesses := 0
-	entryFailures := 0
-	wrapperSuccesses := 0
-	wrapperFailures := 0
+	var result sqsBatchResultIDs
 	for {
 		tok, err := decoder.Token()
 		if errors.Is(err, io.EOF) {
 			break
 		}
 		if err != nil {
-			return 0, 0, fmt.Errorf("parse xml: %w", err)
+			return sqsBatchResultIDs{}, fmt.Errorf("parse xml: %w", err)
 		}
 		start, ok := tok.(xml.StartElement)
 		if !ok {
@@ -943,17 +948,71 @@ func parseBatchCounts(raw []byte) (int, int, error) {
 		}
 		switch {
 		case start.Name.Local == "BatchResultErrorEntry":
-			entryFailures++
+			id, err := decodeBatchResultID(decoder, start)
+			if err != nil {
+				return sqsBatchResultIDs{}, err
+			}
+			result.failed = append(result.failed, id)
 		case strings.HasSuffix(start.Name.Local, "BatchResultEntry"):
-			entrySuccesses++
-		case start.Name.Local == "Successful":
-			wrapperSuccesses++
-		case start.Name.Local == "Failed":
-			wrapperFailures++
+			id, err := decodeBatchResultID(decoder, start)
+			if err != nil {
+				return sqsBatchResultIDs{}, err
+			}
+			result.successful = append(result.successful, id)
 		}
 	}
-	if entrySuccesses > 0 || entryFailures > 0 {
-		return entrySuccesses, entryFailures, nil
+	return result, nil
+}
+
+func decodeBatchResultID(decoder *xml.Decoder, start xml.StartElement) (string, error) {
+	var entry struct {
+		ID string `xml:"Id"`
 	}
-	return wrapperSuccesses, wrapperFailures, nil
+	if err := decoder.DecodeElement(&entry, &start); err != nil {
+		return "", fmt.Errorf("decode batch result entry: %w", err)
+	}
+	id := strings.TrimSpace(entry.ID)
+	if id == "" {
+		return "", errors.New("batch result entry missing id")
+	}
+	return id, nil
+}
+
+func verifyBatchResultIDs(result sqsBatchResultIDs, expected []string) (int, int, error) {
+	expectedIDs := make(map[string]struct{}, len(expected))
+	for _, id := range expected {
+		if id == "" {
+			return 0, 0, errors.New("batch request entry id is empty")
+		}
+		if _, ok := expectedIDs[id]; ok {
+			return 0, 0, fmt.Errorf("duplicate batch request id %q", id)
+		}
+		expectedIDs[id] = struct{}{}
+	}
+	seen := make(map[string]struct{}, len(expected))
+	for _, id := range result.successful {
+		if err := verifyBatchResponseID(id, expectedIDs, seen); err != nil {
+			return 0, 0, err
+		}
+	}
+	for _, id := range result.failed {
+		if err := verifyBatchResponseID(id, expectedIDs, seen); err != nil {
+			return 0, 0, err
+		}
+	}
+	if len(seen) != len(expectedIDs) {
+		return 0, 0, fmt.Errorf("accounted for %d of %d entries", len(seen), len(expectedIDs))
+	}
+	return len(result.successful), len(result.failed), nil
+}
+
+func verifyBatchResponseID(id string, expectedIDs, seen map[string]struct{}) error {
+	if _, ok := expectedIDs[id]; !ok {
+		return fmt.Errorf("unknown batch response id %q", id)
+	}
+	if _, ok := seen[id]; ok {
+		return fmt.Errorf("duplicate batch response id %q", id)
+	}
+	seen[id] = struct{}{}
+	return nil
 }
