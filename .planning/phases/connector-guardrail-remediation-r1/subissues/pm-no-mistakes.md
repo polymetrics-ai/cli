@@ -9,7 +9,8 @@ Update PM orchestrator, worker, issue/PR template, connector implementation, and
 - Parent branch: `fix/3579-connector-path-ownership-guardrails`
 - Sub-issue branch: `fix/3583-pm-no-mistakes-connector-lane`
 - Sub-PR base: `fix/3579-connector-path-ownership-guardrails`
-- Dependency: #3581
+- Dependency: none
+- Integration prerequisite: #3581 public contract must be stable before final integration and current-code revalidation.
 
 ## Scope
 

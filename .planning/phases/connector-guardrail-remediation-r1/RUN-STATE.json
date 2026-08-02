@@ -22,10 +22,10 @@
   "ready_queue": [
     {
       "number": 3581,
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "dependencies": [],
       "write_scope": "cmd/connectorgen/**; internal/connectors/boundary/**; focused docs/tests",
-      "decision": "spawn_pending"
+      "decision": "spawned"
     },
     {
       "number": 3582,
@@ -38,17 +38,17 @@
     },
     {
       "number": 3583,
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "dependencies": [],
       "write_scope": ".agents/**; .pi/**; .github templates; no-mistakes guidance",
-      "decision": "spawn_pending"
+      "decision": "spawned"
     },
     {
       "number": 3584,
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "dependencies": [],
       "write_scope": "HubSpot/Bitbucket ledger; internal/cli/**; internal/app/**; internal/connectors/manifest.go; bundleregistry tests",
-      "decision": "spawn_pending"
+      "decision": "spawned"
     },
     {
       "number": 3585,
@@ -61,10 +61,10 @@
     },
     {
       "number": 3586,
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "dependencies": [],
       "write_scope": "generated/manual/docs/website unrelated connector remediation; guard fixtures",
-      "decision": "spawn_pending"
+      "decision": "spawned"
     },
     {
       "number": 3587,
@@ -110,9 +110,9 @@
       "number": 3581,
       "url": "https://github.com/polymetrics-ai/cli/issues/3581",
       "branch": "fix/3581-target-scope-core-validator",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3590",
       "worker": "pm-gsd-worker",
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "write_scope": "cmd/connectorgen/**; internal/connectors/boundary/**; focused docs/tests",
       "worker_directory": "pending",
       "verification": "pending",
@@ -152,9 +152,9 @@
       "number": 3583,
       "url": "https://github.com/polymetrics-ai/cli/issues/3583",
       "branch": "fix/3583-pm-no-mistakes-connector-lane",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3588",
       "worker": "pm-gsd-worker",
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "write_scope": ".agents/**; .pi/**; .github templates; no-mistakes guidance",
       "worker_directory": "pending",
       "verification": "pending",
@@ -173,9 +173,9 @@
       "number": 3584,
       "url": "https://github.com/polymetrics-ai/cli/issues/3584",
       "branch": "fix/3584-hubspot-bitbucket-forward-remediation",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3591",
       "worker": "pm-gsd-worker",
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "write_scope": "HubSpot/Bitbucket ledger; internal/cli/**; internal/app/**; internal/connectors/manifest.go; bundleregistry tests",
       "worker_directory": "pending",
       "verification": "pending",
@@ -215,9 +215,9 @@
       "number": 3586,
       "url": "https://github.com/polymetrics-ai/cli/issues/3586",
       "branch": "fix/3586-generated-unrelated-connector-remediation",
-      "pr_url": "pending",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/3589",
       "worker": "pm-gsd-worker",
-      "status": "worker_ready",
+      "status": "sub_pr_open",
       "write_scope": "generated/manual/docs/website unrelated connector remediation; guard fixtures",
       "worker_directory": "pending",
       "verification": "pending",
@@ -266,5 +266,5 @@
     "reverse ETL execution outside plan-preview-approval-execute",
     "branch protection/ruleset permission denial"
   ],
-  "updated_at": "2026-08-02T06:05:39Z"
+  "updated_at": "2026-08-02T08:47:35Z"
 }
