@@ -5264,21 +5264,14 @@
       "availability": "implemented",
       "stream": "hiring_team_role_list",
       "source_url": "https://developers.ashbyhq.com/reference/hiringteamrolelist",
-      "flags": [
-        {
-          "name": "names-only",
-          "type": "boolean",
-          "maps_to": "query.namesOnly",
-          "summary": "When set to true (the default), an array of role titles is returned. When set to false, an array of objects that include the id and title of the role is returned."
-        }
-      ],
+      "flags": [],
       "api_surface": [
         {
           "method": "POST",
           "path": "/hiringTeamRole.list"
         }
       ],
-      "notes": "Fixed Ashby stream for hiringTeamRole.list; flags map only to documented request body fields."
+      "notes": "Fixed Ashby stream for hiringTeamRole.list; defaults to namesOnly=true role-title results. namesOnly=false object results are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false."
     },
     {
       "path": "user info",
@@ -5773,7 +5766,7 @@
       "redact_fields": [
         "sequenceId"
       ],
-      "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },

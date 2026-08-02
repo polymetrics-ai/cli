@@ -4,15 +4,7 @@
   "type": "object",
   "properties": {
     "value": {
-      "type": [
-        "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
+      "type": "string"
     }
   },
   "x-primary-key": [

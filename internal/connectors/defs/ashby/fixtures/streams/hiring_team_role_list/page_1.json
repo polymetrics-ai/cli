@@ -9,16 +9,9 @@
     "body": {
       "success": true,
       "results": [
-        {
-          "value": {
-            "id": "hiring_team_role_list_value_fixture_46"
-          }
-        }
+        "Hiring Team Role fixture 46"
       ],
       "moreDataAvailable": false
     }
-  },
-  "read_query": {
-    "namesOnly": "true"
   }
 }

@@ -3956,10 +3956,11 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required.",
       "redact_fields": [
         "sequenceId"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "update_sequence_stage",
