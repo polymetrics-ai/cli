@@ -111,6 +111,21 @@ compose() {
   podman-compose --podman-path "${PODMAN_WRAPPER}" -f "${COMPOSE_FILE}" --env-file "${ENV_FILE}" -p "${PROJECT}" "$@"
 }
 
+wait_for_health() {
+  local attempts delay out
+  attempts="${BAHMNI_LAB_HEALTH_ATTEMPTS:-20}"
+  delay="${BAHMNI_LAB_HEALTH_DELAY_SECONDS:-15}"
+  out="${LAB_HOME}/last-health.json"
+  for ((i = 1; i <= attempts; i++)); do
+    if "${PYTHON_BIN}" "${LABCTL}" health --json >"${out}" 2>/dev/null; then
+      cat "${out}"
+      return 0
+    fi
+    sleep "${delay}"
+  done
+  "${PYTHON_BIN}" "${LABCTL}" health --json
+}
+
 ensure_prepared() {
   "${PYTHON_BIN}" "${LABCTL}" prepare >/dev/null
 }
@@ -144,7 +159,7 @@ case "${cmd}" in
       profiles+=(--profile snowstorm-lite --profile cdss)
     fi
     compose "${profiles[@]}" up -d
-    "${PYTHON_BIN}" "${LABCTL}" health --json
+    wait_for_health
     ;;
   ps)
     ensure_connection

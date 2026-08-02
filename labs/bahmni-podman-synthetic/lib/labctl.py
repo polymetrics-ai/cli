@@ -25,7 +25,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 PIN_PATH = ROOT / "config" / "pin.json"
@@ -385,6 +385,35 @@ def provider_records(seed: dict[str, Any]) -> list[dict[str, Any]]:
     return list(seed.get("providers", [])) + list(seed.get("staff", []))
 
 
+def clinical_text_values(seed: dict[str, Any]) -> Iterable[tuple[str, str]]:
+    """Return patient-record-facing strings that should read like fictional clinical records."""
+    records = seed.get("records", {})
+    for key in ("appointment_comment_prefix", "encounter_marker_prefix", "allergy_comment", "document_note"):
+        value = records.get(key)
+        if value:
+            yield f"records.{key}", str(value)
+    for index, value in enumerate(records.get("condition_texts", [])):
+        yield f"records.condition_texts[{index}]", str(value)
+
+    for patient in seed.get("patients", []):
+        identifier = patient.get("identifier", "unknown")
+        if patient.get("chief_complaint"):
+            yield f"patients.{identifier}.chief_complaint", str(patient["chief_complaint"])
+        for index, value in enumerate(patient.get("diagnosis_notes", [])):
+            yield f"patients.{identifier}.diagnosis_notes[{index}]", str(value)
+        for event_index, event in enumerate(patient.get("history_events", [])):
+            event_id = event.get("event_id", event_index)
+            if event.get("summary"):
+                yield f"patients.{identifier}.history_events.{event_id}.summary", str(event["summary"])
+            for field in ("diagnoses", "tests", "medications", "procedures", "notes"):
+                for index, value in enumerate(event.get(field, [])):
+                    yield f"patients.{identifier}.history_events.{event_id}.{field}[{index}]", str(value)
+            billing = event.get("billing") or {}
+            for field in ("invoice_id", "status", "payer"):
+                if billing.get(field):
+                    yield f"patients.{identifier}.history_events.{event_id}.billing.{field}", str(billing[field])
+
+
 def check_synthetic(args: argparse.Namespace) -> dict[str, Any]:
     seed = load_json(SEED_PATH)
     failures: list[str] = []
@@ -405,14 +434,10 @@ def check_synthetic(args: argparse.Namespace) -> dict[str, Any]:
         norm = normalize_name(full)
         if any(token in norm for token in ["doctor", "sparsh", "hospital", "praveen", "abhijit"]):
             failures.append(f"staff/provider {ident} contains a forbidden identity token")
-        if not any(marker in provider.get("family_name", "").lower() for marker in ["demo", "test", "sim", "mock", "fict", "synth"]):
-            failures.append(f"staff/provider {ident} family name is not obviously synthetic")
     for patient in seed.get("patients", []):
         ident = patient.get("identifier", "")
         if not ident.startswith("SYN-HEN-"):
             failures.append(f"patient identifier not synthetic: {ident}")
-        if not any(marker in patient.get("family_name", "").lower() for marker in ["demo", "test", "sim", "mock", "fict", "trial", "connector", "synth"]):
-            failures.append(f"patient {ident} family name is not obviously synthetic")
         contact = patient.get("synthetic_contact", {})
         if contact:
             phone = contact.get("phone", "")
@@ -421,6 +446,12 @@ def check_synthetic(args: argparse.Namespace) -> dict[str, Any]:
                 failures.append(f"patient {ident} contact phone is not the invalid synthetic placeholder")
             if email and not email.endswith(".invalid"):
                 failures.append(f"patient {ident} contact email must use the .invalid TLD")
+
+    clinical_texts_checked = 0
+    for path, value in clinical_text_values(seed):
+        clinical_texts_checked += 1
+        if "synthetic" in value.lower():
+            failures.append(f"clinical-facing fixture text {path} contains 'synthetic'; keep safeguards in identifiers/metadata")
 
     online_checked = False
     if args.online_source:
@@ -445,6 +476,7 @@ def check_synthetic(args: argparse.Namespace) -> dict[str, Any]:
         "clinical_providers_checked": len(seed.get("providers", [])),
         "staff_checked": len(seed.get("staff", [])),
         "patients_checked": len(seed.get("patients", [])),
+        "clinical_texts_checked": clinical_texts_checked,
         "online_source_checked": online_checked,
         "failures": failures,
     }
@@ -546,7 +578,7 @@ def ensure_location(api: BahmniApi, name: str, parent: str | None, summary: dict
         return existing["uuid"]
     body: dict[str, Any] = {
         "name": name,
-        "description": "FM-BAHMNI-LAB-R1 synthetic local connector lab location; not a real facility.",
+        "description": "FM-BAHMNI-LAB-R1 local connector lab location for Chikitsalayaḥ.",
     }
     if parent:
         body["parentLocation"] = parent
@@ -583,7 +615,7 @@ def ensure_patient(api: BahmniApi, patient: dict[str, str], pid_type: str, locat
         "gender": patient["gender"],
         "birthdate": patient["birthdate"],
         "addresses": [{
-            "address1": f"Synthetic {ident} Loopback Lane",
+            "address1": f"{ident} Loopback Lane",
             "cityVillage": "Demo City",
             "stateProvince": "Local Test State",
             "country": "ZZ",
@@ -813,7 +845,7 @@ def history_event_count(seed_data: dict[str, Any]) -> int:
 
 def history_event_text_observations(event: dict[str, Any], concepts: dict[str, str], when: str) -> list[dict[str, Any]]:
     lines = [
-        f"FM-BAHMNI-LAB-R1 synthetic history event {event['event_id']}: {event.get('summary', '')}",
+        f"FM-BAHMNI-LAB-R1 history event {event['event_id']}: {event.get('summary', '')}",
     ]
     for field, label in [
         ("diagnoses", "diagnoses"),
@@ -824,13 +856,13 @@ def history_event_text_observations(event: dict[str, Any], concepts: dict[str, s
     ]:
         values = event.get(field) or []
         if values:
-            lines.append(f"FM-BAHMNI-LAB-R1 synthetic {label}: " + "; ".join(str(value) for value in values))
+            lines.append(f"FM-BAHMNI-LAB-R1 {label}: " + "; ".join(str(value) for value in values))
     billing = event.get("billing") or {}
     if billing:
         lines.append(
-            "FM-BAHMNI-LAB-R1 synthetic billing note: "
+            "FM-BAHMNI-LAB-R1 billing note: "
             f"invoice={billing.get('invoice_id')}; status={billing.get('status')}; "
-            f"amount_inr={billing.get('amount_inr')}; payer={billing.get('payer')}; not a real invoice"
+            f"amount_inr={billing.get('amount_inr')}; payer={billing.get('payer')}"
         )
     return [{"concept": concepts["document_text"], "value": line, "obsDatetime": when} for line in lines if line]
 
@@ -879,7 +911,7 @@ def seed_history_event(
     visit_type_uuid = visit_types.get(event.get("visit_type") or patient["visit_type"]) or visit_types.get("OPD") or next(iter(visit_types.values()))
     visit_uuid = ensure_visit(api, patient_uuid, visit_type_uuid, event["start"], location, summary, stop=event.get("stop"))
     when = event.get("encounter_datetime") or event["start"]
-    marker_prefix = f"FM-BAHMNI-LAB-R1 synthetic history {patient['identifier']} {event_id}"
+    marker_prefix = f"FM-BAHMNI-LAB-R1 history {patient['identifier']} {event_id}"
     consultation_obs = history_event_numeric_observations(event, concepts, when) + history_event_text_observations(event, concepts, when)
     ensure_encounter(
         api,
@@ -995,7 +1027,7 @@ def seed(args: argparse.Namespace) -> None:
     parent_location = ensure_location(api, seed_data["organization"]["name"], base_location, summary)
     location_by_department: dict[str, str] = {}
     for department in seed_data["departments"]:
-        location_by_department[department] = ensure_location(api, f"Synthetic Department - {department}", parent_location, summary)
+        location_by_department[department] = ensure_location(api, f"Chikitsalaya Department - {department}", parent_location, summary)
     for service_location in seed_data["service_locations"]:
         ensure_location(api, service_location, parent_location, summary)
 
@@ -1075,7 +1107,7 @@ def seed(args: argparse.Namespace) -> None:
         )
 
         condition_texts = seed_data["records"]["condition_texts"]
-        condition_text = condition_texts[index] if index < len(condition_texts) else f"FM-BAHMNI-LAB-R1 synthetic condition {patient['identifier']}"
+        condition_text = condition_texts[index] if index < len(condition_texts) else f"Clinical condition follow-up {patient['identifier']}"
         ensure_condition(api, patient["identifier"], condition_text, summary)
         ensure_allergy(api, patient_uuid, concepts["penicillin"], f"{seed_data['records']['allergy_comment']} {patient['identifier']}", summary)
 
@@ -1202,7 +1234,8 @@ def verify(args: argparse.Namespace) -> None:
     appointment_count = 0
     if isinstance(appointments, list):
         appointment_count = sum(1 for item in appointments if str(item.get("comments", "")).startswith(seed_data["records"]["appointment_comment_prefix"]))
-    _, fhir_patients = api.fhir("/Patient", params={"identifier": "SYN-HEN"})
+    fhir_patient_ids = {patient["identifier"]: fhir_patient_id(api, patient["identifier"]) for patient in seed_data["patients"]}
+    fhir_patient_exact_count = sum(1 for value in fhir_patient_ids.values() if value)
     _, fhir_observations = api.fhir("/Observation", params={"code": seed_data["concepts"]["weight_kg"]})
 
     unicode_location_present = any(
@@ -1240,12 +1273,14 @@ def verify(args: argparse.Namespace) -> None:
         if patient_hits:
             encounters = api.results("/encounter", patient=patient_hits[0]["uuid"], v="full", limit=100)
             for event in expected_events:
-                marker_prefix = f"FM-BAHMNI-LAB-R1 synthetic history {patient['identifier']} {event['event_id']}"
+                marker_prefix = f"FM-BAHMNI-LAB-R1 history {patient['identifier']} {event['event_id']}"
                 if any(marker_in_obs(encounter, marker_prefix) for encounter in encounters):
                     found_events += 1
         history_live[patient["identifier"]] = {"expected": len(expected_events), "found": found_events, "ok": found_events == len(expected_events)}
 
     live_ok = counts["patients"] == len(seed_data["patients"]) and counts["providers"] == len(provider_records(seed_data))
+    live_ok = live_ok and fhir_patient_exact_count == len(seed_data["patients"])
+    live_ok = live_ok and int(fhir_observations.get("total", 0) or 0) > 0
     live_ok = live_ok and unicode_location_present and all(karthik_live.values()) and all(item["ok"] for item in history_live.values())
     result = {
         "ok": live_ok,
@@ -1255,7 +1290,8 @@ def verify(args: argparse.Namespace) -> None:
         "karthik_live": karthik_live,
         "history_live": history_live,
         "fhir": {
-            "patient_search_total": fhir_patients.get("total"),
+            "patient_exact_match_count": fhir_patient_exact_count,
+            "sample_patient_id_present": bool(fhir_patient_ids.get("SYN-HEN-0009")),
             "weight_observation_total": fhir_observations.get("total"),
         },
         "urls": local_urls(),

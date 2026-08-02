@@ -31,25 +31,27 @@ Local URLs:
 - DCM4CHEE HTTP: `http://127.0.0.1:18055`
 - DICOM: `127.0.0.1:11112`
 
-Use a private terminal for local credentials:
+Use a private terminal for local API credentials:
 
 ```bash
 labs/bahmni-podman-synthetic/bin/bahmni-lab credentials --show
 ```
+
+For browser inspection, open the Bahmni URL, accept the loopback-only self-signed certificate, log in with the pinned Bahmni Standard bundled demo `doctor` user using the private local demo password, and select `OPD-1` as the login location. Do not paste credentials into issues, PRs, status messages, or shell transcripts.
 
 ## Synthetic dataset
 
 Fixture: `fixtures/synthetic-seed.json`.
 
 - Hospital/location name is exactly `Chikitsalayaḥ`.
-- Patients use `SYN-HEN-*` identifiers and obviously synthetic family names such as `Syntheticcase`, `Testpatient`, and `Democase`; `check-synthetic` fails if a family name carries no synthetic marker.
-- Clinical providers use `SYN-PROV-*`; the extended non-patient staff roster uses `SYN-STAFF-*` and is represented as OpenMRS Provider/Person records for connector inspection.
+- Patients use `SYN-HEN-*` identifiers, invalid placeholder contacts, and clearly fictional Indian names. The visible clinical names are realistic for UI/API testing; the synthetic proof is carried by identifiers, fixture metadata, and automated checks rather than fake-looking family-name markers.
+- Clinical providers use `SYN-PROV-*`; the extended non-patient staff roster uses `SYN-STAFF-*` and is represented as OpenMRS Provider/Person records for connector inspection. Names are fictional and checked against forbidden/source-collision identity patterns.
 - Staff coverage includes consultant/resident doctors, nursing, allied health, lab, radiology, pharmacy, front office, billing, medical records, administration, HR, finance, procurement, IT, biomedical engineering, facilities, housekeeping, security, dietary, ambulance/transport, CSSD, infection control, quality/compliance, and patient relations.
 - Contact defaults are deliberately invalid placeholders: `000-000-0000` and `.invalid` emails.
-- Karthik test patient: `SYN-HEN-0009 - Karthik Syntheticcase`.
-- Rohit test patient: `SYN-HEN-0010 - Rohit Syntheticcase`; contact data remains the invalid placeholder and no real phone number is stored in fixture/config/log output.
+- Karthik test patient: `SYN-HEN-0009 - Karthik Iyer`.
+- Rohit test patient: `SYN-HEN-0010 - Rohit Nair`; contact data remains the invalid placeholder and no real phone number is stored in fixture/config/log output.
 - Karthik has a completed OPD cold/fever visit, fever temperature observation, chief complaint text, diagnosis text, completed visit stop time, appointments, lab/procedure/radiology/medication orders, allergy placeholder, and FHIR condition presence.
-- Karthik and Rohit also have longitudinal synthetic history events for intake, diagnostics/lab results, medication notes, follow-up/discharge, document metadata, and simulated billing notes. Billing is represented as OpenMRS document/encounter text for connector testing, not as a real Odoo invoice.
+- Karthik and Rohit also have longitudinal fictional history events for intake, diagnostics/lab results, medication notes, follow-up/discharge, document metadata, and simulated billing notes. Billing is represented as OpenMRS document/encounter text for connector testing, not as a real Odoo invoice.
 
 The dataset uses SPARSH Hennur-style taxonomy only structurally. It does not use real people, phone numbers, emails, addresses, or contacts.
 
@@ -74,7 +76,9 @@ Recommended local checks. During active connector live verification, use only th
 bash -n labs/bahmni-podman-synthetic/bin/bahmni-lab
 python3 -m py_compile labs/bahmni-podman-synthetic/lib/labctl.py
 labs/bahmni-podman-synthetic/bin/bahmni-lab check-synthetic --json
+labs/bahmni-podman-synthetic/bin/bahmni-lab check-synthetic --json --online-source  # optional network collision check against the public taxonomy page
 labs/bahmni-podman-synthetic/bin/bahmni-lab verify --offline
+labs/bahmni-podman-synthetic/bin/bahmni-lab seed --dry-run --json
 # Live mutation gates; run only after explicit clearance from active connector verification:
 # labs/bahmni-podman-synthetic/bin/bahmni-lab seed --json
 # labs/bahmni-podman-synthetic/bin/bahmni-lab seed --json   # idempotency rerun

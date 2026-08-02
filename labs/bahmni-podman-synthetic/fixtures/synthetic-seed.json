@@ -4,7 +4,7 @@
   "organization": {
     "name": "Chikitsalayaḥ",
     "short_name": "CHIK",
-    "description": "Local synthetic Bahmni/OpenMRS connector test lab named Chikitsalayaḥ, inspired by public specialty taxonomy structure only; not affiliated with SPARSH or any real facility.",
+    "description": "Local Bahmni/OpenMRS connector test lab named Chikitsalayaḥ, inspired by public specialty taxonomy structure only; not affiliated with SPARSH or any real facility.",
     "facility_identifier": "SYN-HEN-FAC-001"
   },
   "source_taxonomy": {
@@ -62,196 +62,196 @@
     "Mortuary Services"
   ],
   "service_locations": [
-    "Synthetic Emergency Receiving",
-    "Synthetic General Ward",
-    "Synthetic Pediatric Ward",
-    "Synthetic Intensive Care Unit",
-    "Synthetic Day Care Procedures",
-    "Synthetic Diagnostic Imaging",
-    "Synthetic Clinical Laboratory",
-    "Synthetic Patient Documents Desk"
+    "Emergency Receiving",
+    "General Ward",
+    "Pediatric Ward",
+    "Intensive Care Unit",
+    "Day Care Procedures",
+    "Diagnostic Imaging",
+    "Clinical Laboratory",
+    "Patient Documents Desk"
   ],
   "providers": [
     {
       "identifier": "SYN-PROV-CARD-001",
-      "given_name": "Asha",
-      "family_name": "Demoheart",
+      "given_name": "Aarav",
+      "family_name": "Raman",
       "gender": "F",
       "birthdate": "1979-04-12",
       "department": "Cardiology"
     },
     {
       "identifier": "SYN-PROV-ORTH-002",
-      "given_name": "Balen",
-      "family_name": "Testbone",
+      "given_name": "Bhaskar",
+      "family_name": "Kulkarni",
       "gender": "M",
       "birthdate": "1981-09-04",
       "department": "Orthopaedic"
     },
     {
       "identifier": "SYN-PROV-NEUR-003",
-      "given_name": "Cira",
-      "family_name": "Simnerve",
+      "given_name": "Charulata",
+      "family_name": "Menon",
       "gender": "F",
       "birthdate": "1983-02-18",
       "department": "Neuroscience"
     },
     {
       "identifier": "SYN-PROV-LAB-004",
-      "given_name": "Davin",
-      "family_name": "Mocklab",
+      "given_name": "Devika",
+      "family_name": "Nair",
       "gender": "M",
       "birthdate": "1976-12-08",
       "department": "Clinical Laboratory"
     },
     {
       "identifier": "SYN-PROV-RAD-005",
-      "given_name": "Esha",
-      "family_name": "Fictaradi",
+      "given_name": "Eshwar",
+      "family_name": "Rao",
       "gender": "F",
       "birthdate": "1985-07-21",
       "department": "Radiology"
     },
     {
       "identifier": "SYN-PROV-CRIT-006",
-      "given_name": "Feroz",
-      "family_name": "Synthcare",
+      "given_name": "Farida",
+      "family_name": "Khan",
       "gender": "M",
       "birthdate": "1977-06-30",
       "department": "Critical Care Medicine"
     },
     {
       "identifier": "SYN-PROV-PEDS-007",
-      "given_name": "Gita",
-      "family_name": "Demochild",
+      "given_name": "Girish",
+      "family_name": "Pai",
       "gender": "F",
       "birthdate": "1984-11-15",
       "department": "Pediatric Intensive Care"
     },
     {
       "identifier": "SYN-PROV-DERM-008",
-      "given_name": "Harin",
-      "family_name": "Testskin",
+      "given_name": "Harini",
+      "family_name": "Iyer",
       "gender": "M",
       "birthdate": "1980-03-09",
       "department": "Dermatology"
     },
     {
       "identifier": "SYN-PROV-PULM-009",
-      "given_name": "Ila",
-      "family_name": "Simlung",
+      "given_name": "Ishaan",
+      "family_name": "Shetty",
       "gender": "F",
       "birthdate": "1982-08-27",
       "department": "Pulmonology"
     },
     {
       "identifier": "SYN-PROV-ENDO-010",
-      "given_name": "Jovan",
-      "family_name": "Mockendo",
+      "given_name": "Jahnavi",
+      "family_name": "Reddy",
       "gender": "M",
       "birthdate": "1978-05-23",
       "department": "Endocrinology and Diabetology"
     },
     {
       "identifier": "SYN-PROV-SURG-011",
-      "given_name": "Kavi",
-      "family_name": "Fictasurg",
+      "given_name": "Kunal",
+      "family_name": "Deshpande",
       "gender": "F",
       "birthdate": "1986-10-01",
       "department": "General Surgery"
     },
     {
       "identifier": "SYN-PROV-EMER-012",
-      "given_name": "Leor",
-      "family_name": "Synthrapid",
+      "given_name": "Lavanya",
+      "family_name": "Prakash",
       "gender": "M",
       "birthdate": "1975-01-19",
       "department": "Emergency Medicine"
     },
     {
       "identifier": "SYN-PROV-ANES-013",
-      "given_name": "Malen",
-      "family_name": "Demosedate",
+      "given_name": "Manish",
+      "family_name": "Bhat",
       "gender": "M",
       "birthdate": "1980-06-12",
       "department": "Anaesthesiology"
     },
     {
       "identifier": "SYN-PROV-BARI-014",
-      "given_name": "Nira",
-      "family_name": "Testscale",
+      "given_name": "Nandita",
+      "family_name": "Gowda",
       "gender": "F",
       "birthdate": "1982-09-19",
       "department": "Bariatric Sciences"
     },
     {
       "identifier": "SYN-PROV-BMT-015",
-      "given_name": "Orin",
-      "family_name": "Simmarrow",
+      "given_name": "Omkar",
+      "family_name": "Patil",
       "gender": "M",
       "birthdate": "1978-12-03",
       "department": "Bone Marrow Transplant"
     },
     {
       "identifier": "SYN-PROV-DENT-016",
-      "given_name": "Piya",
-      "family_name": "Mockjaw",
+      "given_name": "Prisha",
+      "family_name": "Naidu",
       "gender": "F",
       "birthdate": "1986-02-16",
       "department": "Maxillofacial and Dental Surgery"
     },
     {
       "identifier": "SYN-PROV-DENT-017",
-      "given_name": "Rohan",
-      "family_name": "Fictatooth",
+      "given_name": "Raghav",
+      "family_name": "Hegde",
       "gender": "M",
       "birthdate": "1984-05-08",
       "department": "Dentistry"
     },
     {
       "identifier": "SYN-PROV-RONC-018",
-      "given_name": "Sima",
-      "family_name": "Synthbeam",
+      "given_name": "Sahana",
+      "family_name": "Murthy",
       "gender": "F",
       "birthdate": "1981-11-24",
       "department": "Radiation Oncology"
     },
     {
       "identifier": "SYN-PROV-NIR-019",
-      "given_name": "Tovan",
-      "family_name": "Demonerve",
+      "given_name": "Tejas",
+      "family_name": "Kapoor",
       "gender": "M",
       "birthdate": "1979-01-27",
       "department": "Neuro Intervention Radiology"
     },
     {
       "identifier": "SYN-PROV-DIAL-020",
-      "given_name": "Veda",
-      "family_name": "Testdialysis",
+      "given_name": "Vaishnavi",
+      "family_name": "Shenoy",
       "gender": "F",
       "birthdate": "1983-04-20",
       "department": "Dialysis"
     },
     {
       "identifier": "SYN-PROV-URO-021",
-      "given_name": "Wyan",
-      "family_name": "Simrenal",
+      "given_name": "Yash",
+      "family_name": "Mehta",
       "gender": "M",
       "birthdate": "1977-07-13",
       "department": "Urology and Nephrology"
     },
     {
       "identifier": "SYN-PROV-COSM-022",
-      "given_name": "Xara",
-      "family_name": "Mockskin",
+      "given_name": "Zoya",
+      "family_name": "Ansari",
       "gender": "F",
       "birthdate": "1985-10-09",
       "department": "Cosmetology and Cosmetic Surgery"
     },
     {
       "identifier": "SYN-PROV-HNS-023",
-      "given_name": "Yori",
-      "family_name": "Fictaneck",
+      "given_name": "Anirudh",
+      "family_name": "Varma",
       "gender": "M",
       "birthdate": "1980-03-30",
       "department": "Head and Neck Surgery"
@@ -260,8 +260,8 @@
   "patients": [
     {
       "identifier": "SYN-HEN-0001",
-      "given_name": "Mira",
-      "family_name": "Testpatient",
+      "given_name": "Meera",
+      "family_name": "Rao",
       "gender": "F",
       "birthdate": "1988-03-14",
       "department": "Cardiology",
@@ -270,8 +270,8 @@
     },
     {
       "identifier": "SYN-HEN-0002",
-      "given_name": "Niko",
-      "family_name": "Democase",
+      "given_name": "Nikhil",
+      "family_name": "Menon",
       "gender": "M",
       "birthdate": "1972-05-22",
       "department": "Orthopaedic",
@@ -281,7 +281,7 @@
     {
       "identifier": "SYN-HEN-0003",
       "given_name": "Pavan",
-      "family_name": "Simrecord",
+      "family_name": "Kulkarni",
       "gender": "M",
       "birthdate": "2017-08-05",
       "department": "Pediatric Intensive Care",
@@ -290,8 +290,8 @@
     },
     {
       "identifier": "SYN-HEN-0004",
-      "given_name": "Qiana",
-      "family_name": "Mockchart",
+      "given_name": "Kavya",
+      "family_name": "Iyer",
       "gender": "F",
       "birthdate": "1991-12-11",
       "department": "Endocrinology and Diabetology",
@@ -300,8 +300,8 @@
     },
     {
       "identifier": "SYN-HEN-0005",
-      "given_name": "Rafi",
-      "family_name": "Fictitious",
+      "given_name": "Rafiq",
+      "family_name": "Khan",
       "gender": "M",
       "birthdate": "1967-02-02",
       "department": "Pulmonology",
@@ -311,7 +311,7 @@
     {
       "identifier": "SYN-HEN-0006",
       "given_name": "Sana",
-      "family_name": "Labdemo",
+      "family_name": "Shetty",
       "gender": "F",
       "birthdate": "1984-09-30",
       "department": "Radiology",
@@ -320,8 +320,8 @@
     },
     {
       "identifier": "SYN-HEN-0007",
-      "given_name": "Taru",
-      "family_name": "Trialpatient",
+      "given_name": "Tarun",
+      "family_name": "Deshmukh",
       "gender": "O",
       "birthdate": "2000-01-17",
       "department": "Dermatology",
@@ -331,7 +331,7 @@
     {
       "identifier": "SYN-HEN-0008",
       "given_name": "Uma",
-      "family_name": "Connectorcase",
+      "family_name": "Krishnan",
       "gender": "F",
       "birthdate": "1959-07-08",
       "department": "General Surgery",
@@ -341,21 +341,21 @@
     {
       "identifier": "SYN-HEN-0009",
       "given_name": "Karthik",
-      "family_name": "Syntheticcase",
+      "family_name": "Iyer",
       "gender": "M",
       "birthdate": "1990-04-03",
       "department": "Emergency Medicine",
       "provider": "SYN-PROV-EMER-012",
       "visit_type": "OPD",
       "visit_status": "completed",
-      "chief_complaint": "FM-BAHMNI-LAB-R1 synthetic cold and fever visit for Karthik; no real contact data",
+      "chief_complaint": "Cold, fever, body ache, and throat irritation for two days",
       "synthetic_contact": {
         "phone": "000-000-0000",
-        "email": "karthik.synthetic.invalid@example.invalid"
+        "email": "karthik.iyer@example.invalid"
       },
       "diagnosis_notes": [
-        "FM-BAHMNI-LAB-R1 diagnosis: synthetic common cold for Karthik",
-        "FM-BAHMNI-LAB-R1 diagnosis: synthetic fever for Karthik"
+        "Diagnosis: acute viral nasopharyngitis",
+        "Diagnosis: fever without localizing bacterial focus"
       ],
       "history_events": [
         {
@@ -366,7 +366,7 @@
           "stop": "2026-01-23T10:45:00.000+0000",
           "department": "Emergency Medicine",
           "provider": "SYN-PROV-EMER-012",
-          "summary": "Synthetic intake for Karthik cold and fever with front-office registration, nursing triage, physician assessment, and billing estimate.",
+          "summary": "Triage, physician consultation, CBC order, paracetamol plan, and billing estimate for fever with cold symptoms.",
           "vitals": {
             "temperature_c": 38.6,
             "pulse": 96,
@@ -377,27 +377,28 @@
             "height_cm": 174
           },
           "diagnoses": [
-            "synthetic common cold",
-            "synthetic fever"
+            "acute viral upper respiratory infection",
+            "fever under evaluation"
           ],
           "tests": [
-            "complete blood count ordered",
-            "serum glucose ordered",
-            "creatinine screening ordered"
+            "CBC with differential",
+            "random blood glucose",
+            "serum creatinine"
           ],
           "medications": [
-            "synthetic paracetamol advice",
-            "synthetic oral hydration advice"
+            "Paracetamol 500 mg oral tablet every 6 hours as needed for fever for 3 days",
+            "Warm saline gargle and oral fluids",
+            "Cetirizine 10 mg oral tablet at night for 3 days if rhinorrhea persists"
           ],
           "billing": {
             "invoice_id": "SYN-BILL-KAR-001",
             "status": "closed",
             "amount_inr": 1250,
-            "payer": "synthetic self-pay placeholder"
+            "payer": "Self-pay"
           },
           "notes": [
-            "No real contact data stored; placeholder-only registration.",
-            "Nursing education completed with synthetic fever precautions."
+            "Nursing fever charting completed.",
+            "Physician advised return precautions for persistent fever, breathlessness, or worsening throat pain."
           ]
         },
         {
@@ -408,7 +409,7 @@
           "stop": "2026-01-24T11:20:00.000+0000",
           "department": "Clinical Laboratory",
           "provider": "SYN-PROV-LAB-004",
-          "summary": "Synthetic lab follow-up for Karthik with sample collection, resulted hematology/chemistry, and medication continuation note.",
+          "summary": "CBC and renal function results reviewed; fever trending down; medication plan continued.",
           "vitals": {
             "temperature_c": 37.9,
             "pulse": 88,
@@ -423,23 +424,24 @@
             "serum_creatinine_mg_dl": 0.92
           },
           "diagnoses": [
-            "synthetic resolving viral syndrome"
+            "resolving viral syndrome"
           ],
           "tests": [
-            "CBC resulted synthetic normal range",
-            "renal function resulted synthetic normal range"
+            "CBC reviewed: no critical alert",
+            "renal function reviewed before medication continuation"
           ],
           "medications": [
-            "synthetic antipyretic course reviewed"
+            "Continue Paracetamol only if temperature is above 38 °C",
+            "Avoid duplicate over-the-counter cold medication containing acetaminophen"
           ],
           "billing": {
             "invoice_id": "SYN-BILL-KAR-002",
             "status": "closed",
             "amount_inr": 980,
-            "payer": "synthetic self-pay placeholder"
+            "payer": "Self-pay"
           },
           "notes": [
-            "Lab result review completed; no direct database writes used."
+            "Lab results reviewed with patient."
           ]
         },
         {
@@ -450,7 +452,7 @@
           "stop": "2026-01-28T15:40:00.000+0000",
           "department": "Emergency Medicine",
           "provider": "SYN-PROV-EMER-012",
-          "summary": "Synthetic follow-up closing Karthik cold and fever episode with discharge advice and revenue-cycle closure note.",
+          "summary": "Follow-up visit closed the cold-and-fever episode; symptoms improved and discharge advice documented.",
           "vitals": {
             "temperature_c": 36.8,
             "pulse": 78,
@@ -460,23 +462,25 @@
             "weight_kg": 72.1
           },
           "diagnoses": [
-            "synthetic fever resolved",
-            "synthetic cold improved"
+            "fever resolved",
+            "upper respiratory symptoms improved"
           ],
           "tests": [
-            "no repeat lab required synthetic note"
+            "repeat lab testing not required"
           ],
           "medications": [
-            "synthetic medication stopped after symptom resolution"
+            "Stop antipyretic after 24 hours afebrile",
+            "Steam inhalation twice daily for nasal congestion if needed"
           ],
           "billing": {
             "invoice_id": "SYN-BILL-KAR-003",
             "status": "settled",
             "amount_inr": 350,
-            "payer": "synthetic self-pay placeholder"
+            "payer": "Self-pay"
           },
           "notes": [
-            "Discharge summary and follow-up instructions documented as synthetic text observations."
+            "Discharge summary completed.",
+            "Follow up with OPD if fever recurs."
           ]
         }
       ]
@@ -484,21 +488,21 @@
     {
       "identifier": "SYN-HEN-0010",
       "given_name": "Rohit",
-      "family_name": "Syntheticcase",
+      "family_name": "Nair",
       "gender": "M",
       "birthdate": "1987-06-19",
       "department": "Pulmonology",
       "provider": "SYN-PROV-PULM-009",
       "visit_type": "OPD",
       "visit_status": "completed",
-      "chief_complaint": "FM-BAHMNI-LAB-R1 synthetic Rohit respiratory review; contact uses invalid placeholder only",
+      "chief_complaint": "Cough, low-grade fever, and chest congestion for three days",
       "synthetic_contact": {
         "phone": "000-000-0000",
-        "email": "rohit.synthetic.invalid@example.invalid"
+        "email": "rohit.nair@example.invalid"
       },
       "diagnosis_notes": [
-        "FM-BAHMNI-LAB-R1 diagnosis: synthetic acute upper respiratory infection for Rohit",
-        "FM-BAHMNI-LAB-R1 diagnosis: synthetic medication review for Rohit"
+        "Diagnosis: acute bronchitis under review",
+        "Diagnosis: medication reconciliation needed"
       ],
       "history_events": [
         {
@@ -509,7 +513,7 @@
           "stop": "2026-02-03T11:10:00.000+0000",
           "department": "Pulmonology",
           "provider": "SYN-PROV-PULM-009",
-          "summary": "Synthetic Rohit new-patient respiratory intake with registration, nursing triage, pulmonology consultation, and billing estimate.",
+          "summary": "New-patient pulmonology intake with nursing triage, pulse oximetry, CBC order, chest X-ray request, and medication advice.",
           "vitals": {
             "temperature_c": 37.7,
             "pulse": 84,
@@ -520,26 +524,28 @@
             "height_cm": 176
           },
           "diagnoses": [
-            "synthetic acute cough",
-            "synthetic low-grade fever"
+            "acute cough",
+            "low-grade fever"
           ],
           "tests": [
-            "complete blood count ordered",
-            "chest imaging screening ordered",
-            "serum creatinine ordered before medication review"
+            "CBC with differential",
+            "chest X-ray PA view",
+            "serum creatinine before medication review",
+            "pulse oximetry"
           ],
           "medications": [
-            "synthetic inhalation guidance",
-            "synthetic antipyretic advice"
+            "Paracetamol 500 mg oral tablet as needed for fever",
+            "Salbutamol inhaler two puffs as needed for wheeze after demonstration",
+            "Ambroxol syrup 10 ml twice daily for cough for 5 days"
           ],
           "billing": {
             "invoice_id": "SYN-BILL-ROH-001",
             "status": "closed",
             "amount_inr": 1450,
-            "payer": "synthetic self-pay placeholder"
+            "payer": "Self-pay"
           },
           "notes": [
-            "The user-provided real phone number is not stored; placeholder-only contact policy retained."
+            "Phone contact is not stored in the committed lab fixture; registration uses placeholder contact policy."
           ]
         },
         {
@@ -550,7 +556,7 @@
           "stop": "2026-02-04T12:05:00.000+0000",
           "department": "Radiology",
           "provider": "SYN-PROV-RAD-005",
-          "summary": "Synthetic Rohit diagnostic day with lab result review, radiology order/result note, and pharmacy billing queue note.",
+          "summary": "Diagnostics visit reviewed CBC, renal function, and imaging order status; pharmacy counselling completed.",
           "vitals": {
             "temperature_c": 37.2,
             "pulse": 82,
@@ -565,25 +571,26 @@
             "serum_creatinine_mg_dl": 1.01
           },
           "diagnoses": [
-            "synthetic bronchitis review"
+            "acute bronchitis review"
           ],
           "tests": [
-            "CBC resulted synthetic mild leukocyte trend",
-            "ultrasound/radiology placeholder order tracked",
-            "procedure placeholder reviewed"
+            "CBC reviewed with mild leukocyte trend",
+            "chest imaging request tracked",
+            "renal function acceptable for prescribed medicines"
           ],
           "medications": [
-            "synthetic short course medication dispensed",
-            "synthetic pharmacy counselling completed"
+            "Azithromycin 500 mg oral tablet once daily for 3 days if clinician confirms bacterial features",
+            "Inhaler technique reviewed using spacer demonstration",
+            "Avoid smoking exposure and monitor respiratory rate"
           ],
           "billing": {
             "invoice_id": "SYN-BILL-ROH-002",
             "status": "closed",
             "amount_inr": 2320,
-            "payer": "synthetic self-pay placeholder"
+            "payer": "Self-pay"
           },
           "notes": [
-            "Radiology and lab data are synthetic connector-test artifacts."
+            "Radiology and lab reports filed in the chart."
           ]
         },
         {
@@ -594,7 +601,7 @@
           "stop": "2026-02-06T14:50:00.000+0000",
           "department": "Pharmacy",
           "provider": "SYN-STAFF-PHAR-021",
-          "summary": "Synthetic Rohit pharmacy follow-up with medication reconciliation, billing settlement, and patient education.",
+          "summary": "Pharmacy follow-up for medication reconciliation, inhaler technique, and billing settlement.",
           "vitals": {
             "temperature_c": 36.9,
             "pulse": 76,
@@ -604,23 +611,24 @@
             "weight_kg": 79.0
           },
           "diagnoses": [
-            "synthetic respiratory symptoms improving"
+            "respiratory symptoms improving"
           ],
           "tests": [
-            "no repeat diagnostic testing required synthetic note"
+            "repeat diagnostic testing not required"
           ],
           "medications": [
-            "synthetic medication reconciliation complete",
-            "synthetic adherence counselling complete"
+            "Complete prescribed antimicrobial course if started by clinician",
+            "Continue inhaler only if wheeze persists",
+            "Medication adherence counselling completed"
           ],
           "billing": {
             "invoice_id": "SYN-BILL-ROH-003",
             "status": "settled",
             "amount_inr": 640,
-            "payer": "synthetic self-pay placeholder"
+            "payer": "Self-pay"
           },
           "notes": [
-            "Billing settlement is simulated in OpenMRS document text, not an Odoo invoice."
+            "Medication reconciliation completed by pharmacy."
           ]
         },
         {
@@ -631,7 +639,7 @@
           "stop": "2026-02-10T16:30:00.000+0000",
           "department": "Patient Relations",
           "provider": "SYN-STAFF-PR-064",
-          "summary": "Synthetic Rohit episode closure with care-coordination callback note, final billing audit, and document metadata.",
+          "summary": "Episode closure with care-coordination note, final billing audit, and document filing.",
           "vitals": {
             "temperature_c": 36.7,
             "pulse": 74,
@@ -641,44 +649,45 @@
             "weight_kg": 78.8
           },
           "diagnoses": [
-            "synthetic episode closed"
+            "respiratory episode closed"
           ],
           "tests": [
-            "all synthetic tests reviewed and filed"
+            "all ordered tests reviewed and filed"
           ],
           "medications": [
-            "synthetic medication course completed"
+            "Medication course completed",
+            "No refill required at closure"
           ],
           "billing": {
             "invoice_id": "SYN-BILL-ROH-004",
             "status": "settled",
             "amount_inr": 0,
-            "payer": "synthetic self-pay placeholder"
+            "payer": "Self-pay"
           },
           "notes": [
-            "Final record-history closure for connector testing; no real patient contact data."
+            "Care-coordination closure documented."
           ]
         }
       ]
     }
   ],
   "records": {
-    "appointment_comment_prefix": "FM-BAHMNI-LAB-R1 synthetic appointment",
-    "encounter_marker_prefix": "FM-BAHMNI-LAB-R1 synthetic encounter",
+    "appointment_comment_prefix": "FM-BAHMNI-LAB-R1 appointment",
+    "encounter_marker_prefix": "FM-BAHMNI-LAB-R1 encounter",
     "condition_texts": [
-      "FM-BAHMNI-LAB-R1 synthetic controlled hypertension",
-      "FM-BAHMNI-LAB-R1 synthetic follow-up fracture care",
-      "FM-BAHMNI-LAB-R1 synthetic pediatric observation",
-      "FM-BAHMNI-LAB-R1 synthetic diabetes review",
-      "FM-BAHMNI-LAB-R1 synthetic acute bronchospasm",
-      "FM-BAHMNI-LAB-R1 synthetic imaging follow-up",
-      "FM-BAHMNI-LAB-R1 synthetic dermatitis review",
-      "FM-BAHMNI-LAB-R1 synthetic post-procedure review",
-      "FM-BAHMNI-LAB-R1 synthetic cold and fever",
-      "FM-BAHMNI-LAB-R1 synthetic Rohit respiratory medication follow-up"
+      "Essential hypertension follow-up",
+      "Fracture aftercare visit",
+      "Pediatric observation after viral fever",
+      "Type 2 diabetes review",
+      "Acute bronchospasm episode",
+      "Imaging follow-up after abdominal pain",
+      "Dermatitis review",
+      "Post-procedure review",
+      "Common cold with fever",
+      "Respiratory medication follow-up"
     ],
-    "allergy_comment": "FM-BAHMNI-LAB-R1 synthetic low-severity medication allergy; not real patient data",
-    "document_note": "FM-BAHMNI-LAB-R1 synthetic document metadata only; no real attachment bytes are stored"
+    "allergy_comment": "Low-severity medication allergy noted in local connector lab record",
+    "document_note": "Document metadata recorded for local connector lab; no attachment bytes are stored"
   },
   "concepts": {
     "weight_kg": "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
@@ -726,14 +735,14 @@
   },
   "contact_defaults": {
     "patient_phone_placeholder": "000-000-0000",
-    "patient_email_placeholder": "karthik.synthetic.invalid@example.invalid",
-    "privacy_note": "Placeholders are intentionally invalid and synthetic. Do not commit, log, or seed real contact data; use gitignored local-contact-overrides.json or manual UI entry for human-only contact tests after explicit clearance."
+    "patient_email_placeholder": "local.patient@example.invalid",
+    "privacy_note": "Placeholders are intentionally invalid. Do not commit, log, or seed real contact data; use gitignored local-contact-overrides.json or manual UI entry for human-only contact tests after explicit clearance."
   },
   "staff": [
     {
       "identifier": "SYN-STAFF-NURS-001",
       "given_name": "Aditi",
-      "family_name": "Demonurse",
+      "family_name": "Rao",
       "gender": "F",
       "birthdate": "1987-01-05",
       "department": "Nursing Services",
@@ -743,7 +752,7 @@
     {
       "identifier": "SYN-STAFF-NURS-002",
       "given_name": "Biren",
-      "family_name": "Testcharge",
+      "family_name": "Patel",
       "gender": "M",
       "birthdate": "1989-02-14",
       "department": "Nursing Services",
@@ -753,7 +762,7 @@
     {
       "identifier": "SYN-STAFF-NURS-003",
       "given_name": "Charu",
-      "family_name": "Simtriage",
+      "family_name": "Menon",
       "gender": "F",
       "birthdate": "1991-03-21",
       "department": "Emergency Medicine",
@@ -763,7 +772,7 @@
     {
       "identifier": "SYN-STAFF-NURS-004",
       "given_name": "Deepa",
-      "family_name": "Mockicu",
+      "family_name": "Nair",
       "gender": "F",
       "birthdate": "1988-04-12",
       "department": "Critical Care Medicine",
@@ -773,7 +782,7 @@
     {
       "identifier": "SYN-STAFF-NURS-005",
       "given_name": "Evan",
-      "family_name": "Fictward",
+      "family_name": "D’Souza",
       "gender": "M",
       "birthdate": "1990-05-09",
       "department": "Nursing Services",
@@ -783,7 +792,7 @@
     {
       "identifier": "SYN-STAFF-NURS-006",
       "given_name": "Farah",
-      "family_name": "Synthpeds",
+      "family_name": "Khan",
       "gender": "F",
       "birthdate": "1992-06-18",
       "department": "Pediatric Intensive Care",
@@ -792,8 +801,8 @@
     },
     {
       "identifier": "SYN-STAFF-NURS-007",
-      "given_name": "Garen",
-      "family_name": "Demoot",
+      "given_name": "Gaurav",
+      "family_name": "Bhat",
       "gender": "M",
       "birthdate": "1986-07-22",
       "department": "Operation Theatre Nursing",
@@ -803,7 +812,7 @@
     {
       "identifier": "SYN-STAFF-NURS-008",
       "given_name": "Hira",
-      "family_name": "Testdial",
+      "family_name": "Shenoy",
       "gender": "F",
       "birthdate": "1993-08-11",
       "department": "Dialysis",
@@ -813,7 +822,7 @@
     {
       "identifier": "SYN-STAFF-NURS-009",
       "given_name": "Ishan",
-      "family_name": "Simdischarge",
+      "family_name": "Kapoor",
       "gender": "M",
       "birthdate": "1985-09-30",
       "department": "Nursing Services",
@@ -823,7 +832,7 @@
     {
       "identifier": "SYN-STAFF-NURS-010",
       "given_name": "Jaya",
-      "family_name": "Mockeducate",
+      "family_name": "Murthy",
       "gender": "F",
       "birthdate": "1984-10-28",
       "department": "Nursing Services",
@@ -833,7 +842,7 @@
     {
       "identifier": "SYN-STAFF-LAB-011",
       "given_name": "Ketan",
-      "family_name": "Fictphleb",
+      "family_name": "Naik",
       "gender": "M",
       "birthdate": "1994-01-17",
       "department": "Clinical Laboratory",
@@ -843,7 +852,7 @@
     {
       "identifier": "SYN-STAFF-LAB-012",
       "given_name": "Lina",
-      "family_name": "Synthmicro",
+      "family_name": "Fernandes",
       "gender": "F",
       "birthdate": "1988-02-25",
       "department": "Clinical Laboratory",
@@ -853,7 +862,7 @@
     {
       "identifier": "SYN-STAFF-LAB-013",
       "given_name": "Mohan",
-      "family_name": "Demochem",
+      "family_name": "Reddy",
       "gender": "M",
       "birthdate": "1987-03-13",
       "department": "Clinical Laboratory",
@@ -863,7 +872,7 @@
     {
       "identifier": "SYN-STAFF-LAB-014",
       "given_name": "Nadia",
-      "family_name": "Testpath",
+      "family_name": "Ansari",
       "gender": "F",
       "birthdate": "1986-04-04",
       "department": "Clinical Laboratory",
@@ -873,7 +882,7 @@
     {
       "identifier": "SYN-STAFF-BLOOD-015",
       "given_name": "Omar",
-      "family_name": "Simblood",
+      "family_name": "Shaikh",
       "gender": "M",
       "birthdate": "1985-05-15",
       "department": "Blood Bank",
@@ -882,8 +891,8 @@
     },
     {
       "identifier": "SYN-STAFF-RAD-016",
-      "given_name": "Prena",
-      "family_name": "Mockxray",
+      "given_name": "Prerna",
+      "family_name": "Iyer",
       "gender": "F",
       "birthdate": "1990-06-07",
       "department": "Radiology",
@@ -893,7 +902,7 @@
     {
       "identifier": "SYN-STAFF-RAD-017",
       "given_name": "Qadir",
-      "family_name": "Fictct",
+      "family_name": "Hussain",
       "gender": "M",
       "birthdate": "1989-07-19",
       "department": "Radiology",
@@ -903,7 +912,7 @@
     {
       "identifier": "SYN-STAFF-RAD-018",
       "given_name": "Riya",
-      "family_name": "Synthmri",
+      "family_name": "Gowda",
       "gender": "F",
       "birthdate": "1991-08-23",
       "department": "Radiology",
@@ -913,7 +922,7 @@
     {
       "identifier": "SYN-STAFF-PHYS-019",
       "given_name": "Samar",
-      "family_name": "Demomove",
+      "family_name": "Deshpande",
       "gender": "M",
       "birthdate": "1988-09-26",
       "department": "Physiotherapy",
@@ -923,7 +932,7 @@
     {
       "identifier": "SYN-STAFF-DIET-020",
       "given_name": "Tina",
-      "family_name": "Testdiet",
+      "family_name": "Mathew",
       "gender": "F",
       "birthdate": "1987-10-14",
       "department": "Dietary and Nutrition",
@@ -933,7 +942,7 @@
     {
       "identifier": "SYN-STAFF-PHAR-021",
       "given_name": "Uday",
-      "family_name": "Simpharma",
+      "family_name": "Kulkarni",
       "gender": "M",
       "birthdate": "1984-11-05",
       "department": "Pharmacy",
@@ -943,7 +952,7 @@
     {
       "identifier": "SYN-STAFF-PHAR-022",
       "given_name": "Vani",
-      "family_name": "Mockdispense",
+      "family_name": "Raman",
       "gender": "F",
       "birthdate": "1992-12-18",
       "department": "Pharmacy",
@@ -952,8 +961,8 @@
     },
     {
       "identifier": "SYN-STAFF-PHAR-023",
-      "given_name": "Waseem",
-      "family_name": "Fictstock",
+      "given_name": "Wasim",
+      "family_name": "Qureshi",
       "gender": "M",
       "birthdate": "1989-01-22",
       "department": "Pharmacy",
@@ -963,7 +972,7 @@
     {
       "identifier": "SYN-STAFF-FRONT-024",
       "given_name": "Xena",
-      "family_name": "Synthfront",
+      "family_name": "Thomas",
       "gender": "F",
       "birthdate": "1993-02-12",
       "department": "Front Office and Registration",
@@ -973,7 +982,7 @@
     {
       "identifier": "SYN-STAFF-FRONT-025",
       "given_name": "Yash",
-      "family_name": "Demoreg",
+      "family_name": "Mehta",
       "gender": "M",
       "birthdate": "1990-03-06",
       "department": "Front Office and Registration",
@@ -983,7 +992,7 @@
     {
       "identifier": "SYN-STAFF-FRONT-026",
       "given_name": "Zara",
-      "family_name": "Testappt",
+      "family_name": "Bose",
       "gender": "F",
       "birthdate": "1991-04-08",
       "department": "Front Office and Registration",
@@ -993,7 +1002,7 @@
     {
       "identifier": "SYN-STAFF-MRD-027",
       "given_name": "Anil",
-      "family_name": "Simrecord",
+      "family_name": "Prabhu",
       "gender": "M",
       "birthdate": "1988-05-20",
       "department": "Medical Records",
@@ -1003,7 +1012,7 @@
     {
       "identifier": "SYN-STAFF-MRD-028",
       "given_name": "Bela",
-      "family_name": "Mockcoded",
+      "family_name": "Chatterjee",
       "gender": "F",
       "birthdate": "1986-06-15",
       "department": "Medical Records",
@@ -1012,8 +1021,8 @@
     },
     {
       "identifier": "SYN-STAFF-BILL-029",
-      "given_name": "Chet",
-      "family_name": "Fictbill",
+      "given_name": "Chetan",
+      "family_name": "Joshi",
       "gender": "M",
       "birthdate": "1985-07-02",
       "department": "Billing and Insurance",
@@ -1023,7 +1032,7 @@
     {
       "identifier": "SYN-STAFF-BILL-030",
       "given_name": "Dia",
-      "family_name": "Synthclaim",
+      "family_name": "Pillai",
       "gender": "F",
       "birthdate": "1990-08-17",
       "department": "Billing and Insurance",
@@ -1033,7 +1042,7 @@
     {
       "identifier": "SYN-STAFF-BILL-031",
       "given_name": "Eron",
-      "family_name": "Democash",
+      "family_name": "D’Souza",
       "gender": "M",
       "birthdate": "1992-09-09",
       "department": "Finance",
@@ -1043,7 +1052,7 @@
     {
       "identifier": "SYN-STAFF-MGMT-032",
       "given_name": "Faye",
-      "family_name": "Testadmin",
+      "family_name": "Kapoor",
       "gender": "F",
       "birthdate": "1979-10-10",
       "department": "Hospital Administration",
@@ -1053,7 +1062,7 @@
     {
       "identifier": "SYN-STAFF-MGMT-033",
       "given_name": "Gopal",
-      "family_name": "Simops",
+      "family_name": "Krishnan",
       "gender": "M",
       "birthdate": "1978-11-11",
       "department": "Hospital Administration",
@@ -1063,7 +1072,7 @@
     {
       "identifier": "SYN-STAFF-MGMT-034",
       "given_name": "Heena",
-      "family_name": "Mockquality",
+      "family_name": "Bhatia",
       "gender": "F",
       "birthdate": "1982-12-12",
       "department": "Quality and Compliance",
@@ -1073,7 +1082,7 @@
     {
       "identifier": "SYN-STAFF-MGMT-035",
       "given_name": "Irfan",
-      "family_name": "Fictfinance",
+      "family_name": "Ali",
       "gender": "M",
       "birthdate": "1980-01-13",
       "department": "Finance",
@@ -1083,7 +1092,7 @@
     {
       "identifier": "SYN-STAFF-MGMT-036",
       "given_name": "Juhi",
-      "family_name": "Synthhr",
+      "family_name": "Saxena",
       "gender": "F",
       "birthdate": "1983-02-18",
       "department": "Human Resources",
@@ -1093,7 +1102,7 @@
     {
       "identifier": "SYN-STAFF-MGMT-037",
       "given_name": "Kiran",
-      "family_name": "Demoprocure",
+      "family_name": "Nambiar",
       "gender": "M",
       "birthdate": "1981-03-23",
       "department": "Procurement and Stores",
@@ -1103,7 +1112,7 @@
     {
       "identifier": "SYN-STAFF-MGMT-038",
       "given_name": "Leela",
-      "family_name": "Testpatientrel",
+      "family_name": "Rao",
       "gender": "F",
       "birthdate": "1984-04-27",
       "department": "Patient Relations",
@@ -1113,7 +1122,7 @@
     {
       "identifier": "SYN-STAFF-MGMT-039",
       "given_name": "Manu",
-      "family_name": "Simcompliance",
+      "family_name": "Varghese",
       "gender": "M",
       "birthdate": "1977-05-31",
       "department": "Quality and Compliance",
@@ -1123,7 +1132,7 @@
     {
       "identifier": "SYN-STAFF-IT-040",
       "given_name": "Nisha",
-      "family_name": "Mockit",
+      "family_name": "Shetty",
       "gender": "F",
       "birthdate": "1989-06-04",
       "department": "Information Technology",
@@ -1133,7 +1142,7 @@
     {
       "identifier": "SYN-STAFF-IT-041",
       "given_name": "Omkar",
-      "family_name": "Fictnet",
+      "family_name": "Patil",
       "gender": "M",
       "birthdate": "1987-07-08",
       "department": "Information Technology",
@@ -1143,7 +1152,7 @@
     {
       "identifier": "SYN-STAFF-IT-042",
       "given_name": "Pari",
-      "family_name": "Synthdata",
+      "family_name": "Naidu",
       "gender": "F",
       "birthdate": "1991-08-12",
       "department": "Information Technology",
@@ -1153,7 +1162,7 @@
     {
       "identifier": "SYN-STAFF-BIOM-043",
       "given_name": "Qasim",
-      "family_name": "Demobiomed",
+      "family_name": "Khan",
       "gender": "M",
       "birthdate": "1986-09-16",
       "department": "Biomedical Engineering",
@@ -1163,7 +1172,7 @@
     {
       "identifier": "SYN-STAFF-BIOM-044",
       "given_name": "Reva",
-      "family_name": "Testequip",
+      "family_name": "Hegde",
       "gender": "F",
       "birthdate": "1988-10-20",
       "department": "Biomedical Engineering",
@@ -1173,7 +1182,7 @@
     {
       "identifier": "SYN-STAFF-FAC-045",
       "given_name": "Sahil",
-      "family_name": "Simfacility",
+      "family_name": "Malhotra",
       "gender": "M",
       "birthdate": "1985-11-24",
       "department": "Facilities and Maintenance",
@@ -1183,7 +1192,7 @@
     {
       "identifier": "SYN-STAFF-FAC-046",
       "given_name": "Tara",
-      "family_name": "Mockelectric",
+      "family_name": "Menon",
       "gender": "F",
       "birthdate": "1990-12-28",
       "department": "Facilities and Maintenance",
@@ -1192,8 +1201,8 @@
     },
     {
       "identifier": "SYN-STAFF-FAC-047",
-      "given_name": "Utkar",
-      "family_name": "Fictwater",
+      "given_name": "Utkarsh",
+      "family_name": "Sharma",
       "gender": "M",
       "birthdate": "1989-01-03",
       "department": "Facilities and Maintenance",
@@ -1203,7 +1212,7 @@
     {
       "identifier": "SYN-STAFF-HK-048",
       "given_name": "Veda",
-      "family_name": "Synthclean",
+      "family_name": "Pai",
       "gender": "F",
       "birthdate": "1993-02-07",
       "department": "Housekeeping",
@@ -1213,7 +1222,7 @@
     {
       "identifier": "SYN-STAFF-HK-049",
       "given_name": "Wahid",
-      "family_name": "Demowardclean",
+      "family_name": "Ansari",
       "gender": "M",
       "birthdate": "1994-03-11",
       "department": "Housekeeping",
@@ -1223,7 +1232,7 @@
     {
       "identifier": "SYN-STAFF-SEC-050",
       "given_name": "Xavier",
-      "family_name": "Testguard",
+      "family_name": "D’Souza",
       "gender": "M",
       "birthdate": "1986-04-15",
       "department": "Security",
@@ -1233,7 +1242,7 @@
     {
       "identifier": "SYN-STAFF-SEC-051",
       "given_name": "Yamini",
-      "family_name": "Simentry",
+      "family_name": "Reddy",
       "gender": "F",
       "birthdate": "1990-05-19",
       "department": "Security",
@@ -1243,7 +1252,7 @@
     {
       "identifier": "SYN-STAFF-FOOD-052",
       "given_name": "Zubin",
-      "family_name": "Mockkitchen",
+      "family_name": "Irani",
       "gender": "M",
       "birthdate": "1985-06-23",
       "department": "Dietary and Nutrition",
@@ -1253,7 +1262,7 @@
     {
       "identifier": "SYN-STAFF-FOOD-053",
       "given_name": "Arohi",
-      "family_name": "Fictmeal",
+      "family_name": "Desai",
       "gender": "F",
       "birthdate": "1992-07-27",
       "department": "Dietary and Nutrition",
@@ -1262,8 +1271,8 @@
     },
     {
       "identifier": "SYN-STAFF-AMB-054",
-      "given_name": "Bhav",
-      "family_name": "Synthdrive",
+      "given_name": "Bhavik",
+      "family_name": "Shah",
       "gender": "M",
       "birthdate": "1987-08-31",
       "department": "Ambulance and Transport",
@@ -1273,7 +1282,7 @@
     {
       "identifier": "SYN-STAFF-AMB-055",
       "given_name": "Celia",
-      "family_name": "Demoparam",
+      "family_name": "Lobo",
       "gender": "F",
       "birthdate": "1991-09-04",
       "department": "Ambulance and Transport",
@@ -1283,7 +1292,7 @@
     {
       "identifier": "SYN-STAFF-PORT-056",
       "given_name": "Dilan",
-      "family_name": "Testporter",
+      "family_name": "Fernandes",
       "gender": "M",
       "birthdate": "1993-10-08",
       "department": "Ambulance and Transport",
@@ -1293,7 +1302,7 @@
     {
       "identifier": "SYN-STAFF-CSSD-057",
       "given_name": "Elina",
-      "family_name": "Simsterile",
+      "family_name": "Mathew",
       "gender": "F",
       "birthdate": "1989-11-12",
       "department": "CSSD and Sterilization",
@@ -1303,7 +1312,7 @@
     {
       "identifier": "SYN-STAFF-CSSD-058",
       "given_name": "Faiz",
-      "family_name": "Mockscope",
+      "family_name": "Shaikh",
       "gender": "M",
       "birthdate": "1988-12-16",
       "department": "CSSD and Sterilization",
@@ -1313,7 +1322,7 @@
     {
       "identifier": "SYN-STAFF-INF-059",
       "given_name": "Gia",
-      "family_name": "Fictcontrol",
+      "family_name": "Thomas",
       "gender": "F",
       "birthdate": "1984-01-20",
       "department": "Infection Control",
@@ -1323,7 +1332,7 @@
     {
       "identifier": "SYN-STAFF-INF-060",
       "given_name": "Harsh",
-      "family_name": "Synthsafety",
+      "family_name": "Mehta",
       "gender": "M",
       "birthdate": "1983-02-24",
       "department": "Quality and Compliance",
@@ -1333,7 +1342,7 @@
     {
       "identifier": "SYN-STAFF-STORE-061",
       "given_name": "Ina",
-      "family_name": "Demostore",
+      "family_name": "Nair",
       "gender": "F",
       "birthdate": "1990-03-28",
       "department": "Procurement and Stores",
@@ -1343,7 +1352,7 @@
     {
       "identifier": "SYN-STAFF-STORE-062",
       "given_name": "Jerin",
-      "family_name": "Testasset",
+      "family_name": "Varghese",
       "gender": "M",
       "birthdate": "1987-04-01",
       "department": "Procurement and Stores",
@@ -1353,7 +1362,7 @@
     {
       "identifier": "SYN-STAFF-MORT-063",
       "given_name": "Kavya",
-      "family_name": "Simmort",
+      "family_name": "Murthy",
       "gender": "F",
       "birthdate": "1985-05-05",
       "department": "Mortuary Services",
@@ -1363,7 +1372,7 @@
     {
       "identifier": "SYN-STAFF-PR-064",
       "given_name": "Lalit",
-      "family_name": "Mockguide",
+      "family_name": "Joshi",
       "gender": "M",
       "birthdate": "1988-06-09",
       "department": "Patient Relations",

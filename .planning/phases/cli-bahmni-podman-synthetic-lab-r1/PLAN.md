@@ -20,7 +20,8 @@
 5. Synthetic hospital name exactly `Chikitsalayaḥ`, plus Karthik synthetic cold/fever completed visit fixture and live verification.
 6. Extended synthetic staff roster covering doctors, nursing, allied health, diagnostics, pharmacy, operations, revenue cycle, facilities, management, IT, quality, security, and support roles.
 7. Rohit synthetic patient plus richer Karthik/Rohit longitudinal histories for tests, medication, documents, and simulated billing notes without storing real phone/contact data.
-8. Commit containing only reproducible lab assets, not cloned upstream source or local secrets.
+8. Clinical-facing patient/provider/staff names and record narratives use realistic Indian fictional names, realistic tests, medicines, and care workflows while preserving non-real-data safeguards in identifiers/config/docs.
+9. Commit containing only reproducible lab assets, not cloned upstream source or local secrets.
 
 ## Work slices
 
@@ -65,7 +66,7 @@
 - Generate deterministic JSON fixture data for:
   - synthetic facility exactly named `Chikitsalayaḥ`, departments/specialties, locations;
   - fictional providers;
-  - fictional patients and identifiers, including `SYN-HEN-0009 - Karthik Syntheticcase` with invalid placeholder contacts;
+  - fictional patients and identifiers, including `SYN-HEN-0009 - Karthik Iyer` with invalid placeholder contacts;
   - appointments, visits, encounters;
   - diagnoses/conditions, allergies, observations/vitals, including Karthik cold/fever chief complaint, fever observation, and completed visit stop time;
   - orders, medications, lab tests/results, procedures;
@@ -94,10 +95,18 @@
 
 ### Slice G — Rohit patient and richer synthetic histories
 
-- Add `SYN-HEN-0010 - Rohit Syntheticcase` using invalid placeholder contact defaults only; do not commit, log, or seed the user-provided real phone number into the synthetic fixture.
+- Add `SYN-HEN-0010 - Rohit Nair` using invalid placeholder contact defaults only; do not commit, log, or seed the user-provided real phone number into the synthetic fixture.
 - Add structured longitudinal `history_events` for Karthik and Rohit covering intake, consultation, lab/radiology/procedure orders, medication notes, billing/revenue-cycle notes, follow-up/discharge, and document metadata.
 - Implement history seeding through existing supported OpenMRS REST visit/encounter/obs primitives, using deterministic markers for idempotency and simulated billing notes rather than direct Odoo/DB writes.
 - Preserve the current live hold: no live `seed`, `verify`, restart, reset, cleanup, or dataset mutation until connector live-write proof clearance is explicitly granted.
+
+### Slice H — Realistic fictional clinical wording and Indian names
+
+- Keep the connector hold: perform only fixture/code/docs changes and offline checks; do not live seed, verify, push, restart, reset, or mutate the running Bahmni lab without explicit clearance.
+- Replace patient-record-facing prose that repeatedly says `synthetic` with realistic fictional clinical text. Keep test-data safeguards outside clinical-facing text via `SYN-*` identifiers, invalid placeholder contacts, fixture metadata, and automated checks.
+- Rename doctors/staff/patients to Indian fictional names without copying real SPARSH identities. Do not store real phone numbers or real contact details.
+- Add realistic clinical content for Karthik and Rohit: medicine names, dosage-style text, lab/radiology/procedure names, nursing instructions, discharge/follow-up, and simulated billing labels clearly documented as lab-only artifacts.
+- Update checks so they enforce `SYN-PROV-*`, `SYN-STAFF-*`, and `SYN-HEN-*` identifiers plus no real-looking phone numbers, rather than requiring fake-looking family-name markers in the clinical display name.
 
 ## Risks and mitigations
 

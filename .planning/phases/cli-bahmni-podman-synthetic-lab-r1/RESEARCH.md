@@ -4,6 +4,7 @@
 **Retrieval date:** 2026-07-26
 **GSD path:** `scripts/gsd doctor`; `scripts/gsd prompt plan-phase cli-bahmni-podman-synthetic-lab-r1 --skip-research`; attempted `scripts/gsd prompt programming-loop init --phase cli-bahmni-podman-synthetic-lab-r1 --dry-run` but this adapter registry does not contain `programming-loop`, so this phase records a manual GSD/TDD fallback.
 **Required skills loaded:** `gsd-core`, `golang-how-to`, `golang-security`, `golang-safety`, `golang-testing`, `golang-documentation`, plus repo references `required-skills-routing.md`, `runtime-rlm-website-integration.md`, `gsd-pi-adapter.md`.
+**Recovery refresh:** 2026-08-02 used `chrome-devtools-axi` to re-open `bahmni.org`/install/security-advisory pages and `gh-axi` to re-check `Bahmni/bahmni-docker` tag `1.0.2-standard`; the official security advisory still lists `1.0.2-standard`, OpenMRS image `1.1.3`, and `bahmni-core` `1.2.1`, and the annotated tag still resolves to commit `1dfe62c4e5d6f3d702e65d869729726226fceb56`.
 
 ## Official Bahmni source trail
 

@@ -22,12 +22,15 @@
 | E | browser Unicode/login check | Chrome cannot open/login/render | Bahmni dashboard login succeeds; Unicode heading `Chikitsalayaḥ` renders | green |
 | F | `check-synthetic --json` after staff expansion | staff fixture absent, non-synthetic identifiers, real contacts, or forbidden identity tokens | validates expanded doctors/staff roster as synthetic and contact-free | green offline |
 | F | `seed --dry-run --json` after staff expansion | planned counts do not include staff/providers | dry-run reports 87 providers = 23 clinical + 64 staff, 46 departments, 9 patients | green offline |
-| F | `seed --json` after staff expansion | new staff records fail OpenMRS API create/search | new `providers_created` count equals unseeded staff records; rerun creates zero records | blocked pending connector clearance |
-| F | `verify` after staff expansion | provider count remains old or staff missing | live provider count equals doctors plus extended staff roster | blocked pending connector clearance |
+| F | `seed --json` after staff expansion | new staff records fail OpenMRS API create/search | new `providers_created` count equals unseeded staff records; rerun creates zero records | green live |
+| F | `verify` after staff expansion | provider count remains old or staff missing | live provider count equals doctors plus extended staff roster | green live |
 | G | `check-synthetic --json` after Rohit/history expansion | real phone or non-synthetic identity appears in fixture | 10 synthetic patients, no real-looking phone, invalid placeholders only | green offline |
 | G | `verify --offline` after Rohit/history expansion | patient/history counts stale | offline reports Rohit present and Karthik/Rohit history events planned | green offline |
 | G | `seed --dry-run --json` after Rohit/history expansion | dry-run omits history events | reports planned history event count without live API writes | green offline |
-| G | live `seed --json` and idempotency | live mutation while connector proof is active | blocked until explicit connector clearance | blocked pending connector clearance |
+| G | live `seed --json` and idempotency | live mutation while connector proof is active or records duplicate | live seed adds Rohit/history once and rerun creates no records | green live |
+| H | `check-synthetic --json` after realistic-name pass | Indian-style names fail old fake-family marker check or real phone leaks into fixtures | 10 patients, 87 providers/staff pass via `SYN-*` IDs, no real-looking phone numbers, and clinical-facing text excludes repeated `synthetic` wording | green offline |
+| H | clinical-facing text scan | patient history/record notes contain repeated `synthetic` wording | patient history/record notes use realistic fictional clinical wording while metadata/docs retain safeguards | green offline |
+| H | `verify --offline` and `seed --dry-run --json` | offline counts regress | offline counts remain 10 patients, 87 providers/staff, 7 history events | green offline |
 
 ## Evidence log
 
@@ -42,3 +45,7 @@
 - 2026-07-26: Offline staff validation passed: `check-synthetic --json` ok for 87 providers (23 clinical + 64 staff) and 9 patients; `verify --offline` ok; `seed --dry-run --json` planned 87 providers and 46 departments without live API writes.
 - 2026-07-26: Slice G accepted for offline-only Rohit/history fixture work. The user-provided real phone is intentionally not stored; live application remains blocked pending connector clearance.
 - 2026-07-26: Offline Rohit/history validation passed: `check-synthetic --json` ok for 10 patients and 87 providers; `verify --offline` ok with Rohit present and 7 history events (3 Karthik, 4 Rohit); `seed --dry-run --json` planned 7 history events without live writes.
+- 2026-07-26: Slice H accepted for offline-only clinical realism pass. Boundary recorded: make fictional records clinically plausible and Indian-named, but keep `SYN-*` identifiers, no real phone/contact data, and no live mutation until cleared.
+- 2026-08-02: Recovery validation passed: `check-synthetic --json` ok for 10 patients / 87 providers-staff with `clinical_texts_checked=100`; `check-synthetic --json --online-source` ok without source collisions; `verify --offline` ok with 7 history events; `seed --dry-run --json` reports planned counts only.
+- 2026-08-02: Live recovery validation passed after read-only Podman inventory and task-owned restart: health ok, first seed added missing Slice F/G/H records, second seed had `created_nonzero={}`, live verify ok with 10 patients, 87 providers/staff, 10 appointments, 50 orders, 100 encounters, FHIR exact Patient count 10, and Karthik/Rohit history checks true.
+- 2026-08-02: Cold start initially showed OpenMRS health not ready while Bahmni Web was already serving; `bahmni-lab start` now retries health before returning.
