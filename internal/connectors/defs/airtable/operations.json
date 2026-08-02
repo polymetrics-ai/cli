@@ -3,8 +3,8 @@
     {
       "id": "hyperdb_table_read_records",
       "kind": "rest_read",
-      "summary": "Read Airtable HyperDB records by primary key",
-      "description": "Fixture-tested direct read for the official Airtable HyperDB getRecords operation. It requires typed enterprise/data-table path parameters and a bounded JSON body; output uses generic JSON redaction.",
+      "summary": "Read Airtable HyperDB records",
+      "description": "Fixture-tested direct read for the official Airtable HyperDB getRecords operation. It requires typed enterprise/data-table path parameters and accepts a bounded JSON body with optional primary keys, fields, maxRecords, or cursor; output uses generic JSON redaction.",
       "source_url": "https://airtable.com/developers/web/api/introduction",
       "risk": "medium",
       "approval": "read-only direct query; no provider mutation",
@@ -42,9 +42,7 @@
               "type": "string"
             }
           },
-          "required": [
-            "primaryKeys"
-          ]
+          "required": []
         }
       }
     }
