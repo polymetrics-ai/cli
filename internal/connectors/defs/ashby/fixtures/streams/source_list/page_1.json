@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/source.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "source_list_id_fixture_40",
+          "title": "Title fixture 40",
+          "isArchived": false,
+          "sourceType": {
+            "id": "source_list_id_fixture_40",
+            "title": "Title fixture 40",
+            "isArchived": false
+          }
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

@@ -13,14 +13,14 @@
   },
   "direct_read_candidates": [
     {
-      "stage_name": "candidate_search_fixture_shape",
-      "command": "candidate search",
+      "stage_name": "file_info_fixture_shape",
+      "command": "file info",
       "args": [
         {
-          "literal": "--email"
+          "literal": "--file-handle"
         },
         {
-          "literal": "candidate@example.invalid"
+          "literal": "file_handle_fixture"
         }
       ]
     }

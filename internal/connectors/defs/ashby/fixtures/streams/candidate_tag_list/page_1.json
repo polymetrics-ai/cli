@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/candidateTag.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "candidate_tag_list_id_fixture_17",
+          "title": "Title fixture 17",
+          "isArchived": true
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

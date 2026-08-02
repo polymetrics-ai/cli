@@ -383,6 +383,102 @@ def write_json(path: Path, data: Any):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, ensure_ascii=False)+"\n")
 
+def fixture_type(node: Any) -> str:
+    if not isinstance(node, dict): return "string"
+    typ = node.get("type")
+    if isinstance(typ, list):
+        values = [t for t in typ if t != "null"]
+        for preferred in ("object", "array", "string", "integer", "number", "boolean"):
+            if preferred in values: return preferred
+        return values[0] if values else "string"
+    if isinstance(typ, str): return typ
+    if "properties" in node: return "object"
+    if "items" in node: return "array"
+    return "string"
+
+def fixture_slug(value: str) -> str:
+    value = re.sub(r"[^A-Za-z0-9]+", "_", value).strip("_").lower()
+    return value or "ashby"
+
+def fixture_title(value: str) -> str:
+    return re.sub(r"[_\-]+", " ", value).strip().title() or "Ashby"
+
+def fixture_value(node: Any, field: str, stream: str, index: int, depth: int = 0) -> Any:
+    node = node if isinstance(node, dict) else {}
+    enum = node.get("enum")
+    if isinstance(enum, list):
+        for item in enum:
+            if item is not None: return item
+    typ = fixture_type(node)
+    lower = field.lower()
+    stream_slug = fixture_slug(stream)
+    field_slug = fixture_slug(field)
+    if typ == "object":
+        props = node.get("properties") if isinstance(node.get("properties"), dict) else {}
+        if props and depth < 20:
+            return {name: fixture_value(prop, name, stream, index, depth+1) for name, prop in props.items()}
+        return {} if node.get("additionalProperties") is False else {"id": f"{stream_slug}_{field_slug}_fixture_{index}"}
+    if typ == "array":
+        item = node.get("items") if isinstance(node.get("items"), dict) else {"type": "string"}
+        return [fixture_value(item, field.rstrip("s") or field, stream, index, depth+1)]
+    if typ == "integer": return index
+    if typ == "number": return float(index)
+    if typ == "boolean": return index % 2 == 1
+    if lower == "timezone": return "UTC"
+    day = ((index - 1) % 28) + 1
+    if node.get("format") == "date": return f"2026-01-{day:02d}"
+    if node.get("format") == "date-time" or lower in {"date", "timestamp"} or lower.endswith(("at", "date", "time")) or "timestamp" in lower:
+        return f"2026-01-{day:02d}T0{index % 10}:00:00Z"
+    if node.get("format") == "uri" or any(marker in lower for marker in ("url", "link", "profile")):
+        return f"https://example.invalid/ashby/{stream_slug}/{field_slug}/{index}"
+    if node.get("format") == "email" or "email" in lower:
+        return f"{stream_slug}.{field_slug}.{index}@example.invalid"
+    if "phone" in lower: return f"+1555010{index:02d}"
+    if lower == "name" or lower.endswith("name"): return f"{fixture_title(stream)} {fixture_title(field)} Fixture {index}"
+    if lower in {"title", "text", "description", "content", "comment", "reasoning", "failurereason"} or lower.endswith(("title", "text", "description", "content", "comment")):
+        return f"{fixture_title(field)} fixture {index}"
+    if "html" in lower: return f"<p>{fixture_title(field)} fixture {index}</p>"
+    if lower == "status" or lower.endswith("status"): return "active"
+    if lower == "type" or lower.endswith("type"): return "fixture"
+    if lower == "ipaddress": return f"192.0.2.{index}"
+    if lower == "useragent": return "polymetrics-fixture/1.0"
+    if lower == "value": return f"{stream_slug}_value_fixture_{index}"
+    if lower == "code": return f"{stream_slug.upper()}_{index:03d}"
+    if lower == "mimetype": return "application/json"
+    if lower == "id" or lower.endswith("id") or lower.endswith("ids") or "handle" in lower:
+        return f"{stream_slug}_{field_slug}_fixture_{index}"
+    return f"{stream_slug}_{field_slug}_fixture_{index}"
+
+def fixture_record(stream_name: str, schema: dict[str, Any], index: int) -> dict[str, Any]:
+    props = schema.get("properties", {}) if isinstance(schema.get("properties"), dict) else {}
+    record = {field: fixture_value(prop, field, stream_name, index) for field, prop in props.items()}
+    for pk in schema.get("x-primary-key", []):
+        if record.get(pk) in (None, ""):
+            record[pk] = f"{fixture_slug(stream_name)}_{fixture_slug(pk)}_fixture_{index}"
+    cursor = schema.get("x-cursor-field")
+    if cursor:
+        record[cursor] = f"2026-02-{((index - 1) % 28) + 1:02d}T{index % 24:02d}:00:00Z"
+    return record
+
+def fixture_results_are_array(path: str, stream_name: str) -> bool:
+    clean = path.strip("/").lower()
+    return clean in {"candidate.list", "job.list", "application.list", "user.list"} or ".list" in clean or stream_name.endswith("_list")
+
+def fixture_request_value(kind: str, field: str) -> str:
+    if kind in {"integer", "number"}: return "1"
+    if kind == "boolean": return "true"
+    if kind == "array": return "[]"
+    if kind == "object": return "{}"
+    return f"{fixture_slug(field)}_fixture"
+
+def fixture_read_query(shape: dict[str, Any] | None) -> dict[str, str]:
+    if not shape: return {}
+    fields = list(shape.get("required", []))
+    required_any = shape.get("required_any", [])
+    if required_any: fields.append(required_any[0])
+    field_types = shape.get("field_types", {})
+    return {field: fixture_request_value(field_types.get(field, "string"), field) for field in fields}
+
 def go_quote(s: str) -> str: return json.dumps(s)
 def go_string_slice(items): return "[]string{" + ", ".join(go_quote(x) for x in items) + "}"
 def go_map_string(items): return "map[string]string{" + ", ".join(go_quote(k)+":"+go_quote(v) for k,v in sorted(items.items())) + "}"
@@ -429,8 +525,8 @@ def main():
                 body_schema["minProperties"] = DIRECT_READ_MIN_PROPERTIES[clean]
             operation_entries.append({"id":opid,"kind":"rest_read","summary":clean,"description":op.get("description","")[:1000],"source_url":source_url(op),"risk":"medium" if ("file" in clean.lower() or "transcript" in clean.lower()) else "low","approval":"none","output_policy":"json_redacted","rest":{"method":method,"path":path,"content_type":"application/json","max_bytes":1048576,"body":default_body_for(req_props),"body_schema":body_schema}})
             flags=flags_for_props(req_props, "body", PAGINATION_FIELDS)
-            direct_risk = SIGNED_URL_DIRECT_READ_RISK if clean in SIGNED_URL_DIRECT_READS else "bounded JSON direct read; response fields with secret/download markers are redacted"
-            cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"direct_read","availability":"implemented","operation":opid,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"output_policy":"json_redacted","redact_fields":redact_fields(req_props),"risk":direct_risk,"approval":"none","notes":"Fixed Ashby POST direct read; no raw method/path/body override is exposed."})
+            direct_risk = SIGNED_URL_DIRECT_READ_RISK if clean in SIGNED_URL_DIRECT_READS else "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output"
+            cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"direct_read","availability":"implemented","operation":opid,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"output_policy":"json_redacted","risk":direct_risk,"approval":"none","notes":"Fixed Ashby POST direct read; no raw method/path/body override is exposed."})
             api_rows.append({"method":method,"path":path,"covered_by":{"direct_read":cpath}}); continue
         if is_write(summary):
             wname=write_name_for(clean, used_writes); req_schema=to_draft_schema(schema, req_sch, close_object=True); destructive=is_destructive(clean)
@@ -459,7 +555,7 @@ def main():
     for sub in (DEFS/"schemas",):
         if sub.exists():
             for f in sub.glob("*.json"): f.unlink()
-    write_json(DEFS/"metadata.json", {"name":"ashby","display_name":"Ashby","description":"Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.","integration_type":"api","release_stage":"alpha","capabilities":{"check":True,"read":True,"write":True,"query":False,"cdc":False,"dynamic_schema":False},"batch":{"read_page_size":100,"write_batch_size":1},"risk":{"read":"bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and redacted fixtures","write":"named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation","approval":"reverse ETL writes require plan -> preview -> explicit approval -> execute"},"conformance":{"skip_dynamic":True,"reason":"Ashby list streams require POST body cursor pagination and many generated write/direct surfaces; native Ashby tests plus connectorgen/static validation cover the connector-local engine delegation while fixture replay remains credential-free and no live calls are made."},"docs_url":"https://developers.ashbyhq.com/"})
+    write_json(DEFS/"metadata.json", {"name":"ashby","display_name":"Ashby","description":"Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.","integration_type":"api","release_stage":"alpha","capabilities":{"check":True,"read":True,"write":True,"query":False,"cdc":False,"dynamic_schema":False},"batch":{"read_page_size":100,"write_batch_size":1},"risk":{"read":"bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and sanitized replay fixtures","write":"named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation","approval":"reverse ETL writes require plan -> preview -> explicit approval -> execute"},"docs_url":"https://developers.ashbyhq.com/"})
     write_json(DEFS/"spec.json", {"$schema":"http://json-schema.org/draft-07/schema#","title":"Ashby Connection Specification","type":"object","required":["api_key","start_date"],"properties":{"api_key":{"type":"string","x-secret":True,"description":"Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."},"start_date":{"type":"string","format":"date-time","description":"Lower bound used by client-side incremental filtering when a stream has a timestamp cursor."},"base_url":{"type":"string","default":"https://api.ashbyhq.com","description":"Ashby API base URL; override only for local tests."},"page_size":{"type":"string","default":"100","description":"Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector."},"max_pages":{"type":"string","default":"1","description":"Maximum pages to read per stream. Use 0, all, or unlimited for an exhaustive read."},"mode":{"type":"string","description":"Set to fixture for credential-free native tests."}}})
     write_json(DEFS/"streams.json", {"base":{"url":"{{ config.base_url }}","user_agent":"polymetrics-go-cli","headers":{"Accept":"application/json; version=1","Content-Type":"application/json"},"auth":[{"mode":"basic","username":"{{ secrets.api_key }}","password":""}],"check":{"method":"POST","path":"/apiKey.info"},"pagination":{"type":"none"}},"streams":stream_entries})
     for name, sch in stream_schemas.items(): write_json(DEFS/"schemas"/f"{name}.json", sch)
@@ -472,10 +568,28 @@ def main():
         elif c["intent"]=="direct_read": grouped["direct"].append(c["path"])
         elif c["intent"]=="reverse_etl": grouped["writes"].append(c["path"])
     write_json(DEFS/"cli_surface.json", {"tagline":"Ashby applicant-tracking connector with typed REST streams, bounded direct reads, and gated reverse-ETL writes.","usage":"pm connectors command ashby <command> [flags]","source_cli":{"name":"Ashby Public API","docs":"https://developers.ashbyhq.com/","reference":DOC_URL,"source":"public ReadMe OpenAPI"},"groups":[{"id":"streams","title":"ETL streams","commands":grouped["streams"]},{"id":"direct_reads","title":"Bounded direct reads","commands":grouped["direct"]},{"id":"reverse_etl","title":"Reverse ETL writes","commands":grouped["writes"]}],"commands":cli_commands,"help_topics":[{"name":"ashby safety","summary":"Ashby writes are named, schema-validated actions only; reverse ETL must use plan, preview, explicit approval, and execute."},{"name":"ashby parity","summary":"Public Ashby OpenAPI coverage ledger is recorded in api_surface.json with blocked webhook/partner/binary workflow reasons."}]})
-    write_json(DEFS/"certification.json", {"schema_version":1,"source":{"default_stream":"candidates","live_unavailable":[{"kind":"no_credentials_requested","contains":["No live Ashby credentials or provider calls were requested for issue #3207 wave05-r1."]}]},"direct_read_candidates":[{"stage_name":"candidate_search_fixture_shape","command":"candidate search","args":[{"literal":"--email"},{"literal":"candidate@example.invalid"}]}],"write_pairings":[]})
-    fixture_dir=DEFS/"fixtures/streams/candidates"; fixture_dir.mkdir(parents=True, exist_ok=True)
-    write_json(fixture_dir/"page_1.json", {"success":True,"results":[{"id":"candidate_fixture_1","name":"Fixture Candidate","primaryEmailAddress":{"value":"fixture@example.invalid"},"primaryPhoneNumber":{"value":"+15550100"},"company":"Example Inc","title":"Engineer","locationSummary":"Remote","timezone":"UTC","createdAt":"2026-01-01T00:00:00Z","updatedAt":"2026-01-02T00:00:00Z"}],"moreDataAvailable":False})
-    docs = f"""# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference ({DOC_URL}). The parity ledger was reviewed on {REVIEWED_AT}.\n\nCoverage summary:\n\n- REST operations in source: {len(ops)}\n- OpenAPI webhook events in source: {len(schema.get('webhooks',{}))}\n- Implemented ETL/changefeed streams: {len(stream_entries)}\n- Implemented bounded direct reads/search/file metadata operations: {len(operation_entries)}\n- Implemented reverse-ETL write actions: {len(write_actions)}\n- Reverse-ETL CLI commands with scalar flags: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'implemented')}; partial nested-object flag surfaces: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'partial')}\n- Blocked/non-executable ledger rows: {len(api_rows) - len(stream_entries) - len(operation_entries) - len(write_actions)}\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. The current wave is fixture/static validated only; no live Ashby credentials or provider calls were used.\n"""
+    write_json(DEFS/"certification.json", {"schema_version":1,"source":{"default_stream":"candidates","live_unavailable":[{"kind":"no_credentials_requested","contains":["No live Ashby credentials or provider calls were requested for issue #3207 wave05-r1."]}]},"direct_read_candidates":[{"stage_name":"file_info_fixture_shape","command":"file info","args":[{"literal":"--file-handle"},{"literal":"file_handle_fixture"}]}],"write_pairings":[]})
+    fixture_root=DEFS/"fixtures"
+    stream_fixture_root=fixture_root/"streams"
+    if stream_fixture_root.exists():
+        for old in stream_fixture_root.glob("*/page_*.json"):
+            old.unlink()
+    request_shape_by_stream = {item["name"]: item for item in stream_go}
+    for index, stream in enumerate(stream_entries, start=1):
+        stream_name = stream["name"]
+        record = fixture_record(stream_name, stream_schemas[stream_name], index)
+        body = {"success": True, "results": [record] if fixture_results_are_array(stream["path"], stream_name) else record}
+        if fixture_results_are_array(stream["path"], stream_name): body["moreDataAvailable"] = False
+        fixture = {"request":{"method":stream.get("method") or "GET","path":stream["path"],"query":{}},"response":{"status":200,"body":body}}
+        read_query = fixture_read_query(request_shape_by_stream.get(stream_name))
+        if read_query: fixture["read_query"] = read_query
+        write_json(stream_fixture_root/stream_name/"page_1.json", fixture)
+    check_record = fixture_record("api_key_info", stream_schemas.get("api_key_info", {"properties": {"title": {"type": "string"}, "createdAt": {"type": "string"}, "scopes": {"type": "array", "items": {"type": "string"}}}}), 1)
+    check_record["title"] = "Ashby fixture key"
+    check_record["createdAt"] = "2026-01-01T00:00:00Z"
+    if "scopes" in check_record: check_record["scopes"] = ["fixture_scope"]
+    write_json(fixture_root/"check.json", {"request":{"method":"POST","path":"/apiKey.info","query":{}},"response":{"status":200,"body":{"success":True,"results":check_record}}})
+    docs = f"""# Ashby Connector\n\n## Overview\n\nAshby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference ({DOC_URL}). The parity ledger was reviewed on {REVIEWED_AT}.\n\nCoverage summary:\n\n- REST operations in source: {len(ops)}\n- OpenAPI webhook events in source: {len(schema.get('webhooks',{}))}\n- Implemented ETL/changefeed streams: {len(stream_entries)}\n- Implemented bounded direct reads/search/file metadata operations: {len(operation_entries)}\n- Implemented reverse-ETL write actions: {len(write_actions)}\n- Reverse-ETL CLI commands with scalar flags: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'implemented')}; partial nested-object flag surfaces: {sum(1 for c in cli_commands if c.get('intent') == 'reverse_etl' and c.get('availability') == 'partial')}\n- Blocked/non-executable ledger rows: {len(api_rows) - len(stream_entries) - len(operation_entries) - len(write_actions)}\n\n## Auth setup\n\nAuthentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.\n\n## Streams notes\n\nAshby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination, applies page-size and max-pages bounds, and supports client-side incremental filtering when a documented cursor field exists.\n\n## Write actions & risks\n\nReverse ETL writes are typed action names with closed top-level JSON schemas and the normal plan → preview → explicit approval → execute gate. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.\n\n## Known limits\n\nBlocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.\n"""
     (DEFS/"docs.md").write_text(docs)
 
     go_lines=[]
