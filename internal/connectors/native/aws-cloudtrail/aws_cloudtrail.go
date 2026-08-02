@@ -134,8 +134,11 @@ func (c Connector) readAction(ctx context.Context, action, stream string, req co
 			body["MaxResults"] = maxItems
 		}
 	}
-	maxPages := maxPages(req.Config)
-	for page := 0; maxPages == 0 || page < maxPages; page++ {
+	maxPageLimit, err := maxPages(req.Config)
+	if err != nil {
+		return err
+	}
+	for page := 0; maxPageLimit == 0 || page < maxPageLimit; page++ {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
@@ -342,19 +345,22 @@ func pageSize(cfg connectors.RuntimeConfig) (int, error) {
 	return value, nil
 }
 
-func maxPages(cfg connectors.RuntimeConfig) int {
+func maxPages(cfg connectors.RuntimeConfig) (int, error) {
 	if cfg.Config == nil {
-		return 0
+		return 0, nil
 	}
 	raw := strings.TrimSpace(strings.ToLower(cfg.Config["max_pages"]))
 	if raw == "" || raw == "all" || raw == "unlimited" || raw == "synthetic-conformance-value" {
-		return 0
+		return 0, nil
 	}
 	value, err := strconv.Atoi(raw)
-	if err != nil || value < 0 {
-		return 0
+	if err != nil {
+		return 0, fmt.Errorf("aws-cloudtrail config max_pages must be an integer, all, or unlimited: %w", err)
 	}
-	return value
+	if value < 0 {
+		return 0, errors.New("aws-cloudtrail config max_pages must be 0 for unlimited or a positive integer")
+	}
+	return value, nil
 }
 
 func fixtureMode(cfg connectors.RuntimeConfig) bool {

@@ -37,7 +37,7 @@ func TestHooksDelegateFixtureCheckAndRead(t *testing.T) {
 	}
 
 	count := 0
-	handled, err = h.ReadStream(context.Background(), engine.StreamSpec{Name: "management_events"}, connectors.ReadRequest{Stream: "management_events", Config: cfg}, nil, func(connectors.Record) error {
+	handled, err = h.ReadStream(context.Background(), engine.StreamSpec{Name: "describe_trails"}, connectors.ReadRequest{Stream: "describe_trails", Config: cfg}, nil, func(connectors.Record) error {
 		count++
 		return nil
 	})
@@ -49,5 +49,20 @@ func TestHooksDelegateFixtureCheckAndRead(t *testing.T) {
 	}
 	if count == 0 {
 		t.Fatal("ReadStream emitted zero fixture records")
+	}
+}
+
+func TestHooksRejectLegacyLookupAlias(t *testing.T) {
+	h := Hooks{Connector: native.New()}
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
+	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "management_events"}, connectors.ReadRequest{Stream: "management_events", Config: cfg}, nil, func(connectors.Record) error {
+		t.Fatal("ReadStream emitted a record for legacy lookup alias")
+		return nil
+	})
+	if err == nil {
+		t.Fatal("ReadStream unexpectedly accepted legacy lookup alias")
+	}
+	if !handled {
+		t.Fatal("ReadStream handled = false")
 	}
 }
