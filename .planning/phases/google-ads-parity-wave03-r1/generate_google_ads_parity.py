@@ -359,9 +359,12 @@ def cli_flag_for_schema(name, schema, target_prefix="body", summary_prefix="Goog
 
 def cli_flags_for_body_schema(body_schema):
     flags = []
+    required = set(body_schema.get("required") or [])
     for name, schema in sorted((body_schema.get("properties") or {}).items()):
         flag = cli_flag_for_schema(name, schema)
         if flag:
+            if name in required:
+                flag["required"] = True
             flags.append(flag)
     return flags
 

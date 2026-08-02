@@ -196,7 +196,8 @@
             "TALL_PORTRAIT_MARKETING_IMAGE",
             "RELATED_YOUTUBE_VIDEOS",
             "LANDING_PAGE_PREVIEW"
-          ]
+          ],
+          "required": true
         },
         {
           "name": "final-url",
@@ -242,13 +243,15 @@
           "name": "ad-groups",
           "maps_to": "body.adGroups",
           "summary": "Google Ads request field adGroups.",
-          "type": "string_array"
+          "type": "string_array",
+          "required": true
         },
         {
           "name": "keywords",
           "maps_to": "body.keywords",
           "summary": "Google Ads request field keywords.",
-          "type": "string_array"
+          "type": "string_array",
+          "required": true
         }
       ]
     },
@@ -552,7 +555,8 @@
             "LOCAL_SERVICES",
             "TRAVEL",
             "DEMAND_GEN"
-          ]
+          ],
+          "required": true
         },
         {
           "name": "campaign-call-asset-count",
@@ -678,7 +682,8 @@
             "CUSTOM_AUDIENCE_OPT_IN",
             "LEAD_FORM_ASSET",
             "IMPROVE_DEMAND_GEN_AD_STRENGTH"
-          ]
+          ],
+          "required": true
         },
         {
           "name": "target-content-network",
@@ -743,13 +748,15 @@
             "DEVICE",
             "YOUTUBE_LINEUP",
             "USER_LIST"
-          ]
+          ],
+          "required": true
         },
         {
           "name": "query-text",
           "maps_to": "body.queryText",
           "summary": "Google Ads request field queryText.",
-          "type": "string"
+          "type": "string",
+          "required": true
         }
       ]
     },
@@ -777,7 +784,8 @@
           "name": "brand-prefix",
           "maps_to": "body.brandPrefix",
           "summary": "Google Ads request field brandPrefix.",
-          "type": "string"
+          "type": "string",
+          "required": true
         },
         {
           "name": "selected-brands",
@@ -811,7 +819,8 @@
           "name": "language-option",
           "maps_to": "body.languageOption",
           "summary": "Google Ads request field languageOption.",
-          "type": "string"
+          "type": "string",
+          "required": true
         },
         {
           "name": "place-ids",
@@ -919,7 +928,8 @@
           "name": "customer-id",
           "maps_to": "body.customerId",
           "summary": "Google Ads request field customerId.",
-          "type": "string"
+          "type": "string",
+          "required": true
         },
         {
           "name": "customer-reach-group",
@@ -973,7 +983,8 @@
           "name": "plannable-location-id",
           "maps_to": "body.plannableLocationId",
           "summary": "Google Ads request field plannableLocationId.",
-          "type": "string"
+          "type": "string",
+          "required": true
         }
       ]
     },
@@ -1001,7 +1012,8 @@
           "name": "customer-id",
           "maps_to": "body.customerId",
           "summary": "Google Ads request field customerId.",
-          "type": "string"
+          "type": "string",
+          "required": true
         },
         {
           "name": "name-query",
@@ -1056,7 +1068,8 @@
           "name": "customer-id",
           "maps_to": "body.customerId",
           "summary": "Google Ads request field customerId.",
-          "type": "string"
+          "type": "string",
+          "required": true
         },
         {
           "name": "customer-reach-group",

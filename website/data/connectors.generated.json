@@ -55526,7 +55526,8 @@
                 "RELATED_YOUTUBE_VIDEOS",
                 "LANDING_PAGE_PREVIEW"
               ],
-              "maps_to": "body.assetFieldTypes"
+              "maps_to": "body.assetFieldTypes",
+              "required": true
             },
             {
               "name": "final-url",
@@ -55573,14 +55574,16 @@
               "type": "string_array",
               "summary": "Google Ads request field adGroups.",
               "values": [],
-              "maps_to": "body.adGroups"
+              "maps_to": "body.adGroups",
+              "required": true
             },
             {
               "name": "keywords",
               "type": "string_array",
               "summary": "Google Ads request field keywords.",
               "values": [],
-              "maps_to": "body.keywords"
+              "maps_to": "body.keywords",
+              "required": true
             }
           ],
           "examples": [
@@ -55877,7 +55880,8 @@
                 "TRAVEL",
                 "DEMAND_GEN"
               ],
-              "maps_to": "body.advertisingChannelType"
+              "maps_to": "body.advertisingChannelType",
+              "required": true
             },
             {
               "name": "campaign-call-asset-count",
@@ -56011,7 +56015,8 @@
                 "LEAD_FORM_ASSET",
                 "IMPROVE_DEMAND_GEN_AD_STRENGTH"
               ],
-              "maps_to": "body.recommendationTypes"
+              "maps_to": "body.recommendationTypes",
+              "required": true
             },
             {
               "name": "target-content-network",
@@ -56076,14 +56081,16 @@
                 "YOUTUBE_LINEUP",
                 "USER_LIST"
               ],
-              "maps_to": "body.dimensions"
+              "maps_to": "body.dimensions",
+              "required": true
             },
             {
               "name": "query-text",
               "type": "string",
               "summary": "Google Ads request field queryText.",
               "values": [],
-              "maps_to": "body.queryText"
+              "maps_to": "body.queryText",
+              "required": true
             }
           ],
           "examples": [
@@ -56109,7 +56116,8 @@
               "type": "string",
               "summary": "Google Ads request field brandPrefix.",
               "values": [],
-              "maps_to": "body.brandPrefix"
+              "maps_to": "body.brandPrefix",
+              "required": true
             },
             {
               "name": "selected-brands",
@@ -56142,7 +56150,8 @@
               "type": "string",
               "summary": "Google Ads request field languageOption.",
               "values": [],
-              "maps_to": "body.languageOption"
+              "maps_to": "body.languageOption",
+              "required": true
             },
             {
               "name": "place-ids",
@@ -56248,7 +56257,8 @@
               "type": "string",
               "summary": "Google Ads request field customerId.",
               "values": [],
-              "maps_to": "body.customerId"
+              "maps_to": "body.customerId",
+              "required": true
             },
             {
               "name": "customer-reach-group",
@@ -56299,7 +56309,8 @@
               "type": "string",
               "summary": "Google Ads request field plannableLocationId.",
               "values": [],
-              "maps_to": "body.plannableLocationId"
+              "maps_to": "body.plannableLocationId",
+              "required": true
             }
           ],
           "examples": [
@@ -56325,7 +56336,8 @@
               "type": "string",
               "summary": "Google Ads request field customerId.",
               "values": [],
-              "maps_to": "body.customerId"
+              "maps_to": "body.customerId",
+              "required": true
             },
             {
               "name": "name-query",
@@ -56380,7 +56392,8 @@
               "type": "string",
               "summary": "Google Ads request field customerId.",
               "values": [],
-              "maps_to": "body.customerId"
+              "maps_to": "body.customerId",
+              "required": true
             },
             {
               "name": "customer-reach-group",

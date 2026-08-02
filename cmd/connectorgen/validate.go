@@ -923,11 +923,11 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 	if len(requiredPaths) == 0 {
 		return nil
 	}
-	mappedTargets := make([]string, 0, len(cmd.Flags))
+	mappedTargets := make([]cliBodyFlagMapping, 0, len(cmd.Flags))
 	for _, flag := range cmd.Flags {
 		target, ok := strings.CutPrefix(flag.MapsTo, "body.")
 		if ok && target != "" {
-			mappedTargets = append(mappedTargets, target)
+			mappedTargets = append(mappedTargets, cliBodyFlagMapping{target: target, name: flag.Name, required: flag.Required})
 		}
 	}
 	var findings []Finding
@@ -935,12 +935,22 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 		if operationStaticBodyProvidesPath(op.REST.Body, requiredPath) {
 			continue
 		}
-		if commandBodyFlagCoversRequiredPath(schema, mappedTargets, requiredPath) {
+		mapping, ok := commandBodyFlagCoveringRequiredPath(schema, mappedTargets, requiredPath)
+		if !ok {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but no command flag maps to it and rest.body does not provide it", i, cmd.Path, op.ID, requiredPath)})
 			continue
 		}
-		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but no command flag maps to it and rest.body does not provide it", i, cmd.Path, op.ID, requiredPath)})
+		if !mapping.required {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but flag --%s is not marked required", i, cmd.Path, op.ID, requiredPath, mapping.name)})
+		}
 	}
 	return findings
+}
+
+type cliBodyFlagMapping struct {
+	target   string
+	name     string
+	required bool
 }
 
 func operationStaticBodyProvidesPath(body map[string]any, path string) bool {
@@ -961,17 +971,27 @@ func operationStaticBodyProvidesPath(body map[string]any, path string) bool {
 	return true
 }
 
-func commandBodyFlagCoversRequiredPath(schema *cliRecordSchemaNode, mappedTargets []string, requiredPath string) bool {
+func commandBodyFlagCoveringRequiredPath(schema *cliRecordSchemaNode, mappedTargets []cliBodyFlagMapping, requiredPath string) (cliBodyFlagMapping, bool) {
 	requiredNode, err := schema.recordPath(requiredPath)
-	for _, target := range mappedTargets {
-		if target == requiredPath {
-			return true
+	var optional cliBodyFlagMapping
+	optionalFound := false
+	for _, mapping := range mappedTargets {
+		covers := mapping.target == requiredPath
+		if !covers && err == nil && requiredNode != nil && (requiredNode.isObject() || requiredNode.isArray()) && dottedPathPrefix(requiredPath, mapping.target) {
+			covers = true
 		}
-		if err == nil && requiredNode != nil && (requiredNode.isObject() || requiredNode.isArray()) && dottedPathPrefix(requiredPath, target) {
-			return true
+		if !covers {
+			continue
+		}
+		if mapping.required {
+			return mapping, true
+		}
+		if !optionalFound {
+			optional = mapping
+			optionalFound = true
 		}
 	}
-	return false
+	return optional, optionalFound
 }
 
 func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
