@@ -81,6 +81,27 @@ def snake(name: str) -> str:
 
 def kebab(name: str) -> str: return snake(name).replace("_", "-")
 def clean_summary(summary: str) -> str: return re.sub(r"\s*\(Implemented by Partner\)\s*", "", summary).strip()
+def terminal_summary(description: str, fallback: str) -> str:
+    source_was_truncated = len(description) >= 160
+    text = description.strip() or fallback
+    text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"`([^`]*)`", r"\1", text)
+    text = re.sub(r"\((?:ref:|authentication#)[^)]*$", "", text)
+    text = re.sub(r"(?m)^\s*>\s?", "", text)
+    text = text.replace("**", "").replace("__", "")
+    text = text.translate(str.maketrans("", "", "[]`*"))
+    text = re.sub(r"\s+", " ", text).strip()
+    needs_abbreviation = source_was_truncated or (text and text[-1] not in ".!?")
+    if len(text) <= 160 and not needs_abbreviation:
+        return text
+    candidate = text[:161]
+    sentence_end = max(candidate.rfind(". "), candidate.rfind("! "), candidate.rfind("? "))
+    if sentence_end >= 40:
+        return candidate[:sentence_end + 1]
+    word_end = candidate[:157].rfind(" ")
+    if word_end < 40:
+        word_end = 157
+    return candidate[:word_end].rstrip(" ,;:-") + "..."
 def ref_slug(op_id: str, summary: str) -> str: return re.sub(r"[^a-z0-9]", "", (op_id or clean_summary(summary)).lower())
 
 def deref(schema: dict[str, Any], ref: str) -> Any:
@@ -570,7 +591,7 @@ def main():
                 notes += f" Repeatable array request variants ({blocked_names}) are blocked pending {STREAM_ARRAY_FOUNDATION}."
             if "syncToken" in req_props:
                 notes += f" Opaque syncToken checkpointing is blocked pending {SYNC_TOKEN_FOUNDATION}; this stream is full-refresh only."
-            command_summary = op.get("description","")[:160] or clean
+            command_summary = terminal_summary(op.get("description", ""), clean)
             if "syncToken" in req_props:
                 command_summary = f"Full-refresh-only Ashby {clean} read. Opaque syncToken checkpointing is unavailable pending {SYNC_TOKEN_FOUNDATION}."
             cli_commands.append({"path":cpath,"summary":command_summary,"intent":"etl","availability":"implemented","stream":sname,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"notes":notes})
@@ -582,7 +603,7 @@ def main():
             operation_entries.append({"id":opid,"kind":"rest_read","summary":clean,"description":op.get("description","")[:1000],"source_url":source_url(op),"risk":"medium" if ("file" in clean.lower() or "transcript" in clean.lower() or clean == "report.generate") else "low","approval":"none","output_policy":"json_redacted","rest":{"method":method,"path":path,"content_type":"application/json","max_bytes":1048576,"body":default_body_for(req_props),"body_schema":body_schema}})
             flags=flags_for_props(req_props, "body", PAGINATION_FIELDS, set(req_required))
             direct_risk = DIRECT_READ_RISK_OVERRIDES.get(clean, SIGNED_URL_DIRECT_READ_RISK if clean in SIGNED_URL_DIRECT_READS else "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output")
-            command_summary = DIRECT_READ_COMMAND_SUMMARY_OVERRIDES.get(clean, op.get("description","")[:160] or clean)
+            command_summary = terminal_summary(DIRECT_READ_COMMAND_SUMMARY_OVERRIDES.get(clean, op.get("description", "")), clean)
             cli_commands.append({"path":cpath,"summary":command_summary,"intent":"direct_read","availability":"implemented","operation":opid,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"output_policy":"json_redacted","risk":direct_risk,"approval":"none","notes":"Fixed Ashby POST direct read; no raw method/path/body override is exposed."})
             api_rows.append({"method":method,"path":path,"covered_by":{"direct_read":cpath}}); continue
         if is_write(summary):
@@ -600,7 +621,7 @@ def main():
             if complex_required:
                 note += " This command has nested object/array requirements that are implemented by the reverse-ETL action schema but are not fully expressible as scalar CLI flags; use file/warehouse reverse-ETL inputs for execution."
             cpath=command_path(clean, used_commands)
-            cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"reverse_etl","availability":availability,"write":wname,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"redact_fields":action["redact_fields"],"risk":action["risk"],"approval":"reverse ETL writes require plan -> preview -> explicit approval -> execute","notes":note})
+            cli_commands.append({"path":cpath,"summary":terminal_summary(op.get("description", ""), clean),"intent":"reverse_etl","availability":availability,"write":wname,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"redact_fields":action["redact_fields"],"risk":action["risk"],"approval":"reverse ETL writes require plan -> preview -> explicit approval -> execute","notes":note})
             api_rows.append({"method":method,"path":path,"covered_by":{"write":wname}}); continue
         if is_partner(summary):
             reason="official OpenAPI marks this as implemented by an assessment partner and called by Ashby; the CLI connector is a client of Ashby, not an inbound partner API server"; model="disallowed"; risk="medium"

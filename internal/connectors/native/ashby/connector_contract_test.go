@@ -143,6 +143,41 @@ func TestSyncTokenCommandsUseFullRefreshHelp(t *testing.T) {
 	}
 }
 
+func TestCommandSurfaceSummariesRenderAsPlainTerminalHelp(t *testing.T) {
+	for _, command := range New().(connectors.CommandSurfaceProvider).CommandSurface().Commands {
+		summary := strings.TrimSpace(command.Summary)
+		if summary == "" {
+			t.Fatalf("command %q has an empty summary", command.Path)
+		}
+		if strings.ContainsAny(summary, "\r\n") {
+			t.Fatalf("command %q summary contains a line break: %q", command.Path, summary)
+		}
+		for _, marker := range []string{"](", "**", "`"} {
+			if strings.Contains(summary, marker) {
+				t.Fatalf("command %q summary contains raw Markdown marker %q: %q", command.Path, marker, summary)
+			}
+		}
+		if strings.HasPrefix(summary, ">") {
+			t.Fatalf("command %q summary contains a raw Markdown blockquote: %q", command.Path, summary)
+		}
+		if len(summary) > 160 {
+			t.Fatalf("command %q summary is %d bytes, want at most 160: %q", command.Path, len(summary), summary)
+		}
+	}
+
+	for _, command := range New().(connectors.CommandSurfaceProvider).CommandSurface().Commands {
+		if command.Path != "application create" {
+			continue
+		}
+		const want = "Consider a candidate for a job (e.g. when sourcing a candidate for a job posting)."
+		if command.Summary != want {
+			t.Fatalf("application create summary = %q, want %q", command.Summary, want)
+		}
+		return
+	}
+	t.Fatal("application create command not found")
+}
+
 func TestSemanticDirectReadsReturnAshbyResults(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var body map[string]any

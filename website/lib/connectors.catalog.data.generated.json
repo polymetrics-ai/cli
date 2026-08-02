@@ -16074,7 +16074,7 @@
         },
         {
           "path": "api-key info",
-          "summary": "Returns details for the API key used to make the request.\n\n**Requires the [`apiKeysRead`](authentication#permissions-apikeyinfo) permission.**",
+          "summary": "Returns details for the API key used to make the request. Requires the apiKeysRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "api_key_info",
@@ -16090,7 +16090,7 @@
         },
         {
           "path": "audit-log list",
-          "summary": "> **Beta**\n>\n> **This API is in active development and only available in a closed beta with early design partners.**\n\nLists an organization's audit log entries,",
+          "summary": "Beta This API is in active development and only available in a closed beta with early design partners.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "audit_log_list",
@@ -16125,7 +16125,7 @@
         },
         {
           "path": "application create",
-          "summary": "Consider a candidate for a job (e.g. when sourcing a candidate for a job posting).\n\nIf you're submitting an application as a job board, use the [`applicationFor",
+          "summary": "Consider a candidate for a job (e.g. when sourcing a candidate for a job posting).",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16206,7 +16206,7 @@
         },
         {
           "path": "application update",
-          "summary": "Update an application.\n\nTo set values for custom fields on Applications, use the [`customField.setValue`](ref:customfieldsetvalue) endpoint.\n\n**Requires the [`c",
+          "summary": "Update an application. To set values for custom fields on Applications, use the customField.setValue endpoint.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16263,7 +16263,7 @@
         },
         {
           "path": "application delete",
-          "summary": "Deletes an application by id.\n\n**Requires the [`candidatesDelete`](authentication#permissions-applicationdelete) permission.**",
+          "summary": "Deletes an application by id. Requires the candidatesDelete permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16288,7 +16288,7 @@
         },
         {
           "path": "application info",
-          "summary": "Fetch application details by application id or by submitted form instance id (which is returned by the `applicationForm.submit` endpoint). If both `applicationI",
+          "summary": "Fetch application details by application id or by submitted form instance id (which is returned by the applicationForm.submit endpoint).",
           "intent": "etl",
           "availability": "implemented",
           "stream": "application_info",
@@ -16321,7 +16321,7 @@
         },
         {
           "path": "application add-hiring-team-member",
-          "summary": "Adds an Ashby user to the hiring team at the application level.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationaddhiringteammember) p",
+          "summary": "Adds an Ashby user to the hiring team at the application level.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16362,7 +16362,7 @@
         },
         {
           "path": "application remove-hiring-team-member",
-          "summary": "Unassigns a hiring team role from an Ashby user at the application level.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationremovehiring",
+          "summary": "Unassigns a hiring team role from an Ashby user at the application level.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16403,7 +16403,7 @@
         },
         {
           "path": "application-hiring-team-role list",
-          "summary": "Gets all available hiring team roles for applications in the organization.\n\n**Requires the [`candidatesRead`](authentication#permissions-applicationhiringteamro",
+          "summary": "Gets all available hiring team roles for applications in the organization.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "application_hiring_team_role_list",
@@ -16419,7 +16419,7 @@
         },
         {
           "path": "application change-stage",
-          "summary": "**Deprecated.** Use [`application.changeStage`](ref:applicationchangestage) instead.\n\nChange the stage of an application.\n\n**Requires the [`candidatesWrite`](au",
+          "summary": "Deprecated. Use application.changeStage instead. Change the stage of an application.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16460,7 +16460,7 @@
         },
         {
           "path": "application change-stage-2",
-          "summary": "Change the stage of an application.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationchangestage) permission.**",
+          "summary": "Change the stage of an application. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16501,7 +16501,7 @@
         },
         {
           "path": "application change-source",
-          "summary": "**Deprecated.** Use [`application.changeSource`](ref:applicationchangesource) instead.\n\nChange the source of an application.\n\n**Requires the [`candidatesWrite`]",
+          "summary": "Deprecated. Use application.changeSource instead. Change the source of an application.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16534,7 +16534,7 @@
         },
         {
           "path": "application change-source-2",
-          "summary": "Change the source of an application.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationchangesource) permission.**",
+          "summary": "Change the source of an application. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16567,7 +16567,7 @@
         },
         {
           "path": "application transfer",
-          "summary": "Transfer an application to a different job.\n\n**Requires the [`candidatesWrite`](authentication#permissions-applicationtransfer) permission.**",
+          "summary": "Transfer an application to a different job. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16623,7 +16623,7 @@
         },
         {
           "path": "application update-history",
-          "summary": "Update the history of an application. Used to update stage timestamps and to delete history events.\n\n**Also requires the `Allow updating application history?` s",
+          "summary": "Update the history of an application. Used to update stage timestamps and to delete history events. Also requires the Allow updating application history?",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16672,7 +16672,7 @@
         },
         {
           "path": "application list-history",
-          "summary": "Fetch a paginated list of application history items for an application.\n\nThis endpoint supports pagination only (not incremental sync). See the [Pagination and",
+          "summary": "Fetch a paginated list of application history items for an application. This endpoint supports pagination only (not incremental sync).",
           "intent": "etl",
           "availability": "implemented",
           "stream": "application_list_history",
@@ -16698,7 +16698,7 @@
         },
         {
           "path": "application list-criteria-evaluations",
-          "summary": "Fetch a paginated list of AI criteria evaluations for an application.\n\nThis endpoint returns the AI-generated criteria evaluations that assess how well a candid",
+          "summary": "Fetch a paginated list of AI criteria evaluations for an application.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "application_list_criteria_evaluations",
@@ -16756,7 +16756,7 @@
         },
         {
           "path": "application-feedback submit",
-          "summary": "Application feedback forms support a variety of field types.\n\nThe values accepted for each field depend on the type of field that's being filled out:\n- `Boolean",
+          "summary": "Application feedback forms support a variety of field types.",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -16813,7 +16813,7 @@
         },
         {
           "path": "application-feedback-request create",
-          "summary": "Request feedback on an application without scheduling an interview.\nThe `interviewEventId` returned in the response can be provided to `applicationFeedback.subm",
+          "summary": "Request feedback on an application without scheduling an interview.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16854,7 +16854,7 @@
         },
         {
           "path": "approval-definition update",
-          "summary": "Create or update an approval definition for a specific entity that requires approval. The entity requiring approval must be within scope of an approval in Ashby",
+          "summary": "Create or update an approval definition for a specific entity that requires approval.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -16917,7 +16917,7 @@
         },
         {
           "path": "candidate search",
-          "summary": "Searches for candidates by email and/or name.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatesearch) permission.**",
+          "summary": "Searches for candidates by email and/or name. Requires the candidatesRead permission.",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -16951,7 +16951,7 @@
         },
         {
           "path": "candidate info",
-          "summary": "Fetches details about a single candidate by id or external mapping id.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidateinfo) permission.*",
+          "summary": "Fetches details about a single candidate by id or external mapping id. Requires the candidatesRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "candidate_info",
@@ -16984,7 +16984,7 @@
         },
         {
           "path": "candidate create",
-          "summary": "Creates a new candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidatecreate) permission.**",
+          "summary": "Creates a new candidate. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17081,7 +17081,7 @@
         },
         {
           "path": "candidate upload-resume",
-          "summary": "Uploads a resume for a candidate. Accepts either a multipart/form-data\nrequest with a `resume` file part, or a JSON body with a `resumeHandle`\npreviously create",
+          "summary": "Uploads a resume for a candidate. Accepts either a multipart/form-data request with a resume file part, or a JSON body with a resumeHandle previously...",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17114,7 +17114,7 @@
         },
         {
           "path": "candidate upload-file",
-          "summary": "Uploads a file for a candidate. Accepts either a multipart/form-data\nrequest with a `file` file part, or a JSON body with a `fileHandle`\npreviously created via",
+          "summary": "Uploads a file for a candidate. Accepts either a multipart/form-data request with a file file part, or a JSON body with a fileHandle previously created...",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17147,7 +17147,7 @@
         },
         {
           "path": "candidate update",
-          "summary": "Updates an existing candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateupdate) permission.**",
+          "summary": "Updates an existing candidate. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17267,7 +17267,7 @@
         },
         {
           "path": "candidate create-note",
-          "summary": "Creates a note on a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidatecreatenote) permission.**",
+          "summary": "Creates a note on a candidate. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17359,7 +17359,7 @@
         },
         {
           "path": "candidate list-fraud-checks",
-          "summary": "Lists the fraud checks performed on a candidate.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatelistfraudchecks) permission.**",
+          "summary": "Lists the fraud checks performed on a candidate. Requires the candidatesRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "candidate_list_fraud_checks",
@@ -17385,7 +17385,7 @@
         },
         {
           "path": "candidate set-fraud-status",
-          "summary": "Updates the manual fraud-review status of a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidatesetfraudstatus) permission.**",
+          "summary": "Updates the manual fraud-review status of a candidate. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17447,7 +17447,7 @@
         },
         {
           "path": "candidate anonymize",
-          "summary": "Anonymizes a candidate's personally identifiable information.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateanonymize) permission.**",
+          "summary": "Anonymizes a candidate's personally identifiable information. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17472,7 +17472,7 @@
         },
         {
           "path": "candidate remove-project",
-          "summary": "Removes the candidate from a project.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateremoveproject) permission.**",
+          "summary": "Removes the candidate from a project. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17505,7 +17505,7 @@
         },
         {
           "path": "candidate add-project",
-          "summary": "Adds a candidate to a project.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateaddproject) permission.**",
+          "summary": "Adds a candidate to a project. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17538,7 +17538,7 @@
         },
         {
           "path": "candidate add-email-message",
-          "summary": "Attaches an existing email message (e.g. fetched from a partner provider) to a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candida",
+          "summary": "Attaches an existing email message (e.g. fetched from a partner provider) to a candidate.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17659,7 +17659,7 @@
         },
         {
           "path": "candidate add-tag",
-          "summary": "Adds a tag to a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateaddtag) permission.**",
+          "summary": "Adds a tag to a candidate. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17692,7 +17692,7 @@
         },
         {
           "path": "candidate remove-tag",
-          "summary": "Removes a tag from a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-candidateremovetag) permission.**",
+          "summary": "Removes a tag from a candidate. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17725,7 +17725,7 @@
         },
         {
           "path": "candidate list-projects",
-          "summary": "Lists the projects a candidate has been added to.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatelistprojects) permission.**",
+          "summary": "Lists the projects a candidate has been added to. Requires the candidatesRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "candidate_list_projects",
@@ -17751,7 +17751,7 @@
         },
         {
           "path": "candidate push-to-hris",
-          "summary": "> Beta\n>\n> This feature is in beta and may not be available for all organizations.\n\nPushes a candidate's data to an HRIS system (e.g. Workday, BambooHR, ADP).",
+          "summary": "Beta This feature is in beta and may not be available for all organizations. Pushes a candidate's data to an HRIS system (e.g. Workday, BambooHR, ADP).",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17811,7 +17811,7 @@
         },
         {
           "path": "candidate-tag create",
-          "summary": "Creates a candidate tag.\n\nIf a tag already exists with the given title, the existing tag will be returned.\n\n**Requires the [`hiringProcessMetadataWrite`](authen",
+          "summary": "Creates a candidate tag. If a tag already exists with the given title, the existing tag will be returned.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17836,7 +17836,7 @@
         },
         {
           "path": "candidate-tag archive",
-          "summary": "Archives a candidate tag.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-candidatetagarchive) permission.**",
+          "summary": "Archives a candidate tag. Requires the hiringProcessMetadataWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -17885,7 +17885,7 @@
         },
         {
           "path": "communication-template list",
-          "summary": "List all enabled communication templates.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-communicationtemplatelist) permission.**",
+          "summary": "List all enabled communication templates. Requires the hiringProcessMetadataRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "communication_template_list",
@@ -17925,7 +17925,7 @@
         },
         {
           "path": "feedback-form-definition info",
-          "summary": "Returns a single feedback form by id\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-feedbackformdefinitioninfo) permission.**",
+          "summary": "Returns a single feedback form by id Requires the hiringProcessMetadataRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "feedback_form_definition_info",
@@ -17951,7 +17951,7 @@
         },
         {
           "path": "job-posting list",
-          "summary": "Lists published job postings. By default, only published job postings are returned.\n\nSet `includeUnpublishedJobPostings` to `true` to also include unpublished (",
+          "summary": "Lists published job postings. By default, only published job postings are returned.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_posting_list",
@@ -18006,7 +18006,7 @@
         },
         {
           "path": "job-posting info",
-          "summary": "Retrieve an individual job posting.\n\nSet `includeUnpublishedJobPostings` to `true` when fetching an unpublished (draft) job posting. This flag is required for d",
+          "summary": "Retrieve an individual job posting. Set includeUnpublishedJobPostings to true when fetching an unpublished (draft) job posting.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_posting_info",
@@ -18047,7 +18047,7 @@
         },
         {
           "path": "job-posting update-compensation",
-          "summary": "Updates compensation for an existing job posting.\n\nSet `includeUnpublishedJobPostings` to `true` when updating an unpublished (draft) job posting. This flag is",
+          "summary": "Updates compensation for an existing job posting. Set includeUnpublishedJobPostings to true when updating an unpublished (draft) job posting.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18112,7 +18112,7 @@
         },
         {
           "path": "job-posting update",
-          "summary": "Updates an existing job posting.\n\nSet `includeUnpublishedJobPostings` to `true` when updating an unpublished (draft) job posting. This flag is required for draf",
+          "summary": "Updates an existing job posting. Set includeUnpublishedJobPostings to true when updating an unpublished (draft) job posting.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18185,7 +18185,7 @@
         },
         {
           "path": "job-posting set-status",
-          "summary": "Sets the status of a job posting. Use this to publish or unpublish a job posting.\n\nSet `status` to `Published` to publish a draft job posting. The posting must",
+          "summary": "Sets the status of a job posting. Use this to publish or unpublish a job posting. Set status to Published to publish a draft job posting.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18220,7 +18220,7 @@
         },
         {
           "path": "job info",
-          "summary": "Fetches details of a single job by id.\n\n**Requires the [`jobsRead`](authentication#permissions-jobinfo) permission.**",
+          "summary": "Fetches details of a single job by id. Requires the jobsRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_info",
@@ -18253,7 +18253,7 @@
         },
         {
           "path": "job create",
-          "summary": "Creates a new job.\n\n**Requires the [`jobsWrite`](authentication#permissions-jobcreate) permission.**",
+          "summary": "Creates a new job. Requires the jobsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18331,7 +18331,7 @@
         },
         {
           "path": "job update",
-          "summary": "Updates an existing job. At least one field other than `jobId` must be supplied.\n\n**Requires the [`jobsWrite`](authentication#permissions-jobupdate) permission.",
+          "summary": "Updates an existing job. At least one field other than jobId must be supplied. Requires the jobsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18409,7 +18409,7 @@
         },
         {
           "path": "job update-compensation",
-          "summary": "Replaces the compensation tiers on a job. Pass an empty array to clear existing compensation.\n\n**Requires the [`jobsWrite`](authentication#permissions-jobupdate",
+          "summary": "Replaces the compensation tiers on a job. Pass an empty array to clear existing compensation.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18467,7 +18467,7 @@
         },
         {
           "path": "job search",
-          "summary": "Searches jobs by title or custom requisition id. At least one of `title` or `requisitionId` must be provided.\n\n**Requires the [`jobsRead`](authentication#permis",
+          "summary": "Searches jobs by title or custom requisition id. At least one of title or requisitionId must be provided.",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -18501,7 +18501,7 @@
         },
         {
           "path": "job set-status",
-          "summary": "Sets the status of a job.\n\n**Requires the [`jobsWrite`](authentication#permissions-jobsetstatus) permission.**",
+          "summary": "Sets the status of a job. Requires the jobsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18538,7 +18538,7 @@
         },
         {
           "path": "job-board list",
-          "summary": "List all enabled job boards.\n\n**Requires the [`jobsRead`](authentication#permissions-jobboardlist) permission.**",
+          "summary": "List all enabled job boards. Requires the jobsRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_board_list",
@@ -18554,7 +18554,7 @@
         },
         {
           "path": "job-interview-plan info",
-          "summary": "Returns a job's interview plan, including activities and interviews that need to be scheduled at each stage.\n\n**Requires the [`jobsRead`](authentication#permiss",
+          "summary": "Returns a job's interview plan, including activities and interviews that need to be scheduled at each stage.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "job_interview_plan_info",
@@ -18596,7 +18596,7 @@
         },
         {
           "path": "department archive",
-          "summary": "Archives a department.\n\n**Requires the [`organizationWrite`](authentication#permissions-departmentarchive) permission.**",
+          "summary": "Archives a department. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18621,7 +18621,7 @@
         },
         {
           "path": "department restore",
-          "summary": "Restores a department.\n\n**Requires the [`organizationWrite`](authentication#permissions-departmentrestore) permission.**",
+          "summary": "Restores a department. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18646,7 +18646,7 @@
         },
         {
           "path": "department create",
-          "summary": "Creates a department.\n\n**Requires the [`organizationWrite`](authentication#permissions-departmentcreate) permission.**",
+          "summary": "Creates a department. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18687,7 +18687,7 @@
         },
         {
           "path": "department info",
-          "summary": "Fetch department details by id.\n\n**Requires the [`organizationRead`](authentication#permissions-departmentinfo) permission.**",
+          "summary": "Fetch department details by id. Requires the organizationRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "department_info",
@@ -18737,7 +18737,7 @@
         },
         {
           "path": "department move",
-          "summary": "Moves a department to another parent.\n\n**Requires the [`organizationWrite`](authentication#permissions-departmentmove) permission.**",
+          "summary": "Moves a department to another parent. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18770,7 +18770,7 @@
         },
         {
           "path": "department update",
-          "summary": "Updates a department.\n\n**Requires the [`organizationWrite`](authentication#permissions-departmentupdate) permission.**",
+          "summary": "Updates a department. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18811,7 +18811,7 @@
         },
         {
           "path": "location archive",
-          "summary": "Archives a location or location hierarchy.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationarchive) permission.**",
+          "summary": "Archives a location or location hierarchy. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18836,7 +18836,7 @@
         },
         {
           "path": "location create",
-          "summary": "Creates a location or location hierarchy.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationcreate) permission.**",
+          "summary": "Creates a location or location hierarchy. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18905,7 +18905,7 @@
         },
         {
           "path": "location restore",
-          "summary": "Restores an archived location or location hierarchy.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationrestore) permission.**",
+          "summary": "Restores an archived location or location hierarchy. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -18961,7 +18961,7 @@
         },
         {
           "path": "location info",
-          "summary": "Gets details for a single location by id.\n\n**Requires the [`organizationRead`](authentication#permissions-locationinfo) permission.**",
+          "summary": "Gets details for a single location by id. Requires the organizationRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "location_info",
@@ -18987,7 +18987,7 @@
         },
         {
           "path": "location move",
-          "summary": "Moves a location in location hierarchy.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationmove) permission.**",
+          "summary": "Moves a location in location hierarchy. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19020,7 +19020,7 @@
         },
         {
           "path": "location update-address",
-          "summary": "Update an address of a location or location hierarchy.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationupdateaddress) permission.**",
+          "summary": "Update an address of a location or location hierarchy. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19045,7 +19045,7 @@
         },
         {
           "path": "location update-name",
-          "summary": "Update location's name.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationupdatename) permission.**",
+          "summary": "Update location's name. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19078,7 +19078,7 @@
         },
         {
           "path": "location update-workplace-type",
-          "summary": "Update location's workplace type.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationupdateworkplacetype) permission.**",
+          "summary": "Update location's workplace type. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19114,7 +19114,7 @@
         },
         {
           "path": "location update-external-name",
-          "summary": "Update a location's external (candidate-facing) name.\n\n**Requires the [`organizationWrite`](authentication#permissions-locationupdateexternalname) permission.**",
+          "summary": "Update a location's external (candidate-facing) name. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19171,7 +19171,7 @@
         },
         {
           "path": "interview-stage list",
-          "summary": "List all interview stages for an interview plan in order.\n\n**Requires the [`interviewsRead`](authentication#permissions-interviewstagelist) permission.**",
+          "summary": "List all interview stages for an interview plan in order. Requires the interviewsRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_stage_list",
@@ -19197,7 +19197,7 @@
         },
         {
           "path": "interview-stage-group list",
-          "summary": "List all interview stage groups in the organization in order.\n\n**Requires the [`interviewsRead`](authentication#permissions-interviewstagegrouplist) permission.",
+          "summary": "List all interview stage groups in the organization in order. Requires the interviewsRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_stage_group_list",
@@ -19213,7 +19213,7 @@
         },
         {
           "path": "notetaker-transcript info",
-          "summary": "Fetches metadata and a pre-signed download URL for an AI\nNotetaker transcript recording.\n\n**Prerequisites:**\n- Your organization must have the **AI Notetaker ad",
+          "summary": "Fetches metadata and a pre-signed download URL for an AI Notetaker transcript recording.",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -19240,7 +19240,7 @@
         },
         {
           "path": "offer approve",
-          "summary": "Approves an offer or a specific approval step within an offer's approval process.\n\nThis endpoint mimics the behavior of the \"Force Approve\" function in the Ashb",
+          "summary": "Approves an offer or a specific approval step within an offer's approval process.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19288,7 +19288,7 @@
         },
         {
           "path": "offer create",
-          "summary": "Creates a new Offer\n\nOffer forms support a variety of field types. The values accepted for each field depend on the type of field that's being filled out:\n- `Bo",
+          "summary": "Creates a new Offer Offer forms support a variety of field types.",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -19368,7 +19368,7 @@
         },
         {
           "path": "offer info",
-          "summary": "Returns details about a single offer by id\n\n**Requires the [`offersRead`](authentication#permissions-offerinfo) permission.**",
+          "summary": "Returns details about a single offer by id Requires the offersRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "offer_info",
@@ -19401,7 +19401,7 @@
         },
         {
           "path": "offer start",
-          "summary": "The offer.start endpoint creates and returns an offer version instance that can be filled out and submitted\nusing the `offer.create` endpoint.\n\nIn order to crea",
+          "summary": "The offer.start endpoint creates and returns an offer version instance that can be filled out and submitted using the offer.create endpoint.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19426,7 +19426,7 @@
         },
         {
           "path": "offer start-approval-process",
-          "summary": "Starts the approval process for an offer in a \"WaitingOnApprovalStart\" state.\nOnce started, the approval is sent to the configured approvers.\n\nThe offer version",
+          "summary": "Starts the approval process for an offer in a \"WaitingOnApprovalStart\" state. Once started, the approval is sent to the configured approvers.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19466,7 +19466,7 @@
         },
         {
           "path": "offer update",
-          "summary": "Updates an existing Offer\n\nOffer forms support a variety of field types. The values accepted for each field depend on the type of field that's being filled out:",
+          "summary": "Updates an existing Offer Offer forms support a variety of field types.",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -19506,7 +19506,7 @@
         },
         {
           "path": "offer set-status",
-          "summary": "Updates an offer's acceptance status.\n\nAshby derives the offer status from the provided acceptance status; `offerStatus` can't be set independently.\n\n**Requires",
+          "summary": "Updates an offer's acceptance status. Ashby derives the offer status from the provided acceptance status; offerStatus can't be set independently.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19549,7 +19549,7 @@
         },
         {
           "path": "offer set-decided-at",
-          "summary": "Updates an offer's decidedAt timestamp.\n\n**Requires the [`offersWrite`](authentication#permissions-offersetdecidedat) permission.**",
+          "summary": "Updates an offer's decidedAt timestamp. Requires the offersWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19590,7 +19590,7 @@
         },
         {
           "path": "offer-process start",
-          "summary": "Starts an offer process for a candidate.\n\n**Requires the [`offersWrite`](authentication#permissions-offerprocessstart) permission.**",
+          "summary": "Starts an offer process for a candidate. Requires the offersWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19615,7 +19615,7 @@
         },
         {
           "path": "opening info",
-          "summary": "Retrieves an opening by its UUID.\n\n**Requires the [`jobsRead`](authentication#permissions-openinginfo) permission.**",
+          "summary": "Retrieves an opening by its UUID. Requires the jobsRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "opening_info",
@@ -19641,7 +19641,7 @@
         },
         {
           "path": "opening create",
-          "summary": "Creates an opening.\n\nTo set values of custom fields on Openings, use the [`customField.setValue`](ref:customfieldsetvalue) endpoint.\n\n**Requires the [`jobsWrite",
+          "summary": "Creates an opening. To set values of custom fields on Openings, use the customField.setValue endpoint.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19746,7 +19746,7 @@
         },
         {
           "path": "opening update",
-          "summary": "Updates an opening.\n\nTo set values for custom fields on Openings, use the [`customField.setValue`](ref:customfieldsetvalue) endpoint.\n\n**Requires the [`jobsWrit",
+          "summary": "Updates an opening. To set values for custom fields on Openings, use the customField.setValue endpoint.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19833,7 +19833,7 @@
         },
         {
           "path": "opening set-archived",
-          "summary": "Sets the archived state of an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingsetarchived) permission.**",
+          "summary": "Sets the archived state of an opening. Requires the jobsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19865,7 +19865,7 @@
         },
         {
           "path": "opening set-opening-state",
-          "summary": "Sets the state of an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingsetopeningstate) permission.**",
+          "summary": "Sets the state of an opening. Requires the jobsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19910,7 +19910,7 @@
         },
         {
           "path": "opening add-job",
-          "summary": "Adds a job to an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingaddjob) permission.**",
+          "summary": "Adds a job to an opening. Requires the jobsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19943,7 +19943,7 @@
         },
         {
           "path": "opening remove-job",
-          "summary": "Removes a job from an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingremovejob) permission.**",
+          "summary": "Removes a job from an opening. Requires the jobsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -19976,7 +19976,7 @@
         },
         {
           "path": "opening add-location",
-          "summary": "Adds a location to an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingaddlocation) permission.**",
+          "summary": "Adds a location to an opening. Requires the jobsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20009,7 +20009,7 @@
         },
         {
           "path": "opening remove-location",
-          "summary": "Removes a location from an opening.\n\n**Requires the [`jobsWrite`](authentication#permissions-openingremovelocation) permission.**",
+          "summary": "Removes a location from an opening. Requires the jobsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20066,7 +20066,7 @@
         },
         {
           "path": "opening search",
-          "summary": "Searches for openings by identifier.\n\n**Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.**",
+          "summary": "Searches for openings by identifier. Requires the jobsRead permission.",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -20093,7 +20093,7 @@
         },
         {
           "path": "project info",
-          "summary": "Retrieves a project by its UUID.\n\n**Requires the [`candidatesRead`](authentication#permissions-projectinfo) permission.**",
+          "summary": "Retrieves a project by its UUID. Requires the candidatesRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "project_info",
@@ -20143,7 +20143,7 @@
         },
         {
           "path": "project search",
-          "summary": "Search for projects by title.\n\nResponses are limited to 100 results. Consider refining your search or using /project.list to paginate through all projects, if y",
+          "summary": "Search for projects by title. Responses are limited to 100 results.",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -20170,7 +20170,7 @@
         },
         {
           "path": "source list",
-          "summary": "List all sources\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-sourcelist) permission.**",
+          "summary": "List all sources Requires the hiringProcessMetadataRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "source_list",
@@ -20226,7 +20226,7 @@
         },
         {
           "path": "archive-reason list",
-          "summary": "Lists archive reasons.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-archivereasonlist) permission.**",
+          "summary": "Lists archive reasons. Requires the hiringProcessMetadataRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "archive_reason_list",
@@ -20250,7 +20250,7 @@
         },
         {
           "path": "brand list",
-          "summary": "Lists all brands for the organization.\n\n**Requires the [`organizationRead`](authentication#permissions-brandlist) permission.**",
+          "summary": "Lists all brands for the organization. Requires the organizationRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "brand_list",
@@ -20290,7 +20290,7 @@
         },
         {
           "path": "custom-field create",
-          "summary": "Create a new custom field.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-customfieldcreate) permission.**",
+          "summary": "Create a new custom field. Requires the hiringProcessMetadataWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20388,7 +20388,7 @@
         },
         {
           "path": "custom-field set-value",
-          "summary": "Set the value of a custom field for a given object.\n\n**Note:** When updating multiple custom fields on the same object, use\n[`customField.setValues`](#operation",
+          "summary": "Set the value of a custom field for a given object.",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -20433,7 +20433,7 @@
         },
         {
           "path": "custom-field info",
-          "summary": "Get information about a custom field.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-customfieldinfo) permission.**",
+          "summary": "Get information about a custom field. Requires the hiringProcessMetadataRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "custom_field_info",
@@ -20459,7 +20459,7 @@
         },
         {
           "path": "custom-field set-values",
-          "summary": "Set the values of multiple custom fields for a given object in a single call.\nThis is the recommended approach when updating multiple fields on the same object",
+          "summary": "Set the values of multiple custom fields for a given object in a single call.",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -20504,7 +20504,7 @@
         },
         {
           "path": "custom-field update-selectable-values",
-          "summary": "Update the selectable values for a custom field.\n\nThis endpoint merges the provided selectable values with the existing values for a custom field.\n\n**Merge beha",
+          "summary": "Update the selectable values for a custom field. This endpoint merges the provided selectable values with the existing values for a custom field.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20545,7 +20545,7 @@
         },
         {
           "path": "assessment update",
-          "summary": "Update Ashby about the status of a started assessment.\n\n`assessment_status` is required unless `cancelled_reason` is provided.\n\n**Requires the [`candidatesWrite",
+          "summary": "Update Ashby about the status of a started assessment. assessment_status is required unless cancelled_reason is provided.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20584,7 +20584,7 @@
         },
         {
           "path": "assessment add-completed-to-candidate",
-          "summary": "Add a completed assessment to a candidate.\n\n**Requires the [`candidatesWrite`](authentication#permissions-assessmentaddcompletedtocandidate) permission.**",
+          "summary": "Add a completed assessment to a candidate. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20728,7 +20728,7 @@
         },
         {
           "path": "hiring-team add-member",
-          "summary": "Adds an Ashby user to the hiring team at the application, job, or opening level.\n\n**Requires the [`organizationWrite`](authentication#permissions-hiringteamaddm",
+          "summary": "Adds an Ashby user to the hiring team at the application, job, or opening level.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20785,7 +20785,7 @@
         },
         {
           "path": "hiring-team remove-member",
-          "summary": "Removes an Ashby user from the hiring team at the application, job, or opening level.\n\n**Requires the [`organizationWrite`](authentication#permissions-hiringtea",
+          "summary": "Removes an Ashby user from the hiring team at the application, job, or opening level.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20842,7 +20842,7 @@
         },
         {
           "path": "hiring-team-role list",
-          "summary": "Lists the possible hiring team roles in an organization\n\n**Requires the [`organizationRead`](authentication#permissions-hiringteamrolelist) permission.**",
+          "summary": "Lists the possible hiring team roles in an organization Requires the organizationRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "hiring_team_role_list",
@@ -20858,7 +20858,7 @@
         },
         {
           "path": "user info",
-          "summary": "Retrieves detailed information about a specific user by their ID.\n\n**Requires the [`organizationRead`](authentication#permissions-userinfo) permission.**",
+          "summary": "Retrieves detailed information about a specific user by their ID. Requires the organizationRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "user_info",
@@ -20884,7 +20884,7 @@
         },
         {
           "path": "user search",
-          "summary": "Searches for users by email address.\n\nReturns an array containing the user if found, or an empty array if no user with the given email exists.\n\n**Requires the [",
+          "summary": "Searches for users by email address. Returns an array containing the user if found, or an empty array if no user with the given email exists.",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -20911,7 +20911,7 @@
         },
         {
           "path": "user interviewer-settings",
-          "summary": "Get interviewer settings for a user.\n\n**Requires the [`organizationRead`](authentication#permissions-userinterviewersettings) permission.**",
+          "summary": "Get interviewer settings for a user. Requires the organizationRead permission.",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -20938,7 +20938,7 @@
         },
         {
           "path": "user update-interviewer-settings",
-          "summary": "Update interviewer settings for a user.\n\nEither limit can be provided, or both can be provided. If only one is provided, the other will remain unchanged. If a l",
+          "summary": "Update interviewer settings for a user. Either limit can be provided, or both can be provided. If only one is provided, the other will remain unchanged.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -20977,7 +20977,7 @@
         },
         {
           "path": "user create-interviewer-pause",
-          "summary": "Creates an interviewer pause for a user. While paused, the user will not be scheduled for interviews.\n\nA user can only have one interviewer pause at a time (whe",
+          "summary": "Creates an interviewer pause for a user. While paused, the user will not be scheduled for interviews.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21028,7 +21028,7 @@
         },
         {
           "path": "user list-interviewer-pauses",
-          "summary": "Lists all active or scheduled interviewer pauses for a user.\n\n**Requires the [`organizationRead`](authentication#permissions-userlistinterviewerpauses) permissi",
+          "summary": "Lists all active or scheduled interviewer pauses for a user.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "user_list_interviewer_pauses",
@@ -21054,7 +21054,7 @@
         },
         {
           "path": "user delete-interviewer-pause",
-          "summary": "Deletes an interviewer pause.\n\n**Requires the [`organizationWrite`](authentication#permissions-userdeleteinterviewerpause) permission.**",
+          "summary": "Deletes an interviewer pause. Requires the organizationWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21079,7 +21079,7 @@
         },
         {
           "path": "user set-custom-field-value",
-          "summary": "Set the value of a custom field on an employee.\n\nThe values accepted in the `fieldValue` param depend on the type of field being updated. See the [customField.s",
+          "summary": "Set the value of a custom field on an employee. The values accepted in the fieldValue param depend on the type of field being updated.",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -21112,7 +21112,7 @@
         },
         {
           "path": "user set-custom-field-values",
-          "summary": "Set the values of multiple custom fields on an employee in a single call.\nThis is the recommended approach when updating multiple fields on the same employee\nto",
+          "summary": "Set the values of multiple custom fields on an employee in a single call.",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -21145,7 +21145,7 @@
         },
         {
           "path": "referral create",
-          "summary": "Creates a referral\n\n**Requires the [`candidatesWrite`](authentication#permissions-referralcreate) permission.**",
+          "summary": "Creates a referral Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -21195,7 +21195,7 @@
         },
         {
           "path": "email-sender list",
-          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nLists the email addresses available to the acting identity for sending emai",
+          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "email_sender_list",
@@ -21211,7 +21211,7 @@
         },
         {
           "path": "sequence add",
-          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nEnrolls a candidate in a reusable sourcing sequence. Set start to false to",
+          "summary": "Beta This endpoint is in beta and may not be available for all organizations. Enrolls a candidate in a reusable sourcing sequence.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21259,7 +21259,7 @@
         },
         {
           "path": "sequence cancel",
-          "summary": "Cancels a running sourcing sequence (campaign) for a candidate.\n\n**Requires the [`sourcingWrite`](authentication#permissions-sequencecancel) permission.**",
+          "summary": "Cancels a running sourcing sequence (campaign) for a candidate. Requires the sourcingWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21293,7 +21293,7 @@
         },
         {
           "path": "sequence discard",
-          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nPermanently discards a NotStarted sourcing sequence draft owned by the acti",
+          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21318,7 +21318,7 @@
         },
         {
           "path": "sequence info",
-          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nRetrieves a candidate's sourcing sequence enrollment when it is visible to",
+          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "sequence_info",
@@ -21369,7 +21369,7 @@
         },
         {
           "path": "sequence update-stage",
-          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nReplaces the supplied subject or HTML body of one email stage in a not-star",
+          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21418,7 +21418,7 @@
         },
         {
           "path": "sequence start",
-          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nValidates and starts an existing NotStarted sourcing sequence draft owned b",
+          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21443,7 +21443,7 @@
         },
         {
           "path": "sequence-template info",
-          "summary": "Retrieves metadata for a reusable sourcing sequence template visible to the caller. Archived templates may be returned. Message subjects and bodies are not expo",
+          "summary": "Retrieves metadata for a reusable sourcing sequence template visible to the caller. Archived templates may be returned.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "sequence_template_info",
@@ -21533,7 +21533,7 @@
         },
         {
           "path": "interview-schedule create",
-          "summary": "Create a scheduled interview in Ashby.\n\n**Requires the [`interviewsWrite`](authentication#permissions-interviewschedulecreate) permission.**",
+          "summary": "Create a scheduled interview in Ashby. Requires the interviewsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21582,7 +21582,7 @@
         },
         {
           "path": "interview-schedule update",
-          "summary": "Update an interview schedule. This endpoint allows you to add, cancel, or update interview events associated with an interview schedule.\n\nIn order to update an",
+          "summary": "Update an interview schedule. This endpoint allows you to add, cancel, or update interview events associated with an interview schedule.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21622,7 +21622,7 @@
         },
         {
           "path": "interview-schedule cancel",
-          "summary": "Cancel an interview schedule by id.\n\n**Requires the [`interviewsWrite`](authentication#permissions-interviewschedulecancel) permission.**",
+          "summary": "Cancel an interview schedule by id. Requires the interviewsWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -21687,7 +21687,7 @@
         },
         {
           "path": "take-home-assignment info",
-          "summary": "> Beta\n>\n> This endpoint is in beta and may not be available for all organizations.\n\nRetrieves a single take-home assignment by id and links it to its interview",
+          "summary": "Beta This endpoint is in beta and may not be available for all organizations.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "take_home_assignment_info",
@@ -21746,7 +21746,7 @@
         },
         {
           "path": "interview-briefing info",
-          "summary": "Fetch the briefing data for an interview event. Returns the application,\ninterview, per-interviewer status, and the feedback form definition id\nneeded to render",
+          "summary": "Fetch the briefing data for an interview event.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_briefing_info",
@@ -21772,7 +21772,7 @@
         },
         {
           "path": "interview info",
-          "summary": "Fetch interview details by id.\n\n**Requires the [`interviewsRead`](authentication#permissions-interviewinfo) permission.**",
+          "summary": "Fetch interview details by id. Requires the interviewsRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_info",
@@ -21836,7 +21836,7 @@
         },
         {
           "path": "interview-stage info",
-          "summary": "Retrieves detailed information about a specific interview stage by its ID.\n\n**Requires the [`interviewsRead`](authentication#permissions-interviewstageinfo) per",
+          "summary": "Retrieves detailed information about a specific interview stage by its ID.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interview_stage_info",
@@ -21862,7 +21862,7 @@
         },
         {
           "path": "file info",
-          "summary": "Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files).\n\n**Please note** that",
+          "summary": "Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files).",
           "intent": "direct_read",
           "availability": "implemented",
           "stream": "",
@@ -21889,7 +21889,7 @@
         },
         {
           "path": "survey-form-definition info",
-          "summary": "Returns details about a single survey form definition by id.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-surveyformdefinitioninfo)",
+          "summary": "Returns details about a single survey form definition by id.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "survey_form_definition_info",
@@ -21931,7 +21931,7 @@
         },
         {
           "path": "survey-request create",
-          "summary": "This endpoint generates a survey request and returns a survey URL. You can send this URL to a candidate to allow them to complete a survey.\n\n**Note that calling",
+          "summary": "This endpoint generates a survey request and returns a survey URL. You can send this URL to a candidate to allow them to complete a survey.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22022,7 +22022,7 @@
         },
         {
           "path": "survey-submission create",
-          "summary": "Creates a survey submission for a candidate and application.\n\n**Requires the [`candidatesWrite`](authentication#permissions-surveysubmissioncreate) permission.*",
+          "summary": "Creates a survey submission for a candidate and application. Requires the candidatesWrite permission.",
           "intent": "reverse_etl",
           "availability": "partial",
           "stream": "",
@@ -22099,7 +22099,7 @@
         },
         {
           "path": "webhook create",
-          "summary": "Creates a webhook setting.\n\n**Requires the [`apiKeysWrite`](authentication#permissions-webhookcreate) permission.**",
+          "summary": "Creates a webhook setting. Requires the apiKeysWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22166,7 +22166,7 @@
         },
         {
           "path": "webhook info",
-          "summary": "Retrieves information about a specific webhook setting by its ID.\n\n**Requires the [`apiKeysRead`](authentication#permissions-webhookinfo) permission.**",
+          "summary": "Retrieves information about a specific webhook setting by its ID. Requires the apiKeysRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "webhook_info",
@@ -22192,7 +22192,7 @@
         },
         {
           "path": "webhook update",
-          "summary": "Updates a webhook setting. One of `enabled`, `requestUrl`, or `secretToken` must be provided.\n\n**Requires the [`apiKeysWrite`](authentication#permissions-webhoo",
+          "summary": "Updates a webhook setting. One of enabled, requestUrl, or secretToken must be provided.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22240,7 +22240,7 @@
         },
         {
           "path": "webhook delete",
-          "summary": "Deletes a webhook setting.\n\n**Requires the [`apiKeysWrite`](authentication#permissions-webhookdelete) permission.**",
+          "summary": "Deletes a webhook setting. Requires the apiKeysWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22296,7 +22296,7 @@
         },
         {
           "path": "interviewer-pool info",
-          "summary": "Get information about an interviewer pool.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-interviewerpoolinfo) permission.**",
+          "summary": "Get information about an interviewer pool. Requires the hiringProcessMetadataRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "interviewer_pool_info",
@@ -22322,7 +22322,7 @@
         },
         {
           "path": "interviewer-pool archive",
-          "summary": "Archives an interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolarchive) permission.**",
+          "summary": "Archives an interviewer pool. Requires the hiringProcessMetadataWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22347,7 +22347,7 @@
         },
         {
           "path": "interviewer-pool restore",
-          "summary": "Restores an archived interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolrestore) permission.**",
+          "summary": "Restores an archived interviewer pool. Requires the hiringProcessMetadataWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22372,7 +22372,7 @@
         },
         {
           "path": "interviewer-pool create",
-          "summary": "Create an interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolcreate) permission.**",
+          "summary": "Create an interviewer pool. Requires the hiringProcessMetadataWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22404,7 +22404,7 @@
         },
         {
           "path": "interviewer-pool update",
-          "summary": "Update an interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolupdate) permission.**",
+          "summary": "Update an interviewer pool. Requires the hiringProcessMetadataWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22444,7 +22444,7 @@
         },
         {
           "path": "interviewer-pool add-user",
-          "summary": "Add a user to an interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpooladduser) permission.**",
+          "summary": "Add a user to an interviewer pool. Requires the hiringProcessMetadataWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22485,7 +22485,7 @@
         },
         {
           "path": "interviewer-pool remove-user",
-          "summary": "Remove a user from an interviewer pool.\n\n**Requires the [`hiringProcessMetadataWrite`](authentication#permissions-interviewerpoolremoveuser) permission.**",
+          "summary": "Remove a user from an interviewer pool. Requires the hiringProcessMetadataWrite permission.",
           "intent": "reverse_etl",
           "availability": "implemented",
           "stream": "",
@@ -22518,7 +22518,7 @@
         },
         {
           "path": "close-reason list",
-          "summary": "Lists all close reasons for jobs or openings.\n\n**Requires the [`hiringProcessMetadataRead`](authentication#permissions-closereasonlist) permission.**",
+          "summary": "Lists all close reasons for jobs or openings. Requires the hiringProcessMetadataRead permission.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "close_reason_list",
@@ -22594,7 +22594,7 @@
         },
         {
           "path": "report synchronous",
-          "summary": "> Beta\n>\n> This endpoint is currently in beta and may change without notice.\n\nRetrieves report data synchronously.\n\n**Timeout:** 30 seconds. If a report is timi",
+          "summary": "Beta This endpoint is currently in beta and may change without notice. Retrieves report data synchronously. Timeout: 30 seconds.",
           "intent": "etl",
           "availability": "implemented",
           "stream": "report_synchronous",

@@ -183,6 +183,7 @@ def main() -> None:
             elif command.get("stream") in incremental_streams and SYNC_TOKEN_FOUNDATION not in notes:
                 notes += f" Incremental execution is blocked pending {SYNC_TOKEN_FOUNDATION}; this stream is full-refresh only."
             command["notes"] = notes
+        command["summary"] = terminal_summary(command.get("summary", ""), command.get("path", "Ashby command"))
         commands.append(command)
     surface["commands"] = commands
     commands_by_intent = {
@@ -262,6 +263,29 @@ def close_modeled_objects(node: Any) -> None:
         node["additionalProperties"] = False
     for value in node.values():
         close_modeled_objects(value)
+
+
+def terminal_summary(description: str, fallback: str) -> str:
+    source_was_truncated = len(description) >= 160
+    text = description.strip() or fallback
+    text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"`([^`]*)`", r"\1", text)
+    text = re.sub(r"\((?:ref:|authentication#)[^)]*$", "", text)
+    text = re.sub(r"(?m)^\s*>\s?", "", text)
+    text = text.replace("**", "").replace("__", "")
+    text = text.translate(str.maketrans("", "", "[]`*"))
+    text = re.sub(r"\s+", " ", text).strip()
+    needs_abbreviation = source_was_truncated or (text and text[-1] not in ".!?")
+    if len(text) <= 160 and not needs_abbreviation:
+        return text
+    candidate = text[:161]
+    sentence_end = max(candidate.rfind(". "), candidate.rfind("! "), candidate.rfind("? "))
+    if sentence_end >= 40:
+        return candidate[:sentence_end + 1]
+    word_end = candidate[:157].rfind(" ")
+    if word_end < 40:
+        word_end = 157
+    return candidate[:word_end].rstrip(" ,;:-") + "..."
 
 
 def at_path(node: Any, path: tuple[str, ...]) -> Any:
