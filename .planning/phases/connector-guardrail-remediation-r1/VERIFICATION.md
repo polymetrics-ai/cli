@@ -42,3 +42,7 @@ If GitHub permissions deny required ruleset/branch-protection configuration, rec
 - `no-mistakes doctor`: pass; daemon running
 - Parent issue: #3579 created
 - Parent branch: `fix/3579-connector-path-ownership-guardrails` created from `origin/main`
+- #3583 / #3588 no-mistakes run `01KZ0SEAKBB9TG7N3SMG97XKJS`: passed at head `0c321595d7ae4852550a5012a895c3e11f7e8298` with review/test/document/lint/push/pr/ci complete.
+- #3588 checks at merge time: required/current checks green per captain authority, including `connector-boundary`; sub-PR open, cleanly mergeable into parent before merge.
+- #3588 parent integration: squash-merged into `fix/3579-connector-path-ownership-guardrails` as `86b91fc40f46b8653538531fc40c183913676f05`; parent PR #3580 remains draft and human-gated.
+- Parent roadmap restore/update: this ledger commit restores parent planning/state artifacts after the no-mistakes-generated documentation prune and records #3583 provisional integration plus #3590 as next critical-path child.

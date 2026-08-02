@@ -40,6 +40,7 @@ For each sub-issue, record:
 - issue number and URL
 - dependency list
 - expected write scope
+- for connector implementation work: exactly one target connector, target connector scope, ownership guard evidence expected, changed-path compliance evidence expected, and whether a separate foundation issue/PR is required before implementation
 - branch name
 - PR base
 - primary worker agent
@@ -63,6 +64,12 @@ satisfied. Each worker prompt must include:
 - required verification
 - worker handoff template
 
+Connector implementation lane prompts must name exactly one target connector. If the worker or
+planner identifies shared runtime/tooling, schema, generated-index, or unrelated connector changes,
+the orchestrator stops that connector lane and creates or links a separate foundation issue/PR for
+that shared work before the connector implementation proceeds. Connector PRs must not absorb the
+foundation diff.
+
 The orchestrator continues non-overlapping work while workers run. It must not duplicate worker
 implementation tasks. Worker prompts may use compact status language, but exact commands, code,
 test output, safety gates, security warnings, destructive-action warnings, and approval gates must
@@ -82,11 +89,12 @@ When a worker returns:
 1. Read the worker handoff.
 2. Confirm changed files match the assigned scope.
 3. Confirm verification evidence is present.
-4. Confirm the sub-PR targets the parent branch.
-5. Confirm the sub-PR body uses `Refs` for both the sub-issue and parent issue.
-6. Confirm automated review records, the parent PR fallback route, Copilot backup route, or a
+4. For connector implementation sub-PRs, confirm the handoff records target connector scope, ownership guard evidence, changed-path compliance, and any foundation PR path or blocker.
+5. Confirm the sub-PR targets the parent branch.
+6. Confirm the sub-PR body uses `Refs` for both the sub-issue and parent issue.
+7. Confirm automated review records, the parent PR fallback route, Copilot backup route, or a
    recorded blocker.
-7. Mark missing evidence as `blocked`, not complete.
+8. Mark missing evidence as `blocked`, not complete.
 
 ## 5. Merge Or Block Sub-PRs
 

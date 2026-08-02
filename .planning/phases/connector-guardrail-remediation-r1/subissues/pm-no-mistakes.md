@@ -9,7 +9,8 @@ Update PM orchestrator, worker, issue/PR template, connector implementation, and
 - Parent branch: `fix/3579-connector-path-ownership-guardrails`
 - Sub-issue branch: `fix/3583-pm-no-mistakes-connector-lane`
 - Sub-PR base: `fix/3579-connector-path-ownership-guardrails`
-- Dependency: #3581
+- Dependency: none
+- Integration status: #3588 was captain-authorized and provisionally integrated into the parent branch as `86b91fc40f46b8653538531fc40c183913676f05` after no-mistakes run `01KZ0SEAKBB9TG7N3SMG97XKJS` passed at `0c321595d7ae4852550a5012a895c3e11f7e8298`; parent PR review/final readiness remains pending.
 
 ## Scope
 
@@ -63,7 +64,7 @@ Refs #3583
 Refs #3579
 ```
 
-Include docs-only TDD exemption only where no executable check exists; otherwise include red/green evidence, no-mistakes validation, CI, automated review route, and worker handoff.
+Include docs-only TDD exemption only where no executable check exists; otherwise include red/green evidence, no-mistakes validation, CI, automated review route, and worker handoff. Completed #3588 validation evidence is recorded in `workers/issue-3583/` and parent `VERIFICATION.md`.
 
 ## Safety
 

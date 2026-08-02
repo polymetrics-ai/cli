@@ -43,7 +43,7 @@ Create and integrate a parent remediation PR that enforces connector implementat
 
 - Parent issue: #3579
 - Parent branch: `fix/3579-connector-path-ownership-guardrails`
-- Parent PR: pending draft PR to `main` after seed commit
+- Parent PR: #3580 draft PR to `main`; parent merge remains human-gated
 - State ledger: `.planning/phases/connector-guardrail-remediation-r1/RUN-STATE.json`
 
 ## Slice plan
@@ -85,7 +85,7 @@ Outcomes:
 
 TDD first evidence: add failing workflow/command fixture or validator invocation test before wiring.
 
-### Slice 3 — PM orchestrator and no-mistakes integration
+### Slice 3 — PM orchestrator and no-mistakes integration (provisionally integrated via #3588)
 
 Write scope:
 

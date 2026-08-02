@@ -34,12 +34,12 @@ Audit scope:
 
 | Issue | Milestone | Branch | PR base | Intent | Dependencies | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| #3581 | guardrail core | `fix/3581-target-scope-core-validator` | `fix/3579-connector-path-ownership-guardrails` | Target-scope contract and core changed-path validator | none | Worker-ready |
+| #3581 | guardrail core | `fix/3581-target-scope-core-validator` | `fix/3579-connector-path-ownership-guardrails` | Target-scope contract and core changed-path validator | none | Sub-PR #3590 open; next critical path |
 | #3582 | guardrail gate | `fix/3582-connector-ownership-ci-gate` | `fix/3579-connector-path-ownership-guardrails` | GitHub Actions, label/tag, local hook, and required remote gate | #3581 | Dependency-blocked |
-| #3583 | PM/no-mistakes | `fix/3583-pm-no-mistakes-connector-lane` | `fix/3579-connector-path-ownership-guardrails` | PM orchestrator, issue/PR templates, connector instructions, no-mistakes guidance | none | Worker-ready |
-| #3584 | forward remediation A | `fix/3584-hubspot-bitbucket-forward-remediation` | `fix/3579-connector-path-ownership-guardrails` | HubSpot and Bitbucket shared path dispositions | none | Worker-ready |
-| #3585 | forward remediation B | `fix/3585-shared-engine-runner-remediation` | `fix/3579-connector-path-ownership-guardrails` | Stripe, Freshchat, and Google Ads shared engine/runner/connectorgen dispositions | #3581 for connectorgen-adjacent edits | Queued / dependency-partial |
-| #3586 | generated remediation | `fix/3586-generated-unrelated-connector-remediation` | `fix/3579-connector-path-ownership-guardrails` | Zendesk Support and Google Ads unrelated-connector/generated remediation | none | Worker-ready |
+| #3583 | PM/no-mistakes | `fix/3583-pm-no-mistakes-connector-lane` | `fix/3579-connector-path-ownership-guardrails` | PM orchestrator, issue/PR templates, connector instructions, no-mistakes guidance | none | Provisionally integrated via #3588; parent review/final gate pending |
+| #3584 | forward remediation A | `fix/3584-hubspot-bitbucket-forward-remediation` | `fix/3579-connector-path-ownership-guardrails` | HubSpot and Bitbucket shared path dispositions | none | Sub-PR #3591 open; fresh no-mistakes recovery pending |
+| #3585 | forward remediation B | `fix/3585-shared-engine-runner-remediation` | `fix/3579-connector-path-ownership-guardrails` | Stripe, Freshchat, and Google Ads shared engine/runner/connectorgen dispositions | none for ledger-only fallback | Sub-PR #3593 open |
+| #3586 | generated remediation | `fix/3586-generated-unrelated-connector-remediation` | `fix/3579-connector-path-ownership-guardrails` | Zendesk Support and Google Ads unrelated-connector/generated remediation | none | Sub-PR #3589 open |
 | #3587 | audit ledger/proof | `fix/3587-first-eight-audit-ledger-proof` | `fix/3579-connector-path-ownership-guardrails` | Historical audit ledger and end-to-end enforcement proof for all eight first merges | #3581, #3582, #3584, #3585, #3586 | Dependency-blocked |
 
 ## Orchestration state
@@ -48,12 +48,12 @@ State ledger lives in the parent branch under `.planning/phases/connector-guardr
 
 | Issue | Worker | Branch | PR | Latest SHA | Verification | Automated review coverage | Merge state | Blocker |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| #3581 | pending spawn | `fix/3581-target-scope-core-validator` | pending | pending | Pending | pending | Worker-ready | None |
+| #3581 | pm-gsd-worker | `fix/3581-target-scope-core-validator` | #3590 | pending current-head validation | GitHub checks green; current no-mistakes/review validation pending | pending | Sub-PR open; next critical path | None |
 | #3582 | deferred | `fix/3582-connector-ownership-ci-gate` | pending | pending | Pending | pending | Planned | Blocks on #3581 |
-| #3583 | pending spawn | `fix/3583-pm-no-mistakes-connector-lane` | pending | pending | Pending | pending | Worker-ready | None |
-| #3584 | pending spawn | `fix/3584-hubspot-bitbucket-forward-remediation` | pending | pending | Pending | pending | Worker-ready | None |
-| #3585 | queued | `fix/3585-shared-engine-runner-remediation` | pending | pending | Pending | pending | Planned | Partial dependency/write-scope collision with #3581 for `cmd/connectorgen/**` |
-| #3586 | pending spawn | `fix/3586-generated-unrelated-connector-remediation` | pending | pending | Pending | pending | Worker-ready | None |
+| #3583 | pm-gsd-worker | `fix/3583-pm-no-mistakes-connector-lane` | #3588 | `0c321595d7ae4852550a5012a895c3e11f7e8298` / parent `86b91fc40f46b8653538531fc40c183913676f05` | no-mistakes `01KZ0SEAKBB9TG7N3SMG97XKJS` passed | parent PR fallback/human final gate pending | Provisionally integrated | Parent PR final review/readiness pending |
+| #3584 | pm-gsd-worker | `fix/3584-hubspot-bitbucket-forward-remediation` | #3591 | pending current validation | Checks green; fresh no-mistakes recovery pending | pending | Sub-PR open | Recovery pending |
+| #3585 | pm-gsd-worker | `fix/3585-shared-engine-runner-remediation` | #3593 | pending current validation | Checks green; merge arbitration pending | pending | Sub-PR open | None |
+| #3586 | pm-gsd-worker | `fix/3586-generated-unrelated-connector-remediation` | #3589 | pending current validation | Checks green; merge arbitration pending | pending | Sub-PR open | None |
 | #3587 | deferred | `fix/3587-first-eight-audit-ledger-proof` | pending | pending | Pending | pending | Planned | Blocks on #3581/#3582 and remediation slices |
 
 ## Branch and PR policy

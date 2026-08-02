@@ -14,33 +14,35 @@ Forward-only connector path ownership guardrail remediation parent PR. Draft rem
 
 ## Integrated sub-issues
 
+Integrated into parent branch:
+
+- Refs #3583 — PM orchestrator and no-mistakes integration; sub-PR #3588 squash-merged at parent commit `86b91fc40f46b8653538531fc40c183913676f05` from validated head `0c321595d7ae4852550a5012a895c3e11f7e8298`; no-mistakes run `01KZ0SEAKBB9TG7N3SMG97XKJS` passed. Review coverage remains provisional through the parent PR fallback/human gate until final parent readiness.
+
 Planned / pending integration:
 
-- Refs #3581 — target-scope contract and core validator
-- Refs #3582 — CI, hooks, label, and required remote gate
-- Refs #3583 — PM orchestrator and no-mistakes integration
-- Refs #3584 — HubSpot and Bitbucket forward remediation
-- Refs #3585 — Stripe Freshchat Google Ads shared remediation
-- Refs #3586 — generated and unrelated connector remediation
-- Refs #3587 — first-eight audit ledger and enforcement proof
-
-No sub-PRs integrated yet.
+- Refs #3581 — target-scope contract and core validator; sub-PR #3590 open.
+- Refs #3582 — CI, hooks, label, and required remote gate; blocked on #3581.
+- Refs #3584 — HubSpot and Bitbucket forward remediation; sub-PR #3591 open, fresh no-mistakes recovery pending.
+- Refs #3585 — Stripe Freshchat Google Ads shared remediation; sub-PR #3593 open.
+- Refs #3586 — generated and unrelated connector remediation; sub-PR #3589 open.
+- Refs #3587 — first-eight audit ledger and enforcement proof; blocked on #3581/#3582 plus remediation rows.
 
 ## Dependency graph / current worker queue
 
-- #3581 ready: core validator; blocks #3582 and #3587.
-- #3583 ready: PM/no-mistakes guidance; disjoint from core/remediation code.
-- #3584 ready: HubSpot/Bitbucket remediation; disjoint from generated remediation.
-- #3586 ready: generated/unrelated connector remediation; disjoint docs/generated scope.
-- #3585 queued: shared engine/runner/connectorgen remediation; `cmd/connectorgen/**` may collide with #3581, so defer implementation until #3581 stabilizes or narrow to ledger-only.
+- #3581 open: core validator; blocks #3582 and #3587 final enforcement proof.
+- #3583 provisionally integrated: PM/no-mistakes guidance landed on the parent branch; parent review/final gate pending.
+- #3584 open: HubSpot/Bitbucket remediation; recover fresh no-mistakes run before merge arbitration.
+- #3585 open: shared engine/runner/connectorgen remediation; ledger-only fallback avoided the prior `cmd/connectorgen/**` collision.
+- #3586 open: generated/unrelated connector remediation; canonical stacked PR #3589 remains open.
 - #3582 blocked on #3581.
 - #3587 blocked on #3581/#3582 plus remediation rows.
 
 ## Verification status
 
-- Seed commit only: planning/state artifacts committed.
-- Full verification pending implementation integration.
-- Final no-mistakes validation pending Firstmate instruction after all sub-issues integrate.
+- #3583 sub-PR validation: no-mistakes run `01KZ0SEAKBB9TG7N3SMG97XKJS` passed at `0c321595d7ae4852550a5012a895c3e11f7e8298` with review/test/document/lint/push/pr/ci complete.
+- Parent branch after #3583 merge: starts from `86b91fc40f46b8653538531fc40c183913676f05`; this roadmap records the restored/updated parent ledger before continuing with #3590.
+- Remaining child validation pending current no-mistakes/review arbitration before merge.
+- Full parent verification and final no-mistakes validation pending after all required sub-issues integrate.
 
 ## Safety
 
