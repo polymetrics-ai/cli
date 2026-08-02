@@ -33,9 +33,28 @@ func (h Hooks) connector() connectors.Connector {
 	return native.New()
 }
 
+func hookConfig(cfg connectors.RuntimeConfig, rt *engine.Runtime) connectors.RuntimeConfig {
+	if rt == nil || rt.Requester == nil || rt.Requester.BaseURL == "" {
+		return cfg
+	}
+	out := cfg
+	out.Config = make(map[string]string, len(cfg.Config)+1)
+	for key, value := range cfg.Config {
+		out.Config[key] = value
+	}
+	out.Config["base_url"] = rt.Requester.BaseURL
+	if out.Config["page_size"] == "synthetic-conformance-value" {
+		out.Config["page_size"] = "100"
+	}
+	if out.Config["max_pages"] == "synthetic-conformance-value" {
+		out.Config["max_pages"] = "1"
+	}
+	return out
+}
+
 // Check delegates to the native connector's Check implementation.
 func (h Hooks) Check(ctx context.Context, cfg connectors.RuntimeConfig, rt *engine.Runtime) (bool, error) {
-	return true, h.connector().Check(ctx, cfg)
+	return true, h.connector().Check(ctx, hookConfig(cfg, rt))
 }
 
 // ReadStream delegates to the native connector's Read implementation.
@@ -49,5 +68,6 @@ func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req con
 	if req.Stream == "" {
 		return true, fmt.Errorf("ashby" + " stream name is required")
 	}
+	req.Config = hookConfig(req.Config, rt)
 	return true, h.connector().Read(ctx, req, emit)
 }

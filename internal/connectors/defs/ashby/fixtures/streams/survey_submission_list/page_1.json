@@ -1,0 +1,60 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/surveySubmission.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "survey_submission_list_id_fixture_66",
+          "surveyFormDefinitionId": "survey_submission_list_surveyformdefinitionid_fixture_66",
+          "submittedAt": "2026-02-10T18:00:00Z",
+          "candidateId": "survey_submission_list_candidateid_fixture_66",
+          "applicationId": "survey_submission_list_applicationid_fixture_66",
+          "surveyType": "CandidateExperience",
+          "formDefinition": {
+            "sections": [
+              {
+                "title": "Title fixture 66",
+                "descriptionHtml": "<p>Descriptionhtml fixture 66</p>",
+                "descriptionPlain": "survey_submission_list_descriptionplain_fixture_66",
+                "fields": [
+                  {
+                    "isRequired": false,
+                    "descriptionHtml": "<p>Descriptionhtml fixture 66</p>",
+                    "descriptionPlain": "survey_submission_list_descriptionplain_fixture_66",
+                    "field": {
+                      "id": "survey_submission_list_id_fixture_66",
+                      "type": "fixture",
+                      "path": "survey_submission_list_path_fixture_66",
+                      "humanReadablePath": "survey_submission_list_humanreadablepath_fixture_66",
+                      "title": "Title fixture 66",
+                      "isNullable": false,
+                      "selectableValues": [
+                        {
+                          "label": "survey_submission_list_label_fixture_66",
+                          "value": "survey_submission_list_value_fixture_66"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "submittedValues": {
+            "id": "survey_submission_list_submittedvalues_fixture_66"
+          }
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  },
+  "read_query": {
+    "surveyType": "surveytype_fixture"
+  }
+}

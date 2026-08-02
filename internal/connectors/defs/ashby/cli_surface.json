@@ -1319,11 +1319,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "redact_fields": [
-        "email",
-        "name"
-      ],
-      "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+      "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
       "approval": "none",
       "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
     },
@@ -2869,10 +2865,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "redact_fields": [
-        "requisitionId"
-      ],
-      "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+      "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
       "approval": "none",
       "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
     },
@@ -3646,9 +3639,6 @@
         }
       ],
       "output_policy": "json_redacted",
-      "redact_fields": [
-        "notetakerTranscriptId"
-      ],
       "risk": "bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output",
       "approval": "none",
       "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
@@ -4525,10 +4515,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "redact_fields": [
-        "identifier"
-      ],
-      "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+      "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
       "approval": "none",
       "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
     },
@@ -4602,8 +4589,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "redact_fields": [],
-      "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+      "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
       "approval": "none",
       "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
     },
@@ -5342,10 +5328,7 @@
         }
       ],
       "output_policy": "json_redacted",
-      "redact_fields": [
-        "email"
-      ],
-      "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+      "risk": "bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output",
       "approval": "none",
       "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
     },
@@ -6360,9 +6343,6 @@
         }
       ],
       "output_policy": "json_redacted",
-      "redact_fields": [
-        "fileHandle"
-      ],
       "risk": "bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output",
       "approval": "none",
       "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."

@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/interview.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "interview_info_id_fixture_60",
+        "title": "Title fixture 60",
+        "externalTitle": "Externaltitle fixture 60",
+        "type": "Assessment",
+        "isArchived": false,
+        "isDebrief": false,
+        "isFeedbackRequired": false,
+        "isFeedbackRequested": false,
+        "instructionsHtml": "<p>Instructionshtml fixture 60</p>",
+        "instructionsPlain": "interview_info_instructionsplain_fixture_60",
+        "jobId": "interview_info_jobid_fixture_60",
+        "feedbackFormDefinitionId": "interview_info_feedbackformdefinitionid_fixture_60"
+      }
+    }
+  },
+  "read_query": {
+    "id": "id_fixture"
+  }
+}

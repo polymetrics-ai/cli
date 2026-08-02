@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/user.listInterviewerPauses",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "user_list_interviewer_pauses_id_fixture_48",
+          "userId": "user_list_interviewer_pauses_userid_fixture_48",
+          "startsAt": "2026-01-20T08:00:00Z",
+          "endsAt": "2026-01-20T08:00:00Z",
+          "comment": "Comment fixture 48",
+          "createdAt": "2026-02-20T00:00:00Z"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  },
+  "read_query": {
+    "userId": "userid_fixture"
+  }
+}

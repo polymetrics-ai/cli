@@ -17,8 +17,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"net/url"
+	"os"
+	"path"
+	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 
@@ -177,24 +182,102 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 	return nil
 }
 
-// readFixture emits deterministic records without any network access so the
-// conformance harness can exercise Ashby credential-free.
 func (c Connector) readFixture(ctx context.Context, stream string, endpoint streamEndpoint, req connectors.ReadRequest, emit func(connectors.Record) error) error {
-	for i := 1; i <= 2; i++ {
+	fixtures, err := ashbyFixtureFS()
+	if err != nil {
+		return err
+	}
+	pages, err := ashbyFixtureBodies(fixtures, stream)
+	if err != nil {
+		return err
+	}
+	if len(pages) == 0 {
+		return fmt.Errorf("ashby stream %q has no replay fixtures", stream)
+	}
+	lowerBound := connsdk.Cursor(req.State)
+	if lowerBound == "" {
+		lowerBound = strings.TrimSpace(req.Config.Config["start_date"])
+	}
+	for pageIndex, body := range pages {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		record := ashbyProjectRecord(endpoint, ashbyFixtureItem(stream, endpoint, i), 0, i-1)
-		record["connector"] = "ashby"
-		record["fixture"] = true
-		if cursor := req.State["cursor"]; cursor != "" {
-			record["previous_cursor"] = cursor
+		_, records, err := ashbyResultRecords(body)
+		if err != nil {
+			return fmt.Errorf("decode ashby fixture %s page %d: %w", stream, pageIndex+1, err)
 		}
-		if err := emit(record); err != nil {
-			return err
+		for recordIndex, item := range records {
+			record := ashbyProjectRecord(endpoint, item, pageIndex, recordIndex)
+			if !ashbyPassesCursor(record, endpoint.cursorField, lowerBound) {
+				continue
+			}
+			if err := emit(record); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
+}
+
+type ashbyFixturePage struct {
+	Response struct {
+		Status int             `json:"status"`
+		Body   json.RawMessage `json:"body"`
+	} `json:"response"`
+}
+
+func ashbyFixtureFS() (fs.FS, error) {
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		return nil, errors.New("locate ashby fixture source")
+	}
+	root := filepath.Clean(filepath.Join(filepath.Dir(filename), "../../../.."))
+	fixtureDir := filepath.Join(root, "internal", "connectors", "defs", "ashby", "fixtures")
+	if _, err := os.Stat(fixtureDir); err != nil {
+		return nil, fmt.Errorf("locate ashby fixtures: %w", err)
+	}
+	return os.DirFS(fixtureDir), nil
+}
+
+func ashbyFixtureBodies(fixtures fs.FS, stream string) ([][]byte, error) {
+	dir := path.Join("streams", stream)
+	entries, err := fs.ReadDir(fixtures, dir)
+	if err != nil {
+		if errors.Is(err, fs.ErrNotExist) {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("read ashby fixtures %s: %w", dir, err)
+	}
+	bodies := make([][]byte, 0, len(entries))
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
+			continue
+		}
+		raw, err := fs.ReadFile(fixtures, path.Join(dir, entry.Name()))
+		if err != nil {
+			return nil, fmt.Errorf("read ashby fixture %s/%s: %w", dir, entry.Name(), err)
+		}
+		body, err := ashbyFixtureBody(raw)
+		if err != nil {
+			return nil, fmt.Errorf("parse ashby fixture %s/%s: %w", dir, entry.Name(), err)
+		}
+		bodies = append(bodies, body)
+	}
+	return bodies, nil
+}
+
+func ashbyFixtureBody(raw []byte) ([]byte, error) {
+	var page ashbyFixturePage
+	if err := json.Unmarshal(raw, &page); err != nil {
+		return nil, err
+	}
+	if len(page.Response.Body) == 0 {
+		return raw, nil
+	}
+	if page.Response.Status >= 400 {
+		return nil, fmt.Errorf("status %d", page.Response.Status)
+	}
+	return page.Response.Body, nil
 }
 
 func ashbyStreamBody(endpoint streamEndpoint, cfg connectors.RuntimeConfig, query map[string]string, pageSize int) (map[string]any, error) {
@@ -335,58 +418,12 @@ func ashbyProjectRecord(endpoint streamEndpoint, item map[string]any, page, inde
 	return record
 }
 
-func ashbyFixtureItem(stream string, endpoint streamEndpoint, i int) map[string]any {
-	item := map[string]any{}
-	for _, field := range endpoint.fields {
-		item[field.Name] = ashbyFixtureValue(stream, field, i)
-	}
-	for _, key := range endpoint.primaryKey {
-		if _, ok := item[key]; !ok || item[key] == nil || item[key] == "" {
-			item[key] = fmt.Sprintf("%s_fixture_%d", snakeish(stream), i)
-		}
-	}
-	if endpoint.cursorField != "" {
-		item[endpoint.cursorField] = fmt.Sprintf("2026-01-%02dT00:00:00Z", i)
-	}
-	return item
-}
-
-func ashbyFixtureValue(stream string, field connectors.Field, i int) any {
-	lower := strings.ToLower(field.Name)
-	switch field.Type {
-	case "boolean":
-		return i%2 == 0
-	case "integer":
-		return i
-	case "number":
-		return float64(i)
-	case "array":
-		return []any{fmt.Sprintf("%s_fixture_%d", lower, i)}
-	case "object":
-		return map[string]any{"id": fmt.Sprintf("%s_%s_fixture_%d", snakeish(stream), lower, i)}
-	default:
-		if lower == "id" || strings.HasSuffix(lower, "id") {
-			return fmt.Sprintf("%s_%s_fixture_%d", snakeish(stream), lower, i)
-		}
-		if strings.Contains(lower, "email") {
-			return fmt.Sprintf("fixture+%d@example.invalid", i)
-		}
-		if strings.Contains(lower, "url") {
-			return fmt.Sprintf("https://example.invalid/%s/%d", snakeish(stream), i)
-		}
-		if strings.Contains(lower, "date") || strings.HasSuffix(lower, "at") || strings.Contains(lower, "time") {
-			return fmt.Sprintf("2026-01-%02dT00:00:00Z", i)
-		}
-		return fmt.Sprintf("%s fixture %d", field.Name, i)
-	}
-}
-
 func ashbyPassesCursor(record connectors.Record, cursorField, lowerBound string) bool {
 	if cursorField == "" || lowerBound == "" {
 		return true
 	}
 	value := strings.TrimSpace(stringValue(record[cursorField]))
-	return value == "" || value > lowerBound
+	return value == "" || (value != lowerBound && connsdk.MaxCursor(lowerBound, value) == value)
 }
 
 func cloneMap(in map[string]any) map[string]any {
@@ -420,17 +457,6 @@ func boolValue(value any) bool {
 	default:
 		return false
 	}
-}
-
-func snakeish(value string) string {
-	value = strings.TrimSpace(strings.ToLower(value))
-	value = strings.ReplaceAll(value, "-", "_")
-	value = strings.ReplaceAll(value, ".", "_")
-	value = strings.ReplaceAll(value, "/", "_")
-	if value == "" {
-		return "ashby"
-	}
-	return value
 }
 
 // requester builds a connsdk.Requester wired with Basic auth (api key as

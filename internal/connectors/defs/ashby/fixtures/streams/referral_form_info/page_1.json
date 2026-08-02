@@ -1,0 +1,50 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/referralForm.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "referral_form_info_id_fixture_49",
+        "organizationId": "referral_form_info_organizationid_fixture_49",
+        "title": "Title fixture 49",
+        "isArchived": true,
+        "isDefaultForm": true,
+        "formDefinition": {
+          "sections": [
+            {
+              "title": "Title fixture 49",
+              "descriptionHtml": "<p>Descriptionhtml fixture 49</p>",
+              "descriptionPlain": "referral_form_info_descriptionplain_fixture_49",
+              "fields": [
+                {
+                  "isRequired": true,
+                  "descriptionHtml": "<p>Descriptionhtml fixture 49</p>",
+                  "descriptionPlain": "referral_form_info_descriptionplain_fixture_49",
+                  "field": {
+                    "id": "referral_form_info_id_fixture_49",
+                    "type": "fixture",
+                    "path": "referral_form_info_path_fixture_49",
+                    "humanReadablePath": "referral_form_info_humanreadablepath_fixture_49",
+                    "title": "Title fixture 49",
+                    "isNullable": true,
+                    "selectableValues": [
+                      {
+                        "label": "referral_form_info_label_fixture_49",
+                        "value": "referral_form_info_value_fixture_49"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

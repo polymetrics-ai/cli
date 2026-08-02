@@ -402,6 +402,134 @@ func TestReadUsesStateAsLowerBoundNotPageCursor(t *testing.T) {
 	}
 }
 
+func TestFixtureModeReadsEveryDeclaredAshbyStream(t *testing.T) {
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
+	for _, stream := range ashbyStreamOrder() {
+		stream := stream
+		t.Run(stream, func(t *testing.T) {
+			count := 0
+			err := New().Read(context.Background(), connectors.ReadRequest{Stream: stream, Config: cfg}, func(record connectors.Record) error {
+				count++
+				if len(record) == 0 {
+					t.Fatalf("empty fixture record for %s", stream)
+				}
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Read(fixture %s): %v", stream, err)
+			}
+			if count == 0 {
+				t.Fatalf("Read(fixture %s) emitted zero records", stream)
+			}
+		})
+	}
+}
+
+func TestReadUsesTimeAwareRFC3339CursorOffsets(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/candidate.list" {
+			t.Fatalf("path = %q, want /candidate.list", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"equal-offset","updatedAt":"2026-01-02T06:00:00Z"},{"id":"older-offset","updatedAt":"2026-01-02T05:30:00Z"},{"id":"newer-offset","updatedAt":"2026-01-02T00:30:00-06:00"}],"moreDataAvailable":false}`))
+	}))
+	defer server.Close()
+
+	var records []connectors.Record
+	err := New().Read(context.Background(), connectors.ReadRequest{
+		Stream: "candidates",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL, "max_pages": "1"},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+		State: map[string]string{"cursor": "2026-01-02T01:00:00-05:00"},
+	}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(records) != 1 || records[0]["id"] != "newer-offset" {
+		t.Fatalf("records = %+v, want only newer-offset", records)
+	}
+}
+
+func TestCommandSurfaceDirectReadsDoNotRedactNonCredentialFields(t *testing.T) {
+	surface := New().(connectors.CommandSurfaceProvider).CommandSurface()
+	for _, cmd := range surface.Commands {
+		if cmd.Intent != "direct_read" {
+			continue
+		}
+		if len(cmd.RedactFields) != 0 {
+			t.Fatalf("direct-read command %q redact_fields = %v, want none", cmd.Path, cmd.RedactFields)
+		}
+	}
+}
+
+func TestOperationDirectReadPreservesNonCredentialIdentityFields(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		switch r.URL.Path {
+		case "/candidate.search":
+			_, _ = w.Write([]byte(`{"success":true,"results":[{"email":"candidate@example.invalid","name":"Ada Candidate","apiToken":"synthetic-response-token"}]}`))
+		case "/job.search":
+			_, _ = w.Write([]byte(`{"success":true,"results":[{"title":"Fixture Job","requisitionId":"REQ-123"}]}`))
+		case "/user.search":
+			_, _ = w.Write([]byte(`{"success":true,"results":[{"email":"user@example.invalid","name":"Ada User"}]}`))
+		default:
+			t.Fatalf("path = %q, want Ashby direct-read search endpoint", r.URL.Path)
+		}
+	}))
+	defer server.Close()
+
+	reader := New().(connectors.OperationDirectReader)
+	tests := []struct {
+		name      string
+		operation string
+		body      map[string]any
+		want      map[string]any
+	}{
+		{name: "candidate", operation: "ashby.direct.candidate.search", body: map[string]any{"email": "candidate@example.invalid"}, want: map[string]any{"email": "candidate@example.invalid", "name": "Ada Candidate", "apiToken_redacted": true}},
+		{name: "job", operation: "ashby.direct.job.search", body: map[string]any{"title": "Fixture Job"}, want: map[string]any{"requisitionId": "REQ-123"}},
+		{name: "user", operation: "ashby.direct.user.search", body: map[string]any{"email": "user@example.invalid"}, want: map[string]any{"email": "user@example.invalid", "name": "Ada User"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := reader.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+				Operation: tt.operation,
+				Config: connectors.RuntimeConfig{
+					Config:  map[string]string{"base_url": server.URL},
+					Secrets: map[string]string{"api_key": "test_key"},
+				},
+				Body:         tt.body,
+				OutputPolicy: "json_redacted",
+				MaxBytes:     1 << 20,
+			})
+			if err != nil {
+				t.Fatalf("OperationDirectRead: %v", err)
+			}
+			body, ok := result.Body.(map[string]any)
+			if !ok {
+				t.Fatalf("result body = %T, want object", result.Body)
+			}
+			results, ok := body["results"].([]any)
+			if !ok || len(results) != 1 {
+				t.Fatalf("results = %#v, want one result", body["results"])
+			}
+			row, ok := results[0].(map[string]any)
+			if !ok {
+				t.Fatalf("result row = %T, want object", results[0])
+			}
+			for field, want := range tt.want {
+				if got := row[field]; got != want {
+					t.Fatalf("row[%s] = %v, want %v (row=%+v)", field, got, want, row)
+				}
+			}
+		})
+	}
+}
+
 func TestOperationDirectReadUsesFixedSearchPath(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/candidate.search" {

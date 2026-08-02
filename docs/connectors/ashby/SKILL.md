@@ -706,7 +706,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 
 ## Security
 
-- read risk: bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and redacted fixtures
+- read risk: bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and sanitized replay fixtures
 - write risk: named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation
 - approval: reverse ETL writes require plan -> preview -> explicit approval -> execute
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
@@ -807,7 +807,7 @@ The `interviewEventId` returned in the response can be provided to `applicationF
   - approval-definition update - Create or update an approval definition for a specific entity that requires approval. The entity requiring approval must be within scope of an approval in Ashby [intent=reverse_etl availability=implemented write=update_approval_definition]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby approvalDefinition.update through the documented POST /approvalDefinition.update endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --entity-type, --entity-id, --approval-step-definitions-0-approvals-required, --approval-step-definitions-0-approvers-0-user-id, --approval-step-definitions-0-approvers-0-type, --submit-approval-request
   - candidate search - Searches for candidates by email and/or name.
 
-**Requires the [`candidatesRead`](authentication#permissions-candidatesearch) permission.** [intent=direct_read availability=implemented operation=ashby.direct.candidate.search]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email, --name
+**Requires the [`candidatesRead`](authentication#permissions-candidatesearch) permission.** [intent=direct_read availability=implemented operation=ashby.direct.candidate.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email, --name
   - candidate info - Fetches details about a single candidate by id or external mapping id.
 
 **Requires the [`candidatesRead`](authentication#permissions-candidateinfo) permission.* [intent=etl availability=implemented stream=candidate_info]; notes: Fixed Ashby stream for candidate.info; flags map only to documented request body fields. Requires at least one documented selector: id, externalMappingId.; flags: --id, --external-mapping-id
@@ -917,7 +917,7 @@ Set `status` to `Published` to publish a draft job posting. The posting must  [i
 **Requires the [`jobsWrite`](authentication#permissions-jobupdate [intent=reverse_etl availability=implemented write=update_job_compensation]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby job.updateCompensation through the documented POST /job.updateCompensation endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --job-id, --compensation-tiers-0-components-0-compensation-type, --compensation-tiers-0-components-0-interval
   - job search - Searches jobs by title or custom requisition id. At least one of `title` or `requisitionId` must be provided.
 
-**Requires the [`jobsRead`](authentication#permis [intent=direct_read availability=implemented operation=ashby.direct.job.search]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title, --requisition-id
+**Requires the [`jobsRead`](authentication#permis [intent=direct_read availability=implemented operation=ashby.direct.job.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title, --requisition-id
   - job set-status - Sets the status of a job.
 
 **Requires the [`jobsWrite`](authentication#permissions-jobsetstatus) permission.** [intent=reverse_etl availability=implemented write=set_job_status]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --job-id, --status
@@ -1068,7 +1068,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 **Requires the  [intent=etl availability=implemented stream=opening_list]; notes: Fixed Ashby stream for opening.list; flags map only to documented request body fields.; flags: --created-after
   - opening search - Searches for openings by identifier.
 
-**Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.** [intent=direct_read availability=implemented operation=ashby.direct.opening.search]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --identifier (required)
+**Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.** [intent=direct_read availability=implemented operation=ashby.direct.opening.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --identifier (required)
   - project info - Retrieves a project by its UUID.
 
 **Requires the [`candidatesRead`](authentication#permissions-projectinfo) permission.** [intent=etl availability=implemented stream=project_info]; notes: Fixed Ashby stream for project.info; flags map only to documented request body fields.; flags: --project-id
@@ -1079,7 +1079,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 **Requires the  [intent=etl availability=implemented stream=project_list]; notes: Fixed Ashby stream for project.list; flags map only to documented request body fields.; flags: --created-after
   - project search - Search for projects by title.
 
-Responses are limited to 100 results. Consider refining your search or using /project.list to paginate through all projects, if y [intent=direct_read availability=implemented operation=ashby.direct.project.search]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title (required)
+Responses are limited to 100 results. Consider refining your search or using /project.list to paginate through all projects, if y [intent=direct_read availability=implemented operation=ashby.direct.project.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title (required)
   - source list - List all sources
 
 **Requires the [`hiringProcessMetadataRead`](authentication#permissions-sourcelist) permission.** [intent=etl availability=implemented stream=source_list]; notes: Fixed Ashby stream for source.list; flags map only to documented request body fields.; flags: --include-archived
@@ -1139,7 +1139,7 @@ This endpoint merges the provided selectable values with the existing values for
 
 Returns an array containing the user if found, or an empty array if no user with the given email exists.
 
-**Requires the [ [intent=direct_read availability=implemented operation=ashby.direct.user.search]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email (required)
+**Requires the [ [intent=direct_read availability=implemented operation=ashby.direct.user.search]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and non-credential identity fields remain complete in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email (required)
   - user interviewer-settings - Get interviewer settings for a user.
 
 **Requires the [`organizationRead`](authentication#permissions-userinterviewersettings) permission.** [intent=reverse_etl availability=implemented write=interviewer_user_settings]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby user.interviewerSettings through the documented POST /user.interviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --user-id

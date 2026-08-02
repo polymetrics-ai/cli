@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/surveyFormDefinition.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "survey_form_definition_list_id_fixture_64",
+          "title": "Title fixture 64",
+          "isArchived": false,
+          "formDefinition": {
+            "sections": [
+              {
+                "title": "Title fixture 64",
+                "descriptionHtml": "<p>Descriptionhtml fixture 64</p>",
+                "descriptionPlain": "survey_form_definition_list_descriptionplain_fixture_64",
+                "fields": [
+                  {
+                    "isRequired": false,
+                    "descriptionHtml": "<p>Descriptionhtml fixture 64</p>",
+                    "descriptionPlain": "survey_form_definition_list_descriptionplain_fixture_64",
+                    "field": {
+                      "id": "survey_form_definition_list_id_fixture_64",
+                      "type": "fixture",
+                      "path": "survey_form_definition_list_path_fixture_64",
+                      "humanReadablePath": "survey_form_definition_list_humanreadablepath_fixture_64",
+                      "title": "Title fixture 64",
+                      "isNullable": false,
+                      "selectableValues": [
+                        {
+                          "label": "survey_form_definition_list_label_fixture_64",
+                          "value": "survey_form_definition_list_value_fixture_64"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "surveyType": "EEOC"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}
