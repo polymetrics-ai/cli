@@ -5,6 +5,7 @@ on:
     paths:
       - "website/**"
       - "internal/connectors/icon_data.json"
+      - "docs/connectors/icons/**"
       - ".github/workflows/website.yml"
       - ".gitlab-ci.yml"
   push:
@@ -13,6 +14,7 @@ on:
     paths:
       - "website/**"
       - "internal/connectors/icon_data.json"
+      - "docs/connectors/icons/**"
       - ".github/workflows/website.yml"
       - ".gitlab-ci.yml"
   workflow_dispatch:
