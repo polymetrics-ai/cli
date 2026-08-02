@@ -6,8 +6,13 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "ediscovery_export_fixture_1",
-      "name": "Fixture Name"
+      "id": "exp_fixture_1",
+      "state": "completed",
+      "baseId": "app_fixture_1",
+      "createdByUserId": "usr_fixture_1",
+      "createdTime": "2026-01-01T00:00:00.000Z",
+      "completedTime": "2026-01-01T00:01:00.000Z",
+      "downloadUrl": "https://example.invalid/airtable/ediscovery-export.zip"
     }
   }
 }

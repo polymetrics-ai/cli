@@ -6,11 +6,15 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "scim_group_fixture_1",
-      "name": "Fixture Group",
+      "schemas": [
+        "urn:ietf:params:scim:schemas:core:2.0:Group"
+      ],
+      "id": "grp_fixture_1",
+      "displayName": "Fixture Group",
       "members": [
         {
-          "id": "usr_fixture_1"
+          "value": "usr_fixture_1",
+          "display": "Fixture User"
         }
       ]
     }

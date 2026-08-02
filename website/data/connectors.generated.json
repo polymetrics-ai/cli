@@ -1872,7 +1872,7 @@
   {
     "slug": "airtable",
     "name": "Airtable",
-    "description": "Reads Airtable Web API, SCIM, metadata, comments, webhook payloads, enterprise/admin, HyperDB direct reads, and executes typed record/schema/admin mutations from fixture-tested declarative definitions.",
+    "description": "Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, enterprise/admin data, and HyperDB direct reads; executes typed single-resource mutations while batch array-cardinality operations stay blocked until enforceable.",
     "docs_url": "https://airtable.com/developers/web/api/introduction",
     "integration_type": "api",
     "release_stage": "ga",
@@ -1886,23 +1886,7 @@
     },
     "streams": [
       {
-        "name": "scim_groups",
-        "primary_key": [
-          "id"
-        ],
-        "cursor": "",
-        "incremental": false
-      },
-      {
         "name": "scim_group",
-        "primary_key": [
-          "id"
-        ],
-        "cursor": "",
-        "incremental": false
-      },
-      {
-        "name": "scim_users",
         "primary_key": [
           "id"
         ],
@@ -2136,44 +2120,14 @@
     ],
     "write_actions": [
       {
-        "name": "create_scim_group",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_scim_group",
         "method": "DELETE",
         "kind": "delete"
       },
       {
-        "name": "patch_scim_group",
-        "method": "PATCH",
-        "kind": "update"
-      },
-      {
-        "name": "put_scim_group",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "create_scim_user",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_scim_user",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "patch_scim_user",
-        "method": "PATCH",
-        "kind": "update"
-      },
-      {
-        "name": "put_scim_user",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "create_webhook",
@@ -2196,11 +2150,6 @@
         "kind": "update"
       },
       {
-        "name": "create_base",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_base",
         "method": "DELETE",
         "kind": "delete"
@@ -2216,11 +2165,6 @@
         "kind": "update"
       },
       {
-        "name": "add_base_collaborator",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "delete_base_collaborator",
         "method": "DELETE",
         "kind": "delete"
@@ -2229,11 +2173,6 @@
         "name": "update_collaborator_base_permission",
         "method": "PATCH",
         "kind": "update"
-      },
-      {
-        "name": "add_interface_collaborator",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_interface_collaborator",
@@ -2264,11 +2203,6 @@
         "name": "manage_share",
         "method": "PATCH",
         "kind": "update"
-      },
-      {
-        "name": "create_table",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "update_table",
@@ -2306,49 +2240,14 @@
         "kind": "create"
       },
       {
-        "name": "move_user_groups",
-        "method": "POST",
-        "kind": "update"
-      },
-      {
-        "name": "move_workspaces",
-        "method": "POST",
-        "kind": "update"
-      },
-      {
         "name": "create_base_from_package_enterprise",
         "method": "POST",
         "kind": "create"
       },
       {
-        "name": "revoke_enterprise_personal_access_tokens",
-        "method": "POST",
-        "kind": "update"
-      },
-      {
         "name": "delete_users_by_email",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "manage_user_batched",
-        "method": "PATCH",
-        "kind": "update"
-      },
-      {
-        "name": "manage_user_membership",
-        "method": "POST",
-        "kind": "update"
-      },
-      {
-        "name": "grant_admin_access",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "revoke_admin_access",
-        "method": "POST",
-        "kind": "update"
       },
       {
         "name": "delete_user_by_id",
@@ -2371,11 +2270,6 @@
         "kind": "update"
       },
       {
-        "name": "update_workspace_ai_allowlist",
-        "method": "POST",
-        "kind": "update"
-      },
-      {
         "name": "create_workspace",
         "method": "POST",
         "kind": "create"
@@ -2384,11 +2278,6 @@
         "name": "delete_workspace",
         "method": "DELETE",
         "kind": "delete"
-      },
-      {
-        "name": "add_workspace_collaborator",
-        "method": "POST",
-        "kind": "create"
       },
       {
         "name": "delete_workspace_collaborator",
@@ -2419,26 +2308,6 @@
         "name": "upload_attachment",
         "method": "POST",
         "kind": "custom"
-      },
-      {
-        "name": "delete_multiple_records",
-        "method": "DELETE",
-        "kind": "delete"
-      },
-      {
-        "name": "update_multiple_records",
-        "method": "PATCH",
-        "kind": "update"
-      },
-      {
-        "name": "create_records",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
-        "name": "update_multiple_records_put",
-        "method": "PUT",
-        "kind": "update"
       },
       {
         "name": "delete_record",
@@ -2474,16 +2343,6 @@
         "name": "update_date_dependency_metadata",
         "method": "PATCH",
         "kind": "update"
-      },
-      {
-        "name": "hyperdb_delete_records_by_primary_keys",
-        "method": "POST",
-        "kind": "custom"
-      },
-      {
-        "name": "hyperdb_upsert_records_by_primary_keys",
-        "method": "PUT",
-        "kind": "upsert"
       }
     ],
     "cli_surface": {
@@ -2614,30 +2473,6 @@
       "global_flags": [],
       "commands": [
         {
-          "path": "read scim-groups",
-          "summary": "List groups",
-          "intent": "etl",
-          "availability": "implemented",
-          "stream": "scim_groups",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [
-            {
-              "name": "page-size",
-              "type": "string",
-              "summary": "Bounded Airtable page size",
-              "values": [],
-              "maps_to": "config.page_size"
-            }
-          ],
-          "examples": [],
-          "output_policy": "",
-          "risk": "",
-          "approval": "",
-          "notes": ""
-        },
-        {
           "path": "read scim-group",
           "summary": "Get group",
           "intent": "etl",
@@ -2653,30 +2488,6 @@
               "summary": "Airtable group id",
               "values": [],
               "maps_to": "config.group_id"
-            }
-          ],
-          "examples": [],
-          "output_policy": "",
-          "risk": "",
-          "approval": "",
-          "notes": ""
-        },
-        {
-          "path": "read scim-users",
-          "summary": "List users",
-          "intent": "etl",
-          "availability": "implemented",
-          "stream": "scim_users",
-          "write": "",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [
-            {
-              "name": "page-size",
-              "type": "string",
-              "summary": "Bounded Airtable page size",
-              "values": [],
-              "maps_to": "config.page_size"
             }
           ],
           "examples": [],
@@ -3524,22 +3335,6 @@
           "notes": ""
         },
         {
-          "path": "write create-scim-group",
-          "summary": "Create group",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "create_scim_group",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
           "path": "write delete-scim-group",
           "summary": "Delete group",
           "intent": "reverse_etl",
@@ -3556,92 +3351,12 @@
           "notes": ""
         },
         {
-          "path": "write patch-scim-group",
-          "summary": "Patch group",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "patch_scim_group",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write put-scim-group",
-          "summary": "Put group",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "put_scim_group",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write create-scim-user",
-          "summary": "Create user",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "create_scim_user",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
           "path": "write delete-scim-user",
           "summary": "Delete user",
           "intent": "reverse_etl",
           "availability": "planned",
           "stream": "",
           "write": "delete_scim_user",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write patch-scim-user",
-          "summary": "Patch user",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "patch_scim_user",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write put-scim-user",
-          "summary": "Put user",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "put_scim_user",
           "source_cli_path": "",
           "source_url": "https://airtable.com/developers/web/api/introduction",
           "flags": [],
@@ -3716,22 +3431,6 @@
           "notes": ""
         },
         {
-          "path": "write create-base",
-          "summary": "Create base",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "create_base",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "medium",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
           "path": "write delete-base",
           "summary": "Delete base",
           "intent": "reverse_etl",
@@ -3780,22 +3479,6 @@
           "notes": ""
         },
         {
-          "path": "write add-base-collaborator",
-          "summary": "Add base collaborator",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "add_base_collaborator",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "medium",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
           "path": "write delete-base-collaborator",
           "summary": "Delete base collaborator",
           "intent": "reverse_etl",
@@ -3818,22 +3501,6 @@
           "availability": "planned",
           "stream": "",
           "write": "update_collaborator_base_permission",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "medium",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write add-interface-collaborator",
-          "summary": "Add interface collaborator",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "add_interface_collaborator",
           "source_cli_path": "",
           "source_url": "https://airtable.com/developers/web/api/introduction",
           "flags": [],
@@ -3930,22 +3597,6 @@
           "availability": "planned",
           "stream": "",
           "write": "manage_share",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "medium",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write create-table",
-          "summary": "Create table",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "create_table",
           "source_cli_path": "",
           "source_url": "https://airtable.com/developers/web/api/introduction",
           "flags": [],
@@ -4068,38 +3719,6 @@
           "notes": ""
         },
         {
-          "path": "write move-user-groups",
-          "summary": "Move user groups",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "move_user_groups",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write move-workspaces",
-          "summary": "Move workspaces",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "move_workspaces",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
           "path": "write create-base-from-package-enterprise",
           "summary": "Create base from package",
           "intent": "reverse_etl",
@@ -4116,92 +3735,12 @@
           "notes": ""
         },
         {
-          "path": "write revoke-enterprise-personal-access-tokens",
-          "summary": "Revoke personal access tokens",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "revoke_enterprise_personal_access_tokens",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
           "path": "write delete-users-by-email",
           "summary": "Delete users by email",
           "intent": "reverse_etl",
           "availability": "planned",
           "stream": "",
           "write": "delete_users_by_email",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write manage-user-batched",
-          "summary": "Manage user batched",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "manage_user_batched",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write manage-user-membership",
-          "summary": "Manage user membership",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "manage_user_membership",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write grant-admin-access",
-          "summary": "Grant admin access",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "grant_admin_access",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write revoke-admin-access",
-          "summary": "Revoke admin access",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "revoke_admin_access",
           "source_cli_path": "",
           "source_url": "https://airtable.com/developers/web/api/introduction",
           "flags": [],
@@ -4276,22 +3815,6 @@
           "notes": ""
         },
         {
-          "path": "write update-workspace-ai-allowlist",
-          "summary": "Update workspace AI allowlist",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "update_workspace_ai_allowlist",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
           "path": "write create-workspace",
           "summary": "Create workspace",
           "intent": "reverse_etl",
@@ -4320,22 +3843,6 @@
           "examples": [],
           "output_policy": "",
           "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write add-workspace-collaborator",
-          "summary": "Add workspace collaborator",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "add_workspace_collaborator",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "medium",
           "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
           "notes": ""
         },
@@ -4432,70 +3939,6 @@
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write delete-multiple-records",
-          "summary": "Delete multiple records",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "delete_multiple_records",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write update-multiple-records",
-          "summary": "Update multiple records",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "update_multiple_records",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "medium",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write create-records",
-          "summary": "Create records",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "create_records",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "medium",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write update-multiple-records-put",
-          "summary": "Update multiple records (put)",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "update_multiple_records_put",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
           "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
           "notes": ""
         },
@@ -4610,38 +4053,6 @@
           "risk": "medium",
           "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
           "notes": ""
-        },
-        {
-          "path": "write hyperdb-delete-records-by-primary-keys",
-          "summary": "Delete records",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "hyperdb_delete_records_by_primary_keys",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "medium",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
-        },
-        {
-          "path": "write hyperdb-upsert-records-by-primary-keys",
-          "summary": "Update or insert records",
-          "intent": "reverse_etl",
-          "availability": "planned",
-          "stream": "",
-          "write": "hyperdb_upsert_records_by_primary_keys",
-          "source_cli_path": "",
-          "source_url": "https://airtable.com/developers/web/api/introduction",
-          "flags": [],
-          "examples": [],
-          "output_policy": "",
-          "risk": "high",
-          "approval": "Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.",
-          "notes": ""
         }
       ],
       "help_topics": [
@@ -4651,7 +4062,7 @@
         }
       ]
     },
-    "docs_md": "# Overview\n\nAirtable connector bundle expanded to official Web API parity from the embedded OpenAPI specification. It reads Web API, SCIM, metadata, comments, webhook payloads, enterprise/admin, audit/eDiscovery/change-event data, exposes the HyperDB getRecords direct read, and declares typed reverse-ETL write actions for every supportable JSON/no-body mutation.\n\nOfficial documentation: https://airtable.com/developers/web/api/introduction. OpenAPI SHA-256: `f1506571034500ffb0887e7244f770c0b060a4205e734881bd3de6fa20d6f6b8`. Fixture-only validation; no live provider calls or certification claims.\n\n## Auth setup\n\n- `api_key` (secret): Airtable Personal Access Token, preferred when both token fields are set.\n- `access_token` (secret): Airtable OAuth2 access token fallback.\n- `base_url`: default `https://api.airtable.com`; connector paths include `/v0` or `/scim`.\n- Scope/config selectors include `base_id`, `table_id`, `record_id`, `webhook_id`, `enterprise_account_id`, `workspace_id`, `group_id`, `user_id`, `view_id`, and related task ids.\n\nAuthentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. Secret fields are redacted in logs and previews.\n\n## Streams notes\n\n31 fixture-backed streams cover all official GET operations. Default pagination uses `offset`; SCIM/webhook-payload/audit endpoints declare their provider-specific cursor parameters where applicable.\n\n- `scim_groups`: GET `/scim/v2/Groups` -> `Resources`; query count.\n\n- `scim_group`: GET `/scim/v2/Groups/{{ config.group_id }}` -> `.`.\n\n- `scim_users`: GET `/scim/v2/Users` -> `Resources`; query count.\n\n- `scim_user`: GET `/scim/v2/Users/{{ config.user_id }}` -> `.`.\n\n- `webhooks`: GET `/v0/bases/{{ config.base_id }}/webhooks` -> `webhooks`.\n\n- `webhook_payloads`: GET `/v0/bases/{{ config.base_id }}/webhooks/{{ config.webhook_id }}/payloads` -> `payloads`; query limit.\n\n- `bases`: GET `/v0/meta/bases` -> `bases`.\n\n- `base_collaborators`: GET `/v0/meta/bases/{{ config.base_id }}` -> `.`.\n\n- `block_installations`: GET `/v0/meta/bases/{{ config.base_id }}/blockInstallations` -> `.`.\n\n- `interface`: GET `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ config.page_bundle_id }}` -> `.`.\n\n- `shares`: GET `/v0/meta/bases/{{ config.base_id }}/shares` -> `shares`.\n\n- `tables`: GET `/v0/meta/bases/{{ config.base_id }}/tables` -> `tables`.\n\n- `views`: GET `/v0/meta/bases/{{ config.base_id }}/views` -> `views`.\n\n- `view_metadata`: GET `/v0/meta/bases/{{ config.base_id }}/views/{{ config.view_id }}` -> `.`.\n\n- `enterprise`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}` -> `.`.\n\n- `audit_log_events`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogEvents` -> `events`; query pageSize.\n\n- `audit_log_requests`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogs` -> `auditLogs`; query pageSize.\n\n- `audit_log_request`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogs/{{ config.enterprise_audit_log_task_id }}` -> `.`.\n\n- `change_events`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/changeEvents` -> `events`; query pageSize.\n\n- `ediscovery_exports`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/exports` -> `exports`; query pageSize.\n\n- `ediscovery_export`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/exports/{{ config.enterprise_task_id }}` -> `.`.\n\n- `enterprise_packages`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/packages` -> `packages`.\n\n- `enterprise_personal_access_tokens`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/personalAccessTokens` -> `personalAccessTokens`.\n\n- `enterprise_users`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users` -> `users`.\n\n- `enterprise_user`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users/{{ config.user_id }}` -> `.`.\n\n- `user_group`: GET `/v0/meta/groups/{{ config.group_id }}` -> `.`.\n\n- `whoami`: GET `/v0/meta/whoami` -> `.`.\n\n- `workspace_collaborators`: GET `/v0/meta/workspaces/{{ config.workspace_id }}` -> `.`.\n\n- `records`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}` -> `records`; query pageSize.\n\n- `record`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ config.record_id }}` -> `.`.\n\n- `comments`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ fanout.id }}/comments` -> `comments`; fan-out.\n\n## Direct read\n\n- `hyperdb get-records`: POST `/v0/{enterpriseAccountId}/{dataTableId}/getRecords`, typed JSON body with `primaryKeys`, optional `fields`, `maxRecords`, and `cursor`; output policy `json_redacted`.\n\n## Write actions & risks\n\n70 fixture-backed write actions cover supportable JSON/no-body POST/PATCH/PUT/DELETE operations. Every write must use reverse ETL plan -> preview -> explicit approval -> execute. DELETE actions treat 404 as missing-ok idempotent success where supported; DELETE/PUT/revoke/remove/logout actions require destructive confirmation.\n\n- `create_scim_group`: POST `/scim/v2/Groups`; kind `create`; body `json`; path fields `none`; required `schemas, displayName`.\n\n- `delete_scim_group`: DELETE `/scim/v2/Groups/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `patch_scim_group`: PATCH `/scim/v2/Groups/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas, Operations`.\n\n- `put_scim_group`: PUT `/scim/v2/Groups/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas`.\n\n- `create_scim_user`: POST `/scim/v2/Users`; kind `create`; body `json`; path fields `none`; required `schemas, userName`.\n\n- `delete_scim_user`: DELETE `/scim/v2/Users/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `patch_scim_user`: PATCH `/scim/v2/Users/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas, Operations`.\n\n- `put_scim_user`: PUT `/scim/v2/Users/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, schemas, userName`.\n\n- `create_webhook`: POST `/v0/bases/{{ config.base_id }}/webhooks`; kind `create`; body `json`; path fields `none`; required `specification`.\n\n- `delete_webhook`: DELETE `/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `set_webhook_notifications`: POST `/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}/enableNotifications`; kind `update`; body `json`; path fields `id`; required `id, enable`.\n\n- `refresh_webhook`: POST `/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}/refresh`; kind `update`; body `json`; path fields `id`; required `id`.\n\n- `create_base`: POST `/v0/meta/bases`; kind `create`; body `json`; path fields `none`; required `workspaceId, name, tables`.\n\n- `delete_base`: DELETE `/v0/meta/bases/{{ record.base_id }}`; kind `delete`; body `none`; path fields `base_id`; required `base_id`.\n\n- `delete_block_installation`: DELETE `/v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `manage_block_installation`: PATCH `/v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, state`.\n\n- `add_base_collaborator`: POST `/v0/meta/bases/{{ config.base_id }}/collaborators`; kind `create`; body `json`; path fields `none`; required `collaborators`.\n\n- `delete_base_collaborator`: DELETE `/v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `user_or_group_id`; required `user_or_group_id`.\n\n- `update_collaborator_base_permission`: PATCH `/v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}`; kind `update`; body `json`; path fields `user_or_group_id`; required `user_or_group_id, permissionLevel`.\n\n- `add_interface_collaborator`: POST `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators`; kind `create`; body `json`; path fields `page_bundle_id`; required `page_bundle_id, collaborators`.\n\n- `delete_interface_collaborator`: DELETE `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `page_bundle_id, user_or_group_id`; required `page_bundle_id, user_or_group_id`.\n\n- `update_interface_collaborator`: PATCH `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators/{{ record.user_or_group_id }}`; kind `update`; body `json`; path fields `page_bundle_id, user_or_group_id`; required `page_bundle_id, user_or_group_id, permissionLevel`.\n\n- `delete_interface_invite`: DELETE `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/invites/{{ record.invite_id }}`; kind `delete`; body `none`; path fields `page_bundle_id, invite_id`; required `page_bundle_id, invite_id`.\n\n- `delete_base_invite`: DELETE `/v0/meta/bases/{{ config.base_id }}/invites/{{ record.invite_id }}`; kind `delete`; body `none`; path fields `invite_id`; required `invite_id`.\n\n- `delete_share`: DELETE `/v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `manage_share`: PATCH `/v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, state`.\n\n- `create_table`: POST `/v0/meta/bases/{{ config.base_id }}/tables`; kind `create`; body `json`; path fields `none`; required `name, fields`.\n\n- `update_table`: PATCH `/v0/meta/bases/{{ config.base_id }}/tables/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `none`.\n\n- `create_field`: POST `/v0/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields`; kind `create`; body `json`; path fields `table_id`; required `table_id, name, type`.\n\n- `update_field`: PATCH `/v0/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields/{{ record.column_id }}`; kind `update`; body `json`; path fields `table_id, column_id`; required `table_id, column_id`.\n\n- `delete_view`: DELETE `/v0/meta/bases/{{ config.base_id }}/views/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `create_audit_log_request`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/auditLogs`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, timePeriod`.\n\n- `create_descendant_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/descendants`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, name`.\n\n- `create_ediscovery_export`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/exports`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, baseId`.\n\n- `move_user_groups`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/moveGroups`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, groupIds, targetEnterpriseAccountId`.\n\n- `move_workspaces`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/moveWorkspaces`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, workspaceIds, targetEnterpriseAccountId`.\n\n- `create_base_from_package_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/packages/{{ record.package_id }}/install`; kind `create`; body `json`; path fields `enterprise_account_id, package_id`; required `enterprise_account_id, package_id, workspaceId, packageReleaseId, name`.\n\n- `revoke_enterprise_personal_access_tokens`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/personalAccessTokens/revoke`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, tokenIds`.\n\n- `delete_users_by_email`: DELETE `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users?email={{ record.email | urlencode }}`; kind `delete`; body `none`; path fields `enterprise_account_id, email`; required `enterprise_account_id, email`.\n\n- `manage_user_batched`: PATCH `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.\n\n- `manage_user_membership`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/claim`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.\n\n- `grant_admin_access`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/grantAdminAccess`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.\n\n- `revoke_admin_access`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/revokeAdminAccess`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, users`.\n\n- `delete_user_by_id`: DELETE `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}`; kind `delete`; body `none`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `manage_user`: PATCH `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}`; kind `update`; body `json`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `logout_user`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}/logout`; kind `update`; body `json`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `remove_user_from_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}/remove`; kind `update`; body `json`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `update_workspace_ai_allowlist`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/workspaceAiAllowlist`; kind `update`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, workspaces`.\n\n- `create_workspace`: POST `/v0/meta/workspaces`; kind `create`; body `json`; path fields `none`; required `enterpriseAccountId, name`.\n\n- `delete_workspace`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}`; kind `delete`; body `none`; path fields `workspace_id`; required `workspace_id`.\n\n- `add_workspace_collaborator`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/collaborators`; kind `create`; body `json`; path fields `workspace_id`; required `workspace_id, collaborators`.\n\n- `delete_workspace_collaborator`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `workspace_id, user_or_group_id`; required `workspace_id, user_or_group_id`.\n\n- `update_workspace_collaborator`: PATCH `/v0/meta/workspaces/{{ record.workspace_id }}/collaborators/{{ record.user_or_group_id }}`; kind `update`; body `json`; path fields `workspace_id, user_or_group_id`; required `workspace_id, user_or_group_id, permissionLevel`.\n\n- `delete_workspace_invite`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}/invites/{{ record.invite_id }}`; kind `delete`; body `none`; path fields `workspace_id, invite_id`; required `workspace_id, invite_id`.\n\n- `move_base`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/moveBase`; kind `update`; body `json`; path fields `workspace_id`; required `workspace_id, baseId, targetWorkspaceId`.\n\n- `update_workspace_restrictions`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/updateRestrictions`; kind `update`; body `json`; path fields `workspace_id`; required `workspace_id`.\n\n- `upload_attachment`: POST `/v0/{{ config.base_id }}/{{ record.record_id }}/{{ record.attachment_field_id_or_name }}/uploadAttachment`; kind `custom`; body `json`; path fields `record_id, attachment_field_id_or_name`; required `record_id, attachment_field_id_or_name, contentType, filename, file`.\n\n- `delete_multiple_records`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}?records[]={{ record.records | join:&records[]= }}`; kind `delete`; body `none`; path fields `records`; required `records`.\n\n- `update_multiple_records`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `records`.\n\n- `create_records`: POST `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `create`; body `json`; path fields `none`; required `records`.\n\n- `update_multiple_records_put`: PUT `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `records`.\n\n- `delete_record`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `update_record`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, fields`.\n\n- `replace_record`: PUT `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, fields`.\n\n- `create_comment`: POST `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments`; kind `create`; body `json`; path fields `record_id`; required `record_id, text`.\n\n- `delete_comment`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.row_comment_id }}`; kind `delete`; body `none`; path fields `record_id, row_comment_id`; required `record_id, row_comment_id`.\n\n- `update_comment`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.row_comment_id }}`; kind `update`; body `json`; path fields `record_id, row_comment_id`; required `record_id, row_comment_id, text`.\n\n- `update_date_dependency_metadata`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}/dateDependencyMetadata`; kind `update`; body `json`; path fields `id`; required `id, predecessorRecordId, dateDependencyMetadata`.\n\n- `hyperdb_delete_records_by_primary_keys`: POST `/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/deleteRecords`; kind `custom`; body `json`; path fields `enterprise_account_id, data_table_id`; required `enterprise_account_id, data_table_id, primaryKeysForDelete`.\n\n- `hyperdb_upsert_records_by_primary_keys`: PUT `/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/upsertRecords`; kind `upsert`; body `json`; path fields `enterprise_account_id, data_table_id`; required `enterprise_account_id, data_table_id, records`.\n\n## Known limits\n\n- Blocked row: `post-sync-api-endpoint` (`POST /v0/{baseId}/{apiEndpointSyncId}/sync`) because the official Sync API import is `text/csv`; the shared declarative write runtime has no typed bounded CSV body dialect and generic raw uploads remain disallowed.\n\n- API-surface ledger rows: 103 total = 31 streams + 70 writes + 1 direct read + 1 blocked operation.\n\n- Certification remains fixture-only/uncertified until separately approved live-safe credentials and provider resources are supplied outside this wave.\n",
+    "docs_md": "# Overview\n\nAirtable connector bundle expanded to official Web API parity from the embedded OpenAPI specification. It reads Web API metadata, records, comments, webhook payloads, SCIM detail, enterprise/admin, audit/eDiscovery/change-event data, exposes the HyperDB getRecords direct read, and declares typed reverse-ETL write actions for supportable JSON/no-body mutations whose schemas are enforceable by the current runtime.\n\nOfficial documentation: https://airtable.com/developers/web/api/introduction. OpenAPI SHA-256: `f1506571034500ffb0887e7244f770c0b060a4205e734881bd3de6fa20d6f6b8`. Fixture-only validation; no live provider calls or certification claims.\n\n## Auth setup\n\n- `api_key` (secret): Airtable Personal Access Token, preferred when both token fields are set.\n- `access_token` (secret): Airtable OAuth2 access token fallback.\n- `base_url`: default `https://api.airtable.com`; connector paths include `/v0` or `/scim`.\n- Scope/config selectors include `base_id`, `table_id`, `record_id`, `webhook_id`, `enterprise_account_id`, `workspace_id`, `group_id`, `user_id`, `view_id`, and related task ids.\n\nAuthentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. Secret fields are redacted in logs and previews.\n\n## Streams notes\n\n29 fixture-backed streams cover executable GET operations. Default pagination uses `offset`; webhook-payload and audit endpoints declare provider cursor parameters where the current runtime can consume the documented token directly. SCIM list endpoints are blocked because Airtable SCIM responses expose `Resources`, `startIndex`, `itemsPerPage`, and `totalResults`, not a `nextStartIndex` token.\n\n- `scim_group`: GET `/scim/v2/Groups/{{ config.group_id }}` -> `.`.\n\n- `scim_user`: GET `/scim/v2/Users/{{ config.user_id }}` -> `.`.\n\n- `webhooks`: GET `/v0/bases/{{ config.base_id }}/webhooks` -> `webhooks`.\n\n- `webhook_payloads`: GET `/v0/bases/{{ config.base_id }}/webhooks/{{ config.webhook_id }}/payloads` -> `payloads`; query limit; cursor cursor.\n\n- `bases`: GET `/v0/meta/bases` -> `bases`.\n\n- `base_collaborators`: GET `/v0/meta/bases/{{ config.base_id }}` -> `.`.\n\n- `block_installations`: GET `/v0/meta/bases/{{ config.base_id }}/blockInstallations` -> `.`.\n\n- `interface`: GET `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ config.page_bundle_id }}` -> `.`.\n\n- `shares`: GET `/v0/meta/bases/{{ config.base_id }}/shares` -> `shares`.\n\n- `tables`: GET `/v0/meta/bases/{{ config.base_id }}/tables` -> `tables`.\n\n- `views`: GET `/v0/meta/bases/{{ config.base_id }}/views` -> `views`.\n\n- `view_metadata`: GET `/v0/meta/bases/{{ config.base_id }}/views/{{ config.view_id }}` -> `.`.\n\n- `enterprise`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}` -> `.`.\n\n- `audit_log_events`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogEvents` -> `events`; query pageSize; cursor pagination.next.\n\n- `audit_log_requests`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogs` -> `auditLogs`; query pageSize.\n\n- `audit_log_request`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/auditLogs/{{ config.enterprise_audit_log_task_id }}` -> `.`.\n\n- `change_events`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/changeEvents` -> `events`; query pageSize.\n\n- `ediscovery_exports`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/exports` -> `exports`; query pageSize.\n\n- `ediscovery_export`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/exports/{{ config.enterprise_task_id }}` -> `.`.\n\n- `enterprise_packages`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/packages` -> `packages`.\n\n- `enterprise_personal_access_tokens`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/personalAccessTokens` -> `personalAccessTokens`.\n\n- `enterprise_users`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users` -> `users`.\n\n- `enterprise_user`: GET `/v0/meta/enterpriseAccounts/{{ config.enterprise_account_id }}/users/{{ config.user_id }}` -> `.`.\n\n- `user_group`: GET `/v0/meta/groups/{{ config.group_id }}` -> `.`.\n\n- `whoami`: GET `/v0/meta/whoami` -> `.`.\n\n- `workspace_collaborators`: GET `/v0/meta/workspaces/{{ config.workspace_id }}` -> `.`.\n\n- `records`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}` -> `records`; query pageSize.\n\n- `record`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ config.record_id }}` -> `.`.\n\n- `comments`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ fanout.id }}/comments` -> `comments`; fan-out.\n\n## Direct read\n\n- `hyperdb get-records`: POST `/v0/{enterpriseAccountId}/{dataTableId}/getRecords`, typed JSON body with `primaryKeys`, optional `fields`, `maxRecords`, and `cursor`; output policy `json_redacted`.\n\n## Write actions & risks\n\n45 fixture-backed write actions cover supportable JSON/no-body mutations whose closed schemas are enforceable by the current runtime. Every write must use reverse ETL plan -> preview -> explicit approval -> execute. DELETE actions treat 404 as missing-ok idempotent success where supported; DELETE/PUT/revoke/remove/logout actions require destructive confirmation.\n\n- `delete_scim_group`: DELETE `/scim/v2/Groups/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `delete_scim_user`: DELETE `/scim/v2/Users/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `create_webhook`: POST `/v0/bases/{{ config.base_id }}/webhooks`; kind `create`; body `json`; path fields `none`; required `specification`.\n\n- `delete_webhook`: DELETE `/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `set_webhook_notifications`: POST `/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}/enableNotifications`; kind `update`; body `json`; path fields `id`; required `id, enable`.\n\n- `refresh_webhook`: POST `/v0/bases/{{ config.base_id }}/webhooks/{{ record.id }}/refresh`; kind `update`; body `json`; path fields `id`; required `id`.\n\n- `delete_base`: DELETE `/v0/meta/bases/{{ record.base_id }}`; kind `delete`; body `none`; path fields `base_id`; required `base_id`.\n\n- `delete_block_installation`: DELETE `/v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `manage_block_installation`: PATCH `/v0/meta/bases/{{ config.base_id }}/blockInstallations/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, state`.\n\n- `delete_base_collaborator`: DELETE `/v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `user_or_group_id`; required `user_or_group_id`.\n\n- `update_collaborator_base_permission`: PATCH `/v0/meta/bases/{{ config.base_id }}/collaborators/{{ record.user_or_group_id }}`; kind `update`; body `json`; path fields `user_or_group_id`; required `user_or_group_id, permissionLevel`.\n\n- `delete_interface_collaborator`: DELETE `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `page_bundle_id, user_or_group_id`; required `page_bundle_id, user_or_group_id`.\n\n- `update_interface_collaborator`: PATCH `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/collaborators/{{ record.user_or_group_id }}`; kind `update`; body `json`; path fields `page_bundle_id, user_or_group_id`; required `page_bundle_id, user_or_group_id, permissionLevel`.\n\n- `delete_interface_invite`: DELETE `/v0/meta/bases/{{ config.base_id }}/interfaces/{{ record.page_bundle_id }}/invites/{{ record.invite_id }}`; kind `delete`; body `none`; path fields `page_bundle_id, invite_id`; required `page_bundle_id, invite_id`.\n\n- `delete_base_invite`: DELETE `/v0/meta/bases/{{ config.base_id }}/invites/{{ record.invite_id }}`; kind `delete`; body `none`; path fields `invite_id`; required `invite_id`.\n\n- `delete_share`: DELETE `/v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `manage_share`: PATCH `/v0/meta/bases/{{ config.base_id }}/shares/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, state`.\n\n- `update_table`: PATCH `/v0/meta/bases/{{ config.base_id }}/tables/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `none`.\n\n- `create_field`: POST `/v0/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields`; kind `create`; body `json`; path fields `table_id`; required `table_id, name, type`.\n\n- `update_field`: PATCH `/v0/meta/bases/{{ config.base_id }}/tables/{{ record.table_id }}/fields/{{ record.column_id }}`; kind `update`; body `json`; path fields `table_id, column_id`; required `table_id, column_id`.\n\n- `delete_view`: DELETE `/v0/meta/bases/{{ config.base_id }}/views/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `create_audit_log_request`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/auditLogs`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, timePeriod`.\n\n- `create_descendant_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/descendants`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, name`.\n\n- `create_ediscovery_export`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/exports`; kind `create`; body `json`; path fields `enterprise_account_id`; required `enterprise_account_id, baseId`.\n\n- `create_base_from_package_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/packages/{{ record.package_id }}/install`; kind `create`; body `json`; path fields `enterprise_account_id, package_id`; required `enterprise_account_id, package_id, workspaceId, packageReleaseId, name`.\n\n- `delete_users_by_email`: DELETE `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users?email={{ record.email | urlencode }}`; kind `delete`; body `none`; path fields `enterprise_account_id, email`; required `enterprise_account_id, email`.\n\n- `delete_user_by_id`: DELETE `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}`; kind `delete`; body `none`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `manage_user`: PATCH `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}`; kind `update`; body `json`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `logout_user`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}/logout`; kind `update`; body `json`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `remove_user_from_enterprise`: POST `/v0/meta/enterpriseAccounts/{{ record.enterprise_account_id }}/users/{{ record.id }}/remove`; kind `update`; body `json`; path fields `enterprise_account_id, id`; required `enterprise_account_id, id`.\n\n- `create_workspace`: POST `/v0/meta/workspaces`; kind `create`; body `json`; path fields `none`; required `enterpriseAccountId, name`.\n\n- `delete_workspace`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}`; kind `delete`; body `none`; path fields `workspace_id`; required `workspace_id`.\n\n- `delete_workspace_collaborator`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}/collaborators/{{ record.user_or_group_id }}`; kind `delete`; body `none`; path fields `workspace_id, user_or_group_id`; required `workspace_id, user_or_group_id`.\n\n- `update_workspace_collaborator`: PATCH `/v0/meta/workspaces/{{ record.workspace_id }}/collaborators/{{ record.user_or_group_id }}`; kind `update`; body `json`; path fields `workspace_id, user_or_group_id`; required `workspace_id, user_or_group_id, permissionLevel`.\n\n- `delete_workspace_invite`: DELETE `/v0/meta/workspaces/{{ record.workspace_id }}/invites/{{ record.invite_id }}`; kind `delete`; body `none`; path fields `workspace_id, invite_id`; required `workspace_id, invite_id`.\n\n- `move_base`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/moveBase`; kind `update`; body `json`; path fields `workspace_id`; required `workspace_id, baseId, targetWorkspaceId`.\n\n- `update_workspace_restrictions`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/updateRestrictions`; kind `update`; body `json`; path fields `workspace_id`; required `workspace_id`.\n\n- `upload_attachment`: POST `/v0/{{ config.base_id }}/{{ record.record_id }}/{{ record.attachment_field_id_or_name }}/uploadAttachment`; kind `custom`; body `json`; path fields `record_id, attachment_field_id_or_name`; required `record_id, attachment_field_id_or_name, contentType, filename, file`.\n\n- `delete_record`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.\n\n- `update_record`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, fields`.\n\n- `replace_record`: PUT `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, fields`.\n\n- `create_comment`: POST `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments`; kind `create`; body `json`; path fields `record_id`; required `record_id, text`.\n\n- `delete_comment`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.row_comment_id }}`; kind `delete`; body `none`; path fields `record_id, row_comment_id`; required `record_id, row_comment_id`.\n\n- `update_comment`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.record_id }}/comments/{{ record.row_comment_id }}`; kind `update`; body `json`; path fields `record_id, row_comment_id`; required `record_id, row_comment_id, text`.\n\n- `update_date_dependency_metadata`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}/dateDependencyMetadata`; kind `update`; body `json`; path fields `id`; required `id, predecessorRecordId, dateDependencyMetadata`.\n\n## Known limits\n\n- Blocked row: `post-sync-api-endpoint` (`POST /v0/{baseId}/{apiEndpointSyncId}/sync`) because the official Sync API import is `text/csv`; the shared declarative write runtime has no typed bounded CSV body dialect and generic raw uploads remain disallowed.\n\n- Blocked foundation: `airtable-scim-pagination-foundation` for SCIM list users/groups. Airtable's documented SCIM list response uses `Resources`, `startIndex`, `itemsPerPage`, and `totalResults`; the current declarative cursor paginator cannot compute the next `startIndex` arithmetically and must not use nonexistent `nextStartIndex`.\n\n- Blocked foundation: `airtable-array-cardinality-foundation` for 25 official mutations that require non-empty request arrays. The current schema subset supports `minProperties` but not `minItems`, so these operations stay blocked instead of accepting `[]` no-op/destructive payloads.\n\n- API-surface ledger rows: 103 total = 29 streams + 45 writes + 1 direct read + 28 blocked operations.\n\n- Certification remains fixture-only/uncertified until separately approved live-safe credentials and provider resources are supplied outside this wave.\n",
     "icon": {
       "id": "airtable",
       "path": "icons/airtable.svg",

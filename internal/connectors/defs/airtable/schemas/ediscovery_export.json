@@ -3,13 +3,35 @@
   "title": "Airtable ediscovery_export record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "state",
+    "createdTime"
   ],
   "properties": {
     "id": {
       "type": "string"
     },
-    "name": {
+    "state": {
+      "type": "string"
+    },
+    "baseId": {
+      "type": "string"
+    },
+    "createdByUserId": {
+      "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completedTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "downloadUrl": {
       "type": "string"
     }
   },
