@@ -9779,7 +9779,7 @@
   {
     "name": "aws-cloudtrail",
     "display_name": "AWS CloudTrail",
-    "description": "Reads AWS CloudTrail configuration lists through fixed AWS JSON-RPC streams that need no per-call resource identifiers. Provider query/direct-read, parameterized read, and write/admin actions remain planned until safe shared forwarding exists.",
+    "description": "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime.",
     "integration_type": "api",
     "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
     "release_stage": "alpha",
@@ -9845,7 +9845,106 @@
         ]
       },
       {
+        "name": "get_channel",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_dashboard",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
         "name": "get_event_configuration",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_event_data_store",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_event_selectors",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_import",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_insight_selectors",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_resource_policy",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_trail",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_trail_status",
         "primary_key": [
           "pm_record_id"
         ],
@@ -9889,6 +9988,17 @@
         ]
       },
       {
+        "name": "list_import_failures",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
         "name": "list_imports",
         "primary_key": [
           "pm_record_id"
@@ -9911,6 +10021,17 @@
         ]
       },
       {
+        "name": "list_tags",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
         "name": "list_trails",
         "primary_key": [
           "pm_record_id"
@@ -9923,8 +10044,8 @@
       }
     ],
     "risk": {
-      "read": "bounded AWS CloudTrail JSON-RPC reads that use fixed action names and require no per-call resource identifiers",
-      "write": "blocked/planned: CloudTrail parameterized reads, provider query/direct-read operations, and write/admin actions require shared promoted-native forwarding before they can be safely exposed.",
+      "read": "bounded AWS CloudTrail JSON-RPC reads using fixed action names, SigV4 authentication, and connector-local resource discovery for parameterized streams",
+      "write": "blocked/planned: CloudTrail write/admin actions require shared promoted-native manifest, command-surface, validation, and dry-run forwarding before they can be safely exposed.",
       "approval": "No CloudTrail writes are exposed in this scope-corrected connector surface; future writes must preserve plan -> preview -> approval -> execute."
     },
     "icon": {

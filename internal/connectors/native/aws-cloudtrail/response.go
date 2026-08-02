@@ -71,7 +71,7 @@ func stampRecord(action string, record connectors.Record) {
 	if _, ok := record["pm_record_id"]; ok {
 		return
 	}
-	for _, key := range []string{"Name", "TrailARN", "TrailName", "ChannelArn", "DashboardId", "EventDataStoreArn", "EventDataStore", "EventId", "QueryId", "ImportId", "ResourceId", "ResourceARN"} {
+	for _, key := range []string{"Name", "TrailARN", "TrailArn", "TrailName", "ChannelArn", "Channel", "DashboardId", "DashboardArn", "EventDataStoreArn", "EventDataStore", "Arn", "EventId", "QueryId", "ImportId", "ResourceId", "ResourceARN"} {
 		if value, ok := stringAt(map[string]any(record), key); ok && strings.TrimSpace(value) != "" {
 			record["pm_record_id"] = value
 			return

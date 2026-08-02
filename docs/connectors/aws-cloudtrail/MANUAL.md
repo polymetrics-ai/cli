@@ -10,9 +10,9 @@ SYNOPSIS
   pm etl read --connector aws-cloudtrail --credential <name> --stream <stream> --json
 
 DESCRIPTION
-  Reads AWS CloudTrail configuration lists through fixed AWS JSON-RPC streams that need no per-call resource identifiers. Provider query/direct-read, parameterized read, and write/admin actions remain planned until safe shared forwarding exists.
+  Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC read streams.
 
-  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, but only 8 read-stream actions are currently exposed as executable connector-local runtime behavior. The 10 provider query/direct-read actions, 11 parameterized read actions, and 31 write/admin actions are blocked/planned until shared promoted-native forwarding or a typed request-parameter boundary exposes them safely.
+  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, 19 read-stream actions are exposed as executable connector-local runtime behavior, and the 10 provider query/direct-read actions plus 31 write/admin actions are blocked/planned until shared promoted-native forwarding exposes command surfaces, manifests, validation, dry-run previews, and operation-direct reads safely.
 
 ICON
   asset: icons/aws-cloudtrail.svg
@@ -37,29 +37,38 @@ CONFIGURATION
 
 ETL STREAMS
   describe_trails
+  get_channel
+  get_dashboard
   get_event_configuration
+  get_event_data_store
+  get_event_selectors
+  get_import
+  get_insight_selectors
+  get_resource_policy
+  get_trail
+  get_trail_status
   list_channels
   list_dashboards
   list_event_data_stores
+  list_import_failures
   list_imports
   list_public_keys
+  list_tags
   list_trails
 
 BLOCKED / PLANNED OPERATIONS
-  Parameterized read actions blocked: GetChannel, GetDashboard, GetEventDataStore, GetEventSelectors, GetImport, GetInsightSelectors, GetResourcePolicy, GetTrail, GetTrailStatus, ListImportFailures, ListTags.
-
   Provider query/direct-read actions blocked: CancelQuery, DescribeQuery, GenerateQuery, GetQueryResults, ListInsightsData, ListInsightsMetricData, ListQueries, LookupEvents, SearchSampleQueries, StartQuery.
 
   Write/admin actions blocked: AddTags, CreateChannel, CreateDashboard, CreateEventDataStore, CreateTrail, DeleteChannel, DeleteDashboard, DeleteEventDataStore, DeleteResourcePolicy, DeleteTrail, DeregisterOrganizationDelegatedAdmin, DisableFederation, EnableFederation, PutEventConfiguration, PutEventSelectors, PutInsightSelectors, PutResourcePolicy, RegisterOrganizationDelegatedAdmin, RemoveTags, RestoreEventDataStore, StartDashboardRefresh, StartEventDataStoreIngestion, StartImport, StartLogging, StopEventDataStoreIngestion, StopImport, StopLogging, UpdateChannel, UpdateDashboard, UpdateEventDataStore, UpdateTrail.
 
 SECURITY
-  Read streams use fixed AWS CloudTrail JSON-RPC action names and SigV4 authentication. No raw AWS action, path, header, body, shell, file, SQL, or generic HTTP escape hatch is exposed.
+  Read streams use fixed AWS CloudTrail JSON-RPC action names and SigV4 authentication. Resource-detail streams derive identifiers through connector-local discovery/fan-out; no raw AWS action, path, header, body, shell, file, SQL, or generic HTTP escape hatch is exposed.
 
   No CloudTrail write action is executable in this corrective head. Future write enablement must preserve plan -> preview -> approval -> execute plus destructive confirmation metadata.
 
 AGENT WORKFLOW
   1. Inspect metadata with pm connectors inspect aws-cloudtrail --json; this does not read credentials.
   2. Add credentials from environment variables or stdin only.
-  3. Use pm etl catalog/read/run for the 8 implemented read streams.
-  4. Treat parameterized reads, provider query/direct-read commands, and all write/admin actions as blocked/planned until a shared-runtime forwarding or typed request-parameter slice lands.
+  3. Use pm etl catalog/read/run for the 19 implemented read streams.
+  4. Treat provider query/direct-read commands and all write/admin actions as blocked/planned until a shared-runtime forwarding slice lands.
 ```

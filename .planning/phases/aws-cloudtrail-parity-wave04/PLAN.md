@@ -42,18 +42,18 @@ Parent issue #3142 with subissues #3143-#3149. Branch `fm/cli-aws-cloudtrail-par
 
 - Official AWS CloudTrail API action inventory remains 60 actions.
 - Event record contents page still reports eventVersion current version 1.11 and 31 top-level record fields; those fields are schema/data fields, not separate connector operations.
-- Final scope-corrected lane allocation: implemented ETL/read 8, implemented direct/provider query 0, implemented reverse ETL write 0, binary 0, CDC 0, excluded 0, blocked/planned 52 (11 parameterized read + 10 direct/provider query + 31 write/admin requiring shared promoted-native forwarding or typed request-parameter support).
+- Final scope-corrected lane allocation: implemented ETL/read 19, implemented direct/provider query 0, implemented reverse ETL write 0, binary 0, CDC 0, excluded 0, blocked/planned 41 (10 direct/provider query + 31 write/admin requiring shared promoted-native forwarding).
 
 ## Implementation slices
 
 1. Red/contract tests and fixtures:
-   - Connector-local tests prove 60 operation rows remain inventoried, 8 streams are implemented, 52 operations are blocked/planned, no generic escape hatches exist, and native read dispatch uses fixed CloudTrail targets.
+   - Connector-local tests prove 60 operation rows remain inventoried, 19 streams are implemented, 41 operations are blocked/planned, no generic escape hatches exist, and native read dispatch uses fixed CloudTrail targets.
    - Sanitized replay fixtures cover check and every implemented stream.
 2. Definition bundle:
-   - `api_surface.json` inventories all 60 official actions exactly once: 8 covered read streams and 52 blocked/planned operation rows.
+   - `api_surface.json` inventories all 60 official actions exactly once: 19 covered read streams and 41 blocked/planned operation rows.
    - `operations.json` and `writes.json` intentionally contain zero executable actions in this connector-local corrective head.
    - `cli_surface.json` is removed because `pm aws-cloudtrail ...` is not executable without shared promoted-native command-surface forwarding.
-   - `streams.json`, stream schemas, metadata, and docs reflect the implemented 8/0/0 + 52 blocked/planned split.
+   - `streams.json`, stream schemas, metadata, and docs reflect the implemented 19/0/0 + 41 blocked/planned split.
 3. Native/hook runtime:
    - Keep AWS CloudTrail JSON-RPC read streams with per-action `X-Amz-Target`, bounded POST body, SigV4, max pages, fixture mode, and no-live-provider tests.
    - Revert all shared runtime edits; direct-read and write maps are empty so hidden native paths do not expose blocked operations.

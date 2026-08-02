@@ -41,7 +41,7 @@ func assertConnectorContract(t *testing.T, c connectors.Connector, wantName stri
 	if cat.Connector != wantName {
 		t.Fatalf("Catalog().Connector = %q, want %q", cat.Connector, wantName)
 	}
-	if got, want := len(cat.Streams), 9; got != want {
+	if got, want := len(cat.Streams), len(cloudTrailPublishedStreams); got != want {
 		t.Fatalf("Catalog streams = %d, want %d", got, want)
 	}
 }

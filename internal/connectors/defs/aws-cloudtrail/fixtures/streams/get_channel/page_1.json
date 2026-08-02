@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pm_record_id": "get_channel_fixture_1",
+      "operation": "GetChannel",
+      "ChannelArn": "arn:aws:cloudtrail:us-east-1:123456789012:channel/fixture-channel",
+      "Destinations": [
+        {
+          "Type": "EVENT_DATA_STORE",
+          "Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture"
+        }
+      ],
+      "IngestionStatus": {
+        "Name": "fixture"
+      },
+      "Name": "trail-fixture",
+      "Source": "aws.partner/fixture",
+      "SourceConfig": {
+        "Name": "fixture"
+      }
+    }
+  },
+  "read_query": {
+    "Channel": "arn:aws:cloudtrail:us-east-1:123456789012:channel/fixture-channel"
+  }
+}
