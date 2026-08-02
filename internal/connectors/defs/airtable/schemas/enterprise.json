@@ -3,13 +3,21 @@
   "title": "Airtable enterprise record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "name"
   ],
   "properties": {
     "id": {
       "type": "string"
     },
     "name": {
+      "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rootEnterpriseAccountId": {
       "type": "string"
     }
   },

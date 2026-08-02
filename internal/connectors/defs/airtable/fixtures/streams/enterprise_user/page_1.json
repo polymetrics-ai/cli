@@ -6,9 +6,13 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "enterprise_user_fixture_1",
+      "id": "usr_fixture_1",
       "email": "user.fixture@example.invalid",
-      "name": "Fixture User"
+      "name": "Fixture User",
+      "state": "active",
+      "isAdmin": false,
+      "createdTime": "2026-01-01T00:00:00.000Z",
+      "lastActivityTime": "2026-01-02T00:00:00.000Z"
     }
   }
 }

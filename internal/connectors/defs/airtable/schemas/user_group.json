@@ -3,17 +3,25 @@
   "title": "Airtable user_group record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "name"
   ],
   "properties": {
     "id": {
       "type": "string"
     },
-    "email": {
-      "type": "string"
-    },
     "name": {
       "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "memberUserIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": true,

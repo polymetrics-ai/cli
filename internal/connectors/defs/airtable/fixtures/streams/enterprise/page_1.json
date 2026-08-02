@@ -6,8 +6,10 @@
   "response": {
     "status": 200,
     "body": {
-      "id": "enterprise_fixture_1",
-      "name": "Fixture Name"
+      "id": "ent_fixture_1",
+      "name": "Fixture Enterprise",
+      "createdTime": "2026-01-01T00:00:00.000Z",
+      "rootEnterpriseAccountId": "ent_fixture_1"
     }
   }
 }

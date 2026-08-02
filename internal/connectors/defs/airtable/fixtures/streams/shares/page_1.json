@@ -8,8 +8,12 @@
     "body": {
       "shares": [
         {
-          "id": "shares_fixture_1",
-          "name": "Fixture Name"
+          "id": "shr_fixture_1",
+          "type": "base",
+          "state": "enabled",
+          "createdByUserId": "usr_fixture_1",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "url": "https://example.invalid/airtable/share"
         }
       ]
     }

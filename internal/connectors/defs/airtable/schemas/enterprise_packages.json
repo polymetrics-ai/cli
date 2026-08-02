@@ -3,13 +3,25 @@
   "title": "Airtable enterprise_packages record",
   "type": "object",
   "required": [
-    "id"
+    "id",
+    "name",
+    "version"
   ],
   "properties": {
     "id": {
       "type": "string"
     },
     "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createdByUserId": {
       "type": "string"
     }
   },
