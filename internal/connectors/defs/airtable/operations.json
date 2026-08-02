@@ -10,7 +10,7 @@
       "approval": "read-only direct query; no provider mutation",
       "output_policy": "json_redacted",
       "auth_scopes": [
-        "data.records:read"
+        "hyperDB.records:read"
       ],
       "mutation_class": "none",
       "rest": {
