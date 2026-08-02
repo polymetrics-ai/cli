@@ -29,6 +29,9 @@ Planned checks:
 
 ## Current evidence
 
+- Sub-PR: https://github.com/polymetrics-ai/cli/pull/3590
+- Latest remote checks observed: 9 passed, 0 failed, 3 skipped, 4 pending.
+- Automated review: no Claude/Copilot review records observed yet on sub-PR; route pending `claude_auto` / parent fallback.
 - `pwd -P`: `/Users/karthiksivadas/.treehouse/cli-83d592/5/worker-3581-core`
 - `git rev-parse --show-toplevel`: `/Users/karthiksivadas/.treehouse/cli-83d592/5/worker-3581-core`
 - `git status --short --branch`: `## fix/3581-target-scope-core-validator`
