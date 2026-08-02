@@ -1,11 +1,13 @@
 package amazonsqs
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"io"
 	"math"
 	"net/url"
 	"sort"
@@ -169,9 +171,12 @@ func (c Connector) writeSQS(ctx context.Context, req connectors.WriteRequest, re
 			if err != nil {
 				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, err
 			}
-			successes, failures := parseBatchCounts(resp.body)
-			if successes == 0 && failures == 0 {
-				successes = len(chunk)
+			successes, failures, err := parseBatchCounts(resp.body)
+			if err != nil {
+				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response parse failed: %w", def.name, err)
+			}
+			if successes+failures != len(chunk) {
+				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response accounted for %d of %d entries", def.name, successes+failures, len(chunk))
 			}
 			written += successes
 			if failures > 0 {
@@ -921,19 +926,19 @@ func addMessageAttributeMap(form url.Values, prefix string, values map[string]me
 	}
 }
 
-func parseBatchCounts(raw []byte) (int, int) {
-	decoder := xml.NewDecoder(strings.NewReader(string(raw)))
+func parseBatchCounts(raw []byte) (int, int, error) {
+	decoder := xml.NewDecoder(bytes.NewReader(raw))
 	entrySuccesses := 0
 	entryFailures := 0
 	wrapperSuccesses := 0
 	wrapperFailures := 0
 	for {
 		tok, err := decoder.Token()
-		if errors.Is(err, context.Canceled) {
+		if errors.Is(err, io.EOF) {
 			break
 		}
 		if err != nil {
-			break
+			return 0, 0, fmt.Errorf("parse xml: %w", err)
 		}
 		start, ok := tok.(xml.StartElement)
 		if !ok {
@@ -951,7 +956,7 @@ func parseBatchCounts(raw []byte) (int, int) {
 		}
 	}
 	if entrySuccesses > 0 || entryFailures > 0 {
-		return entrySuccesses, entryFailures
+		return entrySuccesses, entryFailures, nil
 	}
-	return wrapperSuccesses, wrapperFailures
+	return wrapperSuccesses, wrapperFailures, nil
 }
