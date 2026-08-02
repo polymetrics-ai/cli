@@ -169,7 +169,7 @@ type tagValue struct {
 }
 
 type listMessageMoveTasksXML struct {
-	Results []messageMoveTaskXML `xml:"ListMessageMoveTasksResult>Result"`
+	Results []messageMoveTaskXML `xml:"ListMessageMoveTasksResult>ListMessageMoveTasksResultEntry"`
 }
 
 type messageMoveTaskXML struct {
@@ -322,7 +322,7 @@ func shouldRedactDirectField(key string, explicit map[string]bool) bool {
 	if explicit[normalized] {
 		return true
 	}
-	for _, marker := range []string{"receipt_handle", "task_handle", "policy", "secret", "token", "password"} {
+	for _, marker := range []string{"receipt_handle", "task_handle", "policy", "secret", "password"} {
 		if strings.Contains(normalized, marker) {
 			return true
 		}

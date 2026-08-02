@@ -369,7 +369,7 @@ func TestManifestWriteActionsAndDestructiveConfirmations(t *testing.T) {
 			t.Fatalf("action %+v missing risk/method/path", action)
 		}
 	}
-	for actionName, field := range map[string]string{"send_message": "message_body", "delete_message": "receipt_handle", "cancel_message_move_task": "task_handle", "set_queue_attributes": "attribute_value"} {
+	for actionName, field := range map[string]string{"send_message": "message_body", "delete_message": "receipt_handle", "cancel_message_move_task": "task_handle", "set_queue_attributes": "attribute_value", "create_queue": "attributes"} {
 		if !containsString(redactFields[actionName], field) {
 			t.Fatalf("action %s RedactFields = %v, want %q", actionName, redactFields[actionName], field)
 		}
@@ -412,7 +412,7 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 		t.Fatalf("OperationDirectRead list_queues: %v", err)
 	}
 	body := res.Body.(map[string]any)
-	if urls := body["queue_urls"].([]string); len(urls) != 1 || body["next_token"] != "***" {
+	if urls := body["queue_urls"].([]string); len(urls) != 1 || body["next_token"] != "next" {
 		t.Fatalf("list_queues body = %#v", body)
 	}
 	res, err = c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "get_queue_attributes", Config: cfg, RedactFields: []string{"policy"}})
@@ -425,6 +425,37 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	}
 	if strings.Join(sawActions, ",") != "ListQueues,GetQueueAttributes" {
 		t.Fatalf("actions = %v", sawActions)
+	}
+}
+
+func TestOperationDirectReadListMessageMoveTasksDecodesResultEntries(t *testing.T) {
+	sourceArn := "arn:aws:sqs:us-east-1:123456789012:orders-dlq"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		if action := r.Form.Get("Action"); action != "ListMessageMoveTasks" {
+			t.Fatalf("Action = %q, want ListMessageMoveTasks", action)
+		}
+		if got := r.Form.Get("SourceArn"); got != sourceArn {
+			t.Fatalf("SourceArn = %q, want %q", got, sourceArn)
+		}
+		_, _ = w.Write([]byte(`<ListMessageMoveTasksResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/"><ListMessageMoveTasksResult><ListMessageMoveTasksResultEntry><TaskHandle>task-handle-fixture</TaskHandle><Status>RUNNING</Status><SourceArn>arn:aws:sqs:us-east-1:123456789012:orders-dlq</SourceArn><DestinationArn>arn:aws:sqs:us-east-1:123456789012:orders</DestinationArn><MaxNumberOfMessagesPerSecond>10</MaxNumberOfMessagesPerSecond><ApproximateNumberOfMessagesMoved>42</ApproximateNumberOfMessagesMoved><ApproximateNumberOfMessagesToMove>100</ApproximateNumberOfMessagesToMove><StartedTimestamp>1767225600</StartedTimestamp></ListMessageMoveTasksResultEntry></ListMessageMoveTasksResult><ResponseMetadata><RequestId>synthetic-request</RequestId></ResponseMetadata></ListMessageMoveTasksResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	res, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_message_move_tasks", Config: testRuntimeConfig(srv.URL), Body: map[string]any{"source_arn": sourceArn}, RedactFields: []string{"task_handle"}})
+	if err != nil {
+		t.Fatalf("OperationDirectRead list_message_move_tasks: %v", err)
+	}
+	results := res.Body.(map[string]any)["results"].([]any)
+	if len(results) != 1 {
+		t.Fatalf("results = %#v, want one decoded task", results)
+	}
+	task := results[0].(map[string]any)
+	if task["task_handle"] != "***" || task["status"] != "RUNNING" || task["source_arn"] != sourceArn || task["approximate_number_of_messages_moved"] != "42" {
+		t.Fatalf("task = %#v, want decoded redacted ListMessageMoveTasksResultEntry", task)
 	}
 }
 
@@ -606,6 +637,40 @@ func TestWriteSendMessagePreservesMessageBodyWhitespace(t *testing.T) {
 	}
 }
 
+func TestWriteMessageAttributesPreservePayloadWhitespace(t *testing.T) {
+	wantBinary := "  Ynl0ZXM=\t"
+	wantString := "  trace value\n"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		if r.Form.Get("MessageAttribute.1.Name") != "binary" || r.Form.Get("MessageAttribute.1.Value.BinaryValue") != wantBinary {
+			t.Fatalf("binary attribute form = %s, want preserved payload whitespace", r.Form.Encode())
+		}
+		if r.Form.Get("MessageAttribute.2.Name") != "trace" || r.Form.Get("MessageAttribute.2.Value.StringValue") != wantString {
+			t.Fatalf("trace attribute form = %s, want preserved payload whitespace", r.Form.Encode())
+		}
+		_, _ = w.Write([]byte(`<SendMessageResponse><SendMessageResult><MessageId>m1</MessageId></SendMessageResult></SendMessageResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{
+		"message_body": "hello",
+		"message_attributes": map[string]any{
+			"binary": map[string]any{"data_type": "Binary", "binary_value": wantBinary},
+			"trace":  map[string]any{"data_type": "String", "string_value": wantString},
+		},
+	}})
+	if err != nil {
+		t.Fatalf("Write send_message: %v", err)
+	}
+	if res.RecordsWritten != 1 {
+		t.Fatalf("result=%+v, want one written record", res)
+	}
+}
+
 func TestWriteMessageAttributesTreatMissingNestedValuesAsEmpty(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
@@ -685,6 +750,30 @@ func TestValidateWriteClosedSchemas(t *testing.T) {
 	}
 	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "ok", "delay_seconds": 901}}); err == nil || !strings.Contains(err.Error(), "between 0 and 900") {
 		t.Fatalf("ValidateWrite out-of-range delay_seconds err = %v, want range error", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "ok", "message_group_id": []string{"orders"}}}); err == nil || !strings.Contains(err.Error(), "must be a string") {
+		t.Fatalf("ValidateWrite non-string message_group_id err = %v, want string type error", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "add_permission", Config: cfg}, []connectors.Record{{"label": "allow", "aws_account_ids": map[string]any{"account": "123"}, "actions": []string{"SendMessage"}}}); err == nil || !strings.Contains(err.Error(), "must be an array of strings") {
+		t.Fatalf("ValidateWrite non-array aws_account_ids err = %v, want array type error", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "add_permission", Config: cfg}, []connectors.Record{{"label": "allow", "aws_account_ids": []any{"123", 456}, "actions": []string{"SendMessage"}}}); err == nil || !strings.Contains(err.Error(), "item 1 must be a string") {
+		t.Fatalf("ValidateWrite non-string aws_account_ids item err = %v, want array item type error", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "ok", "message_attributes": []any{"trace"}}}); err == nil || !strings.Contains(err.Error(), "must be an object") {
+		t.Fatalf("ValidateWrite non-object message_attributes err = %v, want object type error", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "ok", "message_attributes": map[string]any{"trace": 123}}}); err == nil || !strings.Contains(err.Error(), "must be a string or object") {
+		t.Fatalf("ValidateWrite malformed message attribute err = %v, want attribute type error", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "ok", "message_attributes": map[string]any{"trace": map[string]any{"string_value": "ok", "extra": "ignored"}}}}); err == nil || !strings.Contains(err.Error(), "unsupported nested field") {
+		t.Fatalf("ValidateWrite open message attribute object err = %v, want nested field error", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "tag_queue", Config: cfg}, []connectors.Record{{"tag_key": "team", "tag_value": "etl", "tags": map[string]any{"team": map[string]any{"name": "etl"}}}}); err == nil || !strings.Contains(err.Error(), "entry \"team\" must be a string") {
+		t.Fatalf("ValidateWrite non-string tag map value err = %v, want map value type error", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "set_queue_attributes", Config: cfg}, []connectors.Record{{"attribute_name": "Policy", "attribute_value": "{}", "attributes": "Policy={}"}}); err == nil || !strings.Contains(err.Error(), "must be an object") {
+		t.Fatalf("ValidateWrite non-object attributes err = %v, want object type error", err)
 	}
 	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "purge_queue", Config: cfg}, nil); err != nil {
 		t.Fatalf("ValidateWrite purge_queue zero records: %v", err)

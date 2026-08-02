@@ -135,7 +135,10 @@
           }
         }
       },
-      "risk": "creates an SQS queue; SQS returns an existing queue URL when name and attributes match"
+      "risk": "creates an SQS queue; SQS returns an existing queue URL when name and attributes match",
+      "redact_fields": [
+        "attributes"
+      ]
     },
     {
       "name": "delete_message",

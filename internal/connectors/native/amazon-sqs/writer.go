@@ -28,6 +28,39 @@ var sqsIntFieldRules = map[string]sqsIntFieldRule{
 	"visibility_timeout":                {min: 0, max: 43200},
 }
 
+type sqsFieldKind string
+
+const (
+	sqsFieldString            sqsFieldKind = "string"
+	sqsFieldStringSlice       sqsFieldKind = "string_slice"
+	sqsFieldStringMap         sqsFieldKind = "string_map"
+	sqsFieldMessageAttributes sqsFieldKind = "message_attributes"
+)
+
+var sqsFieldKinds = map[string]sqsFieldKind{
+	"actions":                   sqsFieldStringSlice,
+	"attribute_name":            sqsFieldString,
+	"attribute_value":           sqsFieldString,
+	"attributes":                sqsFieldStringMap,
+	"aws_account_ids":           sqsFieldStringSlice,
+	"destination_arn":           sqsFieldString,
+	"id":                        sqsFieldString,
+	"label":                     sqsFieldString,
+	"message_attributes":        sqsFieldMessageAttributes,
+	"message_body":              sqsFieldString,
+	"message_deduplication_id":  sqsFieldString,
+	"message_group_id":          sqsFieldString,
+	"message_system_attributes": sqsFieldMessageAttributes,
+	"queue_name":                sqsFieldString,
+	"receipt_handle":            sqsFieldString,
+	"source_arn":                sqsFieldString,
+	"tag_key":                   sqsFieldString,
+	"tag_keys":                  sqsFieldStringSlice,
+	"tag_value":                 sqsFieldString,
+	"tags":                      sqsFieldStringMap,
+	"task_handle":               sqsFieldString,
+}
+
 type writeActionDef struct {
 	name     string
 	method   string
@@ -49,7 +82,7 @@ var sqsWriteActions = map[string]writeActionDef{
 	"cancel_message_move_task":        {name: "cancel_message_move_task", method: "POST", path: "SQS.CancelMessageMoveTask", kind: "custom", required: []string{"task_handle"}, allowed: []string{"task_handle"}, redact: []string{"task_handle"}, risk: "cancels an in-flight dead-letter-queue message move task", confirm: "destructive", service: true, execute: buildCancelMessageMoveTaskForm},
 	"change_message_visibility":       {name: "change_message_visibility", method: "POST", path: "SQS.ChangeMessageVisibility", kind: "update", required: []string{"receipt_handle", "visibility_timeout"}, allowed: []string{"receipt_handle", "visibility_timeout"}, redact: []string{"receipt_handle"}, risk: "changes the visibility timeout for one in-flight message", queue: true, execute: buildChangeMessageVisibilityForm},
 	"change_message_visibility_batch": {name: "change_message_visibility_batch", method: "POST", path: "SQS.ChangeMessageVisibilityBatch", kind: "update", required: []string{"receipt_handle"}, allowed: []string{"id", "receipt_handle", "visibility_timeout"}, redact: []string{"receipt_handle"}, risk: "changes visibility timeout for up to 10 in-flight messages per SQS batch request", batch: true, queue: true, execute: buildChangeMessageVisibilityBatchEntry},
-	"create_queue":                    {name: "create_queue", method: "POST", path: "SQS.CreateQueue", kind: "create", required: []string{"queue_name"}, allowed: []string{"queue_name", "attributes", "tags"}, risk: "creates an SQS queue; SQS returns an existing queue URL when name and attributes match", service: true, execute: buildCreateQueueForm},
+	"create_queue":                    {name: "create_queue", method: "POST", path: "SQS.CreateQueue", kind: "create", required: []string{"queue_name"}, allowed: []string{"queue_name", "attributes", "tags"}, redact: []string{"attributes"}, risk: "creates an SQS queue; SQS returns an existing queue URL when name and attributes match", service: true, execute: buildCreateQueueForm},
 	"delete_message":                  {name: "delete_message", method: "POST", path: "SQS.DeleteMessage", kind: "delete", required: []string{"receipt_handle"}, allowed: []string{"receipt_handle"}, redact: []string{"receipt_handle"}, risk: "deletes one received message by receipt handle", confirm: "destructive", queue: true, execute: buildDeleteMessageForm},
 	"delete_message_batch":            {name: "delete_message_batch", method: "POST", path: "SQS.DeleteMessageBatch", kind: "delete", required: []string{"receipt_handle"}, allowed: []string{"id", "receipt_handle"}, redact: []string{"receipt_handle"}, risk: "deletes up to 10 received messages per SQS batch request", confirm: "destructive", batch: true, queue: true, execute: buildDeleteMessageBatchEntry},
 	"delete_queue":                    {name: "delete_queue", method: "POST", path: "SQS.DeleteQueue", kind: "delete", allowed: []string{}, risk: "deletes the configured SQS queue", confirm: "destructive", queue: true, execute: buildNoopForm},
@@ -266,18 +299,162 @@ func validateSQSRecords(def writeActionDef, records []connectors.Record) error {
 }
 
 func validateSQSFieldValue(field string, value any) error {
-	if field == "message_body" {
-		if _, ok := value.(string); !ok {
-			return fmt.Errorf("must be a string")
+	if rule, ok := sqsIntFieldRules[field]; ok {
+		return validateSQSIntFieldValue(value, rule.min, rule.max)
+	}
+	kind, ok := sqsFieldKinds[field]
+	if !ok {
+		return nil
+	}
+	switch kind {
+	case sqsFieldString:
+		return validateSQSStringFieldValue(value)
+	case sqsFieldStringSlice:
+		return validateSQSStringSliceValue(value)
+	case sqsFieldStringMap:
+		return validateSQSStringMapValue(value)
+	case sqsFieldMessageAttributes:
+		return validateSQSMessageAttributesValue(value)
+	default:
+		return nil
+	}
+}
+
+func validateSQSIntFieldValue(value any, minValue, maxValue int) error {
+	if value == nil {
+		return nil
+	}
+	if s, ok := value.(string); ok && strings.TrimSpace(s) == "" {
+		return nil
+	}
+	_, err := parseSQSInt(value, minValue, maxValue)
+	return err
+}
+
+func validateSQSStringFieldValue(value any) error {
+	if value == nil {
+		return nil
+	}
+	if _, ok := value.(string); !ok {
+		return fmt.Errorf("must be a string")
+	}
+	return nil
+}
+
+func validateSQSStringSliceValue(value any) error {
+	switch typed := value.(type) {
+	case nil:
+		return nil
+	case []string:
+		return nil
+	case []any:
+		for i, item := range typed {
+			if _, ok := item.(string); !ok {
+				return fmt.Errorf("item %d must be a string", i)
+			}
 		}
 		return nil
+	default:
+		return fmt.Errorf("must be an array of strings")
 	}
-	rule, ok := sqsIntFieldRules[field]
-	if !ok || isEmptyRecordValue(value) {
+}
+
+func validateSQSStringMapValue(value any) error {
+	switch typed := value.(type) {
+	case nil:
 		return nil
+	case map[string]string:
+		return nil
+	case map[string]any:
+		return validateSQSStringMapItems(typed)
+	case connectors.Record:
+		return validateSQSStringMapItems(map[string]any(typed))
+	default:
+		return fmt.Errorf("must be an object")
 	}
-	_, err := parseSQSInt(value, rule.min, rule.max)
-	return err
+}
+
+func validateSQSStringMapItems(items map[string]any) error {
+	for key, value := range items {
+		if _, ok := value.(string); !ok {
+			return fmt.Errorf("entry %q must be a string", key)
+		}
+	}
+	return nil
+}
+
+func validateSQSMessageAttributesValue(value any) error {
+	switch typed := value.(type) {
+	case nil:
+		return nil
+	case map[string]string:
+		items := make(map[string]any, len(typed))
+		for key, item := range typed {
+			items[key] = item
+		}
+		return validateSQSMessageAttributeItems(items)
+	case map[string]any:
+		return validateSQSMessageAttributeItems(typed)
+	case connectors.Record:
+		return validateSQSMessageAttributeItems(map[string]any(typed))
+	default:
+		return fmt.Errorf("must be an object")
+	}
+}
+
+func validateSQSMessageAttributeItems(items map[string]any) error {
+	for name, value := range items {
+		if strings.TrimSpace(name) == "" {
+			return fmt.Errorf("attribute name must not be empty")
+		}
+		if err := validateSQSMessageAttributeValue(value); err != nil {
+			return fmt.Errorf("attribute %q: %w", name, err)
+		}
+	}
+	return nil
+}
+
+func validateSQSMessageAttributeValue(value any) error {
+	switch typed := value.(type) {
+	case string:
+		return nil
+	case map[string]string:
+		items := make(map[string]any, len(typed))
+		for key, item := range typed {
+			items[key] = item
+		}
+		return validateSQSMessageAttributeObject(items)
+	case map[string]any:
+		return validateSQSMessageAttributeObject(typed)
+	case connectors.Record:
+		return validateSQSMessageAttributeObject(map[string]any(typed))
+	default:
+		return fmt.Errorf("must be a string or object")
+	}
+}
+
+func validateSQSMessageAttributeObject(items map[string]any) error {
+	for key, value := range items {
+		switch key {
+		case "data_type", "string_value", "binary_value":
+			if value == nil {
+				continue
+			}
+			if _, ok := value.(string); !ok {
+				return fmt.Errorf("%s must be a string", key)
+			}
+		case "string_list_values", "binary_list_values":
+			if value == nil {
+				continue
+			}
+			if err := validateSQSStringSliceValue(value); err != nil {
+				return fmt.Errorf("%s: %w", key, err)
+			}
+		default:
+			return fmt.Errorf("unsupported nested field %q", key)
+		}
+	}
+	return nil
 }
 
 func isEmptyRequiredRecordValue(field string, v any) bool {
@@ -568,7 +745,7 @@ func parseSQSInt(value any, minValue, maxValue int) (int, error) {
 	case string:
 		return parseSQSIntString(typed, minValue, maxValue, integerErr, rangeErr)
 	default:
-		return parseSQSIntString(fmt.Sprint(value), minValue, maxValue, integerErr, rangeErr)
+		return 0, integerErr()
 	}
 }
 
@@ -601,16 +778,15 @@ func stringSliceField(rec connectors.Record, key string) []string {
 	case []any:
 		out := make([]string, 0, len(typed))
 		for _, v := range typed {
-			out = append(out, fmt.Sprint(v))
+			if s, ok := v.(string); ok {
+				out = append(out, s)
+			}
 		}
 		return compactStrings(out)
 	case string:
 		return splitCSV(typed)
 	default:
-		if value == nil {
-			return nil
-		}
-		return compactStrings([]string{fmt.Sprint(value)})
+		return nil
 	}
 }
 
@@ -632,13 +808,17 @@ func stringMapField(rec connectors.Record, key string) map[string]string {
 	case map[string]any:
 		out := map[string]string{}
 		for k, v := range typed {
-			out[k] = fmt.Sprint(v)
+			if s, ok := v.(string); ok {
+				out[k] = s
+			}
 		}
 		return out
 	case connectors.Record:
 		out := map[string]string{}
 		for k, v := range typed {
-			out[k] = fmt.Sprint(v)
+			if s, ok := v.(string); ok {
+				out[k] = s
+			}
 		}
 		return out
 	default:
@@ -664,13 +844,18 @@ type messageAttributeValue struct {
 
 func messageAttributeMapField(rec connectors.Record, key string) map[string]messageAttributeValue {
 	value := rec[key]
-	items, ok := value.(map[string]any)
-	if !ok {
-		if cr, ok := value.(connectors.Record); ok {
-			items = map[string]any(cr)
-		} else {
-			return nil
+	items := map[string]any{}
+	switch typed := value.(type) {
+	case map[string]string:
+		for k, v := range typed {
+			items[k] = v
 		}
+	case map[string]any:
+		items = typed
+	case connectors.Record:
+		items = map[string]any(typed)
+	default:
+		return nil
 	}
 	out := map[string]messageAttributeValue{}
 	for name, raw := range items {
@@ -678,6 +863,11 @@ func messageAttributeMapField(rec connectors.Record, key string) map[string]mess
 		if !ok {
 			if cr, ok := raw.(connectors.Record); ok {
 				m = map[string]any(cr)
+			} else if sm, ok := raw.(map[string]string); ok {
+				m = make(map[string]any, len(sm))
+				for k, v := range sm {
+					m[k] = v
+				}
 			} else {
 				out[name] = messageAttributeValue{DataType: "String", StringValue: rawStringValue(raw)}
 				continue
@@ -685,8 +875,8 @@ func messageAttributeMapField(rec connectors.Record, key string) map[string]mess
 		}
 		out[name] = messageAttributeValue{
 			DataType:         trimmedStringValue(m["data_type"]),
-			StringValue:      trimmedStringValue(m["string_value"]),
-			BinaryValue:      trimmedStringValue(m["binary_value"]),
+			StringValue:      rawStringValue(m["string_value"]),
+			BinaryValue:      rawStringValue(m["binary_value"]),
 			StringListValues: valueToStrings(m["string_list_values"]),
 			BinaryListValues: valueToStrings(m["binary_list_values"]),
 		}
@@ -698,7 +888,10 @@ func rawStringValue(value any) string {
 	if value == nil {
 		return ""
 	}
-	return fmt.Sprint(value)
+	if s, ok := value.(string); ok {
+		return s
+	}
+	return ""
 }
 
 func trimmedStringValue(value any) string {
