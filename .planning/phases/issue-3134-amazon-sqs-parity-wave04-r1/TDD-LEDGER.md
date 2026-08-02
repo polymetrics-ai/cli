@@ -19,3 +19,20 @@
 ## Notes
 
 No live AWS calls. All tests use fixture mode or `httptest.Server` with synthetic credentials and sanitized payloads.
+
+## 2026-08-02 corrective TDD ledger — issueguard delta removal
+
+Red/guard targets before production edits:
+
+- [x] Restored working tree content has no diff from `origin/main` under `internal/coordination/issueguard/**`.
+- [x] Restored working tree content has no diff from `origin/main` under `cmd/prissueguard/**`.
+- [x] `cmd/prissueguard` accepts the corrected PR body through the established `Refs #3134` contract without shared issueguard weakening.
+- [x] PR #3541 body contains accepted `Refs #3134` linkage and no longer contains the forbidden canonical raw issue URL workaround.
+
+Green evidence:
+
+- Restored forbidden shared paths from `origin/main` in the working tree for a forward corrective commit.
+- `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` passed after restoration.
+- `go run ./cmd/prissueguard --title "chore(amazon-sqs): stage unvalidated parity checkpoint" --body-file /tmp/pr3541-body-refs-3134.md` passed with `issueguard: ok (1 linked issue)`.
+- Focused Amazon SQS connector gates passed after restoration.
+- Fresh native-Codex `gpt-5.6-sol` `xhigh` no-mistakes validation remains required after the corrective commit and push.

@@ -68,3 +68,28 @@ Post-resume safety hardening added URL canonicalization (`queue_url`/`endpoint_u
 6. Verification:
    - Run focused connectorgen validation, conformance, native tests, focused CLI tests, build, connector-boundary, make verify, and git diff check.
    - Commit only after clean local gates.
+
+## 2026-08-02 forward corrective slice — remove unrelated issueguard deltas
+
+Authority: captain decision `sqs-ci-issueguard-removal-20260802` mirrored by Alfred to issue #3134 and PR #3541. The prior no-mistakes validation run `01KZ13QR5T4Z4FDAF6QR25GQFT` was synchronized to published head `66bc2d0f4a70550649e95c821d07fec9b04c796a`; its completed CI-monitoring phase was ended with `no-mistakes axi abort --run 01KZ13QR5T4Z4FDAF6QR25GQFT` before local production edits.
+
+GSD evidence for this corrective slice:
+
+- `scripts/gsd doctor` passed.
+- `scripts/gsd prompt programming-loop init --phase issue-3134-amazon-sqs-ci-issueguard-removal --dry-run` is unavailable in this adapter (`unknown GSD command: programming-loop`).
+- Fallback used: `scripts/gsd prompt gsd-quick "issue-3134 amazon-sqs ci issueguard removal"`, then manual GSD/TDD execution recorded in this plan, `TDD-LEDGER.md`, and `VERIFICATION.md` before production edits.
+- Required skills loaded/active: `gsd-core`, `no-mistakes`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-security`, `golang-safety`, `golang-error-handling`, `golang-lint`.
+
+Scope and constraints:
+
+- Remove every branch delta under `internal/coordination/issueguard/**` and `cmd/prissueguard/**` by a forward corrective commit, restoring those paths to content-equivalent approved base behavior.
+- Correct PR #3541 body through Alfred to the established `Refs #3134` contract rather than weakening shared issueguard behavior.
+- Do not reset, rebase, force-push, discard SQS validation history, retain or relocate the issueguard behavior change, add dependencies, run credentialed connector checks, or edit unrelated shared behavior.
+- After the corrective commit, start fresh comprehensive native-Codex `gpt-5.6-sol` validation at `xhigh`; do not claim readiness until that fresh run and remote checks pass.
+
+Implementation steps:
+
+1. Compare branch changes under `internal/coordination/issueguard/**` and `cmd/prissueguard/**` against the approved base.
+2. Restore those paths from base into the working tree, preserving all SQS-owned commits in history.
+3. Inspect PR #3541 body and replace forbidden/canonical-link workaround content with the accepted `Refs #3134` issue linkage through `gh-axi pr edit` as Alfred.
+4. Run focused verification for issueguard/prissueguard and SQS gates, commit the forward correction, push normally, then launch the required fresh 5.6 SOL no-mistakes validation.
