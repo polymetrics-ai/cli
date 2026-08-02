@@ -2,16 +2,18 @@
 // (GA4) Data API connector. It is a declarative-HTTP per-system connector built
 // on the same shape as the stripe reference: a thin package that composes the
 // connsdk toolkit (Requester + Bearer/OAuth2 access-token auth + JSON extraction)
-// with GA4-specific report definitions and the runReport endpoint.
+// with GA4-specific report definitions, the runReport endpoint, and fixed
+// metadata/audience-export direct reads.
 //
-// GA4 has no fixed REST resources; reporting is a POST runReport call that takes
-// a dimension x metric query and returns rows. Each published "stream" is a
-// canned report spec (see streams.go); a row is flattened to a record by
-// projecting dimensionHeaders/metricHeaders onto the row's
-// dimensionValues/metricValues.
+// GA4 stream reads are POST runReport calls that take a dimension x metric query
+// and return rows. Each published "stream" is a canned report spec (see
+// streams.go); a row is flattened to a record by projecting
+// dimensionHeaders/metricHeaders onto the row's dimensionValues/metricValues.
+// Bounded GET direct reads cover property metadata and audience-export metadata
+// without exposing arbitrary method, URL, or body input.
 //
-// The connector is read-only: the GA4 Data API exposes no safe reverse-ETL
-// writes, so Capabilities.Write is false.
+// The connector is read-only: the GA4 Data API surface exposed here has no safe
+// reverse-ETL writes, so Capabilities.Write is false.
 package googleanalyticsdataapi
 
 import (
@@ -89,10 +91,10 @@ func (c *Connector) Metadata() connectors.Metadata {
 }
 
 // Manifest exposes the native connector's authored bundle shape to generated
-// help, docs, and skills while reads remain implemented by the native runReport
-// code above. engine.Base intentionally provides Definition()/CommandSurface()
-// only, so this method keeps the GA-specific guide truthful without changing
-// every other native connector.
+// help, docs, and skills while stream reads and operation direct reads remain
+// implemented by the native code above. engine.Base intentionally provides
+// Definition()/CommandSurface() only, so this method keeps the GA-specific guide
+// truthful without changing every other native connector.
 func (c *Connector) Manifest() connectors.Manifest {
 	return connectors.Manifest{
 		Metadata: c.Metadata(),

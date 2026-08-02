@@ -1643,7 +1643,7 @@ func checkCLISurfaceOperationEndpointRef(
 	if !ok || op.REST == nil {
 		return Finding{}, false
 	}
-	if strings.ToUpper(strings.TrimSpace(ep.Method)) == strings.ToUpper(strings.TrimSpace(op.REST.Method)) && strings.TrimSpace(ep.Path) == strings.TrimSpace(op.REST.Path) {
+	if strings.EqualFold(strings.TrimSpace(ep.Method), strings.TrimSpace(op.REST.Method)) && strings.TrimSpace(ep.Path) == strings.TrimSpace(op.REST.Path) {
 		return Finding{}, false
 	}
 	return Finding{

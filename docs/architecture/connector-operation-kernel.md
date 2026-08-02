@@ -1,6 +1,6 @@
 # Connector Operation Kernel
 
-Status: foundation slice for GitHub CLI parity (#56).
+Status: operation metadata and fixed direct-read execution foundation.
 
 ## Purpose
 
@@ -20,10 +20,14 @@ metadata use `covered_by.direct_read` or `covered_by.direct_reads`. Blocked
 `api_surface.operation` rows remain ledger-only and are not an execution
 allowlist.
 
-The #56 foundation loads and validates operation metadata but keeps operation
-execution blocked by default. Later issues add executors for fixed REST,
-GraphQL, XML, binary/file, local git, local file, browser, and composite
-operations.
+Operation metadata is loaded and validated for every bundle. A command becomes
+executable only when its `cli_surface.json` entry is `availability: "implemented"`,
+`intent: "direct_read"`, references a `rest_read` operation, and the connector
+implements `OperationDirectReader`; otherwise `commandrunner` returns a blocked
+command error. Implemented operation direct reads are bounded to connector-relative
+GET/POST REST endpoints, require a supported `output_policy`, and reject raw
+method/path/body flags. Non-direct-read operation kinds remain planned until their
+typed executors land.
 
 ## Supported Operation Kinds
 
@@ -58,12 +62,12 @@ shell, unrestricted HTTP write, generic SQL write, or arbitrary GraphQL kind.
 - Generated candidates from provider specs are not executable until reviewed
   and promoted to production metadata.
 
-## Runtime Behavior In #56
+## Runtime Behavior
 
-If a command references `operation`, `commandrunner` returns a blocked command
-error naming the operation ID and explaining that its executor is not yet
-implemented. This fail-closed behavior is deliberate: it lets docs, validation,
-and parity planning land before any new side-effecting executor is available.
+If a command references an operation outside the implemented direct-read contract,
+`commandrunner` returns a blocked command error naming the operation ID and why the
+executor is unavailable. This fail-closed behavior is deliberate: docs, validation,
+and parity planning can land before any new side-effecting executor is available.
 
 ## Example
 
@@ -74,7 +78,7 @@ and parity planning land before any new side-effecting executor is available.
   "summary": "List GitHub Projects using a fixed GraphQL query.",
   "risk": "low",
   "approval": "none",
-  "output_policy": "json",
+  "output_policy": "json_redacted",
   "graphql": {
     "operation_name": "ListProjects",
     "document": "query ListProjects($owner: String!, $first: Int!, $after: String) { organization(login: $owner) { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } }"

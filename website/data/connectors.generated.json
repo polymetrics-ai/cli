@@ -64629,6 +64629,7 @@
           "availability": "implemented",
           "stream": "",
           "write": "",
+          "operation": "google-analytics-data-api.get_metadata",
           "source_cli_path": "",
           "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
           "flags": [
@@ -64654,6 +64655,7 @@
           "availability": "implemented",
           "stream": "",
           "write": "",
+          "operation": "google-analytics-data-api.list_audience_exports",
           "source_cli_path": "",
           "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
           "flags": [
@@ -64694,6 +64696,7 @@
           "availability": "implemented",
           "stream": "",
           "write": "",
+          "operation": "google-analytics-data-api.get_audience_export",
           "source_cli_path": "",
           "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
           "flags": [
@@ -64727,6 +64730,7 @@
           "availability": "planned",
           "stream": "",
           "write": "",
+          "operation": "google-analytics-data-api.run_realtime_report",
           "source_cli_path": "",
           "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
           "flags": [
@@ -64752,6 +64756,7 @@
           "availability": "planned",
           "stream": "",
           "write": "",
+          "operation": "google-analytics-data-api.run_pivot_report",
           "source_cli_path": "",
           "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
           "flags": [
@@ -64777,6 +64782,7 @@
           "availability": "planned",
           "stream": "",
           "write": "",
+          "operation": "google-analytics-data-api.batch_run_reports",
           "source_cli_path": "",
           "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
           "flags": [
@@ -64802,6 +64808,7 @@
           "availability": "planned",
           "stream": "",
           "write": "",
+          "operation": "google-analytics-data-api.batch_run_pivot_reports",
           "source_cli_path": "",
           "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
           "flags": [
@@ -64827,6 +64834,7 @@
           "availability": "planned",
           "stream": "",
           "write": "",
+          "operation": "google-analytics-data-api.check_compatibility",
           "source_cli_path": "",
           "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
           "flags": [
@@ -64852,6 +64860,7 @@
           "availability": "planned",
           "stream": "",
           "write": "",
+          "operation": "google-analytics-data-api.query_audience_export",
           "source_cli_path": "",
           "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
           "flags": [
@@ -64861,6 +64870,14 @@
               "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
               "values": [],
               "maps_to": "path.property_id",
+              "allow_empty": false
+            },
+            {
+              "name": "audience-export-id",
+              "type": "string",
+              "summary": "Audience export ID from a list/create response.",
+              "values": [],
+              "maps_to": "path.audience_export_id",
               "allow_empty": false
             }
           ],
@@ -64877,6 +64894,7 @@
           "availability": "planned",
           "stream": "",
           "write": "",
+          "operation": "google-analytics-data-api.create_audience_export",
           "source_cli_path": "",
           "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
           "flags": [

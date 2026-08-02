@@ -386,6 +386,13 @@
           "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
           "maps_to": "path.property_id",
           "allow_empty": false
+        },
+        {
+          "name": "audience-export-id",
+          "type": "string",
+          "summary": "Audience export ID from a list/create response.",
+          "maps_to": "path.audience_export_id",
+          "allow_empty": false
         }
       ],
       "api_surface": [
