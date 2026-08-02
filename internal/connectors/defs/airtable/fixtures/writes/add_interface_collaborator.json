@@ -3,7 +3,10 @@
     "page_bundle_id": "page_bundle_id_fixture",
     "collaborators": [
       {
-        "sample": "value"
+        "permissionLevel": "read",
+        "user": {
+          "id": "usr00000000000000"
+        }
       }
     ]
   },
@@ -13,7 +16,10 @@
     "body": {
       "collaborators": [
         {
-          "sample": "value"
+          "permissionLevel": "read",
+          "user": {
+            "id": "usr00000000000000"
+          }
         }
       ]
     }

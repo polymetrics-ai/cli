@@ -2,7 +2,10 @@
   "record": {
     "collaborators": [
       {
-        "sample": "value"
+        "permissionLevel": "edit",
+        "user": {
+          "id": "usr00000000000000"
+        }
       }
     ]
   },
@@ -12,7 +15,10 @@
     "body": {
       "collaborators": [
         {
-          "sample": "value"
+          "permissionLevel": "edit",
+          "user": {
+            "id": "usr00000000000000"
+          }
         }
       ]
     }
