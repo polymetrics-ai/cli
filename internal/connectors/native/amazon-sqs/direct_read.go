@@ -253,7 +253,7 @@ type tagValue struct {
 }
 
 type listMessageMoveTasksXML struct {
-	Results []messageMoveTaskXML `xml:"ListMessageMoveTasksResult>Result"`
+	Results []messageMoveTaskXML `xml:"ListMessageMoveTasksResult>ListMessageMoveTasksResultEntry"`
 }
 
 type messageMoveTaskXML struct {

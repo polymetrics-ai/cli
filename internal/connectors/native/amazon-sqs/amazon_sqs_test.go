@@ -359,6 +359,7 @@ func TestManifestWriteActionsAndDestructiveConfirmations(t *testing.T) {
 		"untag_queue":              true,
 	}
 	redacted := map[string][]string{
+		"create_queue":             {"attributes"},
 		"delete_message":           {"receipt_handle"},
 		"send_message":             {"message_body", "message_attributes", "message_system_attributes"},
 		"set_queue_attributes":     {"attribute_value", "attributes"},
@@ -448,6 +449,37 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	}
 	if strings.Join(sawActions, ",") != "ListQueues,ListDeadLetterSourceQueues,GetQueueAttributes,ListQueueTags" {
 		t.Fatalf("actions = %v", sawActions)
+	}
+}
+
+func TestOperationDirectReadListMessageMoveTasksDecodesResultEntries(t *testing.T) {
+	sourceArn := "arn:aws:sqs:us-east-1:123456789012:orders-dlq"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		if action := r.Form.Get("Action"); action != "ListMessageMoveTasks" {
+			t.Fatalf("Action = %q, want ListMessageMoveTasks", action)
+		}
+		if got := r.Form.Get("SourceArn"); got != sourceArn {
+			t.Fatalf("SourceArn = %q, want %q", got, sourceArn)
+		}
+		_, _ = w.Write([]byte(`<ListMessageMoveTasksResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/"><ListMessageMoveTasksResult><ListMessageMoveTasksResultEntry><TaskHandle>task-handle-fixture</TaskHandle><Status>RUNNING</Status><SourceArn>arn:aws:sqs:us-east-1:123456789012:orders-dlq</SourceArn><DestinationArn>arn:aws:sqs:us-east-1:123456789012:orders</DestinationArn><MaxNumberOfMessagesPerSecond>10</MaxNumberOfMessagesPerSecond><ApproximateNumberOfMessagesMoved>42</ApproximateNumberOfMessagesMoved><ApproximateNumberOfMessagesToMove>100</ApproximateNumberOfMessagesToMove><StartedTimestamp>1767225600</StartedTimestamp></ListMessageMoveTasksResultEntry></ListMessageMoveTasksResult><ResponseMetadata><RequestId>synthetic-request</RequestId></ResponseMetadata></ListMessageMoveTasksResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	res, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_message_move_tasks", Config: testRuntimeConfig(srv.URL), Body: map[string]any{"source_arn": sourceArn}, RedactFields: []string{"task_handle"}})
+	if err != nil {
+		t.Fatalf("OperationDirectRead list_message_move_tasks: %v", err)
+	}
+	results := res.Body.(map[string]any)["results"].([]any)
+	if len(results) != 1 {
+		t.Fatalf("results = %#v, want one decoded task", results)
+	}
+	task := results[0].(map[string]any)
+	if task["task_handle"] != "***" || task["status"] != "RUNNING" || task["source_arn"] != sourceArn || task["approximate_number_of_messages_moved"] != "42" {
+		t.Fatalf("task = %#v, want decoded redacted ListMessageMoveTasksResultEntry", task)
 	}
 }
 
@@ -659,6 +691,32 @@ func TestWritePreservesMessageAttributeWhitespace(t *testing.T) {
 	}
 }
 
+func TestWriteWithNoSourceRowsDoesNotExecuteDestructiveZeroFieldAction(t *testing.T) {
+	var calls int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		t.Fatalf("unexpected SQS request for empty source rows: %s", r.URL.String())
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	preview, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "purge_queue", Config: cfg}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite purge_queue empty rows: %v", err)
+	}
+	if preview.RecordsStaged != 0 {
+		t.Fatalf("preview.RecordsStaged = %d, want 0", preview.RecordsStaged)
+	}
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "purge_queue", Config: cfg}, nil)
+	if err != nil {
+		t.Fatalf("Write purge_queue empty rows: %v", err)
+	}
+	if res.RecordsWritten != 0 || res.RecordsFailed != 0 || calls != 0 {
+		t.Fatalf("result=%+v calls=%d, want no-op", res, calls)
+	}
+}
+
 func TestWriteNormalizesActionAndSendsQueueURL(t *testing.T) {
 	var sawQueueURL string
 	var calls int
@@ -697,6 +755,42 @@ func TestWriteNormalizesActionAndSendsQueueURL(t *testing.T) {
 	}
 	if res.RecordsWritten != 1 || calls != 1 || sawQueueURL != cfg.Config["queue_url"] {
 		t.Fatalf("result=%+v calls=%d QueueUrl=%q, want one write to configured queue", res, calls, sawQueueURL)
+	}
+}
+
+func TestWriteMessageAttributesTreatMissingNestedValuesAsEmpty(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		if got := r.Form.Get("MessageAttribute.1.Value.DataType"); got != "String" {
+			t.Fatalf("DataType = %q, want String", got)
+		}
+		if _, ok := r.Form["MessageAttribute.1.Value.StringValue"]; ok {
+			t.Fatalf("StringValue sent for nil nested value: %s", r.Form.Encode())
+		}
+		if _, ok := r.Form["MessageAttribute.1.Value.BinaryValue"]; ok {
+			t.Fatalf("BinaryValue sent for missing nested value: %s", r.Form.Encode())
+		}
+		for key, values := range r.Form {
+			for _, value := range values {
+				if value == "<nil>" {
+					t.Fatalf("form %s contains <nil>: %s", key, r.Form.Encode())
+				}
+			}
+		}
+		_, _ = w.Write([]byte(`<SendMessageResponse><SendMessageResult><MessageId>m1</MessageId></SendMessageResult></SendMessageResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "hello", "message_attributes": map[string]any{"trace": map[string]any{"string_value": nil}}}})
+	if err != nil {
+		t.Fatalf("Write send_message: %v", err)
+	}
+	if res.RecordsWritten != 1 {
+		t.Fatalf("result=%+v, want one written record", res)
 	}
 }
 
