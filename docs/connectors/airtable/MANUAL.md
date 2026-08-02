@@ -19,7 +19,7 @@ ICON
   review_url: https://airtable.com/developers/web/api/changelog
 
 CAPABILITIES
-  check=true catalog=true read=true write=true query=true
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
@@ -379,7 +379,7 @@ REVERSE ETL ACTIONS
     risk: Airtable schema mutation visible to collaborators; preview and approval required
   create_records:
     endpoint: POST /v0/{{ config.base_id }}/{{ config.table_id }}
-    required fields: fields
+    required fields: records
     risk: Airtable schema mutation visible to collaborators; preview and approval required
   update_multiple_records_put:
     endpoint: PUT /v0/{{ config.base_id }}/{{ config.table_id }}
