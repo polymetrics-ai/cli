@@ -101,7 +101,8 @@
           "type": "string",
           "summary": "Queue name to resolve.",
           "maps_to": "body.queue_name",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "queue-owner-aws-account-id",
@@ -242,7 +243,8 @@
           "type": "string",
           "summary": "Source queue ARN.",
           "maps_to": "body.source_arn",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "max-results",
