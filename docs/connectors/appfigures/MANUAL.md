@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Appfigures app-store reviews, products, analytics reports (sales/ratings/revenue/subscriptions/ads/estimates), reference data (categories/countries/languages/currencies/stores/SDKs), release events, connected external accounts, account users, and account info through the Appfigures v2 REST API, and manages release events and review responses.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

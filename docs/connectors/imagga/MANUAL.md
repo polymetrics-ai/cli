@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Imagga account API usage and per-image tags/categories via the Imagga REST API. Read-only. The colors and faces_detections detection streams are not yet ported — see docs.md Known limits.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

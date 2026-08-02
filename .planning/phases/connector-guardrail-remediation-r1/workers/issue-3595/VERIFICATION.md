@@ -30,6 +30,12 @@ Review repair round 3 focused gate:
 go test ./internal/cli -run '^TestValidateConnectorDocsRejectsStaleIconMetadata$' && go run ./cmd/pm docs validate --connectors-dir docs/connectors
 ```
 
+Review repair round 4 focused gate:
+
+```bash
+go test ./internal/connectors ./internal/cli ./cmd/iconregistrygen -run 'Test(ConnectorIconRegistryProjectsCompleteMetadata|ConnectorIconMetadataOmitsAbsentOptionalFields|ValidateConnectorDocsRejectsStaleIconMetadata|BuildIconEntriesPreservesCuratedAttribution)$' && go run ./cmd/pm docs validate --connectors-dir docs/connectors
+```
+
 ## Repository gates before integration
 
 ```bash

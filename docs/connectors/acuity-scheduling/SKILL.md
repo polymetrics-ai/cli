@@ -11,6 +11,7 @@ Reads Acuity Scheduling appointments, clients, appointment types, calendars, for
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Mailosaur virtual servers, message summaries, and account usage transactions through the Mailosaur REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

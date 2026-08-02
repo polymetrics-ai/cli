@@ -11,6 +11,7 @@ Reads and writes CallRail call tracking data (calls, companies, users, tags, tra
 
 ## Icon
 
+- id: callrail
 - asset: icons/callrail.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads incident.io incidents, severities, incident roles, users, and follow-ups t
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

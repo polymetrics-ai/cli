@@ -11,6 +11,7 @@ Reads and writes the documented Luma public API for events, calendars, guests, c
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

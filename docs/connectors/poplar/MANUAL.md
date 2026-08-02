@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Poplar campaigns and orders through read-only REST list endpoints.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

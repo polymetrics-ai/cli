@@ -11,6 +11,7 @@ Reads and writes Elastic Email contacts, campaigns, lists, segments, templates, 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

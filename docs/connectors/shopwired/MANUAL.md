@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes ShopWired v1 catalog, order, customer, content, marketing, shipping, theme, webhook, wishlist, and payment resources through the documented REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

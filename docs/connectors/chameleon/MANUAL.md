@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Chameleon surveys, tours, launchers, tooltips, and segments through the Chameleon v3 REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

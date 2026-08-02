@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Coassemble courses, screen types, collections, clients, users, learner tracking, and translations, and writes course/collection/client/user/translation lifecycle actions, through the Coassemble headless REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

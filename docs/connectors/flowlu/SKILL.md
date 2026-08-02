@@ -11,6 +11,7 @@ Reads Flowlu CRM accounts, leads, tasks, projects, invoices, and agile issues th
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

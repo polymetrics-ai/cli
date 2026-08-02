@@ -11,6 +11,7 @@ Reads Gist contacts, tags, segments, campaigns, forms, teammates, articles, coll
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

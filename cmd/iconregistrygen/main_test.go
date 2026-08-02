@@ -77,6 +77,28 @@ func TestBuildIconEntriesAddsReviewedFallbackForImplementedDefinitions(t *testin
 	}
 }
 
+func TestBuildIconEntriesPreservesCuratedAttribution(t *testing.T) {
+	entries, _, err := buildIconEntries(registryFile{}, buildOptions{
+		ImplementedConnectors: map[string]bool{"demo": true},
+		CuratedEntries: []iconEntry{{
+			Connector:      "demo",
+			ID:             "simple-icons-demo",
+			Path:           "icons/simple-icons/demo.svg",
+			Source:         connectors.IconSourceSimpleIcons,
+			License:        "CC0-1.0",
+			Attribution:    "Example attribution",
+			ReviewStatus:   connectors.IconReviewSimpleIconsCC0Trademark,
+			SimpleIconSlug: "demo",
+		}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(entries) != 1 || entries[0].Attribution != "Example attribution" {
+		t.Fatalf("entries = %+v, want curated attribution", entries)
+	}
+}
+
 func TestBuildIconEntriesRejectsAmbiguousSourceDestinationCollapse(t *testing.T) {
 	_, _, err := buildIconEntries(registryFile{
 		Sources: []map[string]any{{

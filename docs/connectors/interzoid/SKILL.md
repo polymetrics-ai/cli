@@ -11,6 +11,7 @@ Reads Interzoid data-matching lookups: company-name, individual-name, and street
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

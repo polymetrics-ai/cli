@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Omnisend contacts, campaigns, carts, orders, and products through the Omnisend REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

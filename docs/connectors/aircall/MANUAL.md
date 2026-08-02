@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and writes user/team/contact/tag/webhook mutations plus call archive/comment/tag actions, through the Aircall REST API.
 
 ICON
+  id: aircall
   asset: icons/aircall.svg
   source: upstream_registry
   review_status: upstream_seeded

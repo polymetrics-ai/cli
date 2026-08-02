@@ -11,6 +11,7 @@ Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC do
 
 ## Icon
 
+- id: persistiq
 - asset: icons/persistiq.svg
 - source: official
 - review_status: official_verified

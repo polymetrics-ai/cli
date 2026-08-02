@@ -13,6 +13,7 @@ DESCRIPTION
   Reads public KYVE pools, stakers, funders, and Cosmos validators through the KYVE network's public REST query endpoints. Read-only; no credentials required.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

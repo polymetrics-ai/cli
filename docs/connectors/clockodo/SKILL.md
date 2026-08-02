@@ -11,6 +11,7 @@ Reads Clockodo customers, projects, services, users, time entries, absences, tea
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

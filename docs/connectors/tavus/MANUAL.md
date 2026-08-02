@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Tavus faces (replicas), videos, conversations, PALs, guardrails, objectives, documents, pronunciation dictionaries, voices, and skills, and writes approved video/conversation/PAL/guardrail/objective/document/pronunciation-dictionary create-delete mutations through the Tavus API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

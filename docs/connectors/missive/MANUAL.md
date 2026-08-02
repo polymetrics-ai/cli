@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Missive contacts, contact groups, users, teams, and shared labels through the Missive REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

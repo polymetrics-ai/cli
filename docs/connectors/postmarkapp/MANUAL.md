@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Postmark server-token API resources including messages, bounces, templates, message streams, stats, webhooks, suppressions, and inbound rules; exposes server-token write actions for sends and resource mutations.
 
 ICON
+  id: postmark
   asset: icons/postmark.svg
   source: official
   review_status: official_verified

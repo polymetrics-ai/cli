@@ -11,6 +11,7 @@ Reads Insightful workforce-analytics employees, teams, projects, and directory e
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

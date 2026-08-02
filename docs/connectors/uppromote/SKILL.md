@@ -11,6 +11,7 @@ Reads affiliates, programs, coupons, referrals, and payments from the UpPromote 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

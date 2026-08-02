@@ -11,6 +11,7 @@ Reads Metabase cards, dashboards, collections, databases, and users through the 
 
 ## Icon
 
+- id: metabase
 - asset: icons/metabase.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -11,10 +11,17 @@ Reads Box users, groups, collections, folder items, webhooks, retention policies
 
 ## Icon
 
+- id: simple-icons-box
 - asset: icons/simple-icons/box.svg
+- title: Box
+- simple_icon_slug: box
+- simple_icon_hex: 0061D5
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Box
+- match: exact-name-or-slug
+- matched_by: box
 
 ## Capabilities
 

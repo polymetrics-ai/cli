@@ -11,6 +11,7 @@ Reads Eventbrite organizations, events, attendees, orders, and ticket classes th
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

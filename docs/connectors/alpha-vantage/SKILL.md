@@ -11,6 +11,7 @@ Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus 
 
 ## Icon
 
+- id: alpha-vantage
 - asset: icons/alpha-vantage.svg
 - source: upstream_registry
 - review_status: upstream_seeded

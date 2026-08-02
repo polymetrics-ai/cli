@@ -13,6 +13,7 @@ DESCRIPTION
   Reads ChargeDesk charges, customers, subscriptions, and products through the ChargeDesk REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

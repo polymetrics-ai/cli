@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Humanitix events, orders, tickets, and tags through the Humanitix public REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

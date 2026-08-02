@@ -17,6 +17,7 @@
 | Review F5 generated subtree containment | `icons/../outside.svg` passes syntax validation and resolves above the generated icon root | non-clean, dot-segment, absolute, and escaped paths reject before any generated-tree mutation |
 | Review F6 generated docs metadata | catalog, MANUAL, and SKILL icon paths can disagree with the canonical registry without failing docs validation | all three generated surfaces validate canonical paths; the exact 61 stale mappings are regenerated |
 | Review F7 complete rendered metadata | matching paths mask missing review URLs and obsolete provenance in generated catalog, MANUAL, and SKILL icon blocks | serialized catalog icon objects and exact rendered guide blocks must equal their canonical projections, including optional-field omission |
+| Review F8 full canonical projection | the runtime/docs projection drops ID from guides and drops title, slug, hex, license/attribution, and match metadata from every generated surface | one projection renders and validates all canonical icon metadata while absent optional fields remain omitted |
 
 ## Actual evidence log
 
@@ -36,3 +37,7 @@
 - 2026-08-02: Pre-edit F6 audit compared catalog, MANUAL, and SKILL path fields with `internal/connectors/icon_data.json` and found the same exact 61 stale connector mappings on every surface.
 - 2026-08-02: Review round 3 rechecked the repo-local GSD adapter; `scripts/gsd doctor` passed and the required `programming-loop` probe remained unavailable, so the recorded manual GSD fallback continues.
 - 2026-08-02: Pre-edit F7 audit reproduced 220 catalog JSON icon-object mismatches plus 216 MANUAL and 216 SKILL rendered-block mismatches against the canonical registry projection; `100ms` lacks its review URL and `convex` retains obsolete provenance despite matching paths.
+- 2026-08-02: Review round 4 rechecked `scripts/gsd doctor`; the adapter passed while the required `programming-loop` command remained unavailable, so the recorded manual GSD fallback and `local_critical_path` execution continue.
+- 2026-08-02: Pre-edit F8 audit confirmed all 554 catalog icon objects use the reduced five-field `ConnectorIcon`, all 554 registry-backed MANUAL/SKILL icon blocks omit icon IDs, and all 61 curated Simple Icons entries lose title, slug, hex, license, match, and matched-by metadata before rendering.
+- 2026-08-02: F8 regression edits precede production edits; the active review-fix contract permits only one focused verification after the complete fix round, so no interim RED command is run.
+- 2026-08-02: The first focused F8 gate exposed two stale path-corruption fixtures whose context still assumed `asset` was the first rendered icon line; the fixtures were narrowed to mutate only the asset field before repeating the focused gate.

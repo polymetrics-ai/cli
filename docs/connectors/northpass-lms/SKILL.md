@@ -11,6 +11,7 @@ Reads Northpass LMS people, courses, course enrollments, and groups through the 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -11,10 +11,17 @@ Reads Google Classroom courses, teachers, students, course work, and announcemen
 
 ## Icon
 
+- id: simple-icons-googleclassroom
 - asset: icons/simple-icons/googleclassroom.svg
+- title: Google Classroom
+- simple_icon_slug: googleclassroom
+- simple_icon_hex: 0F9D58
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Google%20Classroom
+- match: exact-name-or-slug
+- matched_by: google-classroom
 
 ## Capabilities
 

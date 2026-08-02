@@ -13,6 +13,7 @@ DESCRIPTION
   Reads cards and sets from the public Scryfall API. Read-only and credential-free.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

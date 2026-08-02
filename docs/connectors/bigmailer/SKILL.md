@@ -11,6 +11,7 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

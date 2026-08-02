@@ -11,6 +11,7 @@ Reads Smaily campaigns, segments, contacts, templates, automations, and organiza
 
 ## Icon
 
+- id: smaily
 - asset: icons/smaily.svg
 - source: upstream_registry
 - review_status: upstream_seeded

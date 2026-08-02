@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Planhat companies, end users, and licenses through the Planhat REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

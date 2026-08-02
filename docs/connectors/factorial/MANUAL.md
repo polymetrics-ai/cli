@@ -13,6 +13,7 @@ DESCRIPTION
   Reads FactorialHR employees, teams, time-off leaves, leave types, and locations through the Factorial REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

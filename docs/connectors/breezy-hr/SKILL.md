@@ -11,6 +11,7 @@ Reads Breezy HR positions, hiring pipelines, per-position candidates, department
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

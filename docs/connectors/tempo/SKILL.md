@@ -11,6 +11,7 @@ Reads Tempo accounts, customers, worklogs, and workload schemes through the Temp
 
 ## Icon
 
+- id: tempo
 - asset: icons/tempo.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,10 +13,17 @@ DESCRIPTION
   Reads 185 GitBook REST resources and executes 170 JSON/no-body GitBook mutations through the GitBook API.
 
 ICON
+  id: simple-icons-gitbook
   asset: icons/simple-icons/gitbook.svg
+  title: GitBook
+  simple_icon_slug: gitbook
+  simple_icon_hex: BBDDE5
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=GitBook
+  match: exact-name-or-slug
+  matched_by: gitbook
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

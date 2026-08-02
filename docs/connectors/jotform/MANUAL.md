@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Jotform forms, submissions, reports, folders, and the account profile through the Jotform REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

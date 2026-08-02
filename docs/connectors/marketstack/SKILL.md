@@ -11,6 +11,7 @@ Reads Marketstack exchanges, tickers, end-of-day prices, splits, and dividends t
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

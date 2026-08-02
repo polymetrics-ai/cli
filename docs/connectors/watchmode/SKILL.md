@@ -11,6 +11,7 @@ Reads Watchmode title search results, streaming sources, regions, networks, genr
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

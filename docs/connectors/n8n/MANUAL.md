@@ -13,6 +13,7 @@ DESCRIPTION
   Reads n8n workflows, executions, tags, users, variables, projects, data tables, and credential metadata; writes supported n8n public REST API mutations.
 
 ICON
+  id: n8n
   asset: icons/n8n.svg
   source: upstream_registry
   review_status: upstream_seeded

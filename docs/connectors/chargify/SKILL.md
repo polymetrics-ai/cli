@@ -11,6 +11,7 @@ Reads and writes Chargify (Maxio Advanced Billing) customers, subscriptions, pro
 
 ## Icon
 
+- id: chargify
 - asset: icons/chargify.svg
 - source: upstream_registry
 - review_status: upstream_seeded

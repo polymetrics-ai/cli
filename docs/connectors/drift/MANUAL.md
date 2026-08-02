@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Drift users, accounts, conversations, contacts, and teams, and writes contact/account/message/conversation/timeline-event/GDPR mutations through the Drift REST API.
 
 ICON
+  id: drift
   asset: icons/drift.svg
   source: upstream_registry
   review_status: upstream_seeded

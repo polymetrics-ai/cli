@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Sharetribe listings, users, transactions, availability, stock, and marketplace data through the Sharetribe Integration API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

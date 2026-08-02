@@ -11,6 +11,7 @@ Reads and writes Thinkific courses, users, enrollments, products, orders, and si
 
 ## Icon
 
+- id: thinkific
 - asset: icons/thinkific.svg
 - source: official
 - review_status: official_verified

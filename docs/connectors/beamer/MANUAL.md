@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Beamer NPS survey responses, announcement posts, feature requests, comments, reactions, votes, and end users through the Beamer REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

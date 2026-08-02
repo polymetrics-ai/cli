@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Workable recruiting, account, employee, time tracking, time off, review, subscription, requisition, and offer data; writes Workable candidate, employee, department, member, subscription, time tracking, time off, offer, and requisition mutations.
 
 ICON
+  id: workable
   asset: icons/workable.svg
   source: upstream_registry
   review_status: upstream_seeded

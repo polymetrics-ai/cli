@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Wufoo forms, fields, entries, comments, reports, and widgets, and writes entry submissions and webhook registrations through the Wufoo API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

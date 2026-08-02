@@ -11,6 +11,7 @@ Reads Gainsight PX accounts, users, features, and segments through the aptrinsic
 
 ## Icon
 
+- id: gainsight-px
 - asset: icons/gainsight-px.svg
 - source: upstream_registry
 - review_status: upstream_seeded

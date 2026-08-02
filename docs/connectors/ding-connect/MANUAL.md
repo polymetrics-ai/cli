@@ -13,6 +13,7 @@ DESCRIPTION
   Reads DingConnect reference catalogs (countries, currencies, regions, providers, products, product descriptions, promotions, provider status, error code descriptions, account balance) through the DingConnect REST API, and sends real-money mobile top-up transfers.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

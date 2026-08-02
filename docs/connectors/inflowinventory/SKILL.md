@@ -11,6 +11,7 @@ Reads inFlow Inventory products, customers, vendors, sales orders, and categorie
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

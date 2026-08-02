@@ -13,6 +13,7 @@ DESCRIPTION
   Reads inFlow Inventory products, customers, vendors, sales orders, and categories through the inFlow cloud REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -11,6 +11,7 @@ Reads saved Pocket items through the v3 retrieve API. In architecture v2 this qu
 
 ## Icon
 
+- id: pocket
 - asset: icons/pocket.svg
 - source: upstream_registry
 - review_status: upstream_seeded

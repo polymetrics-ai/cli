@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Front contacts, conversations, inboxes, tags, teammates, and channels through the Front Core REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

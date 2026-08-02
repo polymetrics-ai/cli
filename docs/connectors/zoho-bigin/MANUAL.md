@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Zoho Bigin pipelines, contacts, companies, products, tasks, events, calls, notes, users, tags, module metadata, and generic module records via the Zoho OAuth 2.0 refresh-token grant.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

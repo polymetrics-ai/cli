@@ -11,10 +11,17 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
 
 ## Icon
 
+- id: simple-icons-caldotcom
 - asset: icons/simple-icons/caldotcom.svg
+- title: Cal.com
+- simple_icon_slug: caldotcom
+- simple_icon_hex: 292929
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Cal.com
+- match: curated-alias
+- matched_by: caldotcom
 
 ## Capabilities
 

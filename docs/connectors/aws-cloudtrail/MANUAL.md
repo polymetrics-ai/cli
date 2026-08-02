@@ -13,6 +13,7 @@ DESCRIPTION
   Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API using AWS Signature V4 authentication. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: aws-cloudtrail
   asset: icons/aws-cloudtrail.svg
   source: upstream_registry
   review_status: upstream_seeded

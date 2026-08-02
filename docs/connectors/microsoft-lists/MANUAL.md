@@ -13,6 +13,7 @@ DESCRIPTION
   Reads SharePoint/Microsoft Lists, list items, columns, and content types from a site through the Microsoft Graph API using an OAuth2 client-credentials grant. Read-only.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

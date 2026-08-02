@@ -11,6 +11,7 @@ Reads Teamtailor jobs, candidates, job applications, departments, locations, rol
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

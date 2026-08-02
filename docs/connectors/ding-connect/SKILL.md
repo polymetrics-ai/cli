@@ -11,6 +11,7 @@ Reads DingConnect reference catalogs (countries, currencies, regions, providers,
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

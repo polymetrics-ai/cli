@@ -11,6 +11,7 @@ Reads Float people, projects, clients, tasks, and departments through the Float 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

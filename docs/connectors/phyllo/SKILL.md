@@ -11,6 +11,7 @@ Reads Phyllo users, accounts, profiles, social content/comments, audience, and i
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

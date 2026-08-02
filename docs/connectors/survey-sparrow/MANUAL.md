@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and manages SurveySparrow surveys, contacts, responses, questions, channels, contact lists/properties, reminders, reputation platforms/reviews, survey folders, ticket fields, tickets, teams, roles, variables, webhooks, users, templates, email themes, and expressions through the SurveySparrow API.
 
 ICON
+  id: surveysparrow
   asset: icons/surveysparrow.svg
   source: upstream_registry
   review_status: upstream_seeded

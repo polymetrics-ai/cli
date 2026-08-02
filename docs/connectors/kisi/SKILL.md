@@ -11,6 +11,7 @@ Reads Kisi physical access-control data: members, locks, groups, users, and logi
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

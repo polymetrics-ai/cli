@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Simplesat surveys, answers, questions, customers, and responses (including nested ticket data) through the Simplesat v1 API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

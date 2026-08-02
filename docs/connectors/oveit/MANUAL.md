@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Oveit events, orders, and attendees.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

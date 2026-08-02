@@ -11,6 +11,7 @@ Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

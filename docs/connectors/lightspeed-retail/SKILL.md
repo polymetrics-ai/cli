@@ -11,6 +11,7 @@ Reads Lightspeed Retail (X-Series) products, customers, sales, outlets, and regi
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

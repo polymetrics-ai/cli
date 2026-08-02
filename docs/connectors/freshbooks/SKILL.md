@@ -11,6 +11,7 @@ Reads FreshBooks clients, invoices, expenses, payments, and items through the Fr
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Pipeliner CRM accounts, contacts, opportunities, and leads through the REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

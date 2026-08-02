@@ -11,10 +11,17 @@ Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases
 
 ## Icon
 
+- id: simple-icons-gmail
 - asset: icons/simple-icons/gmail.svg
+- title: Gmail
+- simple_icon_slug: gmail
+- simple_icon_hex: EA4335
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Gmail
+- match: exact-name-or-slug
+- matched_by: gmail
 
 ## Capabilities
 

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Insightful workforce-analytics employees, teams, projects, and directory entries through the Insightful REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

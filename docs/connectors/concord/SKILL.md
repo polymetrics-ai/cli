@@ -11,6 +11,7 @@ Reads and writes Concord contract lifecycle management data: agreements (and the
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and mutates Outreach REST API v2 JSON:API resources, including standard resources and caller-selected custom objects.
 
 ICON
+  id: outreach
   asset: icons/outreach.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -13,10 +13,17 @@ DESCRIPTION
   Reads SparkPost recipient lists, templates, sending domains, transmissions, suppression list records, IP pools, webhooks, subaccounts, tracking domains, inbound domains, relay webhooks, sending IPs, and A/B tests; writes email sends, recipient list/template/domain/suppression/IP-pool/webhook/subaccount/relay-webhook lifecycle mutations.
 
 ICON
+  id: simple-icons-sparkpost
   asset: icons/simple-icons/sparkpost.svg
+  title: SparkPost
+  simple_icon_slug: sparkpost
+  simple_icon_hex: FA6423
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=SparkPost
+  match: exact-name-or-slug
+  matched_by: sparkpost
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

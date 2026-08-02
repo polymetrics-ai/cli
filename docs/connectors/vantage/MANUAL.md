@@ -13,6 +13,7 @@ DESCRIPTION
   Reads cost, budget, resource-management, segment, notification, and integration data from the Vantage API and writes budgets, folders, dashboards, cost reports, resource reports, saved filters, workspaces, teams, cost alerts, budget alerts, anomaly alerts, business metrics, virtual tag configs, segments, report notifications, recommendation views, network flow reports, Kubernetes efficiency reports, anomaly notifications, and canvases.
 
 ICON
+  id: vantage
   asset: icons/vantage.svg
   source: upstream_registry
   review_status: upstream_seeded

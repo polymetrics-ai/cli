@@ -11,6 +11,7 @@ Reads and writes VWO (Visual Website Optimizer) A/B testing campaigns.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

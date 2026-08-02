@@ -11,6 +11,7 @@ Reads Opinion Stage items (polls, quizzes, and forms) through the Opinion Stage 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

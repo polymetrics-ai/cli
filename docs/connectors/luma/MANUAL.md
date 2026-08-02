@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes the documented Luma public API for events, calendars, guests, contacts, tags, coupons, ticket types, memberships, webhooks, and organization resources.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -11,6 +11,7 @@ Reads aviationstack flights and aviation reference data (airlines, airports, air
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads the documented OnePageCRM API v3 CRM surface and exposes declarative write actions for supported JSON/path mutations.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

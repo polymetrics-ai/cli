@@ -11,6 +11,7 @@ Reads and writes Zoho Bigin pipelines, contacts, companies, products, tasks, eve
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

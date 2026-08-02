@@ -11,6 +11,7 @@ Reads Yotpo store products, product variants, collections, customers, orders, an
 
 ## Icon
 
+- id: yotpo
 - asset: icons/yotpo.svg
 - source: upstream_registry
 - review_status: upstream_seeded

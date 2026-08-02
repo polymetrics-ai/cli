@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Microsoft Dataverse accounts, contacts, leads, opportunities, and users through the Web API.
 
 ICON
+  id: microsoftdataverse
   asset: icons/microsoftdataverse.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads and writes the documented Invoiced REST API surface for billing, payments,
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

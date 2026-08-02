@@ -11,6 +11,7 @@ Reads 100ms rooms, sessions, recordings, templates, live streams, external strea
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

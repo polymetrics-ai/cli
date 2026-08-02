@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Guru collections, groups, members, and teams through the Guru REST API using HTTP Basic authentication (email + API token).
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

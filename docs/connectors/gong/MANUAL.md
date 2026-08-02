@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.
 
 ICON
+  id: gong
   asset: icons/gong.svg
   source: upstream_registry
   review_status: upstream_seeded

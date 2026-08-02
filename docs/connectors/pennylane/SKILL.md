@@ -11,6 +11,7 @@ Reads Pennylane v2 customers, customer invoices, suppliers, supplier invoices, p
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

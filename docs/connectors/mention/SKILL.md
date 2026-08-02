@@ -11,6 +11,7 @@ Reads Mention app metadata, accounts, alerts, mentions, alert tags, alert shares
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

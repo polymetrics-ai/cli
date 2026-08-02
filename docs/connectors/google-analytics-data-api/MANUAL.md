@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: google-analytics
   asset: icons/google-analytics.svg
   source: upstream_registry
   review_status: upstream_seeded

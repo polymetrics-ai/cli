@@ -11,6 +11,7 @@ Reads and writes documented Illumina BaseSpace v1pre3 REST API resources through
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

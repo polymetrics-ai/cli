@@ -11,6 +11,7 @@ Reads Productboard features, notes, components, and products through the public 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -11,6 +11,7 @@ Reads Adobe Commerce (Magento) products, orders, customers, categories, invoices
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

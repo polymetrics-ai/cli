@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Thinkific courses, users, enrollments, products, orders, and site administration resources through the Thinkific Admin API.
 
 ICON
+  id: thinkific
   asset: icons/thinkific.svg
   source: official
   review_status: official_verified

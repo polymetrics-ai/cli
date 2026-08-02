@@ -11,6 +11,7 @@ Reads Everhour projects, clients, team members, team time records, per-project t
 
 ## Icon
 
+- id: everhour
 - asset: icons/everhour.svg
 - source: upstream_registry
 - review_status: upstream_seeded

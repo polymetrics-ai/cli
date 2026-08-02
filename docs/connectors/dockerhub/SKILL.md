@@ -11,6 +11,7 @@ Reads public Docker Hub repositories, image tags, and namespace profiles for a c
 
 ## Icon
 
+- id: dockerhub
 - asset: icons/dockerhub.svg
 - source: upstream_registry
 - review_status: upstream_seeded

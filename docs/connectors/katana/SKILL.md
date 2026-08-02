@@ -11,10 +11,17 @@ Reads Katana MRP (Cloud Inventory) products, materials, variants, sales orders, 
 
 ## Icon
 
+- id: simple-icons-katana
 - asset: icons/simple-icons/katana.svg
+- title: Katana
+- simple_icon_slug: katana
+- simple_icon_hex: 000000
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Katana
+- match: exact-name-or-slug
+- matched_by: katana
 
 ## Capabilities
 

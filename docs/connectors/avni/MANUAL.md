@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Avni subjects and encounters through a read-only HTTP API using HTTP Basic authentication.
 
 ICON
+  id: avni
   asset: icons/avni.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads BlueTally IT asset management data (assets, employees, licenses, maintenan
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

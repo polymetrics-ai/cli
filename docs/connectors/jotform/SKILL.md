@@ -11,6 +11,7 @@ Reads Jotform forms, submissions, reports, folders, and the account profile thro
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads sitemap, scraping job, account, and problematic-URL metadata, and writes sitemap/scraping-job create/update/delete mutations, through the Web Scraper Cloud API.
 
 ICON
+  id: web-scraper
   asset: icons/web-scraper.svg
   source: official
   review_status: official_verified

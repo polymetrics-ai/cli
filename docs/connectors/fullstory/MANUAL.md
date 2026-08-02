@@ -13,6 +13,7 @@ DESCRIPTION
   Reads FullStory segments, users, events, and user-scoped sessions; writes server-side user and custom event data through the FullStory Server API.
 
 ICON
+  id: fullstory
   asset: icons/fullstory.svg
   source: upstream_registry
   review_status: upstream_seeded

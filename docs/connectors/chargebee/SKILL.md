@@ -11,6 +11,7 @@ Reads and writes Chargebee subscription billing data (customers, subscriptions, 
 
 ## Icon
 
+- id: chargebee
 - asset: icons/chargebee.svg
 - source: upstream_registry
 - review_status: upstream_seeded

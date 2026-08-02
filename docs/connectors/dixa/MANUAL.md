@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: dixa
   asset: icons/dixa.svg
   source: upstream_registry
   review_status: upstream_seeded

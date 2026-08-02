@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Teamwork projects, people, companies, tags, time entries, tasklists, milestones, and tasks, and writes approved project/tasklist/task/milestone/company/time-entry mutations through the Teamwork API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

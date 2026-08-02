@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes e-conomic customers, products, suppliers, accounts, invoices (booked/draft), orders, and reference data (currencies, payment terms, VAT zones, customer/product/supplier groups) through the e-conomic REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

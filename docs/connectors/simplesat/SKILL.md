@@ -11,6 +11,7 @@ Reads and writes Simplesat surveys, answers, questions, customers, and responses
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

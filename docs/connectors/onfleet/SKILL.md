@@ -11,6 +11,7 @@ Reads Onfleet tasks, workers, teams, hubs, and administrators through the Onflee
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

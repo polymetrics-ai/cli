@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Retail Express products, customers, orders, stock levels, and stores through the Maropost API. Read-only.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads 100ms rooms, sessions, recordings, templates, live streams, external streams, recording assets, and webhook events, and writes room/template/room-code/recording lifecycle mutations, through the 100ms server-side REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

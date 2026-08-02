@@ -13,6 +13,7 @@ DESCRIPTION
   Reads global financial data (dividends, stock splits, historical candlesticks, and commodity prices) from the Finnworlds REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

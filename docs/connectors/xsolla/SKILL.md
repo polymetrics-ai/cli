@@ -11,6 +11,7 @@ Reads Xsolla merchant transaction search/registry, payouts, payout currency brea
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

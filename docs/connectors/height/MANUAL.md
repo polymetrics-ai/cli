@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Height tasks, lists, field templates, users, and workspace through the Height REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

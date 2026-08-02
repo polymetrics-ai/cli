@@ -11,6 +11,7 @@ Reads Mode collections (spaces), reports, data sources, groups, and memberships 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

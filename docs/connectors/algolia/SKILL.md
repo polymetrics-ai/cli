@@ -11,10 +11,17 @@ Reads Algolia indices, API keys, index settings, dictionaries, security sources,
 
 ## Icon
 
+- id: simple-icons-algolia
 - asset: icons/simple-icons/algolia.svg
+- title: Algolia
+- simple_icon_slug: algolia
+- simple_icon_hex: 003DFF
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Algolia
+- match: exact-name-or-slug
+- matched_by: algolia
 
 ## Capabilities
 

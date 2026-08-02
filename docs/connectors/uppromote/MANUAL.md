@@ -13,6 +13,7 @@ DESCRIPTION
   Reads affiliates, programs, coupons, referrals, and payments from the UpPromote API, and writes affiliate/referral/coupon/payment/webhook-subscription lifecycle mutations.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

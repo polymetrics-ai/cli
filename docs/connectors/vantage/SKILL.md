@@ -11,6 +11,7 @@ Reads cost, budget, resource-management, segment, notification, and integration 
 
 ## Icon
 
+- id: vantage
 - asset: icons/vantage.svg
 - source: upstream_registry
 - review_status: upstream_seeded

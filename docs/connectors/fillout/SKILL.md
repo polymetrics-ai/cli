@@ -11,10 +11,17 @@ Reads Fillout forms and manages webhooks/submission deletion through the Fillout
 
 ## Icon
 
+- id: simple-icons-fillout
 - asset: icons/simple-icons/fillout.svg
+- title: Fillout
+- simple_icon_slug: fillout
+- simple_icon_hex: FFC738
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Fillout
+- match: exact-name-or-slug
+- matched_by: fillout
 
 ## Capabilities
 

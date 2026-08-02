@@ -11,6 +11,7 @@ Reads Babelforce call reporting, recordings, numbers, and users through the Babe
 
 ## Icon
 
+- id: babelforce
 - asset: icons/babelforce.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads projects, sections, tasks, comments, labels, and project collaborators, an
 
 ## Icon
 
+- id: todoist
 - asset: icons/todoist.svg
 - source: upstream_registry
 - review_status: upstream_seeded

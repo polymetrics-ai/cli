@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Eventzilla events, categories, users, attendees, ticket types, and transactions, and writes attendee check-in and event sales-page toggle mutations, through the Eventzilla v2 REST API.
 
 ICON
+  id: eventzilla
   asset: icons/eventzilla.svg
   source: official
   review_status: official_verified

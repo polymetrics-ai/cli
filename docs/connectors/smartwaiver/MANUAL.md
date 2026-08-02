@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Smartwaiver waivers, checkins, templates, published keys, user info, and account settings; sends prefill/SMS/webhook mutations through the Smartwaiver API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

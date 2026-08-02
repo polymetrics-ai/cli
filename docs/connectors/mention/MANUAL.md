@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Mention app metadata, accounts, alerts, mentions, alert tags, alert shares, alert preferences, and alert tasks from the Mention social listening REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

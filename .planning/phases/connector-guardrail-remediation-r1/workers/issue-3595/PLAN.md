@@ -75,6 +75,14 @@ No direct PR #3590 R5/R6 response is in scope. PR #3590 remains parked until thi
 - Regenerate exactly the existing metadata-only drift: 220 catalog JSON icon objects, 216 MANUAL icon blocks, and 216 SKILL icon blocks. Preserve every byte outside those icon blocks.
 - Run one focused Go/docs-validation command after implementation, generated updates, and complete diff review.
 
+## Review repair round 4
+
+- F8 is a canonical projection abstraction defect: the registry decoder retains the curated metadata, but `ConnectorIcon` drops title, Simple Icons identity/color, license/attribution, and match metadata before catalog and guide rendering.
+- Define one docs projection on `ConnectorIcon` for ID, path, title, Simple Icons slug/hex, source, license, optional attribution, review status/URL, and match/matched-by metadata. Keep connector identity, implementation state, and fallback disposition as registry control fields rather than icon metadata.
+- Render every projected field in deterministic order and omit only absent optional fields. Add catalog, MANUAL, and SKILL regressions for ID, license/attribution, additional curated metadata, and omission on non-curated entries.
+- Generate into a bounded worktree-local staging directory, transplant only icon objects/blocks while preserving all current non-icon bytes, then run one focused Go/docs-validation command.
+- Required skills: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-cli`, `golang-documentation`, `golang-structs-interfaces`, and `golang-design-patterns`.
+
 ## Integration ordering
 
 This child PR must land into the parent branch before PR #3590 is reconciled. After integration, rebase/reconcile PR #3590 so ownership reads only the canonical bare registry, permits the two exact docs catalog outputs, and includes positive/negative collision, orphan, generated-copy, and source-asset tests.

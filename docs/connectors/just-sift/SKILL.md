@@ -11,6 +11,7 @@ Reads JustSift people directory profiles and person field definitions through th
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

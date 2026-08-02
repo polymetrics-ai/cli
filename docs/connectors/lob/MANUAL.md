@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Lob addresses, postcards, letters, checks, and bank accounts through the Lob print & mail REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

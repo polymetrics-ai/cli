@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes SharePoint lists and list items through Microsoft Graph.
 
 ICON
+  id: microsoft-sharepoint
   asset: icons/microsoft-sharepoint.svg
   source: upstream_registry
   review_status: upstream_seeded

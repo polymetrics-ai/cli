@@ -11,6 +11,7 @@ Reads and writes Chift consumers, connections, syncs, integrations, datastores, 
 
 ## Icon
 
+- id: chift
 - asset: icons/chift.svg
 - source: official
 - review_status: official_verified

@@ -11,6 +11,7 @@ Reads Cin7 Core (DEAR Inventory) products, customers, suppliers, sales, purchase
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

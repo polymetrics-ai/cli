@@ -11,6 +11,7 @@ Reads implemented Asana project-management streams and safely plans implemented 
 
 ## Icon
 
+- id: asana
 - asset: icons/asana.svg
 - source: upstream_registry
 - review_status: upstream_seeded

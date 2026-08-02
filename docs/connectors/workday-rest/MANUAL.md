@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Workday REST API resources (workers, organizations, job profiles) with bearer-token authentication. Read-only.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -11,6 +11,7 @@ Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO correction
 
 ## Icon
 
+- id: datadog
 - asset: icons/datadog.svg
 - source: upstream_registry
 - review_status: upstream_seeded

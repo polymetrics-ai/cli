@@ -13,6 +13,7 @@ DESCRIPTION
   Reads AgileCRM contacts, deals, tasks, milestone pipelines, campaigns, and support tickets, and writes contact/deal/task create, update, and delete actions, through the AgileCRM REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

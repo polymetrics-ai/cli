@@ -11,6 +11,7 @@ Reads Looker users, groups, folders, looks, and dashboards through the Looker AP
 
 ## Icon
 
+- id: looker
 - asset: icons/looker.svg
 - source: upstream_registry
 - review_status: upstream_seeded

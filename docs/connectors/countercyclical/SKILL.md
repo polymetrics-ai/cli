@@ -11,6 +11,7 @@ Reads Countercyclical investments, valuations, research memos, teams, assumption
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

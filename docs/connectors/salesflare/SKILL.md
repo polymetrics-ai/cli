@@ -11,6 +11,7 @@ Reads Salesflare accounts, contacts, opportunities, users, tags, tasks, workflow
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -13,10 +13,17 @@ DESCRIPTION
   Reads and writes Zoho Expense API v1 resources through the declarative connector engine.
 
 ICON
+  id: simple-icons-zoho-expense
   asset: icons/simple-icons/zoho-expense.svg
+  title: Zoho
+  simple_icon_slug: zoho
+  simple_icon_hex: E42527
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=Zoho
+  match: curated-alias
+  matched_by: zoho
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

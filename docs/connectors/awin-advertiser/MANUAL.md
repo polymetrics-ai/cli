@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Awin advertiser transactions, publisher-aggregated performance reports, publisher relationships, and publisher performance reports, and creates advertiser promotion/voucher offers, through the Awin Advertiser REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

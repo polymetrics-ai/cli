@@ -11,6 +11,7 @@ Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, s
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

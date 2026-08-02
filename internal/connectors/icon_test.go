@@ -1,6 +1,7 @@
 package connectors
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -34,6 +35,87 @@ func TestConnectorIconRegistryUsesExactBareNamesOnly(t *testing.T) {
 
 	if icon, ok := ConnectorIconFor("source-apify-dataset"); ok {
 		t.Fatalf("legacy prefixed lookup unexpectedly resolved: %+v", icon)
+	}
+}
+
+func TestConnectorIconRegistryProjectsCompleteMetadata(t *testing.T) {
+	apple, ok := ConnectorIconFor("apple-search-ads")
+	if !ok {
+		t.Fatal("apple-search-ads icon not found")
+	}
+	want := ConnectorIcon{
+		ID:             "simple-icons-apple",
+		Path:           "icons/simple-icons/apple.svg",
+		Title:          "Apple",
+		SimpleIconSlug: "apple",
+		SimpleIconHex:  "000000",
+		Source:         IconSourceSimpleIcons,
+		License:        "CC0-1.0",
+		ReviewStatus:   IconReviewSimpleIconsCC0Trademark,
+		ReviewURL:      "https://simpleicons.org/?q=Apple",
+		Match:          "curated-alias",
+		MatchedBy:      "apple",
+	}
+	if apple != want {
+		t.Fatalf("apple-search-ads icon = %+v, want %+v", apple, want)
+	}
+
+	section := iconSection(Manifest{Metadata: Metadata{Icon: &ConnectorIcon{
+		ID:             "projected",
+		Path:           "icons/projected.svg",
+		Title:          "Projected Icon",
+		SimpleIconSlug: "projected-icon",
+		SimpleIconHex:  "ABCDEF",
+		Source:         IconSourceSimpleIcons,
+		License:        "CC0-1.0",
+		Attribution:    "Example attribution",
+		ReviewStatus:   IconReviewSimpleIconsCC0Trademark,
+		ReviewURL:      "https://example.invalid/review",
+		Match:          "exact-name-or-slug",
+		MatchedBy:      "projected-icon",
+	}}})
+	wantLines := []string{
+		"id: projected",
+		"asset: icons/projected.svg",
+		"title: Projected Icon",
+		"simple_icon_slug: projected-icon",
+		"simple_icon_hex: ABCDEF",
+		"source: simple-icons",
+		"license: CC0-1.0",
+		"attribution: Example attribution",
+		"review_status: cc0_with_trademark_caveat",
+		"review_url: https://example.invalid/review",
+		"match: exact-name-or-slug",
+		"matched_by: projected-icon",
+	}
+	if strings.Join(section.Lines, "\n") != strings.Join(wantLines, "\n") {
+		t.Fatalf("icon section = %q, want %q", section.Lines, wantLines)
+	}
+}
+
+func TestConnectorIconMetadataOmitsAbsentOptionalFields(t *testing.T) {
+	icon, ok := ConnectorIconFor("100ms")
+	if !ok {
+		t.Fatal("100ms icon not found")
+	}
+	section := iconSection(Manifest{Metadata: Metadata{Icon: &icon}})
+	want := []string{
+		"id: pm-sample",
+		"asset: icons/pm-sample.svg",
+		"source: polymetrics",
+		"review_status: polymetrics",
+		"review_url: https://github.com/polymetrics-ai/cli",
+	}
+	if strings.Join(section.Lines, "\n") != strings.Join(want, "\n") {
+		t.Fatalf("100ms icon section = %q, want %q", section.Lines, want)
+	}
+	encoded, err := json.Marshal(icon)
+	if err != nil {
+		t.Fatalf("marshal 100ms icon: %v", err)
+	}
+	wantJSON := `{"id":"pm-sample","path":"icons/pm-sample.svg","source":"polymetrics","review_status":"polymetrics","review_url":"https://github.com/polymetrics-ai/cli"}`
+	if string(encoded) != wantJSON {
+		t.Fatalf("100ms icon JSON = %s, want %s", encoded, wantJSON)
 	}
 }
 

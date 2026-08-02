@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes EZOfficeInventory assets, inventory items, stock assets, members, locations, groups, vendors, and purchase orders through the EZOfficeInventory REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads SavvyCal events, scheduling links, contacts, time zones, webhooks, and workflows, and writes scheduling-link and webhook lifecycle mutations, through the SavvyCal API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

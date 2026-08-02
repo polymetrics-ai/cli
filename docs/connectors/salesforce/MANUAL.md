@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Salesforce object metadata and allow-listed Account, Contact, and Lead SOQL queries through the REST API. Read-only.
 
 ICON
+  id: salesforce
   asset: icons/salesforce.svg
   source: official
   review_status: official_verified

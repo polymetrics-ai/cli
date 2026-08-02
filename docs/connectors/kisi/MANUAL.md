@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Kisi physical access-control data: members, locks, groups, users, and logins via the Kisi REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

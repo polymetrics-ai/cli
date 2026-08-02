@@ -11,6 +11,7 @@ Reads Salesforce object metadata and allow-listed Account, Contact, and Lead SOQ
 
 ## Icon
 
+- id: salesforce
 - asset: icons/salesforce.svg
 - source: official
 - review_status: official_verified

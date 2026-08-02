@@ -11,6 +11,7 @@ Reads Aircall calls, users, contacts, numbers, teams, tags, and webhooks, and wr
 
 ## Icon
 
+- id: aircall
 - asset: icons/aircall.svg
 - source: upstream_registry
 - review_status: upstream_seeded

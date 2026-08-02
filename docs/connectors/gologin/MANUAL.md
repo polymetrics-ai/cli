@@ -13,6 +13,7 @@ DESCRIPTION
   Reads GoLogin browser profiles, folders, tags, and account information through the GoLogin REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

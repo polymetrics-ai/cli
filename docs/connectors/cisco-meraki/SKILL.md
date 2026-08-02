@@ -11,6 +11,7 @@ Reads and writes Cisco Meraki organizations, networks, devices, admins, licenses
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

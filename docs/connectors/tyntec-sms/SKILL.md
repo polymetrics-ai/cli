@@ -11,6 +11,7 @@ Reads tyntec SMS messages, templates, sender IDs, and delivery reports through A
 
 ## Icon
 
+- id: tyntec
 - asset: icons/tyntec.svg
 - source: upstream_registry
 - review_status: upstream_seeded

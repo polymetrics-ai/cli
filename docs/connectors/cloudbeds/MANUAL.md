@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Cloudbeds guests, hotels, rooms, reservations, transactions, rate plans, room types, items, taxes/fees, sources, groups, house accounts, housekeeping, custom fields, payment methods, webhooks, allotment blocks, and guest/reservation notes, and writes guest, reservation, payment, folio, housekeeping, house-account, webhook, and room-block actions, through the Cloudbeds v1.2 REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

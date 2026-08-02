@@ -11,6 +11,7 @@ Reads Segment workspace, source, and destination metadata through the Segment Pu
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -11,6 +11,7 @@ Reads Workday REST API resources (workers, organizations, job profiles) with bea
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

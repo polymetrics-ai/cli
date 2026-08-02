@@ -11,6 +11,7 @@ Reads Picqer products, customers, orders, picklists, warehouses, suppliers, purc
 
 ## Icon
 
+- id: picqer
 - asset: icons/picqer.svg
 - source: official
 - review_status: official_verified

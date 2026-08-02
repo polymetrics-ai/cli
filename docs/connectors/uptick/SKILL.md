@@ -11,6 +11,7 @@ Reads Uptick field service management data through the Uptick REST API using OAu
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

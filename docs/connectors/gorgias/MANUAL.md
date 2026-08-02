@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys through the Gorgias REST API (read-only).
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

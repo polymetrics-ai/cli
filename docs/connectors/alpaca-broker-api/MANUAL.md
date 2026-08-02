@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Alpaca Broker API accounts, assets, market calendar, clock, country info, account activities, journals, and per-account positions/watchlists/orders/documents over the Broker REST API (read-only).
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

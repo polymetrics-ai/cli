@@ -11,6 +11,7 @@ Reads Eventee event agenda, attendee, registration, group, review, and partner d
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

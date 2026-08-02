@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes EasyPost shipping resources including shipments, trackers, addresses, parcels, batches, events, claims, pickups, refunds, scan forms, end shippers, users, and webhooks through the EasyPost REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

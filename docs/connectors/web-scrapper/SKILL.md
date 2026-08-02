@@ -11,6 +11,7 @@ Reads sitemap, scraping job, account, and problematic-URL metadata, and writes s
 
 ## Icon
 
+- id: web-scraper
 - asset: icons/web-scraper.svg
 - source: official
 - review_status: official_verified

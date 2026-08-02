@@ -11,6 +11,7 @@ Reads Cart.com orders, customers, products, and inventory through a read-only RE
 
 ## Icon
 
+- id: cart
 - asset: icons/cart.svg
 - source: upstream_registry
 - review_status: upstream_seeded

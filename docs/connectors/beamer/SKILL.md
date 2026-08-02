@@ -11,6 +11,7 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

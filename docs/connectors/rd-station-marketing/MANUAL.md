@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes RD Station Marketing platform contacts, segmentation contacts, analytics, contact fields, product catalog feeds, and workflows.
 
 ICON
+  id: rdstation
   asset: icons/rdstation.svg
   source: official
   review_status: official_verified

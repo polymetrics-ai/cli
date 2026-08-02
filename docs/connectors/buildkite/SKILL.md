@@ -11,10 +11,17 @@ Reads and writes Buildkite organizations, pipelines, builds, agents, teams, and 
 
 ## Icon
 
+- id: simple-icons-buildkite
 - asset: icons/simple-icons/buildkite.svg
+- title: Buildkite
+- simple_icon_slug: buildkite
+- simple_icon_hex: 14CC80
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Buildkite
+- match: exact-name-or-slug
+- matched_by: buildkite
 
 ## Capabilities
 

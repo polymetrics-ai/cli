@@ -11,6 +11,7 @@ Reads Notion databases, pages, and users through the Notion REST API. Read-only.
 
 ## Icon
 
+- id: notion
 - asset: icons/notion.svg
 - source: upstream_registry
 - review_status: upstream_seeded

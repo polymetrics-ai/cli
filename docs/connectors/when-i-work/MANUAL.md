@@ -13,10 +13,17 @@ DESCRIPTION
   Reads and writes When I Work workforce-scheduling data: users, locations, positions, shifts, sites, shift templates, annotations, availability events, request types, time entries, timezones, payrolls, open-shift approval requests, and shift swaps.
 
 ICON
+  id: simple-icons-wheniwork
   asset: icons/simple-icons/wheniwork.svg
+  title: When I Work
+  simple_icon_slug: wheniwork
+  simple_icon_hex: 51A33D
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=When%20I%20Work
+  match: exact-name-or-slug
+  matched_by: when-i-work
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

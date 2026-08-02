@@ -13,6 +13,7 @@ DESCRIPTION
   Reads pretix organizers, events, items, and orders through the pretix REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

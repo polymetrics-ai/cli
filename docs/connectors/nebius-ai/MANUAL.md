@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Nebius Token Factory OpenAI-compatible API resources, including models, files, fine-tuning, datasets, operations, dedicated endpoints, and inference actions.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -11,6 +11,7 @@ Reads Taboola campaigns through the Backstage API. Read-only.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

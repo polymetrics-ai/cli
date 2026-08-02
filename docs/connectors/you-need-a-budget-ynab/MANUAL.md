@@ -13,6 +13,7 @@ DESCRIPTION
   Reads YNAB budgets, accounts, categories, payees, months, transactions, and scheduled transactions, and writes transaction/account/category/payee/scheduled-transaction mutations through the YNAB REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes the documented Keka HRMS REST API surface for Core HR, documents, leave, attendance, payroll, PSA, PMS, hire, expense, assets, requisitions, skills, and BGV resources.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

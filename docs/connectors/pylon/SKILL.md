@@ -11,6 +11,7 @@ Reads and writes the documented Pylon REST API surface through concrete streams 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

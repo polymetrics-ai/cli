@@ -11,10 +11,17 @@ Reads Clarifai applications, datasets, models, model versions, and workflows, an
 
 ## Icon
 
+- id: simple-icons-clarifai
 - asset: icons/simple-icons/clarifai.svg
+- title: Clarifai
+- simple_icon_slug: clarifai
+- simple_icon_hex: 1955FF
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Clarifai
+- match: curated-alias
+- matched_by: clarifai
 
 ## Capabilities
 

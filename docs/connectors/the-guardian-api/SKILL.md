@@ -11,6 +11,7 @@ Reads Guardian content search results through the Guardian Open Platform Content
 
 ## Icon
 
+- id: theguardian
 - asset: icons/theguardian.svg
 - source: upstream_registry
 - review_status: upstream_seeded

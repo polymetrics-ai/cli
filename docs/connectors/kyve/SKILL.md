@@ -11,6 +11,7 @@ Reads public KYVE pools, stakers, funders, and Cosmos validators through the KYV
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

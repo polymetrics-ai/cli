@@ -11,6 +11,7 @@ Reads Salesloft people, accounts, cadences, users, and emails through the Salesl
 
 ## Icon
 
+- id: salesloft
 - asset: icons/salesloft.svg
 - source: official
 - review_status: official_verified

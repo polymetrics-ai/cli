@@ -13,10 +13,17 @@ DESCRIPTION
   Reads and writes Brex transactions, users, expenses, vendors, budgets, cards, accounts, statements, transfers, and webhooks through the Brex platform REST API.
 
 ICON
+  id: simple-icons-brex
   asset: icons/simple-icons/brex.svg
+  title: Brex
+  simple_icon_slug: brex
+  simple_icon_hex: 212121
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=Brex
+  match: exact-name-or-slug
+  matched_by: brex
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

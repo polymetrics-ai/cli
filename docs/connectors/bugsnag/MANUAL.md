@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Bugsnag organizations, projects, collaborators, errors, events, and releases through the Bugsnag Data Access API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

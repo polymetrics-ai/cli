@@ -11,6 +11,7 @@ Reads Appfigures app-store reviews, products, analytics reports (sales/ratings/r
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

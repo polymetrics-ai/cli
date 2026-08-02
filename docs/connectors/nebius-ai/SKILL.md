@@ -11,6 +11,7 @@ Reads and writes Nebius Token Factory OpenAI-compatible API resources, including
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

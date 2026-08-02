@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Northpass LMS people, courses, course enrollments, and groups through the Northpass REST API. Read-only.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

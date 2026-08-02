@@ -31,11 +31,18 @@ const (
 // ConnectorIcon identifies a local SVG asset and how it was sourced. The path is
 // relative to the connector docs root, e.g. icons/github.svg.
 type ConnectorIcon struct {
-	ID           string `json:"id"`
-	Path         string `json:"path"`
-	Source       string `json:"source"`
-	ReviewStatus string `json:"review_status"`
-	ReviewURL    string `json:"review_url,omitempty"`
+	ID             string `json:"id"`
+	Path           string `json:"path"`
+	Title          string `json:"title,omitempty"`
+	SimpleIconSlug string `json:"simple_icon_slug,omitempty"`
+	SimpleIconHex  string `json:"simple_icon_hex,omitempty"`
+	Source         string `json:"source"`
+	License        string `json:"license,omitempty"`
+	Attribution    string `json:"attribution,omitempty"`
+	ReviewStatus   string `json:"review_status"`
+	ReviewURL      string `json:"review_url,omitempty"`
+	Match          string `json:"match,omitempty"`
+	MatchedBy      string `json:"matched_by,omitempty"`
 }
 
 type connectorIconEntry struct {
@@ -51,6 +58,7 @@ type connectorIconEntry struct {
 	SimpleIconSlug      string `json:"simple_icon_slug,omitempty"`
 	SimpleIconHex       string `json:"simple_icon_hex,omitempty"`
 	License             string `json:"license,omitempty"`
+	Attribution         string `json:"attribution,omitempty"`
 	Match               string `json:"match,omitempty"`
 	MatchedBy           string `json:"matched_by,omitempty"`
 }
@@ -113,7 +121,7 @@ func connectorIconRegistry() (map[string]ConnectorIcon, error) {
 		}
 		icons := make(map[string]ConnectorIcon, len(entries))
 		for _, entry := range entries {
-			icons[entry.Connector] = ConnectorIcon{ID: entry.ID, Path: entry.Path, Source: entry.Source, ReviewStatus: entry.ReviewStatus, ReviewURL: entry.ReviewURL}
+			icons[entry.Connector] = connectorIconProjection(entry)
 		}
 		connectorIcons.by = icons
 	})
@@ -134,6 +142,14 @@ func connectorIconRegistryEntries() ([]connectorIconEntry, error) {
 		entry.Source = strings.TrimSpace(entry.Source)
 		entry.ReviewStatus = strings.TrimSpace(entry.ReviewStatus)
 		entry.ReviewURL = strings.TrimSpace(entry.ReviewURL)
+		entry.FallbackDisposition = strings.TrimSpace(entry.FallbackDisposition)
+		entry.Title = strings.TrimSpace(entry.Title)
+		entry.SimpleIconSlug = strings.TrimSpace(entry.SimpleIconSlug)
+		entry.SimpleIconHex = strings.TrimSpace(entry.SimpleIconHex)
+		entry.License = strings.TrimSpace(entry.License)
+		entry.Attribution = strings.TrimSpace(entry.Attribution)
+		entry.Match = strings.TrimSpace(entry.Match)
+		entry.MatchedBy = strings.TrimSpace(entry.MatchedBy)
 		if entry.Connector == "" {
 			return nil, fmt.Errorf("connector icon registry entry missing connector")
 		}
@@ -156,6 +172,23 @@ func connectorIconRegistryEntries() ([]connectorIconEntry, error) {
 	}
 	sort.SliceStable(entries, func(i, j int) bool { return entries[i].Connector < entries[j].Connector })
 	return entries, nil
+}
+
+func connectorIconProjection(entry connectorIconEntry) ConnectorIcon {
+	return ConnectorIcon{
+		ID:             entry.ID,
+		Path:           entry.Path,
+		Title:          entry.Title,
+		SimpleIconSlug: entry.SimpleIconSlug,
+		SimpleIconHex:  entry.SimpleIconHex,
+		Source:         entry.Source,
+		License:        entry.License,
+		Attribution:    entry.Attribution,
+		ReviewStatus:   entry.ReviewStatus,
+		ReviewURL:      entry.ReviewURL,
+		Match:          entry.Match,
+		MatchedBy:      entry.MatchedBy,
+	}
 }
 
 func (r *Registry) ValidateIconCoverage() error {

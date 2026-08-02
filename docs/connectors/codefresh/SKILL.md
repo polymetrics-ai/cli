@@ -11,10 +11,17 @@ Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, con
 
 ## Icon
 
+- id: simple-icons-codefresh
 - asset: icons/simple-icons/codefresh.svg
+- title: Codefresh
+- simple_icon_slug: codefresh
+- simple_icon_hex: 08B1AB
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Codefresh
+- match: exact-name-or-slug
+- matched_by: codefresh
 
 ## Capabilities
 

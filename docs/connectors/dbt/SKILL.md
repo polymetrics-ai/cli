@@ -11,6 +11,7 @@ Reads dbt Cloud projects, runs, repositories, users, environments, jobs, invites
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

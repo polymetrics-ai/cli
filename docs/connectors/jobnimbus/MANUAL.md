@@ -13,6 +13,7 @@ DESCRIPTION
   Reads JobNimbus CRM contacts, jobs, tasks, activities, and files through the JobNimbus REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

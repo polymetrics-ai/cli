@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Systeme.io contacts, tags, contact fields, funnels, and funnel steps, and writes contact/tag/contact-field/funnel lifecycle mutations and contact-tag assignment, through the Systeme.io public API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

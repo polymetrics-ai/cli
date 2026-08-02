@@ -11,6 +11,7 @@ Reads BoldSign documents, templates, teams, contacts, brands, users, contact gro
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

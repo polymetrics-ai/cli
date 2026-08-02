@@ -11,6 +11,7 @@ Reads latest, crypto, and archived news articles plus available news sources fro
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -11,6 +11,7 @@ Reads Perigon news articles, story clusters, journalists, sources, companies, pe
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

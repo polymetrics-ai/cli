@@ -11,6 +11,7 @@ Reads Finnhub stock symbols, market news, per-symbol company profiles, and per-s
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

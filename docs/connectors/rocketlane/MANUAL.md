@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Rocketlane projects, tasks, customers, users, and time entries through the REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Yotpo store products, product variants, collections, customers, orders, and webhook targets/filters/subscriptions, and writes product/variant/order/customer/fulfillment/collection-membership/webhook mutations through the Yotpo Core API v3.
 
 ICON
+  id: yotpo
   asset: icons/yotpo.svg
   source: upstream_registry
   review_status: upstream_seeded

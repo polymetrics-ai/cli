@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Elasticsearch index metadata and documents through the REST API. Read-only.
 
 ICON
+  id: elasticsearch
   asset: icons/elasticsearch.svg
   source: official
   review_status: official_verified

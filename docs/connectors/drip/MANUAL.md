@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Drip subscribers, campaigns, broadcasts, accounts, workflows, forms, tags, and webhooks, and writes subscriber/tag/broadcast/workflow/event/webhook mutations through the Drip REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -11,6 +11,7 @@ Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Castor EDC studies, users, countries, and audit-trail events through the Castor EDC OAuth2 REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

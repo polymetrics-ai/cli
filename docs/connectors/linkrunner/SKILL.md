@@ -11,6 +11,7 @@ Reads Linkrunner mobile attribution campaigns and attributed users from the Link
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

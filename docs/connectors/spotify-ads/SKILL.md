@@ -11,6 +11,7 @@ Reads Spotify Ads ad accounts, campaigns, ad sets, ads, businesses, business-sco
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -11,6 +11,7 @@ Reads Convex tables and documents through the deployment HTTP API.
 
 ## Icon
 
+- id: convex
 - asset: icons/convex.svg
 - source: official
 - review_status: official_verified

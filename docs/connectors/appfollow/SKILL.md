@@ -11,6 +11,7 @@ Reads AppFollow account users, app collections, app lists, reviews, review summa
 
 ## Icon
 
+- id: appfollow
 - asset: icons/appfollow.svg
 - source: upstream_registry
 - review_status: upstream_seeded

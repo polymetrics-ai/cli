@@ -13,6 +13,7 @@ DESCRIPTION
   Reads CommCare HQ project, application, form, case, user, group, report, location, lookup table, export, and messaging API data; writes supported JSON mutations for cases, users, groups, locations, and lookup tables.
 
 ICON
+  id: commcare
   asset: icons/commcare.svg
   source: upstream_registry
   review_status: upstream_seeded

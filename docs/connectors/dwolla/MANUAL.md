@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Dwolla customers, events, exchange partners, and business classifications, and writes customer/funding-source/transfer/webhook-subscription/beneficial-owner lifecycle mutations, via the Dwolla HAL+JSON REST API using OAuth2 client-credentials.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

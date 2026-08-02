@@ -11,6 +11,7 @@ Reads k6 Cloud organizations, projects, and load tests through the k6 Cloud REST
 
 ## Icon
 
+- id: k6cloud
 - asset: icons/k6cloud.svg
 - source: upstream_registry
 - review_status: upstream_seeded

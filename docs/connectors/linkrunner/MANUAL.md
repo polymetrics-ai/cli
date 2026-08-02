@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Linkrunner mobile attribution campaigns and attributed users from the Linkrunner Data API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

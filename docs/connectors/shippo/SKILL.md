@@ -11,6 +11,7 @@ Reads Shippo addresses, parcels, shipments, and transactions through the Shippo 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

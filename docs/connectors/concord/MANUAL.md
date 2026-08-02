@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Concord contract lifecycle management data: agreements (and their metadata/summary/comments/activities/members/versions/attachments sub-resources), organizations, folders, reports, tags, clauses, approvals, groups, members, events, subscription, branding, and automated templates through the Concord REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

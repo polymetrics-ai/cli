@@ -11,6 +11,7 @@ Reads DefiLlama DeFi analytics: protocols, chains, stablecoins, DEX volumes, and
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Shippo addresses, parcels, shipments, and transactions through the Shippo REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -11,6 +11,7 @@ Reads Missive contacts, contact groups, users, teams, and shared labels through 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

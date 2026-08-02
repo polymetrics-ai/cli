@@ -11,6 +11,7 @@ Reads Paperform forms and form submissions through the Paperform REST API.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

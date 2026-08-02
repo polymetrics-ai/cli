@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes RevenueCat v2 project configuration, customer, product, offering, subscription, purchase, paywall, virtual currency, integration, and metrics resources through the REST API.
 
 ICON
+  id: revenuecat
   asset: icons/revenuecat.svg
   source: official
   review_status: official_verified

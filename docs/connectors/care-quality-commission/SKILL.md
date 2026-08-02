@@ -11,6 +11,7 @@ Reads Care Quality Commission (CQC) registered locations, providers, and inspect
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

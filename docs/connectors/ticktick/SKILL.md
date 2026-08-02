@@ -11,10 +11,17 @@ Reads projects and project tasks, and writes task create/complete/delete actions
 
 ## Icon
 
+- id: simple-icons-ticktick
 - asset: icons/simple-icons/ticktick.svg
+- title: TickTick
+- simple_icon_slug: ticktick
+- simple_icon_hex: 4772FA
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=TickTick
+- match: exact-name-or-slug
+- matched_by: ticktick
 
 ## Capabilities
 

@@ -13,10 +13,17 @@ DESCRIPTION
   Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: simple-icons-googleclassroom
   asset: icons/simple-icons/googleclassroom.svg
+  title: Google Classroom
+  simple_icon_slug: googleclassroom
+  simple_icon_hex: 0F9D58
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=Google%20Classroom
+  match: exact-name-or-slug
+  matched_by: google-classroom
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

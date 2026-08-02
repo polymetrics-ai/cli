@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Chargify (Maxio Advanced Billing) customers, subscriptions, products, product families, coupons, transactions, invoices, payment profiles, events, and statements through the Chargify REST API.
 
 ICON
+  id: chargify
   asset: icons/chargify.svg
   source: upstream_registry
   review_status: upstream_seeded

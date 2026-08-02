@@ -11,6 +11,7 @@ Reads Apptivo CRM customers, contacts, leads, and opportunities through the Appt
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

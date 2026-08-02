@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Webflow sites, collections, collection items, pages, forms, form submissions, assets, asset folders, webhooks, redirects, custom domains, components, orders, products, and ecommerce settings, and writes CMS collection-item lifecycle actions, form-submission hidden-field updates, asset metadata, webhook subscriptions, and ecommerce order/inventory mutations, using the Webflow Data API v2.
 
 ICON
+  id: webflow
   asset: icons/webflow.svg
   source: upstream_registry
   review_status: upstream_seeded

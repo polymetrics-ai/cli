@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Confluence Cloud spaces, pages, blog posts, labels, attachments, comments, tasks, and custom content, and writes pages, blog posts, and comments through the Confluence Cloud REST API v2.
 
 ICON
+  id: confluence
   asset: icons/confluence.svg
   source: upstream_registry
   review_status: upstream_seeded

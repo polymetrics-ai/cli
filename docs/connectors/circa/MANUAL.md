@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Circa events, contacts, companies, teams, custom fields, and event/company sub-resources through the Circa REST API.
 
 ICON
+  id: circa
   asset: icons/circa.svg
   source: official
   review_status: official_verified

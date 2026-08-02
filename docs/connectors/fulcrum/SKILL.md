@@ -11,6 +11,7 @@ Reads Fulcrum forms, records, projects, choice lists, and classification sets th
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

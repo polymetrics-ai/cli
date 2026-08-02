@@ -11,6 +11,7 @@ Reads and manages SurveySparrow surveys, contacts, responses, questions, channel
 
 ## Icon
 
+- id: surveysparrow
 - asset: icons/surveysparrow.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads Rootly incidents, services, and users through the Rootly API. Read-only. I
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

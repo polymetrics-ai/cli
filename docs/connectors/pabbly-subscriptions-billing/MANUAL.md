@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Pabbly customers, subscriptions, plans, and invoices, and writes customer/product/plan mutations and subscription cancellations through the Pabbly Subscriptions Billing REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

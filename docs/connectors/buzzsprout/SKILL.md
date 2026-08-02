@@ -11,6 +11,7 @@ Reads Buzzsprout podcasts and episodes (titles, publish dates, durations, play c
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

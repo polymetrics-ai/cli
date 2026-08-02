@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Intercom contacts, companies, conversations, admins, and tags through the Intercom REST API.
 
 ICON
+  id: intercom
   asset: icons/intercom.svg
   source: upstream_registry
   review_status: upstream_seeded

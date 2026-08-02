@@ -13,10 +13,17 @@ DESCRIPTION
   Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: simple-icons-mendeley
   asset: icons/simple-icons/mendeley.svg
+  title: Mendeley
+  simple_icon_slug: mendeley
+  simple_icon_hex: 9D1620
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=Mendeley
+  match: exact-name-or-slug
+  matched_by: mendeley
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

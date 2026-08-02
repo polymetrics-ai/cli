@@ -13,6 +13,7 @@ DESCRIPTION
   Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space tags, and webhooks, and writes task/folder/list/space/webhook lifecycle mutations, task comments, tags, custom field values, and goal creation, through the ClickUp v2 REST API using a personal API token.
 
 ICON
+  id: clickup
   asset: icons/clickup.svg
   source: upstream_registry
   review_status: upstream_seeded

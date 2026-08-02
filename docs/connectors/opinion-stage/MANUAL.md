@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Opinion Stage items (polls, quizzes, and forms) through the Opinion Stage Public Result API. Read-only.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

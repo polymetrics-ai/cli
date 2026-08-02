@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes EmailOctopus lists, campaigns, campaign summary reports, list contacts, list tags, and list custom fields through the EmailOctopus v1.6 REST API.
 
 ICON
+  id: emailoctopus
   asset: icons/emailoctopus.svg
   source: upstream_registry
   review_status: upstream_seeded

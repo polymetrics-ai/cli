@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Track PMS reservations, guests, units, owners, CRM contacts, and unit types through the Track PMS API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

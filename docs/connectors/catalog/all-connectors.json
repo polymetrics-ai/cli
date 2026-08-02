@@ -3589,9 +3589,15 @@
     "icon": {
       "id": "simple-icons-algolia",
       "path": "icons/simple-icons/algolia.svg",
+      "title": "Algolia",
+      "simple_icon_slug": "algolia",
+      "simple_icon_hex": "003DFF",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Algolia"
+      "review_url": "https://simpleicons.org/?q=Algolia",
+      "match": "exact-name-or-slug",
+      "matched_by": "algolia"
     }
   },
   {
@@ -8393,9 +8399,15 @@
     "icon": {
       "id": "simple-icons-apple",
       "path": "icons/simple-icons/apple.svg",
+      "title": "Apple",
+      "simple_icon_slug": "apple",
+      "simple_icon_hex": "000000",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Apple"
+      "review_url": "https://simpleicons.org/?q=Apple",
+      "match": "curated-alias",
+      "matched_by": "apple"
     }
   },
   {
@@ -12282,9 +12294,15 @@
     "icon": {
       "id": "simple-icons-basecamp",
       "path": "icons/simple-icons/basecamp.svg",
+      "title": "Basecamp",
+      "simple_icon_slug": "basecamp",
+      "simple_icon_hex": "1D2D35",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Basecamp"
+      "review_url": "https://simpleicons.org/?q=Basecamp",
+      "match": "exact-name-or-slug",
+      "matched_by": "basecamp"
     }
   },
   {
@@ -15521,9 +15539,15 @@
     "icon": {
       "id": "simple-icons-bitly",
       "path": "icons/simple-icons/bitly.svg",
+      "title": "Bitly",
+      "simple_icon_slug": "bitly",
+      "simple_icon_hex": "EE6123",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Bitly"
+      "review_url": "https://simpleicons.org/?q=Bitly",
+      "match": "exact-name-or-slug",
+      "matched_by": "bitly"
     }
   },
   {
@@ -15666,9 +15690,15 @@
     "icon": {
       "id": "simple-icons-blogger",
       "path": "icons/simple-icons/blogger.svg",
+      "title": "Blogger",
+      "simple_icon_slug": "blogger",
+      "simple_icon_hex": "FF5722",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Blogger"
+      "review_url": "https://simpleicons.org/?q=Blogger",
+      "match": "exact-name-or-slug",
+      "matched_by": "blogger"
     }
   },
   {
@@ -16474,9 +16504,15 @@
     "icon": {
       "id": "simple-icons-box",
       "path": "icons/simple-icons/box.svg",
+      "title": "Box",
+      "simple_icon_slug": "box",
+      "simple_icon_hex": "0061D5",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Box"
+      "review_url": "https://simpleicons.org/?q=Box",
+      "match": "exact-name-or-slug",
+      "matched_by": "box"
     }
   },
   {
@@ -18006,9 +18042,15 @@
     "icon": {
       "id": "simple-icons-brevo",
       "path": "icons/simple-icons/brevo.svg",
+      "title": "Brevo",
+      "simple_icon_slug": "brevo",
+      "simple_icon_hex": "0B996E",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Brevo"
+      "review_url": "https://simpleicons.org/?q=Brevo",
+      "match": "exact-name-or-slug",
+      "matched_by": "brevo"
     }
   },
   {
@@ -18357,9 +18399,15 @@
     "icon": {
       "id": "simple-icons-brex",
       "path": "icons/simple-icons/brex.svg",
+      "title": "Brex",
+      "simple_icon_slug": "brex",
+      "simple_icon_hex": "212121",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Brex"
+      "review_url": "https://simpleicons.org/?q=Brex",
+      "match": "exact-name-or-slug",
+      "matched_by": "brex"
     }
   },
   {
@@ -18750,9 +18798,15 @@
     "icon": {
       "id": "simple-icons-buildkite",
       "path": "icons/simple-icons/buildkite.svg",
+      "title": "Buildkite",
+      "simple_icon_slug": "buildkite",
+      "simple_icon_hex": "14CC80",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Buildkite"
+      "review_url": "https://simpleicons.org/?q=Buildkite",
+      "match": "exact-name-or-slug",
+      "matched_by": "buildkite"
     }
   },
   {
@@ -19178,9 +19232,15 @@
     "icon": {
       "id": "simple-icons-caldotcom",
       "path": "icons/simple-icons/caldotcom.svg",
+      "title": "Cal.com",
+      "simple_icon_slug": "caldotcom",
+      "simple_icon_hex": "292929",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Cal.com"
+      "review_url": "https://simpleicons.org/?q=Cal.com",
+      "match": "curated-alias",
+      "matched_by": "caldotcom"
     }
   },
   {
@@ -19468,9 +19528,15 @@
     "icon": {
       "id": "simple-icons-calendly",
       "path": "icons/simple-icons/calendly.svg",
+      "title": "Calendly",
+      "simple_icon_slug": "calendly",
+      "simple_icon_hex": "006BFF",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Calendly"
+      "review_url": "https://simpleicons.org/?q=Calendly",
+      "match": "exact-name-or-slug",
+      "matched_by": "calendly"
     }
   },
   {
@@ -20250,9 +20316,15 @@
     "icon": {
       "id": "simple-icons-campaignmonitor",
       "path": "icons/simple-icons/campaignmonitor.svg",
+      "title": "Campaign Monitor",
+      "simple_icon_slug": "campaignmonitor",
+      "simple_icon_hex": "111324",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Campaign%20Monitor"
+      "review_url": "https://simpleicons.org/?q=Campaign%20Monitor",
+      "match": "exact-name-or-slug",
+      "matched_by": "campaign-monitor"
     }
   },
   {
@@ -23359,9 +23431,15 @@
     "icon": {
       "id": "simple-icons-chatwoot",
       "path": "icons/simple-icons/chatwoot.svg",
+      "title": "Chatwoot",
+      "simple_icon_slug": "chatwoot",
+      "simple_icon_hex": "1F93FF",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Chatwoot"
+      "review_url": "https://simpleicons.org/?q=Chatwoot",
+      "match": "exact-name-or-slug",
+      "matched_by": "chatwoot"
     }
   },
   {
@@ -24523,9 +24601,15 @@
     "icon": {
       "id": "simple-icons-circleci",
       "path": "icons/simple-icons/circleci.svg",
+      "title": "CircleCI",
+      "simple_icon_slug": "circleci",
+      "simple_icon_hex": "343434",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=CircleCI"
+      "review_url": "https://simpleicons.org/?q=CircleCI",
+      "match": "exact-name-or-slug",
+      "matched_by": "circleci"
     }
   },
   {
@@ -24952,9 +25036,15 @@
     "icon": {
       "id": "simple-icons-clarifai",
       "path": "icons/simple-icons/clarifai.svg",
+      "title": "Clarifai",
+      "simple_icon_slug": "clarifai",
+      "simple_icon_hex": "1955FF",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Clarifai"
+      "review_url": "https://simpleicons.org/?q=Clarifai",
+      "match": "curated-alias",
+      "matched_by": "clarifai"
     }
   },
   {
@@ -27679,9 +27769,15 @@
     "icon": {
       "id": "simple-icons-codefresh",
       "path": "icons/simple-icons/codefresh.svg",
+      "title": "Codefresh",
+      "simple_icon_slug": "codefresh",
+      "simple_icon_hex": "08B1AB",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Codefresh"
+      "review_url": "https://simpleicons.org/?q=Codefresh",
+      "match": "exact-name-or-slug",
+      "matched_by": "codefresh"
     }
   },
   {
@@ -33716,9 +33812,15 @@
     "icon": {
       "id": "simple-icons-discord",
       "path": "icons/simple-icons/discord.svg",
+      "title": "Discord",
+      "simple_icon_slug": "discord",
+      "simple_icon_hex": "5865F2",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Discord"
+      "review_url": "https://simpleicons.org/?q=Discord",
+      "match": "exact-name-or-slug",
+      "matched_by": "discord"
     }
   },
   {
@@ -34434,9 +34536,15 @@
     "icon": {
       "id": "simple-icons-dolibarr",
       "path": "icons/simple-icons/dolibarr.svg",
+      "title": "Dolibarr",
+      "simple_icon_slug": "dolibarr",
+      "simple_icon_hex": "263C5C",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Dolibarr"
+      "review_url": "https://simpleicons.org/?q=Dolibarr",
+      "match": "exact-name-or-slug",
+      "matched_by": "dolibarr"
     }
   },
   {
@@ -35265,9 +35373,15 @@
     "icon": {
       "id": "simple-icons-dropbox",
       "path": "icons/simple-icons/dropbox.svg",
+      "title": "Dropbox",
+      "simple_icon_slug": "dropbox",
+      "simple_icon_hex": "0061FF",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Dropbox"
+      "review_url": "https://simpleicons.org/?q=Dropbox",
+      "match": "curated-alias",
+      "matched_by": "dropbox"
     }
   },
   {
@@ -36699,9 +36813,15 @@
     "icon": {
       "id": "simple-icons-ebay-finance",
       "path": "icons/simple-icons/ebay-finance.svg",
+      "title": "eBay",
+      "simple_icon_slug": "ebay",
+      "simple_icon_hex": "E53238",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=eBay"
+      "review_url": "https://simpleicons.org/?q=eBay",
+      "match": "curated-alias",
+      "matched_by": "ebay"
     }
   },
   {
@@ -36834,9 +36954,15 @@
     "icon": {
       "id": "simple-icons-ebay-fulfillment",
       "path": "icons/simple-icons/ebay-fulfillment.svg",
+      "title": "eBay",
+      "simple_icon_slug": "ebay",
+      "simple_icon_hex": "E53238",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=eBay"
+      "review_url": "https://simpleicons.org/?q=eBay",
+      "match": "curated-alias",
+      "matched_by": "ebay"
     }
   },
   {
@@ -40289,9 +40415,15 @@
     "icon": {
       "id": "simple-icons-faker",
       "path": "icons/simple-icons/faker.svg",
+      "title": "Faker",
+      "simple_icon_slug": "faker",
+      "simple_icon_hex": "779B2E",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Faker"
+      "review_url": "https://simpleicons.org/?q=Faker",
+      "match": "exact-name-or-slug",
+      "matched_by": "faker"
     }
   },
   {
@@ -40516,9 +40648,15 @@
     "icon": {
       "id": "simple-icons-fastly",
       "path": "icons/simple-icons/fastly.svg",
+      "title": "Fastly",
+      "simple_icon_slug": "fastly",
+      "simple_icon_hex": "FF282D",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Fastly"
+      "review_url": "https://simpleicons.org/?q=Fastly",
+      "match": "exact-name-or-slug",
+      "matched_by": "fastly"
     }
   },
   {
@@ -40757,9 +40895,15 @@
     "icon": {
       "id": "simple-icons-fillout",
       "path": "icons/simple-icons/fillout.svg",
+      "title": "Fillout",
+      "simple_icon_slug": "fillout",
+      "simple_icon_hex": "FFC738",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Fillout"
+      "review_url": "https://simpleicons.org/?q=Fillout",
+      "match": "exact-name-or-slug",
+      "matched_by": "fillout"
     }
   },
   {
@@ -46127,9 +46271,15 @@
     "icon": {
       "id": "simple-icons-formbricks",
       "path": "icons/simple-icons/formbricks.svg",
+      "title": "Formbricks",
+      "simple_icon_slug": "formbricks",
+      "simple_icon_hex": "00C4B8",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Formbricks"
+      "review_url": "https://simpleicons.org/?q=Formbricks",
+      "match": "exact-name-or-slug",
+      "matched_by": "formbricks"
     }
   },
   {
@@ -53564,9 +53714,15 @@
     "icon": {
       "id": "simple-icons-giphy",
       "path": "icons/simple-icons/giphy.svg",
+      "title": "GIPHY",
+      "simple_icon_slug": "giphy",
+      "simple_icon_hex": "FF6666",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=GIPHY"
+      "review_url": "https://simpleicons.org/?q=GIPHY",
+      "match": "exact-name-or-slug",
+      "matched_by": "giphy"
     }
   },
   {
@@ -57091,9 +57247,15 @@
     "icon": {
       "id": "simple-icons-gitbook",
       "path": "icons/simple-icons/gitbook.svg",
+      "title": "GitBook",
+      "simple_icon_slug": "gitbook",
+      "simple_icon_hex": "BBDDE5",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=GitBook"
+      "review_url": "https://simpleicons.org/?q=GitBook",
+      "match": "exact-name-or-slug",
+      "matched_by": "gitbook"
     }
   },
   {
@@ -59941,9 +60103,15 @@
     "icon": {
       "id": "simple-icons-gmail",
       "path": "icons/simple-icons/gmail.svg",
+      "title": "Gmail",
+      "simple_icon_slug": "gmail",
+      "simple_icon_hex": "EA4335",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Gmail"
+      "review_url": "https://simpleicons.org/?q=Gmail",
+      "match": "exact-name-or-slug",
+      "matched_by": "gmail"
     }
   },
   {
@@ -62546,9 +62714,15 @@
     "icon": {
       "id": "simple-icons-googlecalendar",
       "path": "icons/simple-icons/googlecalendar.svg",
+      "title": "Google Calendar",
+      "simple_icon_slug": "googlecalendar",
+      "simple_icon_hex": "4285F4",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Google%20Calendar"
+      "review_url": "https://simpleicons.org/?q=Google%20Calendar",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-calendar"
     }
   },
   {
@@ -62674,9 +62848,15 @@
     "icon": {
       "id": "simple-icons-googleclassroom",
       "path": "icons/simple-icons/googleclassroom.svg",
+      "title": "Google Classroom",
+      "simple_icon_slug": "googleclassroom",
+      "simple_icon_hex": "0F9D58",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Google%20Classroom"
+      "review_url": "https://simpleicons.org/?q=Google%20Classroom",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-classroom"
     }
   },
   {
@@ -62907,9 +63087,15 @@
     "icon": {
       "id": "simple-icons-googleforms",
       "path": "icons/simple-icons/googleforms.svg",
+      "title": "Google Forms",
+      "simple_icon_slug": "googleforms",
+      "simple_icon_hex": "7248B9",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Google%20Forms"
+      "review_url": "https://simpleicons.org/?q=Google%20Forms",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-forms"
     }
   },
   {
@@ -63318,9 +63504,15 @@
     "icon": {
       "id": "simple-icons-googletasks",
       "path": "icons/simple-icons/googletasks.svg",
+      "title": "Google Tasks",
+      "simple_icon_slug": "googletasks",
+      "simple_icon_hex": "2684FC",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Google%20Tasks"
+      "review_url": "https://simpleicons.org/?q=Google%20Tasks",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-tasks"
     }
   },
   {
@@ -65896,9 +66088,15 @@
     "icon": {
       "id": "simple-icons-helpscout",
       "path": "icons/simple-icons/helpscout.svg",
+      "title": "Help Scout",
+      "simple_icon_slug": "helpscout",
+      "simple_icon_hex": "1292EE",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Help%20Scout"
+      "review_url": "https://simpleicons.org/?q=Help%20Scout",
+      "match": "exact-name-or-slug",
+      "matched_by": "help-scout"
     }
   },
   {
@@ -66480,9 +66678,15 @@
     "icon": {
       "id": "simple-icons-huggingface",
       "path": "icons/simple-icons/huggingface.svg",
+      "title": "Hugging Face",
+      "simple_icon_slug": "huggingface",
+      "simple_icon_hex": "FFD21E",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Hugging%20Face"
+      "review_url": "https://simpleicons.org/?q=Hugging%20Face",
+      "match": "curated-alias",
+      "matched_by": "huggingface"
     }
   },
   {
@@ -70413,9 +70617,15 @@
     "icon": {
       "id": "simple-icons-invoiceninja",
       "path": "icons/simple-icons/invoiceninja.svg",
+      "title": "Invoice Ninja",
+      "simple_icon_slug": "invoiceninja",
+      "simple_icon_hex": "000000",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Invoice%20Ninja"
+      "review_url": "https://simpleicons.org/?q=Invoice%20Ninja",
+      "match": "exact-name-or-slug",
+      "matched_by": "invoiceninja"
     }
   },
   {
@@ -71894,9 +72104,15 @@
     "icon": {
       "id": "simple-icons-katana",
       "path": "icons/simple-icons/katana.svg",
+      "title": "Katana",
+      "simple_icon_slug": "katana",
+      "simple_icon_hex": "000000",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Katana"
+      "review_url": "https://simpleicons.org/?q=Katana",
+      "match": "exact-name-or-slug",
+      "matched_by": "katana"
     }
   },
   {
@@ -74619,9 +74835,15 @@
     "icon": {
       "id": "simple-icons-linear",
       "path": "icons/simple-icons/linear.svg",
+      "title": "Linear",
+      "simple_icon_slug": "linear",
+      "simple_icon_hex": "5E6AD2",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Linear"
+      "review_url": "https://simpleicons.org/?q=Linear",
+      "match": "exact-name-or-slug",
+      "matched_by": "linear"
     }
   },
   {
@@ -77023,9 +77245,15 @@
     "icon": {
       "id": "simple-icons-mailtrap",
       "path": "icons/simple-icons/mailtrap.svg",
+      "title": "Mailtrap",
+      "simple_icon_slug": "mailtrap",
+      "simple_icon_hex": "22D172",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Mailtrap"
+      "review_url": "https://simpleicons.org/?q=Mailtrap",
+      "match": "exact-name-or-slug",
+      "matched_by": "mailtrap"
     }
   },
   {
@@ -79942,9 +80170,15 @@
     "icon": {
       "id": "simple-icons-mendeley",
       "path": "icons/simple-icons/mendeley.svg",
+      "title": "Mendeley",
+      "simple_icon_slug": "mendeley",
+      "simple_icon_hex": "9D1620",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Mendeley"
+      "review_url": "https://simpleicons.org/?q=Mendeley",
+      "match": "exact-name-or-slug",
+      "matched_by": "mendeley"
     }
   },
   {
@@ -82951,9 +83185,15 @@
     "icon": {
       "id": "simple-icons-miro",
       "path": "icons/simple-icons/miro.svg",
+      "title": "Miro",
+      "simple_icon_slug": "miro",
+      "simple_icon_hex": "050038",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Miro"
+      "review_url": "https://simpleicons.org/?q=Miro",
+      "match": "exact-name-or-slug",
+      "matched_by": "miro"
     }
   },
   {
@@ -107799,9 +108039,15 @@
     "icon": {
       "id": "simple-icons-pingdom",
       "path": "icons/simple-icons/pingdom.svg",
+      "title": "Pingdom",
+      "simple_icon_slug": "pingdom",
+      "simple_icon_hex": "FFF000",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Pingdom"
+      "review_url": "https://simpleicons.org/?q=Pingdom",
+      "match": "exact-name-or-slug",
+      "matched_by": "pingdom"
     }
   },
   {
@@ -109651,9 +109897,15 @@
     "icon": {
       "id": "simple-icons-matomo",
       "path": "icons/simple-icons/matomo.svg",
+      "title": "Matomo",
+      "simple_icon_slug": "matomo",
+      "simple_icon_hex": "3152A0",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Matomo"
+      "review_url": "https://simpleicons.org/?q=Matomo",
+      "match": "curated-alias",
+      "matched_by": "matomo"
     }
   },
   {
@@ -116030,9 +116282,15 @@
     "icon": {
       "id": "simple-icons-reddit",
       "path": "icons/simple-icons/reddit.svg",
+      "title": "Reddit",
+      "simple_icon_slug": "reddit",
+      "simple_icon_hex": "FF4500",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Reddit"
+      "review_url": "https://simpleicons.org/?q=Reddit",
+      "match": "exact-name-or-slug",
+      "matched_by": "reddit"
     }
   },
   {
@@ -121965,9 +122223,15 @@
     "icon": {
       "id": "simple-icons-rollbar",
       "path": "icons/simple-icons/rollbar.svg",
+      "title": "Rollbar",
+      "simple_icon_slug": "rollbar",
+      "simple_icon_hex": "3569F3",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Rollbar"
+      "review_url": "https://simpleicons.org/?q=Rollbar",
+      "match": "exact-name-or-slug",
+      "matched_by": "rollbar"
     }
   },
   {
@@ -132944,9 +133208,15 @@
     "icon": {
       "id": "simple-icons-sparkpost",
       "path": "icons/simple-icons/sparkpost.svg",
+      "title": "SparkPost",
+      "simple_icon_slug": "sparkpost",
+      "simple_icon_hex": "FA6423",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=SparkPost"
+      "review_url": "https://simpleicons.org/?q=SparkPost",
+      "match": "exact-name-or-slug",
+      "matched_by": "sparkpost"
     }
   },
   {
@@ -133677,9 +133947,15 @@
     "icon": {
       "id": "simple-icons-squarespace",
       "path": "icons/simple-icons/squarespace.svg",
+      "title": "Squarespace",
+      "simple_icon_slug": "squarespace",
+      "simple_icon_hex": "000000",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Squarespace"
+      "review_url": "https://simpleicons.org/?q=Squarespace",
+      "match": "exact-name-or-slug",
+      "matched_by": "squarespace"
     }
   },
   {
@@ -138960,9 +139236,15 @@
     "icon": {
       "id": "simple-icons-testrail",
       "path": "icons/simple-icons/testrail.svg",
+      "title": "TestRail",
+      "simple_icon_slug": "testrail",
+      "simple_icon_hex": "65C179",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=TestRail"
+      "review_url": "https://simpleicons.org/?q=TestRail",
+      "match": "exact-name-or-slug",
+      "matched_by": "testrail"
     }
   },
   {
@@ -141083,9 +141365,15 @@
     "icon": {
       "id": "simple-icons-tickettailor",
       "path": "icons/simple-icons/tickettailor.svg",
+      "title": "Ticket Tailor",
+      "simple_icon_slug": "tickettailor",
+      "simple_icon_hex": "222432",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Ticket%20Tailor"
+      "review_url": "https://simpleicons.org/?q=Ticket%20Tailor",
+      "match": "exact-name-or-slug",
+      "matched_by": "tickettailor"
     }
   },
   {
@@ -141190,9 +141478,15 @@
     "icon": {
       "id": "simple-icons-ticktick",
       "path": "icons/simple-icons/ticktick.svg",
+      "title": "TickTick",
+      "simple_icon_slug": "ticktick",
+      "simple_icon_hex": "4772FA",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=TickTick"
+      "review_url": "https://simpleicons.org/?q=TickTick",
+      "match": "exact-name-or-slug",
+      "matched_by": "ticktick"
     }
   },
   {
@@ -147828,9 +148122,15 @@
     "icon": {
       "id": "simple-icons-uservoice",
       "path": "icons/simple-icons/uservoice.svg",
+      "title": "UserVoice",
+      "simple_icon_slug": "uservoice",
+      "simple_icon_hex": "FF6720",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=UserVoice"
+      "review_url": "https://simpleicons.org/?q=UserVoice",
+      "match": "exact-name-or-slug",
+      "matched_by": "uservoice"
     }
   },
   {
@@ -149227,9 +149527,15 @@
     "icon": {
       "id": "simple-icons-vercel",
       "path": "icons/simple-icons/vercel.svg",
+      "title": "Vercel",
+      "simple_icon_slug": "vercel",
+      "simple_icon_hex": "000000",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Vercel"
+      "review_url": "https://simpleicons.org/?q=Vercel",
+      "match": "exact-name-or-slug",
+      "matched_by": "vercel"
     }
   },
   {
@@ -151510,9 +151816,15 @@
     "icon": {
       "id": "simple-icons-wheniwork",
       "path": "icons/simple-icons/wheniwork.svg",
+      "title": "When I Work",
+      "simple_icon_slug": "wheniwork",
+      "simple_icon_hex": "51A33D",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=When%20I%20Work"
+      "review_url": "https://simpleicons.org/?q=When%20I%20Work",
+      "match": "exact-name-or-slug",
+      "matched_by": "when-i-work"
     }
   },
   {
@@ -152197,9 +152509,15 @@
     "icon": {
       "id": "simple-icons-wordpress",
       "path": "icons/simple-icons/wordpress.svg",
+      "title": "WordPress",
+      "simple_icon_slug": "wordpress",
+      "simple_icon_hex": "21759B",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=WordPress"
+      "review_url": "https://simpleicons.org/?q=WordPress",
+      "match": "exact-name-or-slug",
+      "matched_by": "wordpress"
     }
   },
   {
@@ -158938,9 +159256,15 @@
     "icon": {
       "id": "simple-icons-zoho-analytics-metadata-api",
       "path": "icons/simple-icons/zoho-analytics-metadata-api.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Zoho"
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -159292,9 +159616,15 @@
     "icon": {
       "id": "simple-icons-zoho-billing",
       "path": "icons/simple-icons/zoho-billing.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Zoho"
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -165830,9 +166160,15 @@
     "icon": {
       "id": "simple-icons-zoho-books",
       "path": "icons/simple-icons/zoho-books.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Zoho"
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -165929,9 +166265,15 @@
     "icon": {
       "id": "simple-icons-zoho-campaign",
       "path": "icons/simple-icons/zoho-campaign.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Zoho"
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -166032,9 +166374,15 @@
     "icon": {
       "id": "simple-icons-zoho-desk",
       "path": "icons/simple-icons/zoho-desk.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Zoho"
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -167087,9 +167435,15 @@
     "icon": {
       "id": "simple-icons-zoho-expense",
       "path": "icons/simple-icons/zoho-expense.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Zoho"
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -167190,9 +167544,15 @@
     "icon": {
       "id": "simple-icons-zoho-inventory",
       "path": "icons/simple-icons/zoho-inventory.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Zoho"
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -167293,9 +167653,15 @@
     "icon": {
       "id": "simple-icons-zoho-invoice",
       "path": "icons/simple-icons/zoho-invoice.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
       "source": "simple-icons",
+      "license": "CC0-1.0",
       "review_status": "cc0_with_trademark_caveat",
-      "review_url": "https://simpleicons.org/?q=Zoho"
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {

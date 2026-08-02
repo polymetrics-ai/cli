@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Pennylane v2 customers, customer invoices, suppliers, supplier invoices, products, categories, transactions, and bank accounts, and writes customer/supplier/product/category mutations through the REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

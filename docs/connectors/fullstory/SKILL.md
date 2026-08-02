@@ -11,6 +11,7 @@ Reads FullStory segments, users, events, and user-scoped sessions; writes server
 
 ## Icon
 
+- id: fullstory
 - asset: icons/fullstory.svg
 - source: upstream_registry
 - review_status: upstream_seeded

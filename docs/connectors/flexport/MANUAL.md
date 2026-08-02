@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Flexport logistics, network, billing, booking, purchase order, product, document, port, and webhook-event data through the Flexport REST API; writes supported JSON create/update actions.
 
 ICON
+  id: flexport
   asset: icons/flexport.svg
   source: upstream_registry
   review_status: upstream_seeded

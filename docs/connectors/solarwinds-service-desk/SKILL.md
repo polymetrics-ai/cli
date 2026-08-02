@@ -11,6 +11,7 @@ Reads SolarWinds Service Desk incidents, problems, changes, change catalogs, rel
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

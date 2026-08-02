@@ -11,6 +11,7 @@ Reads Churnkey cancel-flow sessions and aggregated session counts through the Ch
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: google-pagespeed-insights
   asset: icons/google-pagespeed-insights.svg
   source: upstream_registry
   review_status: upstream_seeded

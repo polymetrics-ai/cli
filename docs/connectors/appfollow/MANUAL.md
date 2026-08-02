@@ -13,6 +13,7 @@ DESCRIPTION
   Reads AppFollow account users, app collections, app lists, reviews, review summaries, ratings/ratings history, ASO keywords, rankings, and version/what's-new metadata through the AppFollow REST API v2 (config-list-driven fan-out per app/collection); writes review replies/tags/notes, ASO keyword edits, and account user/app/collection management actions.
 
 ICON
+  id: appfollow
   asset: icons/appfollow.svg
   source: upstream_registry
   review_status: upstream_seeded

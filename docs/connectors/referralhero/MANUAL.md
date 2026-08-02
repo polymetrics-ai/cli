@@ -13,6 +13,7 @@ DESCRIPTION
   Reads ReferralHero lists, subscribers, referrals, rewards, coupon groups, and campaign-scoped subscriber resources, and performs approved ReferralHero API v2 mutations.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

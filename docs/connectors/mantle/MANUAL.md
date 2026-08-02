@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Mantle Core API resources through the heymantle.com REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

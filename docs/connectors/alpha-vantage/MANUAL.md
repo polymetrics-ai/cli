@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus the latest global quote for a configured stock symbol. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: alpha-vantage
   asset: icons/alpha-vantage.svg
   source: upstream_registry
   review_status: upstream_seeded

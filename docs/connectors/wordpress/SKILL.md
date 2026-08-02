@@ -11,10 +11,17 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
 
 ## Icon
 
+- id: simple-icons-wordpress
 - asset: icons/simple-icons/wordpress.svg
+- title: WordPress
+- simple_icon_slug: wordpress
+- simple_icon_hex: 21759B
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=WordPress
+- match: exact-name-or-slug
+- matched_by: wordpress
 
 ## Capabilities
 

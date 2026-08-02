@@ -11,6 +11,7 @@ Reads Ubidots devices, variables, variable values, device groups, device types, 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

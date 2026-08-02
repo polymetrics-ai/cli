@@ -11,6 +11,7 @@ Reads SharePoint/Microsoft Lists, list items, columns, and content types from a 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

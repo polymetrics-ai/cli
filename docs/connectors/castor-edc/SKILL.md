@@ -11,6 +11,7 @@ Reads Castor EDC studies, users, countries, and audit-trail events through the C
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

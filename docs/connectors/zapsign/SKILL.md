@@ -11,6 +11,7 @@ Reads and writes ZapSign documents, signers, templates, and webhooks.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

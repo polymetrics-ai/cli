@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Braze campaigns, Canvases, segments (list + per-id details/analytics-summary), catalogs, content blocks, email templates, Content Cards, email bounce/unsubscribe lists, SMS invalid-number lists, KPIs, sessions, preference centers, and scheduled broadcasts; writes user data (track/identify/merge/alias/delete), subscription-group status, catalog and catalog-item mutations, content block/email template mutations, email/SMS compliance-list mutations, preference center mutations, and live message/campaign/Canvas sends through the Braze REST API. The events (custom event names) and purchases/product_list streams are not modeled by this bundle; see docs.md Known limits.
 
 ICON
+  id: braze
   asset: icons/braze.svg
   source: upstream_registry
   review_status: upstream_seeded

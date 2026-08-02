@@ -11,6 +11,7 @@ Reads and writes EZOfficeInventory assets, inventory items, stock assets, member
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

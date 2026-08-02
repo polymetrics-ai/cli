@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Churnkey cancel-flow sessions and aggregated session counts through the Churnkey Data API, and sends usage/billing events and customer attribute updates through the Churnkey Event Tracking API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

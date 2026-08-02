@@ -11,6 +11,7 @@ Reads Drip subscribers, campaigns, broadcasts, accounts, workflows, forms, tags,
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

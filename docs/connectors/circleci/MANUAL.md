@@ -13,10 +13,17 @@ DESCRIPTION
   Reads and writes CircleCI projects, pipelines, workflows, jobs, contexts, schedules, environment variables, checkout keys, and workflow insights through the CircleCI v2 REST API.
 
 ICON
+  id: simple-icons-circleci
   asset: icons/simple-icons/circleci.svg
+  title: CircleCI
+  simple_icon_slug: circleci
+  simple_icon_hex: 343434
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=CircleCI
+  match: exact-name-or-slug
+  matched_by: circleci
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

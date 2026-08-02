@@ -13,6 +13,7 @@ DESCRIPTION
   Reads tyntec SMS messages, templates, sender IDs, and delivery reports through API list endpoints, and sends approved SMS messages through the Messaging API.
 
 ICON
+  id: tyntec
   asset: icons/tyntec.svg
   source: upstream_registry
   review_status: upstream_seeded

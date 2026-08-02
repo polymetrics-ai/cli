@@ -11,6 +11,7 @@ Reads JobNimbus CRM contacts, jobs, tasks, activities, and files through the Job
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

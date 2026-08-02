@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Deputy locations, employees, departments, timesheets, tasks, leave, rosters, webhooks, and teams, and writes department/leave/roster/webhook/team mutations, through the Deputy REST API (full refresh).
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

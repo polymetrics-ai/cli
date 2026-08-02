@@ -11,6 +11,7 @@ Reads Stigg products, plans, customers, and subscriptions through the Stigg Grap
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

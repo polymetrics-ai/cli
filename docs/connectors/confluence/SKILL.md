@@ -11,6 +11,7 @@ Reads Confluence Cloud spaces, pages, blog posts, labels, attachments, comments,
 
 ## Icon
 
+- id: confluence
 - asset: icons/confluence.svg
 - source: upstream_registry
 - review_status: upstream_seeded

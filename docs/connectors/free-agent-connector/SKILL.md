@@ -11,6 +11,7 @@ Reads FreeAgent contacts, invoices, bills, projects, and tasks through the FreeA
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -11,6 +11,7 @@ Reads broad FireHydrant REST API resources and exposes direct JSON/no-body FireH
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

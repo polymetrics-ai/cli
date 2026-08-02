@@ -13,6 +13,7 @@ DESCRIPTION
   Reads BoldSign documents, templates, teams, contacts, brands, users, contact groups, and sender identities, and writes team/contact-group/document-lifecycle/user-lifecycle mutations, through the BoldSign REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

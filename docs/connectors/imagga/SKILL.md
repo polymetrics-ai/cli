@@ -11,6 +11,7 @@ Reads Imagga account API usage and per-image tags/categories via the Imagga REST
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

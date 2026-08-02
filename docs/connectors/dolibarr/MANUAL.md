@@ -13,10 +13,17 @@ DESCRIPTION
   Reads and writes Dolibarr ERP/CRM third parties, contacts, products, customer invoices, and orders through the Dolibarr REST API.
 
 ICON
+  id: simple-icons-dolibarr
   asset: icons/simple-icons/dolibarr.svg
+  title: Dolibarr
+  simple_icon_slug: dolibarr
+  simple_icon_hex: 263C5C
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=Dolibarr
+  match: exact-name-or-slug
+  matched_by: dolibarr
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

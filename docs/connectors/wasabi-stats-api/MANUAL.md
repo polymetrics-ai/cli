@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Wasabi account and bucket storage statistics from the Wasabi Stats API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -11,6 +11,7 @@ Reads global financial data (dividends, stock splits, historical candlesticks, a
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

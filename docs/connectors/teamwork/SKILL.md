@@ -11,6 +11,7 @@ Reads Teamwork projects, people, companies, tags, time entries, tasklists, miles
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

@@ -40,6 +40,7 @@ type iconEntry struct {
 	ReviewStatus        string `json:"review_status"`
 	ReviewURL           string `json:"review_url,omitempty"`
 	License             string `json:"license,omitempty"`
+	Attribution         string `json:"attribution,omitempty"`
 	Match               string `json:"match,omitempty"`
 	MatchedBy           string `json:"matched_by,omitempty"`
 	FallbackDisposition string `json:"fallback_disposition,omitempty"`

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Pipedrive deals, persons, organizations, activities, products, users, notes, leads, saved filters, activity types, roles, webhooks, and field/reference metadata, and writes lead/note/filter/activity-type/lead-label/webhook mutations through REST API v1.
 
 ICON
+  id: pipedrive
   asset: icons/pipedrive.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads Leadfeeder accounts and their leads, visits, and custom feeds through the 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

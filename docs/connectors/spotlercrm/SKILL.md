@@ -11,6 +11,7 @@ Reads Spotler CRM contacts, accounts, opportunities, and tasks, and (via the rea
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

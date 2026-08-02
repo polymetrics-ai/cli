@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Adobe Commerce (Magento) products, orders, customers, categories, invoices, shipments, credit memos, customer groups, and store configuration through the Magento REST API, and writes product/category updates plus order cancellation.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

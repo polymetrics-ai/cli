@@ -11,10 +11,17 @@ Reads Basecamp 3 projects, people, and account activity events through the Basec
 
 ## Icon
 
+- id: simple-icons-basecamp
 - asset: icons/simple-icons/basecamp.svg
+- title: Basecamp
+- simple_icon_slug: basecamp
+- simple_icon_hex: 1D2D35
 - source: simple-icons
+- license: CC0-1.0
 - review_status: cc0_with_trademark_caveat
 - review_url: https://simpleicons.org/?q=Basecamp
+- match: exact-name-or-slug
+- matched_by: basecamp
 
 ## Capabilities
 

@@ -11,6 +11,7 @@ Reads Twelve Data time series, quotes, stocks, and forex pair reference data.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

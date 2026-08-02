@@ -11,6 +11,7 @@ Reads and writes ConfigCat feature-flag platform data: organizations, products, 
 
 ## Icon
 
+- id: configcat
 - asset: icons/configcat.svg
 - source: upstream_registry
 - review_status: upstream_seeded

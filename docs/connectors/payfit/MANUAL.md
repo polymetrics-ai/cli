@@ -13,6 +13,7 @@ DESCRIPTION
   Reads PayFit legacy /v1 resources and current company-scoped PayFit API resources; writes supported JSON customer-key mutations.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

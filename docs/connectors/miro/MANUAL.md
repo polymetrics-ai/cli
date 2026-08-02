@@ -13,10 +13,17 @@ DESCRIPTION
   Reads and writes documented Miro Platform, Enterprise, SCIM, and experimental REST API resources through the Miro Developer Platform API.
 
 ICON
+  id: simple-icons-miro
   asset: icons/simple-icons/miro.svg
+  title: Miro
+  simple_icon_slug: miro
+  simple_icon_hex: 050038
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=Miro
+  match: exact-name-or-slug
+  matched_by: miro
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

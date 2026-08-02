@@ -11,6 +11,7 @@ Reads JustCall users, call logs, SMS, contacts, and phone numbers through the Ju
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

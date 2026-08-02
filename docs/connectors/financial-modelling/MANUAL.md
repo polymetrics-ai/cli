@@ -13,6 +13,7 @@ DESCRIPTION
   Reads stock and ETF symbol lists, the stock screener, delisted companies, market indexes, S&P 500 constituents, the earnings calendar, and per-symbol company profiles, quotes, historical prices, financial statements, key metrics, and ratios from the Financial Modeling Prep REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

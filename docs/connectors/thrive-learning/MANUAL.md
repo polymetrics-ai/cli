@@ -13,6 +13,7 @@ DESCRIPTION
   Reads users, content, completions, assignments, audiences, tags, CPD records, and activity data through the Thrive Learning Public API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

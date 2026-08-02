@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Float people, projects, clients, tasks, and departments through the Float v3 REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

@@ -11,6 +11,7 @@ Reads Shutterstock media, collection, license, editorial, catalog, contributor, 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

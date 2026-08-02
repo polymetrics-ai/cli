@@ -11,6 +11,7 @@ Reads PaperSign documents, templates, and recipients through the REST API.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

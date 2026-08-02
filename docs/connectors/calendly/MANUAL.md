@@ -13,10 +13,17 @@ DESCRIPTION
   Reads Calendly scheduled events (and their invitees), event types, organization memberships, groups, routing forms and submissions, webhook subscriptions, availability schedules, activity log entries, and the current user, and manages bookings/webhooks/memberships/invitations/event types through the Calendly v2 REST API.
 
 ICON
+  id: simple-icons-calendly
   asset: icons/simple-icons/calendly.svg
+  title: Calendly
+  simple_icon_slug: calendly
+  simple_icon_hex: 006BFF
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=Calendly
+  match: exact-name-or-slug
+  matched_by: calendly
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

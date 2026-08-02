@@ -11,6 +11,7 @@ Reads Dixa conversations (and their queue, rating, and assignment projections) f
 
 ## Icon
 
+- id: dixa
 - asset: icons/dixa.svg
 - source: upstream_registry
 - review_status: upstream_seeded

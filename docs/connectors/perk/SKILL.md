@@ -11,6 +11,7 @@ Reads Perk/TravelPerk trips and invoices through read-only REST list endpoints.
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

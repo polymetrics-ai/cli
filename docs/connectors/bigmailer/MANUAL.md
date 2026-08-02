@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes BigMailer brands, account users, and brand-scoped contacts, lists, custom fields, message types, segments, senders, templates, suppression lists, and campaigns through the BigMailer REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

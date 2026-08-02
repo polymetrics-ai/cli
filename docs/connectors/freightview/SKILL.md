@@ -11,6 +11,7 @@ Reads Freightview shipments, quotes, and tracking events through the Freightview
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

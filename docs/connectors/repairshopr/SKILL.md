@@ -11,6 +11,7 @@ Reads RepairShopr customers, tickets, invoices, estimates, and assets through th
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

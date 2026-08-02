@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Breezy HR positions, hiring pipelines, per-position candidates, departments, categories, custom attribute definitions, questionnaires, and message templates; writes position create/update/state-change and candidate create/update/pipeline-stage-move mutations, through the Breezy v3 REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

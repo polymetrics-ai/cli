@@ -11,6 +11,7 @@ Reads Canny boards, posts, comments, categories, and companies through the Canny
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

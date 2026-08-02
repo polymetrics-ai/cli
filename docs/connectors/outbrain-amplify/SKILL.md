@@ -11,6 +11,7 @@ Reads Outbrain Amplify marketers, campaigns, and performance reports via the Out
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

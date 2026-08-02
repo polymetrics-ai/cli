@@ -32,6 +32,30 @@ func TestValidateConnectorDocsRejectsStaleIconMetadata(t *testing.T) {
 			want: "icon metadata",
 		},
 		{
+			name: "catalog json icon ID",
+			path: filepath.Join(dir, "catalog", "all-connectors.json"),
+			corrupt: corruptCatalogIcon("apple-search-ads", func(icon *connectors.ConnectorIcon) {
+				icon.ID = "stale-apple"
+			}),
+			want: "icon metadata",
+		},
+		{
+			name: "catalog json license attribution",
+			path: filepath.Join(dir, "catalog", "all-connectors.json"),
+			corrupt: corruptCatalogIcon("apple-search-ads", func(icon *connectors.ConnectorIcon) {
+				icon.License = "stale-license"
+			}),
+			want: "icon metadata",
+		},
+		{
+			name: "catalog json match metadata",
+			path: filepath.Join(dir, "catalog", "all-connectors.json"),
+			corrupt: corruptCatalogIcon("apple-search-ads", func(icon *connectors.ConnectorIcon) {
+				icon.MatchedBy = "stale-match"
+			}),
+			want: "icon metadata",
+		},
+		{
 			name: "catalog json missing canonical review URL",
 			path: filepath.Join(dir, "catalog", "all-connectors.json"),
 			corrupt: corruptCatalogIcon("100ms", func(icon *connectors.ConnectorIcon) {
@@ -62,8 +86,35 @@ func TestValidateConnectorDocsRejectsStaleIconMetadata(t *testing.T) {
 			name: "manual",
 			path: filepath.Join(dir, "apple-search-ads", "MANUAL.md"),
 			corrupt: replaceGeneratedMetadata(
-				"ICON\n  asset: icons/simple-icons/apple.svg\n",
-				"ICON\n  asset: icons/pm-sample.svg\n",
+				"  asset: icons/simple-icons/apple.svg\n",
+				"  asset: icons/pm-sample.svg\n",
+			),
+			want: "icon metadata",
+		},
+		{
+			name: "manual icon ID",
+			path: filepath.Join(dir, "apple-search-ads", "MANUAL.md"),
+			corrupt: replaceGeneratedMetadata(
+				"  id: simple-icons-apple\n",
+				"  id: stale-apple\n",
+			),
+			want: "icon metadata",
+		},
+		{
+			name: "manual license attribution",
+			path: filepath.Join(dir, "apple-search-ads", "MANUAL.md"),
+			corrupt: replaceGeneratedMetadata(
+				"  license: CC0-1.0\n",
+				"  license: stale-license\n",
+			),
+			want: "icon metadata",
+		},
+		{
+			name: "manual match metadata",
+			path: filepath.Join(dir, "apple-search-ads", "MANUAL.md"),
+			corrupt: replaceGeneratedMetadata(
+				"  matched_by: apple\n",
+				"  matched_by: stale-match\n",
 			),
 			want: "icon metadata",
 		},
@@ -89,8 +140,35 @@ func TestValidateConnectorDocsRejectsStaleIconMetadata(t *testing.T) {
 			name: "skill",
 			path: filepath.Join(dir, "apple-search-ads", "SKILL.md"),
 			corrupt: replaceGeneratedMetadata(
-				"## Icon\n\n- asset: icons/simple-icons/apple.svg\n",
-				"## Icon\n\n- asset: icons/pm-sample.svg\n",
+				"- asset: icons/simple-icons/apple.svg\n",
+				"- asset: icons/pm-sample.svg\n",
+			),
+			want: "icon metadata",
+		},
+		{
+			name: "skill icon ID",
+			path: filepath.Join(dir, "apple-search-ads", "SKILL.md"),
+			corrupt: replaceGeneratedMetadata(
+				"- id: simple-icons-apple\n",
+				"- id: stale-apple\n",
+			),
+			want: "icon metadata",
+		},
+		{
+			name: "skill license attribution",
+			path: filepath.Join(dir, "apple-search-ads", "SKILL.md"),
+			corrupt: replaceGeneratedMetadata(
+				"- license: CC0-1.0\n",
+				"- license: stale-license\n",
+			),
+			want: "icon metadata",
+		},
+		{
+			name: "skill match metadata",
+			path: filepath.Join(dir, "apple-search-ads", "SKILL.md"),
+			corrupt: replaceGeneratedMetadata(
+				"- matched_by: apple\n",
+				"- matched_by: stale-match\n",
 			),
 			want: "icon metadata",
 		},

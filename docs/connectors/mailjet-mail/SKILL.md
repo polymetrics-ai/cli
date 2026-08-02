@@ -11,6 +11,7 @@ Reads Mailjet contacts, contact lists, messages, campaigns, and statistics throu
 
 ## Icon
 
+- id: mailjetmail
 - asset: icons/mailjetmail.svg
 - source: upstream_registry
 - review_status: upstream_seeded

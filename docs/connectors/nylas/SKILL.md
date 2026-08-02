@@ -11,6 +11,7 @@ Reads Nylas calendars, contacts, messages, and events for a connected grant thro
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

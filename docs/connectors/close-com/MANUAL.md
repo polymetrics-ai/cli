@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Close CRM leads, contacts, opportunities, activities, users, tasks, lead/opportunity statuses, pipelines, roles, groups, and custom field definitions, and writes leads/contacts/opportunities/tasks through the Close REST API.
 
 ICON
+  id: close
   asset: icons/close.svg
   source: upstream_registry
   review_status: upstream_seeded

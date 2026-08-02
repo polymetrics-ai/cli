@@ -11,6 +11,7 @@ Reads Pipedrive deals, persons, organizations, activities, products, users, note
 
 ## Icon
 
+- id: pipedrive
 - asset: icons/pipedrive.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads users, content, completions, assignments, audiences, tags, CPD records, an
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

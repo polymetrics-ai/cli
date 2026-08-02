@@ -11,6 +11,7 @@ Reads Workable recruiting, account, employee, time tracking, time off, review, s
 
 ## Icon
 
+- id: workable
 - asset: icons/workable.svg
 - source: upstream_registry
 - review_status: upstream_seeded

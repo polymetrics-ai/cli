@@ -11,6 +11,7 @@ Reads and writes RevenueCat v2 project configuration, customer, product, offerin
 
 ## Icon
 
+- id: revenuecat
 - asset: icons/revenuecat.svg
 - source: official
 - review_status: official_verified

@@ -11,6 +11,7 @@ Reads and writes e-conomic customers, products, suppliers, accounts, invoices (b
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

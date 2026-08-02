@@ -11,6 +11,7 @@ Reads customers, suppliers, products, invoices, orders, quotes, departments, pay
 
 ## Icon
 
+- id: visma-economic
 - asset: icons/visma-economic.svg
 - source: upstream_registry
 - review_status: upstream_seeded

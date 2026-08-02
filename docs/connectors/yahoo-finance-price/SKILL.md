@@ -11,6 +11,7 @@ Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Re
 
 ## Icon
 
+- id: yahoo-finance-price
 - asset: icons/yahoo-finance-price.svg
 - source: upstream_registry
 - review_status: upstream_seeded

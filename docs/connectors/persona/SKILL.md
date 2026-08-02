@@ -11,6 +11,7 @@ Reads Persona inquiries, accounts, reports, transactions, and cases, and perform
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

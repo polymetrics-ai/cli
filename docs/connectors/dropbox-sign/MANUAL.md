@@ -13,10 +13,17 @@ DESCRIPTION
   Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and account details, and writes signature-request/template/team/account lifecycle mutations, through the Dropbox Sign REST API.
 
 ICON
+  id: simple-icons-dropbox
   asset: icons/simple-icons/dropbox.svg
+  title: Dropbox
+  simple_icon_slug: dropbox
+  simple_icon_hex: 0061FF
   source: simple-icons
+  license: CC0-1.0
   review_status: cc0_with_trademark_caveat
   review_url: https://simpleicons.org/?q=Dropbox
+  match: curated-alias
+  matched_by: dropbox
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

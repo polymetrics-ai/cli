@@ -11,6 +11,7 @@ Reads Alpaca Broker API accounts, assets, market calendar, clock, country info, 
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
