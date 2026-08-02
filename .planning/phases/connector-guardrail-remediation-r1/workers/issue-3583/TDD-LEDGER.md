@@ -35,7 +35,7 @@ Skill rules applied:
 | 2026-08-02 | GSD preflight | `scripts/gsd doctor` | pass | pass |
 | 2026-08-02 | GSD prompt | `scripts/gsd prompt execute-phase connector-guardrail-remediation-r1 --dry-run` | prompt generated | pass; `/tmp/gsd-execute-phase-3583.prompt.md` (87 lines) |
 | 2026-08-02 | GSD fallback | `scripts/gsd prompt programming-loop init --phase connector-guardrail-remediation-r1 --dry-run` | alias if available | fallback; `scripts/gsd: unknown GSD command: programming-loop` |
-| pending | Red docs validation | see below | fail before production edits | pending |
+| 2026-08-02 | Red docs validation | `rg` checks for `exactly one target connector`, `ownership guard evidence`, `foundation issue/PR|foundation PR`, and `no-mistakes.*foundation split|foundation split.*no-mistakes` across `.agents .pi .github` | fail before production edits | failed as expected: all four checks reported `RED missing ...`; command exited 1 |
 | pending | Green docs validation | issue verification grep | pass after production edits | pending |
 
 ## Planned red validation

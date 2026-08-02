@@ -39,7 +39,7 @@ make verify
 | `scripts/gsd doctor` | pass | Pre-plan |
 | `scripts/gsd prompt execute-phase connector-guardrail-remediation-r1 --dry-run` | pass | Prompt generated |
 | `scripts/gsd prompt programming-loop init --phase connector-guardrail-remediation-r1 --dry-run` | fallback | `scripts/gsd: unknown GSD command: programming-loop` |
-| red docs validation | pending | must fail before production edits |
+| red docs validation | pass (expected failure captured) | all four required grep checks missing before production edits; command exited 1 |
 | issue verification grep | pending | run after edits |
 | `git diff --check` | pending | run after edits |
 | no-mistakes scoped validation | pending | run after commit if feasible; stop on daemon error or ask-user finding |
