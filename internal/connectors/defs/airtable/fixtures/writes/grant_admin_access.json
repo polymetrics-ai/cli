@@ -3,7 +3,7 @@
     "enterprise_account_id": "enterprise_account_id_fixture",
     "users": [
       {
-        "sample": "value"
+        "id": "usr00000000000000"
       }
     ]
   },
@@ -13,7 +13,7 @@
     "body": {
       "users": [
         {
-          "sample": "value"
+          "id": "usr00000000000000"
         }
       ]
     }

@@ -1,16 +1,12 @@
 {
   "record": {
-    "dateDependencySettings": {
-      "sample": "value"
-    }
+    "description": "Updated table description"
   },
   "expect": {
     "method": "PATCH",
     "path": "/v0/meta/bases/synthetic-conformance-value/tables/synthetic-conformance-value",
     "body": {
-      "dateDependencySettings": {
-        "sample": "value"
-      }
+      "description": "Updated table description"
     }
   }
 }

@@ -1,7 +1,14 @@
 {
   "record": {
     "specification": {
-      "sample": "value"
+      "options": {
+        "filters": {
+          "dataTypes": [
+            "tableData"
+          ],
+          "recordChangeScope": "tbl00000000000000"
+        }
+      }
     },
     "notificationUrl": "https://example.invalid/airtable/webhook"
   },
@@ -10,7 +17,14 @@
     "path": "/v0/bases/synthetic-conformance-value/webhooks",
     "body": {
       "specification": {
-        "sample": "value"
+        "options": {
+          "filters": {
+            "dataTypes": [
+              "tableData"
+            ],
+            "recordChangeScope": "tbl00000000000000"
+          }
+        }
       },
       "notificationUrl": "https://example.invalid/airtable/webhook"
     }
