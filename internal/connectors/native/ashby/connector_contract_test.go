@@ -173,6 +173,105 @@ func TestCustomFieldValueCommandsArePartial(t *testing.T) {
 	}
 }
 
+func TestValidateWriteRequiresUploadHandles(t *testing.T) {
+	validator := New().(connectors.WriteValidator)
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"base_url": "https://api.ashbyhq.com"}}
+	tests := []struct {
+		name        string
+		action      string
+		handleField string
+	}{
+		{name: "resume", action: "upload_candidate_resume", handleField: "resumeHandle"},
+		{name: "file", action: "upload_candidate_file", handleField: "fileHandle"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			req := connectors.WriteRequest{Action: tt.action, Config: cfg}
+			missing := connectors.Record{"candidateId": "candidate_fixture"}
+			if err := validator.ValidateWrite(context.Background(), req, []connectors.Record{missing}); err == nil {
+				t.Fatalf("ValidateWrite(%s) without %s returned nil", tt.action, tt.handleField)
+			}
+			valid := connectors.Record{"candidateId": "candidate_fixture", tt.handleField: "handle_fixture"}
+			if err := validator.ValidateWrite(context.Background(), req, []connectors.Record{valid}); err != nil {
+				t.Fatalf("ValidateWrite(%s) with %s: %v", tt.action, tt.handleField, err)
+			}
+		})
+	}
+}
+
+func TestReadOmitsLimitWhenUndocumented(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/apiKey.info" {
+			t.Errorf("path = %q, want /apiKey.info", r.URL.Path)
+		}
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Errorf("decode body: %v", err)
+		}
+		if _, ok := body["limit"]; ok {
+			t.Errorf("body[limit] = %v, want omitted for apiKey.info", body["limit"])
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"success":true,"results":{"title":"fixture","createdAt":"2026-01-01T00:00:00Z","scopes":[]},"moreDataAvailable":false}`))
+	}))
+	defer server.Close()
+
+	var records []connectors.Record
+	err := New().Read(context.Background(), connectors.ReadRequest{
+		Stream: "api_key_info",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL, "max_pages": "1"},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+	}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(records) != 1 {
+		t.Fatalf("emitted %d records = %+v, want 1", len(records), records)
+	}
+}
+
+func TestReadDefaultsToOnePage(t *testing.T) {
+	requestCount := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/candidate.list" {
+			t.Errorf("path = %q, want /candidate.list", r.URL.Path)
+		}
+		requestCount++
+		if requestCount > 1 {
+			t.Errorf("unexpected request %d with default max_pages", requestCount)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"first","updatedAt":"2026-01-03T00:00:00Z"}],"moreDataAvailable":true,"nextCursor":"opaque-page-2"}`))
+	}))
+	defer server.Close()
+
+	var records []connectors.Record
+	err := New().Read(context.Background(), connectors.ReadRequest{
+		Stream: "candidates",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": server.URL},
+			Secrets: map[string]string{"api_key": "test_key"},
+		},
+	}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if requestCount != 1 {
+		t.Fatalf("request count = %d, want 1", requestCount)
+	}
+	if len(records) != 1 {
+		t.Fatalf("emitted %d records = %+v, want 1", len(records), records)
+	}
+}
+
 func TestReadUsesStateAsLowerBoundNotPageCursor(t *testing.T) {
 	var requestBodies []map[string]any
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

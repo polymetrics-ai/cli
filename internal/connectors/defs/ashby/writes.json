@@ -822,7 +822,8 @@
           }
         },
         "required": [
-          "candidateId"
+          "candidateId",
+          "resumeHandle"
         ],
         "additionalProperties": false
       },
@@ -849,7 +850,8 @@
           }
         },
         "required": [
-          "candidateId"
+          "candidateId",
+          "fileHandle"
         ],
         "additionalProperties": false
       },
