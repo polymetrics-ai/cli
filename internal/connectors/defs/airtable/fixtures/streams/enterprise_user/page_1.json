@@ -7,12 +7,18 @@
     "status": 200,
     "body": {
       "id": "usr_fixture_1",
+      "state": "active",
       "email": "user.fixture@example.invalid",
       "name": "Fixture User",
-      "state": "active",
+      "lastActivityTime": "2026-01-02T00:00:00.000Z",
+      "isTwoFactorAuthEnabled": true,
+      "isSsoRequired": true,
+      "isServiceAccount": false,
       "isAdmin": false,
-      "createdTime": "2026-01-01T00:00:00.000Z",
-      "lastActivityTime": "2026-01-02T00:00:00.000Z"
+      "isManaged": true,
+      "isSuperAdmin": false,
+      "licenseType": "enterprise",
+      "createdTime": "2026-01-01T00:00:00.000Z"
     }
   }
 }

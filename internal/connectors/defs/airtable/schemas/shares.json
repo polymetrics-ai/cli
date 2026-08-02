@@ -3,20 +3,22 @@
   "title": "Airtable shares record",
   "type": "object",
   "required": [
-    "id",
-    "type",
+    "shareTokenPrefix",
+    "shareId",
     "state",
+    "type",
+    "createdByUserId",
+    "isPasswordProtected",
+    "restrictedToEmailDomains",
+    "restrictedToEnterpriseMembers",
     "createdTime"
   ],
   "properties": {
-    "id": {
+    "blockInstallationId": {
       "type": "string"
     },
-    "type": {
-      "type": "string"
-    },
-    "state": {
-      "type": "string"
+    "canBeSynced": {
+      "type": "boolean"
     },
     "createdByUserId": {
       "type": "string"
@@ -25,12 +27,42 @@
       "type": "string",
       "format": "date-time"
     },
-    "url": {
+    "effectiveEmailDomainAllowList": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "isPasswordProtected": {
+      "type": "boolean"
+    },
+    "restrictedToEmailDomains": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "restrictedToEnterpriseMembers": {
+      "type": "boolean"
+    },
+    "shareId": {
+      "type": "string"
+    },
+    "shareTokenPrefix": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "viewId": {
       "type": "string"
     }
   },
   "additionalProperties": true,
   "x-primary-key": [
-    "id"
+    "shareId"
   ]
 }

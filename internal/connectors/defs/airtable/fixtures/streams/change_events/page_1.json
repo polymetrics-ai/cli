@@ -11,11 +11,36 @@
     "body": {
       "events": [
         {
-          "id": "change_events_fixture_1",
-          "createdTime": "2026-01-01T00:00:00.000Z",
-          "eventType": "fixture.event"
+          "actor": {
+            "type": "user",
+            "user": {
+              "email": "user.fixture@example.invalid",
+              "id": "usr_fixture_1",
+              "name": "Fixture User"
+            }
+          },
+          "context": {
+            "baseId": "app_fixture_1"
+          },
+          "eventTimestamp": "2026-01-01T00:00:00.000Z",
+          "id": "chg_fixture_1",
+          "objectId": "app_fixture_1",
+          "objectType": "base",
+          "origin": {
+            "ipAddress": "192.0.2.1"
+          },
+          "payload": {
+            "data": {
+              "destroyedTableIds": [
+                "tbl_fixture_1"
+              ]
+            }
+          },
+          "timestamp": "2026-01-01T00:00:00.000Z",
+          "type": "base_modified"
         }
-      ]
+      ],
+      "offset": "itr_fixture_2"
     }
   }
 }
