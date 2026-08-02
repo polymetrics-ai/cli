@@ -59,3 +59,11 @@ Red evidence is the reproduced boundary behavior from the fresh review: malforme
 Regression coverage authored before production edits adds table-driven rejection cases for each invalid semantic class and one acceptance case spanning numeric boundaries, 38-digit precision, binary base64, and a synthetic X-Ray trace header. Per the review-phase contract, the tests are run once after the complete fix round rather than between edits.
 
 Green evidence: `go test ./internal/connectors/native/amazon-sqs -count=1` passed after semantic validation was applied; all cases are local and synthetic.
+
+## 2026-08-02 decoded-empty binary follow-up
+
+Red evidence is the reproduced boundary behavior from the fresh review: a newline-only BinaryValue is raw-nonempty, but Go's strict base64 decoder ignores the newline and produces zero bytes without error, so `DryRunWrite` accepts an effectively empty provider value.
+
+Regression coverage authored before production edits adds a table-driven newline-only BinaryValue rejection case at the public dry-run boundary. Per the review-phase contract, the focused package test runs once after the complete fix round.
+
+Green evidence: `go test ./internal/connectors/native/amazon-sqs -count=1` passed after the decoded-byte invariant was enforced; all inputs and endpoints remain local and synthetic.

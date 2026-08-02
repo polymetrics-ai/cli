@@ -113,3 +113,11 @@ Implementation steps:
 - `scripts/gsd doctor` passed; the required `scripts/gsd prompt programming-loop init --phase issue-3134-amazon-sqs-parity-wave04-r1 --dry-run` remains unavailable as `unknown GSD command: programming-loop`, so the manual GSD/TDD fallback continues here.
 - Required skills loaded: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-testing`, `golang-safety`, `golang-security`, `golang-error-handling`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`.
 - Execution decision: `local_critical_path`; the single validator and its focused tests share one SQS-owned package in this isolated review phase.
+
+## 2026-08-02 decoded-empty binary follow-up
+
+- Reproduced the SQS-local gap before production edits: Go's strict standard-base64 decoder still ignores CR/LF, so a raw nonempty newline-only BinaryValue decodes successfully to zero bytes and reaches preview.
+- Root cause is the decoded-value invariant at the shared native SQS binary-attribute boundary, not an individual caller or serializer.
+- `scripts/gsd doctor` passed; the required `scripts/gsd prompt programming-loop init --phase issue-3134-amazon-sqs-parity-wave04-r1 --dry-run` remains unavailable as `unknown GSD command: programming-loop`, so the manual GSD/TDD fallback continues here.
+- Required skills loaded: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-testing`, `golang-safety`, `golang-security`, `golang-error-handling`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`.
+- Execution decision: `local_critical_path`; this assigned review fix is one validator plus its collocated regression case, and subagent delegation is not authorized for this turn.

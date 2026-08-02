@@ -83,8 +83,12 @@ func validateSQSNumberAttributeValue(value string) error {
 
 func validateSQSBinaryAttributeValue(value string) error {
 	decoder := base64.NewDecoder(base64.StdEncoding.Strict(), strings.NewReader(value))
-	if _, err := io.Copy(io.Discard, decoder); err != nil {
+	decodedBytes, err := io.Copy(io.Discard, decoder)
+	if err != nil {
 		return errors.New("binary_value must use standard base64 encoding")
+	}
+	if decodedBytes == 0 {
+		return errors.New("binary_value must decode to at least one byte")
 	}
 	return nil
 }

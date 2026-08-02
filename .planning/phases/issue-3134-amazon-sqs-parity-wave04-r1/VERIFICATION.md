@@ -46,3 +46,9 @@ Forward corrective commit evidence:
 - [x] `go test ./internal/connectors/native/amazon-sqs -count=1`
 - Focused coverage validates SQS Number syntax/precision/range, BinaryValue standard base64 encoding, and AWSTraceHeader X-Ray shape before preview.
 - No full repository, lint, push, PR, CI, live AWS, or credentialed connector phase was run.
+
+## 2026-08-02 decoded-empty binary verification
+
+- [x] `go test ./internal/connectors/native/amazon-sqs -count=1`
+- Focused coverage rejects newline-only standard-base64 input that decodes to zero bytes before preview while preserving valid nonempty binary attributes.
+- No full repository, lint, push, PR, CI, live AWS, or credentialed connector phase was run.
