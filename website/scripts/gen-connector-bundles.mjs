@@ -19,7 +19,6 @@ import { mapCLISurface } from './lib/cli-surface.mjs';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFS_ROOT = resolve(__dirname, '../../internal/connectors/defs');
 const ICON_DATA = resolve(__dirname, '../../internal/connectors/icon_data.json');
-const ICON_OVERRIDES = resolve(__dirname, '../data/icon_overrides.json');
 const ICON_SOURCE_ROOT = resolve(__dirname, '../../docs/connectors');
 const ICON_PUBLIC_ROOT = resolve(__dirname, '../public/connectors');
 const OUT = resolve(__dirname, '../data/connectors.generated.json');
@@ -38,10 +37,6 @@ function readMD(filePath) {
   } catch {
     return '';
   }
-}
-
-function stripPrefix(name) {
-  return String(name || '').replace(/^(source|destination)-/, '');
 }
 
 function trim(value) {
@@ -76,19 +71,17 @@ function readSchema(base, schemaPath) {
 
 const validIconPath = (path) => /^icons\/(?:[A-Za-z0-9._-]+\/)?[A-Za-z0-9._-]+\.svg$/.test(path);
 const iconRaw = readJSON(ICON_DATA) ?? [];
-const iconOverrideRaw = readJSON(ICON_OVERRIDES) ?? [];
 const iconByConnector = new Map();
 for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
-  if (!icon?.connector) continue;
-  iconByConnector.set(icon.connector, icon);
-  iconByConnector.set(stripPrefix(icon.connector), icon);
-}
-
-const iconOverrideByConnector = new Map();
-for (const icon of Array.isArray(iconOverrideRaw) ? iconOverrideRaw : []) {
-  if (!icon?.connector) continue;
-  iconOverrideByConnector.set(icon.connector, icon);
-  iconOverrideByConnector.set(stripPrefix(icon.connector), icon);
+  const connector = trim(icon?.connector);
+  if (!connector) continue;
+  if (/^(source|destination)-/.test(connector)) {
+    throw new Error(`Connector icon registry key must be bare: ${connector}`);
+  }
+  if (iconByConnector.has(connector)) {
+    throw new Error(`Duplicate connector icon registry key: ${connector}`);
+  }
+  iconByConnector.set(connector, icon);
 }
 
 const copiedIconPaths = new Set();
@@ -129,34 +122,11 @@ function syncConnectorIcons(paths) {
   }
 }
 
-function mapIcon(slug, metadata) {
-  const candidates = [
-    slug,
-    metadata.name,
-    stripPrefix(metadata.name),
-    `source-${slug}`,
-    `destination-${slug}`,
-  ].filter(Boolean);
-
-  const override = candidates.map((candidate) => iconOverrideByConnector.get(candidate)).find(Boolean);
-  if (override) {
-    const path = trim(override.path);
-    if (!validIconPath(path)) {
-      throw new Error(`Invalid connector icon override path for ${slug}: ${path}`);
-    }
-
-    return {
-      id: trim(override.id),
-      path,
-      publicPath: `/connectors/${path}`,
-      source: trim(override.source),
-      reviewStatus: trim(override.review_status),
-      reviewUrl: trim(override.review_url),
-    };
+function mapIcon(slug) {
+  const icon = iconByConnector.get(slug);
+  if (!icon) {
+    throw new Error(`Missing canonical connector icon registry entry for ${slug}`);
   }
-
-  const icon = candidates.map((candidate) => iconByConnector.get(candidate)).find(Boolean);
-  if (!icon) return null;
 
   const path = trim(icon.path);
   if (!validIconPath(path)) {
@@ -186,9 +156,12 @@ for (const dirName of entries) {
   const metadata = readJSON(join(base, 'metadata.json'));
   if (!metadata) continue;
 
-  const slug = stripPrefix(metadata.name || dirName);
+  const slug = trim(metadata.name || dirName);
   if (!slug) {
     throw new Error(`Connector bundle has empty name: ${dirName}`);
+  }
+  if (/^(source|destination)-/.test(slug)) {
+    throw new Error(`Connector bundle must use a bare name: ${slug}`);
   }
   
   const streamsData = readJSON(join(base, 'streams.json'));
@@ -247,7 +220,7 @@ for (const dirName of entries) {
     write_actions: writeActions,
     cli_surface: cliSurface,
     docs_md: docsMd,
-    icon: mapIcon(slug, metadata),
+    icon: mapIcon(slug),
   });
 }
 

@@ -1,0 +1,55 @@
+{
+  "issue": 3595,
+  "branch": "fix/3595-icon-registry-single-source",
+  "base": "fix/3579-connector-path-ownership-guardrails",
+  "decision_key": "icon-registry-single-source-bare-identifiers-20260802",
+  "gsd": {
+    "doctor": "pass",
+    "programming_loop_probe": "scripts/gsd prompt programming-loop init --phase connector-guardrail-remediation-r1/workers/issue-3595 --dry-run",
+    "programming_loop_probe_result": "failed: unknown GSD command: programming-loop",
+    "fallback": "manual GSD via .pi/prompts/pm-gsd-loop.md"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "planning",
+      "decision": "local_critical_path",
+      "reason": "User prohibited subagents; isolated worker worktree owns issue #3595 write scope."
+    },
+    {
+      "cycle": "tdd-red",
+      "decision": "local_critical_path",
+      "reason": "Focused red tests added and run inline in this isolated worktree."
+    },
+    {
+      "cycle": "implementation",
+      "decision": "local_critical_path",
+      "reason": "Single-source icon registry implementation changed shared foundation files serially to avoid collisions."
+    },
+    {
+      "cycle": "verification",
+      "decision": "local_critical_path",
+      "reason": "Focused and broad local gates were run inline; no runtime-backed credentialed checks were used."
+    }
+  ],
+  "verificationPassed": true,
+  "verification": [
+    "go test ./internal/connectors ./cmd/iconregistrygen",
+    "go test ./internal/connectors ./internal/connectors/boundary ./cmd/iconregistrygen ./cmd/connectorgen",
+    "node --test website/scripts/icon-registry.test.mjs",
+    "node --check website/scripts/gen-connector-bundles.mjs",
+    "node --check website/scripts/fetch-simple-icons.mjs",
+    "go test ./internal/cli ./cmd/pm",
+    "go vet ./...",
+    "go test ./...",
+    "go build ./cmd/pm",
+    "make connector-boundary",
+    "make verify"
+  ],
+  "safety": {
+    "secrets": "not requested or used",
+    "credentialed_connector_checks": "not run",
+    "new_dependencies": "none",
+    "reverse_etl": "make verify smoke only used local sample/outbox approval flow; no external reverse ETL",
+    "parent_pr_merge": "not performed"
+  }
+}

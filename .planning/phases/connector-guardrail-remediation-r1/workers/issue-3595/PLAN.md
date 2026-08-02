@@ -36,6 +36,7 @@ Migrate connector icon mapping to one canonical bare-identifier registry. `inter
 - deletion of `website/data/icon_overrides.json`
 - canonical source assets under `docs/connectors/icons/**`
 - focused tests for Go runtime, registry generation, website generation/fetching, and ownership consumers
+- `internal/cli/connector_docs.go` narrow docs-generator copy fix required so nested canonical `icons/simple-icons/**` assets are included in generated connector docs and `pm docs validate` remains meaningful
 - authoritative docs under `docs/architecture/**`, `docs/migration/**`, and this worker artifact directory
 
 No direct PR #3590 R5/R6 response is in scope. PR #3590 remains parked until this foundation lands, then it is reconciled and freshly validated under native-Codex `gpt-5.6-sol` at `xhigh`.

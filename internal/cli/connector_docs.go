@@ -205,22 +205,29 @@ func copyConnectorIconAssets(connectorsDir string) error {
 	if samePath(src, dst) {
 		return nil
 	}
-	entries, err := os.ReadDir(src)
-	if err != nil {
-		return fmt.Errorf("read connector icon assets from %s: %w", src, err)
-	}
 	if err := os.MkdirAll(dst, 0o755); err != nil {
 		return fmt.Errorf("create connector icons dir: %w", err)
 	}
-	for _, entry := range entries {
+	return filepath.WalkDir(src, func(path string, entry os.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".svg") {
-			continue
+			return nil
 		}
-		if err := copyFile(filepath.Join(src, entry.Name()), filepath.Join(dst, entry.Name())); err != nil {
-			return err
+		rel, err := filepath.Rel(src, path)
+		if err != nil {
+			return fmt.Errorf("resolve connector icon %s: %w", path, err)
 		}
-	}
-	return nil
+		if strings.HasPrefix(filepath.ToSlash(rel), "../") {
+			return fmt.Errorf("connector icon %s escapes icon source root", path)
+		}
+		target := filepath.Join(dst, rel)
+		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
+			return fmt.Errorf("create connector icon dir %s: %w", filepath.Dir(target), err)
+		}
+		return copyFile(path, target)
+	})
 }
 
 func connectorIconSourceDir(connectorsDir string) (string, error) {

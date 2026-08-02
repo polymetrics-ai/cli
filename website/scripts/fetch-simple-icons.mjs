@@ -1,16 +1,17 @@
-// Fetches vetted Simple Icons SVGs listed in website/data/icon_overrides.json.
+// Fetches vetted Simple Icons SVGs listed in the canonical connector icon registry.
 // Run: node scripts/fetch-simple-icons.mjs
 //
-// The override list is intentionally curated. Do not infer icons from arbitrary
-// docs hosts such as GitHub, ReadMe, or Apiary: that produces false brand matches.
+// The Simple Icons list is intentionally curated in internal/connectors/icon_data.json.
+// Do not infer icons from arbitrary docs hosts such as GitHub, ReadMe, or Apiary:
+// that produces false brand matches.
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OVERRIDES = resolve(__dirname, '../data/icon_overrides.json');
-const PUBLIC_CONNECTORS = resolve(__dirname, '../public/connectors');
+const ICON_DATA = resolve(__dirname, '../../internal/connectors/icon_data.json');
+const DOCS_CONNECTORS = resolve(__dirname, '../../docs/connectors');
 const SIMPLE_ICON_CDN = 'https://cdn.simpleicons.org';
 
 function fail(message) {
@@ -31,30 +32,47 @@ function tintSvg(svg, hex) {
   return clean.replace('<svg ', `<svg fill="#${color.toUpperCase()}" `);
 }
 
-const overrides = JSON.parse(readFileSync(OVERRIDES, 'utf8'));
-if (!Array.isArray(overrides)) fail('icon_overrides.json must be an array');
+const registry = JSON.parse(readFileSync(ICON_DATA, 'utf8'));
+if (!Array.isArray(registry)) fail('canonical icon registry must be an array');
 
-let written = 0;
-for (const icon of overrides) {
+const seenConnectors = new Set();
+const seenPaths = new Set();
+const simpleIcons = [];
+for (const icon of registry) {
+  const connector = String(icon.connector || '').trim();
   const slug = String(icon.simple_icon_slug || '').trim();
   const path = String(icon.path || '').trim();
-  if (!slug || !/^[A-Za-z0-9._-]+$/.test(slug)) fail(`invalid simple_icon_slug: ${slug}`);
-  if (!validIconPath(path)) fail(`invalid icon path for ${icon.connector}: ${path}`);
+  if (!connector || /^(source|destination)-/.test(connector)) {
+    fail(`invalid connector key: ${connector}`);
+  }
+  if (seenConnectors.has(connector)) {
+    fail(`duplicate connector key: ${connector}`);
+  }
+  seenConnectors.add(connector);
+  if (!slug && icon.source !== 'simple-icons') continue;
+  if (!slug || !/^[A-Za-z0-9._-]+$/.test(slug)) fail(`invalid simple_icon_slug for ${connector}: ${slug}`);
+  if (!validIconPath(path)) fail(`invalid Simple Icons path for ${connector}: ${path}`);
+  if (seenPaths.has(path)) fail(`duplicate Simple Icons path: ${path}`);
+  seenPaths.add(path);
+  simpleIcons.push({ connector, slug, path, hex: icon.simple_icon_hex });
+}
 
-  const response = await fetch(`${SIMPLE_ICON_CDN}/${slug}`);
+let written = 0;
+for (const icon of simpleIcons) {
+  const response = await fetch(`${SIMPLE_ICON_CDN}/${icon.slug}`);
   if (!response.ok) {
-    fail(`could not fetch ${slug}: HTTP ${response.status}`);
+    fail(`could not fetch ${icon.slug}: HTTP ${response.status}`);
   }
 
   const svg = await response.text();
   if (!svg.trim().startsWith('<svg') || /<script/i.test(svg)) {
-    fail(`unexpected SVG payload for ${slug}`);
+    fail(`unexpected SVG payload for ${icon.slug}`);
   }
 
-  const out = resolve(PUBLIC_CONNECTORS, path);
+  const out = resolve(DOCS_CONNECTORS, icon.path);
   mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, tintSvg(svg, icon.simple_icon_hex), 'utf8');
+  writeFileSync(out, tintSvg(svg, icon.hex), 'utf8');
   written += 1;
 }
 
-console.log(`Fetched ${written} Simple Icons SVGs.`);
+console.log(`Fetched ${written} Simple Icons SVGs into docs/connectors/icons.`);

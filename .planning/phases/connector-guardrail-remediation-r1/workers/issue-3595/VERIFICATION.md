@@ -35,4 +35,15 @@ If a gate is not applicable or blocked by environment, record the exact reason a
 
 - `scripts/gsd doctor`: pass in `/Users/karthiksivadas/.treehouse/cli-83d592/5/worker-3595-icon-registry`.
 - `scripts/gsd prompt programming-loop init --phase connector-guardrail-remediation-r1/workers/issue-3595 --dry-run`: failed with `unknown GSD command: programming-loop`; manual GSD fallback uses `.pi/prompts/pm-gsd-loop.md` and must be recorded in PR evidence.
-- Pre-edit audit/proof commands completed without credentialed checks; production red tests pending next step.
+- Pre-edit audit/proof commands completed without credentialed checks.
+- RED `go test ./internal/connectors ./cmd/iconregistrygen`: failed before implementation on missing exact bare lookup/ownership/generator-collision support.
+- RED `node --test website/scripts/icon-registry.test.mjs`: failed before implementation on prefixed registry keys, website override authority, and website script prefix handling.
+- GREEN `go test ./internal/connectors ./cmd/iconregistrygen`: pass.
+- GREEN `go test ./internal/connectors ./internal/connectors/boundary ./cmd/iconregistrygen ./cmd/connectorgen`: pass.
+- GREEN `node --test website/scripts/icon-registry.test.mjs`; `node --check website/scripts/gen-connector-bundles.mjs`; `node --check website/scripts/fetch-simple-icons.mjs`: pass.
+- GREEN `go test ./internal/cli ./cmd/pm`: pass (`internal/cli` took 365.247s).
+- GREEN `go vet ./...`: pass.
+- GREEN `go test ./...`: pass.
+- GREEN `go build ./cmd/pm`: pass.
+- GREEN `make connector-boundary`: clean boundary report.
+- GREEN `make verify`: pass, including docs validation, smoke, lint, connectorgen validate, connector boundary, and Homebrew notification checks.
