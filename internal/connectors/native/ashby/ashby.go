@@ -32,8 +32,8 @@ const (
 	ashbyDefaultMaxPages = 1
 	ashbyMaxPageSize     = 100
 	ashbyUserAgent       = "polymetrics-go-cli"
-	// ashbyAPIVersion is sent in the Accept header per Ashby's docs
-	// (Accept: application/json; version=1).
+	// ashbyAccept is sent per Ashby's documented API version header
+	// shape (Accept: application/json; version=1).
 	ashbyAccept = "application/json; version=1"
 )
 

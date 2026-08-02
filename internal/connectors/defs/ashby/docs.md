@@ -8,7 +8,7 @@ Coverage summary:
 
 - REST operations in source: 185
 - OpenAPI webhook events in source: 27
-- Implemented ETL/changefeed streams: 72
+- Implemented ETL streams: 72
 - Implemented bounded direct reads/search/file metadata operations: 7
 - Implemented reverse-ETL write actions: 101
 - Reverse-ETL CLI commands with scalar flags: 91; partial nested-object flag surfaces: 10

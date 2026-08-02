@@ -249,7 +249,6 @@ ETL STREAMS
     fields: createdAt(), endTime(), extraData(), feedbackLink(), hasSubmittedFeedback(), id(), interview(), interviewId(), interviewScheduleId(), interviewerCalendarEventId(), interviewerUserIds(), interviewers(), location(), meetingLink(), notetakerTranscriptId(), startTime(), updatedAt()
   interview_briefing_info:
     primary key: id
-    cursor: candidate
     fields: application(), applicationId(), candidate(), feedbackFormDefinition(), feedbackFormDefinitionId(), hasSubmittedFeedback(), id(), interview(), interviewId(), interviewStageId(), interviewers(), job()
   interview_info:
     primary key: id
@@ -268,7 +267,6 @@ ETL STREAMS
     fields: formDefinition(), id(), isArchived(), surveyType(), title()
   survey_request_list:
     primary key: id
-    cursor: candidateId
     fields: applicationId(), candidateId(), id(), surveyFormDefinitionId(), surveyUrl()
   survey_submission_list:
     primary key: id
