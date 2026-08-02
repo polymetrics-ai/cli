@@ -958,6 +958,7 @@ func TestDryRunRejectsInvalidMessageAttributes(t *testing.T) {
 		{name: "number below range", field: "message_attributes", values: map[string]any{"quantity": map[string]any{"data_type": "Number", "string_value": "9e-129"}}, want: "between 1e-128 and 1e126"},
 		{name: "number above range", field: "message_attributes", values: map[string]any{"quantity": map[string]any{"data_type": "Number", "string_value": "1.1e126"}}, want: "between 1e-128 and 1e126"},
 		{name: "malformed binary base64", field: "message_attributes", values: map[string]any{"payload": map[string]any{"data_type": "Binary.fixture", "binary_value": "not-base64!"}}, want: "standard base64"},
+		{name: "empty decoded binary", field: "message_attributes", values: map[string]any{"payload": map[string]any{"data_type": "Binary.fixture", "binary_value": "\n"}}, want: "decode to at least one byte"},
 		{name: "unsupported system name", field: "message_system_attributes", values: map[string]any{"trace": "value"}, want: "only supports AWSTraceHeader"},
 		{name: "invalid system type", field: "message_system_attributes", values: map[string]any{"AWSTraceHeader": map[string]any{"data_type": "String.custom", "string_value": "value"}}, want: "must use data_type String"},
 		{name: "malformed trace header", field: "message_system_attributes", values: map[string]any{"AWSTraceHeader": "value"}, want: "valid AWS X-Ray trace header"},
