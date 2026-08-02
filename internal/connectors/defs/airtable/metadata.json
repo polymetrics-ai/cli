@@ -18,6 +18,6 @@
   },
   "risk": {
     "read": "external Airtable API reads for base, table, record, comment, webhook, SCIM detail, collaborator, enterprise, audit, eDiscovery, and change-event metadata",
-    "write": "typed Airtable API mutations for single records, schema fields, comments, webhooks, selected admin actions, and attachment upload; destructive/admin actions require plan, preview, explicit approval, and execute while non-empty array batch operations remain blocked"
+    "write": "typed Airtable API mutations for single records, schema fields, comments, webhooks, and selected admin actions; destructive/admin actions require plan, preview, explicit approval, and execute while non-empty arrays and unbounded attachment uploads remain blocked"
   }
 }

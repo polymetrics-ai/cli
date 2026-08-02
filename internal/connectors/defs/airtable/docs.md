@@ -71,7 +71,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `record`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ config.record_id }}` -> `.`.
 
-- `comments`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ fanout.id }}/comments` -> `comments`; fan-out.
+- `comments`: GET `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ config.record_id }}/comments` -> `comments`; exact per-record read; `record_id` is required and stamped onto each emitted comment.
 
 ## Direct read
 
@@ -79,7 +79,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 ## Write actions & risks
 
-45 fixture-backed write actions cover supportable JSON/no-body mutations whose closed schemas are enforceable by the current runtime. Every write must use reverse ETL plan -> preview -> explicit approval -> execute. DELETE actions treat 404 as missing-ok idempotent success where supported; DELETE/PUT/revoke/remove/logout actions require destructive confirmation.
+44 fixture-backed write actions cover supportable JSON/no-body mutations whose closed schemas are enforceable by the current runtime. Every write must use reverse ETL plan -> preview -> explicit approval -> execute. DELETE actions treat 404 as missing-ok idempotent success where supported; DELETE/PUT/revoke/remove/logout actions require destructive confirmation.
 
 - `delete_scim_group`: DELETE `/scim/v2/Groups/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.
 
@@ -155,8 +155,6 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `update_workspace_restrictions`: POST `/v0/meta/workspaces/{{ record.workspace_id }}/updateRestrictions`; kind `update`; body `json`; path fields `workspace_id`; required `workspace_id`.
 
-- `upload_attachment`: POST `/v0/{{ config.base_id }}/{{ record.record_id }}/{{ record.attachment_field_id_or_name }}/uploadAttachment`; kind `custom`; body `json`; path fields `record_id, attachment_field_id_or_name`; required `record_id, attachment_field_id_or_name, contentType, filename, file`.
-
 - `delete_record`: DELETE `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.
 
 - `update_record`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}`; kind `update`; body `json`; path fields `id`; required `id, fields`.
@@ -183,6 +181,8 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - Blocked foundation: `airtable-required-query-foundation` for enterprise user search. Airtable requires at least one documented `email[]` or `id[]` query value, so the connector does not expose an unfiltered ETL stream or raw query escape.
 
-- API-surface ledger rows: 103 total = 28 streams + 45 writes + 1 direct read + 29 blocked operations.
+- Blocked foundation: `airtable-bounded-base64-upload-foundation` for attachment upload. The current Airtable-owned definition path cannot validate base64 decoding and the official decoded-size limit before transmission, so the unbounded write action is not executable.
+
+- API-surface ledger rows: 103 total = 28 streams + 44 writes + 1 direct read + 30 blocked operations.
 
 - Certification remains fixture-only/uncertified until separately approved live-safe credentials and provider resources are supplied outside this wave.

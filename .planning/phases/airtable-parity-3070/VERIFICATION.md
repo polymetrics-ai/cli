@@ -1,6 +1,8 @@
 # Verification checklist — Airtable official API parity
 
-## Required gates
+## Prior required gates
+
+These gates passed before the review-hardening changes and are retained as historical evidence; the outer pipeline owns authoritative full-tree validation for the final tree.
 
 - [!] `go run ./cmd/connectorgen validate internal/connectors/defs/airtable` — current `connectorgen validate` treats the argument as a directory of bundle directories, so this exact single-bundle path validates `fixtures/` and `schemas/` as fake connectors and exits 1 with missing `metadata.json`. No tooling/runtime behavior was changed for this local-only connector wave.
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — `connectorgen validate: 549 connector(s) checked, 0 findings`.
@@ -21,4 +23,8 @@
 
 ## Results
 
-Implemented fixture-only Airtable parity partition: 103 official OpenAPI operations tracked as 31 stream-backed GET/read/changefeed operations, 70 typed write actions (including attachment upload), 1 HyperDB direct-read operation/CLI command, and 1 blocked Sync API CSV import with an explicit typed-runtime reason.
+Implemented fixture-only Airtable parity partition: 103 official OpenAPI operations tracked as 28 stream-backed GET/read/changefeed operations, 44 typed write actions, 1 HyperDB direct-read operation/CLI command, and 30 blocked operations. Comments use the exact official per-record endpoint, webhook replay uses the executable `limit=50`, and attachment upload remains blocked on `airtable-bounded-base64-upload-foundation` instead of exposing an unbounded write.
+
+## Review-hardening gate
+
+- [x] `go test ./internal/connectors/defs ./internal/connectors/conformance -run 'Airtable|Conformance/airtable' -count=1` — passed for both focused packages.

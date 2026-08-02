@@ -52,10 +52,10 @@ Manual-GSD fallback is limited to executing the generated prompts with Pi tools 
 
 3. **Reverse/binary mutation slice**
    - Add typed JSON write actions for supportable POST/PATCH/PUT/DELETE operations.
-   - Add `upload_attachment` as a JSON base64 attachment write with redaction and size/risk notes.
+   - Keep `upload_attachment` blocked on `airtable-bounded-base64-upload-foundation` until an Airtable-owned executor can validate base64 encoding and decoded size before transmission.
    - Mark destructive/admin deletes and destructive replacement PUTs with `confirm: "destructive"` and idempotent 404 handling where the API supports missing-resource tolerance.
-   - Target implementation partition from the audited spec: 31 executable read streams (including detail/changefeed reads), 70 executable typed write actions, 1 executable direct-read CLI operation, and 1 blocked Sync API CSV import row tied to the current body-type/runtime constraint.
-   - Leave only the Sync API CSV import blocked if the shared write runtime cannot emit `text/csv` bodies without a raw upload escape hatch.
+   - Final implementation partition from the audited spec: 28 executable read streams, 44 executable typed write actions, 1 executable direct-read CLI operation, and 30 blocked operations.
+   - Keep Sync API CSV import blocked because the shared write runtime cannot emit `text/csv` bodies without a raw upload escape hatch.
 
 4. **Direct/provider query slice**
    - Add `operations.json` + `cli_surface.json` for the HyperDB `getRecords` POST direct read, bounded by declared body schema, fixed path, redaction, and `max_bytes`.
@@ -73,9 +73,10 @@ Manual-GSD fallback is limited to executing the generated prompts with Pi tools 
 ## Final implementation state
 
 - `api_surface.json`: 103 official operations tracked exactly once.
-- Executable partition: 31 stream-backed GET/read/changefeed operations, 70 typed write actions, and 1 HyperDB direct-read CLI operation.
-- Blocked partition: 1 Sync API CSV import row blocked because the shared declarative write runtime does not expose a typed bounded `text/csv` body dialect and generic raw uploads remain disallowed.
-- Validation artifacts: `VERIFICATION.md` records the current `connectorgen validate` single-bundle path mismatch plus the passing root validation and local gates.
+- Executable partition: 28 stream-backed GET/read/changefeed operations, 44 typed write actions, and 1 HyperDB direct-read CLI operation.
+- Blocked partition: 30 operations, including Sync API CSV import and attachment upload, remain blocked on named typed runtime foundations rather than exposing unsafe or unenforceable request shapes.
+- Comments use the official exact per-record endpoint and require `record_id`; the stream no longer bulk-fans out while ignoring the narrowing flag.
+- Validation artifacts: `VERIFICATION.md` distinguishes prior full verification from the focused review-fix gate owned by this phase.
 
 ## Safety constraints
 
