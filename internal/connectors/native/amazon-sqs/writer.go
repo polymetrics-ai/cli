@@ -38,7 +38,7 @@ var sqsWriteActions = map[string]writeActionDef{
 	"add_permission":                  {name: "add_permission", method: "POST", path: "SQS.AddPermission", kind: "custom", required: []string{"label", "aws_account_ids", "actions"}, allowed: []string{"label", "aws_account_ids", "actions"}, risk: "adds an SQS queue resource policy permission statement for listed AWS account ids", queue: true, execute: buildAddPermissionForm},
 	"cancel_message_move_task":        {name: "cancel_message_move_task", method: "POST", path: "SQS.CancelMessageMoveTask", kind: "custom", required: []string{"task_handle"}, allowed: []string{"task_handle"}, redact: []string{"task_handle"}, risk: "cancels an in-flight dead-letter-queue message move task", confirm: "destructive", service: true, execute: buildCancelMessageMoveTaskForm},
 	"change_message_visibility":       {name: "change_message_visibility", method: "POST", path: "SQS.ChangeMessageVisibility", kind: "update", required: []string{"receipt_handle", "visibility_timeout"}, allowed: []string{"receipt_handle", "visibility_timeout"}, redact: []string{"receipt_handle"}, risk: "changes the visibility timeout for one in-flight message", queue: true, execute: buildChangeMessageVisibilityForm},
-	"change_message_visibility_batch": {name: "change_message_visibility_batch", method: "POST", path: "SQS.ChangeMessageVisibilityBatch", kind: "update", required: []string{"receipt_handle"}, allowed: []string{"id", "receipt_handle", "visibility_timeout"}, redact: []string{"receipt_handle"}, risk: "changes visibility timeout for up to 10 in-flight messages per SQS batch request", batch: true, queue: true, execute: buildChangeMessageVisibilityBatchEntry},
+	"change_message_visibility_batch": {name: "change_message_visibility_batch", method: "POST", path: "SQS.ChangeMessageVisibilityBatch", kind: "update", required: []string{"receipt_handle", "visibility_timeout"}, allowed: []string{"id", "receipt_handle", "visibility_timeout"}, redact: []string{"receipt_handle"}, risk: "changes visibility timeout for up to 10 in-flight messages per SQS batch request", batch: true, queue: true, execute: buildChangeMessageVisibilityBatchEntry},
 	"create_queue":                    {name: "create_queue", method: "POST", path: "SQS.CreateQueue", kind: "create", required: []string{"queue_name"}, allowed: []string{"queue_name", "attributes", "tags"}, risk: "creates an SQS queue; SQS returns an existing queue URL when name and attributes match", service: true, execute: buildCreateQueueForm},
 	"delete_message":                  {name: "delete_message", method: "POST", path: "SQS.DeleteMessage", kind: "delete", required: []string{"receipt_handle"}, allowed: []string{"receipt_handle"}, redact: []string{"receipt_handle"}, risk: "deletes one received message by receipt handle", confirm: "destructive", queue: true, execute: buildDeleteMessageForm},
 	"delete_message_batch":            {name: "delete_message_batch", method: "POST", path: "SQS.DeleteMessageBatch", kind: "delete", required: []string{"receipt_handle"}, allowed: []string{"id", "receipt_handle"}, redact: []string{"receipt_handle"}, risk: "deletes up to 10 received messages per SQS batch request", confirm: "destructive", batch: true, queue: true, execute: buildDeleteMessageBatchEntry},
@@ -594,9 +594,7 @@ func buildChangeMessageVisibilityBatchEntry(form url.Values, rec connectors.Reco
 	prefix := fmt.Sprintf("ChangeMessageVisibilityBatchRequestEntry.%d.", index)
 	form.Set(prefix+"Id", entryID(rec, index))
 	form.Set(prefix+"ReceiptHandle", stringField(rec, "receipt_handle"))
-	if !isEmptyRecordValue(rec["visibility_timeout"]) {
-		form.Set(prefix+"VisibilityTimeout", strconv.Itoa(intField(rec, "visibility_timeout", 0, 0, 43200)))
-	}
+	form.Set(prefix+"VisibilityTimeout", strconv.Itoa(intField(rec, "visibility_timeout", 0, 0, 43200)))
 	return nil
 }
 

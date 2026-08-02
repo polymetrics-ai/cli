@@ -542,6 +542,44 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 	}
 }
 
+func TestWriteChangeMessageVisibilityBatchRequiresTimeout(t *testing.T) {
+	var calls int
+	var body string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		body = r.Form.Encode()
+		if action := r.Form.Get("Action"); action != "ChangeMessageVisibilityBatch" {
+			t.Fatalf("Action = %q, want ChangeMessageVisibilityBatch", action)
+		}
+		_, _ = w.Write([]byte(`<ChangeMessageVisibilityBatchResponse><ChangeMessageVisibilityBatchResult><ChangeMessageVisibilityBatchResultEntry><Id>entry_1</Id></ChangeMessageVisibilityBatchResultEntry></ChangeMessageVisibilityBatchResult></ChangeMessageVisibilityBatchResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "change_message_visibility_batch", Config: cfg}, []connectors.Record{{"receipt_handle": "rh"}})
+	if err == nil || !strings.Contains(err.Error(), "requires field \"visibility_timeout\"") {
+		t.Fatalf("Write change_message_visibility_batch err = %v, want missing visibility_timeout", err)
+	}
+	if res.RecordsWritten != 0 || res.RecordsFailed != 1 || calls != 0 {
+		t.Fatalf("invalid write result=%+v calls=%d, want validation failure before request", res, calls)
+	}
+
+	res, err = c.Write(context.Background(), connectors.WriteRequest{Action: "change_message_visibility_batch", Config: cfg}, []connectors.Record{{"receipt_handle": "rh", "visibility_timeout": 45}})
+	if err != nil {
+		t.Fatalf("Write change_message_visibility_batch: %v", err)
+	}
+	if res.RecordsWritten != 1 || res.RecordsFailed != 0 || calls != 1 {
+		t.Fatalf("valid write result=%+v calls=%d, want one batch request", res, calls)
+	}
+	if !strings.Contains(body, "ChangeMessageVisibilityBatchRequestEntry.1.VisibilityTimeout=45") {
+		t.Fatalf("batch body %q missing required visibility timeout", body)
+	}
+}
+
 func TestWriteAllowsWhitespaceOnlyMessageBody(t *testing.T) {
 	var sentMessageBody string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -690,6 +728,12 @@ func TestValidateWriteClosedSchemas(t *testing.T) {
 			want:    "must be string",
 		},
 		{
+			name:    "change visibility batch missing timeout",
+			action:  "change_message_visibility_batch",
+			records: []connectors.Record{{"receipt_handle": "rh"}},
+			want:    "requires field \"visibility_timeout\"",
+		},
+		{
 			name:    "integer field rejects string",
 			action:  "send_message",
 			records: []connectors.Record{{"message_body": "ok", "delay_seconds": "5"}},
@@ -784,6 +828,39 @@ func TestValidateWriteClosedSchemas(t *testing.T) {
 	}
 }
 
+func TestWriteSchemaRequiresChangeVisibilityBatchTimeout(t *testing.T) {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("runtime.Caller(0) failed")
+	}
+	raw, err := os.ReadFile(filepath.Join(filepath.Dir(thisFile), "..", "..", "defs", "amazon-sqs", "writes.json"))
+	if err != nil {
+		t.Fatalf("Read writes.json: %v", err)
+	}
+	var doc struct {
+		Actions []struct {
+			Name         string `json:"name"`
+			RecordSchema struct {
+				Required []string `json:"required"`
+			} `json:"record_schema"`
+		} `json:"actions"`
+	}
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		t.Fatalf("Unmarshal writes.json: %v", err)
+	}
+	for _, action := range doc.Actions {
+		if action.Name != "change_message_visibility_batch" {
+			continue
+		}
+		want := []string{"receipt_handle", "visibility_timeout"}
+		if len(action.RecordSchema.Required) != len(want) || !hasAllStrings(action.RecordSchema.Required, want) {
+			t.Fatalf("change_message_visibility_batch required = %v, want %v", action.RecordSchema.Required, want)
+		}
+		return
+	}
+	t.Fatal("writes.json missing change_message_visibility_batch")
+}
+
 func TestWriteSchemasAllowMapOnlySetAttributesAndTags(t *testing.T) {
 	_, thisFile, _, ok := runtime.Caller(0)
 	if !ok {
@@ -863,6 +940,12 @@ func TestAmazonSQSGeneratedDocsDescribeMapOnlyWrites(t *testing.T) {
 			if !strings.Contains(text, want) {
 				t.Fatalf("%s missing %q", name, want)
 			}
+		}
+		if strings.Contains(text, "required fields: receipt_handle\n    optional fields: id, visibility_timeout") || strings.Contains(text, "required fields: receipt_handle\n  - optional fields: id, visibility_timeout") {
+			t.Fatalf("%s contains stale change_message_visibility_batch requirement", name)
+		}
+		if !strings.Contains(text, "required fields: receipt_handle, visibility_timeout") || !strings.Contains(text, "optional fields: id") {
+			t.Fatalf("%s missing change_message_visibility_batch timeout requirement", name)
 		}
 	}
 }

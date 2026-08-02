@@ -91,7 +91,8 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "receipt_handle"
+          "receipt_handle",
+          "visibility_timeout"
         ],
         "properties": {
           "id": {

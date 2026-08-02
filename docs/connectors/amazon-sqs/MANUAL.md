@@ -62,8 +62,8 @@ REVERSE ETL ACTIONS
     risk: changes the visibility timeout for one in-flight message
   change_message_visibility_batch:
     endpoint: POST SQS.ChangeMessageVisibilityBatch
-    required fields: receipt_handle
-    optional fields: id, visibility_timeout
+    required fields: receipt_handle, visibility_timeout
+    optional fields: id
     risk: changes visibility timeout for up to 10 in-flight messages per SQS batch request
   create_queue:
     endpoint: POST SQS.CreateQueue
