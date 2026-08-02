@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -155,6 +156,44 @@ func TestNativeCloudTrailReadDispatchesStreamTarget(t *testing.T) {
 	}
 	if len(gotBody) != 0 {
 		t.Fatalf("body = %#v, want empty DescribeTrails body by default", gotBody)
+	}
+}
+
+func TestNativeCloudTrailRejectsInvalidMaxPages(t *testing.T) {
+	tests := []struct {
+		name  string
+		value string
+	}{
+		{name: "malformed", value: "ten"},
+		{name: "negative", value: "-1"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			requests := 0
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				requests++
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write([]byte(`{"Channels":[{"Name":"unexpected"}]}`))
+			}))
+			defer srv.Close()
+
+			cfg := fixtureRuntimeConfig(srv.URL)
+			cfg.Config["max_pages"] = tt.value
+			c := Connector{Client: srv.Client()}
+			err := c.Read(context.Background(), connectors.ReadRequest{Stream: "list_channels", Config: cfg}, func(connectors.Record) error {
+				t.Fatal("emit called for invalid max_pages")
+				return nil
+			})
+			if err == nil {
+				t.Fatalf("Read unexpectedly accepted max_pages=%s", tt.value)
+			}
+			if !strings.Contains(err.Error(), "max_pages") {
+				t.Fatalf("Read error = %v, want max_pages validation", err)
+			}
+			if requests != 0 {
+				t.Fatalf("requests = %d, want 0", requests)
+			}
+		})
 	}
 }
 
