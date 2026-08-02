@@ -196,7 +196,6 @@ func TestOwnershipAllowsTargetDefinitionsFixturesDocsAndNarrowSharedOutputs(t *t
 			"docs/connectors/github/MANUAL.md",
 			"docs/connectors/icons/github.svg",
 			"website/public/connectors/icons/github.svg",
-			"internal/connectors/defs/defs.go",
 			"internal/connectors/hooks/hookset/hookset_gen.go",
 			"internal/connectors/native/nativeset/nativeset_gen.go",
 			"docs/connectors/README.md",
@@ -215,6 +214,75 @@ func TestOwnershipAllowsTargetDefinitionsFixturesDocsAndNarrowSharedOutputs(t *t
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected clean ownership report, got %+v", report.Findings)
 	}
+}
+
+func TestOwnershipRejectsSharedProductionConnectorGo(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"connector-scope.json": `{"api_version":"polymetrics.ai/v1","kind":"ConnectorImplementationScope","connectors":["github"]}`,
+	})
+	goPaths := []string{
+		"internal/connectors/defs/defs.go",
+		"internal/connectors/icons.go",
+		"internal/connectors/connectors.go",
+	}
+
+	report, err := ValidateOwnership(root, OwnershipOptions{
+		ScopeFile:    "connector-scope.json",
+		ChangedPaths: goPaths,
+		Now:          fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("ValidateOwnership: %v", err)
+	}
+	for _, path := range goPaths {
+		requireOwnershipFinding(t, report, RuleOwnershipSharedPath, "github", path)
+		requireOwnershipPath(t, report, path, ownershipClassSharedRuntime, "", ownershipDecisionRejected)
+	}
+}
+
+func TestOwnershipAllowsRegistryGeneratedIconAlias(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"connector-scope.json":                                 `{"api_version":"polymetrics.ai/v1","kind":"ConnectorImplementationScope","connectors":["apify-dataset"]}`,
+		"internal/connectors/defs/apify-dataset/metadata.json": `{"name":"apify-dataset","display_name":"Apify Dataset","integration_type":"api"}`,
+		"internal/connectors/icon_data.json":                   `[{"connector":"source-apify-dataset","id":"apify","path":"icons/apify.svg"}]`,
+	})
+
+	report, err := ValidateOwnership(root, OwnershipOptions{
+		ScopeFile: "connector-scope.json",
+		ChangedPaths: []string{
+			"docs/connectors/icons/apify.svg",
+			"website/public/connectors/icons/apify.svg",
+		},
+		Now: fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("ValidateOwnership: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected clean ownership report, got %+v", report.Findings)
+	}
+	requireOwnershipPath(t, report, "docs/connectors/icons/apify.svg", ownershipClassConnectorIcon, "apify-dataset", ownershipDecisionAllowed)
+	requireOwnershipPath(t, report, "website/public/connectors/icons/apify.svg", ownershipClassConnectorWebsiteIcon, "apify-dataset", ownershipDecisionAllowed)
+}
+
+func TestOwnershipDoesNotResolveCollidingRegistryIconAliases(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"connector-scope.json":                        `{"api_version":"polymetrics.ai/v1","kind":"ConnectorImplementationScope","connectors":["a-bc"]}`,
+		"internal/connectors/defs/a-bc/metadata.json": `{"name":"a-bc","display_name":"A BC","integration_type":"api"}`,
+		"internal/connectors/defs/ab-c/metadata.json": `{"name":"ab-c","display_name":"AB C","integration_type":"api"}`,
+		"internal/connectors/icon_data.json":          `[{"connector":"source-a-bc","id":"shared","path":"icons/shared.svg"},{"connector":"source-ab-c","id":"shared","path":"icons/shared.svg"}]`,
+	})
+
+	report, err := ValidateOwnership(root, OwnershipOptions{
+		ScopeFile:    "connector-scope.json",
+		ChangedPaths: []string{"docs/connectors/icons/shared.svg"},
+		Now:          fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("ValidateOwnership: %v", err)
+	}
+	requireOwnershipFinding(t, report, RuleOwnershipSharedPath, "a-bc", "docs/connectors/icons/shared.svg")
+	requireOwnershipPath(t, report, "docs/connectors/icons/shared.svg", ownershipClassSharedDocs, "", ownershipDecisionRejected)
 }
 
 func TestOwnershipAllowsCompactGeneratedIconAlias(t *testing.T) {

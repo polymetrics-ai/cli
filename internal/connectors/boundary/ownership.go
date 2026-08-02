@@ -118,6 +118,10 @@ func ValidateOwnership(root string, opts OwnershipOptions) (OwnershipReport, err
 	if err != nil {
 		return OwnershipReport{}, &ConfigError{Err: err}
 	}
+	iconAliases, err := loadOwnershipIconAliases(absRoot, lx)
+	if err != nil {
+		return OwnershipReport{}, &ConfigError{Err: err}
+	}
 
 	changed, err := ownershipChangedPaths(absRoot, opts)
 	if err != nil {
@@ -138,7 +142,7 @@ func ValidateOwnership(root string, opts OwnershipOptions) (OwnershipReport, err
 	rawPaths := make([]ownershipPathClass, 0, len(changed))
 	inferredSet := map[string]bool{}
 	for _, rel := range changed {
-		raw := classifyOwnershipChangedPath(rel, lx)
+		raw := classifyOwnershipChangedPath(rel, lx, iconAliases)
 		rawPaths = append(rawPaths, raw)
 		if raw.InferConnector && raw.Connector != "" {
 			inferredSet[raw.Connector] = true
@@ -383,7 +387,7 @@ type ownershipPathClass struct {
 	Ignored        bool
 }
 
-func classifyOwnershipChangedPath(rel string, lx lexicon) ownershipPathClass {
+func classifyOwnershipChangedPath(rel string, lx lexicon, iconAliases ownershipIconAliases) ownershipPathClass {
 	rel = normalizeRelPath(rel)
 	if rel == "" {
 		return ownershipPathClass{Path: rel, Class: ownershipClassIgnored, Ignored: true}
@@ -415,10 +419,10 @@ func classifyOwnershipChangedPath(rel string, lx lexicon) ownershipPathClass {
 	if connector, ok := connectorDocsPath(rel, lx); ok {
 		return ownershipPathClass{Path: rel, Class: ownershipClassConnectorDocs, Connector: connector, InferConnector: true, Generated: true}
 	}
-	if connector, ok := connectorIconPath(rel, "docs/connectors/icons/", lx); ok {
+	if connector, ok := connectorIconPath(rel, "docs/connectors/icons/", iconAliases); ok {
 		return ownershipPathClass{Path: rel, Class: ownershipClassConnectorIcon, Connector: connector, InferConnector: true, Generated: true}
 	}
-	if connector, ok := connectorIconPath(rel, "website/public/connectors/icons/", lx); ok {
+	if connector, ok := connectorIconPath(rel, "website/public/connectors/icons/", iconAliases); ok {
 		return ownershipPathClass{Path: rel, Class: ownershipClassConnectorWebsiteIcon, Connector: connector, InferConnector: true, Generated: true}
 	}
 	if strings.HasPrefix(rel, "cmd/") || strings.HasPrefix(rel, "scripts/") || strings.HasPrefix(rel, "build/") || rel == "Makefile" {
@@ -551,48 +555,108 @@ func connectorDocsPath(rel string, lx lexicon) (string, bool) {
 	return "", false
 }
 
-func connectorIconPath(rel, prefix string, lx lexicon) (string, bool) {
+func connectorIconPath(rel, prefix string, iconAliases ownershipIconAliases) (string, bool) {
 	if !strings.HasPrefix(rel, prefix) {
 		return "", false
 	}
 	rest := strings.TrimPrefix(rel, prefix)
-	base := filepath.Base(rest)
-	name := strings.ToLower(strings.TrimSuffix(base, filepath.Ext(base)))
-	if connector, ok := connectorIconName(name, lx); ok {
+	name := ownershipIconAliasName(rest)
+	if connector, ok := iconAliases.connectorFor(name); ok {
 		return connector, true
 	}
 	return "", false
 }
 
-func connectorIconName(name string, lx lexicon) (string, bool) {
-	name = strings.ToLower(strings.TrimSpace(name))
-	if name == "" {
-		return "", false
+type ownershipIconRegistryEntry struct {
+	Connector string `json:"connector"`
+	ID        string `json:"id"`
+	Path      string `json:"path"`
+}
+
+type ownershipIconAliases struct {
+	owners     map[string]string
+	collisions map[string]bool
+}
+
+func loadOwnershipIconAliases(root string, lx lexicon) (ownershipIconAliases, error) {
+	aliases := newOwnershipIconAliases(lx)
+	b, err := os.ReadFile(filepath.Join(root, "internal", "connectors", "icon_data.json"))
+	if err != nil {
+		if os.IsNotExist(err) {
+			return aliases, nil
+		}
+		return aliases, fmt.Errorf("read connector icon registry: %w", err)
 	}
-	if _, ok := lx.byName[name]; ok {
-		return name, true
+	var entries []ownershipIconRegistryEntry
+	if err := json.Unmarshal(b, &entries); err != nil {
+		return aliases, fmt.Errorf("parse connector icon registry: %w", err)
 	}
-	owners := map[string]string{}
-	collisions := map[string]bool{}
+	for _, entry := range entries {
+		connector, ok := ownershipIconRegistryConnector(entry.Connector, lx)
+		if !ok {
+			continue
+		}
+		aliases.add(entry.ID, connector)
+		aliases.add(entry.Path, connector)
+	}
+	return aliases, nil
+}
+
+func newOwnershipIconAliases(lx lexicon) ownershipIconAliases {
+	aliases := ownershipIconAliases{owners: map[string]string{}, collisions: map[string]bool{}}
 	for _, connector := range lx.connectors {
 		for _, alias := range connectorIconAliases(connector) {
-			alias = strings.ToLower(strings.TrimSpace(alias))
-			if alias == "" {
-				continue
-			}
-			owner, exists := owners[alias]
-			if exists && owner != connector.Name {
-				collisions[alias] = true
-				continue
-			}
-			owners[alias] = connector.Name
+			aliases.add(alias, connector.Name)
 		}
 	}
-	connector, ok := owners[name]
-	if !ok || collisions[name] {
+	return aliases
+}
+
+func (a ownershipIconAliases) add(alias, connector string) {
+	name := ownershipIconAliasName(alias)
+	if name == "" || connector == "" {
+		return
+	}
+	owner, exists := a.owners[name]
+	if exists && owner != connector {
+		a.collisions[name] = true
+		return
+	}
+	a.owners[name] = connector
+}
+
+func (a ownershipIconAliases) connectorFor(name string) (string, bool) {
+	name = ownershipIconAliasName(name)
+	connector, ok := a.owners[name]
+	if !ok || a.collisions[name] {
 		return "", false
 	}
 	return connector, true
+}
+
+func ownershipIconAliasName(value string) string {
+	value = normalizeRelPath(value)
+	if i := strings.LastIndex(value, "/"); i >= 0 {
+		value = value[i+1:]
+	}
+	value = strings.TrimSuffix(value, filepath.Ext(value))
+	return strings.ToLower(strings.TrimSpace(value))
+}
+
+func ownershipIconRegistryConnector(value string, lx lexicon) (string, bool) {
+	connector := strings.ToLower(strings.TrimSpace(value))
+	if _, ok := lx.byName[connector]; ok {
+		return connector, true
+	}
+	for _, prefix := range []string{"source-", "destination-"} {
+		if strings.HasPrefix(connector, prefix) {
+			slug := strings.TrimPrefix(connector, prefix)
+			if _, ok := lx.byName[slug]; ok {
+				return slug, true
+			}
+		}
+	}
+	return "", false
 }
 
 func connectorIconAliases(connector connectorLexeme) []string {
@@ -637,10 +701,8 @@ func dotGHPathPrefix() string {
 
 func isNarrowSharedOwnershipOutput(rel string) bool {
 	switch rel {
-	case "internal/connectors/defs/defs.go",
-		"internal/connectors/hooks/hookset/hookset_gen.go",
+	case "internal/connectors/hooks/hookset/hookset_gen.go",
 		"internal/connectors/native/nativeset/nativeset_gen.go",
-		"internal/connectors/icons.go",
 		"docs/connectors/README.md",
 		"docs/connectors/UNPORTED.md",
 		"docs/cli/connectors.md",
