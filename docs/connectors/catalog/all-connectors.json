@@ -3914,7 +3914,8 @@
         "kind": "custom",
         "method": "POST",
         "path": "/v0/{{ record.enterprise_account_id }}/{{ record.data_table_id }}/deleteRecords",
-        "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
+        "risk": "destructive Airtable HyperDB mutation; deletes records by primary key and requires explicit approval before execute",
+        "confirm": "destructive"
       },
       {
         "name": "hyperdb_upsert_records_by_primary_keys",
