@@ -46,3 +46,11 @@
 - [x] Complete branch path audit contains only Ashby-owned and required Ashby-generated/planning, CLI-golden, documentation-index, website-catalog, and native-registration paths.
 - [x] PR 3542 issue reference was read-only audited: its body contains only a canonical issue URL, so the outer PR phase must add `Refs #3207`; this review phase did not mutate the PR.
 - [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` passed.
+
+## CI repair handoff
+
+- [x] Preserved the approved issueguard contract; no workflow or guard source was weakened.
+- [x] Added `PR-BODY.md` with the required incremental relationship `Refs #3207` and current Ashby scope, verification, and safety evidence.
+- [x] `go run ./cmd/prissueguard --title 'chore(ashby): stage unvalidated parity checkpoint' --body-file .planning/phases/issue-3207-ashby-parity-wave05-r1/PR-BODY.md` returned `issueguard: ok (1 linked issue)`.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` and `git diff --check` passed.
+- [ ] Outer PR phase applies `PR-BODY.md` to PR #3542 and reruns `require-linked-issue`.
