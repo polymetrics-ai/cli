@@ -50,13 +50,13 @@ func (Connector) Metadata() connectors.Metadata {
 		Name:            connectorName,
 		DisplayName:     "AWS CloudTrail",
 		IntegrationType: "api",
-		Description:     "Reads AWS CloudTrail configuration and event metadata through fixed AWS JSON-RPC read streams. Provider query/direct-read and write/admin actions are planned until shared promoted-native forwarding exposes them safely at runtime.",
+		Description:     "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime.",
 		Capabilities:    connectors.Capabilities{Check: true, Catalog: true, Read: true, Write: false, Query: false},
 	}
 }
 
 // Check verifies SigV4 credentials and endpoint reachability with a bounded
-// read-only LookupEvents call. In fixture mode it short-circuits without a
+// read-only DescribeTrails call. In fixture mode it short-circuits without a
 // network call.
 func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
 	if err := ctx.Err(); err != nil {
@@ -65,11 +65,11 @@ func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) erro
 	if fixtureMode(cfg) {
 		return nil
 	}
-	r, err := c.requester(cfg, "LookupEvents")
+	r, err := c.requester(cfg, "DescribeTrails")
 	if err != nil {
 		return err
 	}
-	if err := r.DoJSON(ctx, http.MethodPost, "/", nil, map[string]any{"MaxResults": 1}, nil); err != nil {
+	if err := r.DoJSON(ctx, http.MethodPost, "/", nil, map[string]any{}, nil); err != nil {
 		return fmt.Errorf("check aws-cloudtrail: %w", err)
 	}
 	return nil
@@ -98,7 +98,7 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 		stream = "describe_trails"
 	}
 	action, ok := cloudTrailStreamActions[stream]
-	if !ok {
+	if !ok || !cloudTrailStreamPublished(stream) {
 		return fmt.Errorf("aws-cloudtrail stream %q not found", stream)
 	}
 	if fixtureMode(req.Config) {
@@ -107,17 +107,46 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 	return c.readAction(ctx, action, stream, req, emit)
 }
 
+func cloudTrailStreamPublished(stream string) bool {
+	for _, published := range cloudTrailPublishedStreams {
+		if stream == published {
+			return true
+		}
+	}
+	return false
+}
+
 func (c Connector) readAction(ctx context.Context, action, stream string, req connectors.ReadRequest, emit func(connectors.Record) error) error {
-	r, err := c.requester(req.Config, action)
-	if err != nil {
-		return err
-	}
 	body, err := buildActionBodyFromStrings(action, req.Query, true)
+	if err == nil {
+		return c.emitActionBody(ctx, req.Config, action, body, emit)
+	}
+	if len(req.Query) > 0 || !cloudTrailCanDeriveActionBody(action) {
+		return err
+	}
+	bodies, err := c.derivedActionBodies(ctx, req.Config, action)
 	if err != nil {
 		return err
 	}
+	for _, body := range bodies {
+		if err := c.emitActionBody(ctx, req.Config, action, body, emit); err != nil {
+			if shouldSkipDerivedActionError(action, err) {
+				continue
+			}
+			return err
+		}
+	}
+	return nil
+}
+
+func (c Connector) emitActionBody(ctx context.Context, cfg connectors.RuntimeConfig, action string, rawBody map[string]any, emit func(connectors.Record) error) error {
+	r, err := c.requester(cfg, action)
+	if err != nil {
+		return err
+	}
+	body := copyActionBody(rawBody)
 	if supportsField(action, "MaxResults") {
-		maxItems, err := pageSize(req.Config)
+		maxItems, err := pageSize(cfg)
 		if err != nil {
 			return err
 		}
@@ -125,17 +154,11 @@ func (c Connector) readAction(ctx context.Context, action, stream string, req co
 			body["MaxResults"] = maxItems
 		}
 	}
-	if action == "LookupEvents" {
-		if startTime, err := startTimeBound(req); err != nil {
-			return err
-		} else if startTime != nil {
-			body["StartTime"] = startTime.Unix()
-		}
-		applyLookupAliasFilter(stream, body)
+	maxPageLimit, err := maxPages(cfg)
+	if err != nil {
+		return err
 	}
-
-	maxPages := maxPages(req.Config)
-	for page := 0; maxPages == 0 || page < maxPages; page++ {
+	for page := 0; maxPageLimit == 0 || page < maxPageLimit; page++ {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
@@ -147,7 +170,7 @@ func (c Connector) readAction(ctx context.Context, action, stream string, req co
 		if err := decodeJSON(resp.Body, &decoded); err != nil {
 			return fmt.Errorf("decode aws-cloudtrail %s response: %w", action, err)
 		}
-		if err := emitActionRecords(action, decoded, emit); err != nil {
+		if err := emitActionRecords(action, decoded, body, emit); err != nil {
 			return err
 		}
 		next, _ := stringAt(decoded, "NextToken")
@@ -159,8 +182,204 @@ func (c Connector) readAction(ctx context.Context, action, stream string, req co
 	return nil
 }
 
-// OperationDirectRead executes one definition-owned provider query/lookup
-// operation. It supports only the ten operation IDs declared in operations.json.
+func copyActionBody(body map[string]any) map[string]any {
+	out := make(map[string]any, len(body))
+	for key, value := range body {
+		out[key] = value
+	}
+	return out
+}
+
+func cloudTrailCanDeriveActionBody(action string) bool {
+	switch action {
+	case "GetChannel", "GetDashboard", "GetEventDataStore", "GetEventSelectors", "GetImport", "GetInsightSelectors", "GetResourcePolicy", "GetTrail", "GetTrailStatus", "ListImportFailures", "ListTags":
+		return true
+	default:
+		return false
+	}
+}
+
+func (c Connector) derivedActionBodies(ctx context.Context, cfg connectors.RuntimeConfig, action string) ([]map[string]any, error) {
+	switch action {
+	case "GetChannel":
+		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "ListChannels", "Channel", []string{"ChannelArn", "Channel", "Arn"})
+	case "GetDashboard":
+		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "ListDashboards", "DashboardId", []string{"DashboardId", "DashboardArn", "Arn"})
+	case "GetEventDataStore":
+		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "ListEventDataStores", "EventDataStore", []string{"EventDataStoreArn", "EventDataStore", "Arn"})
+	case "GetEventSelectors":
+		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "DescribeTrails", "TrailName", []string{"TrailARN", "TrailArn", "Name", "TrailName"})
+	case "GetImport", "ListImportFailures":
+		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "ListImports", "ImportId", []string{"ImportId"})
+	case "GetInsightSelectors":
+		return c.derivedInsightSelectorBodies(ctx, cfg)
+	case "GetResourcePolicy":
+		values, err := c.discoveredResourceARNs(ctx, cfg)
+		if err != nil {
+			return nil, err
+		}
+		return validatedDerivedBodies(action, bodiesForValues("ResourceArn", values))
+	case "GetTrail", "GetTrailStatus":
+		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "DescribeTrails", "Name", []string{"TrailARN", "TrailArn", "Name", "TrailName"})
+	case "ListTags":
+		values, err := c.discoveredTagResourceIDs(ctx, cfg)
+		if err != nil {
+			return nil, err
+		}
+		return validatedDerivedBodies(action, bodiesForStringChunks("ResourceIdList", values, 20))
+	default:
+		return nil, fmt.Errorf("aws-cloudtrail %s cannot derive required request fields", action)
+	}
+}
+
+func (c Connector) derivedInsightSelectorBodies(ctx context.Context, cfg connectors.RuntimeConfig) ([]map[string]any, error) {
+	trailValues, err := c.discoveryValues(ctx, cfg, "DescribeTrails", "TrailARN", "TrailArn", "Name", "TrailName")
+	if err != nil {
+		return nil, err
+	}
+	eventDataStoreValues, err := c.discoveryValues(ctx, cfg, "ListEventDataStores", "EventDataStoreArn", "EventDataStore", "Arn")
+	if err != nil {
+		return nil, err
+	}
+	bodies := bodiesForValues("TrailName", trailValues)
+	bodies = append(bodies, bodiesForValues("EventDataStore", eventDataStoreValues)...)
+	return validatedDerivedBodies("GetInsightSelectors", bodies)
+}
+
+func (c Connector) derivedBodiesFromDiscovery(ctx context.Context, cfg connectors.RuntimeConfig, action, discoveryAction, requestField string, keys []string) ([]map[string]any, error) {
+	values, err := c.discoveryValues(ctx, cfg, discoveryAction, keys...)
+	if err != nil {
+		return nil, err
+	}
+	return validatedDerivedBodies(action, bodiesForValues(requestField, values))
+}
+
+func (c Connector) discoveryValues(ctx context.Context, cfg connectors.RuntimeConfig, action string, keys ...string) ([]string, error) {
+	var values []string
+	seen := map[string]bool{}
+	err := c.emitActionBody(ctx, cfg, action, nil, func(record connectors.Record) error {
+		for _, key := range keys {
+			value, ok := stringAt(map[string]any(record), key)
+			value = strings.TrimSpace(value)
+			if !ok || value == "" || seen[value] {
+				continue
+			}
+			seen[value] = true
+			values = append(values, value)
+			break
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return values, nil
+}
+
+func (c Connector) discoveredResourceARNs(ctx context.Context, cfg connectors.RuntimeConfig) ([]string, error) {
+	discoveries := []struct {
+		action string
+		keys   []string
+	}{
+		{action: "ListChannels", keys: []string{"ChannelArn", "Arn"}},
+		{action: "ListDashboards", keys: []string{"DashboardArn", "DashboardId", "Arn"}},
+		{action: "ListEventDataStores", keys: []string{"EventDataStoreArn", "EventDataStore", "Arn"}},
+	}
+	return c.discoveryValuesFromMany(ctx, cfg, discoveries)
+}
+
+func (c Connector) discoveredTagResourceIDs(ctx context.Context, cfg connectors.RuntimeConfig) ([]string, error) {
+	discoveries := []struct {
+		action string
+		keys   []string
+	}{
+		{action: "DescribeTrails", keys: []string{"TrailARN", "TrailArn", "Arn"}},
+		{action: "ListChannels", keys: []string{"ChannelArn", "Arn"}},
+		{action: "ListDashboards", keys: []string{"DashboardArn", "DashboardId", "Arn"}},
+		{action: "ListEventDataStores", keys: []string{"EventDataStoreArn", "EventDataStore", "Arn"}},
+	}
+	return c.discoveryValuesFromMany(ctx, cfg, discoveries)
+}
+
+func (c Connector) discoveryValuesFromMany(ctx context.Context, cfg connectors.RuntimeConfig, discoveries []struct {
+	action string
+	keys   []string
+}) ([]string, error) {
+	var values []string
+	seen := map[string]bool{}
+	for _, discovery := range discoveries {
+		items, err := c.discoveryValues(ctx, cfg, discovery.action, discovery.keys...)
+		if err != nil {
+			return nil, err
+		}
+		for _, item := range items {
+			if seen[item] {
+				continue
+			}
+			seen[item] = true
+			values = append(values, item)
+		}
+	}
+	return values, nil
+}
+
+func bodiesForValues(field string, values []string) []map[string]any {
+	bodies := make([]map[string]any, 0, len(values))
+	for _, value := range values {
+		value = strings.TrimSpace(value)
+		if value == "" {
+			continue
+		}
+		bodies = append(bodies, map[string]any{field: value})
+	}
+	return bodies
+}
+
+func bodiesForStringChunks(field string, values []string, size int) []map[string]any {
+	if size <= 0 {
+		size = len(values)
+	}
+	var bodies []map[string]any
+	for start := 0; start < len(values); start += size {
+		end := start + size
+		if end > len(values) {
+			end = len(values)
+		}
+		chunk := append([]string(nil), values[start:end]...)
+		if len(chunk) > 0 {
+			bodies = append(bodies, map[string]any{field: chunk})
+		}
+	}
+	return bodies
+}
+
+func validatedDerivedBodies(action string, bodies []map[string]any) ([]map[string]any, error) {
+	for i, body := range bodies {
+		if _, err := buildActionBody(action, body, true); err != nil {
+			return nil, fmt.Errorf("derived request body %d: %w", i, err)
+		}
+	}
+	return bodies, nil
+}
+
+func shouldSkipDerivedActionError(action string, err error) bool {
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) {
+		return false
+	}
+	body := strings.ToLower(httpErr.Body)
+	switch action {
+	case "GetResourcePolicy":
+		return httpErr.Status == 404 || strings.Contains(body, "notfound") || strings.Contains(body, "not found")
+	case "GetInsightSelectors":
+		return httpErr.Status == http.StatusBadRequest && (strings.Contains(body, "insightnotenabledexception") || strings.Contains(body, "insight not enabled") || strings.Contains(body, "insights not enabled"))
+	default:
+		return false
+	}
+}
+
+// OperationDirectRead rejects provider query/lookup operations until shared
+// promoted-native forwarding exposes them safely.
 func (c Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
 		return connectors.DirectReadResult{}, err
@@ -342,19 +561,22 @@ func pageSize(cfg connectors.RuntimeConfig) (int, error) {
 	return value, nil
 }
 
-func maxPages(cfg connectors.RuntimeConfig) int {
+func maxPages(cfg connectors.RuntimeConfig) (int, error) {
 	if cfg.Config == nil {
-		return 0
+		return 0, nil
 	}
 	raw := strings.TrimSpace(strings.ToLower(cfg.Config["max_pages"]))
 	if raw == "" || raw == "all" || raw == "unlimited" || raw == "synthetic-conformance-value" {
-		return 0
+		return 0, nil
 	}
 	value, err := strconv.Atoi(raw)
-	if err != nil || value < 0 {
-		return 0
+	if err != nil {
+		return 0, fmt.Errorf("aws-cloudtrail config max_pages must be an integer, all, or unlimited: %w", err)
 	}
-	return value
+	if value < 0 {
+		return 0, errors.New("aws-cloudtrail config max_pages must be 0 for unlimited or a positive integer")
+	}
+	return value, nil
 }
 
 func fixtureMode(cfg connectors.RuntimeConfig) bool {

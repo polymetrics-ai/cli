@@ -69,6 +69,10 @@ var cloudTrailActionFields = map[string][]awsActionField{
 	"UpdateTrail":                          {{Name: "CloudWatchLogsLogGroupArn", Type: "String", Required: false}, {Name: "CloudWatchLogsRoleArn", Type: "String", Required: false}, {Name: "EnableLogFileValidation", Type: "Boolean", Required: false}, {Name: "IncludeGlobalServiceEvents", Type: "Boolean", Required: false}, {Name: "IsMultiRegionTrail", Type: "Boolean", Required: false}, {Name: "IsOrganizationTrail", Type: "Boolean", Required: false}, {Name: "KmsKeyId", Type: "String", Required: false}, {Name: "Name", Type: "String", Required: true}, {Name: "S3BucketName", Type: "String", Required: false}, {Name: "S3KeyPrefix", Type: "String", Required: false}, {Name: "SnsTopicName", Type: "String", Required: false}},
 }
 
+var cloudTrailActionAnyOfRequiredFields = map[string][]string{
+	"GetInsightSelectors": {"EventDataStore", "TrailName"},
+}
+
 var cloudTrailStreamActions = map[string]string{
 	"describe_trails":         "DescribeTrails",
 	"get_channel":             "GetChannel",
@@ -89,10 +93,6 @@ var cloudTrailStreamActions = map[string]string{
 	"list_public_keys":        "ListPublicKeys",
 	"list_tags":               "ListTags",
 	"list_trails":             "ListTrails",
-	"management_events":       "LookupEvents",
-	"read_only_events":        "LookupEvents",
-	"write_only_events":       "LookupEvents",
-	"console_logins":          "LookupEvents",
 }
 
 var cloudTrailPublishedStreams = []string{

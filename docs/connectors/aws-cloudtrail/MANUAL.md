@@ -10,9 +10,9 @@ SYNOPSIS
   pm etl read --connector aws-cloudtrail --credential <name> --stream <stream> --json
 
 DESCRIPTION
-  Reads AWS CloudTrail configuration and event metadata through fixed AWS JSON-RPC read streams.
+  Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC read streams.
 
-  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, but only 19 read-stream actions are currently exposed as executable connector-local runtime behavior. The 10 provider query/direct-read actions and 31 write/admin actions are blocked/planned until shared promoted-native forwarding exposes command surfaces, manifests, validation, dry-run previews, and operation-direct reads safely.
+  Scope-corrected status: 60 official CloudTrail API actions remain inventoried, 19 read-stream actions are exposed as executable connector-local runtime behavior, and the 10 provider query/direct-read actions plus 31 write/admin actions are blocked/planned until typed operation/write metadata and shared promoted-native command surfaces, validation, dry-run previews, and operation-direct reads are available safely.
 
 ICON
   asset: icons/aws-cloudtrail.svg
@@ -31,7 +31,6 @@ CONFIGURATION
   base_url (optional fixture/local endpoint)
   page_size (optional)
   max_pages (optional)
-  start_date (optional)
   mode=fixture (optional credential-free local tests)
   aws_key_id (required secret)
   aws_secret_key (required secret)
@@ -63,7 +62,7 @@ BLOCKED / PLANNED OPERATIONS
   Write/admin actions blocked: AddTags, CreateChannel, CreateDashboard, CreateEventDataStore, CreateTrail, DeleteChannel, DeleteDashboard, DeleteEventDataStore, DeleteResourcePolicy, DeleteTrail, DeregisterOrganizationDelegatedAdmin, DisableFederation, EnableFederation, PutEventConfiguration, PutEventSelectors, PutInsightSelectors, PutResourcePolicy, RegisterOrganizationDelegatedAdmin, RemoveTags, RestoreEventDataStore, StartDashboardRefresh, StartEventDataStoreIngestion, StartImport, StartLogging, StopEventDataStoreIngestion, StopImport, StopLogging, UpdateChannel, UpdateDashboard, UpdateEventDataStore, UpdateTrail.
 
 SECURITY
-  Read streams use fixed AWS CloudTrail JSON-RPC action names and SigV4 authentication. No raw AWS action, path, header, body, shell, file, SQL, or generic HTTP escape hatch is exposed.
+  Read streams use fixed AWS CloudTrail JSON-RPC action names and SigV4 authentication. Resource-detail streams derive identifiers through connector-local discovery/fan-out; no raw AWS action, path, header, body, shell, file, SQL, or generic HTTP escape hatch is exposed.
 
   No CloudTrail write action is executable in this corrective head. Future write enablement must preserve plan -> preview -> approval -> execute plus destructive confirmation metadata.
 

@@ -6039,7 +6039,7 @@
   {
     "slug": "aws-cloudtrail",
     "name": "AWS CloudTrail",
-    "description": "Reads AWS CloudTrail configuration and event metadata through fixed AWS JSON-RPC read streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime.",
+    "description": "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime.",
     "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
     "integration_type": "api",
     "release_stage": "alpha",
@@ -6207,7 +6207,7 @@
     ],
     "write_actions": [],
     "cli_surface": null,
-    "docs_md": "# Overview\n\nAWS CloudTrail connector parity was audited from the official AWS CloudTrail API Reference Actions page. The scope-corrected bundle still enumerates all 60 official CloudTrail API actions exactly once, but only the 19 ETL/read stream actions are implemented and runtime-reachable in this connector-local slice. The 10 provider query/direct-read actions and 31 write/admin actions are recorded as blocked/planned in `api_surface.json` because they require shared promoted-native command-surface, manifest, validation, dry-run, and operation-direct-read forwarding that was reverted from this branch. The official CloudTrail event-record contents page documents event record version 1.11 and 31 top-level event fields; those fields are schema payload fields for LookupEvents, not CDC/changefeed operations.\n\nImplemented readable streams: `describe_trails`, `get_channel`, `get_dashboard`, `get_event_configuration`, `get_event_data_store`, `get_event_selectors`, `get_import`, `get_insight_selectors`, `get_resource_policy`, `get_trail`, `get_trail_status`, `list_channels`, `list_dashboards`, `list_event_data_stores`, `list_import_failures`, `list_imports`, `list_public_keys`, `list_tags`, `list_trails`.\n\nBlocked/planned provider query operations: `CancelQuery`, `DescribeQuery`, `GenerateQuery`, `GetQueryResults`, `ListInsightsData`, `ListInsightsMetricData`, `ListQueries`, `LookupEvents`, `SearchSampleQueries`, `StartQuery`.\n\nBlocked/planned write/admin operations: `AddTags`, `CreateChannel`, `CreateDashboard`, `CreateEventDataStore`, `CreateTrail`, `DeleteChannel`, `DeleteDashboard`, `DeleteEventDataStore`, `DeleteResourcePolicy`, `DeleteTrail`, `DeregisterOrganizationDelegatedAdmin`, `DisableFederation`, `EnableFederation`, `PutEventConfiguration`, `PutEventSelectors`, `PutInsightSelectors`, `PutResourcePolicy`, `RegisterOrganizationDelegatedAdmin`, `RemoveTags`, `RestoreEventDataStore`, `StartDashboardRefresh`, `StartEventDataStoreIngestion`, `StartImport`, `StartLogging`, `StopEventDataStoreIngestion`, `StopImport`, `StopLogging`, `UpdateChannel`, `UpdateDashboard`, `UpdateEventDataStore`, `UpdateTrail`.\n\n## Auth setup\n\nUse `pm credentials add <name> --connector aws-cloudtrail` and provide secrets only from environment variables or stdin:\n\n- `aws_key_id` (required secret)\n- `aws_secret_key` (required secret)\n- `aws_region_name` (required config, for example `us-east-1`)\n\nOptional config fields are `base_url` for local fixture endpoints, `page_size`, `max_pages`, `start_date`, and `mode=fixture` for credential-free tests. Do not place AWS secret values in chat, command history, docs, fixtures, or issue comments.\n\n## Streams notes\n\nEvery implemented stream uses a fixed AWS CloudTrail JSON-RPC action with SigV4 authentication and no raw action/path/header/body escape hatch. Paginated actions pass bounded `MaxResults` and follow `NextToken` until it is absent or `max_pages` is reached. The connector keeps `query=false` at the metadata layer; CloudTrail provider query operations are blocked/planned until shared runtime forwarding makes operation-direct reads visible safely.\n\n## Write actions & risks\n\nNo CloudTrail reverse-ETL write actions are exposed by the scope-corrected runtime surface. The audited write/admin API actions remain blocked/planned in `api_surface.json`; they must not be documented as executable until shared promoted-native forwarding exposes bundle manifests, command surfaces, write validation, and dry-run previews. Any future write slice must preserve the standard plan -> preview -> explicit approval -> execute flow, destructive confirmation metadata, fixed CloudTrail `X-Amz-Target` mapping, and no raw AWS action or request-body escape hatch.\n\n## Known limits\n\n- This work is fixture-only and local-test verified; it does not certify live AWS provider behavior.\n- CloudTrail event record fields are parsed as payload/schema fields where CloudTrail returns them, but they are not counted as CDC because AWS does not document a CloudTrail changefeed/subscription API in the audited sources.\n- Provider query direct reads are blocked/planned. They do not expose a generic CloudTrail Lake SQL runner.\n- Write/admin actions are blocked/planned. No CloudTrail write action is listed as executable in generated catalog/docs/help for this corrective head.\n",
+    "docs_md": "# Overview\n\nAWS CloudTrail connector parity was audited from the official AWS CloudTrail API Reference Actions page. The scope-corrected bundle still enumerates all 60 official CloudTrail API actions exactly once, and 19 ETL/read stream actions are implemented and runtime-reachable in this connector-local slice. Streams whose AWS read action requires an identifier use connector-local discovery/fan-out from the fixed list/describe streams rather than caller-supplied raw action/path/header/body input. The 10 provider query/direct-read actions and 31 write/admin actions are recorded as blocked/planned in `api_surface.json` because they require typed operation/write metadata plus shared promoted-native command-surface, write-validation, dry-run, and operation-direct-read forwarding outside this connector-local branch. The official CloudTrail event-record contents page documents event record version 1.11 and 31 top-level event fields; those fields are schema payload fields for LookupEvents, not CDC/changefeed operations.\n\nImplemented readable streams: `describe_trails`, `get_channel`, `get_dashboard`, `get_event_configuration`, `get_event_data_store`, `get_event_selectors`, `get_import`, `get_insight_selectors`, `get_resource_policy`, `get_trail`, `get_trail_status`, `list_channels`, `list_dashboards`, `list_event_data_stores`, `list_import_failures`, `list_imports`, `list_public_keys`, `list_tags`, `list_trails`.\n\nBlocked/planned provider query operations: `CancelQuery`, `DescribeQuery`, `GenerateQuery`, `GetQueryResults`, `ListInsightsData`, `ListInsightsMetricData`, `ListQueries`, `LookupEvents`, `SearchSampleQueries`, `StartQuery`.\n\nBlocked/planned write/admin operations: `AddTags`, `CreateChannel`, `CreateDashboard`, `CreateEventDataStore`, `CreateTrail`, `DeleteChannel`, `DeleteDashboard`, `DeleteEventDataStore`, `DeleteResourcePolicy`, `DeleteTrail`, `DeregisterOrganizationDelegatedAdmin`, `DisableFederation`, `EnableFederation`, `PutEventConfiguration`, `PutEventSelectors`, `PutInsightSelectors`, `PutResourcePolicy`, `RegisterOrganizationDelegatedAdmin`, `RemoveTags`, `RestoreEventDataStore`, `StartDashboardRefresh`, `StartEventDataStoreIngestion`, `StartImport`, `StartLogging`, `StopEventDataStoreIngestion`, `StopImport`, `StopLogging`, `UpdateChannel`, `UpdateDashboard`, `UpdateEventDataStore`, `UpdateTrail`.\n\n## Auth setup\n\nUse `pm credentials add <name> --connector aws-cloudtrail` and provide secrets only from environment variables or stdin:\n\n- `aws_key_id` (required secret)\n- `aws_secret_key` (required secret)\n- `aws_region_name` (required config, for example `us-east-1`)\n\nOptional config fields are `base_url` for local fixture endpoints, `page_size`, `max_pages`, and `mode=fixture` for credential-free tests. Do not place AWS secret values in chat, command history, docs, fixtures, or issue comments.\n\n## Streams notes\n\nEvery implemented stream uses a fixed AWS CloudTrail JSON-RPC action with SigV4 authentication and no raw action/path/header/body escape hatch. Paginated actions pass bounded `MaxResults` and follow `NextToken` until it is absent or `max_pages` is reached. Streams for resource-detail actions derive required identifiers through connector-local discovery/fan-out from `DescribeTrails`, `ListChannels`, `ListDashboards`, `ListEventDataStores`, and `ListImports`. The connector keeps `query=false` at the metadata layer; CloudTrail provider query operations are blocked/planned until shared runtime forwarding makes operation-direct reads visible safely.\n\n## Write actions & risks\n\nNo CloudTrail reverse-ETL write actions are exposed by the scope-corrected runtime surface. The audited write/admin API actions remain blocked/planned in `api_surface.json`; they must not be documented as executable until typed write definitions and shared promoted-native command surfaces, write validation, and dry-run previews are available. Any future write slice must preserve the standard plan -> preview -> explicit approval -> execute flow, destructive confirmation metadata, fixed CloudTrail `X-Amz-Target` mapping, and no raw AWS action or request-body escape hatch.\n\n## Known limits\n\n- This work is fixture-only and local-test verified; it does not certify live AWS provider behavior.\n- CloudTrail event record fields are parsed as payload/schema fields where CloudTrail returns them, but they are not counted as CDC because AWS does not document a CloudTrail changefeed/subscription API in the audited sources.\n- Provider query direct reads are blocked/planned. They do not expose a generic CloudTrail Lake SQL runner.\n- Resource-detail streams depend on the corresponding list/describe action returning identifiers; when no resources are discovered they emit no records.\n- Write/admin actions are blocked/planned. No CloudTrail write action is listed as executable in generated catalog/docs/help for this corrective head.\n",
     "icon": {
       "id": "aws-cloudtrail",
       "path": "icons/aws-cloudtrail.svg",
@@ -9699,6 +9699,1608 @@
       "reviewStatus": "upstream_seeded",
       "reviewUrl": "https://learn.microsoft.com/en-us/advertising/guides/release-notes"
     }
+  },
+  {
+    "slug": "bitbucket",
+    "name": "Bitbucket",
+    "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; exposes closed-schema repository creation and path-only deletes while blocking untyped JSON-body and multipart writes.",
+    "docs_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": true,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "streams": [
+      {
+        "name": "repositories",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "hook_events",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "hook_events_subject_type",
+        "primary_key": [
+          "event"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_branch_restrictions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_branch_restrictions_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_branching_model",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_branching_model_settings",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit",
+        "primary_key": [
+          "hash"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_comments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_pullrequests",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_reports",
+        "primary_key": [
+          "external_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid",
+        "primary_key": [
+          "external_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
+        "primary_key": [
+          "external_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+        "primary_key": [
+          "external_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_statuses",
+        "primary_key": [
+          "key"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commit_commit_statuses_build_key",
+        "primary_key": [
+          "key"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commits",
+        "primary_key": [
+          "hash"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_commits_revision",
+        "primary_key": [
+          "hash"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_components",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_components_component_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_default_reviewers",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_default_reviewers_target_username",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_deploy_keys",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_deploy_keys_key_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_deployments",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_deployments_deployment_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_diffstat_spec",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_effective_branching_model",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_effective_default_reviewers",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_environments",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_environments_environment_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_file_conflicts_spec",
+        "primary_key": [
+          "path"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_filehistory_commit_path",
+        "primary_key": [
+          "path"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_forks",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_hooks",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_hooks_uid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_import",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id_attachments",
+        "primary_key": [
+          "name"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id_changes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id_changes_change_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id_comments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_merge_base_revspec",
+        "primary_key": [
+          "hash"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_milestones",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_milestones_milestone_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_override_settings",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_permissions_config_groups",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_permissions_config_users",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_caches",
+        "primary_key": [
+          "key_hash"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid_content_uri",
+        "primary_key": [
+          "uri"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_runners",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_schedules",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid_executions",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_variables",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_properties_app_key_property_name",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_comments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_statuses",
+        "primary_key": [
+          "key"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_refs",
+        "primary_key": [
+          "name"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_refs_branches",
+        "primary_key": [
+          "name"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_refs_branches_name",
+        "primary_key": [
+          "name"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_refs_tags",
+        "primary_key": [
+          "name"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_refs_tags_name",
+        "primary_key": [
+          "name"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_src",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_versions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_versions_version_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "repositories_workspace_repo_slug_watchers",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "snippets",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "snippets_workspace",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "snippets_workspace_encoded_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "snippets_workspace_encoded_id_comments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "snippets_workspace_encoded_id_comments_comment_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "snippets_workspace_encoded_id_commits",
+        "primary_key": [
+          "hash"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "snippets_workspace_encoded_id_commits_revision",
+        "primary_key": [
+          "hash"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "snippets_workspace_encoded_id_node_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "snippets_workspace_encoded_id_watchers",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "teams_username_pipelines_config_variables",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "teams_username_pipelines_config_variables_variable_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user_permissions_repositories",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user_permissions_workspaces",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user_workspaces",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user_workspaces_workspace_permission",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user_workspaces_workspace_permissions_repositories",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "users_selected_user",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "users_selected_user_gpg_keys",
+        "primary_key": [
+          "fingerprint"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "users_selected_user_gpg_keys_fingerprint",
+        "primary_key": [
+          "fingerprint"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "users_selected_user_pipelines_config_variables",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "users_selected_user_pipelines_config_variables_variable_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "users_selected_user_properties_app_key_property_name",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "users_selected_user_ssh_keys",
+        "primary_key": [
+          "fingerprint"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "users_selected_user_ssh_keys_key_id",
+        "primary_key": [
+          "fingerprint"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_hooks",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_hooks_uid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_members",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_members_member",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_permissions",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_permissions_repositories",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_permissions_repositories_repo_slug",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_pipelines_config_runners",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_pipelines_config_runners_runner_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_pipelines_config_variables",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_pipelines_config_variables_variable_uuid",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_branching_model",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_branching_model_settings",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_default_reviewers",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+        "primary_key": [
+          "account_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_deploy_keys",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_deploy_keys_key_id",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_permissions_config_groups",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_permissions_config_users",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+        "primary_key": [],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "workspaces_workspace_pullrequests_selected_user",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "delete_repositories_workspace_repo_slug",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_repositories_workspace_repo_slug",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_branch_restrictions_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_commit_commit_approve",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_commit_commit_comments_comment_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_default_reviewers_target_username",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_deploy_keys_key_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_deployments_config_environments_environment_uui_171d7214",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_downloads_filename",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_environments_environment_uuid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_hooks_uid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_issues_issue_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_issues_issue_id_attachments_path",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_issues_issue_id_vote",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_issues_issue_id_watch",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_permissions_config_groups_group_slug",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_caches",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_caches_cache_uuid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_properties_app_key_property_name",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_629f4f2b",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_refs_branches_name",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_repositories_workspace_repo_slug_refs_tags_name",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_snippets_workspace_encoded_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_snippets_workspace_encoded_id_comments_comment_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_snippets_workspace_encoded_id_watch",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_snippets_workspace_encoded_id_node_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_teams_username_pipelines_config_variables_variable_uuid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_users_selected_user_gpg_keys_fingerprint",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_users_selected_user_pipelines_config_variables_variable_uuid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_users_selected_user_properties_app_key_property_name",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_users_selected_user_ssh_keys_key_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_workspaces_workspace_hooks_uid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_workspaces_workspace_pipelines_config_runners_runner_uuid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_workspaces_workspace_pipelines_config_variables_variable_uuid",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_workspaces_workspace_projects_project_key",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_workspaces_workspace_projects_project_key_default_reviewers_selected_user",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_workspaces_workspace_projects_project_key_deploy_keys_key_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_workspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_workspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+        "method": "DELETE",
+        "kind": "delete"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Read Bitbucket Cloud resources and plan typed repository mutations safely.",
+      "usage": "pm bitbucket <command> [flags]",
+      "source_cli": {
+        "name": "Bitbucket Cloud REST API",
+        "docs": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "reference": "OpenAPI 3.0 Bitbucket API 2.0",
+        "source": "provider_api"
+      },
+      "groups": [
+        {
+          "id": "repositories",
+          "title": "Repositories",
+          "commands": [
+            "repositories"
+          ]
+        },
+        {
+          "id": "writes",
+          "title": "Reverse ETL writes",
+          "commands": [
+            "repositories create",
+            "repositories delete"
+          ]
+        },
+        {
+          "id": "planned",
+          "title": "Planned bounded direct/binary operations",
+          "commands": [
+            "search code",
+            "downloads get"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential name to use for Bitbucket requests.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum ETL records to emit.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "preview",
+          "type": "boolean",
+          "summary": "Preview a reverse-ETL write without executing it.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "approve",
+          "type": "string",
+          "summary": "Approval token required to execute a reverse-ETL plan.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "confirm",
+          "type": "string",
+          "summary": "Typed confirmation for destructive reverse-ETL writes.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "repositories list",
+          "summary": "List public Bitbucket repositories as paginated ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "repositories",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bitbucket repositories list --json --limit 100"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "repositories create",
+          "summary": "Create or initialize a Bitbucket repository through typed reverse ETL.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_repositories_workspace_repo_slug",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "workspace",
+              "type": "string",
+              "summary": "Workspace slug or UUID.",
+              "values": [],
+              "maps_to": "record.workspace"
+            },
+            {
+              "name": "repo-slug",
+              "type": "string",
+              "summary": "Repository slug to create.",
+              "values": [],
+              "maps_to": "record.repo_slug"
+            },
+            {
+              "name": "scm",
+              "type": "enum",
+              "summary": "Repository SCM type.",
+              "values": [
+                "git"
+              ],
+              "maps_to": "record.scm"
+            },
+            {
+              "name": "private",
+              "type": "boolean",
+              "summary": "Whether the repository is private.",
+              "values": [],
+              "maps_to": "record.is_private"
+            }
+          ],
+          "examples": [
+            "pm bitbucket repositories create --workspace <workspace> --repo-slug <slug> --scm git --preview"
+          ],
+          "output_policy": "",
+          "risk": "Creates a Bitbucket repository; reverse ETL plan, preview, explicit approval, execute are required.",
+          "approval": "Requires reverse ETL plan -> preview -> explicit approval -> execute.",
+          "notes": ""
+        },
+        {
+          "path": "repositories delete",
+          "summary": "Delete a Bitbucket repository through a destructive typed reverse-ETL action.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_repositories_workspace_repo_slug",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "workspace",
+              "type": "string",
+              "summary": "Workspace slug or UUID.",
+              "values": [],
+              "maps_to": "record.workspace"
+            },
+            {
+              "name": "repo-slug",
+              "type": "string",
+              "summary": "Repository slug to delete.",
+              "values": [],
+              "maps_to": "record.repo_slug"
+            }
+          ],
+          "examples": [
+            "pm bitbucket repositories delete --workspace <workspace> --repo-slug <slug> --confirm destructive --preview"
+          ],
+          "output_policy": "",
+          "risk": "Permanently deletes a Bitbucket repository; action has confirm: destructive.",
+          "approval": "Requires reverse ETL plan -> preview -> explicit approval -> execute plus typed destructive confirmation.",
+          "notes": ""
+        },
+        {
+          "path": "search code",
+          "summary": "Planned bounded Bitbucket provider search/query command; blocked pending shared provider-query foundation #2985.",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+          "flags": [],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "planned bounded provider query; no raw query escape hatch is exposed",
+          "approval": "blocked pending #2985",
+          "notes": "Connector-local operation metadata is present, but shared execution foundation is not claimed."
+        },
+        {
+          "path": "downloads get",
+          "summary": "Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation.",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+          "flags": [],
+          "examples": [],
+          "output_policy": "binary_file_bounded",
+          "risk": "planned bounded binary transfer; no generic byte-stream command is exposed",
+          "approval": "blocked pending bounded binary executor",
+          "notes": "Connector-local operation metadata is present, but shared execution foundation is not claimed."
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "bitbucket-auth",
+          "summary": "Use OAuth access tokens or username/app-password credentials from the credential store; never pass secrets in command text."
+        },
+        {
+          "name": "bitbucket-writes",
+          "summary": "Implemented Bitbucket writes are closed-schema repository creation and path-only DELETE reverse-ETL actions; untyped JSON-body mutations remain blocked."
+        },
+        {
+          "name": "bitbucket-binary-direct",
+          "summary": "Binary and provider-search operation ledger rows are present but command execution is blocked until the shared bounded-command foundations land."
+        }
+      ]
+    },
+    "docs_md": "# Bitbucket connector\n\n## Overview\n\nThis bundle records the complete official Bitbucket Cloud REST API 2.0 OpenAPI inventory from `https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json`. The inventory observed 331 operations with method counts {'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48} and source SHA-256 `efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2`. The connector declares declarative streams for JSON GET operations that the current engine can express, a narrow closed-schema reverse-ETL surface for typed repository creation and path-only deletes, and connector-local blocked operation rows for untyped JSON body mutations, binary transfer, typed JSON direct reads, multipart upload, and provider-search/query surfaces whose shared bounded-command foundations are not present in this worktree.\n\n## Auth setup\n\nUse credentials from the credential store only. Configure `access_token` as a secret for bearer auth, or configure `username` plus secret `app_password` for Bitbucket app-password basic auth. Do not pass tokens, app passwords, OAuth refresh material, or authorization headers in command text, fixtures, docs examples, issue comments, or logs. `base_url` defaults to `https://api.bitbucket.org/2.0`.\n\n## Streams notes\n\nThe stream ledger is generated from every official JSON GET operation that has typed stream coverage in this bundle. Paginated Bitbucket collection responses use `page` and `pagelen` with a bounded `max_pages` cap; singleton GET responses are modeled as single-object streams. Resource-scoped streams use optional config properties matching Bitbucket path parameter names such as `workspace`, `repo_slug`, `pull_request_id`, `commit`, and `issue_id`; a read of those streams fails closed if the needed config is absent. Repository, workspace, project, account, pipeline, and configuration-resource streams use provider `uuid`, `account_id`, `fingerprint`, `key`, `name`, or `external_id` fields when those keys are present; commit streams use commit `hash` values, and streams without a confirmed top-level provider key do not claim deduped sync. The `/user/emails` and `/user/emails/{email}` endpoints remain blocked because the official OpenAPI document publishes no provider-backed 2xx email-address response schema for this bundle to model. Fixtures are sanitized synthetic Bitbucket-shaped pages and do not come from live credentials.\n\n## Write actions & risks\n\nExecutable reverse-ETL actions now use closed record schemas. The retained JSON-body write is repository creation, which requires `workspace`, `repo_slug`, and `scm` and accepts only the typed body fields `scm` and optional `is_private`. `DELETE` actions use `kind: delete`, `body_type: none`, idempotent `missing_ok_status: [404]`, `additionalProperties: false`, and `confirm: \"destructive\"`; they remain in scope under the captain policy correction only through the existing plan -> preview -> explicit approval -> execute path plus typed destructive confirmation. JSON mutations without connector-owned typed body fields are blocked in `api_surface.json`/`operations.json` until the bundle declares closed request-body schemas and redaction evidence. File/multipart upload operations are not exposed as raw writes; they are blocked until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals without generic raw bytes.\n\nSecret-bearing JSON-body writes for pipeline variables, webhooks, deployment variables, and repository pipeline SSH key pairs are blocked until those actions declare closed typed body schemas with required secret fields and matching `redact_fields`. Redaction evidence in this branch applies to plans created after action metadata is persisted; hydrating saved pre-upgrade plans that lack `redact_fields` is a shared runtime dependency and is not claimed by the Bitbucket bundle.\n\n## Known limits\n\n- No live Bitbucket credentials, provider calls, writes, certification, VPS, or Thaalam work were performed. Certification remains fixture-only and `uncertified` until an approved live-safe executor records redacted artifacts.\n- Provider search/query, user email reads, planned JSON direct reads, and direct/binary command execution are connector-local metadata only here. User email endpoints are blocked on provider-backed response schema fixtures; provider query/search is blocked on shared foundation #2985; binary/file transfer execution needs the bounded transfer foundation described in the direct/binary lane.\n- CDC/changefeed semantics for webhook delivery are not claimed because CDC truthfulness/state foundations #2986 and #2988 are outside this connector-local scope. Webhook REST resources are ledgered as ordinary REST rows only; no CDC capability is advertised.\n- Generated streams use passthrough projection except for secret-bearing Bitbucket resources. Pipeline variable streams, webhook streams, deployment-environment variable streams, and the repository pipeline SSH key-pair stream use schema projection and omit provider secret fields such as `value`, `secret`, and `private_key` from ordinary read output.\n- The repository operation-count tables in GitHub issues are preserved by the captain-policy addendum and are not rewritten by this connector-local bundle.\n",
+    "icon": null
   },
   {
     "slug": "bitly",

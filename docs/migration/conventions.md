@@ -143,10 +143,10 @@ not a full override by default.
   `x-secret` fields end up in `Schema.SecretKeys()`, which governs secret/config partitioning,
   secret redaction from write previews, and log redaction. Write actions that place sensitive
   non-secret identifiers or clinical values into templated paths must also declare `redact_fields`
-  for those record paths so previews and write errors do not expose them. A field that merely
-  *looks* sensitive but is documentation-only (an optional Bearer-proxy key never wired into `auth`,
-  e.g. searxng's `api_key`) is still marked `x-secret: true` — the marker is about the *field's
-  nature*, not whether this bundle currently exercises it.
+  for those record paths so reverse-plan samples, previews, and write errors do not expose them. A
+  field that merely *looks* sensitive but is documentation-only (an optional Bearer-proxy key never
+  wired into `auth`, e.g. searxng's `api_key`) is still marked `x-secret: true` — the marker is
+  about the field's nature, not whether this bundle currently exercises it.
 - **Schema-as-projection**: a stream's `schemas/<stream>.json` `properties` set is derived
   **field-for-field** from what the legacy connector's own `mapRecord`/record-shaping function
   actually emits — not from guessing the raw API shape. In `"schema"` projection mode (the
@@ -195,9 +195,11 @@ not a full override by default.
   directory listings. Both policies reject sensitive repository paths before network access and
   redact `content` plus download URLs from returned JSON. Use `json_redacted` or
   `clinical_json_redacted` for non-repository direct reads, paired with `redact_fields` when the
-  operation has connector-specific sensitive response fields. Do not add provider-prefixed output
-  policy names in shared Go; new response families need a generic policy name and regression tests
-  proving reuse by more than one connector shape.
+  operation has connector-specific sensitive response fields. Use `binary_file_bounded` only for
+  reviewed file/binary operation metadata with explicit byte bounds; it must stay blocked until the
+  shared bounded-transfer executor exists. Do not add provider-prefixed output policy names in shared
+  Go; new response families need a generic policy name and regression tests proving reuse by more
+  than one connector shape.
 - **`certification.json` stays definition-owned and harness-only**: connector-specific certify
   contracts belong beside the connector bundle, never in provider-named shared certify branches.
   This optional file may declare `source.default_stream`, source credential defaults,
@@ -729,9 +731,10 @@ at all (pure path-parameterized mutation/delete).
 
 `redact_fields` is an action-local list of record paths whose values must be removed from
 operator-visible write surfaces. It is for non-secret identifiers or clinical values that can appear
-in templated paths or upstream error text; `DryRunWrite` replaces those path values in the resolved
-request preview, and `Write` redacts raw and URL-encoded literal forms from returned write errors
-while preserving typed error wrapping.
+in templated paths or upstream error text; reverse-plan creation persists the list and masks matching
+sample fields, `DryRunWrite` replaces those path values in the resolved request preview, and `Write`
+redacts raw and URL-encoded literal forms from returned write errors while preserving typed error
+wrapping.
 
 **Delete semantics**: `kind: "delete"` + `delete.missing_ok_status: [404, ...]` means those HTTP
 statuses on the delete request count as **written, not failed** (idempotent delete) — any other
