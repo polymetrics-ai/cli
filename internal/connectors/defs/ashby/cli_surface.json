@@ -505,7 +505,7 @@
         "sourceId",
         "creditedToUserId"
       ],
-      "risk": "Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -774,7 +774,7 @@
         "archiveReasonId",
         "archiveEmail"
       ],
-      "risk": "Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -819,7 +819,7 @@
         "archiveReasonId",
         "archiveEmail"
       ],
-      "risk": "Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -999,7 +999,7 @@
       "redact_fields": [
         "applicationId"
       ],
-      "risk": "Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -2896,7 +2896,7 @@
       "redact_fields": [
         "jobId"
       ],
-      "risk": "Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -3957,7 +3957,7 @@
       "redact_fields": [
         "offerId"
       ],
-      "risk": "Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -4148,7 +4148,7 @@
         "locationIds",
         "jobIds"
       ],
-      "risk": "Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -4263,7 +4263,7 @@
       "redact_fields": [
         "openingId"
       ],
-      "risk": "Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -4311,7 +4311,7 @@
         "openingId",
         "closeReasonId"
       ],
-      "risk": "Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -4953,7 +4953,7 @@
       "redact_fields": [
         "customFieldId"
       ],
-      "risk": "Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -4994,7 +4994,7 @@
         "assessment_id",
         "assessment_profile_url"
       ],
-      "risk": "Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },
@@ -6076,7 +6076,7 @@
         "interviewScheduleId",
         "interviewEventIdToCancel"
       ],
-      "risk": "Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
       "notes": "Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed."
     },

@@ -303,7 +303,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 - create_application:
   - endpoint: POST /application.create
   - required fields: candidateId, jobId
-  - risk: Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - update_application:
   - endpoint: POST /application.update
   - required fields: applicationId
@@ -323,11 +323,11 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 - change_application_stage:
   - endpoint: POST /application.change_stage
   - required fields: applicationId, interviewStageId
-  - risk: Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - change_application_stage_2:
   - endpoint: POST /application.changeStage
   - required fields: applicationId, interviewStageId
-  - risk: Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - change_application_source:
   - endpoint: POST /application.change_source
   - required fields: applicationId, sourceId
@@ -343,7 +343,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 - update_application_history:
   - endpoint: POST /application.updateHistory
   - required fields: applicationId, applicationHistory
-  - risk: Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - submit_application_feedback:
   - endpoint: POST /applicationFeedback.submit
   - required fields: feedbackForm, formDefinitionId, applicationId
@@ -447,7 +447,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 - set_job_status:
   - endpoint: POST /job.setStatus
   - required fields: jobId, status
-  - risk: Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - archive_department:
   - endpoint: POST /department.archive
   - required fields: departmentId
@@ -523,7 +523,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 - set_offer_status:
   - endpoint: POST /offer.setStatus
   - required fields: offerId, acceptanceStatus
-  - risk: Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - set_offer_decided_at:
   - endpoint: POST /offer.setDecidedAt
   - required fields: offerId, decidedAt
@@ -534,7 +534,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - risk: Executes Ashby offerProcess.start through the documented POST /offerProcess.start endpoint; reverse ETL plan, preview, approval, and execute are required.
 - create_opening:
   - endpoint: POST /opening.create
-  - risk: Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - update_opening:
   - endpoint: POST /opening.update
   - required fields: openingId
@@ -542,11 +542,11 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 - set_opening_archived:
   - endpoint: POST /opening.setArchived
   - required fields: openingId, archive
-  - risk: Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - set_opening_opening_state:
   - endpoint: POST /opening.setOpeningState
   - required fields: openingId, openingState
-  - risk: Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - add_opening_job:
   - endpoint: POST /opening.addJob
   - required fields: openingId, jobId
@@ -578,11 +578,11 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 - update_custom_field_selectable_values:
   - endpoint: POST /customField.updateSelectableValues
   - required fields: customFieldId, selectableValues
-  - risk: Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - update_assessment:
   - endpoint: POST /assessment.update
   - required fields: assessment_id, timestamp
-  - risk: Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - add_assessment_completed_to_candidate:
   - endpoint: POST /assessment.addCompletedToCandidate
   - required fields: candidateId, partnerId, assessment, timestamp
@@ -650,7 +650,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 - update_interview_schedule:
   - endpoint: POST /interviewSchedule.update
   - required fields: interviewScheduleId
-  - risk: Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, approval, and execute are required.
+  - risk: Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.
 - cancel_interview_schedule:
   - endpoint: POST /interviewSchedule.cancel
   - required fields: id
@@ -744,7 +744,7 @@ By default, only active (enabled) users are returned. Use `includeDeactivated: t
 Lists an organization's audit log entries, [intent=etl availability=implemented stream=audit_log_list]; notes: Fixed Ashby stream for auditLog.list; flags map only to documented request body fields.; flags: --start-date, --end-date, --actor-ids, --target-ids, --target-types, --categories
   - application create - Consider a candidate for a job (e.g. when sourcing a candidate for a job posting).
 
-If you're submitting an application as a job board, use the [`applicationFor [intent=reverse_etl availability=implemented write=create_application]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --job-id, --interview-plan-id, --interview-stage-id, --source-id, --credited-to-user-id, --created-at, --application-history
+If you're submitting an application as a job board, use the [`applicationFor [intent=reverse_etl availability=implemented write=create_application]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --job-id, --interview-plan-id, --interview-stage-id, --source-id, --credited-to-user-id, --created-at, --application-history
   - application update - Update an application.
 
 To set values for custom fields on Applications, use the [`customField.setValue`](ref:customfieldsetvalue) endpoint.
@@ -767,10 +767,10 @@ To set values for custom fields on Applications, use the [`customField.setValue`
 
 Change the stage of an application.
 
-**Requires the [`candidatesWrite`](au [intent=reverse_etl availability=implemented write=change_application_stage]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --interview-stage-id, --archive-reason-id
+**Requires the [`candidatesWrite`](au [intent=reverse_etl availability=implemented write=change_application_stage]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --interview-stage-id, --archive-reason-id
   - application change-stage-2 - Change the stage of an application.
 
-**Requires the [`candidatesWrite`](authentication#permissions-applicationchangestage) permission.** [intent=reverse_etl availability=implemented write=change_application_stage_2]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --interview-stage-id, --archive-reason-id
+**Requires the [`candidatesWrite`](authentication#permissions-applicationchangestage) permission.** [intent=reverse_etl availability=implemented write=change_application_stage_2]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --interview-stage-id, --archive-reason-id
   - application change-source - **Deprecated.** Use [`application.changeSource`](ref:applicationchangesource) instead.
 
 Change the source of an application.
@@ -784,7 +784,7 @@ Change the source of an application.
 **Requires the [`candidatesWrite`](authentication#permissions-applicationtransfer) permission.** [intent=reverse_etl availability=implemented write=transfer_application]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby application.transfer through the documented POST /application.transfer endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --job-id, --interview-plan-id, --interview-stage-id, --start-automatic-activities
   - application update-history - Update the history of an application. Used to update stage timestamps and to delete history events.
 
-**Also requires the `Allow updating application history?` s [intent=reverse_etl availability=implemented write=update_application_history]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --application-history-0-stage-id, --application-history-0-stage-number, --application-history-0-entered-stage-at
+**Also requires the `Allow updating application history?` s [intent=reverse_etl availability=implemented write=update_application_history]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --application-history-0-stage-id, --application-history-0-stage-number, --application-history-0-entered-stage-at
   - application list-history - Fetch a paginated list of application history items for an application.
 
 This endpoint supports pagination only (not incremental sync). See the [Pagination and  [intent=etl availability=implemented stream=application_list_history]; notes: Fixed Ashby stream for application.listHistory; flags map only to documented request body fields.; flags: --application-id
@@ -807,7 +807,7 @@ The `interviewEventId` returned in the response can be provided to `applicationF
   - approval-definition update - Create or update an approval definition for a specific entity that requires approval. The entity requiring approval must be within scope of an approval in Ashby [intent=reverse_etl availability=implemented write=update_approval_definition]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby approvalDefinition.update through the documented POST /approvalDefinition.update endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --entity-type, --entity-id, --approval-step-definitions-0-approvals-required, --approval-step-definitions-0-approvers-0-user-id, --approval-step-definitions-0-approvers-0-type, --submit-approval-request
   - candidate search - Searches for candidates by email and/or name.
 
-**Requires the [`candidatesRead`](authentication#permissions-candidatesearch) permission.** [intent=direct_read availability=implemented]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email, --name
+**Requires the [`candidatesRead`](authentication#permissions-candidatesearch) permission.** [intent=direct_read availability=implemented operation=ashby.direct.candidate.search]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email, --name
   - candidate info - Fetches details about a single candidate by id or external mapping id.
 
 **Requires the [`candidatesRead`](authentication#permissions-candidateinfo) permission.* [intent=etl availability=implemented stream=candidate_info]; notes: Fixed Ashby stream for candidate.info; flags map only to documented request body fields. Requires at least one documented selector: id, externalMappingId.; flags: --id, --external-mapping-id
@@ -917,10 +917,10 @@ Set `status` to `Published` to publish a draft job posting. The posting must  [i
 **Requires the [`jobsWrite`](authentication#permissions-jobupdate [intent=reverse_etl availability=implemented write=update_job_compensation]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby job.updateCompensation through the documented POST /job.updateCompensation endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --job-id, --compensation-tiers-0-components-0-compensation-type, --compensation-tiers-0-components-0-interval
   - job search - Searches jobs by title or custom requisition id. At least one of `title` or `requisitionId` must be provided.
 
-**Requires the [`jobsRead`](authentication#permis [intent=direct_read availability=implemented]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title, --requisition-id
+**Requires the [`jobsRead`](authentication#permis [intent=direct_read availability=implemented operation=ashby.direct.job.search]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title, --requisition-id
   - job set-status - Sets the status of a job.
 
-**Requires the [`jobsWrite`](authentication#permissions-jobsetstatus) permission.** [intent=reverse_etl availability=implemented write=set_job_status]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --job-id, --status
+**Requires the [`jobsWrite`](authentication#permissions-jobsetstatus) permission.** [intent=reverse_etl availability=implemented write=set_job_status]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --job-id, --status
   - job-board list - List all enabled job boards.
 
 **Requires the [`jobsRead`](authentication#permissions-jobboardlist) permission.** [intent=etl availability=implemented stream=job_board_list]; notes: Fixed Ashby stream for jobBoard.list; flags map only to documented request body fields.
@@ -994,7 +994,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 Notetaker transcript recording.
 
 **Prerequisites:**
-- Your organization must have the **AI Notetaker ad [intent=direct_read availability=implemented]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --notetaker-transcript-id
+- Your organization must have the **AI Notetaker ad [intent=direct_read availability=implemented operation=ashby.direct.notetaker.transcript.info]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --notetaker-transcript-id (required)
   - offer approve - Approves an offer or a specific approval step within an offer's approval process.
 
 This endpoint mimics the behavior of the "Force Approve" function in the Ashb [intent=reverse_etl availability=implemented write=approve_offer]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby offer.approve through the documented POST /offer.approve endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --offer-version-id, --approval-step-id, --user-id, --exclude-form-definition
@@ -1023,7 +1023,7 @@ Offer forms support a variety of field types. The values accepted for each field
 
 Ashby derives the offer status from the provided acceptance status; `offerStatus` can't be set independently.
 
-**Requires [intent=reverse_etl availability=implemented write=set_offer_status]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --offer-id, --acceptance-status, --exclude-form-definition
+**Requires [intent=reverse_etl availability=implemented write=set_offer_status]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --offer-id, --acceptance-status, --exclude-form-definition
   - offer set-decided-at - Updates an offer's decidedAt timestamp.
 
 **Requires the [`offersWrite`](authentication#permissions-offersetdecidedat) permission.** [intent=reverse_etl availability=implemented write=set_offer_decided_at]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby offer.setDecidedAt through the documented POST /offer.setDecidedAt endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --offer-id, --decided-at, --exclude-form-definition
@@ -1037,7 +1037,7 @@ Ashby derives the offer status from the provided acceptance status; `offerStatus
 
 To set values of custom fields on Openings, use the [`customField.setValue`](ref:customfieldsetvalue) endpoint.
 
-**Requires the [`jobsWrite [intent=reverse_etl availability=implemented write=create_opening]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --identifier, --description, --team-id, --location-ids, --job-ids, --target-hire-date, --target-start-date, --is-backfill, --employment-type, --opening-state
+**Requires the [`jobsWrite [intent=reverse_etl availability=implemented write=create_opening]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --identifier, --description, --team-id, --location-ids, --job-ids, --target-hire-date, --target-start-date, --is-backfill, --employment-type, --opening-state
   - opening update - Updates an opening.
 
 To set values for custom fields on Openings, use the [`customField.setValue`](ref:customfieldsetvalue) endpoint.
@@ -1045,10 +1045,10 @@ To set values for custom fields on Openings, use the [`customField.setValue`](re
 **Requires the [`jobsWrit [intent=reverse_etl availability=implemented write=update_opening]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.update through the documented POST /opening.update endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --opening-id, --identifier, --description, --team-id, --target-hire-date, --target-start-date, --is-backfill, --employment-type
   - opening set-archived - Sets the archived state of an opening.
 
-**Requires the [`jobsWrite`](authentication#permissions-openingsetarchived) permission.** [intent=reverse_etl availability=implemented write=set_opening_archived]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --opening-id, --archive
+**Requires the [`jobsWrite`](authentication#permissions-openingsetarchived) permission.** [intent=reverse_etl availability=implemented write=set_opening_archived]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --opening-id, --archive
   - opening set-opening-state - Sets the state of an opening.
 
-**Requires the [`jobsWrite`](authentication#permissions-openingsetopeningstate) permission.** [intent=reverse_etl availability=implemented write=set_opening_opening_state]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --opening-id, --opening-state, --close-reason-id
+**Requires the [`jobsWrite`](authentication#permissions-openingsetopeningstate) permission.** [intent=reverse_etl availability=implemented write=set_opening_opening_state]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --opening-id, --opening-state, --close-reason-id
   - opening add-job - Adds a job to an opening.
 
 **Requires the [`jobsWrite`](authentication#permissions-openingaddjob) permission.** [intent=reverse_etl availability=implemented write=add_opening_job]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby opening.addJob through the documented POST /opening.addJob endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --opening-id, --job-id
@@ -1068,7 +1068,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 **Requires the  [intent=etl availability=implemented stream=opening_list]; notes: Fixed Ashby stream for opening.list; flags map only to documented request body fields.; flags: --created-after
   - opening search - Searches for openings by identifier.
 
-**Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.** [intent=direct_read availability=implemented]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --identifier
+**Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.** [intent=direct_read availability=implemented operation=ashby.direct.opening.search]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --identifier (required)
   - project info - Retrieves a project by its UUID.
 
 **Requires the [`candidatesRead`](authentication#permissions-projectinfo) permission.** [intent=etl availability=implemented stream=project_info]; notes: Fixed Ashby stream for project.info; flags map only to documented request body fields.; flags: --project-id
@@ -1079,7 +1079,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 **Requires the  [intent=etl availability=implemented stream=project_list]; notes: Fixed Ashby stream for project.list; flags map only to documented request body fields.; flags: --created-after
   - project search - Search for projects by title.
 
-Responses are limited to 100 results. Consider refining your search or using /project.list to paginate through all projects, if y [intent=direct_read availability=implemented]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title
+Responses are limited to 100 results. Consider refining your search or using /project.list to paginate through all projects, if y [intent=direct_read availability=implemented operation=ashby.direct.project.search]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --title (required)
   - source list - List all sources
 
 **Requires the [`hiringProcessMetadataRead`](authentication#permissions-sourcelist) permission.** [intent=etl availability=implemented stream=source_list]; notes: Fixed Ashby stream for source.list; flags map only to documented request body fields.; flags: --include-archived
@@ -1114,12 +1114,12 @@ This is the recommended approach when updating multiple fields on the same objec
 
 This endpoint merges the provided selectable values with the existing values for a custom field.
 
-**Merge beha [intent=reverse_etl availability=implemented write=update_custom_field_selectable_values]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --custom-field-id, --selectable-values-0-label, --selectable-values-0-value
+**Merge beha [intent=reverse_etl availability=implemented write=update_custom_field_selectable_values]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --custom-field-id, --selectable-values-0-label, --selectable-values-0-value
   - assessment update - Update Ashby about the status of a started assessment.
 
 `assessment_status` is required unless `cancelled_reason` is provided.
 
-**Requires the [`candidatesWrite [intent=reverse_etl availability=implemented write=update_assessment]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --assessment-id, --timestamp, --metadata
+**Requires the [`candidatesWrite [intent=reverse_etl availability=implemented write=update_assessment]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --assessment-id, --timestamp, --metadata
   - assessment add-completed-to-candidate - Add a completed assessment to a candidate.
 
 **Requires the [`candidatesWrite`](authentication#permissions-assessmentaddcompletedtocandidate) permission.** [intent=reverse_etl availability=implemented write=add_assessment_completed_to_candidate]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby assessment.addCompletedToCandidate through the documented POST /assessment.addCompletedToCandidate endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --candidate-id, --partner-id, --assessment-assessment-type-id, --assessment-assessment-id, --assessment-assessment-name, --assessment-result-identifier, --assessment-result-label, --assessment-result-type, --assessment-result-value, --assessment-metadata-0-identifier, --assessment-metadata-0-label, --assessment-metadata-0-type, --assessment-metadata-0-value, --timestamp
@@ -1139,7 +1139,7 @@ This endpoint merges the provided selectable values with the existing values for
 
 Returns an array containing the user if found, or an empty array if no user with the given email exists.
 
-**Requires the [ [intent=direct_read availability=implemented]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email
+**Requires the [ [intent=direct_read availability=implemented operation=ashby.direct.user.search]; approval: none; risk: bounded JSON direct read; response fields with secret/download markers are redacted; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --email (required)
   - user interviewer-settings - Get interviewer settings for a user.
 
 **Requires the [`organizationRead`](authentication#permissions-userinterviewersettings) permission.** [intent=reverse_etl availability=implemented write=interviewer_user_settings]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby user.interviewerSettings through the documented POST /user.interviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --user-id
@@ -1217,7 +1217,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 **Requires the [`interviewsWrite`](authentication#permissions-interviewschedulecreate) permission.** [intent=reverse_etl availability=implemented write=create_interview_schedule]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby interviewSchedule.create through the documented POST /interviewSchedule.create endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --application-id, --interview-events-0-start-time, --interview-events-0-end-time, --interview-events-0-interviewers-0-email
   - interview-schedule update - Update an interview schedule. This endpoint allows you to add, cancel, or update interview events associated with an interview schedule.
 
-In order to update an  [intent=reverse_etl availability=implemented write=update_interview_schedule]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --interview-schedule-id, --interview-event-id-to-cancel, --allow-feedback-deletion
+In order to update an  [intent=reverse_etl availability=implemented write=update_interview_schedule]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --interview-schedule-id, --interview-event-id-to-cancel, --allow-feedback-deletion
   - interview-schedule cancel - Cancel an interview schedule by id.
 
 **Requires the [`interviewsWrite`](authentication#permissions-interviewschedulecancel) permission.** [intent=reverse_etl availability=implemented write=cancel_interview_schedule]; approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; risk: Executes Ashby interviewSchedule.cancel through the documented POST /interviewSchedule.cancel endpoint; reverse ETL plan, preview, approval, and execute are required.; notes: Ashby OpenAPI contains no Idempotency-Key or idempotency header evidence; no provider idempotency key is claimed.; flags: --id, --allow-reschedule
@@ -1250,7 +1250,7 @@ See the [Pagination and Incremental Synchronization](/docs/pagination-and-increm
 **Requires the [`interviewsRead`](authentication#permissions-interviewstageinfo) per [intent=etl availability=implemented stream=interview_stage_info]; notes: Fixed Ashby stream for interviewStage.info; flags map only to documented request body fields.; flags: --interview-stage-id
   - file info - Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files).
 
-**Please note** that [intent=direct_read availability=implemented]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --file-handle
+**Please note** that [intent=direct_read availability=implemented operation=ashby.direct.file.info]; approval: none; risk: bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output; notes: Fixed Ashby POST direct read; no raw method/path/body override is exposed.; flags: --file-handle (required)
   - survey-form-definition info - Returns details about a single survey form definition by id.
 
 **Requires the [`hiringProcessMetadataRead`](authentication#permissions-surveyformdefinitioninfo)  [intent=etl availability=implemented stream=survey_form_definition_info]; notes: Fixed Ashby stream for surveyFormDefinition.info; flags map only to documented request body fields.; flags: --survey-form-definition-id

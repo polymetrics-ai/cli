@@ -9856,7 +9856,8 @@
         "kind": "create",
         "method": "POST",
         "path": "/application.create",
-        "risk": "Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "update_application",
@@ -9893,14 +9894,16 @@
         "kind": "update",
         "method": "POST",
         "path": "/application.change_stage",
-        "risk": "Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "change_application_stage_2",
         "kind": "update",
         "method": "POST",
         "path": "/application.changeStage",
-        "risk": "Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "change_application_source",
@@ -9928,7 +9931,8 @@
         "kind": "update",
         "method": "POST",
         "path": "/application.updateHistory",
-        "risk": "Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "submit_application_feedback",
@@ -10114,7 +10118,8 @@
         "kind": "update",
         "method": "POST",
         "path": "/job.setStatus",
-        "risk": "Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "archive_department",
@@ -10251,7 +10256,8 @@
         "kind": "update",
         "method": "POST",
         "path": "/offer.setStatus",
-        "risk": "Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "set_offer_decided_at",
@@ -10272,7 +10278,8 @@
         "kind": "create",
         "method": "POST",
         "path": "/opening.create",
-        "risk": "Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "update_opening",
@@ -10286,14 +10293,16 @@
         "kind": "update",
         "method": "POST",
         "path": "/opening.setArchived",
-        "risk": "Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "set_opening_opening_state",
         "kind": "update",
         "method": "POST",
         "path": "/opening.setOpeningState",
-        "risk": "Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "add_opening_job",
@@ -10351,14 +10360,16 @@
         "kind": "update",
         "method": "POST",
         "path": "/customField.updateSelectableValues",
-        "risk": "Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "update_assessment",
         "kind": "update",
         "method": "POST",
         "path": "/assessment.update",
-        "risk": "Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "add_assessment_completed_to_candidate",
@@ -10480,7 +10491,8 @@
         "kind": "update",
         "method": "POST",
         "path": "/interviewSchedule.update",
-        "risk": "Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+        "risk": "Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
       },
       {
         "name": "cancel_interview_schedule",
