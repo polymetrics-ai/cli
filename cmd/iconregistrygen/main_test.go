@@ -126,3 +126,43 @@ func TestBuildIconEntriesAllowsReviewedSameAssetCollapse(t *testing.T) {
 		t.Fatalf("assets = %+v", assets)
 	}
 }
+
+func TestBuildIconEntriesRejectsSamePathWithDifferentSourceURLs(t *testing.T) {
+	_, _, err := buildIconEntries(registryFile{
+		Sources: []map[string]any{{
+			"public":           true,
+			"dockerRepository": "registry/source-demo",
+			"documentationUrl": "https://example.com/integrations/sources/demo",
+			"icon":             "demo.svg",
+			"iconUrl":          "https://example.com/source-demo/demo.svg",
+		}},
+		Destinations: []map[string]any{{
+			"public":           true,
+			"dockerRepository": "registry/destination-demo",
+			"documentationUrl": "https://example.com/integrations/destinations/demo",
+			"icon":             "demo.svg",
+			"iconUrl":          "https://example.com/destination-demo/demo.svg",
+		}},
+	}, buildOptions{ImplementedConnectors: map[string]bool{"demo": true}})
+	if err == nil || !strings.Contains(err.Error(), "conflicting source URLs") {
+		t.Fatalf("buildIconEntries source URL conflict error = %v", err)
+	}
+}
+
+func TestValidateBuiltIconEntryUsesSlashOrientedPaths(t *testing.T) {
+	entry := iconEntry{
+		Connector:    "demo",
+		ID:           "demo",
+		Path:         "icons/simple-icons/demo.svg",
+		Source:       connectors.IconSourceSimpleIcons,
+		ReviewStatus: connectors.IconReviewSimpleIconsCC0Trademark,
+	}
+	if err := validateBuiltIconEntry(entry); err != nil {
+		t.Fatalf("validateBuiltIconEntry() rejected forward-slash path: %v", err)
+	}
+
+	entry.Path = `icons/simple-icons\demo.svg`
+	if err := validateBuiltIconEntry(entry); err == nil {
+		t.Fatal("validateBuiltIconEntry() accepted backslash path")
+	}
+}

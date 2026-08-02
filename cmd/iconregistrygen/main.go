@@ -12,6 +12,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -212,6 +213,9 @@ func mergeCollapsedIconEntry(a, b iconEntry) (iconEntry, error) {
 	if a.ID != b.ID || a.Path != b.Path {
 		return iconEntry{}, fmt.Errorf("ambiguous source/destination icon collapse for %q: %s/%s vs %s/%s", a.Connector, a.ID, a.Path, b.ID, b.Path)
 	}
+	if a.SourceURL != b.SourceURL {
+		return iconEntry{}, fmt.Errorf("ambiguous source/destination icon collapse for %q: conflicting source URLs", a.Connector)
+	}
 	if reviewRank(b.ReviewStatus) > reviewRank(a.ReviewStatus) || (b.ReviewURL != "" && a.ReviewURL == "") {
 		b.Implemented = a.Implemented || b.Implemented
 		return b, nil
@@ -261,7 +265,8 @@ func validateBuiltIconEntry(entry iconEntry) error {
 	if entry.ID == "" || entry.Path == "" || entry.Source == "" || entry.ReviewStatus == "" {
 		return fmt.Errorf("connector icon entry %q has incomplete metadata", entry.Connector)
 	}
-	if !strings.HasPrefix(entry.Path, "icons/") || filepath.Clean(entry.Path) != entry.Path || filepath.Ext(entry.Path) != ".svg" {
+	clean := path.Clean(entry.Path)
+	if strings.Contains(entry.Path, `\`) || !strings.HasPrefix(entry.Path, "icons/") || clean != entry.Path || path.Ext(clean) != ".svg" {
 		return fmt.Errorf("connector icon entry %q has invalid path %q", entry.Connector, entry.Path)
 	}
 	return nil

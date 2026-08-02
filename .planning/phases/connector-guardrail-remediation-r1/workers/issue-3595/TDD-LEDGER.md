@@ -10,6 +10,10 @@
 | Asset authority | Website-only SVGs can exist without canonical docs source assets | canonical SVGs live under `docs/connectors/icons/**`; website public assets are generated/copied copies |
 | Ownership consumer | Ownership cannot resolve examples like `apify-dataset -> icons/apify.svg` and `apple-search-ads -> icons/simple-icons/apple.svg` through one registry | ownership maps source assets and generated website copies to the canonical bare connector; ambiguous/orphan/duplicate paths reject |
 | Catalog allowance handoff | PR #3590 still needs exact catalog allowances | handoff records exact `docs/connectors/catalog/all-connectors.json` and `.md` allowance for PR #3590 reconciliation |
+| Review F1 canonical coverage | Missing registry rows can be masked by consumer-side fallback | constructed registries reject missing explicit rows and metadata consumers use canonical rows only |
+| Review F2 source URL collision | Same ID/path with different source URLs collapses by iteration order | conflicting source URLs reject while identical source URL fixtures still collapse |
+| Review F3 generated icon reconciliation | Deleted or renamed canonical icons leave stale website SVGs | a two-generation path-change fixture proves output-only SVGs are removed inside the bounded generated tree |
+| Review F4 slash path portability | host `filepath` semantics can reject portable registry paths | nested forward-slash registry paths validate through slash-oriented `path` semantics |
 
 ## Actual evidence log
 

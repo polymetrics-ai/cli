@@ -12,6 +12,12 @@ node --check website/scripts/fetch-simple-icons.mjs
 
 Add or adjust package-specific commands if implementation places tests elsewhere. Use existing package managers/tools only; do not add dependencies without approval.
 
+Review repair focused gate:
+
+```bash
+go test ./internal/connectors ./internal/connectors/bundleregistry ./cmd/iconregistrygen && node --test website/scripts/icon-registry.test.mjs
+```
+
 ## Repository gates before integration
 
 ```bash

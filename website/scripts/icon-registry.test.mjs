@@ -1,8 +1,19 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
+
+import { syncConnectorIcons } from './lib/connector-icons.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '../..');
@@ -17,6 +28,20 @@ function readJSON(path) {
 
 function byConnector(entries) {
   return new Map(entries.map((entry) => [entry.connector, entry]));
+}
+
+function listSVGPaths(root, current = root) {
+  if (!existsSync(current)) return [];
+  const paths = [];
+  for (const entry of readdirSync(current, { withFileTypes: true })) {
+    const target = join(current, entry.name);
+    if (entry.isDirectory()) {
+      paths.push(...listSVGPaths(root, target));
+    } else if (entry.isFile() && entry.name.endsWith('.svg')) {
+      paths.push(relative(root, target).split(sep).join('/'));
+    }
+  }
+  return paths.sort();
 }
 
 test('canonical icon registry uses bare keys and owns source assets', () => {
@@ -43,6 +68,34 @@ test('website output has no icon mapping or SVG authority outside docs source tr
     assert.ok(existsSync(resolve(docsRoot, entry.path)), `canonical source missing for ${entry.path}`);
     assert.ok(existsSync(resolve(websiteRoot, entry.path)), `generated website copy missing for ${entry.path}`);
   }
+
+  const canonicalPaths = new Set(listSVGPaths(resolve(docsRoot, 'icons')));
+  for (const outputPath of listSVGPaths(resolve(websiteRoot, 'icons'))) {
+    assert.ok(canonicalPaths.has(outputPath), `website-only generated icon must be removed: icons/${outputPath}`);
+  }
+});
+
+test('icon sync removes stale output after canonical path changes', (t) => {
+  const fixtureRoot = mkdtempSync(join(tmpdir(), 'polymetrics-icon-sync-'));
+  t.after(() => rmSync(fixtureRoot, { recursive: true, force: true }));
+
+  const sourceRoot = resolve(fixtureRoot, 'docs/connectors');
+  const publicRoot = resolve(fixtureRoot, 'website/public/connectors');
+  const originalSource = resolve(sourceRoot, 'icons/original.svg');
+  mkdirSync(dirname(originalSource), { recursive: true });
+  writeFileSync(originalSource, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
+
+  syncConnectorIcons(new Set(['icons/original.svg']), { sourceRoot, publicRoot });
+  assert.equal(existsSync(resolve(publicRoot, 'icons/original.svg')), true);
+
+  rmSync(originalSource);
+  const replacementSource = resolve(sourceRoot, 'icons/simple-icons/replacement.svg');
+  mkdirSync(dirname(replacementSource), { recursive: true });
+  writeFileSync(replacementSource, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
+
+  syncConnectorIcons(new Set(['icons/simple-icons/replacement.svg']), { sourceRoot, publicRoot });
+  assert.equal(existsSync(resolve(publicRoot, 'icons/original.svg')), false);
+  assert.equal(existsSync(resolve(publicRoot, 'icons/simple-icons/replacement.svg')), true);
 });
 
 test('website scripts consume only the canonical registry', () => {

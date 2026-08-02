@@ -92,28 +92,11 @@ func ConnectorIconEntries() []connectorIconEntry {
 }
 
 func MetadataWithIcon(meta Metadata) Metadata {
-	if meta.Icon != nil {
-		icon := *meta.Icon
-		meta.Icon = &icon
-		return meta
-	}
+	meta.Icon = nil
 	if icon, ok := ConnectorIconFor(meta.Name); ok {
-		meta.Icon = &icon
-	} else {
-		icon := fallbackConnectorIcon(meta.Name)
 		meta.Icon = &icon
 	}
 	return meta
-}
-
-func fallbackConnectorIcon(name string) ConnectorIcon {
-	return ConnectorIcon{
-		ID:           "pm-" + name,
-		Path:         "icons/pm-sample.svg",
-		Source:       IconSourcePolymetrics,
-		ReviewStatus: IconReviewPolymetrics,
-		ReviewURL:    "https://github.com/polymetrics-ai/cli",
-	}
 }
 
 func manifestWithIcon(manifest Manifest) Manifest {
@@ -173,6 +156,31 @@ func connectorIconRegistryEntries() ([]connectorIconEntry, error) {
 	}
 	sort.SliceStable(entries, func(i, j int) bool { return entries[i].Connector < entries[j].Connector })
 	return entries, nil
+}
+
+func (r *Registry) ValidateIconCoverage() error {
+	icons, err := connectorIconRegistry()
+	if err != nil {
+		return err
+	}
+	names := make([]string, 0, len(r.connectors))
+	for name := range r.connectors {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		if name == "" || name != strings.TrimSpace(name) || hasLegacyIconConnectorPrefix(name) {
+			return fmt.Errorf("connector registry name %q must be a bare connector identifier", name)
+		}
+		metadataName := strings.TrimSpace(r.connectors[name].Metadata().Name)
+		if metadataName != name {
+			return fmt.Errorf("connector %q metadata name %q must match registry name", name, metadataName)
+		}
+		if _, ok := icons[name]; !ok {
+			return fmt.Errorf("missing explicit icon registry entry for connector %q", name)
+		}
+	}
+	return nil
 }
 
 func ValidateConnectorIcons(connectorsDir string, defs []Definition, metas []Metadata) error {

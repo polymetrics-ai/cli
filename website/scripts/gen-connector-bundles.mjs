@@ -4,8 +4,6 @@
 // Emits: website/data/connectors.generated.json
 
 import {
-  copyFileSync,
-  existsSync,
   readFileSync,
   writeFileSync,
   mkdirSync,
@@ -15,6 +13,10 @@ import { dirname, relative, resolve, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { mapCLISurface } from './lib/cli-surface.mjs';
+import {
+  syncConnectorIcons,
+  validConnectorIconPath,
+} from './lib/connector-icons.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFS_ROOT = resolve(__dirname, '../../internal/connectors/defs');
@@ -69,7 +71,6 @@ function readSchema(base, schemaPath) {
   return readJSON(target);
 }
 
-const validIconPath = (path) => /^icons\/(?:[A-Za-z0-9._-]+\/)?[A-Za-z0-9._-]+\.svg$/.test(path);
 const iconRaw = readJSON(ICON_DATA) ?? [];
 const iconByConnector = new Map();
 for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
@@ -87,38 +88,8 @@ for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
 const copiedIconPaths = new Set();
 for (const icon of Array.isArray(iconRaw) ? iconRaw : []) {
   const path = trim(icon?.path);
-  if (path && validIconPath(path)) {
+  if (path && validConnectorIconPath(path)) {
     copiedIconPaths.add(path);
-  }
-}
-
-function resolveIconPath(root, iconPath, label) {
-  if (!validIconPath(iconPath)) {
-    throw new Error(`Invalid connector icon path: ${iconPath}`);
-  }
-
-  const target = resolve(root, iconPath);
-  assertInside(root, target, label);
-  return target;
-}
-
-function syncConnectorIcons(paths) {
-  const outDir = resolve(ICON_PUBLIC_ROOT, 'icons');
-
-  for (const iconPath of [...paths].sort()) {
-    const src = resolveIconPath(ICON_SOURCE_ROOT, iconPath, 'connector icon source');
-    if (!existsSync(src)) {
-      throw new Error(`Missing connector icon asset: ${iconPath}`);
-    }
-  }
-
-  mkdirSync(outDir, { recursive: true });
-
-  for (const iconPath of [...paths].sort()) {
-    const src = resolveIconPath(ICON_SOURCE_ROOT, iconPath, 'connector icon source');
-    const out = resolveIconPath(ICON_PUBLIC_ROOT, iconPath, 'connector icon output');
-    mkdirSync(dirname(out), { recursive: true });
-    copyFileSync(src, out);
   }
 }
 
@@ -129,7 +100,7 @@ function mapIcon(slug) {
   }
 
   const path = trim(icon.path);
-  if (!validIconPath(path)) {
+  if (!validConnectorIconPath(path)) {
     throw new Error(`Invalid connector icon path for ${slug}: ${path}`);
   }
 
@@ -227,7 +198,10 @@ for (const dirName of entries) {
 // Sort alphabetically by name
 connectors.sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
 
-syncConnectorIcons(copiedIconPaths);
+syncConnectorIcons(copiedIconPaths, {
+  sourceRoot: ICON_SOURCE_ROOT,
+  publicRoot: ICON_PUBLIC_ROOT,
+});
 
 mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, JSON.stringify(connectors, null, 2), 'utf8');

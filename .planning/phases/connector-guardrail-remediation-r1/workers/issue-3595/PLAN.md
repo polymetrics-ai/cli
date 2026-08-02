@@ -18,7 +18,7 @@
 
 ## Required skills / policy
 
-Load and record: `gsd-core`, `no-mistakes`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-security`, `golang-safety`, `golang-error-handling`, `golang-documentation`, and task-specific website/JS test guidance as needed.
+Load and record: `gsd-core`, `no-mistakes`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-security`, `golang-safety`, `golang-error-handling`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, and `javascript-testing-patterns`.
 
 Safety gates: no secrets, no credentialed connector checks, no new dependencies without approval, no generic raw write tools, no reverse ETL execution, and no parent PR merge to `main`.
 
@@ -52,6 +52,14 @@ No direct PR #3590 R5/R6 response is in scope. PR #3590 remains parked until thi
 7. Put canonical assets under `docs/connectors/icons/**`; generate/copy website public icons from that tree.
 8. Add documentation describing canonical registry ownership and the audit/collision policy.
 9. Run focused tests, full relevant gates, and comprehensive native-Codex `gpt-5.6-sol` no-mistakes validation at `xhigh` before integration.
+
+## Review repair round
+
+- F1 is an ownership and construction-validation defect: runtime consumers can synthesize an icon outside the canonical registry, and completed registries do not prove coverage. Make canonical lookup authoritative and validate every registered connector after construction.
+- F2 is a collapse-invariant defect: equal IDs and paths are insufficient when source URLs differ. Reject the conflict before either candidate can win by iteration order.
+- F3 is a generated-output reconciliation defect: copy-only generation cannot remove obsolete output. Rebuild only the bounded `website/public/connectors/icons/**` tree after validating all canonical inputs.
+- F4 is a path-domain defect: registry paths are URL-style slash paths, not host filesystem paths. Validate them with `path.Clean` and `path.Ext`.
+- Add focused regressions before production edits; run one combined focused Go and Node verification after the complete fix round.
 
 ## Integration ordering
 

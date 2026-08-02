@@ -7,6 +7,14 @@ import (
 	"testing"
 )
 
+type missingIconConnector struct{ Sample }
+
+func (missingIconConnector) Name() string { return "missing-icon" }
+
+func (missingIconConnector) Metadata() Metadata {
+	return Metadata{Name: "missing-icon", DisplayName: "Missing Icon"}
+}
+
 func TestConnectorIconRegistryUsesExactBareNamesOnly(t *testing.T) {
 	apify, ok := ConnectorIconFor("apify-dataset")
 	if !ok {
@@ -34,6 +42,30 @@ func TestConnectorIconRegistryContainsOnlyBareKeys(t *testing.T) {
 		if strings.HasPrefix(entry.Connector, "source-") || strings.HasPrefix(entry.Connector, "destination-") {
 			t.Fatalf("connector icon registry contains legacy prefixed key %q", entry.Connector)
 		}
+	}
+}
+
+func TestMetadataWithIconUsesCanonicalRegistryOnly(t *testing.T) {
+	meta := MetadataWithIcon(Metadata{
+		Name: "missing-icon",
+		Icon: &ConnectorIcon{
+			ID:           "pm-missing-icon",
+			Path:         "icons/pm-sample.svg",
+			Source:       IconSourcePolymetrics,
+			ReviewStatus: IconReviewPolymetrics,
+		},
+	})
+	if meta.Icon != nil {
+		t.Fatalf("MetadataWithIcon() used non-canonical metadata icon: %+v", meta.Icon)
+	}
+}
+
+func TestRegistryIconCoverageRequiresExplicitCanonicalEntry(t *testing.T) {
+	registry := NewEmptyRegistry()
+	registry.Register(missingIconConnector{})
+	err := registry.ValidateIconCoverage()
+	if err == nil || !strings.Contains(err.Error(), `missing explicit icon registry entry for connector "missing-icon"`) {
+		t.Fatalf("ValidateIconCoverage() error = %v", err)
 	}
 }
 

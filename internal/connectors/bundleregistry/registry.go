@@ -24,5 +24,8 @@ func New() *connectors.Registry {
 		registry.Register(engine.New(bundle, engine.HooksFor(bundle.Name)))
 	}
 	nativeset.RegisterInto(registry)
+	if err := registry.ValidateIconCoverage(); err != nil {
+		panic("validate connector icon coverage: " + err.Error())
+	}
 	return registry
 }
