@@ -254,7 +254,7 @@ func baseChangedPaths(root, baseRef string) ([]string, error) {
 		return nil, err
 	}
 	changed := map[string]bool{}
-	cmd := exec.Command("git", "-C", root, "diff", "--name-only", "--diff-filter=ACMRTD", "--end-of-options", baseRef, "--")
+	cmd := exec.Command("git", "-C", root, "diff", "--no-renames", "--name-only", "--diff-filter=ACMRTD", "--end-of-options", baseRef, "--")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		message := strings.TrimSpace(string(out))
@@ -284,7 +284,7 @@ func baseChangedPaths(root, baseRef string) ([]string, error) {
 
 func worktreeChangedPaths(root string) ([]string, error) {
 	changed := map[string]bool{}
-	cmd := exec.Command("git", "-C", root, "diff", "--name-only", "--diff-filter=ACMRTD", "HEAD", "--")
+	cmd := exec.Command("git", "-C", root, "diff", "--no-renames", "--name-only", "--diff-filter=ACMRTD", "HEAD", "--")
 	out, err := cmd.Output()
 	if err != nil {
 		return nil, fmt.Errorf("git diff --name-only HEAD: %w", err)
@@ -421,7 +421,7 @@ func classifyOwnershipChangedPath(rel string, lx lexicon) ownershipPathClass {
 	if connector, ok := connectorIconPath(rel, "website/public/connectors/icons/", lx); ok {
 		return ownershipPathClass{Path: rel, Class: ownershipClassConnectorWebsiteIcon, Connector: connector, InferConnector: true, Generated: true}
 	}
-	if strings.HasPrefix(rel, "cmd/") || strings.HasPrefix(rel, "scripts/") || rel == "Makefile" {
+	if strings.HasPrefix(rel, "cmd/") || strings.HasPrefix(rel, "scripts/") || strings.HasPrefix(rel, "build/") || rel == "Makefile" {
 		return ownershipPathClass{Path: rel, Class: ownershipClassSharedTooling, Shared: true}
 	}
 	if strings.HasPrefix(rel, "internal/") {
@@ -616,8 +616,7 @@ func isIgnoredOwnershipPath(rel string) bool {
 		strings.HasPrefix(rel, "vendor/") ||
 		strings.Contains(rel, "/node_modules/") ||
 		strings.Contains(rel, "/.next/") ||
-		strings.HasPrefix(rel, "dist/") ||
-		strings.HasPrefix(rel, "build/")
+		strings.HasPrefix(rel, "dist/")
 }
 
 func isWorkerArtifactPath(rel string) bool {

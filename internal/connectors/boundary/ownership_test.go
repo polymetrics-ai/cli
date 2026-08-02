@@ -130,6 +130,35 @@ func TestOwnershipChangedPathCollectionIncludesDeletions(t *testing.T) {
 	}
 }
 
+func TestOwnershipChangedPathCollectionTreatsRenamesAsDeleteAndAdd(t *testing.T) {
+	modes := []struct {
+		name    string
+		baseRef string
+	}{
+		{name: "worktree"},
+		{name: "base", baseRef: "HEAD"},
+	}
+	for _, mode := range modes {
+		t.Run(mode.name+"/unrelated_connector_source_renamed_into_target_rejected", func(t *testing.T) {
+			root := newOwnershipDeletionRepo(t)
+			runGit(t, root, "config", "diff.renames", "true")
+			runGit(t, root, "mv", "internal/connectors/defs/gong/streams.json", "internal/connectors/defs/github/gong-streams.json")
+
+			report, err := ValidateOwnership(root, OwnershipOptions{
+				ScopeFile: "connector-scope.json",
+				BaseRef:   mode.baseRef,
+				Now:       fixedNow,
+			})
+			if err != nil {
+				t.Fatalf("ValidateOwnership: %v", err)
+			}
+			requireOwnershipFinding(t, report, RuleOwnershipUnrelatedConnector, "gong", "internal/connectors/defs/gong/streams.json")
+			requireOwnershipPath(t, report, "internal/connectors/defs/gong/streams.json", ownershipClassConnectorDefs, "gong", ownershipDecisionRejected)
+			requireOwnershipPath(t, report, "internal/connectors/defs/github/gong-streams.json", ownershipClassConnectorDefs, "github", ownershipDecisionAllowed)
+		})
+	}
+}
+
 func TestOwnershipRejectsUnrelatedGeneratedConnectorDocsAndWebsite(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
 		"connector-scope.json": `{"api_version":"polymetrics.ai/v1","kind":"ConnectorImplementationScope","connectors":["github"]}`,
@@ -274,6 +303,29 @@ func TestOwnershipRejectsTopLevelProjectConfigEdits(t *testing.T) {
 	for _, path := range configPaths {
 		requireOwnershipFinding(t, report, RuleOwnershipSharedPath, "github", path)
 		requireOwnershipPath(t, report, path, ownershipClassSharedRepo, "", ownershipDecisionRejected)
+	}
+}
+
+func TestOwnershipRejectsBuildToolingEdits(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"connector-scope.json": `{"api_version":"polymetrics.ai/v1","kind":"ConnectorImplementationScope","connectors":["github"]}`,
+	})
+	buildPaths := []string{
+		"build/agent/src/agent.ts",
+		"build/windowsversion/main.go",
+	}
+
+	report, err := ValidateOwnership(root, OwnershipOptions{
+		ScopeFile:    "connector-scope.json",
+		ChangedPaths: buildPaths,
+		Now:          fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("ValidateOwnership: %v", err)
+	}
+	for _, path := range buildPaths {
+		requireOwnershipFinding(t, report, RuleOwnershipSharedPath, "github", path)
+		requireOwnershipPath(t, report, path, ownershipClassSharedTooling, "", ownershipDecisionRejected)
 	}
 }
 
