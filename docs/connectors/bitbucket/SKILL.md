@@ -731,8 +731,8 @@ Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeli
 - Reverse ETL writes
 - Planned bounded direct/binary operations
 - Other Commands
-  - search code - Planned bounded Bitbucket provider search/query command; blocked pending shared provider-query foundation #2985. [intent=direct_read availability=planned]; approval: blocked pending #2985; risk: planned bounded provider query; no raw query escape hatch is exposed; notes: Connector-local operation metadata is present, but shared execution foundation is not claimed.
-  - downloads get - Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation. [intent=direct_read availability=planned]; approval: blocked pending bounded binary executor; risk: planned bounded binary transfer; no generic byte-stream command is exposed; notes: Connector-local operation metadata is present, but shared execution foundation is not claimed.
+  - search code - Planned bounded Bitbucket provider search/query command; blocked pending shared provider-query foundation #2985. [intent=direct_read availability=planned operation=get_teams_username_search_code]; approval: blocked pending #2985; risk: planned bounded provider query; no raw query escape hatch is exposed; notes: Connector-local operation metadata is present, but shared execution foundation is not claimed.
+  - downloads get - Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation. [intent=direct_read availability=planned operation=get_repositories_workspace_repo_slug_downloads_filename]; approval: blocked pending bounded binary executor; risk: planned bounded binary transfer; no generic byte-stream command is exposed; notes: Connector-local operation metadata is present, but shared execution foundation is not claimed.
 - Help topics:
   - bitbucket-auth - Use OAuth access tokens or username/app-password credentials from the credential store; never pass secrets in command text.
   - bitbucket-writes - Implemented Bitbucket writes are closed-schema repository creation and path-only DELETE reverse-ETL actions; untyped JSON-body mutations remain blocked.
