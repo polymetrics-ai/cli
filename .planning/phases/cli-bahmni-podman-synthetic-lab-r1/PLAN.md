@@ -116,6 +116,14 @@
 - Require task-prefixed machine, connection, and compose-project names plus a matching durable ownership marker before Podman operations; verify compose resource labels before project actions or `down -v`.
 - Add focused standard-library regression tests before production edits. Because the assigned review phase permits only one focused verification after all fixes, record the unexecuted tests as the red specification and run them once after the complete fix round.
 
+### Slice J — Review hardening for pinned APIs and local trust boundaries
+
+- Reconcile proven task-owned legacy appointments through the pinned Bahmni singular `/appointment` update route with the existing UUID in the request, preserving status, provider responses, service, location, kind, and times.
+- Keep the ownership marker outside the cleanup target while binding it to the exact resolved lab home, machine, connection, compose project, and current user; retain it while the owned machine remains.
+- Normalize email and phone candidates before classification so sentence punctuation and compact Indian country-code landline/mobile forms cannot bypass the pre-write guard.
+- Validate the exact configured HTTPS loopback OpenMRS REST origin before reading credentials into an authenticated client, derive FHIR from that origin, and refuse every authenticated redirect.
+- Add the round-two regression tests before production edits and run the focused lab test module only after the complete fix round.
+
 ## Risks and mitigations
 
 - **Podman machine absent/stopped:** create/start only the task-owned machine if needed; never change default connection or unrelated machines.

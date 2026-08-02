@@ -2,12 +2,19 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import io
+import json
 import os
+import shutil
 import subprocess
 import sys
+import tempfile
 import unittest
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any
+from unittest import mock
 
 
 LAB_ROOT = Path(__file__).resolve().parents[1]
@@ -46,29 +53,125 @@ class ContactGuardTests(unittest.TestCase):
     def test_rejects_formatted_indian_contacts_and_external_email(self) -> None:
         samples = [
             "+91 98765 43210",
+            "+919876543210",
+            "+911123456789",
+            "+91 (0) 80 2345 6789",
+            "00911123456789",
+            "911123456789",
             "98765-43210",
             "+91 (80) 2345 6789",
             "080 2345 6789",
             "08023456789",
             "care.team@example.com",
+            "Please contact care.team@example.com.",
+            "care.team@fm-bahmni.invalid.example.",
         ]
         for sample in samples:
             with self.subTest(sample=sample):
                 self.assertTrue(labctl.contact_failures({"note": sample}))
 
     def test_allows_reserved_invalid_email_and_invalid_phone_placeholder(self) -> None:
-        value = {"email": "patient@fm-bahmni.invalid", "phone": "000-000-0000"}
+        value = {"email": "Write to patient@fm-bahmni.invalid.", "phone": "000-000-0000"}
         self.assertEqual([], labctl.contact_failures(value))
 
     def test_committed_fixture_passes_recursive_contact_guard(self) -> None:
         self.assertEqual([], labctl.contact_failures(labctl.load_json(labctl.SEED_PATH)))
 
     def test_outgoing_api_body_is_guarded_before_network_access(self) -> None:
-        api = object.__new__(labctl.BahmniApi)
-        api.auth_header = "Basic redacted"
-        api.ctx = None
-        with self.assertRaises(labctl.ApiError):
-            api.request("https://127.0.0.1", "/obs", "POST", {"value": "Call +91 98765 43210"})
+        credentials = {
+            "urls": {"openmrs_rest": "https://127.0.0.1:18443/openmrs/ws/rest/v1"},
+            "openmrs": {"username": "admin", "password": "redacted"},
+        }
+        with mock.patch.dict(os.environ, {"BAHMNI_LAB_HTTPS_PORT": "18443"}), mock.patch.object(
+            labctl, "read_credentials", return_value=credentials
+        ):
+            api = labctl.BahmniApi()
+            with self.assertRaises(labctl.ApiError):
+                api.rest("/obs", "POST", {"value": "Call +91 98765 43210"})
+
+
+class ApiOriginGuardTests(unittest.TestCase):
+    def credentials(self, rest: str = "https://127.0.0.1:18443/openmrs/ws/rest/v1") -> dict[str, Any]:
+        return {
+            "urls": {
+                "openmrs_rest": rest,
+                "openmrs_fhir": "https://example.com/openmrs/ws/fhir2/R4",
+            },
+            "openmrs": {"username": "admin", "password": "redacted"},
+        }
+
+    def test_accepts_exact_configured_ipv4_ipv6_and_localhost_rest_origins(self) -> None:
+        bases = [
+            "https://127.0.0.1:18443/openmrs/ws/rest/v1",
+            "https://localhost:18443/openmrs/ws/rest/v1",
+            "https://[::1]:18443/openmrs/ws/rest/v1",
+        ]
+        with mock.patch.dict(os.environ, {"BAHMNI_LAB_HTTPS_PORT": "18443"}), mock.patch.object(
+            labctl, "read_credentials", return_value=self.credentials()
+        ):
+            for base in bases:
+                with self.subTest(base=base):
+                    api = labctl.BahmniApi(base)
+                    self.assertEqual(base, api.rest_base)
+                    self.assertEqual(labctl.derive_fhir_base(base), api.fhir_base)
+
+    def test_rejects_remote_unsafe_ambiguous_and_unexpected_rest_origins_before_credentials(self) -> None:
+        bases = [
+            "http://127.0.0.1:18443/openmrs/ws/rest/v1",
+            "https://example.com:18443/openmrs/ws/rest/v1",
+            "https://127.0.0.2:18443/openmrs/ws/rest/v1",
+            "https://admin:secret@127.0.0.1:18443/openmrs/ws/rest/v1",
+            "https://127.0.0.1:18444/openmrs/ws/rest/v1",
+            "https://127.0.0.1:18443/openmrs/ws/rest/v1?target=other",
+            "https://127.0.0.1:18443/openmrs/ws/rest/v1#other",
+            "https://127.0.0.1:18443/openmrs/ws/fhir2/R4",
+            "//127.0.0.1:18443/openmrs/ws/rest/v1",
+        ]
+        with mock.patch.dict(os.environ, {"BAHMNI_LAB_HTTPS_PORT": "18443"}):
+            for base in bases:
+                with self.subTest(base=base), mock.patch.object(labctl, "read_credentials") as read:
+                    with self.assertRaises(labctl.ApiError):
+                        labctl.BahmniApi(base)
+                    read.assert_not_called()
+
+    def test_rejects_remote_rest_origin_loaded_from_credentials(self) -> None:
+        with mock.patch.dict(os.environ, {"BAHMNI_LAB_HTTPS_PORT": "18443"}), mock.patch.object(
+            labctl, "read_credentials", return_value=self.credentials("https://example.com:18443/openmrs/ws/rest/v1")
+        ):
+            with self.assertRaises(labctl.ApiError):
+                labctl.BahmniApi()
+
+    def test_authenticated_redirect_is_refused(self) -> None:
+        credentials = self.credentials()
+        with mock.patch.dict(os.environ, {"BAHMNI_LAB_HTTPS_PORT": "18443"}), mock.patch.object(
+            labctl, "read_credentials", return_value=credentials
+        ):
+            api = labctl.BahmniApi()
+        handler = next(item for item in api.opener.handlers if isinstance(item, labctl.RejectAuthenticatedRedirects))
+
+        class RedirectingOpener:
+            def open(self, request: urllib.request.Request, timeout: int) -> Any:
+                raise urllib.error.HTTPError(
+                    request.full_url,
+                    302,
+                    "Found",
+                    {"Location": "https://example.com/steal"},
+                    io.BytesIO(b""),
+                )
+
+        api.opener = RedirectingOpener()
+        with self.assertRaisesRegex(labctl.ApiError, "authenticated redirect"):
+            api.rest("/session")
+
+        followup = handler.redirect_request(
+            urllib.request.Request(api.rest_base + "/session", headers={"Authorization": api.auth_header}),
+            None,
+            302,
+            "Found",
+            {},
+            "https://example.com/steal",
+        )
+        self.assertIsNone(followup)
 
 
 class NameReconciliationTests(unittest.TestCase):
@@ -230,9 +333,20 @@ class StableRecordUpgradeTests(unittest.TestCase):
             if path == "/appointments" and method == "GET":
                 return 200, [{
                 "uuid": "appointment-1",
-                "patient": {"identifier": "SYN-HEN-0001"},
+                "patient": {"uuid": "existing-patient", "identifier": "SYN-HEN-0001"},
+                "service": {"uuid": "existing-service"},
+                "serviceType": {"uuid": "existing-service-type"},
+                "location": {"uuid": "existing-location"},
+                "appointmentKind": "Virtual",
+                "status": "CheckedIn",
                 "comments": old_comment,
                 "startDateTime": labctl.appointment_ms(start),
+                "endDateTime": labctl.appointment_ms("2026-01-20T09:45:00.000+0000"),
+                "providers": [{
+                    "uuid": "existing-provider",
+                    "response": "REJECTED",
+                    "comments": "Provider retained",
+                }],
                 }]
             return 200, {}
 
@@ -245,9 +359,22 @@ class StableRecordUpgradeTests(unittest.TestCase):
             legacy_comments=[old_comment],
         )
 
-        updates = [call for call in api.calls if call[0:2] == ("POST", "/appointments/appointment-1")]
+        updates = [call for call in api.calls if call[0:2] == ("POST", "/appointment")]
         self.assertEqual(1, len(updates))
-        self.assertIn(stable, updates[0][2]["comments"])
+        update = updates[0][2]
+        self.assertEqual("appointment-1", update["uuid"])
+        self.assertEqual("CheckedIn", update["status"])
+        self.assertEqual("Virtual", update["appointmentKind"])
+        self.assertEqual("existing-service", update["serviceUuid"])
+        self.assertEqual("existing-service-type", update["serviceTypeUuid"])
+        self.assertEqual("existing-location", update["locationUuid"])
+        self.assertEqual([{
+            "uuid": "existing-provider",
+            "response": "REJECTED",
+            "comments": "Provider retained",
+        }], update["providers"])
+        self.assertIn(stable, update["comments"])
+        self.assertFalse(any(call[0:2] == ("POST", "/appointments/appointment-1") for call in api.calls))
         self.assertFalse(any(call[0:2] == ("POST", "/appointments") for call in api.calls))
         self.assertEqual(1, counts["appointments_reconciled"])
 
@@ -278,6 +405,42 @@ class OwnershipGuardTests(unittest.TestCase):
         rendered = labctl.scope_service_labels(source)
         labctl.validate_service_labels(rendered)
         self.assertEqual(2, rendered.count(labctl.OWNER_LABEL))
+
+    def test_ownership_marker_survives_runtime_cleanup_and_same_resource_restart(self) -> None:
+        with tempfile.TemporaryDirectory(prefix=".ownership-", dir=LAB_ROOT) as parent:
+            home = Path(parent) / labctl.LAB_ID
+            environment = {
+                "BAHMNI_LAB_HOME": str(home),
+                "BAHMNI_LAB_MACHINE": "fm-bahmni-lab-r1-machine",
+                "BAHMNI_LAB_CONNECTION": "fm-bahmni-lab-r1-machine",
+                "BAHMNI_LAB_PROJECT": "fm_bahmni_lab_r1",
+            }
+            with mock.patch.dict(os.environ, environment), mock.patch.object(labctl.shutil, "which", return_value=None):
+                claimed = labctl.claim_ownership()
+                marker_path = labctl.ownership_marker_path()
+                self.assertTrue(marker_path.is_file())
+                self.assertNotIn(home, marker_path.parents)
+                shutil.rmtree(home)
+                self.assertEqual(claimed, labctl.load_ownership_marker())
+                self.assertEqual(claimed, labctl.claim_ownership())
+
+    def test_legacy_runtime_marker_migrates_before_lifecycle_verification(self) -> None:
+        with tempfile.TemporaryDirectory(prefix=".ownership-upgrade-", dir=LAB_ROOT) as parent:
+            home = Path(parent) / labctl.LAB_ID
+            home.mkdir()
+            environment = {
+                "BAHMNI_LAB_HOME": str(home),
+                "BAHMNI_LAB_MACHINE": "fm-bahmni-lab-r1-machine",
+                "BAHMNI_LAB_CONNECTION": "fm-bahmni-lab-r1-machine",
+                "BAHMNI_LAB_PROJECT": "fm_bahmni_lab_r1",
+            }
+            with mock.patch.dict(os.environ, environment):
+                expected = labctl.expected_ownership()
+                legacy_path = labctl.legacy_ownership_marker_path()
+                legacy_path.write_text(json.dumps(expected), encoding="utf-8")
+                legacy_path.chmod(0o600)
+                self.assertEqual(expected, labctl.load_ownership_marker())
+                self.assertTrue(labctl.ownership_marker_path().is_file())
 
     def test_task_prefixed_resource_without_project_label_is_rejected(self) -> None:
         with self.assertRaises(ValueError):

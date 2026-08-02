@@ -40,10 +40,8 @@ OWNER_MARKER_NAME = f".{LAB_ID}-ownership.json"
 STABLE_RECORD_PREFIX = f"urn:polymetrics:bahmni-lab:{LAB_ID}"
 MACHINE_NAME_RE = re.compile(rf"^{re.escape(LAB_ID)}-[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
 PROJECT_NAME_RE = re.compile(r"^fm_bahmni_lab_r1(?:_[a-z0-9](?:[a-z0-9_]*[a-z0-9])?)?$")
-INDIAN_MOBILE_RE = re.compile(r"(?<!\d)(?:(?:\+91|0091|91)[\s().-]*)?[6-9](?:[\s().-]*\d){9}(?!\d)")
-INDIAN_LANDLINE_RE = re.compile(r"(?<!\d)(?:(?:\+91|0091)[\s().-]*)?(?:0[\s().-]*)?[1-8]\d{1,3}[\s().-]+\d(?:[\s().-]*\d){5,7}(?!\d)")
-INDIAN_COMPACT_LANDLINE_RE = re.compile(r"(?<!\d)0[1-8]\d{9}(?!\d)")
-EMAIL_RE = re.compile(r"(?<![\w.+-])([\w.!#$%&'*+/=?^`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?)(?![\w.-])")
+PHONE_CANDIDATE_RE = re.compile(r"(?<!\w)(?:\+|00)?\d(?:[\d\s().-]{6,}\d)(?!\w)")
+EMAIL_CANDIDATE_RE = re.compile(r"(?<![\w.!#$%&'*+/=?^`{|}~-])([\w.!#$%&'*+/=?^`{|}~-]+@[^\s<>()\[\]{},;:\"']+)")
 
 
 def eprint(*parts: object) -> None:
@@ -111,6 +109,10 @@ def podman_wrapper_path() -> Path:
 
 
 def ownership_marker_path() -> Path:
+    return runtime_home().parent / OWNER_MARKER_NAME
+
+
+def legacy_ownership_marker_path() -> Path:
     return runtime_home() / OWNER_MARKER_NAME
 
 
@@ -148,16 +150,35 @@ def validate_ownership_marker(actual: dict[str, Any], expected: dict[str, Any]) 
         raise ValueError("ownership marker does not match the requested lab resources")
 
 
-def load_ownership_marker() -> dict[str, Any]:
-    path = ownership_marker_path()
+def read_ownership_marker(path: Path, expected: dict[str, Any]) -> dict[str, Any]:
     if not path.is_file() or path.is_symlink():
         raise ValueError("durable lab ownership marker is missing")
     if path.stat().st_uid != os.getuid():
         raise ValueError("durable lab ownership marker belongs to another user")
     marker = load_json(path)
-    expected = expected_ownership()
     validate_ownership_marker(marker, expected)
     return marker
+
+
+def write_ownership_marker(path: Path, expected: dict[str, Any]) -> dict[str, Any]:
+    try:
+        with path.open("x", encoding="utf-8") as fh:
+            json.dump(expected, fh, indent=2, sort_keys=True)
+            fh.write("\n")
+    except FileExistsError:
+        return read_ownership_marker(path, expected)
+    path.chmod(0o600)
+    return expected
+
+
+def load_ownership_marker() -> dict[str, Any]:
+    expected = expected_ownership()
+    path = ownership_marker_path()
+    if path.exists() or path.is_symlink():
+        return read_ownership_marker(path, expected)
+    legacy_path = legacy_ownership_marker_path()
+    marker = read_ownership_marker(legacy_path, expected)
+    return write_ownership_marker(path, marker)
 
 
 def podman_names(command: list[str], fields: tuple[str, ...]) -> set[str]:
@@ -195,7 +216,8 @@ def legacy_runtime_is_task_owned(expected: dict[str, Any]) -> bool:
 def claim_ownership() -> dict[str, Any]:
     expected = expected_ownership()
     path = ownership_marker_path()
-    if path.exists():
+    legacy_path = legacy_ownership_marker_path()
+    if path.exists() or path.is_symlink() or legacy_path.exists() or legacy_path.is_symlink():
         validate_ownership_marker(load_ownership_marker(), expected)
         return expected
     podman = shutil.which("podman")
@@ -207,14 +229,7 @@ def claim_ownership() -> dict[str, Any]:
     if existing_requested_resources and not legacy_runtime_is_task_owned(expected):
         raise ValueError("refusing to adopt existing Podman resources without prior task ownership evidence")
     ensure_dirs()
-    try:
-        with path.open("x", encoding="utf-8") as fh:
-            json.dump(expected, fh, indent=2, sort_keys=True)
-            fh.write("\n")
-    except FileExistsError:
-        validate_ownership_marker(load_ownership_marker(), expected)
-    path.chmod(0o600)
-    return expected
+    return write_ownership_marker(path, expected)
 
 
 def iter_string_values(value: Any, path: str = "$") -> Iterable[tuple[str, str]]:
@@ -228,13 +243,33 @@ def iter_string_values(value: Any, path: str = "$") -> Iterable[tuple[str, str]]
             yield from iter_string_values(child, f"{path}[{index}]")
 
 
+def normalize_phone_candidate(value: str) -> str | None:
+    raw = value.strip()
+    digits = re.sub(r"\D", "", raw)
+    if raw.startswith("+91") and digits.startswith("91"):
+        digits = digits[2:]
+    elif raw.startswith("0091") and digits.startswith("0091"):
+        digits = digits[4:]
+    elif len(digits) in (12, 13) and digits.startswith("91"):
+        digits = digits[2:]
+    if len(digits) == 11 and digits.startswith("0"):
+        digits = digits[1:]
+    if len(digits) == 10 and digits[0] in "123456789":
+        return digits
+    return None
+
+
+def normalize_email_candidate(value: str) -> str:
+    return value.rstrip(".,!?;:").lower()
+
+
 def contact_failures(value: Any) -> list[str]:
     failures: list[str] = []
     for path, text in iter_string_values(value):
-        if INDIAN_MOBILE_RE.search(text) or INDIAN_LANDLINE_RE.search(text) or INDIAN_COMPACT_LANDLINE_RE.search(text):
+        if any(normalize_phone_candidate(match.group(0)) for match in PHONE_CANDIDATE_RE.finditer(text)):
             failures.append(f"{path} contains a real-looking Indian phone number")
-        for match in EMAIL_RE.finditer(text):
-            domain = match.group(1).rsplit("@", 1)[1].lower().rstrip(".")
+        for match in EMAIL_CANDIDATE_RE.finditer(text):
+            domain = normalize_email_candidate(match.group(1)).rsplit("@", 1)[1]
             if not domain.endswith(".invalid"):
                 failures.append(f"{path} contains an email outside the approved .invalid domain")
     return failures
@@ -743,6 +778,8 @@ class ApiError(RuntimeError):
 
 REST_SUFFIX = "/ws/rest/v1"
 FHIR_SUFFIX = "/ws/fhir2/R4"
+OPENMRS_REST_PATH = "/openmrs" + REST_SUFFIX
+LOOPBACK_API_HOSTS = {"127.0.0.1", "localhost", "::1"}
 
 
 def derive_fhir_base(rest_base: str) -> str:
@@ -752,25 +789,76 @@ def derive_fhir_base(rest_base: str) -> str:
     return trimmed + FHIR_SUFFIX
 
 
+def configured_https_port() -> int:
+    raw = port("HTTPS", 18443)
+    try:
+        value = int(raw)
+    except ValueError as exc:
+        raise ApiError("configured Bahmni HTTPS port is invalid") from exc
+    if not 1 <= value <= 65535 or str(value) != raw:
+        raise ApiError("configured Bahmni HTTPS port is invalid")
+    return value
+
+
+def validate_rest_base(value: str) -> str:
+    try:
+        parsed = urllib.parse.urlsplit(value)
+        host = parsed.hostname
+        target_port = parsed.port
+    except (TypeError, ValueError) as exc:
+        raise ApiError("OpenMRS REST base URL is invalid") from exc
+    if parsed.scheme != "https":
+        raise ApiError("OpenMRS REST base URL must use HTTPS")
+    if parsed.username is not None or parsed.password is not None:
+        raise ApiError("OpenMRS REST base URL must not contain user information")
+    if host not in LOOPBACK_API_HOSTS:
+        raise ApiError("OpenMRS REST base URL must use the task loopback host")
+    if target_port != configured_https_port():
+        raise ApiError("OpenMRS REST base URL must use the configured task HTTPS port")
+    if parsed.path != OPENMRS_REST_PATH or parsed.query or parsed.fragment:
+        raise ApiError("OpenMRS REST base URL must use the exact task REST path")
+    return urllib.parse.urlunsplit(("https", parsed.netloc, OPENMRS_REST_PATH, "", ""))
+
+
+class RejectAuthenticatedRedirects(urllib.request.HTTPRedirectHandler):
+    def redirect_request(
+        self,
+        req: urllib.request.Request,
+        fp: Any,
+        code: int,
+        msg: str,
+        headers: Any,
+        newurl: str,
+    ) -> None:
+        return None
+
+
 class BahmniApi:
     def __init__(self, base_https: str | None = None):
-        creds = read_credentials()
-        urls = creds.get("urls", local_urls())
-        self.rest_base = (base_https or urls["openmrs_rest"]).rstrip("/")
-        # A --base-url override must move REST and FHIR together, otherwise one
-        # run would write to two different deployments.
-        if base_https:
-            self.fhir_base = derive_fhir_base(self.rest_base)
+        if base_https is not None:
+            self.rest_base = validate_rest_base(base_https)
+            creds = read_credentials()
         else:
-            self.fhir_base = urls.get("openmrs_fhir", derive_fhir_base(self.rest_base)).rstrip("/")
+            creds = read_credentials()
+            urls = creds.get("urls") if isinstance(creds.get("urls"), dict) else local_urls()
+            self.rest_base = validate_rest_base(urls.get("openmrs_rest", local_urls()["openmrs_rest"]))
+        self.fhir_base = derive_fhir_base(self.rest_base)
+        self.allowed_bases = {self.rest_base, self.fhir_base}
         user = creds.get("openmrs", {}).get("username") or "admin"
         password = creds.get("openmrs", {}).get("password") or parse_env_file(generated_env_path()).get("OPENMRS_ATOMFEED_PASSWORD", "")
         token = base64.b64encode(f"{user}:{password}".encode("utf-8")).decode("ascii")
         self.auth_header = "Basic " + token
         self.ctx = ssl._create_unverified_context()
+        self.opener = urllib.request.build_opener(
+            urllib.request.HTTPSHandler(context=self.ctx),
+            RejectAuthenticatedRedirects(),
+        )
 
     def request(self, base: str, path: str, method: str = "GET", body: Any | None = None, params: dict[str, Any] | None = None, fhir: bool = False) -> tuple[int, Any]:
-        url = base.rstrip("/") + path
+        normalized_base = base.rstrip("/")
+        if normalized_base not in self.allowed_bases:
+            raise ApiError("refusing authenticated request outside the task loopback API")
+        url = normalized_base + path
         if params:
             clean = {k: v for k, v in params.items() if v is not None}
             url += "?" + urllib.parse.urlencode(clean)
@@ -784,12 +872,14 @@ class BahmniApi:
             headers["Content-Type"] = "application/fhir+json" if fhir else "application/json"
         req = urllib.request.Request(url, data=data, headers=headers, method=method)
         try:
-            with urllib.request.urlopen(req, context=self.ctx, timeout=45) as resp:
+            with self.opener.open(req, timeout=45) as resp:
                 raw = resp.read().decode("utf-8", "replace")
                 if not raw:
                     return resp.status, {}
                 return resp.status, json.loads(raw)
         except urllib.error.HTTPError as exc:
+            if 300 <= exc.code < 400:
+                raise ApiError(f"refusing authenticated redirect for {method} {path}") from exc
             raw = exc.read().decode("utf-8", "replace")
             raise ApiError(f"{method} {path} HTTP {exc.code}: {raw[:800]}") from exc
 
@@ -1057,6 +1147,45 @@ def appointment_comment(comment: str, marker: str) -> str:
     return f"{comment}\n[{marker}]"
 
 
+def reference_uuid(value: Any) -> str | None:
+    if isinstance(value, dict):
+        uuid = value.get("uuid")
+        return str(uuid) if uuid else None
+    return str(value) if value else None
+
+
+def appointment_update_body(appointment: dict[str, Any], comments: str) -> dict[str, Any]:
+    required = {
+        "uuid": appointment.get("uuid"),
+        "patientUuid": reference_uuid(appointment.get("patient")),
+        "serviceUuid": reference_uuid(appointment.get("service")),
+        "locationUuid": reference_uuid(appointment.get("location")),
+        "appointmentKind": appointment.get("appointmentKind"),
+        "status": appointment.get("status"),
+        "startDateTime": appointment.get("startDateTime"),
+        "endDateTime": appointment.get("endDateTime"),
+    }
+    missing = [key for key, value in required.items() if value is None or value == ""]
+    providers_value = appointment.get("providers")
+    if not isinstance(providers_value, list):
+        missing.append("providers")
+    if missing:
+        raise ApiError("owned appointment cannot be safely updated; missing " + ", ".join(sorted(set(missing))))
+    providers: list[dict[str, Any]] = []
+    for provider in providers_value:
+        if not isinstance(provider, dict) or not provider.get("uuid") or not provider.get("response"):
+            raise ApiError("owned appointment cannot be safely updated; provider state is incomplete")
+        preserved = {"uuid": provider["uuid"], "response": provider["response"]}
+        if "comments" in provider:
+            preserved["comments"] = provider["comments"]
+        providers.append(preserved)
+    body = required | {"providers": providers, "comments": comments}
+    service_type_uuid = reference_uuid(appointment.get("serviceType"))
+    if service_type_uuid:
+        body["serviceTypeUuid"] = service_type_uuid
+    return body
+
+
 def ensure_appointment(
     api: BahmniApi,
     patient_ident: str,
@@ -1102,7 +1231,7 @@ def ensure_appointment(
             desired_marker = marker if index == 0 else f"{marker}:preserved:{appointment_uuid}"
             desired_comment = appointment_comment(comment, desired_marker)
             if appt.get("comments") != desired_comment:
-                api.rest(f"/appointments/{appointment_uuid}", "POST", body | {"comments": desired_comment})
+                api.rest("/appointment", "POST", appointment_update_body(appt, desired_comment))
                 changed = True
         if changed:
             summary["appointments_reconciled"] += 1

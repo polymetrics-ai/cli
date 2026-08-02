@@ -7,7 +7,7 @@ Task-owned assets for a reproducible local Bahmni Standard lab for connector tes
 - Pinned source: `Bahmni/bahmni-docker` tag `1.0.2-standard`, commit `1dfe62c4e5d6f3d702e65d869729726226fceb56`.
 - Rootless Podman only; no Docker CLI/Engine/Desktop.
 - Loopback-only service binds.
-- Task-prefixed resources: Podman machine/connection `fm-bahmni-lab-r1-machine`, compose project `fm_bahmni_lab_r1`, runtime dir `/tmp/fm-bahmni-lab-r1`. The first safe start writes a durable marker binding those exact values. Later machine, connection, compose, reset, and cleanup paths refuse missing or mismatched markers.
+- Task-prefixed resources: Podman machine/connection `fm-bahmni-lab-r1-machine`, compose project `fm_bahmni_lab_r1`, runtime dir `/tmp/fm-bahmni-lab-r1`. The first safe start writes a sibling durable marker binding those exact values. Cleanup retains that proof while the owned machine remains; later machine, connection, compose, reset, cleanup, and restart paths refuse missing or mismatched markers.
 - Every explicit compose `container_name` is rewritten with the `fm-bahmni-lab-r1-` prefix, every service receives the `io.polymetrics.bahmni-lab.owner` label, and project actions verify compose labels before they run. Generation fails closed if names or labels are unscoped.
 - `reset`/`cleanup` require `--yes`, target only marker-bound resources, and never create, start, or stop the Podman machine. If the task-owned connection is unavailable they report that there is nothing to reset.
 - Local credentials stay under `/tmp/fm-bahmni-lab-r1` and are not committed.

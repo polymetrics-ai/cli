@@ -69,6 +69,9 @@
 
 ## Final repo gates
 
+- [x] Slice J focused standard-library regression tests passed: 23 tests cover the pinned singular appointment update route, preserved appointment state, legacy marker migration, cleanup/restart ownership continuity, normalized contact candidates, exact loopback API origins, and authenticated redirect refusal.
+- [x] Slice J source review confirms REST and FHIR authentication can target only the configured HTTPS loopback origin, and existing runtime ownership proof migrates forward before lifecycle actions.
+- [x] Slice J performed no live Podman, Bahmni, push, PR, CI, or outer-pipeline action.
 - [x] Slice I focused standard-library regression tests passed: 17 tests covering exact-name reconciliation, legacy/ambiguous record upgrades, adversarial contacts, shell parsing, fixture validation, and ownership guards.
 - [x] Slice I source review confirms every Podman mutation path requires matching ownership state and compose resource labels.
 - [x] Slice I live reconciliation is intentionally left to the outer validation/runtime phase; this review phase did not mutate the running lab.
