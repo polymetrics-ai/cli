@@ -4,11 +4,12 @@
 
 | Slice | Red evidence before production edit | Green evidence target | Final evidence |
 | --- | --- | --- | --- |
-| Audit ledger | Current `api_surface.json` had 30 rows, not the 103 official OpenAPI operations. | Bundle validation accepts 103 partitioned rows. | `api_surface.json` tracks all 103 audited operations: 31 streams, 70 writes, 1 direct read, 1 blocked CSV import; root `connectorgen validate` has 0 findings. |
-| Streams/fixtures | Current bundle had 5 streams and fixtures only for those streams. | Conformance `TestConformance/airtable` passes with fixtures for every executable stream. | 31 streams with sanitized fixtures; conformance passed. |
-| Writes/fixtures | Current bundle had 12 write actions and lacked broad destructive/admin coverage. | Conformance write request-shape checks pass for every executable write action. | 70 typed write actions with fixtures; conformance write request-shape checks passed. |
+| Audit ledger | Current `api_surface.json` had 30 rows, not the 103 official OpenAPI operations. | Bundle validation accepts 103 partitioned rows. | `api_surface.json` tracks all 103 audited operations: 28 streams, 44 writes, 1 direct read, and 30 blocked operations. |
+| Streams/fixtures | Current bundle had 5 streams and fixtures only for those streams. | Conformance `TestConformance/airtable` passes with fixtures for every executable stream. | 28 streams have sanitized fixtures; comments use the exact per-record endpoint instead of bulk fanout. |
+| Writes/fixtures | Current bundle had 12 write actions and lacked broad destructive/admin coverage. | Conformance write request-shape checks pass for every executable write action. | 44 typed write actions have fixtures; attachment upload remains blocked until base64 and decoded-size validation is enforceable. |
 | Direct read CLI | Current Airtable bundle had no `operations.json`/`cli_surface.json`, so `pm airtable hyperdb get-records` was unknown. | `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` includes Airtable direct read coverage and passes. | Added HyperDB operation/CLI command and fixture server test; CLI dynamic/golden gate passed. |
 | Docs/catalog | Current generated docs/catalogs reported 5 streams / 12 writes. | Generated docs/catalogs report actual post-change stream/write/operation counts. | Regenerated Airtable docs, connector catalog, website connector data, and golden transcripts. |
+| Review hardening | Webhook replay expected a non-executable limit, comments ignored `record_id`, attachment upload accepted unbounded strings, and delivery artifacts retained pre-containment counts. | Replay uses `limit=50`; comments issue one exact per-record request; attachment upload stays blocked without decoded-size enforcement; artifacts report the contained partition. | Focused Airtable definition and conformance tests are the review-fix gate for the 28/44/1/30 partition. |
 
 ## Captured red baseline
 
@@ -22,4 +23,4 @@
 
 ## Verification ledger
 
-See `VERIFICATION.md` for command results. The recovered tree now passes the exact single-bundle validate command after the HyperDB direct-read CLI flag was marked required to match the typed `body.primaryKeys` schema; root validation and all local fixture gates also passed before the recovery merge commit.
+See `VERIFICATION.md` for command results. Earlier full gates predate review hardening; the current phase records a separate focused Airtable definition and conformance gate for the final contained tree.

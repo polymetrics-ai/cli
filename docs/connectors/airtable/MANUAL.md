@@ -280,10 +280,6 @@ REVERSE ETL ACTIONS
     endpoint: POST /v0/meta/workspaces/{{ record.workspace_id }}/updateRestrictions
     required fields: workspace_id
     risk: typed Airtable API mutation; preview and explicit approval required before execute
-  upload_attachment:
-    endpoint: POST /v0/{{ config.base_id }}/{{ record.record_id }}/{{ record.attachment_field_id_or_name }}/uploadAttachment
-    required fields: record_id, attachment_field_id_or_name, contentType, filename, file
-    risk: Airtable schema mutation visible to collaborators; preview and approval required
   delete_record:
     endpoint: DELETE /v0/{{ config.base_id }}/{{ config.table_id }}/{{ record.id }}
     required fields: id
@@ -315,7 +311,7 @@ REVERSE ETL ACTIONS
 
 SECURITY
   read risk: external Airtable API reads for base, table, record, comment, webhook, SCIM detail, collaborator, enterprise, audit, eDiscovery, and change-event metadata
-  write risk: typed Airtable API mutations for single records, schema fields, comments, webhooks, selected admin actions, and attachment upload; destructive/admin actions require plan, preview, explicit approval, and execute while non-empty array batch operations remain blocked
+  write risk: typed Airtable API mutations for single records, schema fields, comments, webhooks, and selected admin actions; destructive/admin actions require plan, preview, explicit approval, and execute while non-empty arrays and unbounded attachment uploads remain blocked
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 COMMAND SURFACE
@@ -355,7 +351,7 @@ COMMAND SURFACE
     read workspace-collaborators - Get workspace collaborators [intent=etl availability=implemented stream=workspace_collaborators]; flags: --workspace-id
     read records - List records [intent=etl availability=implemented stream=records]; flags: --base-id, --table-id, --page-size
     read record - Get record [intent=etl availability=implemented stream=record]; flags: --base-id, --table-id, --record-id
-    read comments - List comments [intent=etl availability=implemented stream=comments]; flags: --base-id, --table-id, --record-id
+    read comments - List comments for one record [intent=etl availability=implemented stream=comments]; flags: --base-id, --table-id, --record-id (required)
     hyperdb get-records - Read HyperDB records [intent=direct_read availability=implemented operation=hyperdb_table_read_records]; approval: read-only; risk: medium; flags: --enterprise-account-id, --data-table-id, --primary-key, --field, --max-records, --cursor
     write create-scim-group - Create group [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official SCIM create-group body contains required non-empty array members; no raw body escape is exposed.
     write patch-scim-group - Patch group [intent=reverse_etl availability=planned]; approval: blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays; plan, preview, explicit approval, and execute required before any future execution.; risk: high; notes: Blocked on airtable-array-cardinality-foundation because the official SCIM patch body contains required non-empty Operations; no raw body escape is exposed.
@@ -419,7 +415,7 @@ COMMAND SURFACE
     write delete-workspace-invite - Delete workspace invite [intent=reverse_etl availability=planned write=delete_workspace_invite]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
     write move-base - Move base [intent=reverse_etl availability=planned write=move_base]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
     write update-workspace-restrictions - Update workspace restrictions [intent=reverse_etl availability=planned write=update_workspace_restrictions]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
-    write upload-attachment - Upload attachment [intent=reverse_etl availability=planned write=upload_attachment]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
+    write upload-attachment - Upload attachment [intent=reverse_etl availability=planned]; approval: blocked until airtable-bounded-base64-upload-foundation validates the official base64 and decoded-size limits before transmission; no live write is available today.; risk: medium; notes: Blocked on airtable-bounded-base64-upload-foundation because the current Airtable definition has no target-owned executor that can validate decoded attachment bytes; no unbounded base64 body is exposed.
     write delete-record - Delete record [intent=reverse_etl availability=planned write=delete_record]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high
     write update-record - Update record [intent=reverse_etl availability=planned write=update_record]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: medium
     write replace-record - Update record (put) [intent=reverse_etl availability=planned write=replace_record]; approval: Use reverse ETL plan -> preview -> explicit approval -> execute with typed record input; provider-style flag execution is not exposed for arbitrary object bodies.; risk: high

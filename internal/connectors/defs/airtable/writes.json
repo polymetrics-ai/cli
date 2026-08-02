@@ -1453,50 +1453,6 @@
       "risk": "typed Airtable API mutation; preview and explicit approval required before execute"
     },
     {
-      "name": "upload_attachment",
-      "kind": "custom",
-      "method": "POST",
-      "path": "/v0/{{ config.base_id }}/{{ record.record_id }}/{{ record.attachment_field_id_or_name }}/uploadAttachment",
-      "path_fields": [
-        "record_id",
-        "attachment_field_id_or_name"
-      ],
-      "body_type": "json",
-      "redact_fields": [
-        "file"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "record_id",
-          "attachment_field_id_or_name",
-          "contentType",
-          "filename",
-          "file"
-        ],
-        "properties": {
-          "contentType": {
-            "type": "string"
-          },
-          "filename": {
-            "type": "string"
-          },
-          "file": {
-            "type": "string"
-          },
-          "record_id": {
-            "type": "string"
-          },
-          "attachment_field_id_or_name": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "risk": "Airtable schema mutation visible to collaborators; preview and approval required"
-    },
-    {
       "name": "delete_record",
       "kind": "delete",
       "method": "DELETE",

@@ -3,7 +3,7 @@
     "method": "GET",
     "path": "/v0/bases/synthetic-conformance-value/webhooks/synthetic-conformance-value/payloads",
     "query": {
-      "limit": "synthetic-conformance-value"
+      "limit": "50"
     }
   },
   "response": {
