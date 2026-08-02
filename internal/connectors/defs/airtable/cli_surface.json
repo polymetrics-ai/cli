@@ -257,14 +257,9 @@
           "type": "string",
           "summary": "Airtable webhook id",
           "maps_to": "config.webhook_id"
-        },
-        {
-          "name": "page-size",
-          "type": "string",
-          "summary": "Bounded Airtable page size",
-          "maps_to": "config.page_size"
         }
       ],
+      "notes": "Uses Airtable's documented maximum of 50 payloads per request.",
       "api_surface": [
         {
           "method": "GET",

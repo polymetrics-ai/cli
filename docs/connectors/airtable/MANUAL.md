@@ -329,7 +329,7 @@ COMMAND SURFACE
     read scim-group - Get group [intent=etl availability=implemented stream=scim_group]; flags: --group-id
     read scim-user - Get user [intent=etl availability=implemented stream=scim_user]; flags: --user-id
     read webhooks - List webhooks [intent=etl availability=implemented stream=webhooks]; flags: --base-id
-    read webhook-payloads - List webhook payloads [intent=etl availability=implemented stream=webhook_payloads]; flags: --base-id, --webhook-id, --page-size
+    read webhook-payloads - List webhook payloads [intent=etl availability=implemented stream=webhook_payloads]; notes: Uses Airtable's documented maximum of 50 payloads per request.; flags: --base-id, --webhook-id
     read bases - List bases [intent=etl availability=implemented stream=bases]
     read base-collaborators - Get base collaborators [intent=etl availability=implemented stream=base_collaborators]; flags: --base-id
     read block-installations - List block installations [intent=etl availability=implemented stream=block_installations]; flags: --base-id

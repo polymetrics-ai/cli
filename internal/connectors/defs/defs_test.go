@@ -167,6 +167,64 @@ func TestAirtableRuntimeBundleSafetyContract(t *testing.T) {
 	}
 }
 
+func TestAirtableWebhookPayloadsUsesOfficialLimitCap(t *testing.T) {
+	airtable := loadAirtableBundle(t)
+	stream := findAirtableStream(t, airtable, "webhook_payloads")
+	limitParam, ok := stream.Query["limit"]
+	if !ok {
+		t.Fatal("webhook_payloads query missing limit")
+	}
+	if limitParam.Template != "50" || limitParam.Default != "" {
+		t.Fatalf("webhook_payloads limit query = %+v, want static 50", limitParam)
+	}
+
+	cmd := findAirtableCommand(t, airtable, "read webhook-payloads")
+	for _, flag := range cmd.Flags {
+		if flag.Name == "page-size" {
+			t.Fatalf("read webhook-payloads exposes --page-size despite fixed Airtable payload cap: %+v", flag)
+		}
+	}
+
+	requestQueries := make(chan url.Values, 4)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requestQueries <- r.URL.Query()
+		if r.URL.Path != "/v0/bases/app_fixture/webhooks/ach_fixture/payloads" {
+			http.Error(w, "unexpected path", http.StatusBadRequest)
+			return
+		}
+		if got := r.URL.Query().Get("limit"); got != "50" {
+			http.Error(w, "unexpected limit "+got, http.StatusBadRequest)
+			return
+		}
+		if got := r.URL.Query().Get("cursor"); got != "" {
+			http.Error(w, "unexpected cursor "+got, http.StatusBadRequest)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"payloads":[],"cursor":"itr_terminal","mightHaveMore":false}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	airtable.HTTP.URL = srv.URL
+	err := engine.Read(context.Background(), airtable, connectors.ReadRequest{
+		Stream: "webhook_payloads",
+		Config: connectors.RuntimeConfig{
+			Config: map[string]string{
+				"base_id":    "app_fixture",
+				"webhook_id": "ach_fixture",
+				"page_size":  "100",
+			},
+			Secrets: map[string]string{"api_key": "fixture-token"},
+		},
+	}, nil, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Read webhook_payloads: %v", err)
+	}
+	if got := len(requestQueries); got != 1 {
+		t.Fatalf("webhook_payloads requests = %d, want terminal single page", got)
+	}
+}
+
 func TestAirtableHyperDBDirectReadAllowsDocumentedBodies(t *testing.T) {
 	airtable := loadAirtableBundle(t)
 	op := findAirtableOperation(t, airtable, "hyperdb_table_read_records")

@@ -15,7 +15,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 ## Streams notes
 
-28 fixture-backed streams cover executable GET operations. Default pagination uses `offset`; webhook-payload pagination consumes the documented `cursor` only while `mightHaveMore` is true, and audit endpoints declare provider cursor parameters where the current runtime can consume the documented token directly. SCIM list endpoints are blocked because Airtable SCIM responses expose `Resources`, `startIndex`, `itemsPerPage`, and `totalResults`, not a `nextStartIndex` token. Enterprise user search is blocked because the documented endpoint requires at least one `email[]` or `id[]` query value.
+28 fixture-backed streams cover executable GET operations. Default pagination uses `offset`; webhook-payload pagination sends the documented maximum `limit=50` and consumes the documented `cursor` only while `mightHaveMore` is true, and audit endpoints declare provider cursor parameters where the current runtime can consume the documented token directly. SCIM list endpoints are blocked because Airtable SCIM responses expose `Resources`, `startIndex`, `itemsPerPage`, and `totalResults`, not a `nextStartIndex` token. Enterprise user search is blocked because the documented endpoint requires at least one `email[]` or `id[]` query value.
 
 - `scim_group`: GET `/scim/v2/Groups/{{ config.group_id }}` -> `.`.
 
@@ -23,7 +23,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `webhooks`: GET `/v0/bases/{{ config.base_id }}/webhooks` -> `webhooks`.
 
-- `webhook_payloads`: GET `/v0/bases/{{ config.base_id }}/webhooks/{{ config.webhook_id }}/payloads` -> `payloads`; query limit; cursor cursor; stop flag `mightHaveMore`.
+- `webhook_payloads`: GET `/v0/bases/{{ config.base_id }}/webhooks/{{ config.webhook_id }}/payloads` -> `payloads`; query limit=50; cursor cursor; stop flag `mightHaveMore`.
 
 - `bases`: GET `/v0/meta/bases` -> `bases`.
 
