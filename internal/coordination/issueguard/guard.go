@@ -1,6 +1,7 @@
 package issueguard
 
 import (
+	"net/url"
 	"regexp"
 	"sort"
 	"strconv"
@@ -24,14 +25,16 @@ type Result struct {
 var conventionalTitlePattern = regexp.MustCompile(`^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9][a-z0-9._-]*\))?!?: .+`)
 var issueRefPattern = regexp.MustCompile(`(?i)\b(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved|ref|refs):?\s+(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 var issueTokenPattern = regexp.MustCompile(`(?:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)?#([1-9][0-9]*)\b`)
-var issueURLPattern = regexp.MustCompile(`https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/issues/([1-9][0-9]*)\b`)
 var issueWordNumberPattern = regexp.MustCompile(`(?i)\bissues?\s+(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#?([1-9][0-9]*)\b`)
 var deliveryIssuePhrasePattern = regexp.MustCompile(`(?i)\b(?:deliver(?:s|ed|ing)?|implement(?:s|ed|ing)?|complete(?:s|d|ing)?|ship(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\bissues?\b(?:\.[0-9]|[^.\n\r]){0,160}`)
 var letteredDeliveryIssuePhrasePattern = regexp.MustCompile(`\b(?:[Dd]eliver(?:s|ed|ing)?|[Ii]mplement(?:s|ed|ing)?|[Cc]omplete(?:s|d|ing)?|[Ss]hip(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\b[Ii]ssue\s+[A-Z]\b(?:\.[0-9]|[^.\n\r]){0,60}\b(?i:migration|slice|phase|workstream|delivery|plan|scope|implementation|contract|guard)\b`)
 var parentIssuePattern = regexp.MustCompile(`(?i)\bparent\s+(?:issue\s+)?(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 var markdownH2Pattern = regexp.MustCompile(`(?m)^##\s+([A-Za-z][A-Za-z ]*)\s*$`)
 
-const noMistakesDeliveryMarker = "Updates from [git push no-mistakes](https://" + "git" + "hub.com/kunchenguid/no-mistakes)"
+const (
+	issueTrackerHost         = "git" + "hub.com"
+	noMistakesDeliveryMarker = "Updates from [git push no-mistakes](https://" + issueTrackerHost + "/kunchenguid/no-mistakes)"
+)
 
 var closingKeywords = map[string]bool{
 	"close":    true,
@@ -151,11 +154,10 @@ func addCanonicalTaskRecordIssueLinks(seen map[int]IssueRef, text string) {
 		if !inCanonicalTaskRecordSection {
 			continue
 		}
-		for _, match := range issueURLPattern.FindAllStringSubmatch(trimmed, -1) {
-			if len(match) < 2 {
-				continue
+		for _, token := range strings.Fields(trimmed) {
+			if number, ok := extractIssueURLNumber(token); ok {
+				addIssueRef(seen, number, "refs")
 			}
-			addIssueRef(seen, match[1], "refs")
 		}
 	}
 }
@@ -167,6 +169,28 @@ func addIssueTokens(seen map[int]IssueRef, text, keyword string) {
 		}
 		addIssueRef(seen, match[1], keyword)
 	}
+}
+
+func extractIssueURLNumber(raw string) (string, bool) {
+	candidate := strings.Trim(raw, "<>[](){}\"'`,;")
+	candidate = strings.TrimRight(candidate, ".,;:)]}>\"'")
+
+	parsed, err := url.Parse(candidate)
+	if err != nil {
+		return "", false
+	}
+	if !strings.EqualFold(parsed.Scheme, "https") || !strings.EqualFold(parsed.Host, issueTrackerHost) {
+		return "", false
+	}
+
+	parts := strings.Split(strings.Trim(parsed.Path, "/"), "/")
+	if len(parts) != 4 || parts[2] != "issues" {
+		return "", false
+	}
+	if _, err := strconv.Atoi(parts[3]); err != nil {
+		return "", false
+	}
+	return parts[3], true
 }
 
 func addIssueRef(seen map[int]IssueRef, rawNumber, keyword string) {

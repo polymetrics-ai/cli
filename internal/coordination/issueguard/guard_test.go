@@ -177,6 +177,27 @@ func TestValidatePRAcceptsCanonicalIssueURLsFromTaskRecord(t *testing.T) {
 	}
 }
 
+func TestValidatePRRejectsCanonicalIssueURLsFromOtherHosts(t *testing.T) {
+	body := strings.Join([]string{
+		"## Unvalidated cloud checkpoint — do not merge yet",
+		"",
+		"## Canonical issue links preserved from the task record",
+		"",
+		"- https://github.com.evil/polymetrics-ai/cli/issues/3142",
+		"- https://example.invalid/polymetrics-ai/cli/issues/3143?next=https://github.com/polymetrics-ai/cli/issues/3143",
+	}, "\n")
+	result := ValidatePR("chore(aws-cloudtrail): stage unvalidated parity checkpoint", body)
+	if result.OK {
+		t.Fatal("ValidatePR() OK = true, want false")
+	}
+	if len(result.Issues) != 0 {
+		t.Fatalf("ValidatePR() issues = %#v, want none", result.Issues)
+	}
+	if !containsViolation(result.Violations, "PR body must reference an issue") {
+		t.Fatalf("ValidatePR() violations = %v", result.Violations)
+	}
+}
+
 func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 	tests := []string{
 		"Related to #123\n",
