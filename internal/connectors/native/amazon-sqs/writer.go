@@ -56,7 +56,7 @@ var sqsWriteActions = map[string]writeActionDef{
 }
 
 func (c Connector) Manifest() connectors.Manifest {
-	base := c.Base.Definition()
+	base := c.Definition()
 	cat, _ := c.Catalog(context.Background(), connectors.RuntimeConfig{})
 	fields := []connectors.ConfigField{}
 	secrets := []connectors.SecretField{}
