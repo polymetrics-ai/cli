@@ -104,3 +104,12 @@ Implementation steps:
 - `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase issue-3134-amazon-sqs-parity-wave04-r1 --dry-run` returned `unknown GSD command: programming-loop`, so this plan, the TDD ledger, and verification checklist record the required manual GSD/TDD fallback.
 - Execution is local critical path: the review phase is isolated and the fixes/tests share the same SQS-owned bundle and native package, so no subagents are used.
 - Fix forward with required flags plus synthetic examples, exact missing-path tests, safe reachable `Error` classifiers, bounded code-only AWS errors, and strict scalar/system message-attribute validation before preview.
+
+## 2026-08-02 message-attribute semantic validation follow-up
+
+- Reproduced the remaining SQS-local gap before edits: Number, Binary, and AWSTraceHeader values reached plan/preview after only nonempty scalar checks.
+- Root cause is shared semantic validation at the native SQS write boundary, not individual action serialization; the fix remains confined to `internal/connectors/native/amazon-sqs` and this phase trace.
+- Official AWS constraints applied: Number syntax with at most 38 digits of precision and nonzero magnitude from `1e-128` through `1e126`, standard base64 BinaryValue encoding, and an AWS X-Ray trace header with a valid Root plus validated optional Parent/Sampled fields.
+- `scripts/gsd doctor` passed; the required `scripts/gsd prompt programming-loop init --phase issue-3134-amazon-sqs-parity-wave04-r1 --dry-run` remains unavailable as `unknown GSD command: programming-loop`, so the manual GSD/TDD fallback continues here.
+- Required skills loaded: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-testing`, `golang-safety`, `golang-security`, `golang-error-handling`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`.
+- Execution decision: `local_critical_path`; the single validator and its focused tests share one SQS-owned package in this isolated review phase.

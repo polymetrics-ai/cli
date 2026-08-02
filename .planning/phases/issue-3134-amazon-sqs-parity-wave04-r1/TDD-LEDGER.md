@@ -51,3 +51,11 @@ Regression coverage authored before the fixes:
 The isolated no-mistakes review phase uses a local critical path because all fixes and tests collide in the SQS-owned bundle/native package; no subagents were used.
 
 Green evidence: `go test ./internal/connectors/native/amazon-sqs -count=1` passed after the complete fix round; no live or credentialed AWS calls were made.
+
+## 2026-08-02 message-attribute semantic follow-up
+
+Red evidence is the reproduced boundary behavior from the fresh review: malformed Number strings, out-of-range/over-precision numbers, invalid base64 BinaryValue data, and malformed AWSTraceHeader strings all passed `DryRunWrite` because only type/value presence was checked.
+
+Regression coverage authored before production edits adds table-driven rejection cases for each invalid semantic class and one acceptance case spanning numeric boundaries, 38-digit precision, binary base64, and a synthetic X-Ray trace header. Per the review-phase contract, the tests are run once after the complete fix round rather than between edits.
+
+Green evidence: `go test ./internal/connectors/native/amazon-sqs -count=1` passed after semantic validation was applied; all cases are local and synthetic.

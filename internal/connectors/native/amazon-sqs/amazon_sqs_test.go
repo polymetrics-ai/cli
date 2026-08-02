@@ -953,8 +953,15 @@ func TestDryRunRejectsInvalidMessageAttributes(t *testing.T) {
 		{name: "wrong scalar for Binary", field: "message_attributes", values: map[string]any{"trace": map[string]any{"data_type": "Binary", "string_value": "value"}}, want: "requires non-empty binary_value"},
 		{name: "reserved string list", field: "message_attributes", values: map[string]any{"trace": map[string]any{"data_type": "String", "string_value": "value", "string_list_values": []any{"reserved"}}}, want: "reserved and unsupported"},
 		{name: "reserved provider name", field: "message_attributes", values: map[string]any{"AWS.trace": "value"}, want: "invalid name"},
+		{name: "invalid number syntax", field: "message_attributes", values: map[string]any{"quantity": map[string]any{"data_type": "Number", "string_value": "not-a-number"}}, want: "valid SQS number"},
+		{name: "number exceeds precision", field: "message_attributes", values: map[string]any{"quantity": map[string]any{"data_type": "Number", "string_value": "123456789012345678901234567890123456789"}}, want: "at most 38 digits of precision"},
+		{name: "number below range", field: "message_attributes", values: map[string]any{"quantity": map[string]any{"data_type": "Number", "string_value": "9e-129"}}, want: "between 1e-128 and 1e126"},
+		{name: "number above range", field: "message_attributes", values: map[string]any{"quantity": map[string]any{"data_type": "Number", "string_value": "1.1e126"}}, want: "between 1e-128 and 1e126"},
+		{name: "malformed binary base64", field: "message_attributes", values: map[string]any{"payload": map[string]any{"data_type": "Binary.fixture", "binary_value": "not-base64!"}}, want: "standard base64"},
 		{name: "unsupported system name", field: "message_system_attributes", values: map[string]any{"trace": "value"}, want: "only supports AWSTraceHeader"},
 		{name: "invalid system type", field: "message_system_attributes", values: map[string]any{"AWSTraceHeader": map[string]any{"data_type": "String.custom", "string_value": "value"}}, want: "must use data_type String"},
+		{name: "malformed trace header", field: "message_system_attributes", values: map[string]any{"AWSTraceHeader": "value"}, want: "valid AWS X-Ray trace header"},
+		{name: "malformed trace parent", field: "message_system_attributes", values: map[string]any{"AWSTraceHeader": map[string]any{"data_type": "String", "string_value": "Root=1-5759e988-bd862e3fe1be46a994272793;Parent=invalid;Sampled=1"}}, want: "valid AWS X-Ray trace header"},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -963,6 +970,29 @@ func TestDryRunRejectsInvalidMessageAttributes(t *testing.T) {
 				t.Fatalf("DryRunWrite err = %v, want %q", err, tc.want)
 			}
 		})
+	}
+}
+
+func TestDryRunAcceptsValidSQSMessageAttributeValues(t *testing.T) {
+	attributes := map[string]any{
+		"minimum": map[string]any{"data_type": "Number.minimum", "string_value": "1e-128"},
+		"maximum": map[string]any{"data_type": "Number.maximum", "string_value": "1e126"},
+		"precise": map[string]any{"data_type": "Number", "string_value": "0.12345678901234567890123456789012345678"},
+		"payload": map[string]any{"data_type": "Binary.fixture", "binary_value": "AQIDBA=="},
+	}
+	systemAttributes := map[string]any{
+		"AWSTraceHeader": map[string]any{"data_type": "String", "string_value": "Root=1-5759e988-bd862e3fe1be46a994272793;Parent=53995c3f42cd8ad8;Sampled=1"},
+	}
+	preview, err := native.New().DryRunWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: testRuntimeConfig("https://sqs.example.test")}, []connectors.Record{{
+		"message_body":              "hello",
+		"message_attributes":        attributes,
+		"message_system_attributes": systemAttributes,
+	}})
+	if err != nil {
+		t.Fatalf("DryRunWrite valid message attributes: %v", err)
+	}
+	if preview.RecordsStaged != 1 {
+		t.Fatalf("preview = %+v, want one staged record", preview)
 	}
 }
 
