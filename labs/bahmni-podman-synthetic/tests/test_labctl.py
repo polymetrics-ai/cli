@@ -62,6 +62,9 @@ class ContactGuardTests(unittest.TestCase):
             "+91 (80) 2345 6789",
             "080 2345 6789",
             "08023456789",
+            "+91–98765–43210",
+            "+91/98765/43210",
+            "+٩١–٩٨٧٦٥–٤٣٢١٠",
             "care.team@example.com",
             "Please contact care.team@example.com.",
             "care.team@fm-bahmni.invalid.example.",
@@ -172,6 +175,21 @@ class ApiOriginGuardTests(unittest.TestCase):
             "https://example.com/steal",
         )
         self.assertIsNone(followup)
+
+    def test_authenticated_client_disables_environment_and_system_proxies(self) -> None:
+        credentials = self.credentials()
+        with mock.patch.dict(os.environ, {
+            "BAHMNI_LAB_HTTPS_PORT": "18443",
+            "HTTPS_PROXY": "https://proxy.example:8443",
+            "ALL_PROXY": "socks5://proxy.example:1080",
+        }), mock.patch.object(
+            labctl, "read_credentials", return_value=credentials
+        ), mock.patch.object(
+            urllib.request, "getproxies", side_effect=AssertionError("system proxy discovery must not run")
+        ):
+            api = labctl.BahmniApi()
+
+        self.assertEqual({}, api.proxy_handler.proxies)
 
 
 class NameReconciliationTests(unittest.TestCase):
@@ -342,11 +360,7 @@ class StableRecordUpgradeTests(unittest.TestCase):
                 "comments": old_comment,
                 "startDateTime": labctl.appointment_ms(start),
                 "endDateTime": labctl.appointment_ms("2026-01-20T09:45:00.000+0000"),
-                "providers": [{
-                    "uuid": "existing-provider",
-                    "response": "REJECTED",
-                    "comments": "Provider retained",
-                }],
+                "providers": [],
                 }]
             return 200, {}
 
@@ -368,15 +382,83 @@ class StableRecordUpgradeTests(unittest.TestCase):
         self.assertEqual("existing-service", update["serviceUuid"])
         self.assertEqual("existing-service-type", update["serviceTypeUuid"])
         self.assertEqual("existing-location", update["locationUuid"])
-        self.assertEqual([{
-            "uuid": "existing-provider",
-            "response": "REJECTED",
-            "comments": "Provider retained",
-        }], update["providers"])
+        self.assertEqual([], update["providers"])
         self.assertIn(stable, update["comments"])
         self.assertFalse(any(call[0:2] == ("POST", "/appointments/appointment-1") for call in api.calls))
         self.assertFalse(any(call[0:2] == ("POST", "/appointments") for call in api.calls))
         self.assertEqual(1, counts["appointments_reconciled"])
+
+    def test_appointment_with_unrepresentable_provider_state_is_not_updated(self) -> None:
+        appointment = {
+            "uuid": "appointment-1",
+            "patient": {"uuid": "patient-1"},
+            "service": {"uuid": "service-1"},
+            "location": {"uuid": "location-1"},
+            "appointmentKind": "Scheduled",
+            "status": "Scheduled",
+            "startDateTime": 1,
+            "endDateTime": 2,
+            "providers": [{"uuid": "provider-1", "response": "ACCEPTED", "voided": True}],
+        }
+
+        with self.assertRaisesRegex(labctl.ApiError, "provider associations"):
+            labctl.appointment_update_body(appointment, "new comment")
+
+    def test_legacy_allergy_comment_is_reconciled_through_patient_subresource(self) -> None:
+        old_comment = "FM-BAHMNI-LAB-R1 synthetic low-severity medication allergy; not real patient data SYN-HEN-0001"
+        new_comment = "Low-severity medication allergy noted in local connector lab record SYN-HEN-0001"
+        api = FakeApi()
+
+        def allergy_rest(path: str, method: str = "GET", body: Any | None = None, params: dict[str, Any] | None = None) -> tuple[int, Any]:
+            api.calls.append((method, path, body, params))
+            if method == "GET":
+                return 200, {"results": [{
+                    "uuid": "allergy-1",
+                    "allergen": {"codedAllergen": {"uuid": "penicillin"}},
+                    "comment": old_comment,
+                }]}
+            return 200, {}
+
+        api.rest = allergy_rest
+        counts = summary()
+
+        labctl.ensure_allergy(
+            api,
+            "patient-1",
+            "penicillin",
+            new_comment,
+            counts,
+            legacy_comments=[old_comment],
+        )
+
+        self.assertIn(("POST", "/patient/patient-1/allergy/allergy-1", {"comment": new_comment}, None), api.calls)
+        self.assertEqual(1, counts["allergies_reconciled"])
+        self.assertFalse(any(call[0:2] == ("POST", "/patient/patient-1/allergy") for call in api.calls))
+
+    def test_unrecognized_allergy_comment_is_preserved_without_update(self) -> None:
+        api = FakeApi()
+
+        def allergy_rest(path: str, method: str = "GET", body: Any | None = None, params: dict[str, Any] | None = None) -> tuple[int, Any]:
+            api.calls.append((method, path, body, params))
+            return 200, {"results": [{
+                "uuid": "allergy-1",
+                "allergen": {"codedAllergen": {"uuid": "penicillin"}},
+                "comment": "Clinician-authored comment",
+            }]}
+
+        api.rest = allergy_rest
+        counts = summary()
+        labctl.ensure_allergy(
+            api,
+            "patient-1",
+            "penicillin",
+            "Expected task comment",
+            counts,
+            legacy_comments=["Exact old task comment"],
+        )
+
+        self.assertFalse(any(call[0] == "POST" for call in api.calls))
+        self.assertEqual(1, counts["allergies_existing"])
 
 
 class OwnershipGuardTests(unittest.TestCase):
@@ -414,12 +496,15 @@ class OwnershipGuardTests(unittest.TestCase):
                 "BAHMNI_LAB_MACHINE": "fm-bahmni-lab-r1-machine",
                 "BAHMNI_LAB_CONNECTION": "fm-bahmni-lab-r1-machine",
                 "BAHMNI_LAB_PROJECT": "fm_bahmni_lab_r1",
+                "XDG_STATE_HOME": str(Path(parent) / "state"),
             }
             with mock.patch.dict(os.environ, environment), mock.patch.object(labctl.shutil, "which", return_value=None):
                 claimed = labctl.claim_ownership()
                 marker_path = labctl.ownership_marker_path()
                 self.assertTrue(marker_path.is_file())
-                self.assertNotIn(home, marker_path.parents)
+                self.assertEqual(Path(parent) / "state" / labctl.LAB_ID / "ownership.json", marker_path)
+                self.assertEqual(0o700, marker_path.parent.stat().st_mode & 0o777)
+                self.assertEqual(0o600, marker_path.stat().st_mode & 0o777)
                 shutil.rmtree(home)
                 self.assertEqual(claimed, labctl.load_ownership_marker())
                 self.assertEqual(claimed, labctl.claim_ownership())
@@ -434,20 +519,87 @@ class OwnershipGuardTests(unittest.TestCase):
                 "BAHMNI_LAB_CONNECTION": "fm-bahmni-lab-r1-machine",
                 "BAHMNI_LAB_PROJECT": "fm_bahmni_lab_r1",
             }
+            environment["XDG_STATE_HOME"] = str(Path(parent) / "state")
             with mock.patch.dict(os.environ, environment):
                 expected = labctl.expected_ownership()
-                legacy_path = labctl.legacy_ownership_marker_path()
-                legacy_path.write_text(json.dumps(expected), encoding="utf-8")
+                legacy_path = labctl.legacy_ownership_marker_paths()[0]
+                legacy_marker = dict(expected, schema=1)
+                legacy_marker.pop("resources")
+                legacy_path.write_text(json.dumps(legacy_marker), encoding="utf-8")
                 legacy_path.chmod(0o600)
                 self.assertEqual(expected, labctl.load_ownership_marker())
                 self.assertTrue(labctl.ownership_marker_path().is_file())
+
+    def test_existing_machine_without_durable_marker_requires_explicit_recovery(self) -> None:
+        with tempfile.TemporaryDirectory(prefix=".ownership-refuse-", dir=LAB_ROOT) as parent:
+            environment = {
+                "BAHMNI_LAB_HOME": str(Path(parent) / labctl.LAB_ID),
+                "BAHMNI_LAB_MACHINE": "fm-bahmni-lab-r1-machine",
+                "BAHMNI_LAB_CONNECTION": "fm-bahmni-lab-r1-machine",
+                "BAHMNI_LAB_PROJECT": "fm_bahmni_lab_r1",
+                "XDG_STATE_HOME": str(Path(parent) / "state"),
+            }
+            with mock.patch.dict(os.environ, environment), mock.patch.object(
+                labctl.shutil, "which", return_value="/usr/bin/podman"
+            ), mock.patch.object(
+                labctl, "podman_names", side_effect=[{"fm-bahmni-lab-r1-machine"}, {"fm-bahmni-lab-r1-machine"}]
+            ):
+                with self.assertRaisesRegex(ValueError, "explicit ownership recovery"):
+                    labctl.claim_ownership()
 
     def test_task_prefixed_resource_without_project_label_is_rejected(self) -> None:
         with self.assertRaises(ValueError):
             labctl.validate_owned_resources([{
                 "Names": ["fm-bahmni-lab-r1-openmrs"],
                 "Labels": {},
-            }], "fm_bahmni_lab_r1")
+            }], "fm_bahmni_lab_r1", "container")
+
+    def test_project_resource_without_explicit_owner_label_is_rejected(self) -> None:
+        resource = {
+            "Names": ["fm_bahmni_lab_r1_openmrs_1"],
+            "Id": "container-id",
+            "Labels": {"com.docker.compose.project": "fm_bahmni_lab_r1"},
+        }
+        with self.assertRaisesRegex(ValueError, "ownership label"):
+            labctl.validate_owned_resources([resource], "fm_bahmni_lab_r1", "container")
+
+    def test_network_or_volume_requires_label_or_exact_durable_identity(self) -> None:
+        resource = {
+            "Name": "fm_bahmni_lab_r1_data",
+            "Id": "resource-id",
+            "Labels": {"com.docker.compose.project": "fm_bahmni_lab_r1"},
+        }
+        with self.assertRaisesRegex(ValueError, "ownership proof"):
+            labctl.validate_owned_resources([resource], "fm_bahmni_lab_r1", "volume")
+        labctl.validate_owned_resources(
+            [resource],
+            "fm_bahmni_lab_r1",
+            "volume",
+            [{"kind": "volume", "name": "fm_bahmni_lab_r1_data", "id": "resource-id"}],
+        )
+
+    def test_generated_compose_labels_services_volumes_and_default_network(self) -> None:
+        source = "services:\n  openmrs:\n    image: example/openmrs\nvolumes:\n  openmrs-data:\n"
+        rendered = labctl.scope_compose_ownership(source)
+        labctl.validate_compose_ownership(rendered)
+        self.assertEqual(3, rendered.count(labctl.OWNER_LABEL))
+
+    def test_forget_refuses_while_owned_machine_or_connection_exists(self) -> None:
+        marker = labctl.validate_ownership_config(
+            Path("/tmp/fm-bahmni-lab-r1"),
+            "fm-bahmni-lab-r1-machine",
+            "fm-bahmni-lab-r1-machine",
+            "fm_bahmni_lab_r1",
+        )
+        inventories = [
+            {"fm-bahmni-lab-r1-machine"},
+            set(),
+        ]
+        with mock.patch.object(labctl, "load_ownership_marker", return_value=marker), mock.patch.object(
+            labctl.shutil, "which", return_value="/usr/bin/podman"
+        ), mock.patch.object(labctl, "podman_names", side_effect=inventories):
+            with self.assertRaisesRegex(ValueError, "still exists"):
+                labctl.forget_ownership()
 
     def test_unrelated_shell_override_fails_before_podman_action(self) -> None:
         env = os.environ.copy()

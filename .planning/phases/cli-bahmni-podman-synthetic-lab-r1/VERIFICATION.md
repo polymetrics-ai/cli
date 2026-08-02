@@ -69,6 +69,8 @@
 
 ## Final repo gates
 
+- [x] Slice K focused standard-library regression confirmation passed all 32 tests, covering lossless appointment refusal, Unicode/slash contact normalization, proxy-free authenticated transport, private atomic XDG ownership proof, strict container/network/volume ownership, cleanup/restart continuity, and exact allergy reconciliation.
+- [x] Slice K live allergy reconciliation and ownership recovery are intentionally left to the outer validation/runtime phase; this review phase performed no live Podman or Bahmni mutation.
 - [x] Slice J focused standard-library regression tests passed: 23 tests cover the pinned singular appointment update route, preserved appointment state, legacy marker migration, cleanup/restart ownership continuity, normalized contact candidates, exact loopback API origins, and authenticated redirect refusal.
 - [x] Slice J source review confirms REST and FHIR authentication can target only the configured HTTPS loopback origin, and existing runtime ownership proof migrates forward before lifecycle actions.
 - [x] Slice J performed no live Podman, Bahmni, push, PR, CI, or outer-pipeline action.

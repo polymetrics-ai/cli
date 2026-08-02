@@ -124,6 +124,16 @@
 - Validate the exact configured HTTPS loopback OpenMRS REST origin before reading credentials into an authenticated client, derive FHIR from that origin, and refuse every authenticated redirect.
 - Add the round-two regression tests before production edits and run the focused lab test module only after the complete fix round.
 
+### Slice K — Lossless recovery and durable ownership proof
+
+- Refuse appointment comment reconciliation whenever the pinned representation contains provider associations that the supported update mapper cannot preserve losslessly.
+- Normalize phone candidates across Unicode punctuation, slashes, compact country-code forms, and decimal digits before applying the Indian contact classifier.
+- Disable environment and system proxies for every authenticated loopback REST/FHIR request while retaining the validated-origin and redirect boundaries.
+- Store exact machine, connection, project, and resource ownership proof atomically in private XDG state; require explicit owner labels for containers and either owner labels or exact durable identity proof for networks and volumes.
+- Generate owner labels for services, volumes, and the default network, and provide explicit recovery/forget actions that cannot adopt unlabeled containers or discard proof while its machine or connection exists.
+- Reconcile the exact legacy allergy comment only on the exact task-owned patient and coded allergen through the supported patient allergy subresource, then verify the exact live comment.
+- Add focused regression tests before production edits. The assigned review phase permits one verification only, so these tests remain an unexecuted red specification until every Slice K fix is applied.
+
 ## Risks and mitigations
 
 - **Podman machine absent/stopped:** create/start only the task-owned machine if needed; never change default connection or unrelated machines.

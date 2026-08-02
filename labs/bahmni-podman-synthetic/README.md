@@ -7,9 +7,10 @@ Task-owned assets for a reproducible local Bahmni Standard lab for connector tes
 - Pinned source: `Bahmni/bahmni-docker` tag `1.0.2-standard`, commit `1dfe62c4e5d6f3d702e65d869729726226fceb56`.
 - Rootless Podman only; no Docker CLI/Engine/Desktop.
 - Loopback-only service binds.
-- Task-prefixed resources: Podman machine/connection `fm-bahmni-lab-r1-machine`, compose project `fm_bahmni_lab_r1`, runtime dir `/tmp/fm-bahmni-lab-r1`. The first safe start writes a sibling durable marker binding those exact values. Cleanup retains that proof while the owned machine remains; later machine, connection, compose, reset, cleanup, and restart paths refuse missing or mismatched markers.
-- Every explicit compose `container_name` is rewritten with the `fm-bahmni-lab-r1-` prefix, every service receives the `io.polymetrics.bahmni-lab.owner` label, and project actions verify compose labels before they run. Generation fails closed if names or labels are unscoped.
+- Task-prefixed resources: Podman machine/connection `fm-bahmni-lab-r1-machine`, compose project `fm_bahmni_lab_r1`, runtime dir `/tmp/fm-bahmni-lab-r1`. The first safe start atomically writes private ownership state under `${XDG_STATE_HOME:-~/.local/state}/fm-bahmni-lab-r1/ownership.json`, binding those exact values and any recovered network/volume identities. Cleanup retains that proof while the owned machine remains; later machine, connection, compose, reset, cleanup, and restart paths refuse missing or mismatched markers.
+- Every explicit compose `container_name` is rewritten with the `fm-bahmni-lab-r1-` prefix, and every service, named volume, and default network receives the `io.polymetrics.bahmni-lab.owner` label. Project actions verify labels or exact recovered identities before they run. Generation fails closed if names or labels are unscoped.
 - `reset`/`cleanup` require `--yes`, target only marker-bound resources, and never create, start, or stop the Podman machine. If the task-owned connection is unavailable they report that there is nothing to reset.
+- `ownership-recover --yes` recreates lost durable state only after the exact machine/connection and every task-project resource can be inspected; containers without the explicit owner label are never adopted. `ownership-forget --yes` removes the state only after its exact machine and connection no longer exist.
 - Local credentials stay under `/tmp/fm-bahmni-lab-r1` and are not committed.
 
 ## Commands
@@ -21,6 +22,7 @@ labs/bahmni-podman-synthetic/bin/bahmni-lab start
 labs/bahmni-podman-synthetic/bin/bahmni-lab health --json
 labs/bahmni-podman-synthetic/bin/bahmni-lab seed --json
 labs/bahmni-podman-synthetic/bin/bahmni-lab verify
+labs/bahmni-podman-synthetic/bin/bahmni-lab ownership-recover --yes  # only after durable state loss
 ```
 
 Local URLs:
@@ -77,6 +79,6 @@ labs/bahmni-podman-synthetic/bin/bahmni-lab seed --dry-run --json
 # labs/bahmni-podman-synthetic/bin/bahmni-lab verify
 ```
 
-`verify` checks exact expected provider/patient display names, one canonical stable appointment per synthetic patient, stable history-event markers, the fixture, live OpenMRS/FHIR records, Unicode hospital name, Karthik patient, completed visit, fever observation, cold/fever note, and FHIR condition presence.
+`verify` checks exact expected provider/patient display names and allergy comments, one canonical stable appointment per synthetic patient, stable history-event markers, the fixture, live OpenMRS/FHIR records, Unicode hospital name, Karthik patient, completed visit, fever observation, cold/fever note, and FHIR condition presence.
 
 Known API limit: the pinned OpenMRS FHIR2 Condition endpoint accepts code/text on create but does not echo condition code/text back on read. The seed script therefore uses condition presence as the idempotency guard and records cold/fever detail in encounter observations.

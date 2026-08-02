@@ -30,6 +30,8 @@ Commands:
   credentials [--path|--show]   Print credential file path, or explicitly show local-only credentials.
   reset --yes                   Stop/remove only this compose project and its volumes.
   cleanup --yes                 reset --yes, then remove this task runtime directory. Does not stop the Podman machine.
+  ownership-recover --yes       Recover durable proof after exact label and identity inspection.
+  ownership-forget --yes        Remove durable proof only after its machine and connection are absent.
   urls                          Print local loopback URLs.
 
 This script never invokes Docker. It uses rootless podman and podman-compose only.
@@ -177,6 +179,7 @@ case "${cmd}" in
       profiles+=(--profile snowstorm-lite --profile cdss)
     fi
     compose "${profiles[@]}" up -d
+    verify_owned_resources
     wait_for_health
     ;;
   ps)
@@ -220,6 +223,14 @@ case "${cmd}" in
     "${BASH_SOURCE[0]}" reset --yes
     rm -rf -- "${safe_home}"
     echo "removed ${safe_home}; task-owned Podman machine ${MACHINE} was left running if it was running"
+    ;;
+  ownership-recover)
+    require_yes "${1:-}"
+    "${PYTHON_BIN}" "${LABCTL}" ownership recover --yes --resources
+    ;;
+  ownership-forget)
+    require_yes "${1:-}"
+    "${PYTHON_BIN}" "${LABCTL}" ownership forget --yes
     ;;
   *)
     usage >&2

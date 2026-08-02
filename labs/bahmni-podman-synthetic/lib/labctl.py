@@ -21,6 +21,7 @@ import ssl
 import stat
 import subprocess
 import sys
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -40,7 +41,7 @@ OWNER_MARKER_NAME = f".{LAB_ID}-ownership.json"
 STABLE_RECORD_PREFIX = f"urn:polymetrics:bahmni-lab:{LAB_ID}"
 MACHINE_NAME_RE = re.compile(rf"^{re.escape(LAB_ID)}-[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
 PROJECT_NAME_RE = re.compile(r"^fm_bahmni_lab_r1(?:_[a-z0-9](?:[a-z0-9_]*[a-z0-9])?)?$")
-PHONE_CANDIDATE_RE = re.compile(r"(?<!\w)(?:\+|00)?\d(?:[\d\s().-]{6,}\d)(?!\w)")
+PHONE_CANDIDATE_RE = re.compile(r"(?:\+|00)?\d(?:[^\w@]*\d){7,13}")
 EMAIL_CANDIDATE_RE = re.compile(r"(?<![\w.!#$%&'*+/=?^`{|}~-])([\w.!#$%&'*+/=?^`{|}~-]+@[^\s<>()\[\]{},;:\"']+)")
 
 
@@ -109,11 +110,19 @@ def podman_wrapper_path() -> Path:
 
 
 def ownership_marker_path() -> Path:
-    return runtime_home().parent / OWNER_MARKER_NAME
+    configured = os.environ.get("XDG_STATE_HOME")
+    state_home = Path(configured).expanduser() if configured else Path.home() / ".local" / "state"
+    if not state_home.is_absolute():
+        raise ValueError("XDG_STATE_HOME must be an absolute path")
+    return state_home.resolve() / LAB_ID / "ownership.json"
 
 
 def legacy_ownership_marker_path() -> Path:
     return runtime_home() / OWNER_MARKER_NAME
+
+
+def legacy_ownership_marker_paths() -> tuple[Path, ...]:
+    return (runtime_home().parent / OWNER_MARKER_NAME, legacy_ownership_marker_path())
 
 
 def validate_ownership_config(home: Path, machine: str, connection: str, project: str) -> dict[str, Any]:
@@ -132,12 +141,13 @@ def validate_ownership_config(home: Path, machine: str, connection: str, project
     if failures:
         raise ValueError("; ".join(failures))
     return {
-        "schema": 1,
+        "schema": 2,
         "owner": LAB_ID,
         "lab_home": str(resolved),
         "machine": machine,
         "connection": connection,
         "project": project,
+        "resources": [],
     }
 
 
@@ -145,30 +155,76 @@ def expected_ownership() -> dict[str, Any]:
     return validate_ownership_config(runtime_home(), machine_name(), connection_name(), project_name())
 
 
-def validate_ownership_marker(actual: dict[str, Any], expected: dict[str, Any]) -> None:
-    if actual != expected:
+def validate_ownership_marker(actual: dict[str, Any], expected: dict[str, Any]) -> dict[str, Any]:
+    identity_keys = ("owner", "lab_home", "machine", "connection", "project")
+    if actual.get("schema") not in (1, 2) or any(actual.get(key) != expected.get(key) for key in identity_keys):
         raise ValueError("ownership marker does not match the requested lab resources")
+    raw_resources = actual.get("resources", [])
+    if not isinstance(raw_resources, list):
+        raise ValueError("ownership marker contains invalid resource proof")
+    resources: list[dict[str, str]] = []
+    seen: set[tuple[str, str, str]] = set()
+    for resource in raw_resources:
+        if not isinstance(resource, dict):
+            raise ValueError("ownership marker contains invalid resource proof")
+        normalized = {key: str(resource.get(key) or "") for key in ("kind", "name", "id")}
+        if normalized["kind"] not in ("network", "volume") or not normalized["name"] or not normalized["id"]:
+            raise ValueError("ownership marker contains invalid resource proof")
+        key = (normalized["kind"], normalized["name"], normalized["id"])
+        if key in seen:
+            raise ValueError("ownership marker contains duplicate resource proof")
+        seen.add(key)
+        resources.append(normalized)
+    return expected | {"resources": sorted(resources, key=lambda item: (item["kind"], item["name"], item["id"]))}
 
 
 def read_ownership_marker(path: Path, expected: dict[str, Any]) -> dict[str, Any]:
     if not path.is_file() or path.is_symlink():
         raise ValueError("durable lab ownership marker is missing")
-    if path.stat().st_uid != os.getuid():
+    marker_stat = path.stat()
+    if marker_stat.st_uid != os.getuid():
         raise ValueError("durable lab ownership marker belongs to another user")
+    if stat.S_IMODE(marker_stat.st_mode) & 0o077:
+        raise ValueError("durable lab ownership marker is not private")
     marker = load_json(path)
-    validate_ownership_marker(marker, expected)
-    return marker
+    return validate_ownership_marker(marker, expected)
 
 
-def write_ownership_marker(path: Path, expected: dict[str, Any]) -> dict[str, Any]:
+def ensure_ownership_state_dir(path: Path) -> None:
+    path.parent.mkdir(parents=True, mode=0o700, exist_ok=True)
+    if path.parent.is_symlink() or path.parent.stat().st_uid != os.getuid():
+        raise ValueError("durable lab ownership state directory is unsafe")
+    path.parent.chmod(0o700)
+
+
+def write_ownership_marker(path: Path, marker: dict[str, Any]) -> dict[str, Any]:
+    expected = expected_ownership()
+    normalized = validate_ownership_marker(marker, expected)
+    ensure_ownership_state_dir(path)
+    if path.exists() or path.is_symlink():
+        read_ownership_marker(path, expected)
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.{os.urandom(8).hex()}.tmp")
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
     try:
-        with path.open("x", encoding="utf-8") as fh:
-            json.dump(expected, fh, indent=2, sort_keys=True)
+        descriptor = os.open(temporary, flags, 0o600)
+        with os.fdopen(descriptor, "w", encoding="utf-8") as fh:
+            json.dump(normalized, fh, indent=2, sort_keys=True)
             fh.write("\n")
-    except FileExistsError:
-        return read_ownership_marker(path, expected)
-    path.chmod(0o600)
-    return expected
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(temporary, path)
+        path.chmod(0o600)
+        directory_fd = os.open(path.parent, os.O_RDONLY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
+    finally:
+        if temporary.exists() or temporary.is_symlink():
+            temporary.unlink()
+    return normalized
 
 
 def load_ownership_marker() -> dict[str, Any]:
@@ -176,9 +232,11 @@ def load_ownership_marker() -> dict[str, Any]:
     path = ownership_marker_path()
     if path.exists() or path.is_symlink():
         return read_ownership_marker(path, expected)
-    legacy_path = legacy_ownership_marker_path()
-    marker = read_ownership_marker(legacy_path, expected)
-    return write_ownership_marker(path, marker)
+    for legacy_path in legacy_ownership_marker_paths():
+        if legacy_path.exists() or legacy_path.is_symlink():
+            marker = read_ownership_marker(legacy_path, expected)
+            return write_ownership_marker(path, marker)
+    raise ValueError("durable lab ownership marker is missing")
 
 
 def podman_names(command: list[str], fields: tuple[str, ...]) -> set[str]:
@@ -202,32 +260,19 @@ def podman_names(command: list[str], fields: tuple[str, ...]) -> set[str]:
     return names
 
 
-def legacy_runtime_is_task_owned(expected: dict[str, Any]) -> bool:
-    if expected != validate_ownership_config(DEFAULT_HOME, "fm-bahmni-lab-r1-machine", "fm-bahmni-lab-r1-machine", "fm_bahmni_lab_r1"):
-        return False
-    compose_path = generated_compose_path()
-    env_path = generated_env_path()
-    wrapper_path = podman_wrapper_path()
-    if not compose_path.is_file() or not env_path.is_file() or not wrapper_path.is_file():
-        return False
-    return LAB_ID in compose_path.read_text(encoding="utf-8") and LAB_ID in wrapper_path.read_text(encoding="utf-8")
-
-
 def claim_ownership() -> dict[str, Any]:
     expected = expected_ownership()
     path = ownership_marker_path()
-    legacy_path = legacy_ownership_marker_path()
-    if path.exists() or path.is_symlink() or legacy_path.exists() or legacy_path.is_symlink():
-        validate_ownership_marker(load_ownership_marker(), expected)
-        return expected
+    if path.exists() or path.is_symlink() or any(item.exists() or item.is_symlink() for item in legacy_ownership_marker_paths()):
+        return validate_ownership_marker(load_ownership_marker(), expected)
     podman = shutil.which("podman")
     existing_requested_resources = False
     if podman:
         machine_names = podman_names([podman, "machine", "list", "--format", "json"], ("Name", "name"))
         connection_names = podman_names([podman, "system", "connection", "list", "--format", "json"], ("Name", "name"))
         existing_requested_resources = expected["machine"] in machine_names or expected["connection"] in connection_names
-    if existing_requested_resources and not legacy_runtime_is_task_owned(expected):
-        raise ValueError("refusing to adopt existing Podman resources without prior task ownership evidence")
+    if existing_requested_resources:
+        raise ValueError("refusing to adopt existing Podman resources without durable task ownership evidence; use explicit ownership recovery")
     ensure_dirs()
     return write_ownership_marker(path, expected)
 
@@ -245,7 +290,7 @@ def iter_string_values(value: Any, path: str = "$") -> Iterable[tuple[str, str]]
 
 def normalize_phone_candidate(value: str) -> str | None:
     raw = value.strip()
-    digits = re.sub(r"\D", "", raw)
+    digits = "".join(str(unicodedata.decimal(character)) for character in raw if character.isdecimal())
     if raw.startswith("+91") and digits.startswith("91"):
         digits = digits[2:]
     elif raw.startswith("0091") and digits.startswith("0091"):
@@ -395,31 +440,46 @@ def validate_container_names(compose_text: str) -> None:
 
 
 def service_blocks(compose_text: str) -> list[tuple[int, int]]:
+    return section_blocks(compose_text, "services")
+
+
+def section_blocks(compose_text: str, section: str) -> list[tuple[int, int]]:
     lines = compose_text.splitlines(keepends=True)
     try:
-        services_start = next(index for index, line in enumerate(lines) if line.rstrip("\r\n") == "services:")
+        section_start = next(index for index, line in enumerate(lines) if line.rstrip("\r\n") == f"{section}:")
     except StopIteration:
         return []
-    services_end = len(lines)
-    for index in range(services_start + 1, len(lines)):
+    section_end = len(lines)
+    for index in range(section_start + 1, len(lines)):
         line = lines[index]
         if line.strip() and not line.startswith((" ", "\t", "#")):
-            services_end = index
+            section_end = index
             break
     starts = [
         index
-        for index in range(services_start + 1, services_end)
-        if re.match(r"^  [A-Za-z0-9_.-]+:\s*(?:#.*)?(?:\r?\n)?$", lines[index])
+        for index in range(section_start + 1, section_end)
+        if re.match(r"^  [A-Za-z0-9_.-]+:[^\r\n]*(?:\r?\n)?$", lines[index])
     ]
-    return [(start, starts[offset + 1] if offset + 1 < len(starts) else services_end) for offset, start in enumerate(starts)]
+    return [(start, starts[offset + 1] if offset + 1 < len(starts) else section_end) for offset, start in enumerate(starts)]
 
 
 def scope_service_labels(compose_text: str) -> str:
+    return scope_section_labels(compose_text, "services")
+
+
+def scope_section_labels(compose_text: str, section: str) -> str:
     lines = compose_text.splitlines(keepends=True)
-    for start, end in reversed(service_blocks(compose_text)):
+    for start, end in reversed(section_blocks(compose_text, section)):
         block = "".join(lines[start:end])
         if OWNER_LABEL in block:
             continue
+        entry = re.match(r"^  ([A-Za-z0-9_.-]+):([^\r\n]*)(?:\r?\n)?$", lines[start])
+        remainder = entry.group(2).strip() if entry else ""
+        if remainder and not remainder.startswith(("#", "{}")):
+            raise SystemExit(f"generated compose contains unsupported inline {section} ownership entry")
+        inline_empty = re.match(r"^(  [A-Za-z0-9_.-]+:)\s*\{\}\s*(?:#.*)?(?:\r?\n)?$", lines[start])
+        if inline_empty:
+            lines[start] = inline_empty.group(1) + "\n"
         labels_index = next((index for index in range(start + 1, end) if lines[index].rstrip("\r\n") == "    labels:"), None)
         if labels_index is None:
             lines.insert(start + 1, f"    labels:\n      {OWNER_LABEL}: {LAB_ID}\n")
@@ -431,16 +491,54 @@ def scope_service_labels(compose_text: str) -> str:
 
 
 def validate_service_labels(compose_text: str) -> None:
-    blocks = service_blocks(compose_text)
-    if not blocks:
-        raise SystemExit("generated compose has no services to ownership-label")
+    validate_section_labels(compose_text, "services", required=True)
+
+
+def validate_section_labels(compose_text: str, section: str, required: bool = False) -> None:
+    blocks = section_blocks(compose_text, section)
+    if required and not blocks:
+        raise SystemExit(f"generated compose has no {section} to ownership-label")
     unlabeled = [
         compose_text.splitlines()[start].strip().rstrip(":")
         for start, end in blocks
         if OWNER_LABEL not in "".join(compose_text.splitlines(keepends=True)[start:end])
     ]
     if unlabeled:
-        raise SystemExit("generated compose contains services without task ownership labels: " + ", ".join(unlabeled))
+        raise SystemExit(f"generated compose contains {section} without task ownership labels: " + ", ".join(unlabeled))
+
+
+def ensure_default_network(compose_text: str) -> str:
+    lines = compose_text.splitlines(keepends=True)
+    try:
+        section_start = next(index for index, line in enumerate(lines) if line.rstrip("\r\n") == "networks:")
+    except StopIteration:
+        suffix = "" if not compose_text or compose_text.endswith("\n") else "\n"
+        return compose_text + suffix + "networks:\n  default:\n"
+    if any(lines[start].strip().split(":", 1)[0] == "default" for start, _ in section_blocks(compose_text, "networks")):
+        return compose_text
+    section_end = len(lines)
+    for index in range(section_start + 1, len(lines)):
+        if lines[index].strip() and not lines[index].startswith((" ", "\t", "#")):
+            section_end = index
+            break
+    lines.insert(section_end, "  default:\n")
+    return "".join(lines)
+
+
+def scope_compose_ownership(compose_text: str) -> str:
+    rendered = scope_section_labels(compose_text, "services")
+    rendered = scope_section_labels(rendered, "volumes")
+    rendered = ensure_default_network(rendered)
+    return scope_section_labels(rendered, "networks")
+
+
+def validate_compose_ownership(compose_text: str) -> None:
+    validate_section_labels(compose_text, "services", required=True)
+    validate_section_labels(compose_text, "volumes")
+    validate_section_labels(compose_text, "networks", required=True)
+    network_names = [compose_text.splitlines()[start].strip().split(":", 1)[0] for start, _ in section_blocks(compose_text, "networks")]
+    if "default" not in network_names:
+        raise SystemExit("generated compose has no task-owned default network")
 
 
 def normalized_labels(value: Any) -> dict[str, str]:
@@ -463,33 +561,64 @@ def resource_names(value: dict[str, Any]) -> list[str]:
     return [str(raw).lstrip("/")] if raw else []
 
 
-def validate_owned_resources(values: Iterable[dict[str, Any]], project: str) -> None:
+def resource_identity(value: dict[str, Any]) -> str:
+    raw = value.get("Id") or value.get("ID") or value.get("id")
+    if raw:
+        return str(raw)
+    names = resource_names(value)
+    attributes = {
+        key: value.get(key)
+        for key in ("CreatedAt", "Created", "created", "Mountpoint", "mountpoint")
+        if value.get(key)
+    }
+    if not names or not attributes:
+        return ""
+    material = json.dumps({"names": names, "attributes": attributes}, sort_keys=True, separators=(",", ":"))
+    return "sha256:" + hashlib.sha256(material.encode("utf-8")).hexdigest()
+
+
+def resource_is_candidate(value: dict[str, Any], project: str) -> bool:
+    labels = normalized_labels(value.get("Labels") or value.get("labels"))
+    project_label = labels.get("com.docker.compose.project") or labels.get("io.podman.compose.project")
+    return project_label == project or any(name.startswith((project + "_", LAB_ID + "-")) for name in resource_names(value))
+
+
+def validate_owned_resources(
+    values: Iterable[dict[str, Any]],
+    project: str,
+    kind: str,
+    proofs: Iterable[dict[str, str]] = (),
+) -> None:
+    proof_keys = {(item.get("kind"), item.get("name"), item.get("id")) for item in proofs}
     for value in values:
         labels = normalized_labels(value.get("Labels") or value.get("labels"))
         project_label = labels.get("com.docker.compose.project") or labels.get("io.podman.compose.project")
         owner_label = labels.get(OWNER_LABEL)
         names = resource_names(value)
-        candidate = project_label == project or any(name.startswith((project + "_", LAB_ID + "-")) for name in names)
-        if not candidate:
+        if not resource_is_candidate(value, project):
             continue
         if project_label != project:
             raise ValueError("task-prefixed Podman resource lacks the matching compose project label")
-        if owner_label not in (None, LAB_ID):
+        if owner_label and owner_label != LAB_ID:
             raise ValueError("compose project contains a mismatched task ownership label")
+        if owner_label == LAB_ID:
+            continue
+        if kind == "container":
+            raise ValueError("compose project container lacks the explicit task ownership label")
+        identity = resource_identity(value)
+        if not identity or not any((kind, name, identity) in proof_keys for name in names):
+            raise ValueError(f"compose project {kind} lacks an explicit task ownership label or exact durable ownership proof")
 
 
-def verify_owned_podman_resources() -> None:
-    load_ownership_marker()
-    podman = shutil.which("podman")
-    if not podman:
-        raise ValueError("podman not found")
+def podman_resource_inventory(podman: str) -> dict[str, list[dict[str, Any]]]:
     base = [podman, "--connection", connection_name()]
-    commands = [
-        base + ["ps", "--all", "--format", "json"],
-        base + ["network", "ls", "--format", "json"],
-        base + ["volume", "ls", "--format", "json"],
-    ]
-    for command in commands:
+    commands = {
+        "container": base + ["ps", "--all", "--format", "json"],
+        "network": base + ["network", "ls", "--format", "json"],
+        "volume": base + ["volume", "ls", "--format", "json"],
+    }
+    inventory: dict[str, list[dict[str, Any]]] = {}
+    for kind, command in commands.items():
         proc = run(command, check=False)
         if proc.returncode != 0:
             raise ValueError("unable to inspect Podman ownership labels")
@@ -497,7 +626,70 @@ def verify_owned_podman_resources() -> None:
             values = json.loads(proc.stdout or "[]")
         except json.JSONDecodeError as exc:
             raise ValueError("Podman returned invalid resource-label inventory JSON") from exc
-        validate_owned_resources(values if isinstance(values, list) else [], project_name())
+        inventory[kind] = values if isinstance(values, list) else []
+    return inventory
+
+
+def verify_owned_podman_resources() -> None:
+    marker = load_ownership_marker()
+    podman = shutil.which("podman")
+    if not podman:
+        raise ValueError("podman not found")
+    for kind, values in podman_resource_inventory(podman).items():
+        validate_owned_resources(values, project_name(), kind, marker["resources"])
+
+
+def recover_ownership() -> dict[str, Any]:
+    expected = expected_ownership()
+    podman = shutil.which("podman")
+    if not podman:
+        raise ValueError("podman not found")
+    machine_names = podman_names([podman, "machine", "list", "--format", "json"], ("Name", "name"))
+    connection_names = podman_names([podman, "system", "connection", "list", "--format", "json"], ("Name", "name"))
+    if expected["machine"] not in machine_names or expected["connection"] not in connection_names:
+        raise ValueError("exact task-owned machine and connection must exist before ownership recovery")
+    inventory = podman_resource_inventory(podman)
+    validate_owned_resources(inventory["container"], expected["project"], "container")
+    owned_containers = [value for value in inventory["container"] if resource_is_candidate(value, expected["project"])]
+    resources: list[dict[str, str]] = []
+    for kind in ("network", "volume"):
+        for value in inventory[kind]:
+            if not resource_is_candidate(value, expected["project"]):
+                continue
+            labels = normalized_labels(value.get("Labels") or value.get("labels"))
+            project_label = labels.get("com.docker.compose.project") or labels.get("io.podman.compose.project")
+            owner_label = labels.get(OWNER_LABEL)
+            if project_label != expected["project"] or (owner_label and owner_label != LAB_ID):
+                raise ValueError("refusing ownership recovery for a mismatched compose resource")
+            if owner_label != LAB_ID and not owned_containers:
+                raise ValueError("refusing ownership recovery for unlabeled resources without an explicitly owned container")
+            if owner_label == LAB_ID:
+                continue
+            identity = resource_identity(value)
+            names = resource_names(value)
+            if not identity or len(names) != 1:
+                raise ValueError("refusing ownership recovery for a resource without exact identity")
+            resources.append({"kind": kind, "name": names[0], "id": identity})
+    marker = expected | {"resources": resources}
+    for kind, values in inventory.items():
+        validate_owned_resources(values, expected["project"], kind, marker["resources"])
+    return write_ownership_marker(ownership_marker_path(), marker)
+
+
+def forget_ownership() -> None:
+    marker = load_ownership_marker()
+    podman = shutil.which("podman")
+    if not podman:
+        raise ValueError("cannot prove task-owned Podman resources are absent")
+    machine_names = podman_names([podman, "machine", "list", "--format", "json"], ("Name", "name"))
+    connection_names = podman_names([podman, "system", "connection", "list", "--format", "json"], ("Name", "name"))
+    if marker["machine"] in machine_names or marker["connection"] in connection_names:
+        raise ValueError("task-owned Podman machine or connection still exists")
+    expected = expected_ownership()
+    for path in (ownership_marker_path(), *legacy_ownership_marker_paths()):
+        if path.exists() or path.is_symlink():
+            read_ownership_marker(path, expected)
+            path.unlink()
 
 
 def write_compose(upstream_compose: Path, output_compose: Path) -> None:
@@ -517,13 +709,13 @@ def write_compose(upstream_compose: Path, output_compose: Path) -> None:
     # Any explicit container_name bypasses the compose project prefix, so scope
     # every one of them to this lab before the stack can adopt a foreign container.
     text = scope_container_names(text)
-    text = scope_service_labels(text)
+    text = scope_compose_ownership(text)
     # Official odoo-16 image for the pinned Standard tag is amd64-only as of the
     # research run. Platform pin lets rootless Podman on Apple Silicon use qemu.
     text = add_platform_after_service(text, "odoo", "linux/amd64")
     validate_loopback_ports(text)
     validate_container_names(text)
-    validate_service_labels(text)
+    validate_compose_ownership(text)
     output_compose.write_text(text, encoding="utf-8")
 
 
@@ -849,7 +1041,9 @@ class BahmniApi:
         token = base64.b64encode(f"{user}:{password}".encode("utf-8")).decode("ascii")
         self.auth_header = "Basic " + token
         self.ctx = ssl._create_unverified_context()
+        self.proxy_handler = urllib.request.ProxyHandler({})
         self.opener = urllib.request.build_opener(
+            self.proxy_handler,
             urllib.request.HTTPSHandler(context=self.ctx),
             RejectAuthenticatedRedirects(),
         )
@@ -1171,15 +1365,9 @@ def appointment_update_body(appointment: dict[str, Any], comments: str) -> dict[
         missing.append("providers")
     if missing:
         raise ApiError("owned appointment cannot be safely updated; missing " + ", ".join(sorted(set(missing))))
-    providers: list[dict[str, Any]] = []
-    for provider in providers_value:
-        if not isinstance(provider, dict) or not provider.get("uuid") or not provider.get("response"):
-            raise ApiError("owned appointment cannot be safely updated; provider state is incomplete")
-        preserved = {"uuid": provider["uuid"], "response": provider["response"]}
-        if "comments" in provider:
-            preserved["comments"] = provider["comments"]
-        providers.append(preserved)
-    body = required | {"providers": providers, "comments": comments}
+    if providers_value:
+        raise ApiError("owned appointment cannot be safely updated; provider associations are not losslessly representable")
+    body = required | {"providers": [], "comments": comments}
     service_type_uuid = reference_uuid(appointment.get("serviceType"))
     if service_type_uuid:
         body["serviceTypeUuid"] = service_type_uuid
@@ -1223,7 +1411,7 @@ def ensure_appointment(
     if candidates:
         canonical_token = f"[{marker}]"
         candidates.sort(key=lambda appt: (canonical_token not in str(appt.get("comments") or ""), str(appt.get("uuid", ""))))
-        changed = False
+        updates: list[dict[str, Any]] = []
         for index, appt in enumerate(candidates):
             appointment_uuid = appt.get("uuid")
             if not appointment_uuid:
@@ -1231,9 +1419,10 @@ def ensure_appointment(
             desired_marker = marker if index == 0 else f"{marker}:preserved:{appointment_uuid}"
             desired_comment = appointment_comment(comment, desired_marker)
             if appt.get("comments") != desired_comment:
-                api.rest("/appointment", "POST", appointment_update_body(appt, desired_comment))
-                changed = True
-        if changed:
+                updates.append(appointment_update_body(appt, desired_comment))
+        for update in updates:
+            api.rest("/appointment", "POST", update)
+        if updates:
             summary["appointments_reconciled"] += 1
         summary["appointment_duplicates_preserved"] += max(0, len(candidates) - 1)
         summary["appointments_existing"] += 1
@@ -1243,14 +1432,41 @@ def ensure_appointment(
     summary["appointments_created"] += 1
 
 
-def ensure_allergy(api: BahmniApi, patient_uuid: str, concept_uuid: str, comment: str, summary: dict[str, int]) -> None:
+def ensure_allergy(
+    api: BahmniApi,
+    patient_uuid: str,
+    concept_uuid: str,
+    comment: str,
+    summary: dict[str, int],
+    legacy_comments: Iterable[str] = (),
+) -> None:
     _, existing = api.rest(f"/patient/{patient_uuid}/allergy", params={"v": "full"})
     allergies = existing.get("results", []) if isinstance(existing, dict) else []
-    for allergy in allergies:
-        coded = allergy.get("allergen", {}).get("codedAllergen", {})
-        if comment in (allergy.get("comment") or "") or coded.get("uuid") == concept_uuid:
-            summary["allergies_existing"] += 1
-            return
+    coded_matches = [
+        allergy
+        for allergy in allergies
+        if allergy.get("allergen", {}).get("codedAllergen", {}).get("uuid") == concept_uuid
+    ]
+    if any(allergy.get("comment") == comment for allergy in coded_matches):
+        summary["allergies_existing"] += 1
+        return
+    accepted_legacy = set(legacy_comments)
+    legacy_matches = [allergy for allergy in coded_matches if allergy.get("comment") in accepted_legacy]
+    updates: list[str] = []
+    for allergy in legacy_matches:
+        allergy_uuid = allergy.get("uuid")
+        if not allergy_uuid:
+            raise ApiError("owned legacy allergy does not expose a UUID")
+        updates.append(str(allergy_uuid))
+    for allergy_uuid in updates:
+        api.rest(f"/patient/{patient_uuid}/allergy/{allergy_uuid}", "POST", {"comment": comment})
+    if updates:
+        summary["allergies_reconciled"] += len(updates)
+        summary["allergies_existing"] += 1
+        return
+    if coded_matches:
+        summary["allergies_existing"] += 1
+        return
     body = {
         "allergen": {"allergenType": "DRUG", "codedAllergen": concept_uuid},
         "severity": "MILD",
@@ -1495,7 +1711,7 @@ def new_summary() -> dict[str, int]:
         "visits_created", "visits_existing", "encounters_created", "encounters_existing", "appointments_created", "appointments_existing",
         "providers_reconciled", "patients_reconciled", "encounters_reconciled", "appointments_reconciled",
         "encounter_duplicates_preserved", "appointment_duplicates_preserved",
-        "allergies_created", "allergies_existing", "conditions_created", "conditions_existing", "conditions_skipped",
+        "allergies_created", "allergies_existing", "allergies_reconciled", "conditions_created", "conditions_existing", "conditions_skipped",
         "lab_orders_created", "lab_orders_existing", "radiology_orders_created", "radiology_orders_existing", "procedure_orders_created", "procedure_orders_existing",
         "test_orders_created", "test_orders_existing", "medication_orders_created", "medication_orders_existing", "medication_orders_skipped",
     ]
@@ -1661,7 +1877,14 @@ def seed(args: argparse.Namespace) -> None:
         condition_texts = seed_data["records"]["condition_texts"]
         condition_text = condition_texts[index] if index < len(condition_texts) else f"Clinical condition follow-up {patient['identifier']}"
         ensure_condition(api, patient["identifier"], condition_text, summary)
-        ensure_allergy(api, patient_uuid, concepts["penicillin"], f"{seed_data['records']['allergy_comment']} {patient['identifier']}", summary)
+        ensure_allergy(
+            api,
+            patient_uuid,
+            concepts["penicillin"],
+            f"{seed_data['records']['allergy_comment']} {patient['identifier']}",
+            summary,
+            legacy_comments=[f"FM-BAHMNI-LAB-R1 synthetic low-severity medication allergy; not real patient data {patient['identifier']}"],
+        )
 
         orders = existing_orders(api, patient_uuid)
         order_types = seed_data["known_openmrs_uuids"]["order_types"]
@@ -1761,6 +1984,7 @@ def verify(args: argparse.Namespace) -> None:
         "encounters": 0,
     }
     identity_display_names_exact = True
+    allergy_comments_exact = True
     for patient in seed_data["patients"]:
         patient_hits = api.results("/patient", q=patient["identifier"], v="default", limit=5)
         patient_hit = exact_owned_record(patient_hits, patient["identifier"])
@@ -1771,18 +1995,23 @@ def verify(args: argparse.Namespace) -> None:
             counts["encounters"] += len(api.results("/encounter", patient=patient_uuid, v="default", limit=100))
             try:
                 _, allergies = api.rest(f"/patient/{patient_uuid}/allergy", params={"v": "full"})
-                counts["allergies"] += len(allergies.get("results", [])) if isinstance(allergies, dict) else 0
+                allergy_results = allergies.get("results", []) if isinstance(allergies, dict) else []
+                counts["allergies"] += len(allergy_results)
+                expected_comment = f"{seed_data['records']['allergy_comment']} {patient['identifier']}"
+                allergy_comments_exact = allergy_comments_exact and any(
+                    item.get("allergen", {}).get("codedAllergen", {}).get("uuid") == seed_data["concepts"]["penicillin"]
+                    and item.get("comment") == expected_comment
+                    for item in allergy_results
+                )
             except ApiError:
-                # Some Bahmni/OpenMRS builds return 500 for selected allergy
-                # projections. The seed path uses the supported create/list
-                # shape; verification keeps going and reports other endpoints.
-                pass
+                allergy_comments_exact = False
             fhir_id = fhir_patient_id(api, patient["identifier"])
             if fhir_id:
                 _, condition_bundle = api.fhir("/Condition", params={"patient": fhir_id})
                 counts["conditions"] += int(condition_bundle.get("total", 0) or 0)
         else:
             identity_display_names_exact = False
+            allergy_comments_exact = False
     for provider in provider_records(seed_data):
         provider_hit = exact_owned_record(api.results("/provider", q=provider["identifier"], v="default", limit=5), provider["identifier"])
         if provider_hit and exact_display_matches(provider_hit, provider):
@@ -1850,7 +2079,7 @@ def verify(args: argparse.Namespace) -> None:
         history_live[patient["identifier"]] = {"expected": len(expected_events), "found": found_events, "ok": found_events == len(expected_events)}
 
     live_ok = counts["patients"] == len(seed_data["patients"]) and counts["providers"] == len(provider_records(seed_data))
-    live_ok = live_ok and identity_display_names_exact and appointment_identity_ok
+    live_ok = live_ok and identity_display_names_exact and appointment_identity_ok and allergy_comments_exact
     live_ok = live_ok and fhir_patient_exact_count == len(seed_data["patients"])
     live_ok = live_ok and int(fhir_observations.get("total", 0) or 0) > 0
     live_ok = live_ok and unicode_location_present and all(karthik_live.values()) and all(item["ok"] for item in history_live.values())
@@ -1860,6 +2089,7 @@ def verify(args: argparse.Namespace) -> None:
         "live_counts": counts | {"appointments": appointment_count},
         "identity_display_names_exact": identity_display_names_exact,
         "appointment_identity_ok": appointment_identity_ok,
+        "allergy_comments_exact": allergy_comments_exact,
         "unicode_location_present": unicode_location_present,
         "karthik_live": karthik_live,
         "history_live": history_live,
@@ -1914,13 +2144,23 @@ def inventory(args: argparse.Namespace) -> None:
 
 def ownership(args: argparse.Namespace) -> None:
     try:
-        marker = claim_ownership() if args.action == "claim" else load_ownership_marker()
-        if args.resources:
+        if args.action in ("recover", "forget") and not args.yes:
+            raise ValueError(f"ownership {args.action} requires --yes")
+        if args.action == "claim":
+            marker = claim_ownership()
+        elif args.action == "recover":
+            marker = recover_ownership()
+        elif args.action == "forget":
+            forget_ownership()
+            marker = {"owner": LAB_ID}
+        else:
+            marker = load_ownership_marker()
+        if args.resources and args.action != "forget":
             verify_owned_podman_resources()
     except ValueError as exc:
         raise SystemExit(f"Podman ownership check failed: {exc}") from exc
     if args.json:
-        dump_json({"ok": True, "owner": marker["owner"], "resources_checked": args.resources})
+        dump_json({"ok": True, "owner": marker["owner"], "action": args.action, "resources_checked": args.resources})
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -1961,8 +2201,9 @@ def main(argv: list[str] | None = None) -> None:
     p.set_defaults(func=inventory)
 
     p = sub.add_parser("ownership")
-    p.add_argument("action", choices=("claim", "verify"))
+    p.add_argument("action", choices=("claim", "verify", "recover", "forget"))
     p.add_argument("--resources", action="store_true")
+    p.add_argument("--yes", action="store_true")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=ownership)
 
