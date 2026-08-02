@@ -325,7 +325,7 @@ func shouldRedactDirectField(key string, explicit map[string]bool) bool {
 	if normalized == "next_token" {
 		return false
 	}
-	for _, marker := range []string{"receipt_handle", "task_handle", "policy", "secret", "token", "password"} {
+	for _, marker := range []string{"receipt_handle", "task_handle", "policy", "secret", "token", "password", "api_key", "apikey", "access_key", "accesskey", "credential"} {
 		if strings.Contains(normalized, marker) {
 			return true
 		}
