@@ -91,6 +91,41 @@ func TestAnonymizeCandidateRequiresDestructiveConfirmation(t *testing.T) {
 	t.Fatal("anonymize_candidate write action not found")
 }
 
+func TestDestructiveValueWritesRequireConfirmation(t *testing.T) {
+	def := New().(connectors.DefinitionProvider).Definition()
+	confirmByAction := map[string]string{}
+	for _, action := range def.WriteActions {
+		confirmByAction[action.Name] = action.Confirm
+	}
+	tests := []struct {
+		name string
+	}{
+		{name: "create_application"},
+		{name: "change_application_stage"},
+		{name: "change_application_stage_2"},
+		{name: "update_application_history"},
+		{name: "set_job_status"},
+		{name: "set_offer_status"},
+		{name: "create_opening"},
+		{name: "set_opening_archived"},
+		{name: "set_opening_opening_state"},
+		{name: "update_custom_field_selectable_values"},
+		{name: "update_assessment"},
+		{name: "update_interview_schedule"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			confirm, ok := confirmByAction[tt.name]
+			if !ok {
+				t.Fatalf("write action not found")
+			}
+			if confirm != "destructive" {
+				t.Fatalf("confirm = %q, want destructive", confirm)
+			}
+		})
+	}
+}
+
 func TestCommandSurfaceDocumentsSignedURLPreservation(t *testing.T) {
 	surface := New().(connectors.CommandSurfaceProvider).CommandSurface()
 	want := map[string]bool{"notetaker-transcript info": false, "file info": false}

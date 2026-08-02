@@ -72,7 +72,7 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "candidateId",
         "jobId",
@@ -80,7 +80,8 @@
         "interviewStageId",
         "sourceId",
         "creditedToUserId"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "update_application",
@@ -258,13 +259,14 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "applicationId",
         "interviewStageId",
         "archiveReasonId",
         "archiveEmail"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "change_application_stage_2",
@@ -309,13 +311,14 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "applicationId",
         "interviewStageId",
         "archiveReasonId",
         "archiveEmail"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "change_application_source",
@@ -470,10 +473,11 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "applicationId"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "submit_application_feedback",
@@ -1790,10 +1794,11 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "jobId"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "archive_department",
@@ -2487,10 +2492,11 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "offerId"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "set_offer_decided_at",
@@ -2608,13 +2614,14 @@
         },
         "additionalProperties": false
       },
-      "risk": "Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "identifier",
         "teamId",
         "locationIds",
         "jobIds"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "update_opening",
@@ -2692,10 +2699,11 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "openingId"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "set_opening_opening_state",
@@ -2729,11 +2737,12 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "openingId",
         "closeReasonId"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "add_opening_job",
@@ -3101,10 +3110,11 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "customFieldId"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "update_assessment",
@@ -3342,11 +3352,12 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "assessment_id",
         "assessment_profile_url"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "add_assessment_completed_to_candidate",
@@ -4108,11 +4119,12 @@
         ],
         "additionalProperties": false
       },
-      "risk": "Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, approval, and execute are required.",
+      "risk": "Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
       "redact_fields": [
         "interviewScheduleId",
         "interviewEventIdToCancel"
-      ]
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "cancel_interview_schedule",
