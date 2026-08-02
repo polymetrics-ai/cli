@@ -2,6 +2,7 @@ package connectors
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -169,6 +170,27 @@ func TestConnectorIconPathOwnershipMapsCanonicalAndGeneratedCopies(t *testing.T)
 			}
 			if got != tc.want {
 				t.Fatalf("ConnectorIconOwnerForPath(%q) = %q, want %q", tc.path, got, tc.want)
+			}
+		})
+	}
+}
+
+func TestConnectorIconPathOwnershipReportsRuntimeBuiltinDisposition(t *testing.T) {
+	for _, path := range []string{
+		"docs/connectors/icons/pm-file.svg",
+		"website/public/connectors/icons/pm-file.svg",
+		"docs/connectors/icons/pm-warehouse.svg",
+	} {
+		t.Run(path, func(t *testing.T) {
+			owner, err := ConnectorIconOwnerForPath(path)
+			if !errors.Is(err, ErrConnectorIconPathRuntimeBuiltin) {
+				t.Fatalf("ConnectorIconOwnerForPath(%q) error = %v, want runtime builtin disposition", path, err)
+			}
+			if owner != "" {
+				t.Fatalf("ConnectorIconOwnerForPath(%q) owner = %q, want no connector ownership", path, owner)
+			}
+			if strings.Contains(err.Error(), "undeclared") {
+				t.Fatalf("ConnectorIconOwnerForPath(%q) error = %v, want a declared-but-unowned disposition", path, err)
 			}
 		})
 	}

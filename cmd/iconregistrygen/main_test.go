@@ -101,6 +101,87 @@ func TestBuildIconEntriesPreservesCuratedAttribution(t *testing.T) {
 	}
 }
 
+func TestBuildIconEntriesPreservesCuratedRuntimeBuiltinOverride(t *testing.T) {
+	entries, _, err := buildIconEntries(registryFile{}, buildOptions{
+		ImplementedConnectors: map[string]bool{"demo": true},
+		IncludeLocalBuiltins:  true,
+		CuratedEntries: []iconEntry{{
+			Connector:    "warehouse",
+			ID:           "warehouse",
+			Path:         "icons/warehouse.svg",
+			Source:       connectors.IconSourceOfficial,
+			ReviewStatus: connectors.IconReviewOfficial,
+			ReviewURL:    "https://example.com/warehouse",
+		}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var got iconEntry
+	for _, entry := range entries {
+		if entry.Connector == "warehouse" {
+			got = entry
+		}
+	}
+	if got.Path != "icons/warehouse.svg" || got.Source != connectors.IconSourceOfficial || got.ReviewStatus != connectors.IconReviewOfficial {
+		t.Fatalf("warehouse entry = %+v, want curated override retained", got)
+	}
+}
+
+func TestBuildIconEntriesRejectsCuratedKeyWithoutOwner(t *testing.T) {
+	_, _, err := buildIconEntries(registryFile{}, buildOptions{
+		ImplementedConnectors: map[string]bool{"demo": true},
+		IncludeLocalBuiltins:  true,
+		CuratedEntries: []iconEntry{{
+			Connector:    "retired",
+			ID:           "retired",
+			Path:         "icons/retired.svg",
+			Source:       connectors.IconSourceOfficial,
+			ReviewStatus: connectors.IconReviewOfficial,
+		}},
+	})
+	if err == nil || !strings.Contains(err.Error(), `curated icon entry "retired" has no connector definition or runtime builtin owner`) {
+		t.Fatalf("buildIconEntries curated owner error = %v", err)
+	}
+}
+
+func TestBuildIconEntriesAllowsSharedPathWhenCuratedEntryHasNoSourceURL(t *testing.T) {
+	entries, assets, err := buildIconEntries(registryFile{Sources: []map[string]any{
+		{
+			"public":           true,
+			"dockerRepository": "registry/source-alpha",
+			"documentationUrl": "https://example.com/integrations/sources/alpha",
+			"icon":             "shared.svg",
+			"iconUrl":          "https://example.com/shared.svg",
+		},
+		{
+			"public":           true,
+			"dockerRepository": "registry/source-beta",
+			"documentationUrl": "https://example.com/integrations/sources/beta",
+			"icon":             "shared.svg",
+			"iconUrl":          "https://example.com/shared.svg",
+		},
+	}}, buildOptions{
+		ImplementedConnectors: map[string]bool{"alpha": true, "beta": true},
+		CuratedEntries: []iconEntry{{
+			Connector:    "alpha",
+			ID:           "shared",
+			Path:         "icons/shared.svg",
+			Source:       connectors.IconSourceOfficial,
+			ReviewStatus: connectors.IconReviewOfficial,
+		}},
+	})
+	if err != nil {
+		t.Fatalf("buildIconEntries curated shared path: %v", err)
+	}
+	if len(entries) != 2 {
+		t.Fatalf("entries = %+v, want two connectors", entries)
+	}
+	if len(assets) != 1 || assets[0].SourceURL != "https://example.com/shared.svg" {
+		t.Fatalf("assets = %+v, want the assigned upstream source URL", assets)
+	}
+}
+
 func TestBuildIconEntriesRejectsDuplicateCuratedKeys(t *testing.T) {
 	_, _, err := buildIconEntries(registryFile{}, buildOptions{
 		ImplementedConnectors: map[string]bool{"demo": true},

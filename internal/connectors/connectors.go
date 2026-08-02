@@ -276,16 +276,12 @@ func NewEmptyRegistry() *Registry {
 func NewRegistry() *Registry {
 	if builder := registeredDefaultRegistryBuilder(); builder != nil {
 		registry := builder()
-		if err := registry.ValidateIconCoverage(); err != nil {
-			panic("validate connector icon coverage: " + err.Error())
-		}
+		registry.MustValidateIconCoverage()
 		return registry
 	}
 	r := NewEmptyRegistry()
 	r.RegisterBuiltins()
-	if err := r.ValidateIconCoverage(); err != nil {
-		panic("validate connector icon coverage: " + err.Error())
-	}
+	r.MustValidateIconCoverage()
 	return r
 }
 

@@ -214,9 +214,6 @@ func validateConnectorCatalogDocs(dir string, wantDefs []connectors.Definition) 
 	}
 	seen := make(map[string]struct{}, len(defs))
 	for i, def := range defs {
-		if rawDefs[i].Name != def.Name {
-			return fmt.Errorf("connector catalog json entry %d has inconsistent name metadata", i)
-		}
 		want, ok := wantByName[def.Name]
 		if !ok {
 			return fmt.Errorf("connector catalog json has unexpected connector %q", def.Name)

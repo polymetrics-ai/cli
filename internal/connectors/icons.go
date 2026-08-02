@@ -3,11 +3,13 @@ package connectors
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -76,10 +78,17 @@ var unsafeSVGPatterns = []struct {
 //go:embed icon_data.json
 var connectorIconData []byte
 
+// ErrConnectorIconPathRuntimeBuiltin reports a connector icon path that is
+// declared only by runtime builtin rows carrying implemented: false. Those rows
+// are retained dispositions; they never authorize connector definition
+// ownership, but the path is declared rather than orphaned.
+var ErrConnectorIconPathRuntimeBuiltin = errors.New("connector icon path is a runtime builtin disposition")
+
 var connectorIcons = struct {
-	once sync.Once
-	by   map[string]ConnectorIcon
-	err  error
+	once    sync.Once
+	by      map[string]ConnectorIcon
+	entries []connectorIconEntry
+	err     error
 }{}
 
 func ConnectorIconFor(name string) (ConnectorIcon, bool) {
@@ -96,7 +105,7 @@ func ConnectorIconEntries() []connectorIconEntry {
 	if err != nil {
 		return nil
 	}
-	return entries
+	return slices.Clone(entries)
 }
 
 func MetadataWithIcon(meta Metadata) Metadata {
@@ -112,9 +121,9 @@ func manifestWithIcon(manifest Manifest) Manifest {
 	return manifest
 }
 
-func connectorIconRegistry() (map[string]ConnectorIcon, error) {
+func loadConnectorIconRegistry() ([]connectorIconEntry, map[string]ConnectorIcon, error) {
 	connectorIcons.once.Do(func() {
-		entries, err := connectorIconRegistryEntries()
+		entries, err := decodeConnectorIconRegistry()
 		if err != nil {
 			connectorIcons.err = err
 			return
@@ -123,12 +132,23 @@ func connectorIconRegistry() (map[string]ConnectorIcon, error) {
 		for _, entry := range entries {
 			icons[entry.Connector] = connectorIconProjection(entry)
 		}
+		connectorIcons.entries = entries
 		connectorIcons.by = icons
 	})
-	return connectorIcons.by, connectorIcons.err
+	return connectorIcons.entries, connectorIcons.by, connectorIcons.err
+}
+
+func connectorIconRegistry() (map[string]ConnectorIcon, error) {
+	_, icons, err := loadConnectorIconRegistry()
+	return icons, err
 }
 
 func connectorIconRegistryEntries() ([]connectorIconEntry, error) {
+	entries, _, err := loadConnectorIconRegistry()
+	return entries, err
+}
+
+func decodeConnectorIconRegistry() ([]connectorIconEntry, error) {
 	var entries []connectorIconEntry
 	if err := json.Unmarshal(connectorIconData, &entries); err != nil {
 		return nil, fmt.Errorf("decode connector icon registry: %w", err)
@@ -214,6 +234,16 @@ func (r *Registry) ValidateIconCoverage() error {
 		}
 	}
 	return nil
+}
+
+// MustValidateIconCoverage enforces canonical icon coverage while constructing a
+// process registry. Coverage drift means the embedded registry no longer
+// describes the compiled connector set, so it aborts with the remediation
+// instead of serving connectors with missing icon identity.
+func (r *Registry) MustValidateIconCoverage() {
+	if err := r.ValidateIconCoverage(); err != nil {
+		panic("validate connector icon coverage: " + err.Error() + "; regenerate internal/connectors/icon_data.json with `make icons-generate`")
+	}
 }
 
 func ValidateConnectorIcons(connectorsDir string, defs []Definition, metas []Metadata) error {
@@ -328,15 +358,24 @@ func ConnectorIconOwnerForPath(rel string) (string, error) {
 		return "", err
 	}
 	var owners []string
+	var builtins []string
 	for _, entry := range entries {
-		if !entry.Implemented || entry.Path != iconPath {
+		if entry.Path != iconPath {
+			continue
+		}
+		if !entry.Implemented {
+			builtins = append(builtins, entry.Connector)
 			continue
 		}
 		owners = append(owners, entry.Connector)
 	}
 	sort.Strings(owners)
+	sort.Strings(builtins)
 	switch len(owners) {
 	case 0:
+		if len(builtins) > 0 {
+			return "", fmt.Errorf("%w: %q is declared by %s and does not authorize connector ownership", ErrConnectorIconPathRuntimeBuiltin, rel, strings.Join(builtins, ", "))
+		}
 		return "", fmt.Errorf("undeclared connector icon path %q", rel)
 	case 1:
 		return owners[0], nil

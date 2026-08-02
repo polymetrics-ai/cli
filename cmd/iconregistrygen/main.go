@@ -167,9 +167,19 @@ func buildIconEntries(registry registryFile, opts buildOptions) ([]iconEntry, []
 		curatedConnectors[entry.Connector] = struct{}{}
 	}
 
+	builtinConnectors := map[string]bool{}
+	if opts.IncludeLocalBuiltins {
+		for _, entry := range localIconEntries() {
+			builtinConnectors[entry.Connector] = true
+		}
+	}
+
 	for _, entry := range opts.CuratedEntries {
-		if !includeConnector(entry.Connector, opts.ImplementedConnectors) || !isCuratedIconEntry(entry) {
+		if !isCuratedIconEntry(entry) {
 			continue
+		}
+		if !includeConnector(entry.Connector, opts.ImplementedConnectors) && !builtinConnectors[entry.Connector] {
+			return nil, nil, fmt.Errorf("curated icon entry %q has no connector definition or runtime builtin owner", entry.Connector)
 		}
 		entry.Implemented = opts.ImplementedConnectors[entry.Connector]
 		byConnector[entry.Connector] = entry
@@ -207,7 +217,13 @@ func buildIconEntries(registry registryFile, opts buildOptions) ([]iconEntry, []
 	assetOwners := map[string]assetOwner{}
 	assetURLs := map[string]string{}
 	for _, entry := range entries {
-		if existing, exists := assetOwners[entry.Path]; exists && existing.sourceURL != entry.SourceURL {
+		existing, exists := assetOwners[entry.Path]
+		switch {
+		case !exists:
+			assetOwners[entry.Path] = assetOwner{connector: entry.Connector, sourceURL: entry.SourceURL}
+		case existing.sourceURL == "" && entry.SourceURL != "":
+			assetOwners[entry.Path] = assetOwner{connector: entry.Connector, sourceURL: entry.SourceURL}
+		case entry.SourceURL != "" && existing.sourceURL != entry.SourceURL:
 			return nil, nil, fmt.Errorf(
 				"conflicting source URLs for shared icon path %q: %q (%s) vs %q (%s)",
 				entry.Path,
@@ -216,9 +232,6 @@ func buildIconEntries(registry registryFile, opts buildOptions) ([]iconEntry, []
 				entry.SourceURL,
 				entry.Connector,
 			)
-		}
-		if _, exists := assetOwners[entry.Path]; !exists {
-			assetOwners[entry.Path] = assetOwner{connector: entry.Connector, sourceURL: entry.SourceURL}
 		}
 		if entry.SourceURL != "" {
 			assetURLs[entry.Path] = entry.SourceURL
@@ -438,8 +451,8 @@ func loadCuratedIconEntries(path string) ([]iconEntry, error) {
 	if err := json.Unmarshal(data, &entries); err != nil {
 		return nil, fmt.Errorf("decode curated icon registry: %w", err)
 	}
-	out := entries[:0]
-	for _, entry := range entries {
+	for i := range entries {
+		entry := &entries[i]
 		entry.Connector = strings.TrimSpace(entry.Connector)
 		entry.ID = strings.TrimSpace(entry.ID)
 		entry.Path = strings.TrimSpace(entry.Path)
@@ -457,9 +470,8 @@ func loadCuratedIconEntries(path string) ([]iconEntry, error) {
 		if entry.Connector != canonicalConnectorKey(entry.Connector) {
 			return nil, fmt.Errorf("curated icon registry %s: connector %q must be a bare connector identifier", path, entry.Connector)
 		}
-		out = append(out, entry)
 	}
-	return out, nil
+	return entries, nil
 }
 
 func fallbackIconEntry(connector string, implemented bool) iconEntry {
