@@ -24,6 +24,6 @@
   },
   "conformance": {
     "skip_dynamic": true,
-    "reason": "Tier-3 native SigV4/XML SQS Query API; dynamic declarative replay is skipped and executable behavior is covered by internal/connectors/native/amazon-sqs native httptest fixtures for every operation"
+    "reason": "Tier-3 native SigV4/XML SQS Query API; dynamic declarative replay is skipped because the declarative engine cannot execute AWS Query XML or SigV4 flows; native httptest fixtures cover SigV4 signing, credential-free fixture reads, direct-read validation/redaction, and representative typed write serialization"
   }
 }
