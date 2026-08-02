@@ -14,6 +14,7 @@ Reads Nexio Pay card tokens, payout recipients, spendbacks, payment types, termi
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

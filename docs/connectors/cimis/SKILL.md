@@ -14,6 +14,7 @@ Reads California Irrigation Management Information System (CIMIS) weather statio
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

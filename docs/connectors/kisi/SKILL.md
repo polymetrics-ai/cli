@@ -14,6 +14,7 @@ Reads Kisi physical access-control data: members, locks, groups, users, and logi
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

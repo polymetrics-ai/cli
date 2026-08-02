@@ -14,6 +14,7 @@ Reads and manages Appcues in-app guidance experiences (flows, Flows 2.0, pins, m
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

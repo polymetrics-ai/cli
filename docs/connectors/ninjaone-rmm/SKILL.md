@@ -14,6 +14,7 @@ Reads NinjaOne RMM organizations, devices, locations, activities, and policies t
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

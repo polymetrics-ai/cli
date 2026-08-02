@@ -14,6 +14,7 @@ Reads and writes ShopWired v1 catalog, order, customer, content, marketing, ship
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

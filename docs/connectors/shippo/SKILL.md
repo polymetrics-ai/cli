@@ -14,6 +14,7 @@ Reads Shippo addresses, parcels, shipments, and transactions through the Shippo 
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

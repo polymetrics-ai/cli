@@ -16,6 +16,7 @@
 | Review F4 slash path portability | host `filepath` semantics can reject portable registry paths | nested forward-slash registry paths validate through slash-oriented `path` semantics |
 | Review F5 generated subtree containment | `icons/../outside.svg` passes syntax validation and resolves above the generated icon root | non-clean, dot-segment, absolute, and escaped paths reject before any generated-tree mutation |
 | Review F6 generated docs metadata | catalog, MANUAL, and SKILL icon paths can disagree with the canonical registry without failing docs validation | all three generated surfaces validate canonical paths; the exact 61 stale mappings are regenerated |
+| Review F7 complete rendered metadata | matching paths mask missing review URLs and obsolete provenance in generated catalog, MANUAL, and SKILL icon blocks | serialized catalog icon objects and exact rendered guide blocks must equal their canonical projections, including optional-field omission |
 
 ## Actual evidence log
 
@@ -33,3 +34,5 @@
 - 2026-08-02: Review round 2 rechecked the repo-local GSD adapter; `scripts/gsd doctor` passed and the required `programming-loop` probe remained unavailable, so the recorded manual GSD fallback continues.
 - 2026-08-02: Pre-edit F5 proof confirmed `validConnectorIconPath("icons/../outside.svg")` accepts an escaped path and output resolution is anchored at `website/public/connectors`, above the authorized icon subtree.
 - 2026-08-02: Pre-edit F6 audit compared catalog, MANUAL, and SKILL path fields with `internal/connectors/icon_data.json` and found the same exact 61 stale connector mappings on every surface.
+- 2026-08-02: Review round 3 rechecked the repo-local GSD adapter; `scripts/gsd doctor` passed and the required `programming-loop` probe remained unavailable, so the recorded manual GSD fallback continues.
+- 2026-08-02: Pre-edit F7 audit reproduced 220 catalog JSON icon-object mismatches plus 216 MANUAL and 216 SKILL rendered-block mismatches against the canonical registry projection; `100ms` lacks its review URL and `convex` retains obsolete provenance despite matching paths.

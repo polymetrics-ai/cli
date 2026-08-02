@@ -14,6 +14,7 @@ Reads Paperform forms and form submissions through the Paperform REST API.
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

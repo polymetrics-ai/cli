@@ -14,6 +14,7 @@ Reads and writes Concord contract lifecycle management data: agreements (and the
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

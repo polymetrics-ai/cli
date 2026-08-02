@@ -14,6 +14,7 @@ Reads Twelve Data time series, quotes, stocks, and forex pair reference data.
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

@@ -14,6 +14,7 @@ Reads pretix organizers, events, items, and orders through the pretix REST API.
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

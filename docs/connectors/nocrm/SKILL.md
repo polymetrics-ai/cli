@@ -14,6 +14,7 @@ Reads noCRM.io CRM objects and exposes declarative write actions for supported n
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

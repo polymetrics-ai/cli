@@ -14,6 +14,7 @@ Reads and writes VWO (Visual Website Optimizer) A/B testing campaigns.
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

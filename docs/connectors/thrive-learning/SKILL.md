@@ -14,6 +14,7 @@ Reads users, content, completions, assignments, audiences, tags, CPD records, an
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

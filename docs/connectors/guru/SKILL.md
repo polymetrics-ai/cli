@@ -14,6 +14,7 @@ Reads Guru collections, groups, members, and teams through the Guru REST API usi
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

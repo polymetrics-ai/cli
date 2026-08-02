@@ -14,6 +14,7 @@ Reads stock and ETF symbol lists, the stock screener, delisted companies, market
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

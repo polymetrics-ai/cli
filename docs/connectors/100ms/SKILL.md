@@ -14,6 +14,7 @@ Reads 100ms rooms, sessions, recordings, templates, live streams, external strea
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

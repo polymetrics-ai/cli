@@ -14,6 +14,7 @@ Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, 
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

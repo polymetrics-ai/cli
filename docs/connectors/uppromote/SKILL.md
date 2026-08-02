@@ -14,6 +14,7 @@ Reads affiliates, programs, coupons, referrals, and payments from the UpPromote 
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

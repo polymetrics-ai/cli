@@ -14,6 +14,7 @@ Reads the documented 7shifts v2 REST API surface and executes declarative single
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

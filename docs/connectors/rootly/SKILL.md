@@ -14,6 +14,7 @@ Reads Rootly incidents, services, and users through the Rootly API. Read-only. I
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

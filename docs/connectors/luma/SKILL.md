@@ -14,6 +14,7 @@ Reads and writes the documented Luma public API for events, calendars, guests, c
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

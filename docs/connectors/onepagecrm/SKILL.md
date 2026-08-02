@@ -14,6 +14,7 @@ Reads the documented OnePageCRM API v3 CRM surface and exposes declarative write
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

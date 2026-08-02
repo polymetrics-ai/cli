@@ -14,6 +14,7 @@ Reads and writes the documented Pylon REST API surface through concrete streams 
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

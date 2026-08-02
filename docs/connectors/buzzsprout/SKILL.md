@@ -14,6 +14,7 @@ Reads Buzzsprout podcasts and episodes (titles, publish dates, durations, play c
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

@@ -14,6 +14,7 @@ Reads Churnkey cancel-flow sessions and aggregated session counts through the Ch
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

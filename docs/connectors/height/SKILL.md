@@ -14,6 +14,7 @@ Reads Height tasks, lists, field templates, users, and workspace through the Hei
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

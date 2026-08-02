@@ -14,6 +14,7 @@ Reads Dwolla customers, events, exchange partners, and business classifications,
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

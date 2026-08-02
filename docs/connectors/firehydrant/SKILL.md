@@ -14,6 +14,7 @@ Reads broad FireHydrant REST API resources and exposes direct JSON/no-body FireH
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

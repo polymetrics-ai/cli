@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -80,17 +81,18 @@ func validateConnectorDocs(dir string, registry *connectors.Registry) error {
 				return fmt.Errorf("connector %s manual missing %s", meta.Name, required)
 			}
 		}
-		if err := validateGeneratedConnectorIconPath(string(manual), "ICON\n", "  asset: ", meta.Name, "manual", meta.Icon); err != nil {
+		expectedManual := connectors.RenderConnectorManual(connector)
+		if err := validateGeneratedConnectorIconMetadata(string(manual), expectedManual, "ICON\n", meta.Name, "manual"); err != nil {
 			return err
 		}
-		if err := validateConnectorSkillFile(dir, meta.Name, meta.Icon); err != nil {
+		if err := validateConnectorSkillFile(dir, meta.Name, connector); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func validateConnectorSkillFile(dir, name string, icon *connectors.ConnectorIcon) error {
+func validateConnectorSkillFile(dir, name string, connector connectors.Connector) error {
 	skillPath := filepath.Join(dir, name, "SKILL.md")
 	skill, err := os.ReadFile(skillPath)
 	if err != nil {
@@ -101,27 +103,35 @@ func validateConnectorSkillFile(dir, name string, icon *connectors.ConnectorIcon
 			return fmt.Errorf("connector %s skill missing %q", name, required)
 		}
 	}
-	return validateGeneratedConnectorIconPath(string(skill), "## Icon\n\n", "- asset: ", name, "skill", icon)
+	return validateGeneratedConnectorIconMetadata(string(skill), connectors.RenderConnectorSkill(connector), "## Icon\n\n", name, "skill")
 }
 
-func validateGeneratedConnectorIconPath(document, heading, prefix, name, surface string, icon *connectors.ConnectorIcon) error {
-	if icon == nil || icon.Path == "" {
-		return fmt.Errorf("connector %s canonical icon path is missing", name)
+func validateGeneratedConnectorIconMetadata(document, expected, heading, name, surface string) error {
+	got, err := generatedConnectorIconBlock(document, heading)
+	if err != nil {
+		return fmt.Errorf("connector %s %s icon metadata: %w", name, surface, err)
 	}
-	start := strings.Index(document, heading)
-	if start < 0 {
-		return fmt.Errorf("connector %s %s missing icon path", name, surface)
+	want, err := generatedConnectorIconBlock(expected, heading)
+	if err != nil {
+		return fmt.Errorf("connector %s canonical %s icon metadata: %w", name, surface, err)
 	}
-	remainder := document[start+len(heading):]
-	line, _, _ := strings.Cut(remainder, "\n")
-	if !strings.HasPrefix(line, prefix) {
-		return fmt.Errorf("connector %s %s missing icon path", name, surface)
-	}
-	got := strings.TrimSpace(strings.TrimPrefix(line, prefix))
-	if got != icon.Path {
-		return fmt.Errorf("connector %s %s icon path is %q, want %q", name, surface, got, icon.Path)
+	if got != want {
+		return fmt.Errorf("connector %s %s icon metadata does not match canonical registry", name, surface)
 	}
 	return nil
+}
+
+func generatedConnectorIconBlock(document, heading string) (string, error) {
+	start := strings.Index(document, heading)
+	if start < 0 {
+		return "", fmt.Errorf("missing section")
+	}
+	remainder := document[start+len(heading):]
+	end := strings.Index(remainder, "\n\n")
+	if end < 0 {
+		return "", fmt.Errorf("unterminated section")
+	}
+	return remainder[:end], nil
 }
 
 func writeConnectorCatalogDocs(dir string, defs []connectors.Definition) error {
@@ -161,6 +171,13 @@ func validateConnectorCatalogDocs(dir string, wantDefs []connectors.Definition) 
 	if err := json.Unmarshal(data, &defs); err != nil {
 		return fmt.Errorf("decode connector catalog json: %w", err)
 	}
+	var rawDefs []struct {
+		Name string          `json:"name"`
+		Icon json.RawMessage `json:"icon"`
+	}
+	if err := json.Unmarshal(data, &rawDefs); err != nil {
+		return fmt.Errorf("decode raw connector catalog json: %w", err)
+	}
 	if len(defs) != len(wantDefs) {
 		return fmt.Errorf("connector catalog json has %d entries, want %d", len(defs), len(wantDefs))
 	}
@@ -169,7 +186,10 @@ func validateConnectorCatalogDocs(dir string, wantDefs []connectors.Definition) 
 		wantByName[def.Name] = def
 	}
 	seen := make(map[string]struct{}, len(defs))
-	for _, def := range defs {
+	for i, def := range defs {
+		if rawDefs[i].Name != def.Name {
+			return fmt.Errorf("connector catalog json entry %d has inconsistent name metadata", i)
+		}
 		want, ok := wantByName[def.Name]
 		if !ok {
 			return fmt.Errorf("connector catalog json has unexpected connector %q", def.Name)
@@ -178,7 +198,7 @@ func validateConnectorCatalogDocs(dir string, wantDefs []connectors.Definition) 
 			return fmt.Errorf("connector catalog json has duplicate connector %q", def.Name)
 		}
 		seen[def.Name] = struct{}{}
-		if err := validateCatalogIconPath("json", def.Name, def.Icon, want.Icon); err != nil {
+		if err := validateCatalogIconMetadata("json", def.Name, rawDefs[i].Icon, want.Icon); err != nil {
 			return err
 		}
 	}
@@ -200,16 +220,20 @@ func validateConnectorCatalogDocs(dir string, wantDefs []connectors.Definition) 
 	return nil
 }
 
-func validateCatalogIconPath(surface, name string, got, want *connectors.ConnectorIcon) error {
-	if want == nil || want.Path == "" {
-		return fmt.Errorf("connector %s canonical icon path is missing", name)
+func validateCatalogIconMetadata(surface, name string, got json.RawMessage, want *connectors.ConnectorIcon) error {
+	if want == nil {
+		return fmt.Errorf("connector %s canonical icon metadata is missing", name)
 	}
-	if got == nil || got.Path != want.Path {
-		gotPath := ""
-		if got != nil {
-			gotPath = got.Path
-		}
-		return fmt.Errorf("connector %s catalog %s icon path is %q, want %q", name, surface, gotPath, want.Path)
+	var gotData bytes.Buffer
+	if err := json.Compact(&gotData, got); err != nil {
+		return fmt.Errorf("decode connector %s catalog %s icon metadata: %w", name, surface, err)
+	}
+	wantData, err := json.Marshal(want)
+	if err != nil {
+		return fmt.Errorf("encode connector %s canonical icon metadata: %w", name, err)
+	}
+	if !bytes.Equal(gotData.Bytes(), wantData) {
+		return fmt.Errorf("connector %s catalog %s icon metadata does not match canonical registry", name, surface)
 	}
 	return nil
 }

@@ -16,7 +16,7 @@ ICON
   asset: icons/postgresql.svg
   source: upstream_registry
   review_status: upstream_seeded
-  review_url: https://www.postgresql.org/docs/
+  review_url: https://www.postgresql.org/docs/current/
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

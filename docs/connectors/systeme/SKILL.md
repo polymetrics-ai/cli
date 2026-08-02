@@ -14,6 +14,7 @@ Reads Systeme.io contacts, tags, contact fields, funnels, and funnel steps, and 
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

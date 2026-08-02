@@ -14,6 +14,7 @@ Reads Castor EDC studies, users, countries, and audit-trail events through the C
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

@@ -14,6 +14,7 @@ Reads Missive contacts, contact groups, users, teams, and shared labels through 
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

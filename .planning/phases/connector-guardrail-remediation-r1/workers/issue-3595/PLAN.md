@@ -68,6 +68,13 @@ No direct PR #3590 R5/R6 response is in scope. PR #3590 remains parked until thi
 - Preserve all non-icon generated content and keep the generated website reconciliation bounded to its icon subtree.
 - Run one combined focused Node/Go/docs-validation command after both fixes and all generated metadata updates are complete.
 
+## Review repair round 3
+
+- F7 is a canonical-projection defect: generated validation compares icon paths while allowing the rest of the rendered canonical icon record to drift. Compare complete serialized catalog icon objects and exact generated MANUAL/SKILL icon blocks, including deterministic optional-field omission.
+- Add same-path regressions for a missing canonical review URL (`100ms`) and obsolete provenance (`convex`) on catalog, MANUAL, and SKILL surfaces.
+- Regenerate exactly the existing metadata-only drift: 220 catalog JSON icon objects, 216 MANUAL icon blocks, and 216 SKILL icon blocks. Preserve every byte outside those icon blocks.
+- Run one focused Go/docs-validation command after implementation, generated updates, and complete diff review.
+
 ## Integration ordering
 
 This child PR must land into the parent branch before PR #3590 is reconciled. After integration, rebase/reconcile PR #3590 so ownership reads only the canonical bare registry, permits the two exact docs catalog outputs, and includes positive/negative collision, orphan, generated-copy, and source-asset tests.

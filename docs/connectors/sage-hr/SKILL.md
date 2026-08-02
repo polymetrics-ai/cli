@@ -14,6 +14,7 @@ Reads Sage HR employees, teams, time off, recruitment, and onboarding/offboardin
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

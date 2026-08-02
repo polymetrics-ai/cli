@@ -14,6 +14,7 @@ Reads Customerly users, leads, and accounts, and writes user/lead/tag/message/at
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

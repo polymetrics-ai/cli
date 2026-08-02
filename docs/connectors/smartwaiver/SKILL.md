@@ -14,6 +14,7 @@ Reads Smartwaiver waivers, checkins, templates, published keys, user info, and a
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

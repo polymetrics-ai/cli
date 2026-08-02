@@ -14,6 +14,7 @@ Reads Poplar campaigns and orders through read-only REST list endpoints.
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

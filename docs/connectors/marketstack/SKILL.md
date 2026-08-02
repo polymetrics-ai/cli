@@ -14,6 +14,7 @@ Reads Marketstack exchanges, tickers, end-of-day prices, splits, and dividends t
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

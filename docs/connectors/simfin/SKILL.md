@@ -14,6 +14,7 @@ Reads SimFin company, financial statement, price, share, filing, and database-ch
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

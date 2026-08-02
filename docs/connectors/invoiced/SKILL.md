@@ -14,6 +14,7 @@ Reads and writes the documented Invoiced REST API surface for billing, payments,
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 
