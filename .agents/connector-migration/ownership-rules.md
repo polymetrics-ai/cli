@@ -33,17 +33,24 @@ A worker assigned connector `<name>` owns:
 
 ## Rules
 
-1. **One connector per worker.** A worker never edits another connector's dir.
-2. **Generated files are regenerated, never hand-edited.** If `connectors.generated.json` drifts,
+1. **Exactly one target connector per worker.** A worker declares one target connector slug and never edits another connector's dir.
+2. **Foundation split before connector implementation.** Shared runtime/tooling, schema, engine,
+   command runner, generated-index policy, or unrelated connector work is not connector-lane scope.
+   Stop and route it to a separate foundation issue/PR, then resume the connector only after that
+   foundation path is owned and reviewed.
+3. **Ownership guard evidence is required.** Handoffs and PR bodies record the target connector,
+   changed-path compliance, and the ownership guard command/result that proves the connector PR did
+   not absorb unrelated paths.
+4. **Generated files are regenerated, never hand-edited.** If `connectors.generated.json` drifts,
    run `pnpm run gen:website-data` and commit the output; do not patch the JSON by hand.
-3. **Shared schema changes are their own issue.** Adding a new `execution_model` enum value or a
+5. **Shared schema changes are their own issue.** Adding a new `execution_model` enum value or a
    new `record_schema` keyword is an engine change, not a connector slice — it needs its own
    issue and PR so it doesn't collide with in-flight connector work.
-4. **Compound write hooks are connector-scoped.** A `hook: "<name>"` field routes to a
+6. **Compound write hooks are connector-scoped.** A `hook: "<name>"` field routes to a
    connector's own hook package; do not add connector-specific compound-write logic to a shared
    hook owned by another connector.
-5. **Branch and PR policy.** Worker branches start from the active rollout parent branch (e.g.
+7. **Branch and PR policy.** Worker branches start from the active rollout parent branch (e.g.
    `feat/44-github-cli-parity`), target that same parent branch, and use `Refs #<sub-issue>` and
    `Refs #44` — never closing keywords.
-6. **Commits are coordinator-validated.** Workers push to their own branch; the coordinator owns
+8. **Commits are coordinator-validated.** Workers push to their own branch; the coordinator owns
    merge validation, generated-file regeneration, and the parent-PR review-coverage record.

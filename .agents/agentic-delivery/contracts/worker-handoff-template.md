@@ -23,6 +23,18 @@ Head SHA:
 
 - `<path>`: <reason>
 
+## Connector Implementation Scope
+
+- Applies: <yes | no>
+- Target connector scope: <exactly one target connector slug, or not applicable>
+- Connector-owned paths: <`internal/connectors/defs/<target>/**`, target docs/fixtures/tests, or not applicable>
+- Ownership guard evidence: <exact command/result proving target scope and changed paths comply>
+- Changed-path compliance: <pass | fail | blocked; list any out-of-scope path>
+- Foundation split needed: <yes | no>
+- Foundation issue/PR path: <separate foundation issue/PR URL, blocker, or not applicable>
+- Shared runtime/tooling or unrelated connector changes: <none | moved to foundation PR | blocker>
+- no-mistakes foundation split status: <not run | no finding | stopped/asked | blocker>
+
 ## GSD / TDD / Skill Evidence
 
 - GSD mode: <pi / scripts/gsd / manual fallback>

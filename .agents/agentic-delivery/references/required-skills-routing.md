@@ -29,6 +29,11 @@ If a future slice introduces or edits Cobra/Viper code, also load:
 
 ### Connector runtime and architecture
 
+For connector implementation lanes, require exactly one target connector before production edits.
+Record target connector scope, ownership guard evidence, and changed-path compliance. If shared
+runtime/tooling, schema, generated-index, or unrelated connector changes are needed, stop and split
+that work into a separate foundation issue/PR before continuing the connector lane.
+
 For connector engine, hooks, native protocols, direct-read, binary, ETL, reverse ETL, operation ledgers, or declarative bundle architecture, load:
 
 - `golang-design-patterns`
