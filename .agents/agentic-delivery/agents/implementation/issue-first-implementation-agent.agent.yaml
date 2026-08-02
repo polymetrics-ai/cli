@@ -108,7 +108,7 @@ guardrails:
   output:
   - no secrets in artifacts
   - PR body must reference issue
-  - connector PRs must not include generic shared runtime/tooling or unrelated connector changes unless a separate foundation issue/PR owns those paths
+  - connector PRs must include exactly one target connector and no generic shared runtime/tooling or unrelated connector changes; naming or linking a foundation issue/PR does not authorize those paths in the connector PR, and they must move into the foundation PR before target-aware validation or integration
   - skipped Claude review status must not be counted as review completion
   - Claude run failures or quota exhaustion must be recorded as blockers, not clean reviews
   - Copilot backup review must not be treated as approval

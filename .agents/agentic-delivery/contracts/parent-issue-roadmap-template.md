@@ -60,7 +60,10 @@ true:
 - automated review coverage exists through the sub-PR, through a parent PR fallback review that
   covers the newly integrated commit range, or through an explicitly recorded Copilot/human fallback
   because Claude is blocked
-- connector implementation sub-PRs include exactly one target connector and no generic shared runtime/tooling or unrelated connector changes unless a separate foundation issue/PR owns those paths
+- connector implementation sub-PRs include exactly one target connector and no generic shared
+  runtime/tooling or unrelated connector changes; naming or linking a foundation issue/PR does not
+  authorize those paths in the connector PR, and they must move into the foundation PR before
+  target-aware validation or integration
 - no human gate is triggered
 - no requested-changes review is open
 - the parent branch is current enough that the sub-PR diff is reviewable

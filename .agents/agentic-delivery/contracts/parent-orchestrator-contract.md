@@ -152,7 +152,10 @@ A sub-PR may merge into the parent branch only when:
 - targeted and issue-level verification pass
 - CI checks pass or an infrastructure blocker is recorded
 - automated review findings on the sub-PR are resolved, or the parent PR fallback path is recorded
-- the diff is within the sub-issue scope; connector implementation diffs declare exactly one target connector and contain no shared runtime/tooling or unrelated connector changes unless a separate foundation issue/PR owns those paths
+- the diff is within the sub-issue scope; connector implementation diffs declare exactly one target connector
+  and contain no generic shared runtime/tooling or unrelated connector changes; naming or linking a
+  foundation issue/PR does not authorize those paths in the connector PR, and they must move into
+  the foundation PR before target-aware validation or integration
 - no requested-changes review is open
 - no human gate is triggered
 
