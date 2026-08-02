@@ -403,6 +403,8 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 			_, _ = w.Write([]byte(`<ListDeadLetterSourceQueuesResponse><ListDeadLetterSourceQueuesResult><QueueUrl>https://sqs.us-east-1.amazonaws.com/123/orders-dlq</QueueUrl><NextToken>dead-letter-next</NextToken></ListDeadLetterSourceQueuesResult></ListDeadLetterSourceQueuesResponse>`))
 		case "GetQueueAttributes":
 			_, _ = w.Write([]byte(`<GetQueueAttributesResponse><GetQueueAttributesResult><Attribute><Name>Policy</Name><Value>{"Statement":"fixture"}</Value></Attribute><Attribute><Name>QueueArn</Name><Value>arn:aws:sqs:us-east-1:123:orders</Value></Attribute></GetQueueAttributesResult></GetQueueAttributesResponse>`))
+		case "ListQueueTags":
+			_, _ = w.Write([]byte(`<ListQueueTagsResponse><ListQueueTagsResult><Tag><Key>api_key</Key><Value>abc</Value></Tag><Tag><Key>access_key</Key><Value>def</Value></Tag><Tag><Key>credential_id</Key><Value>ghi</Value></Tag><Tag><Key>environment</Key><Value>prod</Value></Tag></ListQueueTagsResult></ListQueueTagsResponse>`))
 		default:
 			t.Fatalf("unexpected Action %q", r.Form.Get("Action"))
 		}
@@ -435,7 +437,15 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 	if attrs["Policy"] != "***" || attrs["QueueArn"] == "***" {
 		t.Fatalf("attributes redaction = %#v", attrs)
 	}
-	if strings.Join(sawActions, ",") != "ListQueues,ListDeadLetterSourceQueues,GetQueueAttributes" {
+	res, err = c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "list_queue_tags", Config: cfg})
+	if err != nil {
+		t.Fatalf("OperationDirectRead list_queue_tags: %v", err)
+	}
+	tags := res.Body.(map[string]any)["tags"].(map[string]any)
+	if tags["api_key"] != "***" || tags["access_key"] != "***" || tags["credential_id"] != "***" || tags["environment"] != "prod" {
+		t.Fatalf("tag redaction = %#v", tags)
+	}
+	if strings.Join(sawActions, ",") != "ListQueues,ListDeadLetterSourceQueues,GetQueueAttributes,ListQueueTags" {
 		t.Fatalf("actions = %v", sawActions)
 	}
 }
@@ -443,6 +453,7 @@ func TestOperationDirectReadListQueuesAndRedactsPolicy(t *testing.T) {
 func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 	var actions []string
 	var bodies []string
+	var sentMessageBody string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			t.Fatalf("ParseForm: %v", err)
@@ -451,6 +462,7 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 		bodies = append(bodies, r.Form.Encode())
 		switch r.Form.Get("Action") {
 		case "SendMessage":
+			sentMessageBody = r.Form.Get("MessageBody")
 			_, _ = w.Write([]byte(`<SendMessageResponse><SendMessageResult><MessageId>m1</MessageId></SendMessageResult></SendMessageResponse>`))
 		case "DeleteMessageBatch":
 			_, _ = w.Write([]byte(`<DeleteMessageBatchResponse><DeleteMessageBatchResult><Successful><Id>entry_1</Id></Successful></DeleteMessageBatchResult></DeleteMessageBatchResponse>`))
@@ -462,19 +474,19 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 
 	c := native.New()
 	cfg := testRuntimeConfig(srv.URL)
-	preview, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "hello", "message_group_id": "orders"}})
+	preview, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "  hello  ", "message_group_id": "orders"}})
 	if err != nil {
 		t.Fatalf("DryRunWrite: %v", err)
 	}
 	if preview.RecordsStaged != 1 || preview.Action != "send_message" {
 		t.Fatalf("preview = %+v", preview)
 	}
-	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "hello", "message_group_id": "orders"}})
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "  hello  ", "message_group_id": "orders"}})
 	if err != nil {
 		t.Fatalf("Write send_message: %v", err)
 	}
-	if res.RecordsWritten != 1 || !strings.Contains(bodies[0], "MessageBody=hello") || !strings.Contains(bodies[0], "MessageGroupId=orders") {
-		t.Fatalf("send result=%+v body=%q", res, bodies[0])
+	if res.RecordsWritten != 1 || sentMessageBody != "  hello  " || !strings.Contains(bodies[0], "MessageGroupId=orders") {
+		t.Fatalf("send result=%+v message_body=%q body=%q", res, sentMessageBody, bodies[0])
 	}
 
 	records := make([]connectors.Record, 11)
@@ -624,6 +636,21 @@ func TestValidateWriteClosedSchemas(t *testing.T) {
 			}
 		})
 	}
+	validMapShapes := []struct {
+		name    string
+		action  string
+		records []connectors.Record
+	}{
+		{name: "set queue attributes map", action: "set_queue_attributes", records: []connectors.Record{{"attributes": map[string]any{"Policy": "{}"}}}},
+		{name: "tag queue tags map", action: "tag_queue", records: []connectors.Record{{"tags": map[string]any{"team": "platform"}}}},
+	}
+	for _, tc := range validMapShapes {
+		t.Run(tc.name, func(t *testing.T) {
+			if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: tc.action, Config: cfg}, tc.records); err != nil {
+				t.Fatalf("ValidateWrite err = %v, want nil", err)
+			}
+		})
+	}
 	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "purge_queue", Config: cfg}, nil); err != nil {
 		t.Fatalf("ValidateWrite purge_queue empty record: %v", err)
 	}
@@ -652,7 +679,7 @@ func TestWriteSerializesTagMapsWithKeyValue(t *testing.T) {
 	if _, err := c.Write(context.Background(), connectors.WriteRequest{Action: "create_queue", Config: cfg}, []connectors.Record{{"queue_name": "orders", "tags": map[string]any{"env": "prod"}}}); err != nil {
 		t.Fatalf("Write create_queue: %v", err)
 	}
-	if _, err := c.Write(context.Background(), connectors.WriteRequest{Action: "tag_queue", Config: cfg}, []connectors.Record{{"tag_key": "team", "tag_value": "platform"}}); err != nil {
+	if _, err := c.Write(context.Background(), connectors.WriteRequest{Action: "tag_queue", Config: cfg}, []connectors.Record{{"tags": map[string]any{"team": "platform"}}}); err != nil {
 		t.Fatalf("Write tag_queue: %v", err)
 	}
 	if len(bodies) != 2 {
@@ -676,7 +703,7 @@ func TestWriteBatchFailuresReturnError(t *testing.T) {
 		if action := r.Form.Get("Action"); action != "SendMessageBatch" {
 			t.Fatalf("Action = %q, want SendMessageBatch", action)
 		}
-		_, _ = w.Write([]byte(`<SendMessageBatchResponse><SendMessageBatchResult><Successful><Id>entry_1</Id><MessageId>m1</MessageId></Successful><Failed><Id>entry_2</Id><SenderFault>true</SenderFault><Code>InvalidMessageContents</Code><Message>bad</Message></Failed></SendMessageBatchResult></SendMessageBatchResponse>`))
+		_, _ = w.Write([]byte(`<SendMessageBatchResponse><SendMessageBatchResult><SendMessageBatchResultEntry><Id>entry_1</Id><MessageId>m1</MessageId></SendMessageBatchResultEntry><BatchResultErrorEntry><Id>entry_2</Id><SenderFault>true</SenderFault><Code>InvalidMessageContents</Code><Message>bad</Message></BatchResultErrorEntry></SendMessageBatchResult></SendMessageBatchResponse>`))
 	}))
 	defer srv.Close()
 

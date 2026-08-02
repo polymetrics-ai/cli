@@ -18,19 +18,20 @@ import (
 const sqsBatchLimit = 10
 
 type writeActionDef struct {
-	name     string
-	method   string
-	path     string
-	kind     string
-	required []string
-	allowed  []string
-	redact   []string
-	risk     string
-	confirm  string
-	batch    bool
-	queue    bool
-	service  bool
-	execute  func(url.Values, connectors.Record, int) error
+	name        string
+	method      string
+	path        string
+	kind        string
+	required    []string
+	requiredAny [][]string
+	allowed     []string
+	redact      []string
+	risk        string
+	confirm     string
+	batch       bool
+	queue       bool
+	service     bool
+	execute     func(url.Values, connectors.Record, int) error
 }
 
 var sqsWriteActions = map[string]writeActionDef{
@@ -46,9 +47,9 @@ var sqsWriteActions = map[string]writeActionDef{
 	"remove_permission":               {name: "remove_permission", method: "POST", path: "SQS.RemovePermission", kind: "delete", required: []string{"label"}, allowed: []string{"label"}, risk: "removes an SQS queue resource policy permission statement", confirm: "destructive", queue: true, execute: buildRemovePermissionForm},
 	"send_message":                    {name: "send_message", method: "POST", path: "SQS.SendMessage", kind: "create", required: []string{"message_body"}, allowed: []string{"message_body", "delay_seconds", "message_attributes", "message_system_attributes", "message_deduplication_id", "message_group_id"}, redact: []string{"message_body", "message_attributes", "message_system_attributes"}, risk: "sends one message to the configured queue; FIFO queues may use message_deduplication_id for provider-supported idempotency", queue: true, execute: buildSendMessageForm},
 	"send_message_batch":              {name: "send_message_batch", method: "POST", path: "SQS.SendMessageBatch", kind: "create", required: []string{"message_body"}, allowed: []string{"id", "message_body", "delay_seconds", "message_attributes", "message_system_attributes", "message_deduplication_id", "message_group_id"}, redact: []string{"message_body", "message_attributes", "message_system_attributes"}, risk: "sends up to 10 messages per SQS batch request; FIFO queues may use message_deduplication_id for provider-supported idempotency", batch: true, queue: true, execute: buildSendMessageBatchEntry},
-	"set_queue_attributes":            {name: "set_queue_attributes", method: "POST", path: "SQS.SetQueueAttributes", kind: "update", required: []string{"attribute_name", "attribute_value"}, allowed: []string{"attribute_name", "attribute_value", "attributes"}, redact: []string{"attribute_value", "attributes"}, risk: "sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings", queue: true, execute: buildSetQueueAttributesForm},
+	"set_queue_attributes":            {name: "set_queue_attributes", method: "POST", path: "SQS.SetQueueAttributes", kind: "update", requiredAny: [][]string{{"attributes"}, {"attribute_name", "attribute_value"}}, allowed: []string{"attribute_name", "attribute_value", "attributes"}, redact: []string{"attribute_value", "attributes"}, risk: "sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings", queue: true, execute: buildSetQueueAttributesForm},
 	"start_message_move_task":         {name: "start_message_move_task", method: "POST", path: "SQS.StartMessageMoveTask", kind: "custom", required: []string{"source_arn"}, allowed: []string{"source_arn", "destination_arn", "max_number_of_messages_per_second"}, risk: "starts an SQS dead-letter queue redrive message move task", service: true, execute: buildStartMessageMoveTaskForm},
-	"tag_queue":                       {name: "tag_queue", method: "POST", path: "SQS.TagQueue", kind: "update", required: []string{"tag_key", "tag_value"}, allowed: []string{"tag_key", "tag_value", "tags"}, risk: "adds or updates tags on the configured SQS queue", queue: true, execute: buildTagQueueForm},
+	"tag_queue":                       {name: "tag_queue", method: "POST", path: "SQS.TagQueue", kind: "update", requiredAny: [][]string{{"tags"}, {"tag_key", "tag_value"}}, allowed: []string{"tag_key", "tag_value", "tags"}, risk: "adds or updates tags on the configured SQS queue", queue: true, execute: buildTagQueueForm},
 	"untag_queue":                     {name: "untag_queue", method: "POST", path: "SQS.UntagQueue", kind: "delete", required: []string{"tag_keys"}, allowed: []string{"tag_keys"}, risk: "removes tags from the configured SQS queue", confirm: "destructive", queue: true, execute: buildUntagQueueForm},
 }
 
@@ -282,10 +283,8 @@ func validateSQSRecords(def writeActionDef, records []connectors.Record) error {
 		allowed[field] = true
 	}
 	for i, rec := range records {
-		for _, field := range def.required {
-			if isEmptyRecordValue(rec[field]) {
-				return fmt.Errorf("amazon-sqs action %s record %d requires field %q", def.name, i, field)
-			}
+		if err := validateSQSRequiredFields(def, rec); err != nil {
+			return fmt.Errorf("amazon-sqs action %s record %d %w", def.name, i, err)
 		}
 		for field, value := range rec {
 			if !allowed[field] {
@@ -297,6 +296,42 @@ func validateSQSRecords(def writeActionDef, records []connectors.Record) error {
 		}
 	}
 	return nil
+}
+
+func validateSQSRequiredFields(def writeActionDef, rec connectors.Record) error {
+	for _, field := range def.required {
+		if isEmptyRecordValue(rec[field]) {
+			return fmt.Errorf("requires field %q", field)
+		}
+	}
+	if len(def.requiredAny) == 0 {
+		return nil
+	}
+	for _, group := range def.requiredAny {
+		complete := true
+		for _, field := range group {
+			if isEmptyRecordValue(rec[field]) {
+				complete = false
+				break
+			}
+		}
+		if complete {
+			return nil
+		}
+	}
+	return fmt.Errorf("requires one of %s", formatRequiredAny(def.requiredAny))
+}
+
+func formatRequiredAny(groups [][]string) string {
+	parts := make([]string, 0, len(groups))
+	for _, group := range groups {
+		quoted := make([]string, 0, len(group))
+		for _, field := range group {
+			quoted = append(quoted, strconv.Quote(field))
+		}
+		parts = append(parts, strings.Join(quoted, " + "))
+	}
+	return strings.Join(parts, " or ")
 }
 
 func validateSQSFieldValue(field string, value any) error {
@@ -566,7 +601,7 @@ func buildRemovePermissionForm(form url.Values, rec connectors.Record, _ int) er
 }
 
 func buildSendMessageForm(form url.Values, rec connectors.Record, _ int) error {
-	form.Set("MessageBody", stringField(rec, "message_body"))
+	form.Set("MessageBody", exactStringField(rec, "message_body"))
 	addOptionalInt(form, "DelaySeconds", rec, "delay_seconds", 0, 0, 900)
 	addOptionalString(form, "MessageDeduplicationId", rec, "message_deduplication_id")
 	addOptionalString(form, "MessageGroupId", rec, "message_group_id")
@@ -578,7 +613,7 @@ func buildSendMessageForm(form url.Values, rec connectors.Record, _ int) error {
 func buildSendMessageBatchEntry(form url.Values, rec connectors.Record, index int) error {
 	prefix := fmt.Sprintf("SendMessageBatchRequestEntry.%d.", index)
 	form.Set(prefix+"Id", entryID(rec, index))
-	form.Set(prefix+"MessageBody", stringField(rec, "message_body"))
+	form.Set(prefix+"MessageBody", exactStringField(rec, "message_body"))
 	addOptionalInt(form, prefix+"DelaySeconds", rec, "delay_seconds", 0, 0, 900)
 	addOptionalString(form, prefix+"MessageDeduplicationId", rec, "message_deduplication_id")
 	addOptionalString(form, prefix+"MessageGroupId", rec, "message_group_id")
@@ -589,8 +624,11 @@ func buildSendMessageBatchEntry(form url.Values, rec connectors.Record, index in
 
 func buildSetQueueAttributesForm(form url.Values, rec connectors.Record, _ int) error {
 	attrs := stringMapField(rec, "attributes")
-	if len(attrs) == 0 {
-		attrs = map[string]string{stringField(rec, "attribute_name"): stringField(rec, "attribute_value")}
+	if attrs == nil {
+		attrs = map[string]string{}
+	}
+	if !isEmptyRecordValue(rec["attribute_name"]) && !isEmptyRecordValue(rec["attribute_value"]) {
+		attrs[stringField(rec, "attribute_name")] = stringField(rec, "attribute_value")
 	}
 	addStringMap(form, "Attribute", attrs)
 	return nil
@@ -605,8 +643,11 @@ func buildStartMessageMoveTaskForm(form url.Values, rec connectors.Record, _ int
 
 func buildTagQueueForm(form url.Values, rec connectors.Record, _ int) error {
 	tags := stringMapField(rec, "tags")
-	if len(tags) == 0 {
-		tags = map[string]string{stringField(rec, "tag_key"): stringField(rec, "tag_value")}
+	if tags == nil {
+		tags = map[string]string{}
+	}
+	if !isEmptyRecordValue(rec["tag_key"]) && !isEmptyRecordValue(rec["tag_value"]) {
+		tags[stringField(rec, "tag_key")] = stringField(rec, "tag_value")
 	}
 	addTagMap(form, tags)
 	return nil
@@ -643,6 +684,14 @@ func stringField(rec connectors.Record, key string) string {
 		return ""
 	}
 	return strings.TrimSpace(fmt.Sprint(value))
+}
+
+func exactStringField(rec connectors.Record, key string) string {
+	value, ok := rec[key].(string)
+	if !ok {
+		return ""
+	}
+	return value
 }
 
 func intField(rec connectors.Record, key string, def, min, max int) int {
@@ -851,12 +900,14 @@ func addMessageAttributeMap(form url.Values, prefix string, values map[string]me
 
 func parseBatchCounts(raw []byte) (int, int) {
 	decoder := xml.NewDecoder(strings.NewReader(string(raw)))
-	successes := 0
-	failures := 0
+	entrySuccesses := 0
+	entryFailures := 0
+	wrapperSuccesses := 0
+	wrapperFailures := 0
 	for {
 		tok, err := decoder.Token()
 		if errors.Is(err, context.Canceled) {
-			return successes, failures
+			break
 		}
 		if err != nil {
 			break
@@ -865,12 +916,19 @@ func parseBatchCounts(raw []byte) (int, int) {
 		if !ok {
 			continue
 		}
-		switch start.Name.Local {
-		case "Successful":
-			successes++
-		case "Failed":
-			failures++
+		switch {
+		case start.Name.Local == "BatchResultErrorEntry":
+			entryFailures++
+		case strings.HasSuffix(start.Name.Local, "BatchResultEntry"):
+			entrySuccesses++
+		case start.Name.Local == "Successful":
+			wrapperSuccesses++
+		case start.Name.Local == "Failed":
+			wrapperFailures++
 		}
 	}
-	return successes, failures
+	if entrySuccesses > 0 || entryFailures > 0 {
+		return entrySuccesses, entryFailures
+	}
+	return wrapperSuccesses, wrapperFailures
 }
