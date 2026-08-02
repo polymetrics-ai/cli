@@ -179,6 +179,8 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - Blocked foundation: `airtable-array-cardinality-foundation` for 25 official mutations that require non-empty request arrays. The current schema subset supports `minProperties` but not `minItems`, so these operations stay blocked instead of accepting `[]` no-op/destructive payloads.
 
+- Blocked foundation: `airtable-field-variant-schema-foundation` for `create_field` field types whose official write variants require or accept type-specific `options`. The current schema subset has no conditional `anyOf`/`const` enforcement, so `create_field` only advertises official no-options request variants.
+
 - Blocked foundation: `airtable-required-query-foundation` for enterprise user search. Airtable requires at least one documented `email[]` or `id[]` query value, so the connector does not expose an unfiltered ETL stream or raw query escape.
 
 - API-surface ledger rows: 103 total = 28 streams + 45 writes + 1 direct read + 29 blocked operations.

@@ -198,7 +198,8 @@
                         ],
                         "items": {
                           "type": "string"
-                        }
+                        },
+                        "pattern": "^all$"
                       },
                       "includePreviousCellValues": {
                         "type": "boolean"
@@ -772,172 +773,23 @@
               "autoNumber",
               "barcode",
               "button",
-              "checkbox",
               "createdBy",
-              "createdTime",
-              "count",
-              "formula",
-              "lastModifiedTime",
               "lastModifiedBy",
-              "lookup",
-              "number",
-              "percent",
-              "currency",
-              "duration",
               "multilineText",
               "phoneNumber",
-              "rating",
               "richText",
-              "rollup",
               "singleLineText",
               "email",
               "url",
-              "externalSyncSource",
-              "aiText",
-              "multipleRecordLinks",
-              "singleSelect",
-              "multipleSelects",
               "singleCollaborator",
               "multipleCollaborators",
-              "date",
-              "dateTime",
               "multipleAttachments",
-              "multipleLookupValues"
+              "createdTime",
+              "lastModifiedTime"
             ]
           },
           "description": {
             "type": "string"
-          },
-          "options": {
-            "type": "object",
-            "minProperties": 1,
-            "properties": {
-              "choices": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "minProperties": 1,
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "color": {
-                      "type": "string"
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              },
-              "color": {
-                "type": "string",
-                "enum": [
-                  "greenBright",
-                  "tealBright",
-                  "cyanBright",
-                  "blueBright",
-                  "purpleBright",
-                  "pinkBright",
-                  "redBright",
-                  "orangeBright",
-                  "yellowBright",
-                  "grayBright"
-                ]
-              },
-              "dateFormat": {
-                "type": "object",
-                "minProperties": 1,
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "format": {
-                    "type": "string"
-                  }
-                },
-                "additionalProperties": false
-              },
-              "durationFormat": {
-                "type": "string"
-              },
-              "fieldIdInLinkedTable": {
-                "type": "string"
-              },
-              "formula": {
-                "type": "string"
-              },
-              "icon": {
-                "type": "string",
-                "enum": [
-                  "check",
-                  "xCheckbox",
-                  "star",
-                  "heart",
-                  "thumbsUp",
-                  "flag",
-                  "dot"
-                ]
-              },
-              "isValid": {
-                "type": "boolean"
-              },
-              "linkedTableId": {
-                "type": "string"
-              },
-              "max": {
-                "type": "number"
-              },
-              "precision": {
-                "type": "number"
-              },
-              "prompt": {
-                "type": "string"
-              },
-              "recordLinkFieldId": {
-                "type": "string"
-              },
-              "referencedFieldIds": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "result": {
-                "type": "object",
-                "minProperties": 1,
-                "properties": {
-                  "type": {
-                    "type": "string"
-                  }
-                },
-                "additionalProperties": false
-              },
-              "symbol": {
-                "type": "string"
-              },
-              "timeFormat": {
-                "type": "object",
-                "minProperties": 1,
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "format": {
-                    "type": "string"
-                  }
-                },
-                "additionalProperties": false
-              },
-              "timeZone": {
-                "type": "string"
-              },
-              "viewIdForRecordSelection": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false
           },
           "table_id": {
             "type": "string"
@@ -1045,7 +897,8 @@
             "type": "string"
           },
           "timePeriod": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?$"
           },
           "enterprise_account_id": {
             "type": "string"
@@ -1469,7 +1322,14 @@
         ],
         "properties": {
           "permissionLevel": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "owner",
+              "read",
+              "comment",
+              "edit",
+              "create"
+            ]
           },
           "workspace_id": {
             "type": "string"
