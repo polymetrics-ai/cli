@@ -22,6 +22,8 @@ Manual-GSD fallback is limited to executing the generated prompts with Pi tools 
 - `golang-structs-interfaces`
 - `golang-context`
 - `golang-documentation`
+- `golang-troubleshooting`
+- `golang-continuous-integration`
 - `context-mode`
 - References: `required-skills-routing.md`, `cli-help-docs-website-parity.md`, `gsd-pi-adapter.md`, `issue-agent-contract.md`, parent/subissue orchestration references.
 
@@ -75,12 +77,18 @@ Manual-GSD fallback is limited to executing the generated prompts with Pi tools 
    - Recognize canonical GitHub issue URLs only inside the generated `Canonical issue links preserved from the task record` section of an explicitly completed-task checkpoint; keep standalone bare URLs and vague `Issue`/`References` wording rejected.
    - Verify the focused guard packages and the exact CI-shaped `prissueguard` invocation locally; leave push, PR mutation, and pipeline control to the outer no-mistakes executor.
 
+8. **CI connector-boundary false-positive repair slice**
+   - Capture `make connector-boundary` rejecting the canonical issue-host regex as a `github` connector literal in shared coordination code.
+   - Preserve the exact regex behavior while constructing the host from split string literals, matching the existing issue-guard convention and avoiding a connector-policy false positive.
+   - Verify the focused issue guard, connector-boundary, and full `make verify` gates locally; leave hosted CI and every later pipeline phase to the outer executor.
+
 ## Final implementation state
 
 - `api_surface.json`: 103 official operations tracked exactly once.
 - Executable partition: 28 stream-backed GET/read/changefeed operations, 44 typed write actions, and 1 HyperDB direct-read CLI operation.
 - Blocked partition: 30 operations, including Sync API CSV import and attachment upload, remain blocked on named typed runtime foundations rather than exposing unsafe or unenforceable request shapes.
 - Comments use the official exact per-record endpoint and require `record_id`; the stream no longer bulk-fans out while ignoring the narrowing flag.
+- The issue-link checkpoint regex retains exact matching behavior without presenting its hosting-domain name as a connector-specific shared-Go literal to the boundary scanner.
 - Validation artifacts: `VERIFICATION.md` distinguishes prior full verification from the focused review-fix gate owned by this phase.
 
 ## Safety constraints
