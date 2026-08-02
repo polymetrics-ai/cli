@@ -24,6 +24,7 @@ type Result struct {
 var conventionalTitlePattern = regexp.MustCompile(`^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9][a-z0-9._-]*\))?!?: .+`)
 var issueRefPattern = regexp.MustCompile(`(?i)\b(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved|ref|refs):?\s+(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 var issueTokenPattern = regexp.MustCompile(`(?:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)?#([1-9][0-9]*)\b`)
+var issueURLPattern = regexp.MustCompile(`https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/issues/([1-9][0-9]*)\b`)
 var issueWordNumberPattern = regexp.MustCompile(`(?i)\bissues?\s+(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#?([1-9][0-9]*)\b`)
 var deliveryIssuePhrasePattern = regexp.MustCompile(`(?i)\b(?:deliver(?:s|ed|ing)?|implement(?:s|ed|ing)?|complete(?:s|d|ing)?|ship(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\bissues?\b(?:\.[0-9]|[^.\n\r]){0,160}`)
 var letteredDeliveryIssuePhrasePattern = regexp.MustCompile(`\b(?:[Dd]eliver(?:s|ed|ing)?|[Ii]mplement(?:s|ed|ing)?|[Cc]omplete(?:s|d|ing)?|[Ss]hip(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\b[Ii]ssue\s+[A-Z]\b(?:\.[0-9]|[^.\n\r]){0,60}\b(?i:migration|slice|phase|workstream|delivery|plan|scope|implementation|contract|guard)\b`)
@@ -91,6 +92,8 @@ func ExtractIssueRefs(text string) []IssueRef {
 		addDeliveryIssueTokens(seen, text[loc[0]:loc[1]], "issues")
 	}
 
+	addCanonicalTaskRecordIssueLinks(seen, text)
+
 	if len(seen) == 0 {
 		return nil
 	}
@@ -133,6 +136,27 @@ func addDeliveryIssueTokens(seen map[int]IssueRef, text, keyword string) {
 			continue
 		}
 		addIssueRef(seen, match[1], keyword)
+	}
+}
+
+func addCanonicalTaskRecordIssueLinks(seen map[int]IssueRef, text string) {
+	inCanonicalTaskRecordSection := false
+	for _, line := range strings.Split(text, "\n") {
+		trimmed := strings.TrimSpace(line)
+		lower := strings.ToLower(trimmed)
+		if strings.HasPrefix(lower, "## ") {
+			inCanonicalTaskRecordSection = strings.HasPrefix(lower, "## canonical issue links") && strings.Contains(lower, "task record")
+			continue
+		}
+		if !inCanonicalTaskRecordSection {
+			continue
+		}
+		for _, match := range issueURLPattern.FindAllStringSubmatch(trimmed, -1) {
+			if len(match) < 2 {
+				continue
+			}
+			addIssueRef(seen, match[1], "refs")
+		}
 	}
 }
 

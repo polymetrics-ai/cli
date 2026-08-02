@@ -139,6 +139,44 @@ func TestValidatePRAcceptsIssueFirstDeliveryIntent(t *testing.T) {
 	}
 }
 
+func TestValidatePRAcceptsCanonicalIssueURLsFromTaskRecord(t *testing.T) {
+	body := strings.Join([]string{
+		"## Unvalidated cloud checkpoint — do not merge yet",
+		"",
+		"This draft pull request is an unvalidated cloud checkpoint for the completed `cli-aws-cloudtrail-parity-wave04-r1` connector parity task.",
+		"",
+		"## Recorded task branch",
+		"",
+		"- Connector/task: `aws-cloudtrail`",
+		"- Branch: `fm/cli-aws-cloudtrail-parity-wave04-r1`",
+		"",
+		"## Canonical issue links preserved from the task record",
+		"",
+		"- https://github.com/polymetrics-ai/cli/issues/3142",
+		"- https://github.com/polymetrics-ai/cli/issues/3143",
+		"- https://github.com/polymetrics-ai/cli/issues/3144",
+		"- https://github.com/polymetrics-ai/cli/issues/3145",
+		"- https://github.com/polymetrics-ai/cli/issues/3146",
+		"- https://github.com/polymetrics-ai/cli/issues/3147",
+		"- https://github.com/polymetrics-ai/cli/issues/3148",
+		"- https://github.com/polymetrics-ai/cli/issues/3149",
+	}, "\n")
+	result := ValidatePR("chore(aws-cloudtrail): stage unvalidated parity checkpoint", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+
+	want := []int{3142, 3143, 3144, 3145, 3146, 3147, 3148, 3149}
+	if len(result.Issues) != len(want) {
+		t.Fatalf("ValidatePR() issues = %#v", result.Issues)
+	}
+	for i, number := range want {
+		if result.Issues[i].Number != number || result.Issues[i].Closing {
+			t.Fatalf("ValidatePR() issues = %#v", result.Issues)
+		}
+	}
+}
+
 func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 	tests := []string{
 		"Related to #123\n",
@@ -149,6 +187,7 @@ func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 		"Implement Issue B\n",
 		"Implement issue a migration\n",
 		"References #123\n",
+		"Related issue link: https://github.com/polymetrics-ai/cli/issues/123\n",
 		"Ship this. Issue 123 is unrelated.\n",
 		"Do not implement issue #123\n",
 		"Do not ship issue 123\n",
