@@ -28,6 +28,8 @@ var issueWordNumberPattern = regexp.MustCompile(`(?i)\bissues?\s+(?:[a-z0-9_.-]+
 var deliveryIssuePhrasePattern = regexp.MustCompile(`(?i)\b(?:deliver(?:s|ed|ing)?|implement(?:s|ed|ing)?|complete(?:s|d|ing)?|ship(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\bissues?\b(?:\.[0-9]|[^.\n\r]){0,160}`)
 var letteredDeliveryIssuePhrasePattern = regexp.MustCompile(`\b(?:[Dd]eliver(?:s|ed|ing)?|[Ii]mplement(?:s|ed|ing)?|[Cc]omplete(?:s|d|ing)?|[Ss]hip(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\b[Ii]ssue\s+[A-Z]\b(?:\.[0-9]|[^.\n\r]){0,60}\b(?i:migration|slice|phase|workstream|delivery|plan|scope|implementation|contract|guard)\b`)
 var parentIssuePattern = regexp.MustCompile(`(?i)\bparent\s+(?:issue\s+)?(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
+var canonicalIssueURLPattern = regexp.MustCompile(`(?i)\bhttps://` + `git` + `hub\.com/[a-z0-9_.-]+/[a-z0-9_.-]+/issues/([1-9][0-9]*)(?:[/?#][^[:space:])]*)?\b`)
+var canonicalIssueLinksHeadingPattern = regexp.MustCompile(`(?i)^canonical\s+issue\s+links\b`)
 var markdownH2Pattern = regexp.MustCompile(`(?m)^##\s+([A-Za-z][A-Za-z ]*)\s*$`)
 
 const noMistakesDeliveryMarker = "Updates from [git push no-mistakes](https://" + "git" + "hub.com/kunchenguid/no-mistakes)"
@@ -54,7 +56,7 @@ func ValidatePR(title, body string) Result {
 	deliveryRecord := hasNoMistakesDeliveryRecord(body)
 	explicitIssueWording := hasExplicitIssueWording(body)
 	if len(issues) == 0 && !deliveryRecord && !explicitIssueWording {
-		violations = append(violations, "PR body must reference an issue with Closes #123 for completed work, Refs #123 for stacked/incremental work, or explicit parent/delivery issue wording")
+		violations = append(violations, "PR body must reference an issue with Closes #123 for completed work, Refs #123 for stacked/incremental work, a canonical issue links section, or explicit parent/delivery issue wording")
 	}
 
 	return Result{
@@ -83,6 +85,8 @@ func ExtractIssueRefs(text string) []IssueRef {
 		}
 		addIssueRef(seen, match[1], "parent")
 	}
+
+	addCanonicalIssueURLs(seen, text)
 
 	for _, loc := range deliveryIssuePhrasePattern.FindAllStringIndex(text, -1) {
 		if hasNegationPrefix(text, loc[0]) {
@@ -133,6 +137,27 @@ func addDeliveryIssueTokens(seen map[int]IssueRef, text, keyword string) {
 			continue
 		}
 		addIssueRef(seen, match[1], keyword)
+	}
+}
+
+func addCanonicalIssueURLs(seen map[int]IssueRef, text string) {
+	inCanonicalIssueLinks := false
+	for _, line := range strings.Split(text, "\n") {
+		trimmed := strings.TrimSpace(line)
+		if strings.HasPrefix(trimmed, "## ") {
+			heading := strings.TrimSpace(strings.TrimPrefix(trimmed, "## "))
+			inCanonicalIssueLinks = canonicalIssueLinksHeadingPattern.MatchString(heading)
+			continue
+		}
+		if !inCanonicalIssueLinks {
+			continue
+		}
+		for _, match := range canonicalIssueURLPattern.FindAllStringSubmatch(line, -1) {
+			if len(match) < 2 {
+				continue
+			}
+			addIssueRef(seen, match[1], "url")
+		}
 	}
 }
 
