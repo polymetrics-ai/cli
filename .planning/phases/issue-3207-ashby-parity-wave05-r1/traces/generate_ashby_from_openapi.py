@@ -18,8 +18,15 @@ BINARY_JSON_WRITE_SUMMARIES = {"candidate.uploadResume","candidate.uploadFile"}
 CDC_STREAM_SUMMARIES = {"auditLog.list","application.listHistory"}
 CDC_WRITE_SUMMARIES = {"application.updateHistory"}
 PAGINATION_FIELDS = {"cursor","limit","syncToken"}
-DESTRUCTIVE_WORDS = ("delete","remove","archive","cancel","reject","close","disable","restore")
+DESTRUCTIVE_WORDS = ("delete","remove","archive","cancel","reject","close","disable","restore","anonymize")
 REDACT_MARKERS = ("id","email","file","resume","handle","url","name","secret")
+REQUIRED_ANY_FIELDS = {
+    "application.info": ["applicationId", "submittedFormInstanceId"],
+    "candidate.info": ["id", "externalMappingId"],
+}
+DIRECT_READ_MIN_PROPERTIES = {"job.search": 1}
+SIGNED_URL_DIRECT_READS = {"file.info", "notetakerTranscript.info"}
+SIGNED_URL_DIRECT_READ_RISK = "bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output"
 
 
 def fetch_schema():
@@ -407,16 +414,23 @@ def main():
                 if typ not in {"string","integer","number","boolean","array","object"}:
                     typ="string"
                 catalog_fields.append({"name":fname,"type":typ})
-            stream_entries.append(se); stream_go.append({"name":sname,"path":path,"required":req_required,"fields":list(req_props.keys()),"field_types":req_types,"cursor":cursor or "","synthetic":synthetic,"catalog_fields":catalog_fields,"primary_key":rec_schema.get("x-primary-key", [])})
+            required_any = REQUIRED_ANY_FIELDS.get(clean, [])
+            stream_entries.append(se); stream_go.append({"name":sname,"path":path,"required":req_required,"required_any":required_any,"fields":list(req_props.keys()),"field_types":req_types,"cursor":cursor or "","synthetic":synthetic,"catalog_fields":catalog_fields,"primary_key":rec_schema.get("x-primary-key", [])})
             flags=flags_for_props(req_props, "query", PAGINATION_FIELDS)
             cpath=command_path(clean, used_commands)
-            cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"etl","availability":"implemented","stream":sname,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"notes":f"Fixed Ashby stream for {clean}; flags map only to documented request body fields."})
+            notes=f"Fixed Ashby stream for {clean}; flags map only to documented request body fields."
+            if required_any:
+                notes += " Requires at least one documented selector: " + ", ".join(required_any) + "."
+            cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"etl","availability":"implemented","stream":sname,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"notes":notes})
             api_rows.append({"method":method,"path":path,"covered_by":{"stream":sname}}); continue
         if is_direct(summary):
             cpath=command_path(clean, used_commands); opid=operation_id_for("direct", clean, used_ops); body_schema=to_draft_schema(schema, req_sch, close_object=True)
+            if clean in DIRECT_READ_MIN_PROPERTIES:
+                body_schema["minProperties"] = DIRECT_READ_MIN_PROPERTIES[clean]
             operation_entries.append({"id":opid,"kind":"rest_read","summary":clean,"description":op.get("description","")[:1000],"source_url":source_url(op),"risk":"medium" if ("file" in clean.lower() or "transcript" in clean.lower()) else "low","approval":"none","output_policy":"json_redacted","rest":{"method":method,"path":path,"content_type":"application/json","max_bytes":1048576,"body":default_body_for(req_props),"body_schema":body_schema}})
             flags=flags_for_props(req_props, "body", PAGINATION_FIELDS)
-            cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"direct_read","availability":"implemented","operation":opid,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"output_policy":"json_redacted","redact_fields":redact_fields(req_props),"risk":"bounded JSON direct read; response fields with secret/download markers are redacted","approval":"none","notes":"Fixed Ashby POST direct read; no raw method/path/body override is exposed."})
+            direct_risk = SIGNED_URL_DIRECT_READ_RISK if clean in SIGNED_URL_DIRECT_READS else "bounded JSON direct read; response fields with secret/download markers are redacted"
+            cli_commands.append({"path":cpath,"summary":op.get("description","")[:160] or clean,"intent":"direct_read","availability":"implemented","operation":opid,"source_url":source_url(op),"flags":flags,"api_surface":[{"method":method,"path":path}],"output_policy":"json_redacted","redact_fields":redact_fields(req_props),"risk":direct_risk,"approval":"none","notes":"Fixed Ashby POST direct read; no raw method/path/body override is exposed."})
             api_rows.append({"method":method,"path":path,"covered_by":{"direct_read":cpath}}); continue
         if is_write(summary):
             wname=write_name_for(clean, used_writes); req_schema=to_draft_schema(schema, req_sch, close_object=True); destructive=is_destructive(clean)
@@ -471,7 +485,8 @@ def main():
     for e in stream_go:
         ft={k:(v if v in {"string","integer","number","boolean","array","object"} else "string") for k,v in e["field_types"].items()}
         catalog="[]connectors.Field{" + ", ".join("{Name: "+go_quote(f["name"])+", Type: "+go_quote(f["type"])+"}" for f in e["catalog_fields"]) + "}"
-        go_lines.append(f"\t{go_quote(e['name'])}: {{path: {go_quote(e['path'].lstrip('/'))}, requestFields: {go_map_string(ft)}, requiredFields: {go_string_slice(e['required'])}, cursorField: {go_quote(e['cursor'])}, syntheticFields: {go_string_slice(e['synthetic'])}, primaryKey: {go_string_slice(e['primary_key'])}, fields: {catalog}}},\n")
+        required_any = f", requiredAnyFields: {go_string_slice(e['required_any'])}" if e.get("required_any") else ""
+        go_lines.append(f"\t{go_quote(e['name'])}: {{path: {go_quote(e['path'].lstrip('/'))}, requestFields: {go_map_string(ft)}, requiredFields: {go_string_slice(e['required'])}{required_any}, cursorField: {go_quote(e['cursor'])}, syntheticFields: {go_string_slice(e['synthetic'])}, primaryKey: {go_string_slice(e['primary_key'])}, fields: {catalog}}},\n")
     go_lines.append("}\n")
     (NATIVE/"streams_gen.go").write_text("".join(go_lines))
     print(json.dumps({"rest":len(ops),"webhooks":len(schema.get('webhooks',{})),"streams":len(stream_entries),"writes":len(write_actions),"direct_reads":len(operation_entries),"blocked":len(api_rows)-len(stream_entries)-len(write_actions)-len(operation_entries)}, indent=2))

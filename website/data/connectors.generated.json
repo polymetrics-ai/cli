@@ -15047,7 +15047,7 @@
           "output_policy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for application.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for application.info; flags map only to documented request body fields. Requires at least one documented selector: applicationId, submittedFormInstanceId."
         },
         {
           "path": "application add-hiring-team-member",
@@ -15755,7 +15755,7 @@
           "output_policy": "",
           "risk": "",
           "approval": "",
-          "notes": "Fixed Ashby stream for candidate.info; flags map only to documented request body fields."
+          "notes": "Fixed Ashby stream for candidate.info; flags map only to documented request body fields. Requires at least one documented selector: id, externalMappingId."
         },
         {
           "path": "candidate create",
@@ -18020,7 +18020,7 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
@@ -20727,7 +20727,7 @@
           ],
           "examples": [],
           "output_policy": "json_redacted",
-          "risk": "bounded JSON direct read; response fields with secret/download markers are redacted",
+          "risk": "bounded JSON direct read; credential-marked response fields are redacted, and Ashby signed URL fields are preserved (results.url/results.transcriptUrl) in trusted live local output",
           "approval": "none",
           "notes": "Fixed Ashby POST direct read; no raw method/path/body override is exposed."
         },
