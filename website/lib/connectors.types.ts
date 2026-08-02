@@ -42,6 +42,7 @@ export type ConnectorCliFlag = {
   mapsTo: string;
   format?: string;
   allowEmpty?: boolean;
+  required?: boolean;
 };
 
 export type ConnectorCliConstraint = {

@@ -62326,7 +62326,8 @@
               "type": "string_array",
               "summary": "Gong call ID; repeat or comma-separate.",
               "values": [],
-              "maps_to": "body.filter.callIds"
+              "maps_to": "body.filter.callIds",
+              "required": true
             },
             {
               "name": "from",
@@ -62518,7 +62519,8 @@
               "type": "string_array",
               "summary": "Gong call ID; repeat or comma-separate.",
               "values": [],
-              "maps_to": "body.filter.callIds"
+              "maps_to": "body.filter.callIds",
+              "required": true
             }
           ],
           "examples": [
@@ -62600,28 +62602,32 @@
               "type": "string",
               "summary": "Owning Gong user ID.",
               "values": [],
-              "maps_to": "body.filter.userId"
+              "maps_to": "body.filter.userId",
+              "required": true
             },
             {
               "name": "status",
               "type": "string_array",
               "summary": "Task status: OPEN, DONE, or DISMISSED; repeat or comma-separate.",
               "values": [],
-              "maps_to": "body.filter.status"
+              "maps_to": "body.filter.status",
+              "required": true
             },
             {
               "name": "task-action",
               "type": "string_array",
               "summary": "Task action; Gong currently supports CALL.",
               "values": [],
-              "maps_to": "body.filter.taskAction"
+              "maps_to": "body.filter.taskAction",
+              "required": true
             },
             {
               "name": "task-type",
               "type": "string_array",
               "summary": "Task type: FLOW or MANUAL; repeat or comma-separate.",
               "values": [],
-              "maps_to": "body.filter.types"
+              "maps_to": "body.filter.types",
+              "required": true
             },
             {
               "name": "workspace-id",
@@ -62655,14 +62661,16 @@
               "type": "string",
               "summary": "Inclusive date, YYYY-MM-DD.",
               "values": [],
-              "maps_to": "body.filter.fromDate"
+              "maps_to": "body.filter.fromDate",
+              "required": true
             },
             {
               "name": "to-date",
               "type": "string",
               "summary": "Exclusive date, YYYY-MM-DD.",
               "values": [],
-              "maps_to": "body.filter.toDate"
+              "maps_to": "body.filter.toDate",
+              "required": true
             },
             {
               "name": "user-id",
@@ -62763,7 +62771,8 @@
               "type": "string_array",
               "summary": "Scorecard ID; repeat or comma-separate.",
               "values": [],
-              "maps_to": "body.filter.scorecardIds"
+              "maps_to": "body.filter.scorecardIds",
+              "required": true
             },
             {
               "name": "cursor",
@@ -62797,14 +62806,16 @@
               "type": "string",
               "summary": "Inclusive date, YYYY-MM-DD.",
               "values": [],
-              "maps_to": "body.filter.fromDate"
+              "maps_to": "body.filter.fromDate",
+              "required": true
             },
             {
               "name": "to-date",
               "type": "string",
               "summary": "Exclusive date, YYYY-MM-DD.",
               "values": [],
-              "maps_to": "body.filter.toDate"
+              "maps_to": "body.filter.toDate",
+              "required": true
             },
             {
               "name": "user-id",
@@ -62859,14 +62870,16 @@
               "type": "string",
               "summary": "Inclusive date, YYYY-MM-DD.",
               "values": [],
-              "maps_to": "body.filter.fromDate"
+              "maps_to": "body.filter.fromDate",
+              "required": true
             },
             {
               "name": "to-date",
               "type": "string",
               "summary": "Exclusive date, YYYY-MM-DD.",
               "values": [],
-              "maps_to": "body.filter.toDate"
+              "maps_to": "body.filter.toDate",
+              "required": true
             },
             {
               "name": "user-id",
@@ -62921,14 +62934,16 @@
               "type": "string",
               "summary": "Inclusive date, YYYY-MM-DD.",
               "values": [],
-              "maps_to": "body.filter.fromDate"
+              "maps_to": "body.filter.fromDate",
+              "required": true
             },
             {
               "name": "to-date",
               "type": "string",
               "summary": "Exclusive date, YYYY-MM-DD.",
               "values": [],
-              "maps_to": "body.filter.toDate"
+              "maps_to": "body.filter.toDate",
+              "required": true
             },
             {
               "name": "user-id",
@@ -62969,7 +62984,8 @@
                 "QUARTER",
                 "YEAR"
               ],
-              "maps_to": "body.aggregationPeriod"
+              "maps_to": "body.aggregationPeriod",
+              "required": true
             }
           ],
           "examples": [
@@ -62996,7 +63012,8 @@
               "type": "string_array",
               "summary": "Email address to validate. Repeat or comma-separate; max 100 per Gong API.",
               "values": [],
-              "maps_to": "body.emails"
+              "maps_to": "body.emails",
+              "required": true
             }
           ],
           "examples": [],
@@ -63021,7 +63038,8 @@
               "type": "string_array",
               "summary": "Engage flow ID to retrieve steps for. Repeat or comma-separate; max 20 per Gong API.",
               "values": [],
-              "maps_to": "body.flowIds"
+              "maps_to": "body.flowIds",
+              "required": true
             }
           ],
           "examples": [],
@@ -63078,7 +63096,8 @@
               "type": "string_array",
               "summary": "Gong call ID; repeat or comma-separate.",
               "values": [],
-              "maps_to": "body.filter.callIds"
+              "maps_to": "body.filter.callIds",
+              "required": true
             },
             {
               "name": "from",
@@ -63217,14 +63236,14 @@
   {
     "slug": "google-ads",
     "name": "Google Ads",
-    "description": "Reads accessible customers and allow-listed Google Ads GAQL search resources (campaigns, ad groups) through the Google Ads REST API. Read-only; arbitrary GAQL is not accepted.",
+    "description": "Declarative Google Ads connector for v22 customer, campaign, ad group, direct-read, and limited guarded reverse-ETL API surfaces.",
     "docs_url": "https://developers.google.com/google-ads/api/rest/overview",
     "integration_type": "api",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": false
@@ -63255,9 +63274,1138 @@
         "incremental": false
       }
     ],
-    "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads accessible customers and allow-listed Google Ads GAQL search resources (campaigns, ad groups)\nthrough the Google Ads REST API. Read-only; arbitrary GAQL is not accepted.\n\nReadable streams: `accessible_customers`, `campaigns`, `ad_groups`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://developers.google.com/google-ads/api/rest/overview.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Google OAuth 2.0 access token with Google Ads read\n  scope. Used only for Bearer auth; never logged. Acquisition/refresh is out of scope for this\n  connector (credentials layer already owns it).\n- `base_url` (optional, string); default `https://googleads.googleapis.com/v24`; format `uri`;\n  Google Ads REST API base URL override for tests or proxies.\n- `customer_id` (optional, string); Google Ads customer id to query GAQL search resources\n  (campaigns, ad_groups) against. Required for those streams only; accessible_customers is\n  account-scoped and does not reference it.\n- `developer_token` (required, secret, string); Google Ads developer token, sent as the\n  developer-token header on every request. Never logged.\n- `login_customer_id` (optional, string); Optional manager (MCC) customer id sent as the\n  login-customer-id header. Omitted entirely when unset.\n- `max_pages` (optional, string); Maximum pages fetched per GAQL search stream. A positive integer,\n  or 'all'/'unlimited' (default) for no cap.\n- `mode` (optional, string).\n- `page_size` (optional, integer); default `1000`; GAQL search pageSize (1-10000).\n\nSecret fields are redacted in logs and write previews: `access_token`, `developer_token`.\n\nDefault configuration values: `base_url=https://googleads.googleapis.com/v24`, `page_size=1000`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `customers:listAccessibleCustomers`.\n\n## Streams notes\n\nDefault pagination: single request; no pagination.\n\n- `accessible_customers`: GET `customers:listAccessibleCustomers` - records path `resourceNames`.\n- `campaigns`: POST `customers/{{ config.customer_id }}/googleAds:search` - records path `results`.\n- `ad_groups`: POST `customers/{{ config.customer_id }}/googleAds:search` - records path `results`.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external Google Ads API read of\ncustomer/campaign/ad-group metadata.\n\n## Known limits\n\n- Batch defaults: read_page_size=1000.\n- API coverage includes 3 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  duplicate_of=1, out_of_scope=7, requires_elevated_scope=1.\n",
+    "write_actions": [
+      {
+        "name": "move_manager_link_customer_manager_links",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "remove_data_links",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "update_data_links",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "remove_product_link_invitations",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "update_product_link_invitations",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "remove_product_links",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "start_identity_verification_customers",
+        "method": "POST",
+        "kind": "custom"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Google Ads v22 fixed direct reads and limited guarded reverse/write actions.",
+      "usage": "pm google-ads <resource> <operation> [flags]",
+      "source_cli": {
+        "name": "Google Ads API v22 REST discovery",
+        "docs": "https://developers.google.com/google-ads/api/rest/overview",
+        "reference": "https://developers.google.com/google-ads/api/reference/rpc/v22/overview",
+        "source": "https://googleads.googleapis.com/$discovery/rest?version=v22"
+      },
+      "groups": [],
+      "global_flags": [],
+      "commands": [
+        {
+          "path": "audience-insights list-insights-eligible-dates",
+          "summary": "Read Google Ads audienceInsights.listInsightsEligibleDates.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.audience.insights.list.insights.eligible.dates",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#audienceInsights.listInsightsEligibleDates",
+          "flags": [],
+          "examples": [
+            "pm google-ads audience-insights list-insights-eligible-dates --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers asset-generations generate-images",
+          "summary": "Read Google Ads customers.assetGenerations.generateImages.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.asset.generations.generate.images",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetGenerations.generateImages",
+          "flags": [
+            {
+              "name": "advertising-channel-type",
+              "type": "enum",
+              "summary": "Google Ads request field advertisingChannelType.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "SEARCH",
+                "DISPLAY",
+                "SHOPPING",
+                "HOTEL",
+                "VIDEO",
+                "MULTI_CHANNEL",
+                "LOCAL",
+                "SMART",
+                "PERFORMANCE_MAX",
+                "LOCAL_SERVICES",
+                "TRAVEL",
+                "DEMAND_GEN"
+              ],
+              "maps_to": "body.advertisingChannelType"
+            },
+            {
+              "name": "asset-field-types",
+              "type": "string_array",
+              "summary": "Google Ads request field assetFieldTypes.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "HEADLINE",
+                "DESCRIPTION",
+                "MANDATORY_AD_TEXT",
+                "MARKETING_IMAGE",
+                "MEDIA_BUNDLE",
+                "YOUTUBE_VIDEO",
+                "BOOK_ON_GOOGLE",
+                "LEAD_FORM",
+                "PROMOTION",
+                "CALLOUT",
+                "STRUCTURED_SNIPPET",
+                "SITELINK",
+                "MOBILE_APP",
+                "HOTEL_CALLOUT",
+                "CALL",
+                "PRICE",
+                "LONG_HEADLINE",
+                "BUSINESS_NAME",
+                "SQUARE_MARKETING_IMAGE",
+                "PORTRAIT_MARKETING_IMAGE",
+                "LOGO",
+                "LANDSCAPE_LOGO",
+                "VIDEO",
+                "CALL_TO_ACTION_SELECTION",
+                "AD_IMAGE",
+                "BUSINESS_LOGO",
+                "HOTEL_PROPERTY",
+                "DEMAND_GEN_CAROUSEL_CARD",
+                "BUSINESS_MESSAGE",
+                "TALL_PORTRAIT_MARKETING_IMAGE",
+                "RELATED_YOUTUBE_VIDEOS",
+                "LANDING_PAGE_PREVIEW"
+              ],
+              "maps_to": "body.assetFieldTypes"
+            }
+          ],
+          "examples": [
+            "pm google-ads customers asset-generations generate-images --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers asset-generations generate-text",
+          "summary": "Read Google Ads customers.assetGenerations.generateText.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.asset.generations.generate.text",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.assetGenerations.generateText",
+          "flags": [
+            {
+              "name": "advertising-channel-type",
+              "type": "enum",
+              "summary": "Google Ads request field advertisingChannelType.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "SEARCH",
+                "DISPLAY",
+                "SHOPPING",
+                "HOTEL",
+                "VIDEO",
+                "MULTI_CHANNEL",
+                "LOCAL",
+                "SMART",
+                "PERFORMANCE_MAX",
+                "LOCAL_SERVICES",
+                "TRAVEL",
+                "DEMAND_GEN"
+              ],
+              "maps_to": "body.advertisingChannelType"
+            },
+            {
+              "name": "asset-field-types",
+              "type": "string_array",
+              "summary": "Google Ads request field assetFieldTypes.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "HEADLINE",
+                "DESCRIPTION",
+                "MANDATORY_AD_TEXT",
+                "MARKETING_IMAGE",
+                "MEDIA_BUNDLE",
+                "YOUTUBE_VIDEO",
+                "BOOK_ON_GOOGLE",
+                "LEAD_FORM",
+                "PROMOTION",
+                "CALLOUT",
+                "STRUCTURED_SNIPPET",
+                "SITELINK",
+                "MOBILE_APP",
+                "HOTEL_CALLOUT",
+                "CALL",
+                "PRICE",
+                "LONG_HEADLINE",
+                "BUSINESS_NAME",
+                "SQUARE_MARKETING_IMAGE",
+                "PORTRAIT_MARKETING_IMAGE",
+                "LOGO",
+                "LANDSCAPE_LOGO",
+                "VIDEO",
+                "CALL_TO_ACTION_SELECTION",
+                "AD_IMAGE",
+                "BUSINESS_LOGO",
+                "HOTEL_PROPERTY",
+                "DEMAND_GEN_CAROUSEL_CARD",
+                "BUSINESS_MESSAGE",
+                "TALL_PORTRAIT_MARKETING_IMAGE",
+                "RELATED_YOUTUBE_VIDEOS",
+                "LANDING_PAGE_PREVIEW"
+              ],
+              "maps_to": "body.assetFieldTypes",
+              "required": true
+            },
+            {
+              "name": "final-url",
+              "type": "string",
+              "summary": "Google Ads request field finalUrl.",
+              "values": [],
+              "maps_to": "body.finalUrl"
+            },
+            {
+              "name": "freeform-prompt",
+              "type": "string",
+              "summary": "Google Ads request field freeformPrompt.",
+              "values": [],
+              "maps_to": "body.freeformPrompt"
+            },
+            {
+              "name": "keywords",
+              "type": "string_array",
+              "summary": "Google Ads request field keywords.",
+              "values": [],
+              "maps_to": "body.keywords"
+            }
+          ],
+          "examples": [
+            "pm google-ads customers asset-generations generate-text --asset-field-types UNSPECIFIED --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers generate-ad-group-themes",
+          "summary": "Read Google Ads customers.generateAdGroupThemes.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.generate.ad.group.themes",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateAdGroupThemes",
+          "flags": [
+            {
+              "name": "ad-groups",
+              "type": "string_array",
+              "summary": "Google Ads request field adGroups.",
+              "values": [],
+              "maps_to": "body.adGroups",
+              "required": true
+            },
+            {
+              "name": "keywords",
+              "type": "string_array",
+              "summary": "Google Ads request field keywords.",
+              "values": [],
+              "maps_to": "body.keywords",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm google-ads customers generate-ad-group-themes --ad-groups fixture_value --keywords fixture_value --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers generate-keyword-historical-metrics",
+          "summary": "Read Google Ads customers.generateKeywordHistoricalMetrics.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.generate.keyword.historical.metrics",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordHistoricalMetrics",
+          "flags": [
+            {
+              "name": "geo-target-constants",
+              "type": "string_array",
+              "summary": "Google Ads request field geoTargetConstants.",
+              "values": [],
+              "maps_to": "body.geoTargetConstants"
+            },
+            {
+              "name": "include-adult-keywords",
+              "type": "boolean",
+              "summary": "Google Ads request field includeAdultKeywords.",
+              "values": [],
+              "maps_to": "body.includeAdultKeywords"
+            },
+            {
+              "name": "keyword-plan-network",
+              "type": "enum",
+              "summary": "Google Ads request field keywordPlanNetwork.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "GOOGLE_SEARCH",
+                "GOOGLE_SEARCH_AND_PARTNERS"
+              ],
+              "maps_to": "body.keywordPlanNetwork"
+            },
+            {
+              "name": "keywords",
+              "type": "string_array",
+              "summary": "Google Ads request field keywords.",
+              "values": [],
+              "maps_to": "body.keywords"
+            },
+            {
+              "name": "language",
+              "type": "string",
+              "summary": "Google Ads request field language.",
+              "values": [],
+              "maps_to": "body.language"
+            }
+          ],
+          "examples": [
+            "pm google-ads customers generate-keyword-historical-metrics --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers generate-keyword-ideas",
+          "summary": "Read Google Ads customers.generateKeywordIdeas.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.generate.keyword.ideas",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateKeywordIdeas",
+          "flags": [
+            {
+              "name": "geo-target-constants",
+              "type": "string_array",
+              "summary": "Google Ads request field geoTargetConstants.",
+              "values": [],
+              "maps_to": "body.geoTargetConstants"
+            },
+            {
+              "name": "include-adult-keywords",
+              "type": "boolean",
+              "summary": "Google Ads request field includeAdultKeywords.",
+              "values": [],
+              "maps_to": "body.includeAdultKeywords"
+            },
+            {
+              "name": "keyword-annotation",
+              "type": "string_array",
+              "summary": "Google Ads request field keywordAnnotation.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "KEYWORD_CONCEPT"
+              ],
+              "maps_to": "body.keywordAnnotation"
+            },
+            {
+              "name": "keyword-plan-network",
+              "type": "enum",
+              "summary": "Google Ads request field keywordPlanNetwork.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "GOOGLE_SEARCH",
+                "GOOGLE_SEARCH_AND_PARTNERS"
+              ],
+              "maps_to": "body.keywordPlanNetwork"
+            },
+            {
+              "name": "language",
+              "type": "string",
+              "summary": "Google Ads request field language.",
+              "values": [],
+              "maps_to": "body.language"
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "Google Ads request field pageSize.",
+              "values": [],
+              "maps_to": "body.pageSize"
+            },
+            {
+              "name": "page-token",
+              "type": "string",
+              "summary": "Google Ads request field pageToken.",
+              "values": [],
+              "maps_to": "body.pageToken"
+            }
+          ],
+          "examples": [
+            "pm google-ads customers generate-keyword-ideas --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers generate-suggested-targeting-insights",
+          "summary": "Read Google Ads customers.generateSuggestedTargetingInsights.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.generate.suggested.targeting.insights",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateSuggestedTargetingInsights",
+          "flags": [
+            {
+              "name": "customer-insights-group",
+              "type": "string",
+              "summary": "Google Ads request field customerInsightsGroup.",
+              "values": [],
+              "maps_to": "body.customerInsightsGroup"
+            }
+          ],
+          "examples": [
+            "pm google-ads customers generate-suggested-targeting-insights --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers get-identity-verification",
+          "summary": "Read Google Ads customers.getIdentityVerification.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.get.identity.verification",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.getIdentityVerification",
+          "flags": [],
+          "examples": [
+            "pm google-ads customers get-identity-verification --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers invoices list",
+          "summary": "Read Google Ads customers.invoices.list.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.invoices.list",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.invoices.list",
+          "flags": [
+            {
+              "name": "billing-setup",
+              "type": "string",
+              "summary": "Required. The billing setup resource name of the requested invoices.",
+              "values": [],
+              "maps_to": "query.billingSetup",
+              "required": true
+            },
+            {
+              "name": "issue-month",
+              "type": "enum",
+              "summary": "Required. The issue month to retrieve invoices.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "JANUARY",
+                "FEBRUARY",
+                "MARCH",
+                "APRIL",
+                "MAY",
+                "JUNE",
+                "JULY",
+                "AUGUST",
+                "SEPTEMBER",
+                "OCTOBER",
+                "NOVEMBER",
+                "DECEMBER"
+              ],
+              "maps_to": "query.issueMonth",
+              "required": true
+            },
+            {
+              "name": "issue-year",
+              "type": "string",
+              "summary": "Required. The issue year to retrieve invoices, in yyyy format.",
+              "values": [],
+              "maps_to": "query.issueYear",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm google-ads customers invoices list --billing-setup customers/synthetic-conformance-value/billingSetups/fixture --issue-month JANUARY --issue-year 2026 --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers payments-accounts list",
+          "summary": "Read Google Ads customers.paymentsAccounts.list.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.payments.accounts.list",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.paymentsAccounts.list",
+          "flags": [],
+          "examples": [
+            "pm google-ads customers payments-accounts list --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers recommendations generate",
+          "summary": "Read Google Ads customers.recommendations.generate.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.recommendations.generate",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.recommendations.generate",
+          "flags": [
+            {
+              "name": "advertising-channel-type",
+              "type": "enum",
+              "summary": "Google Ads request field advertisingChannelType.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "SEARCH",
+                "DISPLAY",
+                "SHOPPING",
+                "HOTEL",
+                "VIDEO",
+                "MULTI_CHANNEL",
+                "LOCAL",
+                "SMART",
+                "PERFORMANCE_MAX",
+                "LOCAL_SERVICES",
+                "TRAVEL",
+                "DEMAND_GEN"
+              ],
+              "maps_to": "body.advertisingChannelType",
+              "required": true
+            },
+            {
+              "name": "campaign-call-asset-count",
+              "type": "integer",
+              "summary": "Google Ads request field campaignCallAssetCount.",
+              "values": [],
+              "maps_to": "body.campaignCallAssetCount"
+            },
+            {
+              "name": "campaign-image-asset-count",
+              "type": "integer",
+              "summary": "Google Ads request field campaignImageAssetCount.",
+              "values": [],
+              "maps_to": "body.campaignImageAssetCount"
+            },
+            {
+              "name": "campaign-sitelink-count",
+              "type": "integer",
+              "summary": "Google Ads request field campaignSitelinkCount.",
+              "values": [],
+              "maps_to": "body.campaignSitelinkCount"
+            },
+            {
+              "name": "conversion-tracking-status",
+              "type": "enum",
+              "summary": "Google Ads request field conversionTrackingStatus.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "NOT_CONVERSION_TRACKED",
+                "CONVERSION_TRACKING_MANAGED_BY_SELF",
+                "CONVERSION_TRACKING_MANAGED_BY_THIS_MANAGER",
+                "CONVERSION_TRACKING_MANAGED_BY_ANOTHER_MANAGER"
+              ],
+              "maps_to": "body.conversionTrackingStatus"
+            },
+            {
+              "name": "country-codes",
+              "type": "string_array",
+              "summary": "Google Ads request field countryCodes.",
+              "values": [],
+              "maps_to": "body.countryCodes"
+            },
+            {
+              "name": "language-codes",
+              "type": "string_array",
+              "summary": "Google Ads request field languageCodes.",
+              "values": [],
+              "maps_to": "body.languageCodes"
+            },
+            {
+              "name": "merchant-center-account-id",
+              "type": "string",
+              "summary": "Google Ads request field merchantCenterAccountId.",
+              "values": [],
+              "maps_to": "body.merchantCenterAccountId"
+            },
+            {
+              "name": "negative-locations-ids",
+              "type": "string_array",
+              "summary": "Google Ads request field negativeLocationsIds.",
+              "values": [],
+              "maps_to": "body.negativeLocationsIds"
+            },
+            {
+              "name": "positive-locations-ids",
+              "type": "string_array",
+              "summary": "Google Ads request field positiveLocationsIds.",
+              "values": [],
+              "maps_to": "body.positiveLocationsIds"
+            },
+            {
+              "name": "recommendation-types",
+              "type": "string_array",
+              "summary": "Google Ads request field recommendationTypes.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "CAMPAIGN_BUDGET",
+                "KEYWORD",
+                "TEXT_AD",
+                "TARGET_CPA_OPT_IN",
+                "MAXIMIZE_CONVERSIONS_OPT_IN",
+                "ENHANCED_CPC_OPT_IN",
+                "SEARCH_PARTNERS_OPT_IN",
+                "MAXIMIZE_CLICKS_OPT_IN",
+                "OPTIMIZE_AD_ROTATION",
+                "KEYWORD_MATCH_TYPE",
+                "MOVE_UNUSED_BUDGET",
+                "FORECASTING_CAMPAIGN_BUDGET",
+                "TARGET_ROAS_OPT_IN",
+                "RESPONSIVE_SEARCH_AD",
+                "MARGINAL_ROI_CAMPAIGN_BUDGET",
+                "USE_BROAD_MATCH_KEYWORD",
+                "RESPONSIVE_SEARCH_AD_ASSET",
+                "UPGRADE_SMART_SHOPPING_CAMPAIGN_TO_PERFORMANCE_MAX",
+                "RESPONSIVE_SEARCH_AD_IMPROVE_AD_STRENGTH",
+                "DISPLAY_EXPANSION_OPT_IN",
+                "UPGRADE_LOCAL_CAMPAIGN_TO_PERFORMANCE_MAX",
+                "RAISE_TARGET_CPA_BID_TOO_LOW",
+                "FORECASTING_SET_TARGET_ROAS",
+                "CALLOUT_ASSET",
+                "SITELINK_ASSET",
+                "CALL_ASSET",
+                "SHOPPING_ADD_AGE_GROUP",
+                "SHOPPING_ADD_COLOR",
+                "SHOPPING_ADD_GENDER",
+                "SHOPPING_ADD_GTIN",
+                "SHOPPING_ADD_MORE_IDENTIFIERS",
+                "SHOPPING_ADD_SIZE",
+                "SHOPPING_ADD_PRODUCTS_TO_CAMPAIGN",
+                "SHOPPING_FIX_DISAPPROVED_PRODUCTS",
+                "SHOPPING_TARGET_ALL_OFFERS",
+                "SHOPPING_FIX_SUSPENDED_MERCHANT_CENTER_ACCOUNT",
+                "SHOPPING_FIX_MERCHANT_CENTER_ACCOUNT_SUSPENSION_WARNING",
+                "SHOPPING_MIGRATE_REGULAR_SHOPPING_CAMPAIGN_OFFERS_TO_PERFORMANCE_MAX",
+                "DYNAMIC_IMAGE_EXTENSION_OPT_IN",
+                "RAISE_TARGET_CPA",
+                "LOWER_TARGET_ROAS",
+                "PERFORMANCE_MAX_OPT_IN",
+                "IMPROVE_PERFORMANCE_MAX_AD_STRENGTH",
+                "MIGRATE_DYNAMIC_SEARCH_ADS_CAMPAIGN_TO_PERFORMANCE_MAX",
+                "FORECASTING_SET_TARGET_CPA",
+                "SET_TARGET_CPA",
+                "SET_TARGET_ROAS",
+                "MAXIMIZE_CONVERSION_VALUE_OPT_IN",
+                "IMPROVE_GOOGLE_TAG_COVERAGE",
+                "PERFORMANCE_MAX_FINAL_URL_OPT_IN",
+                "REFRESH_CUSTOMER_MATCH_LIST",
+                "CUSTOM_AUDIENCE_OPT_IN",
+                "LEAD_FORM_ASSET",
+                "IMPROVE_DEMAND_GEN_AD_STRENGTH"
+              ],
+              "maps_to": "body.recommendationTypes",
+              "required": true
+            },
+            {
+              "name": "target-content-network",
+              "type": "boolean",
+              "summary": "Google Ads request field targetContentNetwork.",
+              "values": [],
+              "maps_to": "body.targetContentNetwork"
+            },
+            {
+              "name": "target-partner-search-network",
+              "type": "boolean",
+              "summary": "Google Ads request field targetPartnerSearchNetwork.",
+              "values": [],
+              "maps_to": "body.targetPartnerSearchNetwork"
+            }
+          ],
+          "examples": [
+            "pm google-ads customers recommendations generate --advertising-channel-type UNSPECIFIED --recommendation-types UNSPECIFIED --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers search-audience-insights-attributes",
+          "summary": "Read Google Ads customers.searchAudienceInsightsAttributes.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.search.audience.insights.attributes",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.searchAudienceInsightsAttributes",
+          "flags": [
+            {
+              "name": "customer-insights-group",
+              "type": "string",
+              "summary": "Google Ads request field customerInsightsGroup.",
+              "values": [],
+              "maps_to": "body.customerInsightsGroup"
+            },
+            {
+              "name": "dimensions",
+              "type": "string_array",
+              "summary": "Google Ads request field dimensions.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "CATEGORY",
+                "KNOWLEDGE_GRAPH",
+                "GEO_TARGET_COUNTRY",
+                "SUB_COUNTRY_LOCATION",
+                "YOUTUBE_CHANNEL",
+                "AFFINITY_USER_INTEREST",
+                "IN_MARKET_USER_INTEREST",
+                "PARENTAL_STATUS",
+                "INCOME_RANGE",
+                "AGE_RANGE",
+                "GENDER",
+                "YOUTUBE_VIDEO",
+                "DEVICE",
+                "YOUTUBE_LINEUP",
+                "USER_LIST"
+              ],
+              "maps_to": "body.dimensions",
+              "required": true
+            },
+            {
+              "name": "query-text",
+              "type": "string",
+              "summary": "Google Ads request field queryText.",
+              "values": [],
+              "maps_to": "body.queryText",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm google-ads customers search-audience-insights-attributes --dimensions UNSPECIFIED --query-text fixture_value --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers suggest-brands",
+          "summary": "Read Google Ads customers.suggestBrands.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.suggest.brands",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestBrands",
+          "flags": [
+            {
+              "name": "brand-prefix",
+              "type": "string",
+              "summary": "Google Ads request field brandPrefix.",
+              "values": [],
+              "maps_to": "body.brandPrefix",
+              "required": true
+            },
+            {
+              "name": "selected-brands",
+              "type": "string_array",
+              "summary": "Google Ads request field selectedBrands.",
+              "values": [],
+              "maps_to": "body.selectedBrands"
+            }
+          ],
+          "examples": [
+            "pm google-ads customers suggest-brands --brand-prefix fixture_value --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "customers suggest-travel-assets",
+          "summary": "Read Google Ads customers.suggestTravelAssets.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.customers.suggest.travel.assets",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestTravelAssets",
+          "flags": [
+            {
+              "name": "language-option",
+              "type": "string",
+              "summary": "Google Ads request field languageOption.",
+              "values": [],
+              "maps_to": "body.languageOption",
+              "required": true
+            },
+            {
+              "name": "place-ids",
+              "type": "string_array",
+              "summary": "Google Ads request field placeIds.",
+              "values": [],
+              "maps_to": "body.placeIds"
+            }
+          ],
+          "examples": [
+            "pm google-ads customers suggest-travel-assets --language-option fixture_value --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "geo-target-constants suggest",
+          "summary": "Read Google Ads geoTargetConstants.suggest.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.geo.target.constants.suggest",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#geoTargetConstants.suggest",
+          "flags": [
+            {
+              "name": "country-code",
+              "type": "string",
+              "summary": "Google Ads request field countryCode.",
+              "values": [],
+              "maps_to": "body.countryCode"
+            },
+            {
+              "name": "locale",
+              "type": "string",
+              "summary": "Google Ads request field locale.",
+              "values": [],
+              "maps_to": "body.locale"
+            }
+          ],
+          "examples": [
+            "pm google-ads geo-target-constants suggest --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "keyword-theme-constants suggest",
+          "summary": "Read Google Ads keywordThemeConstants.suggest.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.keyword.theme.constants.suggest",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#keywordThemeConstants.suggest",
+          "flags": [
+            {
+              "name": "country-code",
+              "type": "string",
+              "summary": "Google Ads request field countryCode.",
+              "values": [],
+              "maps_to": "body.countryCode"
+            },
+            {
+              "name": "language-code",
+              "type": "string",
+              "summary": "Google Ads request field languageCode.",
+              "values": [],
+              "maps_to": "body.languageCode"
+            },
+            {
+              "name": "query-text",
+              "type": "string",
+              "summary": "Google Ads request field queryText.",
+              "values": [],
+              "maps_to": "body.queryText"
+            }
+          ],
+          "examples": [
+            "pm google-ads keyword-theme-constants suggest --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "v22 generate-conversion-rates",
+          "summary": "Read Google Ads v22.generateConversionRates.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.v22.generate.conversion.rates",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.generateConversionRates",
+          "flags": [
+            {
+              "name": "customer-id",
+              "type": "string",
+              "summary": "Google Ads request field customerId.",
+              "values": [],
+              "maps_to": "body.customerId",
+              "required": true
+            },
+            {
+              "name": "customer-reach-group",
+              "type": "string",
+              "summary": "Google Ads request field customerReachGroup.",
+              "values": [],
+              "maps_to": "body.customerReachGroup"
+            }
+          ],
+          "examples": [
+            "pm google-ads v22 generate-conversion-rates --customer-id fixture_value --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "v22 list-plannable-locations",
+          "summary": "Read Google Ads v22.listPlannableLocations.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.v22.list.plannable.locations",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableLocations",
+          "flags": [],
+          "examples": [
+            "pm google-ads v22 list-plannable-locations --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "v22 list-plannable-products",
+          "summary": "Read Google Ads v22.listPlannableProducts.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.v22.list.plannable.products",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableProducts",
+          "flags": [
+            {
+              "name": "plannable-location-id",
+              "type": "string",
+              "summary": "Google Ads request field plannableLocationId.",
+              "values": [],
+              "maps_to": "body.plannableLocationId",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm google-ads v22 list-plannable-products --plannable-location-id fixture_value --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "v22 list-plannable-user-interests",
+          "summary": "Read Google Ads v22.listPlannableUserInterests.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.v22.list.plannable.user.interests",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableUserInterests",
+          "flags": [
+            {
+              "name": "customer-id",
+              "type": "string",
+              "summary": "Google Ads request field customerId.",
+              "values": [],
+              "maps_to": "body.customerId",
+              "required": true
+            },
+            {
+              "name": "name-query",
+              "type": "string",
+              "summary": "Google Ads request field nameQuery.",
+              "values": [],
+              "maps_to": "body.nameQuery"
+            },
+            {
+              "name": "path-query",
+              "type": "string",
+              "summary": "Google Ads request field pathQuery.",
+              "values": [],
+              "maps_to": "body.pathQuery"
+            },
+            {
+              "name": "user-interest-taxonomy-types",
+              "type": "string_array",
+              "summary": "Google Ads request field userInterestTaxonomyTypes.",
+              "values": [
+                "UNSPECIFIED",
+                "UNKNOWN",
+                "AFFINITY",
+                "IN_MARKET",
+                "MOBILE_APP_INSTALL_USER",
+                "VERTICAL_GEO",
+                "NEW_SMART_PHONE_USER"
+              ],
+              "maps_to": "body.userInterestTaxonomyTypes"
+            }
+          ],
+          "examples": [
+            "pm google-ads v22 list-plannable-user-interests --customer-id fixture_value --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "v22 list-plannable-user-lists",
+          "summary": "Read Google Ads v22.listPlannableUserLists.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google_ads.v22.list.plannable.user.lists",
+          "source_cli_path": "",
+          "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#v22.listPlannableUserLists",
+          "flags": [
+            {
+              "name": "customer-id",
+              "type": "string",
+              "summary": "Google Ads request field customerId.",
+              "values": [],
+              "maps_to": "body.customerId",
+              "required": true
+            },
+            {
+              "name": "customer-reach-group",
+              "type": "string",
+              "summary": "Google Ads request field customerReachGroup.",
+              "values": [],
+              "maps_to": "body.customerReachGroup"
+            }
+          ],
+          "examples": [
+            "pm google-ads v22 list-plannable-user-lists --customer-id fixture_value --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "Bounded JSON direct read; response fields with secret-like names are redacted.",
+          "approval": "none",
+          "notes": ""
+        }
+      ],
+      "help_topics": []
+    },
+    "docs_md": "# Google Ads connector notes\n\n## Overview\n\nGoogle Ads is implemented as a declarative preview connector against the public Google Ads API v22 REST discovery document. This wave ships sanitized fixture coverage plus executable credential-backed reads, fixed direct reads, and guarded reverse/write actions, but does not claim certification.\n\nPublic source audit:\n\n- Source: `https://googleads.googleapis.com/$discovery/rest?version=v22`\n- API version: `v22`\n- Discovery revision: `20260721`\n- Raw discovery method count: `163` (`POST=151`, `GET=11`, `DELETE=1`)\n- Local operation ledger rows: `164`. The row count is one greater than the raw method count because the single `customers.googleAds.search` method is intentionally represented by two fixed GAQL stream rows: `campaigns` and `ad_groups`.\n\n## Auth setup\n\nProvide `access_token` and `developer_token` through the credentials layer or environment. Optional `login_customer_id` is sent only when present. `customer_id` is required for customer-scoped streams, fixed direct reads, and reverse/write actions. Do not place secret values in plans, docs, fixtures, or command text.\n\n## Streams notes\n\nImplemented streams are `accessible_customers`, `campaigns`, and `ad_groups`. The campaign and ad group streams use fixed connector-owned GAQL statements; the connector does not expose arbitrary GAQL or raw search passthrough.\n\nDirect reads: `21` fixed connector-owned operations with JSON-redacted output, bounded response size, and typed CLI body/query fields where a POST body or GET query parameters are required.\n\n## Write actions & risks\n\nReverse/write actions: `7` guarded write actions whose request schemas are closed and connector-owned.\n\n- Write actions use closed record schemas derived from public discovery fields that can be represented without raw operation objects.\n- Destructive or account-admin actions carry explicit `confirm: destructive` metadata and remain subject to the platform reverse ETL plan -> preview -> approval -> execute lifecycle.\n- Secret-like fields are redacted; `access_token` and `developer_token` are never stored in fixtures.\n- No generic Google Ads SQL/GAQL shell, generic HTTP write, or raw request passthrough is exposed.\n\n## Known limits\n\nBlocked/planned operations: `133` rows. These are not advertised as executable. Reserved-expansion resource-name path variables, open-ended discovery write schemas, raw GAQL query commands, and direct reads with required complex request bodies remain blocked.\n\nGoogle Ads methods whose REST paths use `{+resourceName}`, `{+name}`, `{+experiment}`, `{+campaignDraft}`, or `{+adGroupAd}` are blocked in `api_surface.json`. These path variables are reserved expansions and may contain slash-separated Google Ads resource names. The current connector-local path interpolation intentionally URL-encodes slashes for safety, so enabling those methods without shared reserved-expansion support would call the wrong URL.\n",
     "icon": {
       "id": "google-adwords",
       "path": "icons/google-adwords.svg",

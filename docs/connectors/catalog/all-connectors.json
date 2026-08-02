@@ -62003,7 +62003,7 @@
   {
     "name": "google-ads",
     "display_name": "Google Ads",
-    "description": "Reads accessible customers and allow-listed Google Ads GAQL search resources (campaigns, ad groups) through the Google Ads REST API. Read-only; arbitrary GAQL is not accepted.",
+    "description": "Declarative Google Ads connector for v22 customer, campaign, ad group, direct-read, and limited guarded reverse-ETL API surfaces.",
     "integration_type": "api",
     "docs_url": "https://developers.google.com/google-ads/api/rest/overview",
     "release_stage": "ga",
@@ -62011,7 +62011,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -62026,7 +62026,7 @@
         "access_token": {
           "type": "string",
           "x-secret": true,
-          "description": "Google OAuth 2.0 access token with Google Ads read scope. Used only for Bearer auth; never logged. Acquisition/refresh is out of scope for this connector (credentials layer already owns it)."
+          "description": "Google OAuth 2.0 access token with Google Ads API scopes. Used only for Bearer auth; never logged. Acquisition/refresh is out of scope for this connector (credentials layer already owns it)."
         },
         "developer_token": {
           "type": "string",
@@ -62040,12 +62040,12 @@
         "base_url": {
           "type": "string",
           "format": "uri",
-          "default": "https://googleads.googleapis.com/v24",
-          "description": "Google Ads REST API base URL override for tests or proxies."
+          "default": "https://googleads.googleapis.com",
+          "description": "Google Ads REST API root URL override for tests or proxies; declarative paths include /v22."
         },
         "customer_id": {
           "type": "string",
-          "description": "Google Ads customer id to query GAQL search resources (campaigns, ad_groups) against. Required for those streams only; accessible_customers is account-scoped and does not reference it."
+          "description": "Google Ads customer id without dashes. Required for customer-scoped streams, direct reads, and reverse/write actions."
         },
         "page_size": {
           "type": "integer",
@@ -62097,9 +62097,68 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "move_manager_link_customer_manager_links",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/customerManagerLinks:moveManagerLink",
+        "risk": "Executes Google Ads API v22 method customers.customerManagerLinks.moveManagerLink against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_data_links",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/dataLinks:remove",
+        "risk": "Executes Google Ads API v22 method customers.dataLinks.remove against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_data_links",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/dataLinks:update",
+        "risk": "Executes Google Ads API v22 method customers.dataLinks.update against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_product_link_invitations",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/productLinkInvitations:remove",
+        "risk": "Executes Google Ads API v22 method customers.productLinkInvitations.remove against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_product_link_invitations",
+        "kind": "update",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/productLinkInvitations:update",
+        "risk": "Executes Google Ads API v22 method customers.productLinkInvitations.update against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_product_links",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}/productLinks:remove",
+        "risk": "Executes Google Ads API v22 method customers.productLinks.remove against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "start_identity_verification_customers",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/v22/customers/{{ config.customer_id }}:startIdentityVerification",
+        "risk": "Executes Google Ads API v22 method customers.startIdentityVerification against the configured customer. Review provider-side effects before approval.",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
-      "read": "external Google Ads API read of customer/campaign/ad-group metadata",
-      "approval": "none; read-only, no reverse-ETL write surface"
+      "read": "external Google Ads API reads of customer, campaign, ad-group, and bounded direct-read metadata",
+      "write": "limited guarded Google Ads API reverse/write actions with closed record schemas; destructive/admin actions require explicit approval",
+      "approval": "reads require no approval; writes remain gated by plan -\u003e preview -\u003e explicit approval -\u003e execute"
     },
     "icon": {
       "id": "google-adwords",

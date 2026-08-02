@@ -611,6 +611,7 @@ type CLIFlag struct {
 	MapsTo     string   `json:"maps_to,omitempty"`
 	Format     string   `json:"format,omitempty"`
 	AllowEmpty *bool    `json:"allow_empty,omitempty"`
+	Required   bool     `json:"required,omitempty"`
 }
 
 // CLIConstraint describes a provider-neutral validation rule over mapped

@@ -1,38 +1,41 @@
 {
-  "api": "Google Ads API v22 REST discovery revision 20260721",
-  "docs": "https://developers.google.com/google-ads/api/reference/rpc/v22/overview",
-  "reviewed_at": "2026-07-31",
-  "operation_ledger_version": 1,
-  "scope": "Fixture-only parity ledger generated from the public v22 discovery document; no live Google Ads credentials or API calls were used. customers.googleAds.search is split into two fixed GAQL stream rows (campaigns and ad_groups) because connector streams are separate covered_by units. Reserved-expansion resource-name path variables remain blocked because current connector-local templating safely URL-encodes slash characters.",
-  "endpoints": [
-    {
-      "method": "GET",
-      "path": "/v22/customers:listAccessibleCustomers",
-      "covered_by": {
-        "stream": "accessible_customers"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}/googleAds:search (fixed GAQL: campaign)",
-      "covered_by": {
-        "stream": "campaigns"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}/googleAds:search (fixed GAQL: ad_group)",
-      "covered_by": {
-        "stream": "ad_groups"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/audienceInsights:listInsightsEligibleDates",
-      "covered_by": {
-        "direct_read": "audience-insights list-insights-eligible-dates"
-      }
-    },
+  "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+  "version": "v22",
+  "revision": "20260721",
+  "method_count": 163,
+  "http_method_counts": {
+    "DELETE": 1,
+    "GET": 11,
+    "POST": 151
+  },
+  "schema_count": 1363,
+  "path_variable_counts": {
+    "adGroupAd": 1,
+    "campaignDraft": 1,
+    "customerId": 131,
+    "experiment": 2,
+    "name": 5,
+    "resourceName": 13
+  },
+  "classification_counts": {
+    "blocked_duplicate": 1,
+    "blocked_raw_query": 1,
+    "blocked_raw_write_schema": 97,
+    "blocked_required_body_direct_read": 12,
+    "blocked_reserved_path": 22,
+    "direct_read": 21,
+    "stream": 2,
+    "write": 7
+  },
+  "generated_counts": {
+    "api_surface_rows": 164,
+    "streams": 3,
+    "direct_reads": 21,
+    "write_actions": 7,
+    "write_fixtures": 7,
+    "blocked_rows": 133
+  },
+  "blocked_methods": [
     {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/AdGroupCriterionCustomizers:mutate",
@@ -291,20 +294,6 @@
         "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.ads.mutate",
         "notes": "Author a closed record_schema for mutate_ads before enabling this reverse ETL action."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}/assetGenerations:generateImages",
-      "covered_by": {
-        "direct_read": "customers asset-generations generate-images"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}/assetGenerations:generateText",
-      "covered_by": {
-        "direct_read": "customers asset-generations generate-text"
       }
     },
     {
@@ -920,13 +909,6 @@
     },
     {
       "method": "POST",
-      "path": "/v22/customers/{customer_id}/customerManagerLinks:moveManagerLink",
-      "covered_by": {
-        "write": "move_manager_link_customer_manager_links"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v22/customers/{customer_id}/customerManagerLinks:mutate",
       "operation": {
         "model": "disallowed",
@@ -1014,20 +996,6 @@
         "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.dataLinks.create",
         "notes": "Author a closed record_schema for create_data_links before enabling this reverse ETL action."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}/dataLinks:remove",
-      "covered_by": {
-        "write": "remove_data_links"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}/dataLinks:update",
-      "covered_by": {
-        "write": "update_data_links"
       }
     },
     {
@@ -1123,13 +1091,6 @@
     },
     {
       "method": "POST",
-      "path": "/v22/customers/{customer_id}:generateAdGroupThemes",
-      "covered_by": {
-        "direct_read": "customers generate-ad-group-themes"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v22/customers/{customer_id}:generateAudienceCompositionInsights",
       "operation": {
         "model": "direct_read",
@@ -1195,20 +1156,6 @@
     },
     {
       "method": "POST",
-      "path": "/v22/customers/{customer_id}:generateKeywordHistoricalMetrics",
-      "covered_by": {
-        "direct_read": "customers generate-keyword-historical-metrics"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}:generateKeywordIdeas",
-      "covered_by": {
-        "direct_read": "customers generate-keyword-ideas"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v22/customers/{customer_id}:generateReachForecast",
       "operation": {
         "model": "direct_read",
@@ -1231,13 +1178,6 @@
         "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.generateShareablePreviews",
         "notes": "Unsupported required body fields: shareablePreviews. Add connector-owned typed mappings before enabling this direct read."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}:generateSuggestedTargetingInsights",
-      "covered_by": {
-        "direct_read": "customers generate-suggested-targeting-insights"
       }
     },
     {
@@ -1267,13 +1207,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/v22/customers/{customer_id}/getIdentityVerification",
-      "covered_by": {
-        "direct_read": "customers get-identity-verification"
-      }
-    },
-    {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/googleAds:mutate",
       "operation": {
@@ -1297,13 +1230,6 @@
         "reason": "SearchStream is the streaming transport for the same GAQL search surface; the connector implements fixed, bounded campaign/ad_group reads through googleAds:search instead.",
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.googleAds.searchStream",
         "duplicate_of": "customers.googleAds.search fixed campaign/ad_group streams"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v22/customers/{customer_id}/invoices",
-      "covered_by": {
-        "direct_read": "customers invoices list"
       }
     },
     {
@@ -1541,13 +1467,6 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/v22/customers/{customer_id}/paymentsAccounts",
-      "covered_by": {
-        "direct_read": "customers payments-accounts list"
-      }
-    },
-    {
       "method": "POST",
       "path": "/v22/customers/{customer_id}/productLinkInvitations:create",
       "operation": {
@@ -1562,20 +1481,6 @@
     },
     {
       "method": "POST",
-      "path": "/v22/customers/{customer_id}/productLinkInvitations:remove",
-      "covered_by": {
-        "write": "remove_product_link_invitations"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}/productLinkInvitations:update",
-      "covered_by": {
-        "write": "update_product_link_invitations"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v22/customers/{customer_id}/productLinks:create",
       "operation": {
         "model": "disallowed",
@@ -1585,13 +1490,6 @@
         "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.productLinks.create",
         "notes": "Author a closed record_schema for create_product_links before enabling this reverse ETL action."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}/productLinks:remove",
-      "covered_by": {
-        "write": "remove_product_links"
       }
     },
     {
@@ -1635,13 +1533,6 @@
     },
     {
       "method": "POST",
-      "path": "/v22/customers/{customer_id}/recommendations:generate",
-      "covered_by": {
-        "direct_read": "customers recommendations generate"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v22/customers/{customer_id}/remarketingActions:mutate",
       "operation": {
         "model": "disallowed",
@@ -1664,13 +1555,6 @@
         "reason": "Blocked because the discovery request schema contains open-ended operation objects; exposing it would be a raw Google Ads write escape hatch rather than a typed connector-owned action.",
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.removeCampaignAutomaticallyCreatedAsset",
         "notes": "Author a closed record_schema for remove_campaign_automatically_created_asset_customers before enabling this reverse ETL action."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}:searchAudienceInsightsAttributes",
-      "covered_by": {
-        "direct_read": "customers search-audience-insights-attributes"
       }
     },
     {
@@ -1727,20 +1611,6 @@
     },
     {
       "method": "POST",
-      "path": "/v22/customers/{customer_id}:startIdentityVerification",
-      "covered_by": {
-        "write": "start_identity_verification_customers"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}:suggestBrands",
-      "covered_by": {
-        "direct_read": "customers suggest-brands"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/v22/customers/{customer_id}:suggestKeywordThemes",
       "operation": {
         "model": "direct_read",
@@ -1776,13 +1646,6 @@
         "reason": "Blocked because required Google Ads request body fields cannot be supplied by the typed CLI surface without exposing a raw JSON body.",
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#customers.suggestSmartCampaignBudgetOptions",
         "notes": "Unsupported required body fields: suggestionInfo. Add connector-owned typed mappings before enabling this direct read."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/customers/{customer_id}:suggestTravelAssets",
-      "covered_by": {
-        "direct_read": "customers suggest-travel-assets"
       }
     },
     {
@@ -1877,13 +1740,6 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/v22/geoTargetConstants:suggest",
-      "covered_by": {
-        "direct_read": "geo-target-constants suggest"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v22/{resource_name}",
       "operation": {
@@ -1907,48 +1763,6 @@
         "reason": "Blocked because body.query accepts arbitrary GAQL text; Google Ads query surfaces must use fixed connector-owned stream queries.",
         "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22#googleAdsFields.search",
         "notes": "Use the fixed campaigns and ad_groups streams instead of exposing googleAdsFields.search as a raw query command."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22/keywordThemeConstants:suggest",
-      "covered_by": {
-        "direct_read": "keyword-theme-constants suggest"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22:generateConversionRates",
-      "covered_by": {
-        "direct_read": "v22 generate-conversion-rates"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22:listPlannableLocations",
-      "covered_by": {
-        "direct_read": "v22 list-plannable-locations"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22:listPlannableProducts",
-      "covered_by": {
-        "direct_read": "v22 list-plannable-products"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22:listPlannableUserInterests",
-      "covered_by": {
-        "direct_read": "v22 list-plannable-user-interests"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v22:listPlannableUserLists",
-      "covered_by": {
-        "direct_read": "v22 list-plannable-user-lists"
       }
     }
   ]
