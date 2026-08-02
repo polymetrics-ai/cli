@@ -40,3 +40,11 @@ Implemented fixture-only Airtable parity partition: 103 official OpenAPI operati
 - [x] `git diff --check` — passed.
 
 The outer no-mistakes executor still owns commit, push, PR-body mutation, broader validation phases, and authoritative hosted CI rerun.
+
+## CI connector-boundary repair — 2026-08-02
+
+- [x] Red: `make connector-boundary` reported one `connector_literal` finding for `github` in the canonical issue-host regex at `internal/coordination/issueguard/guard.go:34`.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` — passed, preserving the exact PR #3540 checkpoint acceptance and negative cases.
+- [x] `make connector-boundary` — `outcome: clean`, 130 shared files and 550 connectors checked with zero findings or warnings.
+- [x] `make verify` — passed end-to-end: format, tidy check, vet, full tests, build, docs validation, smoke, lint, connector validation, connector boundary, and release notification assertions.
+- [x] No live Airtable calls, provider credentials, provider writes, dependency changes, PR mutation, push, or pipeline-control commands were used.

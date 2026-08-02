@@ -2,10 +2,10 @@
   "phase": "airtable-parity-3070",
   "issue": 3070,
   "branch": "fm/cli-airtable-parity-wave03-r1",
-  "status": "review_fix_complete_awaiting_outer_validation",
-  "verificationPassed": false,
+  "status": "ci_repair_complete_awaiting_outer_ci",
+  "verificationPassed": true,
   "reviewFixVerificationPassed": true,
-  "verificationNote": "The focused Airtable definition/conformance gate and PR issue-link guard repair passed for the final contained tree. Earlier full gates predate review hardening, so the outer pipeline still owns authoritative full-tree validation and hosted CI.",
+  "verificationNote": "The focused Airtable definition/conformance and PR issue-link guard checks pass, the connector-boundary false positive is repaired without changing regex behavior, and full make verify passes. The outer pipeline still owns commit, push, and authoritative hosted CI.",
   "gsd": {
     "doctor": "passed",
     "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase airtable-parity-3070 --dry-run",
@@ -24,6 +24,11 @@
       "cycle": "review-fix",
       "decision": "local_critical_path",
       "reason": "all legitimate findings are confined to the Airtable bundle, fixtures, generated Airtable surfaces, and target phase evidence"
+    },
+    {
+      "cycle": "ci",
+      "decision": "local_critical_path",
+      "reason": "the failing connector-boundary and verify gates share one deterministic false positive in the existing PR issue-link guard repair"
     }
   ],
   "sourceAudit": {
@@ -56,10 +61,12 @@
   },
   "ciRepair": {
     "pr": 3540,
-    "check": "require-linked-issue",
-    "status": "focused_verification_passed_awaiting_outer_ci",
+    "checks": ["connector-boundary", "require-linked-issue", "verify"],
+    "status": "local_verification_passed_awaiting_outer_ci",
     "linkedIssues": [3070, 3071, 3072, 3073, 3074, 3075, 3076, 3077],
-    "result": "issueguard: ok (8 linked issues)"
+    "issueGuardResult": "focused packages pass with 8 non-closing linked issues for the exact checkpoint body",
+    "connectorBoundaryResult": "clean: 130 shared files and 550 connectors checked with zero findings or warnings",
+    "fullVerifyPassed": true
   },
   "safety": {
     "liveProviderCalls": false,
