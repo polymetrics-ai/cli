@@ -266,6 +266,12 @@ func validateSQSRecords(def writeActionDef, records []connectors.Record) error {
 }
 
 func validateSQSFieldValue(field string, value any) error {
+	if field == "message_body" {
+		if _, ok := value.(string); !ok {
+			return fmt.Errorf("must be a string")
+		}
+		return nil
+	}
 	rule, ok := sqsIntFieldRules[field]
 	if !ok || isEmptyRecordValue(value) {
 		return nil
@@ -366,7 +372,7 @@ func buildChangeMessageVisibilityBatchEntry(form url.Values, rec connectors.Reco
 func buildCreateQueueForm(form url.Values, rec connectors.Record, _ int) error {
 	form.Set("QueueName", stringField(rec, "queue_name"))
 	addStringMap(form, "Attribute", stringMapField(rec, "attributes"))
-	addStringMap(form, "Tag", stringMapField(rec, "tags"))
+	addTagMap(form, "Tag", stringMapField(rec, "tags"))
 	return nil
 }
 
@@ -388,7 +394,11 @@ func buildRemovePermissionForm(form url.Values, rec connectors.Record, _ int) er
 }
 
 func buildSendMessageForm(form url.Values, rec connectors.Record, _ int) error {
-	form.Set("MessageBody", rawStringField(rec, "message_body"))
+	body, err := messageBodyField(rec)
+	if err != nil {
+		return err
+	}
+	form.Set("MessageBody", body)
 	if err := addOptionalInt(form, "DelaySeconds", rec, "delay_seconds", 0, 900); err != nil {
 		return err
 	}
@@ -402,7 +412,11 @@ func buildSendMessageForm(form url.Values, rec connectors.Record, _ int) error {
 func buildSendMessageBatchEntry(form url.Values, rec connectors.Record, index int) error {
 	prefix := fmt.Sprintf("SendMessageBatchRequestEntry.%d.", index)
 	form.Set(prefix+"Id", entryID(rec, index))
-	form.Set(prefix+"MessageBody", rawStringField(rec, "message_body"))
+	body, err := messageBodyField(rec)
+	if err != nil {
+		return err
+	}
+	form.Set(prefix+"MessageBody", body)
 	if err := addOptionalInt(form, prefix+"DelaySeconds", rec, "delay_seconds", 0, 900); err != nil {
 		return err
 	}
@@ -436,7 +450,7 @@ func buildTagQueueForm(form url.Values, rec connectors.Record, _ int) error {
 	if len(tags) == 0 {
 		tags = map[string]string{stringField(rec, "tag_key"): stringField(rec, "tag_value")}
 	}
-	addStringMap(form, "Tag", tags)
+	addTagMap(form, "Tag", tags)
 	return nil
 }
 
@@ -480,6 +494,21 @@ func rawStringField(rec connectors.Record, key string) string {
 		return ""
 	}
 	return fmt.Sprint(value)
+}
+
+func messageBodyField(rec connectors.Record) (string, error) {
+	value, ok := rec["message_body"]
+	if !ok || value == nil {
+		return "", fmt.Errorf("field %q is required", "message_body")
+	}
+	body, ok := value.(string)
+	if !ok {
+		return "", fmt.Errorf("field %q must be a string", "message_body")
+	}
+	if body == "" {
+		return "", fmt.Errorf("field %q is required", "message_body")
+	}
+	return body, nil
 }
 
 func intField(rec connectors.Record, key string, minValue, maxValue int) (int, error) {
@@ -650,19 +679,30 @@ func messageAttributeMapField(rec connectors.Record, key string) map[string]mess
 			if cr, ok := raw.(connectors.Record); ok {
 				m = map[string]any(cr)
 			} else {
-				out[name] = messageAttributeValue{DataType: "String", StringValue: fmt.Sprint(raw)}
+				out[name] = messageAttributeValue{DataType: "String", StringValue: rawStringValue(raw)}
 				continue
 			}
 		}
 		out[name] = messageAttributeValue{
-			DataType:         strings.TrimSpace(fmt.Sprint(m["data_type"])),
-			StringValue:      strings.TrimSpace(fmt.Sprint(m["string_value"])),
-			BinaryValue:      strings.TrimSpace(fmt.Sprint(m["binary_value"])),
+			DataType:         trimmedStringValue(m["data_type"]),
+			StringValue:      trimmedStringValue(m["string_value"]),
+			BinaryValue:      trimmedStringValue(m["binary_value"]),
 			StringListValues: valueToStrings(m["string_list_values"]),
 			BinaryListValues: valueToStrings(m["binary_list_values"]),
 		}
 	}
 	return out
+}
+
+func rawStringValue(value any) string {
+	if value == nil {
+		return ""
+	}
+	return fmt.Sprint(value)
+}
+
+func trimmedStringValue(value any) string {
+	return strings.TrimSpace(rawStringValue(value))
 }
 
 func valueToStrings(value any) []string {
@@ -696,6 +736,18 @@ func addStringMap(form url.Values, prefix string, values map[string]string) {
 	sort.Strings(keys)
 	for i, key := range keys {
 		form.Set(fmt.Sprintf("%s.%d.Name", prefix, i+1), key)
+		form.Set(fmt.Sprintf("%s.%d.Value", prefix, i+1), values[key])
+	}
+}
+
+func addTagMap(form url.Values, prefix string, values map[string]string) {
+	keys := make([]string, 0, len(values))
+	for key := range values {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for i, key := range keys {
+		form.Set(fmt.Sprintf("%s.%d.Key", prefix, i+1), key)
 		form.Set(fmt.Sprintf("%s.%d.Value", prefix, i+1), values[key])
 	}
 }

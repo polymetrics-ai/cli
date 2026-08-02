@@ -481,6 +481,50 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 	}
 }
 
+func TestWriteQueueTagsUseKeyValueParameters(t *testing.T) {
+	var checkedCreate bool
+	var checkedTag bool
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		switch r.Form.Get("Action") {
+		case "CreateQueue":
+			checkedCreate = true
+			if r.Form.Get("Tag.1.Key") != "env" || r.Form.Get("Tag.1.Value") != "prod" || r.Form.Get("Tag.1.Name") != "" {
+				t.Fatalf("create tags = %s, want Tag.1.Key/Value only", r.Form.Encode())
+			}
+			if r.Form.Get("Attribute.1.Name") != "VisibilityTimeout" || r.Form.Get("Attribute.1.Value") != "30" {
+				t.Fatalf("create attributes = %s, want Attribute.1.Name/Value", r.Form.Encode())
+			}
+			_, _ = w.Write([]byte(`<CreateQueueResponse><CreateQueueResult><QueueUrl>https://sqs.us-east-1.amazonaws.com/123/orders</QueueUrl></CreateQueueResult></CreateQueueResponse>`))
+		case "TagQueue":
+			checkedTag = true
+			if r.Form.Get("Tag.1.Key") != "team" || r.Form.Get("Tag.1.Value") != "etl" || r.Form.Get("Tag.1.Name") != "" {
+				t.Fatalf("tag queue tags = %s, want Tag.1.Key/Value only", r.Form.Encode())
+			}
+			_, _ = w.Write([]byte(`<TagQueueResponse/>`))
+		default:
+			t.Fatalf("unexpected Action %q", r.Form.Get("Action"))
+		}
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	_, err := c.Write(context.Background(), connectors.WriteRequest{Action: "create_queue", Config: cfg}, []connectors.Record{{"queue_name": "orders", "attributes": map[string]any{"VisibilityTimeout": "30"}, "tags": map[string]any{"env": "prod"}}})
+	if err != nil {
+		t.Fatalf("Write create_queue: %v", err)
+	}
+	_, err = c.Write(context.Background(), connectors.WriteRequest{Action: "tag_queue", Config: cfg}, []connectors.Record{{"tag_key": "team", "tag_value": "etl"}})
+	if err != nil {
+		t.Fatalf("Write tag_queue: %v", err)
+	}
+	if !checkedCreate || !checkedTag {
+		t.Fatalf("checkedCreate=%v checkedTag=%v, want both actions checked", checkedCreate, checkedTag)
+	}
+}
+
 func TestWriteNormalizesActionAndSendsQueueURL(t *testing.T) {
 	var sawQueueURL string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -562,6 +606,42 @@ func TestWriteSendMessagePreservesMessageBodyWhitespace(t *testing.T) {
 	}
 }
 
+func TestWriteMessageAttributesTreatMissingNestedValuesAsEmpty(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("ParseForm: %v", err)
+		}
+		if got := r.Form.Get("MessageAttribute.1.Value.DataType"); got != "String" {
+			t.Fatalf("DataType = %q, want String", got)
+		}
+		if _, ok := r.Form["MessageAttribute.1.Value.StringValue"]; ok {
+			t.Fatalf("StringValue sent for nil nested value: %s", r.Form.Encode())
+		}
+		if _, ok := r.Form["MessageAttribute.1.Value.BinaryValue"]; ok {
+			t.Fatalf("BinaryValue sent for missing nested value: %s", r.Form.Encode())
+		}
+		for key, values := range r.Form {
+			for _, value := range values {
+				if value == "<nil>" {
+					t.Fatalf("form %s contains <nil>: %s", key, r.Form.Encode())
+				}
+			}
+		}
+		_, _ = w.Write([]byte(`<SendMessageResponse><SendMessageResult><MessageId>m1</MessageId></SendMessageResult></SendMessageResponse>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": "hello", "message_attributes": map[string]any{"trace": map[string]any{"string_value": nil}}}})
+	if err != nil {
+		t.Fatalf("Write send_message: %v", err)
+	}
+	if res.RecordsWritten != 1 {
+		t.Fatalf("result=%+v, want one written record", res)
+	}
+}
+
 func TestWriteDeleteBatchReportsSQSBatchEntryFailures(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
@@ -596,6 +676,9 @@ func TestValidateWriteClosedSchemas(t *testing.T) {
 	}
 	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": " "}}); err != nil {
 		t.Fatalf("ValidateWrite whitespace message body: %v", err)
+	}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "send_message", Config: cfg}, []connectors.Record{{"message_body": map[string]any{"text": "ok"}}}); err == nil || !strings.Contains(err.Error(), "must be a string") {
+		t.Fatalf("ValidateWrite non-string message body err = %v, want string type error", err)
 	}
 	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "change_message_visibility", Config: cfg}, []connectors.Record{{"receipt_handle": "rh", "visibility_timeout": "eventually"}}); err == nil || !strings.Contains(err.Error(), "must be an integer") {
 		t.Fatalf("ValidateWrite malformed visibility_timeout err = %v, want integer error", err)
