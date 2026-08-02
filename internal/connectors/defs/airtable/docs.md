@@ -79,7 +79,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 ## Write actions & risks
 
-44 fixture-backed write actions cover supportable JSON/no-body mutations whose closed schemas are enforceable by the current runtime. Every write must use reverse ETL plan -> preview -> explicit approval -> execute. DELETE actions treat 404 as missing-ok idempotent success where supported; DELETE/PUT/revoke/remove/logout actions require destructive confirmation.
+44 fixture-backed write actions cover supportable JSON/no-body mutations whose closed schemas are enforceable by the current runtime. Every write must use reverse ETL plan -> preview -> explicit approval -> execute. DELETE actions treat 404 as missing-ok idempotent success where supported; DELETE/PUT/revoke/remove/logout actions require destructive confirmation. The `delete_users_by_email` action masks `email` in plan samples, previews, and returned write errors.
 
 - `delete_scim_group`: DELETE `/scim/v2/Groups/{{ record.id }}`; kind `delete`; body `none`; path fields `id`; required `id`.
 
