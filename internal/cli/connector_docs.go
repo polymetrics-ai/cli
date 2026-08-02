@@ -122,10 +122,25 @@ func validateGeneratedConnectorIconMetadata(document, expected, heading, name, s
 }
 
 func generatedConnectorIconBlock(document, heading string) (string, error) {
-	start := strings.Index(document, heading)
-	if start < 0 {
+	starts := make([]int, 0, 1)
+	for offset := 0; offset < len(document); {
+		relativeStart := strings.Index(document[offset:], heading)
+		if relativeStart < 0 {
+			break
+		}
+		start := offset + relativeStart
+		if start == 0 || document[start-1] == '\n' {
+			starts = append(starts, start)
+		}
+		offset = start + 1
+	}
+	if len(starts) == 0 {
 		return "", fmt.Errorf("missing section")
 	}
+	if len(starts) > 1 {
+		return "", fmt.Errorf("duplicate sections")
+	}
+	start := starts[0]
 	remainder := document[start+len(heading):]
 	end := strings.Index(remainder, "\n\n")
 	if end < 0 {

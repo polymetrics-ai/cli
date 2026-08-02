@@ -18,6 +18,8 @@
 | Review F6 generated docs metadata | catalog, MANUAL, and SKILL icon paths can disagree with the canonical registry without failing docs validation | all three generated surfaces validate canonical paths; the exact 61 stale mappings are regenerated |
 | Review F7 complete rendered metadata | matching paths mask missing review URLs and obsolete provenance in generated catalog, MANUAL, and SKILL icon blocks | serialized catalog icon objects and exact rendered guide blocks must equal their canonical projections, including optional-field omission |
 | Review F8 full canonical projection | the runtime/docs projection drops ID from guides and drops title, slug, hex, license/attribution, and match metadata from every generated surface | one projection renders and validates all canonical icon metadata while absent optional fields remain omitted |
+| Review F9 generated website propagation | canonical bundle icon updates leave downstream catalog/list objects and output-only SVG copies stale | generated catalog/list icon values match the bundle, the public icon tree exactly matches canonical paths, non-icon values remain byte-equivalent, and a second generation is clean |
+| Review F10 exact unique icon section | first-substring extraction accepts `FAVICON`, embedded heading fragments, and duplicate icon sections | only one exact line-boundary heading is accepted; missing and duplicate headings fail deterministically |
 
 ## Actual evidence log
 
@@ -41,3 +43,7 @@
 - 2026-08-02: Pre-edit F8 audit confirmed all 554 catalog icon objects use the reduced five-field `ConnectorIcon`, all 554 registry-backed MANUAL/SKILL icon blocks omit icon IDs, and all 61 curated Simple Icons entries lose title, slug, hex, license, match, and matched-by metadata before rendering.
 - 2026-08-02: F8 regression edits precede production edits; the active review-fix contract permits only one focused verification after the complete fix round, so no interim RED command is run.
 - 2026-08-02: The first focused F8 gate exposed two stale path-corruption fixtures whose context still assumed `asset` was the first rendered icon line; the fixtures were narrowed to mutate only the asset field before repeating the focused gate.
+- 2026-08-02: Review round 5 rechecked `scripts/gsd doctor`; the adapter passed while `scripts/gsd prompt programming-loop init --phase connector-guardrail-remediation-r1/workers/issue-3595 --dry-run` remained unavailable, so the recorded manual GSD fallback and `local_critical_path` execution continue.
+- 2026-08-02: Pre-edit F9 audit reproduced exactly 230 stale icon objects in `website/lib/connectors.catalog.data.generated.json`, 14 stale icons in `website/lib/connectors.generated.ts`, and 61 output-only SVGs under `website/public/connectors/icons/**`; the canonical website bundle itself matches its generator projection.
+- 2026-08-02: Pre-edit F10 inspection confirmed `strings.Index(document, heading)` selects an `ICON` substring inside a line such as `FAVICON` and accepts the first of duplicate exact sections.
+- 2026-08-02: F10 regression edits precede production edits; the active review-fix contract permits only one focused verification after the complete fix round, so no interim RED command is run.

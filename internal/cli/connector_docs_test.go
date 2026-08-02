@@ -219,6 +219,68 @@ func TestValidateConnectorDocsRejectsStaleIconMetadata(t *testing.T) {
 	}
 }
 
+func TestGeneratedConnectorIconBlockRequiresExactUniqueHeading(t *testing.T) {
+	tests := []struct {
+		name     string
+		document string
+		heading  string
+		want     string
+		wantErr  string
+	}{
+		{
+			name:     "valid exact manual section",
+			document: "DESCRIPTION\nConnector details.\n\nICON\n  id: canonical\n\nSECURITY\nSafe.\n",
+			heading:  "ICON\n",
+			want:     "  id: canonical",
+		},
+		{
+			name:     "manual ignores favicon substring",
+			document: "DESCRIPTION\nFAVICON\n  id: shadow\n\nICON\n  id: canonical\n\nSECURITY\nSafe.\n",
+			heading:  "ICON\n",
+			want:     "  id: canonical",
+		},
+		{
+			name:     "skill ignores embedded heading fragment",
+			document: "## Description\n\nFAV## Icon\n\n- id: shadow\n\n## Icon\n\n- id: canonical\n\n## Agent Rules\n",
+			heading:  "## Icon\n\n",
+			want:     "- id: canonical",
+		},
+		{
+			name:     "duplicate exact sections",
+			document: "ICON\n  id: first\n\nICON\n  id: second\n\nSECURITY\nSafe.\n",
+			heading:  "ICON\n",
+			wantErr:  "duplicate sections",
+		},
+		{
+			name:     "missing exact section",
+			document: "DESCRIPTION\nFAVICON\n  id: shadow\n\nSECURITY\nSafe.\n",
+			heading:  "ICON\n",
+			wantErr:  "missing section",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := generatedConnectorIconBlock(test.document, test.heading)
+			if test.wantErr != "" {
+				if err == nil {
+					t.Fatalf("generatedConnectorIconBlock() error = nil, want %q", test.wantErr)
+				}
+				if !strings.Contains(err.Error(), test.wantErr) {
+					t.Fatalf("generatedConnectorIconBlock() error = %q, want %q", err, test.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("generatedConnectorIconBlock() error = %v", err)
+			}
+			if got != test.want {
+				t.Fatalf("generatedConnectorIconBlock() = %q, want %q", got, test.want)
+			}
+		})
+	}
+}
+
 func corruptCatalogIcon(name string, corrupt func(*connectors.ConnectorIcon)) func(*testing.T, []byte) []byte {
 	return func(t *testing.T, data []byte) []byte {
 		t.Helper()

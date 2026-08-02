@@ -83,6 +83,14 @@ No direct PR #3590 R5/R6 response is in scope. PR #3590 remains parked until thi
 - Generate into a bounded worktree-local staging directory, transplant only icon objects/blocks while preserving all current non-icon bytes, then run one focused Go/docs-validation command.
 - Required skills: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-cli`, `golang-documentation`, `golang-structs-interfaces`, and `golang-design-patterns`.
 
+## Review repair round 5
+
+- F9 is a generated-output propagation defect: `website/data/connectors.generated.json` has the canonical website icon projection, but 230 downstream catalog icon objects, 14 connector-list icons, and 61 obsolete public SVG copies are stale. Regenerate those three bounded output surfaces, prove every non-icon catalog/list field is unchanged, and require a second generation run to be byte-stable.
+- F10 is an icon-section parsing defect: unanchored first-substring matching can select `FAVICON` or an embedded `## Icon` fragment and does not reject duplicate sections. Match headings only at exact line boundaries, require exactly one occurrence, and return deterministic missing/duplicate errors.
+- Add F10 regression cases before production edits. The active review-fix contract permits only one focused verification after all source and generated-output fixes, so the RED expectation is recorded without an interim test run.
+- Recheck `scripts/gsd doctor` and the required programming-loop probe; continue the recorded manual GSD fallback and `local_critical_path` execution because the adapter still lacks the command and subagents are prohibited in this review phase.
+- Required skills: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-cli`, `golang-documentation`, and `javascript-testing-patterns`.
+
 ## Integration ordering
 
 This child PR must land into the parent branch before PR #3590 is reconciled. After integration, rebase/reconcile PR #3590 so ownership reads only the canonical bare registry, permits the two exact docs catalog outputs, and includes positive/negative collision, orphan, generated-copy, and source-asset tests.

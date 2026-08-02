@@ -36,6 +36,17 @@ Review repair round 4 focused gate:
 go test ./internal/connectors ./internal/cli ./cmd/iconregistrygen -run 'Test(ConnectorIconRegistryProjectsCompleteMetadata|ConnectorIconMetadataOmitsAbsentOptionalFields|ValidateConnectorDocsRejectsStaleIconMetadata|BuildIconEntriesPreservesCuratedAttribution)$' && go run ./cmd/pm docs validate --connectors-dir docs/connectors
 ```
 
+Review repair round 5 focused gate:
+
+```bash
+node website/scripts/gen-connector-bundles.mjs
+node website/scripts/gen-connector-catalog.mjs
+node website/scripts/gen-connectors.mjs
+# Assert the first run changes only derived icon values/deletes, rerun all three generators, and require byte-stable outputs.
+go test ./internal/cli -run 'Test(GeneratedConnectorIconBlockRequiresExactUniqueHeading|ValidateConnectorDocsRejectsStaleIconMetadata)$'
+node --test website/scripts/icon-registry.test.mjs
+```
+
 ## Repository gates before integration
 
 ```bash
