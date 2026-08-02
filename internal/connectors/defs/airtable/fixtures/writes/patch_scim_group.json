@@ -2,13 +2,18 @@
   "record": {
     "id": "id_fixture",
     "schemas": [
-      "urn:ietf:params:scim:schemas:core:2.0:User"
+      "urn:ietf:params:scim:api:messages:2.0:PatchOp"
     ],
     "Operations": [
       {
-        "op": "replace",
-        "path": "active",
-        "value": "true"
+        "op": "add",
+        "path": "members",
+        "value": [
+          {
+            "value": "member_fixture",
+            "display": "Fixture Member"
+          }
+        ]
       }
     ]
   },
@@ -17,13 +22,18 @@
     "path": "/scim/v2/Groups/id_fixture",
     "body": {
       "schemas": [
-        "urn:ietf:params:scim:schemas:core:2.0:User"
+        "urn:ietf:params:scim:api:messages:2.0:PatchOp"
       ],
       "Operations": [
         {
-          "op": "replace",
-          "path": "active",
-          "value": "true"
+          "op": "add",
+          "path": "members",
+          "value": [
+            {
+              "value": "member_fixture",
+              "display": "Fixture Member"
+            }
+          ]
         }
       ]
     }
