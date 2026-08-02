@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_channel",
+  "type": "object",
+  "x-primary-key": [
+    "pm_record_id"
+  ],
+  "properties": {
+    "pm_record_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "ChannelArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Destinations": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "IngestionStatus": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "SourceConfig": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

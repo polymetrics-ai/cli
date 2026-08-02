@@ -5,8 +5,8 @@ import shutil
 from pathlib import Path
 
 # Generator for the scope-corrected 60-action CloudTrail ledger. The current
-# connector-local surface exposes only read streams that require no per-call
-# request fields; parameterized reads, direct reads, and writes are blocked.
+# connector-local surface exposes fixed read streams through connector-local
+# discovery/fan-out; direct reads and writes remain blocked.
 ROOT = Path(__file__).resolve().parents[3]
 # The script is stored under .planning/phases/aws-cloudtrail-parity-wave04/traces.
 if not (ROOT / 'internal/connectors').exists():
@@ -38,19 +38,13 @@ WRITES = [
     'StopEventDataStoreIngestion', 'StopImport', 'StopLogging', 'UpdateChannel', 'UpdateDashboard',
     'UpdateEventDataStore', 'UpdateTrail',
 ]
-PARAMETERIZED_READS = [
-    'GetChannel', 'GetDashboard', 'GetEventDataStore', 'GetEventSelectors', 'GetImport',
-    'GetInsightSelectors', 'GetResourcePolicy', 'GetTrail', 'GetTrailStatus',
-    'ListImportFailures', 'ListTags',
-]
-PARAMETERIZED_REQUIREMENTS = {
-    'GetInsightSelectors': ['EventDataStore or TrailName'],
+STREAM_READ_QUERY_OVERRIDES = {
+    'GetInsightSelectors': {'TrailName': 'trail-fixture'},
 }
-STREAMS = [a for a in ops if a not in DIRECT and a not in WRITES and a not in PARAMETERIZED_READS]
+STREAMS = [a for a in ops if a not in DIRECT and a not in WRITES]
 assert len(DIRECT) == 10, len(DIRECT)
 assert len(WRITES) == 31, len(WRITES)
-assert len(PARAMETERIZED_READS) == 11, len(PARAMETERIZED_READS)
-assert len(STREAMS) == 8, (len(STREAMS), STREAMS)
+assert len(STREAMS) == 19, (len(STREAMS), STREAMS)
 
 EVENT_FIELDS = [
     'eventTime','eventVersion','userIdentity','eventSource','eventName','awsRegion','sourceIPAddress','userAgent',
@@ -220,14 +214,14 @@ for name in ['metadata.json','spec.json','streams.json','writes.json','operation
 metadata = {
     'name': 'aws-cloudtrail',
     'display_name': 'AWS CloudTrail',
-    'description': 'Reads AWS CloudTrail configuration lists through fixed AWS JSON-RPC streams that need no per-call resource identifiers. Provider query/direct-read, parameterized read, and write/admin actions remain planned until safe shared forwarding exists.',
+    'description': 'Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime.',
     'integration_type': 'api',
     'release_stage': 'alpha',
     'capabilities': {'check': True, 'read': True, 'write': False, 'query': False, 'cdc': False, 'dynamic_schema': False},
     'batch': {'read_page_size': 50, 'write_batch_size': 1},
     'risk': {
-        'read': 'bounded AWS CloudTrail JSON-RPC reads that use fixed action names and require no per-call resource identifiers',
-        'write': 'blocked/planned: CloudTrail parameterized reads, provider query/direct-read operations, and write/admin actions require shared promoted-native forwarding before they can be safely exposed.',
+        'read': 'bounded AWS CloudTrail JSON-RPC reads using fixed action names, SigV4 authentication, and connector-local resource discovery for parameterized streams',
+        'write': 'blocked/planned: CloudTrail write/admin actions require shared promoted-native manifest, command-surface, validation, and dry-run forwarding before they can be safely exposed.',
         'approval': 'No CloudTrail writes are exposed in this scope-corrected connector surface; future writes must preserve plan -> preview -> approval -> execute.'
     },
     'docs_url': 'https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html'
@@ -305,17 +299,6 @@ json_dump(DEF/'operations.json', operations)
 
 # API surface rows in official action order.
 def blocked_operation(action: str):
-    if action in PARAMETERIZED_READS:
-        required = PARAMETERIZED_REQUIREMENTS.get(action) or [f['name'] for f in ops[action]['request_fields'] if f['required']]
-        return {
-            'model': 'direct_read',
-            'status': 'blocked',
-            'risk': 'medium',
-            'blocked_by_default': True,
-            'reason': 'Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: ' + ', '.join(required) + '.',
-            'source_url': source_url(action),
-            'notes': 'Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided.'
-        }
     if action in DIRECT:
         return {
             'model': 'direct_read',
@@ -351,7 +334,7 @@ api_surface = {
     'docs': 'https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html',
     'reviewed_at': '2026-07-31',
     'operation_ledger_version': 1,
-    'scope': 'Complete AWS CloudTrail API action inventory from the official Actions page. Scope-corrected surface implements only 8 ETL/read streams through the existing connector-local runtime because they do not require per-call request fields. The 10 provider query/direct-read actions, 11 parameterized read actions, and 31 write/admin actions are blocked/planned because their safe exposure requires shared promoted-native forwarding or a typed request-parameter boundary outside this connector-local slice. Event record fields remain payload schema evidence, not CDC operations.',
+    'scope': 'Complete AWS CloudTrail API action inventory from the official Actions page. Scope-corrected surface implements 19 ETL/read streams through the connector-local runtime using fixed action mappings and resource discovery/fan-out where an AWS read action requires identifiers. The 10 provider query/direct-read actions and 31 write/admin actions are blocked/planned because their safe exposure requires shared promoted-native forwarding outside this connector-local slice. Event record fields remain payload schema evidence, not CDC operations.',
     'endpoints': endpoints
 }
 json_dump(DEF/'api_surface.json', api_surface)
@@ -385,7 +368,8 @@ def response_body_for_stream(action: str):
 
 for action in STREAMS:
     stream = snake(action)
-    read_query = {f['name']: str(sample_value(f)) if not isinstance(sample_value(f), (dict, list)) else json.dumps(sample_value(f)) for f in ops[action]['request_fields'] if f['required']}
+    read_query = dict(STREAM_READ_QUERY_OVERRIDES.get(action, {}))
+    read_query.update({f['name']: str(sample_value(f)) if not isinstance(sample_value(f), (dict, list)) else json.dumps(sample_value(f)) for f in ops[action]['request_fields'] if f['required']})
     page = {'request': {'method': 'POST', 'path': '/', 'query': {}}, 'response': {'status': 200, 'body': response_body_for_stream(action)}}
     if read_query:
         page['read_query'] = read_query
@@ -395,14 +379,11 @@ for action in STREAMS:
 write_list = ', '.join(f'`{a}`' for a in WRITES)
 stream_list = ', '.join(f'`{snake(a)}`' for a in STREAMS)
 direct_list = ', '.join(f'`{a}`' for a in DIRECT)
-parameterized_list = ', '.join(f'`{a}`' for a in PARAMETERIZED_READS)
 docs = f"""# Overview
 
-AWS CloudTrail connector parity was audited from the official AWS CloudTrail API Reference Actions page. The scope-corrected bundle still enumerates all 60 official CloudTrail API actions exactly once, but only the 8 ETL/read stream actions that need no required per-call request fields are implemented and runtime-reachable in this connector-local slice. The 10 provider query/direct-read actions, 11 parameterized read actions, and 31 write/admin actions are recorded as blocked/planned in `api_surface.json` because they require shared promoted-native command-surface, manifest, validation, dry-run, operation-direct-read forwarding, or a typed request-parameter boundary that is outside this corrective head. The official CloudTrail event-record contents page documents event record version 1.11 and 31 top-level event fields; those fields are schema payload fields for LookupEvents, not CDC/changefeed operations.
+AWS CloudTrail connector parity was audited from the official AWS CloudTrail API Reference Actions page. The scope-corrected bundle still enumerates all 60 official CloudTrail API actions exactly once, and 19 ETL/read stream actions are implemented and runtime-reachable in this connector-local slice. Streams whose AWS read action requires an identifier use connector-local discovery/fan-out from the fixed list/describe streams rather than caller-supplied raw action/path/header/body input. The 10 provider query/direct-read actions and 31 write/admin actions are recorded as blocked/planned in `api_surface.json` because they require shared promoted-native command-surface, manifest, validation, dry-run, and operation-direct-read forwarding that was reverted from this branch. The official CloudTrail event-record contents page documents event record version 1.11 and 31 top-level event fields; those fields are schema payload fields for LookupEvents, not CDC/changefeed operations.
 
 Implemented readable streams: {stream_list}.
-
-Blocked/planned parameterized read operations: {parameterized_list}.
 
 Blocked/planned provider query operations: {direct_list}.
 
@@ -420,7 +401,7 @@ Optional config fields are `base_url` for local fixture endpoints, `page_size`, 
 
 ## Streams notes
 
-Every implemented stream uses a fixed AWS CloudTrail JSON-RPC action with SigV4 authentication and no raw action/path/header/body escape hatch. Paginated actions pass bounded `MaxResults` and follow `NextToken` until it is absent or `max_pages` is reached. Actions that require resource identifiers, query identifiers, import identifiers, tag resource lists, or other per-call request fields are blocked/planned until a safe typed boundary supplies those fields. The connector keeps `query=false` at the metadata layer; CloudTrail provider query operations are blocked/planned until shared runtime forwarding makes operation-direct reads visible safely.
+Every implemented stream uses a fixed AWS CloudTrail JSON-RPC action with SigV4 authentication and no raw action/path/header/body escape hatch. Paginated actions pass bounded `MaxResults` and follow `NextToken` until it is absent or `max_pages` is reached. Streams for resource-detail actions derive required identifiers through connector-local discovery/fan-out from `DescribeTrails`, `ListChannels`, `ListDashboards`, `ListEventDataStores`, and `ListImports`. The connector keeps `query=false` at the metadata layer; CloudTrail provider query operations are blocked/planned until shared runtime forwarding makes operation-direct reads visible safely.
 
 ## Write actions & risks
 
@@ -431,9 +412,9 @@ No CloudTrail reverse-ETL write actions are exposed by the scope-corrected runti
 - This work is fixture-only and local-test verified; it does not certify live AWS provider behavior.
 - CloudTrail event record fields are parsed as payload/schema fields where CloudTrail returns them, but they are not counted as CDC because AWS does not document a CloudTrail changefeed/subscription API in the audited sources.
 - Provider query direct reads are blocked/planned. They do not expose a generic CloudTrail Lake SQL runner.
-- Parameterized reads are blocked/planned until a typed command, fan-out, or config boundary can supply the required per-call request fields.
+- Resource-detail streams depend on the corresponding list/describe action returning identifiers; when no resources are discovered they emit no records.
 - Write/admin actions are blocked/planned. No CloudTrail write action is listed as executable in generated catalog/docs/help for this corrective head.
 """
 (DEF/'docs.md').write_text(docs)
 
-print('generated aws-cloudtrail bundle:', len(STREAMS), 'streams', len(PARAMETERIZED_READS) + len(DIRECT) + len(WRITES), 'blocked operations')
+print('generated aws-cloudtrail bundle:', len(STREAMS), 'streams', len(DIRECT) + len(WRITES), 'blocked operations')

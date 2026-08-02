@@ -21,7 +21,7 @@ func TestOperationLedgerCounts(t *testing.T) {
 	if got, want := len(bundle.Surface.Endpoints), 60; got != want {
 		t.Fatalf("api_surface rows = %d, want %d", got, want)
 	}
-	if got, want := len(bundle.Streams), 8; got != want {
+	if got, want := len(bundle.Streams), 19; got != want {
 		t.Fatalf("streams = %d, want %d", got, want)
 	}
 	if got, want := len(bundle.Operations), 0; got != want {
@@ -40,15 +40,15 @@ func TestOperationLedgerCounts(t *testing.T) {
 			blocked++
 		}
 	}
-	if got, want := coveredStreams, 8; got != want {
+	if got, want := coveredStreams, 19; got != want {
 		t.Fatalf("stream-covered operations = %d, want %d", got, want)
 	}
-	if got, want := blocked, 52; got != want {
+	if got, want := blocked, 41; got != want {
 		t.Fatalf("blocked/planned operations = %d, want %d", got, want)
 	}
 }
 
-func TestPublishedStreamsNeedNoRequiredRequestFields(t *testing.T) {
+func TestPublishedStreamsHaveClosedRuntimeDispatch(t *testing.T) {
 	published := map[string]bool{}
 	for _, stream := range cloudTrailPublishedStreams {
 		published[stream] = true
@@ -56,13 +56,9 @@ func TestPublishedStreamsNeedNoRequiredRequestFields(t *testing.T) {
 		if !ok {
 			t.Fatalf("published stream %s missing action", stream)
 		}
-		for _, field := range cloudTrailActionFields[action] {
-			if field.Required {
-				t.Fatalf("published stream %s action %s requires %s", stream, action, field.Name)
-			}
-		}
-		if alternatives := cloudTrailActionAnyOfRequiredFields[action]; len(alternatives) > 0 {
-			t.Fatalf("published stream %s action %s requires one of %s", stream, action, strings.Join(alternatives, " or "))
+		_, err := buildActionBodyFromStrings(action, nil, true)
+		if err != nil && !cloudTrailCanDeriveActionBody(action) {
+			t.Fatalf("published stream %s action %s has no default request body or derived body: %v", stream, action, err)
 		}
 	}
 	if len(cloudTrailStreamActions) != len(cloudTrailPublishedStreams) {
@@ -75,7 +71,7 @@ func TestPublishedStreamsNeedNoRequiredRequestFields(t *testing.T) {
 	}
 }
 
-func TestGetInsightSelectorsRequiresTypedRequestBoundary(t *testing.T) {
+func TestGetInsightSelectorsUsesTypedTrailNameBody(t *testing.T) {
 	if _, err := buildActionBodyFromStrings("GetInsightSelectors", nil, true); err == nil {
 		t.Fatal("GetInsightSelectors unexpectedly accepted an empty request body")
 	} else if !strings.Contains(err.Error(), "EventDataStore or TrailName") {
@@ -177,6 +173,78 @@ func TestNativeCloudTrailReadDispatchesStreamTarget(t *testing.T) {
 	}
 }
 
+func TestNativeCloudTrailReadDerivesRequiredStreamFields(t *testing.T) {
+	tests := []struct {
+		name         string
+		stream       string
+		detailAction string
+		field        string
+		response     string
+	}{
+		{
+			name:         "trail status uses discovered trail name",
+			stream:       "get_trail_status",
+			detailAction: "GetTrailStatus",
+			field:        "Name",
+			response:     `{"IsLogging":true}`,
+		},
+		{
+			name:         "insight selectors use discovered trail name",
+			stream:       "get_insight_selectors",
+			detailAction: "GetInsightSelectors",
+			field:        "TrailName",
+			response:     `{"InsightSelectors":[{"InsightType":"ApiCallRateInsight"}]}`,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var targets []string
+			var detailBody map[string]any
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				action := strings.TrimPrefix(r.Header.Get("X-Amz-Target"), cloudTrailTargetPrefix)
+				targets = append(targets, action)
+				var body map[string]any
+				if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+					t.Fatalf("decode body: %v", err)
+				}
+				w.Header().Set("Content-Type", "application/json")
+				switch action {
+				case "DescribeTrails":
+					if len(body) != 0 {
+						t.Fatalf("DescribeTrails body = %#v, want empty discovery request", body)
+					}
+					_, _ = w.Write([]byte(`{"trailList":[{"Name":"trail-fixture","TrailARN":"arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail"}]}`))
+				case tt.detailAction:
+					detailBody = body
+					_, _ = w.Write([]byte(tt.response))
+				default:
+					t.Fatalf("unexpected target %s", action)
+				}
+			}))
+			defer srv.Close()
+
+			c := Connector{Client: srv.Client()}
+			var records []connectors.Record
+			err := c.Read(context.Background(), connectors.ReadRequest{Stream: tt.stream, Config: fixtureRuntimeConfig(srv.URL)}, func(record connectors.Record) error {
+				records = append(records, record)
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Read: %v", err)
+			}
+			if got, want := strings.Join(targets, ","), "DescribeTrails,"+tt.detailAction; got != want {
+				t.Fatalf("targets = %s, want %s", got, want)
+			}
+			if got := detailBody[tt.field]; got != "trail-fixture" {
+				t.Fatalf("%s body = %#v, want trail-fixture", tt.detailAction, detailBody)
+			}
+			if len(records) != 1 || records[0]["operation"] != tt.detailAction {
+				t.Fatalf("records = %#v", records)
+			}
+		})
+	}
+}
+
 func TestNativeCloudTrailRejectsInvalidMaxPages(t *testing.T) {
 	tests := []struct {
 		name  string
@@ -217,17 +285,6 @@ func TestNativeCloudTrailRejectsInvalidMaxPages(t *testing.T) {
 
 func TestNativeCloudTrailRejectsBlockedReadStreams(t *testing.T) {
 	blocked := []string{
-		"get_channel",
-		"get_dashboard",
-		"get_event_data_store",
-		"get_event_selectors",
-		"get_import",
-		"get_insight_selectors",
-		"get_resource_policy",
-		"get_trail",
-		"get_trail_status",
-		"list_import_failures",
-		"list_tags",
 		"management_events",
 		"read_only_events",
 		"write_only_events",

@@ -1,7 +1,7 @@
 {
   "name": "aws-cloudtrail",
   "display_name": "AWS CloudTrail",
-  "description": "Reads AWS CloudTrail configuration lists through fixed AWS JSON-RPC streams that need no per-call resource identifiers. Provider query/direct-read, parameterized read, and write/admin actions remain planned until safe shared forwarding exists.",
+  "description": "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime.",
   "integration_type": "api",
   "release_stage": "alpha",
   "capabilities": {
@@ -17,8 +17,8 @@
     "write_batch_size": 1
   },
   "risk": {
-    "read": "bounded AWS CloudTrail JSON-RPC reads that use fixed action names and require no per-call resource identifiers",
-    "write": "blocked/planned: CloudTrail parameterized reads, provider query/direct-read operations, and write/admin actions require shared promoted-native forwarding before they can be safely exposed.",
+    "read": "bounded AWS CloudTrail JSON-RPC reads using fixed action names, SigV4 authentication, and connector-local resource discovery for parameterized streams",
+    "write": "blocked/planned: CloudTrail write/admin actions require shared promoted-native manifest, command-surface, validation, and dry-run forwarding before they can be safely exposed.",
     "approval": "No CloudTrail writes are exposed in this scope-corrected connector surface; future writes must preserve plan -> preview -> approval -> execute."
   },
   "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html"

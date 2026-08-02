@@ -3,7 +3,7 @@
   "docs": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
   "reviewed_at": "2026-07-31",
   "operation_ledger_version": 1,
-  "scope": "Complete AWS CloudTrail API action inventory from the official Actions page. Scope-corrected surface implements only 8 ETL/read streams through the existing connector-local runtime because they do not require per-call request fields. The 10 provider query/direct-read actions, 11 parameterized read actions, and 31 write/admin actions are blocked/planned because their safe exposure requires shared promoted-native forwarding or a typed request-parameter boundary outside this connector-local slice. Event record fields remain payload schema evidence, not CDC operations.",
+  "scope": "Complete AWS CloudTrail API action inventory from the official Actions page. Scope-corrected surface implements 19 ETL/read streams through the connector-local runtime using fixed action mappings and resource discovery/fan-out where an AWS read action requires identifiers. The 10 provider query/direct-read actions and 31 write/admin actions are blocked/planned because their safe exposure requires shared promoted-native forwarding outside this connector-local slice. Event record fields remain payload schema evidence, not CDC operations.",
   "endpoints": [
     {
       "method": "POST",
@@ -221,29 +221,17 @@
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:GetChannel",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: Channel.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetChannel.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "get_channel"
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:GetDashboard",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: DashboardId.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetDashboard.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "get_dashboard"
       }
     },
     {
@@ -254,55 +242,31 @@
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:GetEventDataStore",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: EventDataStore.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetEventDataStore.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "get_event_data_store"
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:GetEventSelectors",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: TrailName.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetEventSelectors.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "get_event_selectors"
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:GetImport",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: ImportId.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetImport.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "get_import"
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:GetInsightSelectors",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: EventDataStore or TrailName.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetInsightSelectors.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "get_insight_selectors"
       }
     },
     {
@@ -319,42 +283,24 @@
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:GetResourcePolicy",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: ResourceArn.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetResourcePolicy.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "get_resource_policy"
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:GetTrail",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: Name.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetTrail.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "get_trail"
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:GetTrailStatus",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: Name.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetTrailStatus.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "get_trail_status"
       }
     },
     {
@@ -379,16 +325,10 @@
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:ListImportFailures",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: ImportId.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListImportFailures.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "list_import_failures"
       }
     },
     {
@@ -445,16 +385,10 @@
       }
     },
     {
-      "method": "POST",
+      "method": "READ_POST",
       "path": "cloudtrail_api_action:ListTags",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail read action requires per-call request fields not supplied by the supported default ETL boundary: ResourceIdList.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListTags.html",
-        "notes": "Re-enable only with a typed stream command, fan-out, or config boundary; no raw AWS action/path/header/body escape hatch is provided."
+      "covered_by": {
+        "stream": "list_tags"
       }
     },
     {
