@@ -15262,11 +15262,6 @@
         "kind": "create"
       },
       {
-        "name": "submit_application_form",
-        "method": "POST",
-        "kind": "create"
-      },
-      {
         "name": "update_approval_definition",
         "method": "POST",
         "kind": "update"
@@ -15567,11 +15562,6 @@
         "kind": "delete"
       },
       {
-        "name": "interviewer_user_settings",
-        "method": "POST",
-        "kind": "custom"
-      },
-      {
         "name": "update_user_interviewer_settings",
         "method": "POST",
         "kind": "update"
@@ -15695,11 +15685,6 @@
         "name": "remove_interviewer_pool_user",
         "method": "POST",
         "kind": "delete"
-      },
-      {
-        "name": "generate_report",
-        "method": "POST",
-        "kind": "custom"
       }
     ],
     "cliSurface": {
