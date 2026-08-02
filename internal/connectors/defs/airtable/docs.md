@@ -205,7 +205,7 @@ Authentication uses Bearer tokens and the check endpoint `GET /v0/meta/bases`. S
 
 - `update_multiple_records`: PATCH `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `records`.
 
-- `create_records`: POST `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `create`; body `json`; path fields `none`; required `fields`.
+- `create_records`: POST `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `create`; body `json`; path fields `none`; required `records`.
 
 - `update_multiple_records_put`: PUT `/v0/{{ config.base_id }}/{{ config.table_id }}`; kind `update`; body `json`; path fields `none`; required `records`.
 
