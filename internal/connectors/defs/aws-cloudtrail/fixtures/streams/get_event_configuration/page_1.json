@@ -23,5 +23,8 @@
       "MaxEventSize": "fixture-max-event-size",
       "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail"
     }
+  },
+  "read_query": {
+    "TrailName": "trail-fixture"
   }
 }

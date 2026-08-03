@@ -46,12 +46,12 @@ Green criteria:
 - Focused native/hook/conformance checks and `make verify` pass without reintroducing shared command/direct/write forwarding.
 - The operation ledger and generated docs/catalog/help show 19 implemented streams, 0 executable direct reads, 0 executable writes, and 41 blocked/planned operations.
 
-Evidence after restoring shared command/direct/write files and the final manifest fix:
+Evidence after restoring shared command/direct/write files and reverting the manifest wrapper:
 
-- The final head keeps only bundle-backed promoted-native `Manifest()` forwarding for catalog/inspect truthfulness; CloudTrail command-surface, operation-direct-read, write-validation, and dry-run forwarding remain blocked/planned.
+- The final head keeps no shared-runtime change. The bundle-backed promoted-native `Manifest()` override was extracted into standalone foundation PR #3676 because it affects every bundle-based connector (~30 today) rather than aws-cloudtrail-owned surface, so this connector must not claim catalog/inspect manifest truthfulness it does not deliver. The resulting metadata-only manifest for promoted natives is a repo-wide gap that already exists on `main` and is not a regression from this connector or this revert. CloudTrail command-surface, operation-direct-read, write-validation, and dry-run forwarding remain blocked/planned.
 - `go test ./internal/connectors/native/aws-cloudtrail ./internal/connectors/hooks/aws-cloudtrail -count=1` passed.
 - `go test ./internal/connectors/conformance -run 'TestConformance/aws-cloudtrail' -count=1` passed.
 - `go run ./cmd/connectorgen validate internal/connectors/defs/aws-cloudtrail --json` failed because reverted `connectorgen` no longer treats a connector dir as a single bundle and instead checks nested `fixtures/` and `schemas/` as connector roots. Full `go run ./cmd/connectorgen validate internal/connectors/defs` is the final validator gate and passes.
 - `go run ./cmd/pm connectors catalog --json` reports AWS CloudTrail as read-only with 19 streams and 0 write actions.
-- `go run ./cmd/pm connectors inspect aws-cloudtrail --json` reports runtime metadata `write=false` and a bundle-backed manifest with 19 streams and 0 write actions.
+- `go run ./cmd/pm connectors inspect aws-cloudtrail --json` reports runtime metadata `write=false` and 0 write actions; it does not enumerate the 19 streams, because bundle-backed manifest forwarding is deferred to #3676. `pm connectors catalog --json` is the bundle-backed check for the 19-stream surface.
 - `go run ./cmd/pm aws-cloudtrail --help` fails with `help topic "aws-cloudtrail" not found`, which is now the truthful help surface because `cli_surface.json` was removed.

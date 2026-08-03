@@ -43,7 +43,7 @@ func isCollectionAction(action string) bool {
 }
 
 func firstArray(decoded map[string]any) ([]any, bool) {
-	preferred := []string{"trailList", "Events", "Channels", "Dashboards", "EventDataStores", "Imports", "PublicKeys", "Queries", "TagsList", "ResourceTagList"}
+	preferred := []string{"trailList", "Trails", "Events", "Channels", "Dashboards", "EventDataStores", "Failures", "Imports", "PublicKeys", "PublicKeyList", "Queries", "TagsList", "ResourceTagList"}
 	for _, key := range preferred {
 		if arr, ok := decoded[key].([]any); ok {
 			return arr, true

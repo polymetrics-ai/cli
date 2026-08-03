@@ -72,12 +72,7 @@ func TestPublishedStreamsHaveClosedRuntimeDispatch(t *testing.T) {
 	}
 }
 
-func TestGetInsightSelectorsUsesTypedRequestBody(t *testing.T) {
-	if _, err := buildActionBodyFromStrings("GetInsightSelectors", nil, true); err == nil {
-		t.Fatal("GetInsightSelectors unexpectedly accepted an empty request body")
-	} else if !strings.Contains(err.Error(), "EventDataStore or TrailName") {
-		t.Fatalf("GetInsightSelectors error = %v, want alternate request field requirement", err)
-	}
+func TestTrailScopedActionsUseTypedRequestBody(t *testing.T) {
 	tests := []struct {
 		name  string
 		raw   map[string]string
@@ -87,14 +82,23 @@ func TestGetInsightSelectorsUsesTypedRequestBody(t *testing.T) {
 		{name: "trail", raw: map[string]string{"TrailName": "trail-fixture"}, field: "TrailName", want: "trail-fixture"},
 		{name: "event data store", raw: map[string]string{"EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"}, field: "EventDataStore", want: "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			body, err := buildActionBodyFromStrings("GetInsightSelectors", tt.raw, true)
-			if err != nil {
-				t.Fatalf("GetInsightSelectors with %s: %v", tt.field, err)
+	for _, action := range []string{"GetEventConfiguration", "GetInsightSelectors"} {
+		t.Run(action, func(t *testing.T) {
+			if _, err := buildActionBodyFromStrings(action, nil, true); err == nil {
+				t.Fatalf("%s unexpectedly accepted an empty request body", action)
+			} else if !strings.Contains(err.Error(), "EventDataStore or TrailName") {
+				t.Fatalf("%s error = %v, want alternate request field requirement", action, err)
 			}
-			if got := body[tt.field]; got != tt.want {
-				t.Fatalf("%s = %#v, want %q", tt.field, got, tt.want)
+			for _, tt := range tests {
+				t.Run(tt.name, func(t *testing.T) {
+					body, err := buildActionBodyFromStrings(action, tt.raw, true)
+					if err != nil {
+						t.Fatalf("%s with %s: %v", action, tt.field, err)
+					}
+					if got := body[tt.field]; got != tt.want {
+						t.Fatalf("%s = %#v, want %q", tt.field, got, tt.want)
+					}
+				})
 			}
 		})
 	}
@@ -225,6 +229,15 @@ func TestNativeCloudTrailReadDerivesRequiredStreamFields(t *testing.T) {
 			wantTargets:  "DescribeTrails,ListEventDataStores,GetInsightSelectors",
 			response:     `{"InsightSelectors":[{"InsightType":"ApiCallRateInsight"}]}`,
 		},
+		{
+			name:         "event configuration uses discovered trail ARN",
+			stream:       "get_event_configuration",
+			detailAction: "GetEventConfiguration",
+			field:        "TrailName",
+			wantValue:    trailARN,
+			wantTargets:  "DescribeTrails,ListEventDataStores,GetEventConfiguration",
+			response:     `{"MaxEventSize":"Standard"}`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -245,7 +258,7 @@ func TestNativeCloudTrailReadDerivesRequiredStreamFields(t *testing.T) {
 					}
 					_, _ = w.Write([]byte(`{"trailList":[{"Name":"trail-fixture","TrailARN":"` + trailARN + `"}]}`))
 				case "ListEventDataStores":
-					if tt.detailAction != "GetInsightSelectors" {
+					if !strings.Contains(tt.wantTargets, "ListEventDataStores") {
 						t.Fatalf("unexpected target %s", action)
 					}
 					_, _ = w.Write([]byte(`{"EventDataStores":[]}`))
@@ -625,6 +638,35 @@ func TestNativeCloudTrailDirectAndWritesAreBlockedInScopeCorrectedSurface(t *tes
 	}
 	if got, err := c.Write(context.Background(), connectors.WriteRequest{Action: "start_logging"}, []connectors.Record{{"Name": "trail-fixture"}}); err == nil || got.RecordsFailed != 1 {
 		t.Fatalf("Write result = %+v err = %v, want blocked failure", got, err)
+	}
+}
+
+func TestCollectionActionsUseDocumentedResponseArrays(t *testing.T) {
+	tests := []struct {
+		action string
+		key    string
+	}{
+		{action: "DescribeTrails", key: "trailList"},
+		{action: "ListChannels", key: "Channels"},
+		{action: "ListDashboards", key: "Dashboards"},
+		{action: "ListEventDataStores", key: "EventDataStores"},
+		{action: "ListImportFailures", key: "Failures"},
+		{action: "ListImports", key: "Imports"},
+		{action: "ListPublicKeys", key: "PublicKeyList"},
+		{action: "ListTags", key: "ResourceTagList"},
+		{action: "ListTrails", key: "Trails"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.action, func(t *testing.T) {
+			decoded := map[string]any{
+				tt.key:           []any{map[string]any{"Name": "documented"}},
+				"UnrelatedArray": []any{map[string]any{"Name": "decoy"}},
+			}
+			records := recordsForAction(tt.action, decoded)
+			if len(records) != 1 || records[0]["Name"] != "documented" {
+				t.Fatalf("records = %#v, want the %s array", records, tt.key)
+			}
+		})
 	}
 }
 

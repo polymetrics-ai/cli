@@ -2,17 +2,15 @@
 
 ```text
 NAME
-  aws-cloudtrail - AWS CloudTrail
+  pm connectors inspect aws-cloudtrail - AWS CloudTrail connector manual
 
 SYNOPSIS
-  pm credentials add <name> --connector aws-cloudtrail --config aws_region_name=<region> --from-env aws_key_id=AWS_ACCESS_KEY_ID --from-env aws_secret_key=AWS_SECRET_ACCESS_KEY
-  pm etl catalog --connector aws-cloudtrail --credential <name> --json
-  pm etl read --connector aws-cloudtrail --credential <name> --stream <stream> --json
+  pm connectors inspect aws-cloudtrail
+  pm connectors inspect aws-cloudtrail --json
+  pm credentials add <name> --connector aws-cloudtrail [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC read streams.
-
-  Current status: 60 official CloudTrail API actions remain inventoried, 19 read-stream actions are exposed as executable connector-local runtime behavior, and the 10 provider query/direct-read actions plus 31 write/admin actions are blocked/planned until typed operation/write metadata and shared promoted-native command surfaces, validation, dry-run previews, and operation-direct reads are available safely.
+  Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; CloudTrail event and Insights record reads are blocked/planned. See the connector docs migration note.
 
 ICON
   asset: icons/aws-cloudtrail.svg
@@ -24,51 +22,100 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  Store AWS credentials with pm credentials. Use --from-env or --value-stdin only; never put AWS secret values in chat, shell history, docs, or issue comments.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  aws_region_name (required config)
-  base_url (optional fixture/local endpoint)
-  page_size (optional)
-  max_pages (optional)
-  mode=fixture (optional credential-free local tests)
-  aws_key_id (required secret)
-  aws_secret_key (required secret)
+  aws_region_name
+  base_url
+  max_pages
+  mode
+  page_size
+  aws_key_id (secret)
+  aws_secret_key (secret)
 
 ETL STREAMS
-  describe_trails
-  get_channel
-  get_dashboard
-  get_event_configuration
-  get_event_data_store
-  get_event_selectors
-  get_import
-  get_insight_selectors
-  get_resource_policy
-  get_trail
-  get_trail_status
-  list_channels
-  list_dashboards
-  list_event_data_stores
-  list_import_failures
-  list_imports
-  list_public_keys
-  list_tags
-  list_trails
+  describe_trails:
+    primary key: pm_record_id
+    fields: CloudWatchLogsLogGroupArn(), CloudWatchLogsRoleArn(), HasCustomEventSelectors(), HasInsightSelectors(), HomeRegion(), IncludeGlobalServiceEvents(), IsMultiRegionTrail(), IsOrganizationTrail(), KmsKeyId(), LogFileValidationEnabled(), Name(), S3BucketName(), S3KeyPrefix(), SnsTopicARN(), SnsTopicName(), TrailARN(), operation(), pm_record_id()
+  get_channel:
+    primary key: pm_record_id
+    fields: ChannelArn(), Destinations(), IngestionStatus(), Name(), Source(), SourceConfig(), operation(), pm_record_id()
+  get_dashboard:
+    primary key: pm_record_id
+    fields: CreatedTimestamp(), DashboardArn(), LastRefreshFailureReason(), LastRefreshId(), RefreshSchedule(), Status(), TerminationProtectionEnabled(), Type(), UpdatedTimestamp(), Widgets(), operation(), pm_record_id()
+  get_event_configuration:
+    primary key: pm_record_id
+    fields: AggregationConfigurations(), ContextKeySelectors(), EventDataStoreArn(), MaxEventSize(), TrailARN(), operation(), pm_record_id()
+  get_event_data_store:
+    primary key: pm_record_id
+    fields: AdvancedEventSelectors(), BillingMode(), CreatedTimestamp(), EventDataStoreArn(), FederationRoleArn(), FederationStatus(), KmsKeyId(), MultiRegionEnabled(), Name(), OrganizationEnabled(), PartitionKeys(), RetentionPeriod(), Status(), TerminationProtectionEnabled(), UpdatedTimestamp(), operation(), pm_record_id()
+  get_event_selectors:
+    primary key: pm_record_id
+    fields: AdvancedEventSelectors(), EventSelectors(), TrailARN(), operation(), pm_record_id()
+  get_import:
+    primary key: pm_record_id
+    fields: CreatedTimestamp(), Destinations(), EndEventTime(), ImportId(), ImportSource(), ImportStatistics(), ImportStatus(), StartEventTime(), UpdatedTimestamp(), operation(), pm_record_id()
+  get_insight_selectors:
+    primary key: pm_record_id
+    fields: EventDataStoreArn(), InsightSelectors(), InsightsDestination(), TrailARN(), operation(), pm_record_id()
+  get_resource_policy:
+    primary key: pm_record_id
+    fields: DelegatedAdminResourcePolicy(), ResourceArn(), ResourcePolicy(), operation(), pm_record_id()
+  get_trail:
+    primary key: pm_record_id
+    fields: Trail(), operation(), pm_record_id()
+  get_trail_status:
+    primary key: pm_record_id
+    fields: IsLogging(), LatestCloudWatchLogsDeliveryError(), LatestCloudWatchLogsDeliveryTime(), LatestDeliveryAttemptSucceeded(), LatestDeliveryAttemptTime(), LatestDeliveryError(), LatestDeliveryTime(), LatestDigestDeliveryError(), LatestDigestDeliveryTime(), LatestNotificationAttemptSucceeded(), LatestNotificationAttemptTime(), LatestNotificationError(), LatestNotificationTime(), StartLoggingTime(), StopLoggingTime(), TimeLoggingStarted(), TimeLoggingStopped(), operation(), pm_record_id()
+  list_channels:
+    primary key: pm_record_id
+    fields: ChannelArn(), Destinations(), Name(), Source(), SourceConfig(), operation(), pm_record_id()
+  list_dashboards:
+    primary key: pm_record_id
+    fields: DashboardArn(), DashboardId(), Name(), RefreshSchedule(), Status(), Type(), Widgets(), operation(), pm_record_id()
+  list_event_data_stores:
+    primary key: pm_record_id
+    fields: AdvancedEventSelectors(), BillingMode(), CreatedTimestamp(), EventDataStoreArn(), KmsKeyId(), MultiRegionEnabled(), Name(), OrganizationEnabled(), RetentionPeriod(), Status(), TerminationProtectionEnabled(), UpdatedTimestamp(), operation(), pm_record_id()
+  list_import_failures:
+    primary key: pm_record_id
+    fields: ErrorMessage(), ErrorType(), LastUpdatedTime(), Location(), Status(), operation(), pm_record_id()
+  list_imports:
+    primary key: pm_record_id
+    fields: CreatedTimestamp(), Destinations(), EndEventTime(), ImportId(), ImportStatus(), StartEventTime(), UpdatedTimestamp(), operation(), pm_record_id()
+  list_public_keys:
+    primary key: pm_record_id
+    fields: Fingerprint(), ValidityEndTime(), ValidityStartTime(), Value(), operation(), pm_record_id()
+  list_tags:
+    primary key: pm_record_id
+    fields: ResourceId(), TagsList(), operation(), pm_record_id()
+  list_trails:
+    primary key: pm_record_id
+    fields: HomeRegion(), Name(), TrailARN(), operation(), pm_record_id()
 
-BLOCKED / PLANNED OPERATIONS
-  Provider query/direct-read actions blocked: CancelQuery, DescribeQuery, GenerateQuery, GetQueryResults, ListInsightsData, ListInsightsMetricData, ListQueries, LookupEvents, SearchSampleQueries, StartQuery.
-
-  Write/admin actions blocked: AddTags, CreateChannel, CreateDashboard, CreateEventDataStore, CreateTrail, DeleteChannel, DeleteDashboard, DeleteEventDataStore, DeleteResourcePolicy, DeleteTrail, DeregisterOrganizationDelegatedAdmin, DisableFederation, EnableFederation, PutEventConfiguration, PutEventSelectors, PutInsightSelectors, PutResourcePolicy, RegisterOrganizationDelegatedAdmin, RemoveTags, RestoreEventDataStore, StartDashboardRefresh, StartEventDataStoreIngestion, StartImport, StartLogging, StopEventDataStoreIngestion, StopImport, StopLogging, UpdateChannel, UpdateDashboard, UpdateEventDataStore, UpdateTrail.
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  Read streams use fixed AWS CloudTrail JSON-RPC action names and SigV4 authentication. Resource-detail streams derive identifiers through connector-local discovery/fan-out; no raw AWS action, path, header, body, shell, file, SQL, or generic HTTP escape hatch is exposed.
+  read risk: bounded AWS CloudTrail JSON-RPC reads using fixed action names, SigV4 authentication, and connector-local resource discovery for parameterized streams
+  write risk: blocked/planned: CloudTrail write/admin actions require typed write metadata plus shared promoted-native command-surface, validation, and dry-run forwarding before they can be safely exposed.
+  approval: No CloudTrail writes are exposed in the current connector surface; future writes must preserve plan -> preview -> approval -> execute.
+  Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
-  No CloudTrail write action is executable in the current connector surface. Future write enablement must preserve plan -> preview -> approval -> execute plus destructive confirmation metadata.
+EXAMPLES
+  # Inspect as a manual
+  pm connectors inspect aws-cloudtrail
+
+  # Inspect as structured JSON
+  pm connectors inspect aws-cloudtrail --json
 
 AGENT WORKFLOW
-  1. Inspect metadata with pm connectors inspect aws-cloudtrail --json; this does not read credentials.
-  2. Add credentials from environment variables or stdin only.
-  3. Use pm etl catalog/read/run for the 19 implemented read streams.
-  4. Treat provider query/direct-read commands and all write/admin actions as blocked/planned until a shared-runtime forwarding slice lands.
+  - Run pm connectors inspect aws-cloudtrail before creating credentials or plans.
+  - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+  - Never ask the user to paste secret values into chat.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+
 ```

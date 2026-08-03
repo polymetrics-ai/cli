@@ -9779,7 +9779,7 @@
   {
     "name": "aws-cloudtrail",
     "display_name": "AWS CloudTrail",
-    "description": "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime.",
+    "description": "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; CloudTrail event and Insights record reads are blocked/planned. See the connector docs migration note.",
     "integration_type": "api",
     "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
     "release_stage": "alpha",

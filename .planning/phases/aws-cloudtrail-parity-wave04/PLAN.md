@@ -86,7 +86,7 @@ Plan:
 
 Final head note:
 
-- The later manifest-fix commit keeps a narrow `internal/connectors/native/nativeset/promoted.go` wrapper so promoted-native connectors expose bundle-backed `Manifest()` data for catalog/inspect truthfulness. It does not re-enable CloudTrail command-surface, operation-direct-read, write-validation, dry-run, or generic request forwarding.
+- The later manifest-fix commit that added a bundle-backed `Manifest()` override to the shared `internal/connectors/native/nativeset/promoted.go` wrapper is reverted on this branch and extracted into standalone foundation PR #3676. That wrapper is shared by every `withBundleDefinition`-wrapped connector (~30 today), so it is not aws-cloudtrail-owned surface and must not be claimed as part of this connector's delivery. Until #3676 merges, promoted natives — including this one — expose a metadata-only manifest to `pm connectors inspect`; that gap is repo-wide and pre-existing on `main`, not introduced here. Bundle-backed catalog and website data are unaffected.
 
 Shared-runtime dependency documented by this correction:
 

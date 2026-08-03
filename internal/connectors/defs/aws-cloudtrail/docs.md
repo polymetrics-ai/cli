@@ -8,6 +8,20 @@ Blocked/planned provider query operations: `CancelQuery`, `DescribeQuery`, `Gene
 
 Blocked/planned write/admin operations: `AddTags`, `CreateChannel`, `CreateDashboard`, `CreateEventDataStore`, `CreateTrail`, `DeleteChannel`, `DeleteDashboard`, `DeleteEventDataStore`, `DeleteResourcePolicy`, `DeleteTrail`, `DeregisterOrganizationDelegatedAdmin`, `DisableFederation`, `EnableFederation`, `PutEventConfiguration`, `PutEventSelectors`, `PutInsightSelectors`, `PutResourcePolicy`, `RegisterOrganizationDelegatedAdmin`, `RemoveTags`, `RestoreEventDataStore`, `StartDashboardRefresh`, `StartEventDataStoreIngestion`, `StartImport`, `StartLogging`, `StopEventDataStoreIngestion`, `StopImport`, `StopLogging`, `UpdateChannel`, `UpdateDashboard`, `UpdateEventDataStore`, `UpdateTrail`.
 
+## Breaking change and migration
+
+The earlier CloudTrail connector exposed four `LookupEvents`-backed event streams: `management_events`, `read_only_events`, `write_only_events`, and `console_logins`. None of them is an executable read stream in this native implementation, and their schemas are removed. Existing ETL connections that name one of them now fail with `aws-cloudtrail stream <name> not found`, and the incremental `EventTime` cursor those streams provided is gone; all 19 current streams are full-refresh.
+
+`LookupEvents` is now classified in the blocked/planned provider query/direct-read lane in `api_surface.json`, together with `ListInsightsData` and `ListInsightsMetricData`, so CloudTrail event and Insights record reads are not available from this connector at all until that lane is enabled.
+
+There is no drop-in replacement for event-record ETL. The typed CloudTrail operations this connector does implement read configuration and resource metadata, not event records:
+
+- Trail inventory and delivery state: `describe_trails`, `list_trails`, `get_trail`, `get_trail_status`.
+- What a trail or event data store is configured to capture: `get_event_selectors`, `get_insight_selectors`, `get_event_configuration`.
+- Lake and delivery resources: `list_event_data_stores`, `get_event_data_store`, `list_channels`, `get_channel`, `list_imports`, `get_import`, `list_import_failures`.
+
+Until the query/direct-read lane lands, read CloudTrail event records through an AWS-native path (CloudTrail Lake queries, an S3 log-delivery bucket, or CloudWatch Logs) rather than through this connector.
+
 ## Auth setup
 
 Use `pm credentials add <name> --connector aws-cloudtrail` and provide secrets only from environment variables or stdin:
