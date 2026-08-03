@@ -168,6 +168,41 @@ func TestValidatePRRejectsCanonicalIssueSectionWithoutCheckpointHeading(t *testi
 	}
 }
 
+func TestValidatePRIgnoresIssueLinksAfterCanonicalCheckpointSection(t *testing.T) {
+	tests := []struct {
+		name string
+		body string
+	}{
+		{name: "LF", body: unvalidatedCheckpointBodyWithTrailingSection()},
+		{name: "CRLF", body: strings.ReplaceAll(unvalidatedCheckpointBodyWithTrailingSection(), "\n", "\r\n")},
+		{name: "GitHub-indented trailing heading", body: strings.Replace(unvalidatedCheckpointBodyWithTrailingSection(), "\n## Later notes", "\n  ## Later notes", 1)},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := ValidatePR("chore(airtable): stage unvalidated parity checkpoint", tt.body)
+			if !result.OK {
+				t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+			}
+
+			want := []int{3070, 3071, 3072, 3073, 3074, 3075, 3076, 3077}
+			if len(result.Issues) != len(want) {
+				t.Fatalf("ValidatePR() issues = %#v, want %v", result.Issues, want)
+			}
+			for i, number := range want {
+				if result.Issues[i].Number != number {
+					t.Fatalf("ValidatePR() issues = %#v, want issue %d at index %d", result.Issues, number, i)
+				}
+			}
+			for _, ref := range result.Issues {
+				if ref.Number == 9001 {
+					t.Fatalf("ValidatePR() harvested issue 9001 from the section after the canonical issue links, issues = %#v", result.Issues)
+				}
+			}
+		})
+	}
+}
+
 func TestValidatePRAllowsLetteredDeliveryIssueMigrationIntent(t *testing.T) {
 	body := "Implement the focused connector-boundary Issue B migration on branch refactor/connector-engine-policy-migration: remove GitHub-specific shared runtime policy names."
 	result := ValidatePR("feat(connectors): genericize repository read policies", body)
@@ -314,6 +349,15 @@ func unvalidatedCheckpointBody() string {
 		"- https://github.com/polymetrics-ai/cli/issues/3074",
 		"- https://github.com/polymetrics-ai/cli/issues/3075",
 		"- https://github.com/polymetrics-ai/cli/issues/3076",
+		"",
+	}, "\n")
+}
+
+func unvalidatedCheckpointBodyWithTrailingSection() string {
+	return unvalidatedCheckpointBody() + strings.Join([]string{
+		"## Later notes outside the task record",
+		"",
+		"- https://github.com/polymetrics-ai/cli/issues/9001",
 		"",
 	}, "\n")
 }
