@@ -12,12 +12,14 @@ import (
 // bcharleson/linkedincli's own defect ("--li-at <cookie> / --jsessionid
 // <cookie> put a live session token in shell history and in ps output").
 // internal/browserauth/no_argv_credentials_test.go proves that library has
-// no argv-parsing capability at all; this half proves the boundary at the
-// ONE place in this codebase where a --key value flag's value is actually
-// read: parsedFlags.first (parse.go). pm's flag parser (parseFlags) is
-// fully generic — it accepts any --key value pair with no allow-list — so
-// the only enforceable guarantee is that no call site ever reads a flag
-// name shaped like a raw credential value. The forbidden list below is the
+// no argv-parsing capability at all; this half proves the boundary at both
+// places in this codebase where a --key value flag's value is actually
+// read: parsedFlags.first (parse.go) and direct parsedFlags.values[...] map
+// indexing, which roughly twenty-five call sites use instead. pm's flag
+// parser (parseFlags) is fully generic — it accepts any --key value pair
+// with no allow-list — so the only enforceable guarantee is that no call
+// site ever reads a flag name shaped like a raw credential value, by
+// either route. The forbidden list below is the
 // exact session material the dual-mechanism connector plan names per
 // provider (report §3.4: reddit_session/modhash, auth_token/ct0,
 // li_at/JSESSIONID) plus the generic OAuth/session-secret vocabulary, so a
@@ -30,7 +32,7 @@ import (
 // this PR's own --accept-risk <sha256-of-public-warning-text> all stay
 // clear of every forbidden name below.
 func TestNoSecretShapedFlagIsEverRead(t *testing.T) {
-	forbidden := regexp.MustCompile(`(?i)\.first\(\s*"(` + strings.Join([]string{
+	names := strings.Join([]string{
 		"password",
 		"li_at", "li-at",
 		"jsessionid",
@@ -44,7 +46,9 @@ func TestNoSecretShapedFlagIsEverRead(t *testing.T) {
 		"client_secret", "client-secret",
 		"cookie",
 		"csrf_token", "csrf-token",
-	}, "|") + `)"\s*\)`)
+	}, "|")
+	forbidden := regexp.MustCompile(`(?i)(\.first\(\s*"(` + names + `)"\s*\)` +
+		`|\.values\[\s*"(` + names + `)"\s*\])`)
 
 	err := filepath.WalkDir(".", func(path string, d os.DirEntry, walkErr error) error {
 		if walkErr != nil {

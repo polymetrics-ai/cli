@@ -179,3 +179,11 @@ func TestMechanismUnknownKindRejected(t *testing.T) {
 		t.Fatalf("Load error = %v, want a mechanism kind complaint", err)
 	}
 }
+
+func TestMechanismOfficialAPIRequiresSanctioned(t *testing.T) {
+	meta := strings.Replace(validMetadata("acme"), `"capabilities"`, `"mechanism": { "kind": "official_api", "sanctioned_by_provider": false }, "capabilities"`, 1)
+	_, err := Load(bundleFSWithMetadata("acme", meta), "acme")
+	if err == nil || !strings.Contains(err.Error(), "sanctioned_by_provider") {
+		t.Fatalf("Load error = %v, want a sanctioned_by_provider complaint", err)
+	}
+}

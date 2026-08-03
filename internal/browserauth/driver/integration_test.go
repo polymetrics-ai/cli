@@ -42,10 +42,7 @@ func TestSessionCapturesRealBrowserCookies(t *testing.T) {
 	}
 	defer func() { _ = session.Close() }()
 
-	if err := session.Navigate(ctx, server.URL); err != nil {
-		t.Fatalf("Navigate() error = %v", err)
-	}
-
+	// No explicit Navigate: New navigates to Config.LoginURL itself.
 	if err := session.WaitFor(ctx, 10*time.Second, func(snap driver.Snapshot) bool {
 		return snap.Cookies["session_token"] != ""
 	}); err != nil {

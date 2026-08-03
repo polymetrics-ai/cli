@@ -152,7 +152,10 @@ func (v *Vault) DeleteBlob(ctx context.Context, ns Namespace) error {
 }
 
 // List returns every Namespace stored for connector, across all profiles and
-// kinds, sorted by profile then kind.
+// kinds, sorted by profile then kind. Each logical namespace appears exactly
+// once no matter how many of its backing files exist — a (profile, kind) that
+// holds both a credential and a blob is one Namespace, and callers such as
+// RotateKey already probe both extensions per entry themselves.
 func (v *Vault) List(ctx context.Context, connector string) ([]Namespace, error) {
 	if err := ctx.Err(); err != nil {
 		return nil, err
@@ -170,6 +173,7 @@ func (v *Vault) List(ctx context.Context, connector string) ([]Namespace, error)
 	}
 
 	var out []Namespace
+	seen := make(map[Namespace]bool)
 	for _, p := range profiles {
 		if !p.IsDir() {
 			continue
@@ -183,12 +187,21 @@ func (v *Vault) List(ctx context.Context, connector string) ([]Namespace, error)
 				continue
 			}
 			name := e.Name()
+			var kind string
 			switch {
 			case strings.HasSuffix(name, credentialExt):
-				out = append(out, Namespace{Connector: connector, Profile: p.Name(), Kind: strings.TrimSuffix(name, credentialExt)})
+				kind = strings.TrimSuffix(name, credentialExt)
 			case strings.HasSuffix(name, blobExt):
-				out = append(out, Namespace{Connector: connector, Profile: p.Name(), Kind: strings.TrimSuffix(name, blobExt)})
+				kind = strings.TrimSuffix(name, blobExt)
+			default:
+				continue
 			}
+			ns := Namespace{Connector: connector, Profile: p.Name(), Kind: kind}
+			if seen[ns] {
+				continue
+			}
+			seen[ns] = true
+			out = append(out, ns)
 		}
 	}
 	sort.Slice(out, func(i, j int) bool {
