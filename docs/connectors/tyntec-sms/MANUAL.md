@@ -52,6 +52,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   send_message:
     endpoint: POST sms/v1/messages
+    required fields: to, from, text
     risk: sends a billable SMS message to the recipient phone number and may notify an external user
 
 SECURITY

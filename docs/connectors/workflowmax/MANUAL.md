@@ -60,6 +60,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a WorkflowMax client record; approval required
   create_job:
     endpoint: POST /v2/jobs
+    required fields: clientUUID, jobName, statusUUID, startDate, dueDate, priority
     risk: creates a WorkflowMax job; approval required
   delete_job:
     endpoint: DELETE /v2/jobs/{{ record.uuid }}
@@ -67,6 +68,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a WorkflowMax job; approval required
   create_client_contact:
     endpoint: POST /v2/clients/contacts
+    required fields: firstName
     risk: creates a WorkflowMax client-contact record (not attached to any client until linked); approval required
   update_client_contact:
     endpoint: PUT /v2/clients/contacts/{{ record.uuid }}

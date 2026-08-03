@@ -74,6 +74,7 @@ Reads Squarespace orders, products, inventory, profiles, transactions, store pag
 
 - create_webhook_subscription:
   - endpoint: POST /webhook_subscriptions
+  - required fields: endpointUrl
   - risk: registers a new HTTPS endpoint to receive live order/contact/address event notifications; low-risk external mutation, no approval required
 - delete_webhook_subscription:
   - endpoint: DELETE /webhook_subscriptions/{{ record.id }}

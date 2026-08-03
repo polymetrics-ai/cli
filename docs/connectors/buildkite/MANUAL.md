@@ -69,6 +69,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_pipeline:
     endpoint: POST /organizations/{{ config.organization }}/pipelines
+    required fields: name, cluster_id, repository
     risk: creates a new CI/CD pipeline scoped to a cluster and repository; low-risk external mutation, no approval required
   update_pipeline:
     endpoint: PATCH /organizations/{{ config.organization }}/pipelines/{{ record.slug }}
@@ -88,7 +89,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a pipeline and its build history; irreversible
   create_build:
     endpoint: POST /organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds
-    required fields: pipeline_slug
+    required fields: pipeline_slug, commit, branch
     risk: immediately triggers a new CI/CD build on the target pipeline/branch; consumes agent capacity and may run arbitrary pipeline-defined commands
   cancel_build:
     endpoint: PUT /organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds/{{ record.number }}/cancel
@@ -100,7 +101,7 @@ REVERSE ETL ACTIONS
     risk: triggers a full re-run of a completed build on new agent capacity; may run arbitrary pipeline-defined commands again
   create_annotation:
     endpoint: POST /organizations/{{ config.organization }}/pipelines/{{ record.pipeline_slug }}/builds/{{ record.build_number }}/annotations
-    required fields: pipeline_slug, build_number
+    required fields: pipeline_slug, build_number, body
     risk: posts a visible HTML/Markdown annotation onto a build's detail page; low-risk external mutation, no approval required
   retry_job:
     endpoint: PUT /organizations/{{ config.organization }}/jobs/{{ record.job_id }}/retry
@@ -127,6 +128,7 @@ REVERSE ETL ACTIONS
     risk: resumes a previously paused agent so it can pick up new jobs again
   create_team:
     endpoint: POST /organizations/{{ config.organization }}/teams
+    required fields: name
     risk: creates a new team; low-risk external mutation, no approval required
   update_team:
     endpoint: PATCH /organizations/{{ config.organization }}/teams/{{ record.id }}

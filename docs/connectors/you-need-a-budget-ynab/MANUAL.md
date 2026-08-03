@@ -71,10 +71,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_transaction:
     endpoint: POST /budgets/{{ config.budget_id }}/transactions
+    required fields: transaction
     risk: external mutation; creates a new budget transaction; approval required. Body is wrapped under a top-level "transaction" key (YNAB's own POST /budgets/{budget_id}/transactions convention) — the record itself carries that wrapper, since the engine's write dialect sends record fields verbatim as the JSON body with no nested-wrapper construction primitive (see teamwork/bitly precedent).
   update_transaction:
     endpoint: PUT /budgets/{{ config.budget_id }}/transactions/{{ record.id }}
-    required fields: id
+    required fields: id, transaction
     risk: external mutation; updates an existing budget transaction (amount, category, memo, cleared/approved status); approval required
   delete_transaction:
     endpoint: DELETE /budgets/{{ config.budget_id }}/transactions/{{ record.id }}
@@ -82,27 +83,31 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; deletes a budget transaction (YNAB marks it deleted rather than purging, but it disappears from active budget totals); approval required
   create_account:
     endpoint: POST /budgets/{{ config.budget_id }}/accounts
+    required fields: account
     risk: external mutation; creates a new budget account with an opening balance; approval required. This action cannot be undone via the API (YNAB has no delete-account endpoint).
   create_category:
     endpoint: POST /budgets/{{ config.budget_id }}/categories
+    required fields: category
     risk: external mutation; creates a new budget category within a category group; approval required
   update_category:
     endpoint: PATCH /budgets/{{ config.budget_id }}/categories/{{ record.id }}
-    required fields: id
+    required fields: id, category
     risk: external mutation; renames/re-notes/re-goals an existing budget category; approval required
   update_month_category:
     endpoint: PATCH /budgets/{{ config.budget_id }}/months/{{ record.month }}/categories/{{ record.category_id }}
-    required fields: month, category_id
+    required fields: month, category_id, category
     risk: external mutation; reassigns (budgets) an amount to a category for a specific month; approval required
   create_payee:
     endpoint: POST /budgets/{{ config.budget_id }}/payees
+    required fields: payee
     risk: external mutation; creates a new payee; approval required
   update_payee:
     endpoint: PATCH /budgets/{{ config.budget_id }}/payees/{{ record.id }}
-    required fields: id
+    required fields: id, payee
     risk: external mutation; renames an existing payee (also renames the corresponding transactions and shared payee history); approval required
   create_scheduled_transaction:
     endpoint: POST /budgets/{{ config.budget_id }}/scheduled_transactions
+    required fields: scheduled_transaction
     risk: external mutation; creates a new recurring scheduled transaction that will auto-post future budget transactions; approval required
   delete_scheduled_transaction:
     endpoint: DELETE /budgets/{{ config.budget_id }}/scheduled_transactions/{{ record.id }}

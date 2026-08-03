@@ -82,6 +82,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_customer:
     endpoint: POST /customers
+    required fields: customerNumber, name, currency, customerGroup, vatZone, paymentTerms
     risk: creates a new customer record in the live e-conomic bookkeeping ledger; low-risk additive mutation, no approval required
   update_customer:
     endpoint: PUT /customers/{{ record.customerNumber }}
@@ -93,6 +94,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a customer record; e-conomic rejects the delete (409) if the customer has any booked entries, but a customer with no bookkeeping history is removed irreversibly
   create_product:
     endpoint: POST /products
+    required fields: productNumber, name, productGroup
     risk: creates a new sellable/purchasable product in the live e-conomic catalog; low-risk additive mutation, no approval required
   update_product:
     endpoint: PUT /products/{{ record.productNumber }}
@@ -104,6 +106,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a product from the catalog; e-conomic rejects the delete (409) if the product is referenced by any booked invoice line
   create_supplier:
     endpoint: POST /suppliers
+    required fields: supplierNumber, name, currency, supplierGroup, vatZone
     risk: creates a new supplier record in the live e-conomic bookkeeping ledger; low-risk additive mutation, no approval required
   update_supplier:
     endpoint: PUT /suppliers/{{ record.supplierNumber }}
@@ -115,6 +118,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a supplier record; e-conomic rejects the delete (409) if the supplier has any booked entries
   create_draft_invoice:
     endpoint: POST /invoices/drafts
+    required fields: date, currency, customer, paymentTerms, layout, lines
     risk: creates a new draft (work-in-progress, not yet legally binding) invoice; not yet booked, so reversible by deleting the draft — low-risk
   update_draft_invoice:
     endpoint: PUT /invoices/drafts/{{ record.draftInvoiceNumber }}
@@ -122,6 +126,7 @@ REVERSE ETL ACTIONS
     risk: overwrites an existing draft invoice's stored details; only draft (unbooked) invoices are mutable — a booked invoice number here is rejected by e-conomic
   book_invoice:
     endpoint: POST /invoices/booked
+    required fields: draftInvoice
     risk: irreversibly transitions a draft invoice to a legally-binding booked invoice; e-conomic core invoice fields become immutable after booking (a correction requires issuing a credit note against it, not an update/delete)
 
 SECURITY

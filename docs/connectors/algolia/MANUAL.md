@@ -71,6 +71,7 @@ REVERSE ETL ACTIONS
     risk: overwrites the named index's search settings (ranking, faceting, searchable attributes); settings not included in the submitted record are left unchanged, but any included field replaces its current value immediately for live search traffic
   create_api_key:
     endpoint: POST /1/keys
+    required fields: acl
     risk: creates a new live Algolia API key with the requested ACL/index scope; a broadly-scoped key (e.g. admin-level ACLs) is a new standing credential that must be tracked and rotated like any other secret
 
 SECURITY

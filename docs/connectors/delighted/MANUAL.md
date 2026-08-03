@@ -55,6 +55,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_person:
     endpoint: POST /people.json
+    required fields: email
     risk: creates or updates a Delighted person and may trigger survey workflow depending on account settings
   delete_person:
     endpoint: DELETE /people/{{ record.person_id }}.json

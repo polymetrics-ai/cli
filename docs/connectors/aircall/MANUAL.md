@@ -64,6 +64,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_user:
     endpoint: POST /users
+    required fields: name, email
     risk: creates a new Aircall agent seat, which may consume a billable license; external mutation, approval required
   update_user:
     endpoint: PUT /users/{{ record.id }}
@@ -75,6 +76,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes an Aircall agent seat; irreversible, frees the associated license; approval required
   create_team:
     endpoint: POST /teams
+    required fields: name
     risk: creates a new team container; low-risk external mutation, no approval required
   delete_team:
     endpoint: DELETE /teams/{{ record.id }}
@@ -101,6 +103,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a directory contact; irreversible
   create_tag:
     endpoint: POST /tags
+    required fields: name, color
     risk: creates a new call-tagging label; low-risk external mutation, no approval required
   update_tag:
     endpoint: PUT /tags/{{ record.id }}
@@ -112,6 +115,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a tag; it is un-applied from every call that previously carried it
   create_webhook:
     endpoint: POST /webhooks
+    required fields: url, events
     risk: registers a new outbound webhook that will POST live call/event data to an external URL of the caller's choosing; verify the target endpoint before enabling
   update_webhook:
     endpoint: PUT /webhooks/{{ record.id }}
@@ -131,13 +135,11 @@ REVERSE ETL ACTIONS
     risk: restores a previously archived call to default call-list views
   comment_call:
     endpoint: POST /calls/{{ record.id }}/comments
-    required fields: id
-    optional fields: content
+    required fields: id, content
     risk: adds an internal comment note to a call record; visible to other agents with call access, no external side effect
   tag_call:
     endpoint: POST /calls/{{ record.id }}/tags
-    required fields: id
-    optional fields: tag_ids
+    required fields: id, tag_ids
     risk: applies the given tags to a call; additive, does not remove tags already present
 
 SECURITY

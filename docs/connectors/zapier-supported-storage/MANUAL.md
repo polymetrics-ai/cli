@@ -43,9 +43,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   set_record:
     endpoint: PATCH /api/records
+    required fields: action, data
     risk: creates or overwrites a single key/value pair in the caller's Zapier Storage bucket (optionally only when the existing value matches only_if_value); external mutation, no approval required
   increment_record:
     endpoint: PATCH /api/records
+    required fields: action, data
     risk: atomically increments a numeric-valued key by amount (creating it at amount if absent); external mutation, no approval required
   delete_record:
     endpoint: DELETE /api/records?key={{ record.key }}

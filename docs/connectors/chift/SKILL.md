@@ -64,6 +64,7 @@ Reads and writes Chift consumers, connections, syncs, integrations, datastores, 
 
 - create_consumer:
   - endpoint: POST /consumers
+  - required fields: name
   - risk: external mutation; approval required
 - update_consumer:
   - endpoint: PATCH /consumers/{{ record.consumerid }}

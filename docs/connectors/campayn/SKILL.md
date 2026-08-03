@@ -60,7 +60,7 @@ Reads and writes Campayn subscriber lists, signup forms, contacts, email campaig
 
 - add_contact:
   - endpoint: POST /lists/{{ record.list_id }}/contacts.json
-  - required fields: list_id
+  - required fields: list_id, email
   - risk: adds a new contact to a Campayn subscriber list; low-risk external mutation, no approval required
 - update_contact:
   - endpoint: PUT /contacts/{{ record.id }}.json

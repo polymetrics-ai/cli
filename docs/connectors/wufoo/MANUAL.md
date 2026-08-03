@@ -75,6 +75,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; creates a live Wufoo form entry; approval required
   add_webhook:
     endpoint: PUT /forms/{{ config.form_hash }}/webhooks.json
+    required fields: url
     risk: external mutation; registers a webhook callback URL on the configured form; approval required
   delete_webhook:
     endpoint: DELETE /forms/{{ config.form_hash }}/webhooks/{{ record.hash }}.json

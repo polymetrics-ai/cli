@@ -48,9 +48,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_webhook:
     endpoint: POST /webhook/create
+    required fields: formId, url
     risk: registers a new outbound webhook subscription that will POST live form-submission data to an external URL; external mutation, approval required
   remove_webhook:
     endpoint: POST /webhook/delete
+    required fields: webhookId
     risk: permanently removes a webhook subscription; event delivery to its target URL stops immediately
   delete_submission_by_id:
     endpoint: DELETE /forms/{{ record.form_id }}/submissions/{{ record.submission_id }}

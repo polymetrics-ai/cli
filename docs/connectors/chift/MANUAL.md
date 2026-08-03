@@ -60,6 +60,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_consumer:
     endpoint: POST /consumers
+    required fields: name
     risk: external mutation; approval required
   update_consumer:
     endpoint: PATCH /consumers/{{ record.consumerid }}

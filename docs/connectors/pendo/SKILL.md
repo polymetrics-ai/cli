@@ -158,10 +158,11 @@ Reads Pendo Engage visitors, accounts, product objects, guides, reports, metadat
   - risk: starts an asynchronous Pendo segment visitor export job; approval required
 - create_segment:
   - endpoint: POST /segment/upload
+  - required fields: name, visitors
   - risk: creates a shared Pendo segment from visitor ids; approval required
 - update_segment:
   - endpoint: PUT /segment/{{ record.segmentId }}
-  - required fields: segmentId
+  - required fields: segmentId, name, visitors
   - risk: replaces the visitor membership for a Pendo segment; approval required
 - delete_segment:
   - endpoint: DELETE /segment/{{ record.segmentId }}
@@ -177,7 +178,7 @@ Reads Pendo Engage visitors, accounts, product objects, guides, reports, metadat
   - risk: removes a visitor from a Pendo segment; destructive membership mutation
 - patch_segment_visitors:
   - endpoint: PATCH /segment/{{ record.segmentId }}/visitor
-  - required fields: segmentId
+  - required fields: segmentId, patch
   - risk: adds/removes a small batch of visitors for a Pendo segment; approval required
 - reset_guide_for_visitor:
   - endpoint: POST /guide/{{ record.guideId }}/visitor/{{ record.visitorId }}/reset
@@ -196,14 +197,15 @@ Reads Pendo Engage visitors, accounts, product objects, guides, reports, metadat
   - risk: resets all staged guides in the subscription; approval required
 - change_guide_segment:
   - endpoint: PUT /guide/{{ record.guideId }}/segment
-  - required fields: guideId
+  - required fields: guideId, segmentId
   - risk: changes the segment assigned to a Pendo guide; approval required
 - change_guide_state:
   - endpoint: PUT /guide/{{ record.guideId }}/state
-  - required fields: guideId
+  - required fields: guideId, state
   - risk: changes a Pendo guide state such as public, staged, disabled, or draft; approval required
 - create_feedback:
   - endpoint: POST /feedback
+  - required fields: accountId, visitorId, title
   - risk: creates a Pendo Listen feedback item; approval required
 - update_feedback:
   - endpoint: PATCH /feedback/{{ record.id }}
@@ -211,7 +213,7 @@ Reads Pendo Engage visitors, accounts, product objects, guides, reports, metadat
   - risk: updates a Pendo Listen feedback item; approval required
 - delete_feedback:
   - endpoint: DELETE /feedback
-  - optional fields: ids
+  - required fields: ids
   - risk: deletes Pendo Listen feedback items by id; destructive external mutation
 
 ## Security

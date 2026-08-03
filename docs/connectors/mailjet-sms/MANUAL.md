@@ -60,9 +60,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   send_sms:
     endpoint: POST /sms-send
+    required fields: From, To, Text
     risk: external mutation; sends an SMS message; approval required
   request_sms_export:
     endpoint: POST /sms/export
+    required fields: FromTS, ToTS
     risk: external mutation; creates an asynchronous SMS export job; approval required
 
 SECURITY

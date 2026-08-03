@@ -84,6 +84,7 @@ Reads Sage HR employees, teams, time off, recruitment, and onboarding/offboardin
 
 - create_employee:
   - endpoint: POST /employees
+  - required fields: email, first_name, last_name
   - risk: creates a new employee record and may email the new hire (send_email); external mutation, approval required
 - update_employee:
   - endpoint: PUT /employees/{{ record.id }}
@@ -91,31 +92,35 @@ Reads Sage HR employees, teams, time off, recruitment, and onboarding/offboardin
   - risk: external mutation updating an employee record (org placement, leave types, reporting line); approval required
 - update_employee_custom_field:
   - endpoint: PUT /employees/{{ record.employee_id }}/custom-fields/{{ record.custom_field_id }}
-  - required fields: employee_id, custom_field_id
+  - required fields: employee_id, custom_field_id, value
   - risk: external mutation of an employee custom field; approval required
 - terminate_employee:
   - endpoint: POST /employees/{{ record.employee_id }}/terminations
-  - required fields: employee_id
+  - required fields: employee_id, date, termination_reason_id
   - risk: destructive/irreversible: terminates an employee's record in Sage HR; external mutation, approval required
 - create_timeoff_request:
   - endpoint: POST /leave-management/requests
+  - required fields: employee_id, time_off_policy_id, type, part_of_day
   - risk: creates a new time off request against an employee's leave balance; external mutation, approval required
 - create_kit_day:
   - endpoint: POST /leave-management/kit-days
+  - required fields: employee_id, policy_id
   - risk: creates a Keeping-In-Touch day entry against an employee's leave policy; external mutation, approval required
 - update_kit_day_status:
   - endpoint: PATCH /leave-management/kit-days/{{ record.id }}
-  - required fields: id
+  - required fields: id, status
   - risk: approves, declines, or cancels a KIT day request; external mutation, approval required
 - update_leave_policy_kit_days:
   - endpoint: PATCH /leave-management/policies/{{ record.id }}
-  - required fields: id
+  - required fields: id, kit_days_enabled, kit_days_quantity
   - risk: changes a company-wide leave policy's KIT-day configuration; external mutation, approval required
 - create_onboarding_task:
   - endpoint: POST /onboarding/tasks
+  - required fields: title, boarding_task_template_category_id, due_in
   - risk: creates a new onboarding task template; external mutation, approval required
 - create_offboarding_task:
   - endpoint: POST /offboarding/tasks
+  - required fields: title, boarding_task_template_category_id, due_in
   - risk: creates a new offboarding task template; external mutation, approval required
 
 ## Security

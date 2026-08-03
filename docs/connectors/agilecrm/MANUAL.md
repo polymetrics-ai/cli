@@ -67,9 +67,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_contact:
     endpoint: POST /contacts
+    required fields: properties
     risk: external mutation; creates a live AgileCRM contact/company; approval required
   update_contact:
     endpoint: PUT /contacts/edit-properties
+    required fields: id, properties
     risk: external mutation; overwrites live AgileCRM contact property fields; approval required
   delete_contact:
     endpoint: DELETE /contacts/{{ record.id }}
@@ -77,9 +79,11 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live AgileCRM contact; approval required
   create_deal:
     endpoint: POST /opportunity
+    required fields: name
     risk: external mutation; creates a live AgileCRM deal; approval required
   update_deal:
     endpoint: PUT /opportunity/partial-update
+    required fields: id
     risk: external mutation; overwrites live AgileCRM deal fields; approval required
   delete_deal:
     endpoint: DELETE /opportunity/{{ record.id }}
@@ -87,9 +91,11 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live AgileCRM deal; approval required
   create_task:
     endpoint: POST /tasks
+    required fields: subject, type
     risk: external mutation; creates a live AgileCRM task; approval required
   update_task:
     endpoint: PUT /tasks/partial-update
+    required fields: id
     risk: external mutation; overwrites live AgileCRM task fields; approval required
   delete_task:
     endpoint: DELETE /tasks/{{ record.id }}

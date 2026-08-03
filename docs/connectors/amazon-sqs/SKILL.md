@@ -11,6 +11,7 @@ Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue
 
 ## Icon
 
+- id: amazon-sqs
 - asset: icons/amazon-sqs.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -105,7 +106,7 @@ Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue
   - risk: sends up to 10 messages per SQS batch request; FIFO queues may use message_deduplication_id for provider-supported idempotency
 - set_queue_attributes:
   - endpoint: POST SQS.SetQueueAttributes
-  - required fields: attributes or attribute_name + attribute_value
+  - optional fields: attribute_name, attribute_value, attributes
   - risk: sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings
 - start_message_move_task:
   - endpoint: POST SQS.StartMessageMoveTask
@@ -114,7 +115,7 @@ Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue
   - risk: starts an SQS dead-letter queue redrive message move task
 - tag_queue:
   - endpoint: POST SQS.TagQueue
-  - required fields: tags or tag_key + tag_value
+  - optional fields: tag_key, tag_value, tags
   - risk: adds or updates tags on the configured SQS queue
 - untag_queue:
   - endpoint: POST SQS.UntagQueue

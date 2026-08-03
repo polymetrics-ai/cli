@@ -108,6 +108,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_lead:
     endpoint: POST /leads
+    required fields: title
     risk: creates a new lead; low-risk external mutation, no approval required
   update_lead:
     endpoint: PATCH /leads/{{ record.id }}
@@ -119,10 +120,11 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a lead; destructive external mutation, approval required
   create_note:
     endpoint: POST /notes
+    required fields: content
     risk: creates a new note attached to a deal/person/organization/lead; low-risk external mutation, no approval required
   update_note:
     endpoint: PUT /notes/{{ record.id }}
-    required fields: id
+    required fields: id, content
     risk: updates an existing note's content; external mutation, approval required
   delete_note:
     endpoint: DELETE /notes/{{ record.id }}
@@ -130,10 +132,11 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a note; destructive external mutation, approval required
   create_filter:
     endpoint: POST /filters
+    required fields: name, conditions, type
     risk: creates a new saved filter; low-risk external mutation, no approval required
   update_filter:
     endpoint: PUT /filters/{{ record.id }}
-    required fields: id
+    required fields: id, name, conditions
     risk: updates an existing saved filter's name/conditions; external mutation, approval required
   delete_filter:
     endpoint: DELETE /filters/{{ record.id }}
@@ -141,6 +144,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a saved filter; destructive external mutation, approval required
   create_activity_type:
     endpoint: POST /activityTypes
+    required fields: name, icon_key
     risk: creates a new custom activity type; low-risk external mutation, no approval required
   update_activity_type:
     endpoint: PUT /activityTypes/{{ record.id }}
@@ -152,6 +156,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a custom activity type; destructive external mutation, approval required
   create_lead_label:
     endpoint: POST /leadLabels
+    required fields: name, color
     risk: creates a new lead label; low-risk external mutation, no approval required
   update_lead_label:
     endpoint: PATCH /leadLabels/{{ record.id }}
@@ -163,6 +168,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a lead label; destructive external mutation, approval required
   create_webhook:
     endpoint: POST /webhooks
+    required fields: subscription_url, event_action, event_object, name
     risk: registers a new webhook subscription that will receive event notifications; low-risk external mutation, no approval required
   delete_webhook:
     endpoint: DELETE /webhooks/{{ record.id }}

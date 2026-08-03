@@ -53,6 +53,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_task:
     endpoint: POST /task
+    required fields: title
     risk: creates a new task in the caller's TickTick account (in the given projectId, or the default Inbox if omitted); low-risk external mutation, no approval required
   complete_task:
     endpoint: POST /project/{{ record.projectId }}/task/{{ record.id }}/complete

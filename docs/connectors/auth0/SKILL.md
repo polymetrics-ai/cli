@@ -68,6 +68,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
 
 - create_user:
   - endpoint: POST /api/v2/users
+  - required fields: connection
   - risk: external mutation; creates a new Auth0 user account (and, when password is set, a live credential); approval required
 - update_user:
   - endpoint: PATCH /api/v2/users/{{ record.user_id }}
@@ -75,6 +76,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
   - risk: external mutation; updates an existing Auth0 user's profile/credential/blocked state; approval required
 - create_client:
   - endpoint: POST /api/v2/clients
+  - required fields: name
   - risk: external mutation; registers a new Auth0 application (client), which can obtain its own OAuth2 credentials; approval required
 - update_client:
   - endpoint: PATCH /api/v2/clients/{{ record.client_id }}
@@ -82,6 +84,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
   - risk: external mutation; updates an existing Auth0 application's configuration; approval required
 - create_role:
   - endpoint: POST /api/v2/roles
+  - required fields: name
   - risk: external mutation; creates a new RBAC role (no permissions attached by default); approval required
 - update_role:
   - endpoint: PATCH /api/v2/roles/{{ record.id }}
@@ -89,6 +92,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
   - risk: external mutation; updates an existing RBAC role's name/description; approval required
 - create_organization:
   - endpoint: POST /api/v2/organizations
+  - required fields: name
   - risk: external mutation; creates a new Auth0 organization (multi-tenant scoping unit); approval required
 - update_organization:
   - endpoint: PATCH /api/v2/organizations/{{ record.id }}

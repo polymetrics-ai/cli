@@ -70,6 +70,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_contact:
     endpoint: POST /contacts
+    required fields: inbox_id
     risk: creates a new Chatwoot contact record; low risk, no customer notification
   update_contact:
     endpoint: PUT /contacts/{{ record.id }}
@@ -77,17 +78,19 @@ REVERSE ETL ACTIONS
     risk: updates an existing Chatwoot contact's profile fields; low risk, no customer notification
   create_conversation:
     endpoint: POST /conversations
+    required fields: source_id
     risk: creates a new conversation in the target inbox; customer-visible once the initial message is delivered through a live channel
   send_message:
     endpoint: POST /conversations/{{ record.conversation_id }}/messages
-    required fields: conversation_id
+    required fields: conversation_id, content
     risk: sends a message into a conversation; customer-visible unless private is true and may notify the contact through the inbox channel
   toggle_conversation_status:
     endpoint: POST /conversations/{{ record.conversation_id }}/toggle_status
-    required fields: conversation_id
+    required fields: conversation_id, status
     risk: changes a conversation's status (open/resolved/pending/snoozed); may affect agent routing and reporting metrics
   create_label:
     endpoint: POST /labels
+    required fields: title
     risk: creates a new account-wide label; low risk, visible to all agents in the sidebar when show_on_sidebar is true
 
 SECURITY

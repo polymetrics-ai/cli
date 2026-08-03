@@ -85,6 +85,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_lead:
     endpoint: POST /lead/
+    required fields: name
     risk: external mutation; creates a live Close lead; approval required
   update_lead:
     endpoint: PUT /lead/{{ record.id }}
@@ -96,6 +97,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Close lead and its contacts/opportunities; approval required
   create_contact:
     endpoint: POST /contact/
+    required fields: lead_id, name
     risk: external mutation; creates a live Close contact under a lead; approval required
   update_contact:
     endpoint: PUT /contact/{{ record.id }}
@@ -107,6 +109,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Close contact; approval required
   create_opportunity:
     endpoint: POST /opportunity/
+    required fields: lead_id
     risk: external mutation; creates a live Close opportunity under a lead; approval required
   update_opportunity:
     endpoint: PUT /opportunity/{{ record.id }}
@@ -118,6 +121,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Close opportunity; approval required
   create_task:
     endpoint: POST /task/
+    required fields: _type, lead_id, text
     risk: external mutation; creates a live Close task on a lead; approval required
   update_task:
     endpoint: PUT /task/{{ record.id }}

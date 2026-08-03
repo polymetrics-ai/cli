@@ -74,6 +74,7 @@ Reads AssemblyAI transcripts, per-transcript detail, sentences, paragraphs, and 
 
 - create_transcript:
   - endpoint: POST /v2/transcript
+  - required fields: audio_url
   - risk: external mutation; submits a new transcription job against a caller-supplied audio_url and consumes AssemblyAI account balance/quota; approval required
 
 ## Security

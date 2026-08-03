@@ -73,14 +73,15 @@ Reads and writes Simplesat surveys, answers, questions, customers, and responses
   - risk: mutates an existing survey answer's recorded choice/comment/follow-up fields; changes the customer-submitted response data an already-collected survey answer represents
 - create_or_update_response:
   - endpoint: POST /responses/create-or-update
+  - required fields: survey_id
   - risk: creates a new survey response (or updates one matched by the API's own dedup rule) including its nested answers/customer/ticket/team_members sub-objects; commonly used to import or backfill historical survey data with an explicit created timestamp
 - update_response:
   - endpoint: PUT /responses/{{ record.id }}/update
-  - required fields: id
+  - required fields: id, survey_id
   - risk: mutates an existing survey response's tags/answers/team_members by id; overwrites the identified response's recorded data
 - send_survey_email:
   - endpoint: POST /surveys/{{ record.survey_token }}/email
-  - required fields: survey_token
+  - required fields: survey_token, customer
   - risk: sends a live survey invitation email to the named customer's real inbox; each call generates one outbound email delivery, not a reversible data mutation
 
 ## Security

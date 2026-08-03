@@ -114,18 +114,23 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_completions:
     endpoint: POST /v1/completions
+    required fields: model, prompt
     risk: high: external Nebius API side effect or mutation; approval required
   create_chat_completions:
     endpoint: POST /v1/chat/completions
+    required fields: model, messages
     risk: high: external Nebius API side effect or mutation; approval required
   create_embeddings:
     endpoint: POST /v1/embeddings
+    required fields: model, input
     risk: high: external Nebius API side effect or mutation; approval required
   create_rerank:
     endpoint: POST /v1/rerank
+    required fields: model, query, documents
     risk: high: external Nebius API side effect or mutation; approval required
   create_responses:
     endpoint: POST /v1/responses
+    required fields: input, model
     risk: high: external Nebius API side effect or mutation; approval required
   delete_files_file_id:
     endpoint: DELETE /v1/files/{{ record.file_id }}
@@ -133,9 +138,11 @@ REVERSE ETL ACTIONS
     risk: medium: external Nebius API side effect or mutation; approval required
   create_images_generations:
     endpoint: POST /v1/images/generations
+    required fields: model, prompt
     risk: high: external Nebius API side effect or mutation; approval required
   create_fine_tuning_jobs:
     endpoint: POST /v1/fine_tuning/jobs
+    required fields: model, training_file
     risk: high: external Nebius API side effect or mutation; approval required
   execute_fine_tuning_jobs_job_id_cancel:
     endpoint: POST /v1/fine_tuning/jobs/{{ record.job_id }}/cancel
@@ -143,6 +150,7 @@ REVERSE ETL ACTIONS
     risk: high: external Nebius API side effect or mutation; approval required
   create_dedicated_endpoints:
     endpoint: POST /v0/dedicated_endpoints
+    required fields: name, model_name, flavor_name, gpu_type, region, gpu_count, scaling
     risk: high: external Nebius API side effect or mutation; approval required
   update_dedicated_endpoints_endpoint_id:
     endpoint: PATCH /v0/dedicated_endpoints/{{ record.endpoint_id }}
@@ -154,6 +162,7 @@ REVERSE ETL ACTIONS
     risk: high: external Nebius API side effect or mutation; approval required
   create_datasets:
     endpoint: POST /v1/datasets
+    required fields: name, schema, folder, rows
     risk: high: external Nebius API side effect or mutation; approval required
   update_datasets_dataset_id:
     endpoint: PATCH /v1/datasets/{{ record.dataset_id }}
@@ -165,10 +174,11 @@ REVERSE ETL ACTIONS
     risk: high: external Nebius API side effect or mutation; approval required
   create_datasets_uploads:
     endpoint: POST /v1/datasets/uploads
+    required fields: name, schema, folder
     risk: high: external Nebius API side effect or mutation; approval required
   create_datasets_uploads_upload_id_complete:
     endpoint: POST /v1/datasets/uploads/{{ record.upload_id }}/complete
-    required fields: upload_id
+    required fields: upload_id, part_ids
     risk: high: external Nebius API side effect or mutation; approval required
   execute_datasets_uploads_upload_id_cancel:
     endpoint: POST /v1/datasets/uploads/{{ record.upload_id }}/cancel
@@ -176,6 +186,7 @@ REVERSE ETL ACTIONS
     risk: high: external Nebius API side effect or mutation; approval required
   create_operations:
     endpoint: POST /v1/operations
+    required fields: params, src
     risk: high: external Nebius API side effect or mutation; approval required
   execute_operations_operation_id_cancel:
     endpoint: POST /v1/operations/{{ record.operation_id }}/cancel

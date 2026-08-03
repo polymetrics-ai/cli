@@ -111,6 +111,7 @@ Reads Zonka Feedback responses, surveys, contacts, devices, tasks, locations, us
 
 - add_response:
   - endpoint: POST /responses
+  - required fields: surveyId, response
   - risk: creates a Zonka Feedback survey response; approval required
 - update_response:
   - endpoint: PATCH /responses/{{ record.responseId }}
@@ -121,18 +122,23 @@ Reads Zonka Feedback responses, surveys, contacts, devices, tasks, locations, us
   - risk: creates or updates Zonka Feedback contact records; approval required
 - send_email_survey:
   - endpoint: POST /sendemail
+  - required fields: surveyId, email
   - risk: sends or schedules email survey invitations; approval required
 - send_sms_survey:
   - endpoint: POST /sendsms
+  - required fields: surveyId, mobile
   - risk: sends or schedules SMS survey invitations; approval required
 - send_two_way_sms_survey:
   - endpoint: POST /send2waysms
+  - required fields: surveyId, mobile
   - risk: sends or schedules two-way SMS survey invitations; approval required
 - send_whatsapp_survey:
   - endpoint: POST /send-wa-message
+  - required fields: surveyId, mobile
   - risk: sends or schedules WhatsApp survey invitations; approval required
 - add_task:
   - endpoint: POST /tasks/add
+  - required fields: taskName
   - risk: creates a Zonka Feedback task; approval required
 - update_task:
   - endpoint: POST /tasks/{{ record.taskId }}
@@ -140,6 +146,7 @@ Reads Zonka Feedback responses, surveys, contacts, devices, tasks, locations, us
   - risk: updates a Zonka Feedback task; approval required
 - delete_tasks:
   - endpoint: DELETE /tasks/delete
+  - required fields: taskId
   - risk: deletes one or more Zonka Feedback tasks; approval required
 
 ## Security

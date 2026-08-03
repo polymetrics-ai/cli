@@ -80,17 +80,19 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_customer:
     endpoint: POST /customers.json
+    required fields: customer
     risk: external mutation; approval required
   update_customer:
     endpoint: PUT /customers/{{ record.id }}.json
-    required fields: id
+    required fields: id, customer
     risk: external mutation; approval required
   create_subscription:
     endpoint: POST /subscriptions.json
+    required fields: subscription
     risk: external mutation with billing side effects; approval required
   update_subscription:
     endpoint: PUT /subscriptions/{{ record.id }}.json
-    required fields: id
+    required fields: id, subscription
     risk: external mutation with billing side effects; approval required
   cancel_subscription:
     endpoint: POST /subscriptions/{{ record.id }}/cancel.json
@@ -98,22 +100,23 @@ REVERSE ETL ACTIONS
     risk: external mutation with billing side effects; approval required
   create_product_family:
     endpoint: POST /product_families.json
+    required fields: product_family
     risk: external mutation; approval required
   create_product:
     endpoint: POST /product_families/{{ record.product_family_id }}/products.json
-    required fields: product_family_id
+    required fields: product_family_id, product
     risk: external mutation; approval required
   update_product:
     endpoint: PUT /products/{{ record.id }}.json
-    required fields: id
+    required fields: id, product
     risk: external mutation; approval required
   create_coupon:
     endpoint: POST /product_families/{{ record.product_family_id }}/coupons.json
-    required fields: product_family_id
+    required fields: product_family_id, coupon
     risk: external mutation; approval required
   update_coupon:
     endpoint: PUT /coupons/{{ record.id }}.json
-    required fields: id
+    required fields: id, coupon
     risk: external mutation; approval required
 
 SECURITY

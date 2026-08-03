@@ -82,6 +82,7 @@ Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, con
 
 - create_project:
   - endpoint: POST /projects
+  - required fields: projectName
   - risk: external mutation; creates a new Codefresh project; approval required
 - delete_project:
   - endpoint: DELETE /projects/{{ record.id }}
@@ -89,10 +90,11 @@ Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, con
   - risk: destructive; irreversible deletion of a Codefresh project; approval required
 - create_pipeline:
   - endpoint: POST /pipelines
+  - required fields: metadata
   - risk: external mutation; creates a new Codefresh pipeline; approval required
 - update_pipeline:
   - endpoint: PUT /pipelines/{{ record.name }}
-  - required fields: name
+  - required fields: name, metadata
   - risk: external mutation; replaces an existing Codefresh pipeline's spec; approval required
 - delete_pipeline:
   - endpoint: DELETE /pipelines/{{ record.name }}
@@ -104,6 +106,7 @@ Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, con
   - risk: external mutation; triggers a real Codefresh pipeline run (build minutes/resources consumed); approval required
 - create_context:
   - endpoint: POST /contexts
+  - required fields: metadata, spec
   - risk: external mutation; creates a new Codefresh shared context (may hold configuration values); approval required
 - delete_context:
   - endpoint: DELETE /contexts/{{ record.name }}
@@ -111,6 +114,7 @@ Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, con
   - risk: destructive; irreversible deletion of a Codefresh shared context; approval required
 - create_agent:
   - endpoint: POST /agents
+  - required fields: name
   - risk: external mutation; registers a new Codefresh runner agent; approval required
 - delete_agent:
   - endpoint: DELETE /agent/{{ record.id }}

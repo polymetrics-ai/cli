@@ -65,6 +65,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_appointment:
     endpoint: POST /appointments
+    required fields: datetime, appointmentTypeID, firstName, lastName, email
     risk: creates a live appointment booking on the calendar and, depending on account settings, sends the client a confirmation email/SMS; external mutation, approval required
   update_appointment:
     endpoint: PUT /appointments/{{ record.id }}
@@ -76,6 +77,7 @@ REVERSE ETL ACTIONS
     risk: permanently cancels a live scheduled appointment; irreversible (Acuity's own docs: it is not possible to un-cancel), and by default sends the client a cancellation notification. External mutation, approval required
   create_block:
     endpoint: POST /blocks
+    required fields: start, end, calendarID
     risk: blocks off a time range on a live calendar, preventing clients from booking appointments in it; external mutation, approval required
   create_certificate:
     endpoint: POST /certificates

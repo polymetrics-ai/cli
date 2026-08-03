@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector google-calendar [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token.
 
 ICON
   id: simple-icons-googlecalendar
@@ -30,38 +30,15 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  Use pm credentials add with --from-env or --value-stdin for secret fields.
+  No secret authentication is required for this connector.
 
 CONFIGURATION
-  base_url
-  calendarid
-  mode
-  client_id (secret)
-  client_refresh_token_2 (secret)
-  client_secret (secret)
-
-ETL STREAMS
-  calendar_list:
-    primary key: id
-    fields: accessRole(), colorId(), deleted(), description(), etag(), hidden(), id(), kind(), primary(), selected(), summary(), timeZone()
-  events:
-    primary key: id
-    cursor: updated
-    fields: attendees(), created(), creator(), description(), end(), etag(), htmlLink(), iCalUID(), id(), kind(), location(), organizer(), recurringEventId(), start(), status(), summary(), updated()
-  settings:
-    primary key: id
-    fields: etag(), id(), kind(), value()
-  acl:
-    primary key: id
-    fields: etag(), id(), kind(), role(), scope()
-
-SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+  No connector-specific config fields.
 
 SECURITY
-  read risk: external Google Calendar API reads performed by the legacy connector via a Tier-2 hook
-  write risk: unsupported
-  approval: none; read-only
+  read risk: connector-specific
+  write risk: connector-specific
+  approval: external mutations require preview and approval
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

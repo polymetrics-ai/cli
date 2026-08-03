@@ -61,9 +61,11 @@ Reads Eventzilla events, categories, users, attendees, ticket types, and transac
 
 - checkin_attendee:
   - endpoint: POST /attendees/checkin
+  - required fields: barcode, eventcheckin
   - risk: marks an attendee checked in or reverts check-in at the door; low-risk operational mutation, no approval required
 - toggle_event_sales:
   - endpoint: POST /events/togglesales
+  - required fields: eventid, status
   - risk: publishes or unpublishes an event's public sales page; setting status false immediately stops new ticket sales for that event, approval required
 
 ## Security

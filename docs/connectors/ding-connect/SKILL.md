@@ -74,6 +74,7 @@ Reads DingConnect reference catalogs (countries, currencies, regions, providers,
 
 - send_transfer:
   - endpoint: POST /api/V1/SendTransfer
+  - required fields: SkuCode, SendValue, AccountNumber, DistributorRef
   - risk: external mutation; sends a real-money mobile top-up/airtime transfer to a live account and deducts the distributor's DingConnect balance unless ValidateOnly is set; approval required
 
 ## Security

@@ -54,6 +54,7 @@ Reads and writes VWO (Visual Website Optimizer) A/B testing campaigns.
 
 - create_campaign:
   - endpoint: POST /accounts/{{ config.account_id }}/campaigns
+  - required fields: type, urls, primaryUrl, goals
   - risk: creates a new A/B testing campaign visible to the workspace; external mutation, approval required
 - update_campaign:
   - endpoint: PATCH /accounts/{{ config.account_id }}/campaigns/{{ record.id }}

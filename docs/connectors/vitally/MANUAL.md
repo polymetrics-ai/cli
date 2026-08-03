@@ -63,6 +63,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_account:
     endpoint: POST /resources/accounts
+    required fields: externalId, name
     risk: creates a new customer-success account visible to the vendor's CS team; external mutation, approval required
   update_account:
     endpoint: PUT /resources/accounts/{{ record.id }}
@@ -70,6 +71,7 @@ REVERSE ETL ACTIONS
     risk: updates an existing customer-success account's fields/traits, visible to the vendor's CS team; external mutation, approval required
   create_user:
     endpoint: POST /resources/users
+    required fields: externalId
     risk: creates a new user record visible to the vendor's CS team; external mutation, approval required
   update_user:
     endpoint: PUT /resources/users/{{ record.id }}
@@ -77,6 +79,7 @@ REVERSE ETL ACTIONS
     risk: updates an existing user's fields/traits, visible to the vendor's CS team; external mutation, approval required
   create_note:
     endpoint: POST /resources/notes
+    required fields: note, noteDate
     risk: creates a customer-success note visible to the vendor's CS team; external mutation, approval required
   update_note:
     endpoint: PUT /resources/notes/{{ record.id }}
@@ -88,6 +91,7 @@ REVERSE ETL ACTIONS
     risk: archives/deletes a customer-success note; external mutation, approval required
   create_conversation:
     endpoint: POST /resources/conversations
+    required fields: subject, messages
     risk: creates a historical conversation record visible to the vendor's CS team; does not send outbound messages to real participants (Vitally's own documented behavior); external mutation, approval required
   update_conversation:
     endpoint: PUT /resources/conversations/{{ record.id }}
@@ -99,6 +103,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a conversation and all its messages; external mutation, approval required
   create_task:
     endpoint: POST /resources/tasks
+    required fields: name, accountId
     risk: creates a customer-success task visible to the vendor's CS team; external mutation, approval required
   update_task:
     endpoint: PUT /resources/tasks/{{ record.id }}
@@ -106,6 +111,7 @@ REVERSE ETL ACTIONS
     risk: updates an existing customer-success task visible to the vendor's CS team; external mutation, approval required
   create_nps_response:
     endpoint: POST /resources/npsResponses
+    required fields: userId, respondedAt, score
     risk: creates (or, if externalId already exists, upserts -- Vitally's own documented behavior) an NPS response visible to the vendor's CS team; external mutation, approval required
   update_nps_response:
     endpoint: PUT /resources/npsResponses/{{ record.id }}

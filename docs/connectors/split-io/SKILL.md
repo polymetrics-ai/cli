@@ -83,11 +83,11 @@ Reads Split.io workspaces, environments, feature flags, segments, groups, traffi
   - risk: restores an archived feature flag to active use account-wide; approval required
 - add_segment_keys_in_environment:
   - endpoint: PUT /internal/api/v2/segments/{{ record.environment_id }}/{{ record.segment_name }}/uploadKeys
-  - required fields: environment_id, segment_name
+  - required fields: environment_id, segment_name, keys
   - risk: adds member keys to a segment in the given environment, changing which end-users match segment-based targeting rules for every feature flag using it; production traffic-shaping mutation, approval required
 - remove_segment_keys_from_environment:
   - endpoint: PUT /internal/api/v2/segments/{{ record.environment_id }}/{{ record.segment_name }}/removeKeys
-  - required fields: environment_id, segment_name
+  - required fields: environment_id, segment_name, keys
   - risk: removes member keys from a segment in the given environment, changing which end-users match segment-based targeting rules for every feature flag using it; production traffic-shaping mutation, approval required
 
 ## Security

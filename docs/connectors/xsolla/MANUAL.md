@@ -73,11 +73,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   request_refund:
     endpoint: PUT /merchants/{{ config.merchant_id }}/reports/transactions/{{ record.transaction_id }}/refund
-    required fields: transaction_id
+    required fields: transaction_id, description
     risk: irreversible external mutation; issues a full refund to the user for the given transaction; approval required
   request_partial_refund:
     endpoint: PUT /merchants/{{ config.merchant_id }}/reports/transactions/{{ record.transaction_id }}/partial_refund
-    required fields: transaction_id
+    required fields: transaction_id, description, refund_amount
     risk: irreversible external mutation; issues a partial refund to the user for the given transaction; approval required
 
 SECURITY

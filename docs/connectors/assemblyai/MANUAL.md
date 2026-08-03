@@ -70,6 +70,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_transcript:
     endpoint: POST /v2/transcript
+    required fields: audio_url
     risk: external mutation; submits a new transcription job against a caller-supplied audio_url and consumes AssemblyAI account balance/quota; approval required
 
 SECURITY

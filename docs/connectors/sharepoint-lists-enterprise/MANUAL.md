@@ -52,6 +52,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_list:
     endpoint: POST /sites/{{ config.site_id }}/lists
+    required fields: displayName
     risk: creates a new SharePoint list (and any custom columns/template declared in the request) on the configured site; low-risk external mutation, no approval required
   update_list:
     endpoint: PATCH /sites/{{ config.site_id }}/lists/{{ record.id }}
@@ -59,6 +60,7 @@ REVERSE ETL ACTIONS
     risk: mutates an existing list's display name/description by id; low-risk external mutation, no approval required
   create_list_item:
     endpoint: POST /sites/{{ config.site_id }}/lists/{{ config.list_id }}/items
+    required fields: fields
     risk: creates a new item (row) in the configured list, with the submitted column values; low-risk external mutation, no approval required
   update_list_item:
     endpoint: PATCH /sites/{{ config.site_id }}/lists/{{ config.list_id }}/items/{{ record.id }}/fields

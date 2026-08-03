@@ -56,6 +56,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_submission:
     endpoint: POST /submissions
+    required fields: template_id, submitters
     risk: external mutation; dispatches a live signature-request email/SMS to every listed submitter unless send_email/send_sms are explicitly set false; approval required
   archive_submission:
     endpoint: DELETE /submissions/{{ record.id }}

@@ -106,6 +106,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_survey:
     endpoint: POST /surveys
+    required fields: name, survey_type
     risk: external mutation; approval required
   update_survey:
     endpoint: PATCH /surveys/{{ record.id }}
@@ -124,10 +125,11 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_question:
     endpoint: POST /questions
+    required fields: survey_id, text, type
     risk: external mutation; approval required
   update_question:
     endpoint: PUT /questions/{{ record.question_id }}
-    required fields: question_id
+    required fields: question_id, survey_id
     risk: external mutation; approval required
   delete_question:
     endpoint: DELETE /questions/{{ record.question_id }}
@@ -135,6 +137,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_contact_list:
     endpoint: POST /contact_lists
+    required fields: name
     risk: external mutation; approval required
   update_contact_list:
     endpoint: PATCH /contact_lists/{{ record.id }}
@@ -146,6 +149,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_contact_property:
     endpoint: POST /contact_properties
+    required fields: type, label
     risk: external mutation; approval required
   update_contact_property:
     endpoint: PATCH /contact_properties/{{ record.id }}
@@ -157,6 +161,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_survey_folder:
     endpoint: POST /survey_folders
+    required fields: name
     risk: external mutation; approval required
   update_survey_folder:
     endpoint: PATCH /survey_folders/{{ record.id }}
@@ -168,9 +173,11 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_team:
     endpoint: POST /teams
+    required fields: name
     risk: external mutation; approval required
   create_ticket:
     endpoint: POST /tickets
+    required fields: subject, priority, status
     risk: external mutation; approval required
   update_ticket:
     endpoint: PUT /tickets/{{ record.id }}
@@ -182,6 +189,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_webhook:
     endpoint: POST /webhooks
+    required fields: url, survey_id, http_method
     risk: external mutation; approval required
   update_webhook:
     endpoint: PUT /webhooks/{{ record.id }}
@@ -193,6 +201,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_user:
     endpoint: POST /users
+    required fields: name, email, role_id
     risk: external mutation creating a live user account with console access; approval required
   update_user:
     endpoint: PATCH /users/{{ record.id }}
@@ -204,6 +213,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion of a user account; approval required
   create_reminder:
     endpoint: POST /reminders
+    required fields: channel_id, survey_id, frequency, type, interval, embed_first_question, custom_footer
     risk: external mutation; approval required
   delete_reminder:
     endpoint: DELETE /reminders/{{ record.id }}
@@ -211,6 +221,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_variable:
     endpoint: POST /variables
+    required fields: survey_id, label, name, type
     risk: external mutation; approval required
   delete_variable:
     endpoint: DELETE /variables/{{ record.variable_id }}
@@ -218,6 +229,7 @@ REVERSE ETL ACTIONS
     risk: irreversible external deletion; approval required
   create_channel:
     endpoint: POST /channels
+    required fields: type
     risk: external mutation; approval required
   delete_channel:
     endpoint: DELETE /channels/{{ record.id }}

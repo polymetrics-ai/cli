@@ -85,18 +85,19 @@ SYNC MODES
 REVERSE ETL ACTIONS
   add_project:
     endpoint: POST index.php?/api/v2/add_project
+    required fields: name
     risk: creates a new top-level TestRail project; low-risk external mutation, no approval required
   add_milestone:
     endpoint: POST index.php?/api/v2/add_milestone/{{ record.project_id }}
-    required fields: project_id
+    required fields: project_id, name
     risk: creates a new milestone under the target project; low-risk external mutation, no approval required
   add_suite:
     endpoint: POST index.php?/api/v2/add_suite/{{ record.project_id }}
-    required fields: project_id
+    required fields: project_id, name
     risk: creates a new test suite under the target project; low-risk external mutation, no approval required
   add_case:
     endpoint: POST index.php?/api/v2/add_case/{{ record.section_id }}
-    required fields: section_id
+    required fields: section_id, title
     risk: creates a new test case in the target section; low-risk external mutation, no approval required
   update_case:
     endpoint: POST index.php?/api/v2/update_case/{{ record.id }}
@@ -104,11 +105,11 @@ REVERSE ETL ACTIONS
     risk: mutates an existing test case's title, type, priority, milestone, estimate, or references
   add_plan:
     endpoint: POST index.php?/api/v2/add_plan/{{ record.project_id }}
-    required fields: project_id
+    required fields: project_id, name
     risk: creates a new test plan under the target project; low-risk external mutation, no approval required
   add_run:
     endpoint: POST index.php?/api/v2/add_run/{{ record.project_id }}
-    required fields: project_id
+    required fields: project_id, name
     risk: creates a new test run under the target project, selecting test cases into it for execution; low-risk external mutation, no approval required
   close_run:
     endpoint: POST index.php?/api/v2/close_run/{{ record.id }}

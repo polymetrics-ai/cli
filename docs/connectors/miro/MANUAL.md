@@ -323,7 +323,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Miro API mutation; approval required
   create_boards_board_id_docs:
     endpoint: POST /v2/boards/{{ record.board_id }}/docs
-    required fields: board_id
+    required fields: board_id, data
     risk: medium: external Miro API mutation; approval required
   delete_boards_board_id_docs_item_id:
     endpoint: DELETE /v2/boards/{{ record.board_id }}/docs/{{ record.item_id }}
@@ -331,11 +331,11 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_orgs_org_id_cases:
     endpoint: POST /v2/orgs/{{ record.org_id }}/cases
-    required fields: org_id
+    required fields: org_id, name
     risk: medium: external Miro API mutation; approval required
   update_orgs_org_id_cases_case_id:
     endpoint: PUT /v2/orgs/{{ record.org_id }}/cases/{{ record.case_id }}
-    required fields: org_id, case_id
+    required fields: org_id, case_id, name
     risk: medium: external Miro API mutation; approval required
   delete_orgs_org_id_cases_case_id:
     endpoint: DELETE /v2/orgs/{{ record.org_id }}/cases/{{ record.case_id }}
@@ -343,11 +343,11 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_orgs_org_id_cases_case_id_legal_holds:
     endpoint: POST /v2/orgs/{{ record.org_id }}/cases/{{ record.case_id }}/legal-holds
-    required fields: org_id, case_id
+    required fields: org_id, case_id, name, scope
     risk: medium: external Miro API mutation; approval required
   update_orgs_org_id_cases_case_id_legal_holds_legal_hold_id:
     endpoint: PUT /v2/orgs/{{ record.org_id }}/cases/{{ record.case_id }}/legal-holds/{{ record.legal_hold_id }}
-    required fields: org_id, case_id, legal_hold_id
+    required fields: org_id, case_id, legal_hold_id, name, scope
     risk: medium: external Miro API mutation; approval required
   delete_orgs_org_id_cases_case_id_legal_holds_legal_hold_id:
     endpoint: DELETE /v2/orgs/{{ record.org_id }}/cases/{{ record.case_id }}/legal-holds/{{ record.legal_hold_id }}
@@ -355,7 +355,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   update_orgs_org_id_boards_export_jobs_job_id_status:
     endpoint: PUT /v2/orgs/{{ record.org_id }}/boards/export/jobs/{{ record.job_id }}/status
-    required fields: org_id, job_id
+    required fields: org_id, job_id, status
     risk: medium: external Miro API mutation; approval required
   create_orgs_org_id_boards_export_jobs_job_id_tasks_task_id_export_link:
     endpoint: POST /v2/orgs/{{ record.org_id }}/boards/export/jobs/{{ record.job_id }}/tasks/{{ record.task_id }}/export-link
@@ -363,6 +363,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Miro API mutation; approval required
   create_users:
     endpoint: POST /Users
+    required fields: userName
     risk: medium: external Miro API mutation; approval required
   update_users_id:
     endpoint: PUT /Users/{{ record.id }}
@@ -370,7 +371,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Miro API mutation; approval required
   update_users_id_2:
     endpoint: PATCH /Users/{{ record.id }}
-    required fields: id
+    required fields: id, schemas, Operations
     risk: medium: external Miro API mutation; approval required
   delete_users_id:
     endpoint: DELETE /Users/{{ record.id }}
@@ -378,7 +379,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   update_groups_id:
     endpoint: PATCH /Groups/{{ record.id }}
-    required fields: id
+    required fields: id, schemas, Operations
     risk: medium: external Miro API mutation; approval required
   create_boards:
     endpoint: POST /v2/boards
@@ -417,7 +418,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_boards_board_id_connectors:
     endpoint: POST /v2/boards/{{ record.board_id }}/connectors
-    required fields: board_id
+    required fields: board_id, endItem, startItem
     risk: medium: external Miro API mutation; approval required
   update_boards_board_id_connectors_connector_id:
     endpoint: PATCH /v2/boards/{{ record.board_id }}/connectors/{{ record.connector_id }}
@@ -429,7 +430,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_boards_board_id_documents:
     endpoint: POST /v2/boards/{{ record.board_id }}/documents
-    required fields: board_id
+    required fields: board_id, data
     risk: medium: external Miro API mutation; approval required
   update_boards_board_id_documents_item_id:
     endpoint: PATCH /v2/boards/{{ record.board_id }}/documents/{{ record.item_id }}
@@ -441,7 +442,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_boards_board_id_embeds:
     endpoint: POST /v2/boards/{{ record.board_id }}/embeds
-    required fields: board_id
+    required fields: board_id, data
     risk: medium: external Miro API mutation; approval required
   update_boards_board_id_embeds_item_id:
     endpoint: PATCH /v2/boards/{{ record.board_id }}/embeds/{{ record.item_id }}
@@ -453,7 +454,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_boards_board_id_images:
     endpoint: POST /v2/boards/{{ record.board_id }}/images
-    required fields: board_id
+    required fields: board_id, data
     risk: medium: external Miro API mutation; approval required
   update_boards_board_id_images_item_id:
     endpoint: PATCH /v2/boards/{{ record.board_id }}/images/{{ record.item_id }}
@@ -473,7 +474,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_boards_board_id_members:
     endpoint: POST /v2/boards/{{ record.board_id }}/members
-    required fields: board_id
+    required fields: board_id, emails
     risk: medium: external Miro API mutation; approval required
   update_boards_board_id_members_board_member_id:
     endpoint: PATCH /v2/boards/{{ record.board_id }}/members/{{ record.board_member_id }}
@@ -509,7 +510,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_boards_board_id_texts:
     endpoint: POST /v2/boards/{{ record.board_id }}/texts
-    required fields: board_id
+    required fields: board_id, data
     risk: medium: external Miro API mutation; approval required
   update_boards_board_id_texts_item_id:
     endpoint: PATCH /v2/boards/{{ record.board_id }}/texts/{{ record.item_id }}
@@ -521,7 +522,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_boards_board_id_frames:
     endpoint: POST /v2/boards/{{ record.board_id }}/frames
-    required fields: board_id
+    required fields: board_id, data
     risk: medium: external Miro API mutation; approval required
   update_boards_board_id_frames_item_id:
     endpoint: PATCH /v2/boards/{{ record.board_id }}/frames/{{ record.item_id }}
@@ -537,7 +538,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_experimental_boards_board_id_mindmap_nodes:
     endpoint: POST /v2-experimental/boards/{{ record.board_id }}/mindmap_nodes
-    required fields: board_id
+    required fields: board_id, data
     risk: medium: external Miro API mutation; approval required
   delete_experimental_boards_board_id_items_item_id:
     endpoint: DELETE /v2-experimental/boards/{{ record.board_id }}/items/{{ record.item_id }}
@@ -573,11 +574,11 @@ REVERSE ETL ACTIONS
     risk: medium: external Miro API mutation; approval required
   create_boards_board_id_groups:
     endpoint: POST /v2/boards/{{ record.board_id }}/groups
-    required fields: board_id
+    required fields: board_id, id, name, type
     risk: medium: external Miro API mutation; approval required
   update_boards_board_id_groups_group_id:
     endpoint: PUT /v2/boards/{{ record.board_id }}/groups/{{ record.group_id }}
-    required fields: board_id, group_id
+    required fields: board_id, group_id, id, name, type
     risk: medium: external Miro API mutation; approval required
   delete_boards_board_id_groups_group_id:
     endpoint: DELETE /v2/boards/{{ record.board_id }}/groups/{{ record.group_id }}
@@ -585,7 +586,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_boards_board_id_tags:
     endpoint: POST /v2/boards/{{ record.board_id }}/tags
-    required fields: board_id
+    required fields: board_id, title
     risk: medium: external Miro API mutation; approval required
   update_boards_board_id_tags_tag_id:
     endpoint: PATCH /v2/boards/{{ record.board_id }}/tags/{{ record.tag_id }}
@@ -597,11 +598,11 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_orgs_org_id_teams_team_id_projects:
     endpoint: POST /v2/orgs/{{ record.org_id }}/teams/{{ record.team_id }}/projects
-    required fields: org_id, team_id
+    required fields: org_id, team_id, name
     risk: medium: external Miro API mutation; approval required
   update_orgs_org_id_teams_team_id_projects_project_id:
     endpoint: PATCH /v2/orgs/{{ record.org_id }}/teams/{{ record.team_id }}/projects/{{ record.project_id }}
-    required fields: org_id, team_id, project_id
+    required fields: org_id, team_id, project_id, name
     risk: medium: external Miro API mutation; approval required
   delete_orgs_org_id_teams_team_id_projects_project_id:
     endpoint: DELETE /v2/orgs/{{ record.org_id }}/teams/{{ record.team_id }}/projects/{{ record.project_id }}
@@ -613,7 +614,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Miro API mutation; approval required
   create_orgs_org_id_teams_team_id_projects_project_id_members:
     endpoint: POST /v2/orgs/{{ record.org_id }}/teams/{{ record.team_id }}/projects/{{ record.project_id }}/members
-    required fields: org_id, team_id, project_id
+    required fields: org_id, team_id, project_id, email, role
     risk: medium: external Miro API mutation; approval required
   update_orgs_org_id_teams_team_id_projects_project_id_members_member_id:
     endpoint: PATCH /v2/orgs/{{ record.org_id }}/teams/{{ record.team_id }}/projects/{{ record.project_id }}/members/{{ record.member_id }}
@@ -625,7 +626,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_orgs_org_id_teams:
     endpoint: POST /v2/orgs/{{ record.org_id }}/teams
-    required fields: org_id
+    required fields: org_id, name
     risk: medium: external Miro API mutation; approval required
   update_orgs_org_id_teams_team_id:
     endpoint: PATCH /v2/orgs/{{ record.org_id }}/teams/{{ record.team_id }}
@@ -637,7 +638,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_orgs_org_id_teams_team_id_members:
     endpoint: POST /v2/orgs/{{ record.org_id }}/teams/{{ record.team_id }}/members
-    required fields: org_id, team_id
+    required fields: org_id, team_id, email
     risk: medium: external Miro API mutation; approval required
   update_orgs_org_id_teams_team_id_members_member_id:
     endpoint: PATCH /v2/orgs/{{ record.org_id }}/teams/{{ record.team_id }}/members/{{ record.member_id }}
@@ -653,7 +654,7 @@ REVERSE ETL ACTIONS
     risk: medium: external Miro API mutation; approval required
   create_orgs_org_id_groups:
     endpoint: POST /v2/orgs/{{ record.org_id }}/groups
-    required fields: org_id
+    required fields: org_id, name
     risk: medium: external Miro API mutation; approval required
   update_orgs_org_id_groups_group_id:
     endpoint: PATCH /v2/orgs/{{ record.org_id }}/groups/{{ record.group_id }}
@@ -665,7 +666,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_orgs_org_id_groups_group_id_members:
     endpoint: POST /v2/orgs/{{ record.org_id }}/groups/{{ record.group_id }}/members
-    required fields: org_id, group_id
+    required fields: org_id, group_id, email
     risk: medium: external Miro API mutation; approval required
   update_orgs_org_id_groups_group_id_members:
     endpoint: PATCH /v2/orgs/{{ record.org_id }}/groups/{{ record.group_id }}/members
@@ -677,7 +678,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_orgs_org_id_teams_team_id_groups:
     endpoint: POST /v2/orgs/{{ record.org_id }}/teams/{{ record.team_id }}/groups
-    required fields: org_id, team_id
+    required fields: org_id, team_id, userGroupId, role
     risk: medium: external Miro API mutation; approval required
   delete_orgs_org_id_teams_team_id_groups_group_id:
     endpoint: DELETE /v2/orgs/{{ record.org_id }}/teams/{{ record.team_id }}/groups/{{ record.group_id }}
@@ -685,7 +686,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_orgs_org_id_boards_board_id_groups:
     endpoint: POST /v2/orgs/{{ record.org_id }}/boards/{{ record.board_id }}/groups
-    required fields: org_id, board_id
+    required fields: org_id, board_id, userGroupIds, role
     risk: medium: external Miro API mutation; approval required
   delete_orgs_org_id_boards_board_id_groups_group_id:
     endpoint: DELETE /v2/orgs/{{ record.org_id }}/boards/{{ record.board_id }}/groups/{{ record.group_id }}
@@ -693,7 +694,7 @@ REVERSE ETL ACTIONS
     risk: high: external Miro API mutation; approval required
   create_orgs_org_id_projects_project_id_groups:
     endpoint: POST /v2/orgs/{{ record.org_id }}/projects/{{ record.project_id }}/groups
-    required fields: org_id, project_id
+    required fields: org_id, project_id, userGroupIds, role
     risk: medium: external Miro API mutation; approval required
   delete_orgs_org_id_projects_project_id_groups_group_id:
     endpoint: DELETE /v2/orgs/{{ record.org_id }}/projects/{{ record.project_id }}/groups/{{ record.group_id }}

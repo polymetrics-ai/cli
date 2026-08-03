@@ -63,7 +63,7 @@ Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and 
 
 - update_signature_request:
   - endpoint: POST /signature_request/update/{{ record.signature_request_id }}
-  - required fields: signature_request_id
+  - required fields: signature_request_id, signature_id
   - risk: external mutation; changes a signer's email address or name on an in-progress signature request, redirecting where the next request/reminder is delivered; approval required
 - cancel_signature_request:
   - endpoint: POST /signature_request/cancel/{{ record.signature_request_id }}
@@ -71,7 +71,7 @@ Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and 
   - risk: destructive external mutation; cancels an incomplete signature request, this action is not reversible; approval required
 - remind_signature_request:
   - endpoint: POST /signature_request/remind/{{ record.signature_request_id }}
-  - required fields: signature_request_id
+  - required fields: signature_request_id, email_address
   - risk: external mutation; sends an email reminder to a signer; cannot be sent again within 1 hour of the last reminder (manual or automatic)
 - release_hold_signature_request:
   - endpoint: POST /signature_request/release_hold/{{ record.signature_request_id }}
@@ -98,6 +98,7 @@ Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and 
   - risk: external mutation; creates a new Team and makes the calling account its member; fails if the caller already belongs to a Team
 - update_team:
   - endpoint: PUT /team
+  - required fields: name
   - risk: external mutation; renames the caller's own Team
 - add_team_member:
   - endpoint: PUT /team/add_member

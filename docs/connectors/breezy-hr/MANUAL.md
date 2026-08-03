@@ -67,6 +67,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_position:
     endpoint: POST /positions
+    required fields: name, description, type, location
     risk: creates a new job opening; if not left in draft state, may become publicly visible on the company's careers page and job boards depending on the configured state
   update_position:
     endpoint: PUT /position/{{ record.position_id }}
@@ -74,11 +75,11 @@ REVERSE ETL ACTIONS
     risk: mutates an existing job opening's title/description/location/department; a live (published) posting's public listing reflects the change immediately
   update_position_state:
     endpoint: PUT /position/{{ record.position_id }}/state
-    required fields: position_id
+    required fields: position_id, state
     risk: changes a position's lifecycle state (published/draft/closed/archived); setting state to published makes the job publicly visible on the company's careers page and job boards, and closed/archived stops accepting new applicants
   create_candidate:
     endpoint: POST /position/{{ record.position_id }}/candidates
-    required fields: position_id
+    required fields: position_id, name
     risk: adds a new candidate to a position's hiring pipeline; low-risk additive mutation, no approval required
   update_candidate:
     endpoint: PUT /position/{{ record.position_id }}/candidate/{{ record.candidate_id }}
@@ -86,8 +87,7 @@ REVERSE ETL ACTIONS
     risk: mutates an existing candidate's contact/profile information
   move_candidate_stage:
     endpoint: PUT /position/{{ record.position_id }}/candidate/{{ record.candidate_id }}/stage
-    required fields: position_id, candidate_id
-    optional fields: stage_id
+    required fields: position_id, candidate_id, stage_id
     risk: moves a candidate to a different pipeline stage within the SAME position (e.g. Applied to Interviewing to Hired/Disqualified); moving to a terminal stage (hired/disqualified) may trigger configured stage actions (auto-emails, webhook notifications) depending on the position's stage_actions_enabled setting
 
 SECURITY

@@ -94,6 +94,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_group:
     endpoint: POST /groups
+    required fields: name
     risk: external mutation; creates a new Box enterprise group; approval required
   update_group:
     endpoint: PUT /groups/{{ record.id }}
@@ -105,6 +106,7 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; permanently deletes a Box enterprise group; approval required
   create_webhook:
     endpoint: POST /webhooks
+    required fields: target, address, triggers
     risk: external mutation; creates a new Box webhook subscription that will POST event payloads to an external address; approval required
   update_webhook:
     endpoint: PUT /webhooks/{{ record.id }}
@@ -116,6 +118,7 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; permanently deletes a Box webhook subscription; approval required
   create_collaboration:
     endpoint: POST /collaborations
+    required fields: item, accessible_by, role
     risk: external mutation; grants a user or group access to a Box file/folder; approval required
   update_collaboration:
     endpoint: PUT /collaborations/{{ record.id }}

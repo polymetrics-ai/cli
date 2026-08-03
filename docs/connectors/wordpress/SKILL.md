@@ -106,6 +106,7 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
   - risk: external deletion of public site content (moves to trash unless force=true is embedded in the path); approval required
 - create_comment:
   - endpoint: POST /wp-json/wp/v2/comments
+  - required fields: post, content
   - risk: external mutation; publishes a public-facing comment; approval required
 - update_comment:
   - endpoint: POST /wp-json/wp/v2/comments/{{ record.id }}
@@ -125,6 +126,7 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
   - risk: irreversible external deletion of a media/attachment item (WordPress core requires force=true; attachments do not support trashing); approval required
 - create_user:
   - endpoint: POST /wp-json/wp/v2/users
+  - required fields: username, email, password
   - risk: external mutation; creates a new site user account with a password; approval required
 - update_user:
   - endpoint: POST /wp-json/wp/v2/users/{{ record.id }}
@@ -136,6 +138,7 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
   - risk: irreversible external deletion of a site user account (WordPress core requires force=true and a reassign target; users do not support trashing); approval required
 - create_category:
   - endpoint: POST /wp-json/wp/v2/categories
+  - required fields: name
   - risk: external mutation; approval required
 - update_category:
   - endpoint: POST /wp-json/wp/v2/categories/{{ record.id }}
@@ -147,6 +150,7 @@ Reads and writes WordPress REST API content: posts, pages, comments, media, user
   - risk: irreversible external deletion of a category (WordPress core requires force=true; terms do not support trashing); approval required
 - create_tag:
   - endpoint: POST /wp-json/wp/v2/tags
+  - required fields: name
   - risk: external mutation; approval required
 - update_tag:
   - endpoint: POST /wp-json/wp/v2/tags/{{ record.id }}

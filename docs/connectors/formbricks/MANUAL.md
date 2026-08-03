@@ -104,6 +104,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_action_class:
     endpoint: POST management/action-classes
+    required fields: workspaceId, name, type
     risk: creates an action class in the configured Formbricks workspace
   delete_action_class:
     endpoint: DELETE management/action-classes/{{ record.actionClassId }}
@@ -111,6 +112,7 @@ REVERSE ETL ACTIONS
     risk: deletes an action class; automatic action classes may be rejected by Formbricks
   create_response:
     endpoint: POST management/responses
+    required fields: surveyId
     risk: creates a survey response and may trigger configured response pipelines
   update_response:
     endpoint: PUT management/responses/{{ record.responseId }}
@@ -122,9 +124,11 @@ REVERSE ETL ACTIONS
     risk: deletes a survey response
   create_public_file_upload:
     endpoint: POST management/storage
+    required fields: fileName, fileType, workspaceId
     risk: creates a public file upload target and returns upload metadata
   create_survey:
     endpoint: POST management/surveys
+    required fields: workspaceId, name, type, status
     risk: creates a survey in the configured Formbricks workspace
   update_survey:
     endpoint: PUT management/surveys/{{ record.surveyId }}
@@ -136,6 +140,7 @@ REVERSE ETL ACTIONS
     risk: deletes a survey and its configured collection surface
   create_webhook:
     endpoint: POST webhooks
+    required fields: url, triggers
     risk: creates a webhook that sends Formbricks events to the configured URL
   delete_webhook:
     endpoint: DELETE webhooks/{{ record.webhookId }}

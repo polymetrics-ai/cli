@@ -99,9 +99,11 @@ REVERSE ETL ACTIONS
     risk: external mutation; cancels a real scheduled event and notifies invitees; approval required
   create_invitee:
     endpoint: POST /invitees
+    required fields: event_type, start_time, invitee
     risk: external mutation; books a real meeting slot on the target event type and notifies the invitee; approval required
   create_webhook_subscription:
     endpoint: POST /webhook_subscriptions
+    required fields: url, events, organization, scope
     risk: external mutation; registers a new webhook endpoint that will receive live invitee/routing-form event payloads; approval required
   delete_webhook_subscription:
     endpoint: DELETE /webhook_subscriptions/{{ record.uuid }}
@@ -113,14 +115,15 @@ REVERSE ETL ACTIONS
     risk: destructive; permanently removes a user's membership from the organization, revoking their access; approval required
   invite_user_to_organization:
     endpoint: POST /organizations/{{ record.organization_uuid }}/invitations
-    required fields: organization_uuid
-    optional fields: email
+    required fields: organization_uuid, email
     risk: external mutation; sends a real organization-invitation email to the given address; approval required
   create_one_off_event_type:
     endpoint: POST /one_off_event_types
+    required fields: name, host, duration, date_setting
     risk: external mutation; publishes a new one-off publicly-bookable event type; approval required
   create_share:
     endpoint: POST /shares
+    required fields: event_type
     risk: external mutation; creates a new shareable booking link with its own spot limit for an event type; approval required
 
 SECURITY

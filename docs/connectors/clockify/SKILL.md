@@ -82,10 +82,11 @@ Reads Clockify workspaces, clients, projects, tags, users, tasks, time entries, 
 
 - create_client:
   - endpoint: POST /v1/workspaces/{{ config.workspace_id }}/clients
+  - required fields: name
   - risk: external mutation; creates a live Clockify client; approval required
 - update_client:
   - endpoint: PUT /v1/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}
-  - required fields: id
+  - required fields: id, name
   - risk: external mutation; overwrites a live Clockify client's fields; approval required
 - delete_client:
   - endpoint: DELETE /v1/workspaces/{{ config.workspace_id }}/clients/{{ record.id }}
@@ -93,10 +94,11 @@ Reads Clockify workspaces, clients, projects, tags, users, tasks, time entries, 
   - risk: external mutation; irreversibly deletes a live Clockify client; approval required
 - create_project:
   - endpoint: POST /v1/workspaces/{{ config.workspace_id }}/projects
+  - required fields: name
   - risk: external mutation; creates a live Clockify project; approval required
 - update_project:
   - endpoint: PUT /v1/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}
-  - required fields: id
+  - required fields: id, name
   - risk: external mutation; overwrites a live Clockify project's fields; approval required
 - delete_project:
   - endpoint: DELETE /v1/workspaces/{{ config.workspace_id }}/projects/{{ record.id }}
@@ -104,10 +106,11 @@ Reads Clockify workspaces, clients, projects, tags, users, tasks, time entries, 
   - risk: external mutation; irreversibly deletes a live Clockify project; approval required
 - create_tag:
   - endpoint: POST /v1/workspaces/{{ config.workspace_id }}/tags
+  - required fields: name
   - risk: external mutation; creates a live Clockify tag; approval required
 - update_tag:
   - endpoint: PUT /v1/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}
-  - required fields: id
+  - required fields: id, name
   - risk: external mutation; overwrites a live Clockify tag's fields; approval required
 - delete_tag:
   - endpoint: DELETE /v1/workspaces/{{ config.workspace_id }}/tags/{{ record.id }}
@@ -115,11 +118,11 @@ Reads Clockify workspaces, clients, projects, tags, users, tasks, time entries, 
   - risk: external mutation; irreversibly deletes a live Clockify tag; approval required
 - create_task:
   - endpoint: POST /v1/workspaces/{{ config.workspace_id }}/projects/{{ record.projectId }}/tasks
-  - required fields: projectId
+  - required fields: projectId, name
   - risk: external mutation; creates a live Clockify task on a project; approval required
 - update_task:
   - endpoint: PUT /v1/workspaces/{{ config.workspace_id }}/projects/{{ record.projectId }}/tasks/{{ record.id }}
-  - required fields: projectId, id
+  - required fields: projectId, id, name
   - risk: external mutation; overwrites a live Clockify task's fields; approval required
 - delete_task:
   - endpoint: DELETE /v1/workspaces/{{ config.workspace_id }}/projects/{{ record.projectId }}/tasks/{{ record.id }}

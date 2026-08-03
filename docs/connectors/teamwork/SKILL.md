@@ -71,22 +71,23 @@ Reads Teamwork projects, people, companies, tags, time entries, tasklists, miles
 
 - create_project:
   - endpoint: POST /projects.json
+  - required fields: project
   - risk: creates a new project; low-risk external mutation, no approval required. Body is wrapped under a top-level "project" key (Teamwork's V1 API convention) — the record itself must carry that wrapper, since the engine's write dialect sends record fields verbatim as the JSON body with no nested-wrapper construction primitive.
 - update_project:
   - endpoint: PUT /projects/{{ record.id }}.json
-  - required fields: id
+  - required fields: id, project
   - risk: mutates an existing project's name or description; visible to every project member
 - create_tasklist:
   - endpoint: POST /projects/{{ record.project_id }}/tasklists.json
-  - required fields: project_id
+  - required fields: project_id, todo-list
   - risk: creates a new task list under the target project; low-risk external mutation, no approval required
 - create_task:
   - endpoint: POST /tasklists/{{ record.tasklist_id }}/tasks.json
-  - required fields: tasklist_id
+  - required fields: tasklist_id, todo-item
   - risk: creates a new task in the target task list; low-risk external mutation, no approval required
 - update_task:
   - endpoint: PUT /tasks/{{ record.id }}.json
-  - required fields: id
+  - required fields: id, todo-item
   - risk: mutates an existing task's content, description, or priority
 - complete_task:
   - endpoint: PUT /tasks/{{ record.id }}/complete.json
@@ -94,14 +95,15 @@ Reads Teamwork projects, people, companies, tags, time entries, tasklists, miles
   - risk: marks an existing task as complete; a visible, notifiable state change for every task follower
 - create_milestone:
   - endpoint: POST /projects/{{ record.project_id }}/milestones.json
-  - required fields: project_id
+  - required fields: project_id, milestone
   - risk: creates a new milestone under the target project; low-risk external mutation, no approval required
 - create_company:
   - endpoint: POST /companies.json
+  - required fields: company
   - risk: creates a new company record; low-risk external mutation, no approval required
 - create_time_entry:
   - endpoint: POST /projects/{{ record.project_id }}/time_entries.json
-  - required fields: project_id
+  - required fields: project_id, time-entry
   - risk: logs a new time entry against the target project; contributes to billable-hours totals and any linked invoice
 
 ## Security

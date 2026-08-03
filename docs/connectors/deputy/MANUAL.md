@@ -66,6 +66,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_department:
     endpoint: POST /api/v1/resource/OperationalUnit
+    required fields: Company, OperationalUnitName
     risk: external mutation; creates a real Deputy department/operational unit; approval required
   update_department:
     endpoint: POST /api/v1/resource/OperationalUnit/{{ record.Id }}
@@ -77,6 +78,7 @@ REVERSE ETL ACTIONS
     risk: irreversible deletion of a real Deputy department/operational unit; approval required
   create_leave:
     endpoint: POST /api/v1/resource/Leave
+    required fields: Employee, DateStart, DateEnd
     risk: external mutation; creates a real leave request for a Deputy employee; approval required
   update_leave:
     endpoint: POST /api/v1/resource/Leave/{{ record.Id }}
@@ -88,6 +90,7 @@ REVERSE ETL ACTIONS
     risk: irreversible deletion of a real Deputy leave request; approval required
   create_roster:
     endpoint: POST /api/v1/resource/Roster
+    required fields: StartTime, EndTime, OperationalUnit
     risk: external mutation; creates a real Deputy roster/shift, potentially notifying the assigned employee; approval required
   update_roster:
     endpoint: POST /api/v1/resource/Roster/{{ record.Id }}
@@ -99,6 +102,7 @@ REVERSE ETL ACTIONS
     risk: irreversible deletion of a real Deputy roster/shift; approval required
   create_webhook:
     endpoint: POST /api/v1/resource/Webhook
+    required fields: Topic, Address, Type
     risk: external mutation; registers a real Deputy webhook subscription that will deliver events to the given address; approval required
   update_webhook:
     endpoint: POST /api/v1/resource/Webhook/{{ record.Id }}
@@ -110,6 +114,7 @@ REVERSE ETL ACTIONS
     risk: irreversible deletion of a real Deputy webhook subscription; approval required
   create_team:
     endpoint: POST /api/v1/resource/Team
+    required fields: Name
     risk: external mutation; creates a real Deputy team; approval required
   update_team:
     endpoint: POST /api/v1/resource/Team/{{ record.Id }}

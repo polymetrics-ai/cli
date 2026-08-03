@@ -79,6 +79,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   score_cleanest_route:
     endpoint: POST /insights/v1/cleanest-route
+    required fields: routes
     risk: stateless environmental-cleanliness scoring computation over caller-supplied route geometries; creates or mutates no persistent BreezoMeter object and has no side effects beyond the API call itself, low-risk
 
 SECURITY

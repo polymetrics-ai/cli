@@ -67,6 +67,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_supplier:
     endpoint: POST /suppliers
+    required fields: name
     risk: external mutation; approval required
   update_supplier:
     endpoint: PUT /suppliers/{{ record.id }}
@@ -78,6 +79,7 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_warehouse:
     endpoint: POST /warehouses
+    required fields: name
     risk: external mutation; approval required
   update_warehouse:
     endpoint: PUT /warehouses/{{ record.id }}
@@ -85,6 +87,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; approval required
   create_delivery_method:
     endpoint: POST /delivery_methods
+    required fields: name
     risk: external mutation; approval required
   update_delivery_method:
     endpoint: PUT /delivery_methods/{{ record.id }}
@@ -96,6 +99,7 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_tag:
     endpoint: POST /tags
+    required fields: name
     risk: external mutation; approval required
   delete_tag:
     endpoint: DELETE /tags/{{ record.id }}
@@ -103,6 +107,7 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_channel:
     endpoint: POST /channels
+    required fields: name, type_code
     risk: external mutation; approval required
   update_channel:
     endpoint: PUT /channels/{{ record.id }}
@@ -114,20 +119,23 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_product_property:
     endpoint: POST /product_properties
+    required fields: name
     risk: external mutation; approval required
   create_customer:
     endpoint: POST /customers
+    required fields: customer
     risk: external mutation; approval required
   update_customer:
     endpoint: PUT /customers/{{ record.id }}
-    required fields: id
+    required fields: id, customer
     risk: external mutation; approval required
   create_product:
     endpoint: POST /products
+    required fields: product
     risk: external mutation; approval required
   update_product:
     endpoint: PUT /products/{{ record.id }}
-    required fields: id
+    required fields: id, product
     risk: external mutation; approval required
   delete_product:
     endpoint: DELETE /products/{{ record.id }}
@@ -135,10 +143,11 @@ REVERSE ETL ACTIONS
     risk: destructive external mutation; approval required
   create_order:
     endpoint: POST /orders
+    required fields: order
     risk: external mutation; approval required
   update_order:
     endpoint: PUT /orders/{{ record.id }}
-    required fields: id
+    required fields: id, order
     risk: external mutation; approval required
   cancel_order:
     endpoint: PUT /orders/{{ record.id }}/cancel
@@ -146,9 +155,11 @@ REVERSE ETL ACTIONS
     risk: external mutation (cancels an order); approval required
   create_payment:
     endpoint: POST /payments
+    required fields: amount, payment_attributes
     risk: external mutation; approval required
   create_shipment:
     endpoint: POST /shipments
+    required fields: carrier_id, notify_customer, update_remote_order, allocation_id, order_id
     risk: external mutation; approval required
 
 SECURITY

@@ -77,6 +77,7 @@ Reads dbt Cloud projects, runs, repositories, users, environments, jobs, invites
 
 - create_job:
   - endpoint: POST /accounts/{{ config.account_id }}/jobs/
+  - required fields: project_id, environment_id, name, execute_steps
   - risk: creates a new scheduled/triggerable dbt Cloud job definition; low-risk until triggered, no approval required
 - update_job:
   - endpoint: POST /accounts/{{ config.account_id }}/jobs/{{ record.id }}/
@@ -88,7 +89,7 @@ Reads dbt Cloud projects, runs, repositories, users, environments, jobs, invites
   - risk: irreversible removal of a job definition (its schedule/trigger and run history reference); approval required
 - trigger_job_run:
   - endpoint: POST /accounts/{{ config.account_id }}/jobs/{{ record.job_id }}/run/
-  - required fields: job_id
+  - required fields: job_id, cause
   - risk: kicks off a real dbt Cloud job run against the configured warehouse connection (builds/materializes models, can run arbitrary project SQL); external mutation with warehouse side effects, approval required
 - retry_failed_job:
   - endpoint: POST /accounts/{{ config.account_id }}/jobs/{{ record.job_id }}/rerun/
@@ -104,6 +105,7 @@ Reads dbt Cloud projects, runs, repositories, users, environments, jobs, invites
   - risk: retries a specific failed run from the point of failure; runs real warehouse queries, external mutation with warehouse side effects, approval required
 - create_notification:
   - endpoint: POST /accounts/{{ config.account_id }}/notifications/
+  - required fields: user_id, on_cancel, on_failure, on_success, on_warning, state
   - risk: registers an outbound job-status notification (email or Slack channel of the caller's choosing); low-risk external mutation, no approval required
 - update_notification:
   - endpoint: POST /accounts/{{ config.account_id }}/notifications/{{ record.id }}/
@@ -115,6 +117,7 @@ Reads dbt Cloud projects, runs, repositories, users, environments, jobs, invites
   - risk: removes an existing job-status notification configuration; approval required
 - create_ssh_tunnel:
   - endpoint: POST /accounts/{{ config.account_id }}/encryptions/
+  - required fields: connection_id, username, port, hostname, state
   - risk: creates an SSH tunnel encrypting traffic for a warehouse connection; may carry a private key in the request body, external mutation, approval required
 - update_ssh_tunnel:
   - endpoint: POST /accounts/{{ config.account_id }}/encryptions/{{ record.id }}/

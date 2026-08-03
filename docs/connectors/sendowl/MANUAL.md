@@ -59,6 +59,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_product:
     endpoint: POST /api/v1/products
+    required fields: name
     risk: creates a new sellable product (no file attachment; SendOwl's file-upload create path is a separate multipart-only endpoint this dialect cannot express, see docs.md Known limits); external mutation, approval required
   update_product:
     endpoint: PUT /api/v1/products/{{ record.id }}
@@ -70,6 +71,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a product; breaks any existing order-fulfillment/download links referencing it
   create_subscription:
     endpoint: POST /api/v1/subscriptions
+    required fields: name
     risk: creates a new recurring-billing subscription product; external mutation, approval required
   update_subscription:
     endpoint: PUT /api/v1/subscriptions/{{ record.id }}
@@ -81,6 +83,7 @@ REVERSE ETL ACTIONS
     risk: permanently removes a subscription product; does not itself cancel any buyer's already-active recurring order (see cancel_order_subscription)
   create_discount:
     endpoint: POST /api/v1_2/discounts
+    required fields: code
     risk: creates a new discount code usable at checkout; external mutation, approval required
   update_discount:
     endpoint: PUT /api/v1_2/discounts/{{ record.id }}
@@ -100,8 +103,8 @@ REVERSE ETL ACTIONS
     risk: permanently removes a bundle; breaks any existing order-fulfillment links referencing it
   refund_order:
     endpoint: POST /api/v1/orders/{{ record.id }}/refund
-    required fields: id
-    optional fields: amount, cancel_subscription, revoke_access
+    required fields: id, amount
+    optional fields: cancel_subscription, revoke_access
     risk: issues a real financial refund against the buyer's original payment method; irreversible external money movement, approval required
   cancel_order_subscription:
     endpoint: PUT /api/v1/orders/{{ record.id }}/cancel_subscription

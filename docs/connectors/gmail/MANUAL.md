@@ -84,12 +84,15 @@ SYNC MODES
 REVERSE ETL ACTIONS
   send_message:
     endpoint: POST /users/{{ config.user_id }}/messages/send
+    required fields: raw
     risk: sends a real outbound email on behalf of the mailbox owner; irreversible once delivered
   insert_message:
     endpoint: POST /users/{{ config.user_id }}/messages
+    required fields: raw
     risk: inserts a message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still a real, visible mailbox mutation
   import_message:
     endpoint: POST /users/{{ config.user_id }}/messages/import
+    required fields: raw
     risk: imports a message into the mailbox from an external mail migration source, bypassing spam classification by default
   modify_message:
     endpoint: POST /users/{{ config.user_id }}/messages/{{ record.id }}/modify
@@ -125,13 +128,15 @@ REVERSE ETL ACTIONS
     risk: permanently deletes every message in a thread immediately, bypassing Trash; irreversible
   create_draft:
     endpoint: POST /users/{{ config.user_id }}/drafts
+    required fields: message
     risk: creates a new unsent draft, visible to the mailbox owner
   update_draft:
     endpoint: PUT /users/{{ config.user_id }}/drafts/{{ record.id }}
-    required fields: id
+    required fields: id, message
     risk: replaces the entire content of an existing draft
   send_draft:
     endpoint: POST /users/{{ config.user_id }}/drafts/send
+    required fields: id
     risk: sends a real outbound email from an existing draft on behalf of the mailbox owner; irreversible once delivered
   delete_draft:
     endpoint: DELETE /users/{{ config.user_id }}/drafts/{{ record.id }}
@@ -139,10 +144,11 @@ REVERSE ETL ACTIONS
     risk: permanently deletes a draft; irreversible
   create_label:
     endpoint: POST /users/{{ config.user_id }}/labels
+    required fields: name
     risk: creates a new custom label visible in the mailbox owner's label list
   update_label:
     endpoint: PUT /users/{{ config.user_id }}/labels/{{ record.id }}
-    required fields: id
+    required fields: id, name
     risk: replaces the full definition of an existing label (name/visibility/color); a system label's name cannot actually be changed by Gmail even though the request is accepted
   patch_label:
     endpoint: PATCH /users/{{ config.user_id }}/labels/{{ record.id }}
@@ -154,6 +160,7 @@ REVERSE ETL ACTIONS
     risk: removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error
   create_filter:
     endpoint: POST /users/{{ config.user_id }}/settings/filters
+    required fields: criteria
     risk: creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally)
   delete_filter:
     endpoint: DELETE /users/{{ config.user_id }}/settings/filters/{{ record.id }}
@@ -161,6 +168,7 @@ REVERSE ETL ACTIONS
     risk: removes an existing mail filter; future messages stop being auto-actioned by it
   create_send_as:
     endpoint: POST /users/{{ config.user_id }}/settings/sendAs
+    required fields: sendAsEmail
     risk: adds a new custom From: alias; Google emails a verification link to the new address before it can send mail
   update_send_as:
     endpoint: PUT /users/{{ config.user_id }}/settings/sendAs/{{ record.sendAsEmail }}
@@ -180,6 +188,7 @@ REVERSE ETL ACTIONS
     risk: re-sends the verification email for a pending custom From: alias
   create_delegate:
     endpoint: POST /users/{{ config.user_id }}/settings/delegates
+    required fields: delegateEmail
     risk: grants another account read/send/delete access to this mailbox (Google Workspace accounts only); a significant access-control change
   delete_delegate:
     endpoint: DELETE /users/{{ config.user_id }}/settings/delegates/{{ record.delegateEmail }}
@@ -187,6 +196,7 @@ REVERSE ETL ACTIONS
     risk: revokes another account's delegated access to this mailbox
   create_forwarding_address:
     endpoint: POST /users/{{ config.user_id }}/settings/forwardingAddresses
+    required fields: forwardingEmail
     risk: proposes a new external forwarding address; Google emails a verification link before it can be used by update_auto_forwarding
   delete_forwarding_address:
     endpoint: DELETE /users/{{ config.user_id }}/settings/forwardingAddresses/{{ record.forwardingEmail }}
@@ -194,12 +204,14 @@ REVERSE ETL ACTIONS
     risk: removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops
   update_auto_forwarding:
     endpoint: PUT /users/{{ config.user_id }}/settings/autoForwarding
+    required fields: enabled
     risk: changes the account-wide auto-forwarding singleton; when enabled, silently copies all future incoming mail to an external address
   update_vacation:
     endpoint: PUT /users/{{ config.user_id }}/settings/vacation
     risk: changes the account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the configured message
   update_language:
     endpoint: PUT /users/{{ config.user_id }}/settings/language
+    required fields: displayLanguage
     risk: changes the Gmail web interface display language for the account
   update_imap:
     endpoint: PUT /users/{{ config.user_id }}/settings/imap

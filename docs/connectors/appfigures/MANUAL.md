@@ -94,11 +94,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   reply_to_review:
     endpoint: POST /reviews/{{ record.id }}/response
-    required fields: id
-    optional fields: content
+    required fields: id, content
     risk: publishes a developer response to a customer review, visible on the public app store listing
   create_event:
     endpoint: POST /events/
+    required fields: caption, date
     risk: creates a release/marketing event marker overlaid on every Appfigures analytics chart
   update_event:
     endpoint: PUT /events/{{ record.id }}

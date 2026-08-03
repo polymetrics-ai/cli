@@ -92,6 +92,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_customer:
     endpoint: POST /v2/customers
+    required fields: name
     risk: external mutation; creates a live Clockodo customer; approval required
   update_customer:
     endpoint: PUT /v2/customers/{{ record.id }}
@@ -103,6 +104,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Clockodo customer; approval required
   create_project:
     endpoint: POST /v2/projects
+    required fields: name, customers_id
     risk: external mutation; creates a live Clockodo project; approval required
   update_project:
     endpoint: PUT /v2/projects/{{ record.id }}
@@ -114,6 +116,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly removes a live Clockodo project; approval required
   create_service:
     endpoint: POST /v2/services
+    required fields: name
     risk: external mutation; creates a live Clockodo service; approval required
   update_service:
     endpoint: PUT /v2/services/{{ record.id }}
@@ -125,6 +128,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Clockodo service; approval required
   create_team:
     endpoint: POST /v2/teams
+    required fields: name
     risk: external mutation; creates a live Clockodo team; approval required
   update_team:
     endpoint: PUT /v2/teams/{{ record.id }}
@@ -136,6 +140,7 @@ REVERSE ETL ACTIONS
     risk: external mutation; irreversibly deletes a live Clockodo team; approval required
   create_lumpsum_service:
     endpoint: POST /v2/lumpsumservices
+    required fields: name, price
     risk: external mutation; creates a live Clockodo lump-sum service; approval required
   update_lumpsum_service:
     endpoint: PUT /v2/lumpsumservices/{{ record.id }}

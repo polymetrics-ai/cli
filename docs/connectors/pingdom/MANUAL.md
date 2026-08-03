@@ -72,6 +72,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_check:
     endpoint: POST /checks
+    required fields: name, host, type
     risk: creates a new Pingdom uptime check (this action models the common HTTP-type check shape; Pingdom's other 8 check types share the same name/host/type/paused/resolution/notification fields plus type-specific attributes not modeled here, see docs.md Known limits); low-risk external mutation, no approval required
   update_check:
     endpoint: PUT /checks/{{ record.id }}
@@ -83,10 +84,11 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an uptime check and its historical results; destructive external mutation, approval required
   create_contact:
     endpoint: POST /alerting/contacts
+    required fields: name, notification_targets
     risk: creates a new alerting contact with email/SMS notification targets; low-risk external mutation, no approval required
   update_contact:
     endpoint: PUT /alerting/contacts/{{ record.id }}
-    required fields: id
+    required fields: id, name, paused, notification_targets
     risk: updates an existing alerting contact's name/paused state/notification targets (Pingdom's PUT is a full replacement, requiring name/paused/notification_targets together); external mutation, approval required
   delete_contact:
     endpoint: DELETE /alerting/contacts/{{ record.id }}
@@ -94,10 +96,11 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an alerting contact and its notification targets; destructive external mutation, approval required
   create_team:
     endpoint: POST /alerting/teams
+    required fields: name, member_ids
     risk: creates a new alerting team from a list of contact ids; low-risk external mutation, no approval required
   update_team:
     endpoint: PUT /alerting/teams/{{ record.id }}
-    required fields: id
+    required fields: id, name, member_ids
     risk: updates an existing alerting team's name/member list; external mutation, approval required
   delete_team:
     endpoint: DELETE /alerting/teams/{{ record.id }}
@@ -105,6 +108,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an alerting team; destructive external mutation, approval required
   create_maintenance:
     endpoint: POST /maintenance
+    required fields: description, from, to
     risk: creates a new maintenance window that suppresses alerting for the assigned checks during the scheduled period; low-risk external mutation, no approval required
   delete_maintenance:
     endpoint: DELETE /maintenance/{{ record.id }}

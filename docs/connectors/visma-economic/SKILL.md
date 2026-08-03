@@ -103,10 +103,11 @@ Reads customers, suppliers, products, invoices, orders, quotes, departments, pay
 
 - create_customer:
   - endpoint: POST /customers
+  - required fields: name, currency, paymentTerms, customerGroup, vatZone
   - risk: external mutation; approval required
 - update_customer:
   - endpoint: PUT /customers/{{ record.id }}
-  - required fields: id
+  - required fields: id, name, currency, paymentTerms, customerGroup, vatZone
   - risk: external mutation; approval required
 - delete_customer:
   - endpoint: DELETE /customers/{{ record.id }}
@@ -114,10 +115,11 @@ Reads customers, suppliers, products, invoices, orders, quotes, departments, pay
   - risk: destructive external mutation (deletes a customer permanently); approval required
 - create_supplier:
   - endpoint: POST /suppliers
+  - required fields: name, currency, paymentTerms, group, vatZone
   - risk: external mutation; approval required
 - update_supplier:
   - endpoint: PUT /suppliers/{{ record.id }}
-  - required fields: id
+  - required fields: id, name, currency, paymentTerms, group, vatZone
   - risk: external mutation; approval required
 - delete_supplier:
   - endpoint: DELETE /suppliers/{{ record.id }}
@@ -125,10 +127,11 @@ Reads customers, suppliers, products, invoices, orders, quotes, departments, pay
   - risk: destructive external mutation (deletes a supplier permanently); approval required
 - create_product:
   - endpoint: POST /products
+  - required fields: productNumber, name, salesPrice, productGroup
   - risk: external mutation; approval required
 - update_product:
   - endpoint: PUT /products/{{ record.id }}
-  - required fields: id
+  - required fields: id, name, salesPrice, productGroup
   - risk: external mutation; approval required
 - delete_product:
   - endpoint: DELETE /products/{{ record.id }}
@@ -136,10 +139,11 @@ Reads customers, suppliers, products, invoices, orders, quotes, departments, pay
   - risk: destructive external mutation (deletes a product permanently); approval required
 - create_unit:
   - endpoint: POST /units
+  - required fields: name
   - risk: external mutation; approval required
 - update_unit:
   - endpoint: PUT /units/{{ record.id }}
-  - required fields: id
+  - required fields: id, name
   - risk: external mutation; approval required
 - delete_unit:
   - endpoint: DELETE /units/{{ record.id }}
@@ -147,10 +151,11 @@ Reads customers, suppliers, products, invoices, orders, quotes, departments, pay
   - risk: destructive external mutation (deletes a unit permanently); approval required
 - create_payment_term:
   - endpoint: POST /payment-terms
+  - required fields: name, paymentTermsType
   - risk: external mutation; approval required
 - update_payment_term:
   - endpoint: PUT /payment-terms/{{ record.id }}
-  - required fields: id
+  - required fields: id, name, paymentTermsType
   - risk: external mutation; approval required
 - delete_payment_term:
   - endpoint: DELETE /payment-terms/{{ record.id }}
