@@ -68008,7 +68008,7 @@
   {
     "name": "hubplanner",
     "display_name": "Hubplanner",
-    "description": "Reads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through the Hubplanner REST API.",
+    "description": "Reads Hubplanner scheduling, project, resource, client, billing, time, vacation, custom-field, and webhook-subscription data and exposes typed reverse-ETL writes for documented Hubplanner REST resources.",
     "integration_type": "api",
     "docs_url": "https://github.com/hubplanner/API",
     "release_stage": "ga",
@@ -68016,7 +68016,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -68029,28 +68029,14 @@
       "properties": {
         "api_key": {
           "type": "string",
-          "x-secret": true,
-          "description": "Hubplanner API key, sent verbatim (no Bearer prefix) as the Authorization header. Never logged."
+          "description": "Hubplanner API key passed in the Authorization header.",
+          "x-secret": true
         },
         "base_url": {
           "type": "string",
           "format": "uri",
           "default": "https://api.hubplanner.com/v1",
-          "description": "Hubplanner API base URL override for tests or proxies."
-        },
-        "page_size": {
-          "type": "string",
-          "default": "200",
-          "description": "Records per page (1-1000)."
-        },
-        "max_pages": {
-          "type": "string",
-          "default": "0",
-          "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+          "description": "Hubplanner API base URL."
         }
       }
     },
@@ -68131,11 +68117,607 @@
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
         ]
+      },
+      {
+        "name": "booking_categories",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "resource_custom_field_templates",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_custom_field_templates",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_groups",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "resource_groups",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "cost_categories",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_managers",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_tags",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "resource_tags",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "time_entries",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "unassigned_work",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "vacations",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "webhook_subscriptions",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "create_billing_rate",
+        "kind": "create",
+        "method": "POST",
+        "path": "/billingRate",
+        "risk": "creates a Hubplanner billing rate"
+      },
+      {
+        "name": "update_billing_rate",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/billingRate/{{ record.id }}",
+        "risk": "updates a Hubplanner billing rate"
+      },
+      {
+        "name": "delete_billing_rate",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/billingRate/{{ record.id }}",
+        "risk": "deletes a Hubplanner billing rate",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_booking_category",
+        "kind": "create",
+        "method": "POST",
+        "path": "/categories",
+        "risk": "creates a Hubplanner booking category"
+      },
+      {
+        "name": "update_booking_category",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/categories/{{ record.id }}",
+        "risk": "updates a Hubplanner booking category"
+      },
+      {
+        "name": "create_booking",
+        "kind": "create",
+        "method": "POST",
+        "path": "/booking",
+        "risk": "creates a Hubplanner booking"
+      },
+      {
+        "name": "update_booking",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/booking/{{ record.id }}",
+        "risk": "updates a Hubplanner booking"
+      },
+      {
+        "name": "patch_booking",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/booking/{{ record.id }}",
+        "risk": "patches selected Hubplanner booking fields"
+      },
+      {
+        "name": "delete_booking",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/booking/{{ record.id }}",
+        "risk": "deletes a Hubplanner booking",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_bookings",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/booking?ids={{ record.ids }}",
+        "risk": "deletes multiple Hubplanner bookings by ids",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_client",
+        "kind": "create",
+        "method": "POST",
+        "path": "/client",
+        "risk": "creates a Hubplanner client"
+      },
+      {
+        "name": "update_client",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/client/{{ record.id }}",
+        "risk": "updates a Hubplanner client"
+      },
+      {
+        "name": "delete_client",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/client/{{ record.id }}",
+        "risk": "deletes a Hubplanner client",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_resource_custom_field_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/resource/customField/template",
+        "risk": "creates a Hubplanner resource custom field template"
+      },
+      {
+        "name": "update_resource_custom_field_template",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/resource/customField/template/{{ record.id }}",
+        "risk": "updates a Hubplanner resource custom field template"
+      },
+      {
+        "name": "delete_resource_custom_field_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/resource/customField/template/{{ record.id }}",
+        "risk": "deletes a Hubplanner resource custom field template",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_project_custom_field_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/project/customField/template",
+        "risk": "creates a Hubplanner project custom field template"
+      },
+      {
+        "name": "update_project_custom_field_template",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/project/customField/template/{{ record.id }}",
+        "risk": "updates a Hubplanner project custom field template"
+      },
+      {
+        "name": "delete_project_custom_field_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project/customField/template/{{ record.id }}",
+        "risk": "deletes a Hubplanner project custom field template",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_event",
+        "kind": "create",
+        "method": "POST",
+        "path": "/event",
+        "risk": "creates a Hubplanner event"
+      },
+      {
+        "name": "update_event",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/event/{{ record.id }}",
+        "risk": "updates a Hubplanner event"
+      },
+      {
+        "name": "delete_event",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/event/{{ record.id }}",
+        "risk": "deletes a Hubplanner event",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_project_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projectgroup",
+        "risk": "creates a Hubplanner project group"
+      },
+      {
+        "name": "update_project_group",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/projectgroup/{{ record.id }}",
+        "risk": "updates a Hubplanner project group"
+      },
+      {
+        "name": "delete_project_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projectgroup/{{ record.id }}",
+        "risk": "deletes a Hubplanner project group",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_holiday",
+        "kind": "create",
+        "method": "POST",
+        "path": "/holiday",
+        "risk": "creates a Hubplanner holiday"
+      },
+      {
+        "name": "update_holiday",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/holiday/{{ record.id }}",
+        "risk": "updates a Hubplanner holiday"
+      },
+      {
+        "name": "delete_holiday",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/holiday/{{ record.id }}",
+        "risk": "deletes a Hubplanner holiday",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_milestone",
+        "kind": "create",
+        "method": "POST",
+        "path": "/milestone",
+        "risk": "creates a Hubplanner milestone"
+      },
+      {
+        "name": "update_milestone",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/milestone/{{ record.id }}",
+        "risk": "updates a Hubplanner milestone"
+      },
+      {
+        "name": "delete_milestone",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/milestone/{{ record.id }}",
+        "risk": "deletes a Hubplanner milestone",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_cost_category",
+        "kind": "create",
+        "method": "POST",
+        "path": "/costCategories",
+        "risk": "creates a Hubplanner project cost category"
+      },
+      {
+        "name": "update_cost_category",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/costCategories/{{ record.id }}",
+        "risk": "updates a Hubplanner project cost category"
+      },
+      {
+        "name": "delete_cost_category",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/costCategories/{{ record.id }}",
+        "risk": "deletes a Hubplanner project cost category",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_project_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/project-tag",
+        "risk": "creates a Hubplanner project tag"
+      },
+      {
+        "name": "update_project_tag",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/project-tag/{{ record.id }}",
+        "risk": "updates a Hubplanner project tag"
+      },
+      {
+        "name": "delete_project_tag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project-tag/{{ record.id }}",
+        "risk": "deletes a Hubplanner project tag",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_resource_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/resource-tag",
+        "risk": "creates a Hubplanner resource tag"
+      },
+      {
+        "name": "update_resource_tag",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/resource-tag/{{ record.id }}",
+        "risk": "updates a Hubplanner resource tag"
+      },
+      {
+        "name": "delete_resource_tag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/resource-tag/{{ record.id }}",
+        "risk": "deletes a Hubplanner resource tag",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/project",
+        "risk": "creates a Hubplanner project"
+      },
+      {
+        "name": "patch_project",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/project",
+        "risk": "patches a Hubplanner project by _id in the typed body"
+      },
+      {
+        "name": "delete_project",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project/{{ record.id }}",
+        "risk": "deletes a Hubplanner project",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_projects",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project",
+        "risk": "deletes multiple Hubplanner projects by ids",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_resource",
+        "kind": "create",
+        "method": "POST",
+        "path": "/resource",
+        "risk": "creates a Hubplanner resource"
+      },
+      {
+        "name": "patch_resource",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/resource",
+        "risk": "patches a Hubplanner resource by _id in the typed body"
+      },
+      {
+        "name": "delete_resource",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/resource/{{ record.id }}",
+        "risk": "deletes a Hubplanner resource",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_resources",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/resource",
+        "risk": "deletes multiple Hubplanner resources by ids",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_time_entry",
+        "kind": "create",
+        "method": "POST",
+        "path": "/timeentry",
+        "risk": "creates a Hubplanner time entry"
+      },
+      {
+        "name": "update_time_entry",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/timeentry/{{ record.id }}",
+        "risk": "updates a Hubplanner time entry"
+      },
+      {
+        "name": "delete_time_entry",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/timeentry/{{ record.id }}",
+        "risk": "deletes a Hubplanner time entry",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_time_entries",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/timeentry",
+        "risk": "deletes multiple Hubplanner time entries by ids",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_unassigned_work",
+        "kind": "create",
+        "method": "POST",
+        "path": "/unassigned-work",
+        "risk": "creates Hubplanner unassigned work"
+      },
+      {
+        "name": "update_unassigned_work",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/unassigned-work/{{ record.id }}",
+        "risk": "updates Hubplanner unassigned work"
+      },
+      {
+        "name": "delete_unassigned_work",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/unassigned-work/{{ record.id }}",
+        "risk": "deletes Hubplanner unassigned work",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_vacation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/vacation",
+        "risk": "creates a Hubplanner vacation"
+      },
+      {
+        "name": "update_vacation",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/vacation/{{ record.id }}",
+        "risk": "updates a Hubplanner vacation"
+      },
+      {
+        "name": "patch_vacation",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/vacation/{{ record.id }}",
+        "risk": "patches selected Hubplanner vacation fields"
+      },
+      {
+        "name": "delete_vacation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/vacation/{{ record.id }}",
+        "risk": "deletes a Hubplanner vacation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_webhook_subscription",
+        "kind": "create",
+        "method": "POST",
+        "path": "/subscription",
+        "risk": "creates a Hubplanner webhook subscription that can deliver future event payloads to the approved HTTPS target URL",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_webhook_subscription",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/subscription/{{ record.id }}",
+        "risk": "deletes a Hubplanner webhook subscription",
+        "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external Hubplanner API read of scheduling, project, and billing data",
-      "approval": "none; read-only, no reverse-ETL write surface"
+      "read": "external Hubplanner API reads of scheduling, project, resource, client, time, vacation, billing, and webhook-subscription data",
+      "write": "typed reverse-ETL actions create, update, patch, and delete Hubplanner records using fixed documented REST paths only",
+      "approval": "reverse ETL writes require plan, preview, explicit approval, and destructive confirmation for deletes"
     },
     "icon": {
       "id": "hubplanner",

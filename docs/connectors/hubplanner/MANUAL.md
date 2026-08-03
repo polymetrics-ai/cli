@@ -405,22 +405,22 @@ COMMAND SURFACE
     unassigned-work list - List Hubplanner unassigned work as ETL records. [intent=etl availability=implemented stream=unassigned_work]
     vacations list - List Hubplanner vacations as ETL records. [intent=etl availability=implemented stream=vacations]
     webhook-subscriptions list - List Hubplanner webhook subscriptions as ETL records. [intent=etl availability=implemented stream=webhook_subscriptions]
-    billing-rates get - Get a Hubplanner billing rate by id. [intent=direct_read availability=implemented]; flags: --id
-    booking-categories get - Get a Hubplanner booking category by id. [intent=direct_read availability=implemented]; flags: --id
-    bookings get - Get a Hubplanner booking by id. [intent=direct_read availability=implemented]; flags: --id
-    clients get - Get a Hubplanner client by id. [intent=direct_read availability=implemented]; flags: --id
-    events get - Get a Hubplanner event by id. [intent=direct_read availability=implemented]; flags: --id
-    project-groups get - Get a Hubplanner project group by id. [intent=direct_read availability=implemented]; flags: --id
-    holidays get - Get a Hubplanner holiday by id. [intent=direct_read availability=implemented]; flags: --id
-    milestones get - Get a Hubplanner milestone by id. [intent=direct_read availability=implemented]; flags: --id
-    cost-categories get - Get a Hubplanner project cost category by id. [intent=direct_read availability=implemented]; flags: --id
-    projects get - Get a Hubplanner project by id. [intent=direct_read availability=implemented]; flags: --id
-    resources get - Get a Hubplanner resource by id. [intent=direct_read availability=implemented]; flags: --id
-    time-entries get - Get a Hubplanner time entry by id. [intent=direct_read availability=implemented]; flags: --id
-    unassigned-work get - Get a Hubplanner unassigned-work record by id. [intent=direct_read availability=implemented]; flags: --id
-    vacations get - Get a Hubplanner vacation by id. [intent=direct_read availability=implemented]; flags: --id
-    resource-custom-fields search - Search Hubplanner resource custom field templates. [intent=direct_read availability=implemented]; flags: --type, --label, --required
-    project-custom-fields search - Search Hubplanner project custom field templates. [intent=direct_read availability=implemented]; flags: --type, --label, --required
+    billing-rates get - Get a Hubplanner billing rate by id. [intent=direct_read availability=implemented operation=hubplanner.billing_rates_get]; flags: --id
+    booking-categories get - Get a Hubplanner booking category by id. [intent=direct_read availability=implemented operation=hubplanner.booking_categories_get]; flags: --id
+    bookings get - Get a Hubplanner booking by id. [intent=direct_read availability=implemented operation=hubplanner.bookings_get]; flags: --id
+    clients get - Get a Hubplanner client by id. [intent=direct_read availability=implemented operation=hubplanner.clients_get]; flags: --id
+    events get - Get a Hubplanner event by id. [intent=direct_read availability=implemented operation=hubplanner.events_get]; flags: --id
+    project-groups get - Get a Hubplanner project group by id. [intent=direct_read availability=implemented operation=hubplanner.project_groups_get]; flags: --id
+    holidays get - Get a Hubplanner holiday by id. [intent=direct_read availability=implemented operation=hubplanner.holidays_get]; flags: --id
+    milestones get - Get a Hubplanner milestone by id. [intent=direct_read availability=implemented operation=hubplanner.milestones_get]; flags: --id
+    cost-categories get - Get a Hubplanner project cost category by id. [intent=direct_read availability=implemented operation=hubplanner.cost_categories_get]; flags: --id
+    projects get - Get a Hubplanner project by id. [intent=direct_read availability=implemented operation=hubplanner.projects_get]; flags: --id
+    resources get - Get a Hubplanner resource by id. [intent=direct_read availability=implemented operation=hubplanner.resources_get]; flags: --id
+    time-entries get - Get a Hubplanner time entry by id. [intent=direct_read availability=implemented operation=hubplanner.time_entries_get]; flags: --id
+    unassigned-work get - Get a Hubplanner unassigned-work record by id. [intent=direct_read availability=implemented operation=hubplanner.unassigned_work_get]; flags: --id
+    vacations get - Get a Hubplanner vacation by id. [intent=direct_read availability=implemented operation=hubplanner.vacations_get]; flags: --id
+    resource-custom-fields search - Search Hubplanner resource custom field templates. [intent=direct_read availability=implemented operation=hubplanner.resource_custom_field_template_search]; flags: --type, --label, --required
+    project-custom-fields search - Search Hubplanner project custom field templates. [intent=direct_read availability=implemented operation=hubplanner.project_custom_field_template_search]; flags: --type, --label, --required
     billing-rates create - Plan or preview Hubplanner write action `create_billing_rate`. [intent=reverse_etl availability=implemented write=create_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute; risk: creates a Hubplanner billing rate; flags: --label, --rate, --currency
     billing-rates update - Plan or preview Hubplanner write action `update_billing_rate`. [intent=reverse_etl availability=implemented write=update_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute; risk: updates a Hubplanner billing rate; flags: --id, --label, --rate, --currency
     billing-rates delete - Plan or preview Hubplanner write action `delete_billing_rate`. [intent=reverse_etl availability=implemented write=delete_billing_rate]; approval: reverse ETL plan -> preview -> approval -> execute with destructive confirmation; risk: deletes a Hubplanner billing rate; flags: --id
