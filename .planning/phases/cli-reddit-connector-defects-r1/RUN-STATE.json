@@ -1,0 +1,157 @@
+{
+  "phase": "cli-reddit-connector-defects-r1",
+  "pr": 3677,
+  "branch": "fm/cli-reddit-connector-defects-r1",
+  "baseCommit": "9c977b2084306e3d360ef48cdc5586392104989f",
+  "status": "implemented",
+  "verificationPassed": true,
+  "verificationBlocked": false,
+  "humanGated": true,
+  "breakingChange": {
+    "isBreaking": true,
+    "field": "reddit_username",
+    "reason": "Adds a required config field to a release_stage=ga connector's spec.json; a breaking config change regardless of current user count.",
+    "decision": "Captain decision: keep reddit_username required as committed (no existing reddit connector users, so backward compatibility is not a practical concern) but mark the break honestly.",
+    "commitType": "fix(connectors)!:",
+    "commit": "9b25e9a69",
+    "closesFinding": "breaking-required-config-unflagged"
+  },
+  "gsd": {
+    "doctor": "passed",
+    "doctorDetail": "node v24.13.1, 69 commands registered; official docs, commands registry, upstream lock, and Pi adapter resources all ok",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase cli-reddit-connector-defects-r1 --dry-run",
+    "programmingLoopResult": "unavailable_unknown_command",
+    "manualFallback": true,
+    "fallbackReference": ".agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Single connector-owned mutating scope in an already isolated worktree; parallel mutating workers would collide on the reddit bundle and its generated catalog/website surfaces."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Applied the three defect fixes, the templated User-Agent header, the regression test, and the reddit-only generated-surface sync inline on the issue branch."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Focused gofmt/vet/test/build gates plus a base-bundle red run passed locally; merge stays human-gated."
+    }
+  ],
+  "defects": [
+    {
+      "id": 1,
+      "summary": "streams.json declared the non-conforming literal user_agent 'polymetrics-go-cli'; Reddit mandates <platform>:<app ID>:<version> (by /u/<reddit username>) and drastically rate-limits non-conforming clients.",
+      "fix": "Moved User-Agent into a templated base.headers entry built from a new required reddit_username config field.",
+      "engineConstraint": "base.user_agent is copied to connsdk.Requester.UserAgent verbatim and never interpolated; connsdk/http.go applyHeaders (line 623) sets UserAgent at lines 629-631 then overrides with DefaultHeaders at lines 638-640, so base.headers always wins.",
+      "behaviorChange": true,
+      "pinnedByTests": [
+        "TestRedditUserAgentDeclaredAsTemplatedHeader",
+        "TestRedditUserAgentSentOnReadRequests",
+        "TestRedditUserAgentFailsClosedWithoutUsername"
+      ]
+    },
+    {
+      "id": 2,
+      "summary": "api_surface.json claimed documented coverage for the comments stream's GET /r/{subreddit}/comments, which is not among Reddit's 202 documented endpoints; only the per-article GET [/r/subreddit]/comments/{article} tree is documented.",
+      "fix": "Kept the working bare route and made api_surface.json honest: a dated scope caveat with citation plus an explicit excluded entry for the real documented endpoint, following the YNAB-connector precedent rather than inventing a new excluded.category enum value.",
+      "engineConstraint": "The documented per-article endpoint returns a two-element top-level Listing array ([post_listing, comment_listing]) that records.path's dotted-key-only traversal (connsdk.RecordsAt) cannot parse, plus an N+1 fan-out cost against Reddit's 100 QPM budget.",
+      "behaviorChange": false
+    },
+    {
+      "id": 3,
+      "summary": "spec.json required a caller-supplied access_token and declared OAuth acquisition/refresh out of scope, but Reddit bearer tokens expire 1 hour after issuance and nothing documented that.",
+      "fix": "Documented the 1-hour limit in access_token's description, docs.md, and the 401 hint; sharpened the 429 hint to name X-Ratelimit-Used, X-Ratelimit-Remaining, and X-Ratelimit-Reset.",
+      "engineConstraint": "refresh_token support would need a new engine auth mode, a shared-runtime change out of scope for this connector-scoped slice.",
+      "behaviorChange": false
+    }
+  ],
+  "checks": [
+    {
+      "command": "scripts/gsd doctor",
+      "result": "passed"
+    },
+    {
+      "command": "gofmt -l internal/connectors/engine/reddit_user_agent_test.go",
+      "result": "passed",
+      "summary": "no output"
+    },
+    {
+      "command": "go vet ./internal/connectors/engine/...",
+      "result": "passed",
+      "summary": "exit 0"
+    },
+    {
+      "command": "go test ./internal/connectors/engine/... -count=1",
+      "result": "passed",
+      "summary": "ok polymetrics.ai/internal/connectors/engine 11.386s"
+    },
+    {
+      "command": "go test ./internal/connectors/engine/... -run TestRedditUserAgent -count=1 -v",
+      "result": "passed",
+      "summary": "3/3 pass; ok polymetrics.ai/internal/connectors/engine 1.883s"
+    },
+    {
+      "command": "go build ./cmd/pm",
+      "result": "passed",
+      "summary": "exit 0"
+    },
+    {
+      "command": "base-bundle red run (reddit streams.json + spec.json from 9c977b208 + current test)",
+      "result": "red_as_expected",
+      "summary": "all three TestRedditUserAgent* cases fail: base.user_agent = \"polymetrics-go-cli\"; request 0 User-Agent = \"polymetrics-go-cli\"; fail-closed case reaches the test server and ends in http 500 instead of a header-resolution error"
+    },
+    {
+      "command": "git status --porcelain (after red-run restore)",
+      "result": "passed",
+      "summary": "empty; HEAD 5ae5c62b0; base.headers[User-Agent] confirmed restored"
+    },
+    {
+      "command": "GSD_BASE_REF=9c977b208 scripts/verify-gsd-workflow (before this phase)",
+      "result": "failed_as_expected",
+      "summary": "cmd/internal changed, but no GSD planning evidence changed; exit 1 — reproduces the gsd-workflow-evidence CI failure on PR #3677"
+    },
+    {
+      "command": "GSD_BASE_REF=9c977b208 scripts/verify-gsd-workflow (after this phase)",
+      "result": "passed",
+      "summary": "planning evidence present and mentions manual-GSD fallback plus Red/Green evidence"
+    },
+    {
+      "command": "catalog diff scope check",
+      "result": "passed",
+      "summary": "git diff --numstat on docs/connectors/catalog/all-connectors.json reports 7 insertions and 2 deletions, all inside the reddit entry; no other connector touched"
+    }
+  ],
+  "parity": {
+    "cliSurface": "not_applicable",
+    "cliReason": "No pm command, subcommand, flag, output, or help-topic change; this slice edits a connector bundle and its generated documentation only.",
+    "connectorSurface": "updated",
+    "generatedSurfaces": [
+      "docs/connectors/catalog/all-connectors.json",
+      "docs/connectors/reddit/MANUAL.md",
+      "docs/connectors/reddit/SKILL.md",
+      "website/data/connectors.generated.json",
+      "website/lib/connectors.catalog.data.generated.json"
+    ],
+    "fullDocsGenerateRun": false,
+    "fullDocsGenerateReason": "pm docs generate regenerates all ~550 connectors due to pre-existing unrelated drift; that churn is deliberately kept out of this connector-scoped PR. Only the reddit entry was synced and the diff scope was verified."
+  },
+  "openItems": [
+    "Hardcoded version segment: the User-Agent's version is the literal 'v1', not a real build version. No {{ version }} template namespace exists in the engine and adding one is a shared-runtime change outside this connector-scoped slice. The header conforms to Reddit's required shape today but the version will not track releases until that namespace exists.",
+    "Undocumented comments route retained: GET /r/{subreddit}/comments is live and is what the legacy connector always called, but Reddit does not document it and could change it without notice. Migrating to the documented per-article tree needs array-index support in records.path and an answer for the N+1 fan-out against the 100 QPM budget; both deferred.",
+    "No token refresh: access_token stays caller-supplied and expires after 1 hour. Refresh support needs a new engine auth mode. Scheduled or long-running reddit syncs will fail with 401 until that lands; the limit is now documented in spec.json, docs.md, and the 401 hint rather than silent.",
+    "Reddit commercial-terms and data-retention decisions remain open and are untouched by this slice; all three defects fixed here are independent of that thread.",
+    "Prior-run review finding 'user-agent-conformance-unenforced' (info/no-op) is accepted as classified; no action taken."
+  ],
+  "safety": {
+    "secretsHandled": false,
+    "liveProviderCalls": false,
+    "credentialedChecks": false,
+    "dependenciesAdded": false,
+    "reverseETLExecuted": false,
+    "note": "The regression test uses the synthetic literal 'synthetic-conformance-secret' against a local httptest server. reddit_username is explicitly not a secret — it is a public identity component Reddit's API rules require in the User-Agent — so it is a plain config field rather than an x-secret one."
+  }
+}
