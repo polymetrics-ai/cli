@@ -2,6 +2,7 @@ package bundleregistry
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/fs"
 	"strings"
 	"testing"
@@ -124,6 +125,7 @@ func TestNewOmitsUnloadableBundlesInsteadOfPanicking(t *testing.T) {
 	copyBundleForTest(t, fixture, "akeneo")
 	disableBundleForTest(t, fixture, "akeneo", "upstream routes rotated; pending re-verification")
 	useDefinitionsFSForTest(t, fixture)
+	warnings := captureWarningsForTest(t)
 
 	registry := newWithoutPanicking(t)
 
@@ -133,6 +135,22 @@ func TestNewOmitsUnloadableBundlesInsteadOfPanicking(t *testing.T) {
 	if _, ok := registry.Get("github"); !ok {
 		t.Fatal("registry missing github; bundles that loaded successfully must still register")
 	}
+
+	got := warnings.String()
+	for _, want := range []string{"akeneo", "upstream routes rotated"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("warning output %q does not name %q; an omitted connector must be reported", got, want)
+		}
+	}
+}
+
+func captureWarningsForTest(t *testing.T) *strings.Builder {
+	t.Helper()
+	var sb strings.Builder
+	prev := warnf
+	warnf = func(format string, a ...any) { fmt.Fprintf(&sb, format, a...) }
+	t.Cleanup(func() { warnf = prev })
+	return &sb
 }
 
 func newWithoutPanicking(t *testing.T) *connectors.Registry {

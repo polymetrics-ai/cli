@@ -29,9 +29,17 @@ const vaultIDFile = "id"
 // KeychainProtector stores the vault's data key in the host OS's native
 // credential store — macOS Keychain, Windows Credential Manager, or Linux
 // Secret Service (D-Bus) — via github.com/zalando/go-keyring, instead of on
-// disk. This closes vault v2 gap #1 (F3', "key stored in plaintext beside
+// disk. This addresses vault v2 gap #1 (F3', "key stored in plaintext beside
 // the ciphertext"): filesystem read access alone no longer yields every
 // stored credential.
+//
+// It is opt-in, not the default: Init's auto-selection never chooses it, so
+// reaching it requires an explicit InitWithProtector(dir,
+// KeychainProtector{}). Init's doc comment records the two gaps that must
+// close before it can be promoted to the default — most importantly that
+// LoadOrCreateKey below still mints a fresh key when no entry is findable,
+// which silently orphans a vault that already holds ciphertext (a restore
+// onto a new machine, a reinstalled OS, a deleted keychain item).
 //
 // Library choice: go-keyring wraps all three platforms behind one small
 // interface, and its macOS backend shells out to the fixed system
@@ -41,10 +49,10 @@ const vaultIDFile = "id"
 // system binary called with fixed flags) rather than linking cgo, keeping
 // `pm`'s build simple and cross-compilable. Its Linux backend needs a
 // reachable D-Bus Secret Service (gnome-keyring, kwallet, ...); on a
-// headless host with none, LoadOrCreateKey returns an error and
-// InitWithProtector's auto-selection falls back to filekeyProtector — that
-// fallback is recorded via Vault.UsingFallbackKeyProtection(), never
-// silent.
+// headless host with none, LoadOrCreateKey returns an error, which a caller
+// that supplied this protector through an explicit protector chain can
+// absorb by falling back to filekeyProtector — recorded via
+// Vault.UsingFallbackKeyProtection(), never silent.
 //
 // The account name is derived from the vault's own persisted id (not from
 // any filesystem path) so distinct project vaults never collide in one

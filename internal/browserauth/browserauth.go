@@ -81,8 +81,8 @@ type SessionCredential struct {
 	// cookies are only coherent with the browser build that produced them.
 	// It is the browser's reported version string where the binary reports
 	// one, the pinned revision for a downloaded Chromium, and otherwise a
-	// content fingerprint of the binary. The guarantee it supports is
-	// therefore "did the browser build change since capture?", not a
+	// path/size/mtime fingerprint of the binary. The guarantee it supports
+	// is therefore "did the browser build change since capture?", not a
 	// semantic version comparison.
 	FingerprintRef string
 	CapturedAt     time.Time

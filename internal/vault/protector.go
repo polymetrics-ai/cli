@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"testing"
 )
 
 // KeyProtector resolves the vault's 32-byte AES-256 data key and decides
@@ -33,11 +32,11 @@ type keyStorer interface {
 }
 
 // filekeyProtector is the pre-v2 behavior: a 32-byte key written in
-// plaintext beside the ciphertext (vault/key, mode 0600). It is the
-// explicit, warned fallback for headless hosts with no OS keychain —
-// anyone with filesystem read access to the vault directory can decrypt
-// every credential it holds, so InitWithProtector's auto-selection only
-// reaches for it after KeychainProtector fails.
+// plaintext beside the ciphertext (vault/key, mode 0600). It is the default
+// protector for every new vault — anyone with filesystem read access to the
+// vault directory can decrypt every credential it holds, which is exactly
+// the pre-v2 property KeychainProtector is meant to eventually improve on.
+// See Init for why that promotion is deferred.
 type filekeyProtector struct{}
 
 func (filekeyProtector) Name() string { return "filekey" }
@@ -75,12 +74,20 @@ func filekeyPath(dir string) string { return filepath.Join(dir, "key") }
 const protectorMarkerFile = "protector"
 
 // Init opens or creates the vault under projectDir/vault, auto-selecting a
-// KeyProtector: a vault that was already initialized (or a legacy pre-v2
-// vault with a plaintext key file and no marker) reuses whatever protected
-// it before; a brand-new vault tries the OS keychain first and falls back to
-// the plaintext file key, recorded via UsingFallbackKeyProtection(), when no
-// keychain is reachable (headless hosts, CI, sandboxes with no secret
-// service).
+// KeyProtector: a vault that was already initialized reuses whatever
+// protected it before (via the vault/protector marker), and a brand-new
+// vault gets filekeyProtector — the pre-v2 plaintext on-disk key.
+//
+// KeychainProtector is fully implemented and available, but only through an
+// explicit InitWithProtector(dir, KeychainProtector{}); auto-selection never
+// reaches for it. Two gaps have to close before it can become the default,
+// and both are deferred to a follow-up hardening PR: it must fail closed
+// rather than silently minting a fresh key when the vault already holds
+// ciphertext but no key is findable in this machine's keychain, and its
+// auto-selection guard must cover ephemeral and non-interactive invocations
+// (`make smoke`, CI, containers) rather than only the in-process `go test`
+// case. Until then, defaulting here would write a never-deleted secret into
+// the operator's login keychain on every throwaway `pm init`.
 func Init(projectDir string) (*Vault, error) {
 	return InitWithProtector(projectDir, nil)
 }
@@ -115,23 +122,13 @@ func InitWithProtector(projectDir string, protector KeyProtector) (*Vault, error
 	return initNewVault(dir)
 }
 
+// initNewVault protects a vault that carries no protector marker yet. Both
+// shapes that reach here — a brand-new vault and a legacy pre-v2 vault whose
+// plaintext key file predates the marker — resolve to filekeyProtector, so a
+// pre-v2 vault keeps decrypting exactly as before and a new one never
+// touches the host's OS keychain without the caller asking for it.
 func initNewVault(dir string) (*Vault, error) {
-	// Legacy pre-v2 vault: a plaintext key file with no marker yet. Preserve
-	// it under filekeyProtector rather than reinterpreting it, so vaults
-	// created before v2 keep decrypting exactly as before.
-	if _, err := os.Stat(filekeyPath(dir)); err == nil {
-		return newVaultWithProtector(dir, filekeyProtector{}, false)
-	}
-
-	// Under `go test`, never reach the real OS keychain: auto-selection would
-	// otherwise mint a fresh, never-deleted secret in the developer's own
-	// login keychain for every t.TempDir() project root any test creates.
-	if testing.Testing() {
-		return initWithProtectorChain(dir, filekeyProtector{})
-	}
-
-	// Brand-new vault: try the OS keychain first, fall back to the file key.
-	return initWithProtectorChain(dir, KeychainProtector{}, filekeyProtector{})
+	return initWithProtectorChain(dir, filekeyProtector{})
 }
 
 // initWithProtectorChain tries each protector in order, using the first one
