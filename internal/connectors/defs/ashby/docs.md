@@ -2,7 +2,7 @@
 
 ## Overview
 
-Ashby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference/candidateaddtag). The parity ledger was reviewed on 2026-08-01.
+Ashby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference). The parity ledger was reviewed on 2026-08-01.
 
 Coverage summary:
 

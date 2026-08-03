@@ -1,6 +1,6 @@
 {
   "api": "Official Ashby developer ReadMe OpenAPI 3.1 schema embedded in the public reference page",
-  "docs": "https://developers.ashbyhq.com/reference/candidateaddtag",
+  "docs": "https://developers.ashbyhq.com/reference",
   "reviewed_at": "2026-08-01",
   "operation_ledger_version": 1,
   "scope": "Complete public Ashby inventory: REST operations plus OpenAPI webhook events. Supported REST read/write/direct surfaces are fixed and typed; conditional side-effect reads, multipart submissions, inbound partner/webhook, and presigned external file-transfer workflows remain blocked with source-backed reasons.",

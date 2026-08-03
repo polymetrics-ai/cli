@@ -652,7 +652,7 @@ SECURITY
 COMMAND SURFACE
   Ashby applicant-tracking connector with typed REST streams, bounded direct reads, and gated reverse-ETL writes.
   Usage: pm connectors command ashby <command> [flags]
-  Source CLI: Ashby Public API (https://developers.ashbyhq.com/reference/candidateaddtag)
+  Source CLI: Ashby Public API (https://developers.ashbyhq.com/reference)
   ETL streams
   Bounded direct reads
   Reverse ETL writes

@@ -4,7 +4,7 @@
   "source_cli": {
     "name": "Ashby Public API",
     "docs": "https://developers.ashbyhq.com/",
-    "reference": "https://developers.ashbyhq.com/reference/candidateaddtag",
+    "reference": "https://developers.ashbyhq.com/reference",
     "source": "public ReadMe OpenAPI"
   },
   "groups": [
