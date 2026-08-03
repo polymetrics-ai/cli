@@ -59,3 +59,34 @@ The outer no-mistakes executor still owns commit, push, PR-body mutation, broade
 - [x] `make connector-boundary` — passed with a clean report.
 - [x] `make verify` — passed end-to-end on the final tree.
 - [x] No live Airtable calls, credentials, provider writes, dependencies, PR mutation, push, or no-mistakes pipeline-control commands were used.
+
+## CI phase repair — stale check runs from abandoned temp branch — 2026-08-04
+
+This branch's own `branch-name` and `require-linked-issue` runs at head `ff794c51b3` already passed;
+the two failing checks on this PR were **stale runs from the abandoned temp branch
+`fm-airtable-import-tmp` (PR #3678)** attached to the same head SHA. Because GitHub shows the newest
+run per check name for a head SHA, that branch's failing runs temporarily superseded this PR's passing
+ones in the checks UI. Diagnosis (all read-only):
+
+- `branch-name` failed only because the stale run carried `HEAD_REF=fm-airtable-import-tmp`, which contains
+  no `/` and therefore matches neither `fm/*` nor a conventional `<type>/…` prefix. This PR's branch
+  `fm/cli-airtable-parity-wave03-r1` matches the `fm/*` allowlist.
+- `require-linked-issue` failed only because the stale run carried PR #3678's body (`## What Changed …
+  expanded the Airtable connector …`), which contains no `Closes #…`/issue wording. This PR's body
+  (`Closes #3070` … `Closes #3077`) passes `go run ./cmd/prissueguard --title "feat(connectors): complete
+  Airtable Web API parity" --body-file …` → `issueguard: ok (8 linked issues)`.
+
+Deliberately **not** adopted (they would be out-of-scope or wrong-scope fixes; the shared-runtime
+`internal/coordination/issueguard` change belongs to merged foundation PR #3675, and adding `fm-*` to
+`.github/workflows/conventions.yml` would globally loosen the branch-name check):
+
+- [x] `internal/coordination/issueguard/*` left untouched — `git diff origin/main -- internal/coordination/issueguard` is empty, confirming no leaked shared-runtime change.
+- [x] `.github/workflows/conventions.yml` left untouched — no global branch-name allowance added.
+
+Fix: a head-SHA refresh commit on this branch, so fresh workflow runs attach only to this branch's new
+SHA. At the new SHA both checks pass: `branch-name` (fm/* allowlist) and `require-linked-issue` (issueguard
+ok, 8 linked issues).
+- [x] `go run ./cmd/prissueguard --title "feat(connectors): complete Airtable Web API parity" --body-file <pr3540 body>` — `issueguard: ok (8 linked issues)`.
+- [x] Branch-name gate: `fm/cli-airtable-parity-wave03-r1` is allowlisted via `fm/*`; a genuinely malformed branch is still rejected.
+- [x] `git diff --check` — passed.
+- [x] No live Airtable calls, credentials, provider writes, dependencies, PR mutation, push, or no-mistakes pipeline-control commands were used.
