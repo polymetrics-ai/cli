@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -72,12 +73,7 @@ func TestPublishedStreamsHaveClosedRuntimeDispatch(t *testing.T) {
 	}
 }
 
-func TestGetInsightSelectorsUsesTypedRequestBody(t *testing.T) {
-	if _, err := buildActionBodyFromStrings("GetInsightSelectors", nil, true); err == nil {
-		t.Fatal("GetInsightSelectors unexpectedly accepted an empty request body")
-	} else if !strings.Contains(err.Error(), "EventDataStore or TrailName") {
-		t.Fatalf("GetInsightSelectors error = %v, want alternate request field requirement", err)
-	}
+func TestTrailScopedActionsUseTypedRequestBody(t *testing.T) {
 	tests := []struct {
 		name  string
 		raw   map[string]string
@@ -87,14 +83,23 @@ func TestGetInsightSelectorsUsesTypedRequestBody(t *testing.T) {
 		{name: "trail", raw: map[string]string{"TrailName": "trail-fixture"}, field: "TrailName", want: "trail-fixture"},
 		{name: "event data store", raw: map[string]string{"EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"}, field: "EventDataStore", want: "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			body, err := buildActionBodyFromStrings("GetInsightSelectors", tt.raw, true)
-			if err != nil {
-				t.Fatalf("GetInsightSelectors with %s: %v", tt.field, err)
+	for _, action := range []string{"GetEventConfiguration", "GetInsightSelectors"} {
+		t.Run(action, func(t *testing.T) {
+			if _, err := buildActionBodyFromStrings(action, nil, true); err == nil {
+				t.Fatalf("%s unexpectedly accepted an empty request body", action)
+			} else if !strings.Contains(err.Error(), "EventDataStore or TrailName") {
+				t.Fatalf("%s error = %v, want alternate request field requirement", action, err)
 			}
-			if got := body[tt.field]; got != tt.want {
-				t.Fatalf("%s = %#v, want %q", tt.field, got, tt.want)
+			for _, tt := range tests {
+				t.Run(tt.name, func(t *testing.T) {
+					body, err := buildActionBodyFromStrings(action, tt.raw, true)
+					if err != nil {
+						t.Fatalf("%s with %s: %v", action, tt.field, err)
+					}
+					if got := body[tt.field]; got != tt.want {
+						t.Fatalf("%s = %#v, want %q", tt.field, got, tt.want)
+					}
+				})
 			}
 		})
 	}
@@ -225,6 +230,15 @@ func TestNativeCloudTrailReadDerivesRequiredStreamFields(t *testing.T) {
 			wantTargets:  "DescribeTrails,ListEventDataStores,GetInsightSelectors",
 			response:     `{"InsightSelectors":[{"InsightType":"ApiCallRateInsight"}]}`,
 		},
+		{
+			name:         "event configuration uses discovered trail ARN",
+			stream:       "get_event_configuration",
+			detailAction: "GetEventConfiguration",
+			field:        "TrailName",
+			wantValue:    trailARN,
+			wantTargets:  "DescribeTrails,ListEventDataStores,GetEventConfiguration",
+			response:     `{"MaxEventSize":"Standard"}`,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -245,7 +259,7 @@ func TestNativeCloudTrailReadDerivesRequiredStreamFields(t *testing.T) {
 					}
 					_, _ = w.Write([]byte(`{"trailList":[{"Name":"trail-fixture","TrailARN":"` + trailARN + `"}]}`))
 				case "ListEventDataStores":
-					if tt.detailAction != "GetInsightSelectors" {
+					if !strings.Contains(tt.wantTargets, "ListEventDataStores") {
 						t.Fatalf("unexpected target %s", action)
 					}
 					_, _ = w.Write([]byte(`{"EventDataStores":[]}`))
@@ -490,6 +504,139 @@ func TestNativeCloudTrailReadSkipsInsightSelectorsNotEnabledTrails(t *testing.T)
 	}
 }
 
+var trailOrEventDataStoreFanoutStreams = []struct {
+	name       string
+	stream     string
+	action     string
+	okResponse string
+}{
+	{name: "event configuration", stream: "get_event_configuration", action: "GetEventConfiguration", okResponse: `{"MaxEventSize":"Standard"}`},
+	{name: "insight selectors", stream: "get_insight_selectors", action: "GetInsightSelectors", okResponse: `{"InsightSelectors":[{"InsightType":"ApiCallRateInsight"}]}`},
+}
+
+func TestNativeCloudTrailSkipsFanoutInapplicableResources(t *testing.T) {
+	eventDataStore := "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/inactive-store"
+	for _, stream := range trailOrEventDataStoreFanoutStreams {
+		for _, tt := range []struct {
+			name        string
+			storeStatus int
+			storeBody   string
+		}{
+			{name: "inactive store", storeStatus: http.StatusBadRequest, storeBody: `{"__type":"InactiveEventDataStoreException","Message":"event data store is not active"}`},
+			{name: "unsupported store category", storeStatus: http.StatusBadRequest, storeBody: `{"__type":"InvalidEventDataStoreCategoryException","Message":"unsupported category"}`},
+			{name: "unsupported operation", storeStatus: http.StatusBadRequest, storeBody: `{"__type":"UnsupportedOperationException","Message":"unsupported"}`},
+			{name: "missing store", storeStatus: http.StatusNotFound, storeBody: `{"__type":"EventDataStoreNotFoundException","Message":"unknown store"}`},
+		} {
+			t.Run(stream.name+"/"+tt.name, func(t *testing.T) {
+				var requests []string
+				srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					action := strings.TrimPrefix(r.Header.Get("X-Amz-Target"), cloudTrailTargetPrefix)
+					var body map[string]any
+					if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+						t.Fatalf("decode body: %v", err)
+					}
+					w.Header().Set("Content-Type", "application/json")
+					switch action {
+					case "DescribeTrails":
+						_, _ = w.Write([]byte(`{"trailList":[{"Name":"deleted-trail"},{"Name":"configured-trail"}]}`))
+					case "ListEventDataStores":
+						_, _ = w.Write([]byte(`{"EventDataStores":[{"EventDataStoreArn":"` + eventDataStore + `"}]}`))
+					case stream.action:
+						if store, ok := body["EventDataStore"].(string); ok {
+							requests = append(requests, store)
+							w.WriteHeader(tt.storeStatus)
+							_, _ = w.Write([]byte(tt.storeBody))
+							return
+						}
+						trailName, _ := body["TrailName"].(string)
+						requests = append(requests, trailName)
+						if trailName == "deleted-trail" {
+							w.WriteHeader(http.StatusBadRequest)
+							_, _ = w.Write([]byte(`{"__type":"TrailNotFoundException","Message":"unknown trail"}`))
+							return
+						}
+						_, _ = w.Write([]byte(stream.okResponse))
+					default:
+						t.Fatalf("unexpected target %s", action)
+					}
+				}))
+				defer srv.Close()
+
+				c := Connector{Client: srv.Client()}
+				var records []connectors.Record
+				err := c.Read(context.Background(), connectors.ReadRequest{Stream: stream.stream, Config: fixtureRuntimeConfig(srv.URL)}, func(record connectors.Record) error {
+					records = append(records, record)
+					return nil
+				})
+				if err != nil {
+					t.Fatalf("Read: %v", err)
+				}
+				if got, want := strings.Join(requests, ","), "deleted-trail,configured-trail,"+eventDataStore; got != want {
+					t.Fatalf("%s requests = %s, want %s", stream.action, got, want)
+				}
+				if len(records) != 1 || records[0]["pm_record_id"] != "configured-trail" {
+					t.Fatalf("records = %#v", records)
+				}
+			})
+		}
+	}
+}
+
+func TestNativeCloudTrailPropagatesFanoutAccessErrors(t *testing.T) {
+	for _, stream := range trailOrEventDataStoreFanoutStreams {
+		t.Run(stream.name, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				action := strings.TrimPrefix(r.Header.Get("X-Amz-Target"), cloudTrailTargetPrefix)
+				w.Header().Set("Content-Type", "application/json")
+				switch action {
+				case "DescribeTrails":
+					_, _ = w.Write([]byte(`{"trailList":[{"Name":"configured-trail"}]}`))
+				case "ListEventDataStores":
+					_, _ = w.Write([]byte(`{"EventDataStores":[]}`))
+				case stream.action:
+					w.WriteHeader(http.StatusBadRequest)
+					_, _ = w.Write([]byte(`{"__type":"InsufficientDependencyServiceAccessPermissionException","Message":"missing permission"}`))
+				default:
+					t.Fatalf("unexpected target %s", action)
+				}
+			}))
+			defer srv.Close()
+
+			c := Connector{Client: srv.Client()}
+			err := c.Read(context.Background(), connectors.ReadRequest{Stream: stream.stream, Config: fixtureRuntimeConfig(srv.URL)}, func(connectors.Record) error {
+				t.Fatal("emit called for a permission failure")
+				return nil
+			})
+			if err == nil {
+				t.Fatal("Read unexpectedly succeeded despite a permission failure")
+			}
+		})
+	}
+}
+
+func TestTrailOrEventDataStoreFanoutActionsShareErrorTolerance(t *testing.T) {
+	for action := range cloudTrailTrailOrEventDataStoreActions {
+		t.Run(action, func(t *testing.T) {
+			if !cloudTrailCanDeriveActionBody(action) {
+				t.Fatalf("%s routes through the shared fan-out but cannot derive a request body", action)
+			}
+			if _, ok := cloudTrailActionAnyOfRequiredFields[action]; !ok {
+				t.Fatalf("%s routes through the shared fan-out but has no anyOf request requirement", action)
+			}
+			for _, marker := range cloudTrailTrailOrEventDataStoreSkipMarkers {
+				err := &connsdk.HTTPError{Status: http.StatusBadRequest, Body: `{"__type":"` + marker + `"}`}
+				if !shouldSkipDerivedActionError(action, err) {
+					t.Fatalf("%s does not tolerate shared fan-out error %q", action, marker)
+				}
+			}
+			denied := &connsdk.HTTPError{Status: http.StatusBadRequest, Body: `{"__type":"InsufficientDependencyServiceAccessPermissionException"}`}
+			if shouldSkipDerivedActionError(action, denied) {
+				t.Fatalf("%s tolerates a permission failure", action)
+			}
+		})
+	}
+}
+
 func TestNativeCloudTrailRejectsRepeatedNextToken(t *testing.T) {
 	requests := 0
 	var requestTokens []string
@@ -625,6 +772,35 @@ func TestNativeCloudTrailDirectAndWritesAreBlockedInScopeCorrectedSurface(t *tes
 	}
 	if got, err := c.Write(context.Background(), connectors.WriteRequest{Action: "start_logging"}, []connectors.Record{{"Name": "trail-fixture"}}); err == nil || got.RecordsFailed != 1 {
 		t.Fatalf("Write result = %+v err = %v, want blocked failure", got, err)
+	}
+}
+
+func TestCollectionActionsUseDocumentedResponseArrays(t *testing.T) {
+	tests := []struct {
+		action string
+		key    string
+	}{
+		{action: "DescribeTrails", key: "trailList"},
+		{action: "ListChannels", key: "Channels"},
+		{action: "ListDashboards", key: "Dashboards"},
+		{action: "ListEventDataStores", key: "EventDataStores"},
+		{action: "ListImportFailures", key: "Failures"},
+		{action: "ListImports", key: "Imports"},
+		{action: "ListPublicKeys", key: "PublicKeyList"},
+		{action: "ListTags", key: "ResourceTagList"},
+		{action: "ListTrails", key: "Trails"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.action, func(t *testing.T) {
+			decoded := map[string]any{
+				tt.key:           []any{map[string]any{"Name": "documented"}},
+				"UnrelatedArray": []any{map[string]any{"Name": "decoy"}},
+			}
+			records := recordsForAction(tt.action, decoded)
+			if len(records) != 1 || records[0]["Name"] != "documented" {
+				t.Fatalf("records = %#v, want the %s array", records, tt.key)
+			}
+		})
 	}
 }
 

@@ -52,7 +52,7 @@ func (Connector) Metadata() connectors.Metadata {
 		Name:            connectorName,
 		DisplayName:     "AWS CloudTrail",
 		IntegrationType: "api",
-		Description:     "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime.",
+		Description:     "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; CloudTrail event and Insights record reads are blocked/planned. See the connector docs migration note.",
 		Capabilities:    connectors.Capabilities{Check: true, Catalog: true, Read: true, Write: false, Query: false},
 	}
 }
@@ -212,14 +212,30 @@ func copyActionBody(body map[string]any) map[string]any {
 
 func cloudTrailCanDeriveActionBody(action string) bool {
 	switch action {
-	case "GetChannel", "GetDashboard", "GetEventDataStore", "GetEventSelectors", "GetImport", "GetInsightSelectors", "GetResourcePolicy", "GetTrail", "GetTrailStatus", "ListImportFailures", "ListTags":
+	case "GetChannel", "GetDashboard", "GetEventConfiguration", "GetEventDataStore", "GetEventSelectors", "GetImport", "GetInsightSelectors", "GetResourcePolicy", "GetTrail", "GetTrailStatus", "ListImportFailures", "ListTags":
 		return true
 	default:
 		return false
 	}
 }
 
+var cloudTrailTrailOrEventDataStoreActions = map[string][]string{
+	"GetEventConfiguration": nil,
+	"GetInsightSelectors":   {"insightnotenabledexception", "insight not enabled", "insights not enabled"},
+}
+
+var cloudTrailTrailOrEventDataStoreSkipMarkers = []string{
+	"trailnotfoundexception",
+	"eventdatastorenotfoundexception",
+	"inactiveeventdatastoreexception",
+	"invalideventdatastorecategoryexception",
+	"unsupportedoperationexception",
+}
+
 func (c Connector) derivedActionBodies(ctx context.Context, cfg connectors.RuntimeConfig, action string) ([]map[string]any, error) {
+	if _, ok := cloudTrailTrailOrEventDataStoreActions[action]; ok {
+		return c.derivedTrailOrEventDataStoreBodies(ctx, cfg, action)
+	}
 	switch action {
 	case "GetChannel":
 		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "ListChannels", "Channel", []string{"ChannelArn", "Channel", "Arn"})
@@ -231,8 +247,6 @@ func (c Connector) derivedActionBodies(ctx context.Context, cfg connectors.Runti
 		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "DescribeTrails", "TrailName", []string{"TrailARN", "TrailArn", "Name", "TrailName"})
 	case "GetImport", "ListImportFailures":
 		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "ListImports", "ImportId", []string{"ImportId"})
-	case "GetInsightSelectors":
-		return c.derivedInsightSelectorBodies(ctx, cfg)
 	case "GetResourcePolicy":
 		values, err := c.discoveredResourceARNs(ctx, cfg)
 		if err != nil {
@@ -252,7 +266,7 @@ func (c Connector) derivedActionBodies(ctx context.Context, cfg connectors.Runti
 	}
 }
 
-func (c Connector) derivedInsightSelectorBodies(ctx context.Context, cfg connectors.RuntimeConfig) ([]map[string]any, error) {
+func (c Connector) derivedTrailOrEventDataStoreBodies(ctx context.Context, cfg connectors.RuntimeConfig, action string) ([]map[string]any, error) {
 	trailValues, err := c.discoveryValues(ctx, cfg, "DescribeTrails", "TrailARN", "TrailArn", "Name", "TrailName")
 	if err != nil {
 		return nil, err
@@ -263,7 +277,7 @@ func (c Connector) derivedInsightSelectorBodies(ctx context.Context, cfg connect
 	}
 	bodies := bodiesForValues("TrailName", trailValues)
 	bodies = append(bodies, bodiesForValues("EventDataStore", eventDataStoreValues)...)
-	return validatedDerivedBodies("GetInsightSelectors", bodies)
+	return validatedDerivedBodies(action, bodies)
 }
 
 func (c Connector) derivedBodiesFromDiscovery(ctx context.Context, cfg connectors.RuntimeConfig, action, discoveryAction, requestField string, keys []string) ([]map[string]any, error) {
@@ -388,14 +402,30 @@ func shouldSkipDerivedActionError(action string, err error) bool {
 		return false
 	}
 	body := strings.ToLower(httpErr.Body)
+	if actionMarkers, ok := cloudTrailTrailOrEventDataStoreActions[action]; ok {
+		if httpErr.Status == http.StatusNotFound {
+			return true
+		}
+		if httpErr.Status != http.StatusBadRequest {
+			return false
+		}
+		return containsAny(body, cloudTrailTrailOrEventDataStoreSkipMarkers...) || containsAny(body, actionMarkers...)
+	}
 	switch action {
 	case "GetResourcePolicy":
-		return httpErr.Status == 404 || strings.Contains(body, "notfound") || strings.Contains(body, "not found")
-	case "GetInsightSelectors":
-		return httpErr.Status == http.StatusBadRequest && (strings.Contains(body, "insightnotenabledexception") || strings.Contains(body, "insight not enabled") || strings.Contains(body, "insights not enabled"))
+		return httpErr.Status == http.StatusNotFound || containsAny(body, "notfound", "not found")
 	default:
 		return false
 	}
+}
+
+func containsAny(value string, markers ...string) bool {
+	for _, marker := range markers {
+		if strings.Contains(value, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 // OperationDirectRead rejects provider query/lookup operations until shared

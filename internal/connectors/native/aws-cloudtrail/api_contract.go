@@ -70,7 +70,8 @@ var cloudTrailActionFields = map[string][]awsActionField{
 }
 
 var cloudTrailActionAnyOfRequiredFields = map[string][]string{
-	"GetInsightSelectors": {"EventDataStore", "TrailName"},
+	"GetEventConfiguration": {"EventDataStore", "TrailName"},
+	"GetInsightSelectors":   {"EventDataStore", "TrailName"},
 }
 
 var cloudTrailStreamActions = map[string]string{

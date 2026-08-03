@@ -1,35 +1,56 @@
 ---
 name: pm-aws-cloudtrail
-description: Use the Polymetrics AWS CloudTrail connector for implemented read-stream ETL and for understanding blocked/planned CloudTrail direct-read and write/admin parity.
+description: AWS CloudTrail connector knowledge and safe action guide.
 ---
 
-# AWS CloudTrail connector skill
+# pm-aws-cloudtrail
 
-## Implemented surface
+## Purpose
 
-- Connector: `aws-cloudtrail`
-- Implemented counts: 19 ETL/read streams, 0 direct-read commands, 0 reverse-ETL write actions.
-- Blocked/planned counts: 10 provider query/direct-read actions and 31 write/admin actions.
-- Reason blocked: typed operation/write metadata plus command-surface, write-validation, dry-run preview, and operation-direct-read exposure require shared promoted-native forwarding that is intentionally not part of the current connector-local surface.
+Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; CloudTrail event and Insights record reads are blocked/planned. See the connector docs migration note.
+
+## Icon
+
+- asset: icons/aws-cloudtrail.svg
+- source: upstream_registry
+- review_status: upstream_seeded
+
+## Capabilities
+
+- check=true catalog=true read=true write=false query=false
+- Integration type: api
+
+## Authentication
+
+- No secret authentication is required for this connector.
+
+## Configuration
+
+- No connector-specific config fields.
+
+## Security
+
+- read risk: connector-specific
+- write risk: connector-specific
+- approval: external mutations require preview and approval
+- Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Commands
+
+### Inspect as a manual
+
+```bash
+pm connectors inspect aws-cloudtrail
+```
+
+### Inspect as structured JSON
+
+```bash
+pm connectors inspect aws-cloudtrail --json
+```
 
 ## Agent Rules
 
-- Never request, print, summarize, or store AWS secret values.
-- Add credentials from environment variables or stdin only, for example `--from-env aws_key_id=AWS_ACCESS_KEY_ID` and `--from-env aws_secret_key=AWS_SECRET_ACCESS_KEY`.
-- Inspect metadata with `pm connectors inspect aws-cloudtrail --json`; this does not read credentials.
-- Use `pm etl catalog`, `pm etl read`, or configured `pm etl run` for implemented read streams.
-- Do not use or invent `pm aws-cloudtrail ...` commands for the current connector surface; the dynamic connector command surface is blocked/planned.
-- Do not attempt CloudTrail reverse-ETL writes. No CloudTrail write/admin action is executable until a future shared-runtime slice preserves plan -> preview -> approval -> execute with typed confirmation metadata.
-- Do not expose raw AWS action names, raw paths, raw headers, raw request bodies, shell, SQL, file, or generic HTTP write tools.
-
-## Implemented ETL streams
-
-`describe_trails`, `get_channel`, `get_dashboard`, `get_event_configuration`, `get_event_data_store`, `get_event_selectors`, `get_import`, `get_insight_selectors`, `get_resource_policy`, `get_trail`, `get_trail_status`, `list_channels`, `list_dashboards`, `list_event_data_stores`, `list_import_failures`, `list_imports`, `list_public_keys`, `list_tags`, `list_trails`.
-
-Resource-detail streams use connector-local discovery/fan-out from fixed list/describe actions to populate required CloudTrail request identifiers.
-
-## Blocked/planned operations
-
-Direct/provider query operations: `CancelQuery`, `DescribeQuery`, `GenerateQuery`, `GetQueryResults`, `ListInsightsData`, `ListInsightsMetricData`, `ListQueries`, `LookupEvents`, `SearchSampleQueries`, `StartQuery`.
-
-Write/admin operations: `AddTags`, `CreateChannel`, `CreateDashboard`, `CreateEventDataStore`, `CreateTrail`, `DeleteChannel`, `DeleteDashboard`, `DeleteEventDataStore`, `DeleteResourcePolicy`, `DeleteTrail`, `DeregisterOrganizationDelegatedAdmin`, `DisableFederation`, `EnableFederation`, `PutEventConfiguration`, `PutEventSelectors`, `PutInsightSelectors`, `PutResourcePolicy`, `RegisterOrganizationDelegatedAdmin`, `RemoveTags`, `RestoreEventDataStore`, `StartDashboardRefresh`, `StartEventDataStoreIngestion`, `StartImport`, `StartLogging`, `StopEventDataStoreIngestion`, `StopImport`, `StopLogging`, `UpdateChannel`, `UpdateDashboard`, `UpdateEventDataStore`, `UpdateTrail`.
+- Run pm connectors inspect aws-cloudtrail before creating credentials or plans.
+- Use --json only when the caller needs structured output; use the manual for human-readable guidance.
+- Never ask the user to paste secret values into chat.
