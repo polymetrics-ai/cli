@@ -59,3 +59,18 @@ The outer no-mistakes executor still owns commit, push, PR-body mutation, broade
 - [x] `make connector-boundary` — passed with a clean report.
 - [x] `make verify` — passed end-to-end on the final tree.
 - [x] No live Airtable calls, credentials, provider writes, dependencies, PR mutation, push, or no-mistakes pipeline-control commands were used.
+
+## CI phase repair — unvalidated-checkpoint heading indentation — 2026-08-03
+
+Notably, the prior indentation fix only taught the canonical-section heading and URL patterns to
+accept 0–4 leading spaces; the blocking `## Unvalidated cloud checkpoint — do not merge yet` heading
+pattern still required zero leading whitespace, so the hosted PR resumed failing
+`require-linked-issue` once that heading was indented.
+
+- [x] Red: reverting the guard and running `TestValidatePRAcceptsUnvalidatedCheckpointCanonicalIssueLinks` reproduced the missing-issue violation on the new `indented checkpoint heading` and CRLF fixtures.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` — passed, including new indented-heading LF/CRLF fixtures that pin the exact failing shape.
+- [x] `go vet ./internal/coordination/issueguard ./cmd/prissueguard` — passed.
+- [x] `go build ./cmd/prissueguard` — passed.
+- [x] Branch-name gate: verified `fm-airtable-import-tmp` and `fm/cli-...` pass the `conventions.yml` branch-name case while a genuinely malformed branch is still rejected.
+- [x] `git diff --check` — passed.
+- [x] No live Airtable calls, credentials, provider writes, dependencies, PR mutation, push, or no-mistakes pipeline-control commands were used by this CI phase.
