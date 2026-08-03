@@ -34,6 +34,7 @@ AUTHENTICATION
 
 CONFIGURATION
   base_url
+  reddit_username
   subreddit
   access_token (secret)
 

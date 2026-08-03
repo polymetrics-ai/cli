@@ -1,8 +1,8 @@
 {
   "api": "Reddit OAuth API (https://oauth.reddit.com)",
   "docs": "https://www.reddit.com/dev/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (posts, comments); legacy itself ships no writes (capabilities.write is false), no OAuth token acquisition (the caller supplies a valid access_token), and no other Reddit resource is modeled.",
+  "reviewed_at": "2026-08-03",
+  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (posts, comments); legacy itself ships no writes (capabilities.write is false), no OAuth token acquisition (the caller supplies a valid access_token), and no other Reddit resource is modeled. CAVEAT (cli-reddit-rdtcli-official-api-parity-r1 report §4.3, dated 2026-08-03): the comments stream's GET /r/{subreddit}/comments is NOT among the 202 endpoints documented at https://www.reddit.com/dev/api/ -- the only documented comments listing is the per-article tree GET [/r/subreddit]/comments/{article} (see the excluded entry for that path below). The bare sub-wide route is live and working (it is what the legacy connector always called) but is undocumented surface; kept as-is rather than migrated because the documented per-article route returns a two-element top-level Listing array ([post_listing, comment_listing]) that this engine's records.path dialect (dotted-key traversal only, no array-index selection; connsdk.RecordsAt) cannot parse, and because migrating would require an N+1 fan-out over every post in the subreddit against Reddit's 100 QPM budget -- both real engine/budget gaps, not oversights.",
   "endpoints": [
     {
       "method": "GET",
@@ -16,6 +16,14 @@
       "path": "/r/{subreddit}/comments",
       "covered_by": {
         "stream": "comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "[/r/subreddit]/comments/{article}",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "the only endpoint reddit.com/dev/api/ documents for comment listings (a single post's comment tree); the comments stream instead calls the undocumented sub-wide GET /r/{subreddit}/comments (see this file's top-level scope note) because this per-article route's two-element top-level Listing array response ([post_listing, comment_listing]) is not expressible via records.path's dotted-key-only traversal, and a per-post fan-out (via the posts stream) would multiply request volume N-to-1 against Reddit's 100 QPM budget"
       }
     },
     {
