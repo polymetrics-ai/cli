@@ -1,13 +1,12 @@
 {
   "record": {
-    "id": "tbl_fixture_1",
-    "name": "Fixture Table Renamed"
+    "description": "Updated table description"
   },
   "expect": {
     "method": "PATCH",
-    "path": "/meta/bases/synthetic-conformance-value/tables/tbl_fixture_1",
+    "path": "/v0/meta/bases/synthetic-conformance-value/tables/synthetic-conformance-value",
     "body": {
-      "name": "Fixture Table Renamed"
+      "description": "Updated table description"
     }
   }
 }

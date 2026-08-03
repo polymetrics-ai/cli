@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/bases/synthetic-conformance-value/views/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "viw_fixture_1",
+      "name": "Fixture View",
+      "type": "grid",
+      "visibleFieldIds": [
+        "fld_fixture_1"
+      ]
+    }
+  }
+}

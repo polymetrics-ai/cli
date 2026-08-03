@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Airtable block_installations record",
+  "type": "object",
+  "required": [
+    "id",
+    "state",
+    "blockId",
+    "createdByUserId",
+    "createdTime"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "blockId": {
+      "type": "string"
+    },
+    "createdByUserId": {
+      "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

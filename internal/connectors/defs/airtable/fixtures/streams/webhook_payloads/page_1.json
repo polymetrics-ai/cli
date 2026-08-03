@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/bases/synthetic-conformance-value/webhooks/synthetic-conformance-value/payloads",
+    "query": {
+      "limit": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "payloads": [
+        {
+          "timestamp": "2026-01-01T00:00:00.000Z",
+          "baseTransactionNumber": 1,
+          "actionMetadata": {
+            "source": "client",
+            "sourceMetadata": {
+              "user": {
+                "id": "usr_fixture_1",
+                "email": "user.fixture@example.invalid",
+                "permissionLevel": "create"
+              }
+            }
+          },
+          "destroyedTableIds": [
+            "tbl_fixture_1"
+          ],
+          "payloadFormat": "v0"
+        }
+      ],
+      "cursor": 1,
+      "mightHaveMore": false
+    }
+  }
+}

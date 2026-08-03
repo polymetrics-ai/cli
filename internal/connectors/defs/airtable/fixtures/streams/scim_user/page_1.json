@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/scim/v2/Users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "schemas": [
+        "urn:ietf:params:scim:schemas:core:2.0:User"
+      ],
+      "id": "usr_fixture_1",
+      "userName": "user.fixture@example.invalid",
+      "name": {
+        "givenName": "Fixture",
+        "familyName": "User"
+      },
+      "emails": [
+        {
+          "value": "user.fixture@example.invalid",
+          "primary": true,
+          "type": "work"
+        }
+      ],
+      "active": true
+    }
+  }
+}

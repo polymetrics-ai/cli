@@ -1,0 +1,17 @@
+{
+  "record": {
+    "workspace_id": "workspace_id_fixture",
+    "baseId": "baseId_fixture",
+    "targetWorkspaceId": "targetWorkspaceId_fixture",
+    "targetIndex": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/workspaces/workspace_id_fixture/moveBase",
+    "body": {
+      "baseId": "baseId_fixture",
+      "targetWorkspaceId": "targetWorkspaceId_fixture",
+      "targetIndex": 1
+    }
+  }
+}

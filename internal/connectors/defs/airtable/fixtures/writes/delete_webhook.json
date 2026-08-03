@@ -1,7 +1,9 @@
 {
-  "record": { "id": "achFixture1" },
+  "record": {
+    "id": "id_fixture"
+  },
   "expect": {
     "method": "DELETE",
-    "path": "/bases/synthetic-conformance-value/webhooks/achFixture1"
+    "path": "/v0/bases/synthetic-conformance-value/webhooks/id_fixture"
   }
 }

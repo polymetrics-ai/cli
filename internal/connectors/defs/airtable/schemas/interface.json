@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Airtable interface record",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "rootTableId"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "rootTableId": {
+      "type": "string"
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "isPublished": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

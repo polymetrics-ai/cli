@@ -1,18 +1,30 @@
 {
-  "request": { "method": "GET", "path": "/bases/synthetic-conformance-value/webhooks" },
+  "request": {
+    "method": "GET",
+    "path": "/v0/bases/synthetic-conformance-value/webhooks"
+  },
   "response": {
     "status": 200,
     "body": {
       "webhooks": [
         {
-          "id": "achFixture1",
-          "notificationUrl": "https://example.com/fixture/webhook",
-          "isHookEnabled": true,
-          "areNotificationsEnabled": true,
+          "areNotificationsEnabled": false,
           "cursorForNextPayload": 1,
-          "expirationTime": null,
+          "expirationTime": "2026-01-20T00:00:00.000Z",
+          "id": "ach_fixture_1",
+          "isHookEnabled": true,
+          "lastNotificationResult": null,
           "lastSuccessfulNotificationTime": null,
-          "specification": { "options": { "filters": { "dataTypes": ["tableData"] } } }
+          "notificationUrl": "https://example.invalid/airtable/webhook",
+          "specification": {
+            "options": {
+              "filters": {
+                "dataTypes": [
+                  "tableData"
+                ]
+              }
+            }
+          }
         }
       ]
     }

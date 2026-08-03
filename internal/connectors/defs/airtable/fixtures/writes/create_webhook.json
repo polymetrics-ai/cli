@@ -1,18 +1,32 @@
 {
   "record": {
-    "notificationUrl": "https://example.com/fixture/webhook",
-    "specification": { "options": { "filters": { "dataTypes": ["tableData"] } } }
+    "specification": {
+      "options": {
+        "filters": {
+          "dataTypes": [
+            "tableData"
+          ],
+          "recordChangeScope": "tbl00000000000000"
+        }
+      }
+    },
+    "notificationUrl": "https://example.invalid/airtable/webhook"
   },
   "expect": {
     "method": "POST",
-    "path": "/bases/synthetic-conformance-value/webhooks",
+    "path": "/v0/bases/synthetic-conformance-value/webhooks",
     "body": {
-      "notificationUrl": "https://example.com/fixture/webhook",
-      "specification": { "options": { "filters": { "dataTypes": ["tableData"] } } }
+      "specification": {
+        "options": {
+          "filters": {
+            "dataTypes": [
+              "tableData"
+            ],
+            "recordChangeScope": "tbl00000000000000"
+          }
+        }
+      },
+      "notificationUrl": "https://example.invalid/airtable/webhook"
     }
-  },
-  "response": {
-    "status": 200,
-    "body": { "id": "achFixtureNew", "expirationTime": "2026-02-01T00:00:00.000Z" }
   }
 }

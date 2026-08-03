@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/enterpriseAccounts/synthetic-conformance-value/personalAccessTokens"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "personalAccessTokens": [
+        {
+          "id": "ptok_fixture_1",
+          "userId": "usr_fixture_1",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "lastUsedTime": "2026-01-02T00:00:00.000Z",
+          "scopes": [
+            "data.records:read"
+          ]
+        }
+      ]
+    }
+  }
+}

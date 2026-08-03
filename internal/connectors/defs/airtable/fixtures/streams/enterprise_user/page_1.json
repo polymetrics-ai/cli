@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/enterpriseAccounts/synthetic-conformance-value/users/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "usr_fixture_1",
+      "state": "active",
+      "email": "user.fixture@example.invalid",
+      "name": "Fixture User",
+      "lastActivityTime": "2026-01-02T00:00:00.000Z",
+      "isTwoFactorAuthEnabled": true,
+      "isSsoRequired": true,
+      "isServiceAccount": false,
+      "isAdmin": false,
+      "isManaged": true,
+      "isSuperAdmin": false,
+      "licenseType": "enterprise",
+      "createdTime": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

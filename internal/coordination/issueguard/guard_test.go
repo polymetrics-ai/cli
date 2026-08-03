@@ -106,6 +106,8 @@ func TestValidatePRAcceptsUnvalidatedCheckpointCanonicalIssueLinks(t *testing.T)
 		{name: "CRLF", body: strings.ReplaceAll(unvalidatedCheckpointBody(), "\n", "\r\n")},
 		{name: "GitHub-indented body", body: unvalidatedCheckpointBodyWithGitHubIndentation()},
 		{name: "GitHub-indented CRLF body", body: strings.ReplaceAll(unvalidatedCheckpointBodyWithGitHubIndentation(), "\n", "\r\n")},
+		{name: "indented checkpoint heading", body: unvalidatedCheckpointBodyWithIndentedHeading()},
+		{name: "indented checkpoint heading CRLF", body: strings.ReplaceAll(unvalidatedCheckpointBodyWithIndentedHeading(), "\n", "\r\n")},
 	}
 
 	for _, tt := range tests {
@@ -376,4 +378,15 @@ func unvalidatedCheckpointBodyWithGitHubIndentation() string {
 		}
 	}
 	return strings.Join(lines, "\n")
+}
+
+// unvalidatedCheckpointBodyWithIndentedHeading indents the checkpoint heading,
+// canonical issue section, and its links by four spaces the way GitHub re-renders
+// the generated checkpoint body, while leaving the task-record paragraph at a
+// separate (unindented) indentation level.
+func unvalidatedCheckpointBodyWithIndentedHeading() string {
+	body := strings.Replace(unvalidatedCheckpointBody(), "\n- https://github.com/polymetrics-ai/cli/issues/", "\n    - https://github.com/polymetrics-ai/cli/issues/", 1)
+	body = strings.Replace(body, "## Unvalidated cloud checkpoint — do not merge yet", "    ## Unvalidated cloud checkpoint — do not merge yet", 1)
+	body = strings.Replace(body, "## Canonical issue links preserved from the task record", "    ## Canonical issue links preserved from the task record", 1)
+	return body
 }

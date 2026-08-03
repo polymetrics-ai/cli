@@ -1,0 +1,15 @@
+{
+  "record": {
+    "enterprise_account_id": "ent00000000000000",
+    "timePeriod": "2021-01",
+    "filter": "app00000000000000"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/enterpriseAccounts/ent00000000000000/auditLogs",
+    "body": {
+      "timePeriod": "2021-01",
+      "filter": "app00000000000000"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/bases/synthetic-conformance-value/shares"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "shares": [
+        {
+          "createdByUserId": "usr_fixture_1",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "effectiveEmailDomainAllowList": [
+            "example.invalid"
+          ],
+          "isPasswordProtected": true,
+          "restrictedToEmailDomains": [
+            "example.invalid"
+          ],
+          "restrictedToEnterpriseMembers": false,
+          "shareId": "shr_fixture_1",
+          "shareTokenPrefix": "shr_fixt",
+          "state": "enabled",
+          "type": "base"
+        }
+      ]
+    }
+  }
+}

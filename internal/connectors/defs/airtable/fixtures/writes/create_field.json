@@ -1,19 +1,17 @@
 {
   "record": {
-    "table_id": "tbl_fixture_1",
-    "name": "Fixture Field",
-    "type": "singleLineText"
+    "table_id": "table_id_fixture",
+    "name": "Fixture Name",
+    "type": "singleLineText",
+    "description": "description_fixture"
   },
   "expect": {
     "method": "POST",
-    "path": "/meta/bases/synthetic-conformance-value/tables/tbl_fixture_1/fields",
+    "path": "/v0/meta/bases/synthetic-conformance-value/tables/table_id_fixture/fields",
     "body": {
-      "name": "Fixture Field",
-      "type": "singleLineText"
+      "name": "Fixture Name",
+      "type": "singleLineText",
+      "description": "description_fixture"
     }
-  },
-  "response": {
-    "status": 200,
-    "body": { "id": "fld_fixture_new", "name": "Fixture Field", "type": "singleLineText" }
   }
 }

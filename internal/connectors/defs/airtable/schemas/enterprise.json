@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Airtable enterprise record",
+  "type": "object",
+  "required": [
+    "id",
+    "rootEnterpriseAccountId",
+    "userIds",
+    "groupIds",
+    "workspaceIds",
+    "emailDomains",
+    "createdTime",
+    "descendantEnterpriseAccountIds"
+  ],
+  "properties": {
+    "aggregated": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "descendantEnterpriseAccountIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "descendants": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "emailDomains": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "groupIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "id": {
+      "type": "string"
+    },
+    "rootEnterpriseAccountId": {
+      "type": "string"
+    },
+    "userIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "workspaceIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}
