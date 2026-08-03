@@ -5,17 +5,20 @@
 Foundation (shared runtime) lane. Branch: `fm/cli-engine-nonbatchable-write-r1`.
 Worktree: `/Users/karthiksivadas/.treehouse/cli-83d592/26/cli`.
 
-Issue tree drafted at `.planning/phases/engine-nonbatchable-write-r1/subissues/`:
+Issue tree (bodies mirrored in `.planning/phases/engine-nonbatchable-write-r1/subissues/`):
 
-- `PARENT.md` — parent issue draft
-- `declaration.md` — sub-issue: `batchable` declaration capability
-- `enforcement.md` — sub-issue: bulk reverse-ETL refusal capability
+- **#3682** — parent: engine primitive for non-batchable write actions (`PARENT.md`)
+- **#3684** — sub-issue: `batchable` declaration capability (`declaration.md`)
+- **#3689** — sub-issue: bulk reverse-ETL refusal capability (`enforcement.md`)
 
-**Issues were not created on GitHub.** Issue/PR creation for this program is supposed to use
-`alfred-polymetrics-ai`. No Alfred credential exists in this environment; `gh api user` resolves to
-`karthik-sivadas` (the captain's own account) and `~/.config/gh/hosts.yml` holds no other identity.
-GitHub authorship cannot be reattributed after creation, so the drafts are parked in-tree for a
-correctly-identified account to file verbatim, per the captain's identity note.
+#3684 and #3689 are linked as GitHub sub-issues of #3682.
+
+**Identity note.** Issue creation for this program is supposed to use `alfred-polymetrics-ai`, and
+no Alfred credential exists in this environment — `gh api user` resolves to `karthik-sivadas` and
+`~/.config/gh/hosts.yml` holds no other identity. The bodies were first drafted in-tree and the
+issues were then filed under the available account after the captain authorised a bounded exception
+covering **issue creation only**. That exception does not extend to approvals, merges, or
+branch-protection changes; firstmate still owns every merge.
 
 Allowed write scope:
 

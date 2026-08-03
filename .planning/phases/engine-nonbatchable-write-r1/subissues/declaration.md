@@ -1,8 +1,8 @@
-# Sub-issue draft — `batchable` declaration on write actions
+# Sub-issue #3684 — `batchable` declaration on write actions
 
-> **Draft only.** Not created on GitHub. See `PARENT.md` for why (no `alfred-polymetrics-ai`
-> credential in this environment; only the captain's own account is authenticated, and GitHub
-> authorship cannot be reattributed after creation).
+> **Filed as [#3684](https://github.com/polymetrics-ai/cli/issues/3684), sub-issue of
+> [#3682](https://github.com/polymetrics-ai/cli/issues/3682).** Created under the captain's bounded
+> identity exception for issue creation only.
 
 **Title:** `feat(engine): add batchable declaration to write actions`
 
@@ -16,7 +16,7 @@ single typed boolean on a write action, defaulting to permissive.
 ## Operations unblocked
 
 **None directly.** This slice ships vocabulary, not enforcement. It is the dependency that both the
-[enforcement](./enforcement.md) slice and the eventual `reddit vote` operation (`reddit` connector,
+enforcement (#3689) slice and the eventual `reddit vote` operation (`reddit` connector,
 1 operation) require.
 
 Declaring the field without enforcing it would be worse than nothing — that is precisely the
@@ -25,7 +25,7 @@ this slice does not ship alone; it lands in the same PR as enforcement.
 
 ## Parent
 
-- Parent issue draft: `.planning/phases/engine-nonbatchable-write-r1/subissues/PARENT.md`
+- Parent issue: #3682
 - Branch: `fm/cli-engine-nonbatchable-write-r1`
 
 ## Scope

@@ -740,6 +740,21 @@ sample fields, `DryRunWrite` replaces those path values in the resolved request 
 redacts raw and URL-encoded literal forms from returned write errors while preserving typed error
 wrapping.
 
+`batchable` declares whether the action may run from a **bulk** reverse ETL plan — the
+`pm reverse plan --source-table ...` shape that fans one action out over many warehouse rows under
+a single approval. It defaults to `true`; omit it unless you mean to restrict the action. Declaring
+`"batchable": false` makes `PlanReverseETL` refuse the action before it stores a plan or mints an
+approval token, and makes `RunReverseETL` re-check the live manifest before executing an
+already-stored bulk plan. The action remains fully executable as its own `pm <connector> <command>`
+via `cli_surface.json`, which is the entire point: it stays available to a human invoking it one
+record at a time.
+
+Declare it for operations that must never be bulk-automated — moderation actions, irreversible
+sends, rate-sensitive endpoints, and anything governed by a provider rule about human intent. Do
+**not** reach for it as a severity signal: that is `confirm`'s job, and the two are independent. An
+action can be non-batchable without being destructive (casting a vote) or destructive without being
+non-batchable (a bulk delete), so neither one implies the other.
+
 **Delete semantics**: `kind: "delete"` + `delete.missing_ok_status: [404, ...]` means those HTTP
 statuses on the delete request count as **written, not failed** (idempotent delete) — any other
 status, or an unlisted 404, is a genuine per-record failure. `Write`'s overall accounting is

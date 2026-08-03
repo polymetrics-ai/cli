@@ -30,6 +30,15 @@ DESCRIPTION
   Newly created plans persist the destination write action's redact_fields
   metadata and mask those fields in plan samples.
 
+  A connector may declare a write action non-batchable (batchable: false).
+  Bulk plans over --source-table refuse such an action, naming the action and
+  the individual pm command that still runs it. Those actions stay fully
+  available one record at a time as pm <connector> <command>, which keeps the
+  plan, preview, approval, and execute steps. Use it for operations that must
+  never be fanned out over many rows under a single approval. It is separate
+  from --confirm: batchable controls whether an action may run in bulk at all,
+  --confirm controls how severe one call is.
+
 COMMANDS
   list
     List reverse ETL plans and runs in the current project.
@@ -37,7 +46,8 @@ COMMANDS
   plan
     Create a reverse ETL plan from a local warehouse table to a destination
     connector. A human-readable plan prints an approval token for the user.
-    JSON output redacts the token.
+    JSON output redacts the token. A non-batchable destination action is
+    refused here, before any plan or approval token exists.
 
   preview
     Show a stored plan, mapped sample rows, destination connector, action, and

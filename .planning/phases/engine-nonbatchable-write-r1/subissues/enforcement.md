@@ -1,8 +1,8 @@
-# Sub-issue draft — refuse non-batchable actions in bulk reverse ETL
+# Sub-issue #3689 — refuse non-batchable actions in bulk reverse ETL
 
-> **Draft only.** Not created on GitHub. See `PARENT.md` for why (no `alfred-polymetrics-ai`
-> credential in this environment; only the captain's own account is authenticated, and GitHub
-> authorship cannot be reattributed after creation).
+> **Filed as [#3689](https://github.com/polymetrics-ai/cli/issues/3689), sub-issue of
+> [#3682](https://github.com/polymetrics-ai/cli/issues/3682).** Created under the captain's bounded
+> identity exception for issue creation only.
 
 **Title:** `feat(app): refuse non-batchable write actions in bulk reverse ETL plans`
 
@@ -10,7 +10,7 @@
 
 ## Objective
 
-Enforce the [`batchable` declaration](./declaration.md): a write action declared `batchable: false`
+Enforce the `batchable` declaration (#3684): a write action declared `batchable: false`
 must be refused by the bulk reverse-ETL path, and must remain individually executable.
 
 ## Operations unblocked
@@ -21,7 +21,7 @@ must be refused by the bulk reverse-ETL path, and must remain individually execu
 
 ## Parent
 
-- Parent issue draft: `.planning/phases/engine-nonbatchable-write-r1/subissues/PARENT.md`
+- Parent issue: #3682
 - Branch: `fm/cli-engine-nonbatchable-write-r1`
 
 ## Scope

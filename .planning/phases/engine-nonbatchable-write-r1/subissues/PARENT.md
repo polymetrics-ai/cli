@@ -1,10 +1,9 @@
-# Parent issue draft — engine primitive: non-batchable write actions
+# Parent issue #3682 — engine primitive: non-batchable write actions
 
-> **Draft only.** This issue was NOT created on GitHub. Issue/PR creation for this program is
-> supposed to use the `alfred-polymetrics-ai` account, and no Alfred credential exists in this
-> environment — the only authenticated GitHub identity is the captain's own account
-> (`karthik-sivadas`). GitHub authorship cannot be reattributed after creation, so this body is
-> parked here for a correctly-identified account to file verbatim.
+> **Filed as [#3682](https://github.com/polymetrics-ai/cli/issues/3682).** The captain authorised a
+> bounded identity exception for issue creation only, since no `alfred-polymetrics-ai` credential
+> exists in this environment. That exception does not extend to approvals, merges, or
+> branch-protection changes.
 
 **Title:** `feat(engine): let a write action declare itself non-batchable`
 
@@ -60,8 +59,8 @@ actionable error.
 
 | Sub-issue | Capability | Operations unblocked |
 | --- | --- | --- |
-| [declaration](./declaration.md) | `batchable` declaration on write actions: schema field, bundle load, manifest/definition surface, help + docs parity | none directly — it is the vocabulary the enforcement slice and `reddit vote` both depend on |
-| [enforcement](./enforcement.md) | Bulk reverse-ETL refusal guard at plan time and execute time, with an actionable error | `reddit vote` (1 operation, `reddit`) once Reddit adopts `batchable: false` in its own lane |
+| [#3684](https://github.com/polymetrics-ai/cli/issues/3684) — declaration | `batchable` declaration on write actions: schema field, bundle load, manifest/definition surface, help + docs parity | none directly — it is the vocabulary the enforcement slice and `reddit vote` both depend on |
+| [#3689](https://github.com/polymetrics-ai/cli/issues/3689) — enforcement | Bulk reverse-ETL refusal guard at plan time and execute time, with an actionable error | `reddit vote` (1 operation, `reddit`) once Reddit adopts `batchable: false` in its own lane |
 
 ## Non-goals
 
