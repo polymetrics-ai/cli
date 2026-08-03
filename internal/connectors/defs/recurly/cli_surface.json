@@ -4899,7 +4899,7 @@
       ],
       "notes": "Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.",
       "examples": [
-        "pm recurly invoices preview --json"
+        "pm recurly invoices preview --account-id \"<value>\" --currency \"<value>\" --json"
       ]
     },
     {
@@ -4915,7 +4915,10 @@
           "path": "/invoices/{invoice_id}.pdf"
         }
       ],
-      "notes": "Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice."
+      "notes": "Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice.",
+      "examples": [
+        "pm recurly invoice pdf get --json"
+      ]
     },
     {
       "path": "subscriptions preview renewal",
@@ -4947,7 +4950,7 @@
       ],
       "notes": "Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.",
       "examples": [
-        "pm recurly subscriptions preview renewal --json"
+        "pm recurly subscriptions preview renewal --subscription-id \"<value>\" --json"
       ]
     },
     {
@@ -4980,7 +4983,7 @@
       ],
       "notes": "Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.",
       "examples": [
-        "pm recurly subscriptions preview change --json"
+        "pm recurly subscriptions preview change --subscription-id \"<value>\" --json"
       ]
     },
     {
@@ -5019,7 +5022,7 @@
       ],
       "notes": "Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.",
       "examples": [
-        "pm recurly purchases preview --json"
+        "pm recurly purchases preview --currency \"<value>\" --account-code \"<value>\" --json"
       ]
     },
     {
@@ -5035,7 +5038,10 @@
           "path": "/export_dates"
         }
       ],
-      "notes": "Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice."
+      "notes": "Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice.",
+      "examples": [
+        "pm recurly export dates get --json"
+      ]
     },
     {
       "path": "export files get",
@@ -5050,7 +5056,10 @@
           "path": "/export_dates/{export_date}/export_files"
         }
       ],
-      "notes": "Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice."
+      "notes": "Official binary/export endpoint recorded as bounded metadata; shared direct-read runtime does not execute binary transfers in this slice.",
+      "examples": [
+        "pm recurly export files get --json"
+      ]
     },
     {
       "path": "gift cards preview",
@@ -5094,7 +5103,7 @@
       ],
       "notes": "Bounded Recurly read/preview operation; fixed method and path, typed request fields, and redacted JSON output.",
       "examples": [
-        "pm recurly gift cards preview --json"
+        "pm recurly gift cards preview --product-code \"<value>\" --unit-amount \"<value>\" --currency \"<value>\" --json"
       ]
     }
   ],
