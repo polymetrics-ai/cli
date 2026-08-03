@@ -11,6 +11,7 @@ Reads Plausible Analytics sites and stats reports through the Stats API.
 
 ## Icon
 
+- id: plausible
 - asset: icons/plausible.svg
 - source: upstream_registry
 - review_status: upstream_seeded

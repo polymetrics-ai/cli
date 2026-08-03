@@ -11,6 +11,7 @@ Reads orders, products, customers, warehouses, suppliers, purchase orders, sales
 
 ## Icon
 
+- id: veeqo
 - asset: icons/veeqo.svg
 - source: official
 - review_status: official_verified

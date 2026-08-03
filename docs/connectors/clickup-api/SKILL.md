@@ -11,6 +11,7 @@ Reads ClickUp workspaces (teams), spaces, folders, lists, tasks, goals, space ta
 
 ## Icon
 
+- id: clickup
 - asset: icons/clickup.svg
 - source: upstream_registry
 - review_status: upstream_seeded

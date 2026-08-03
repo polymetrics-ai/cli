@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Chift consumers, connections, syncs, integrations, datastores, and webhook event definitions through the Chift REST API using a session-token (client credentials) exchange.
 
 ICON
+  id: chift
   asset: icons/chift.svg
   source: official
   review_status: official_verified

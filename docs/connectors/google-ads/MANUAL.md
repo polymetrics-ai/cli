@@ -13,6 +13,7 @@ DESCRIPTION
   Declarative Google Ads connector for v22 customer, campaign, ad group, direct-read, and limited guarded reverse-ETL API surfaces.
 
 ICON
+  id: google-adwords
   asset: icons/google-adwords.svg
   source: upstream_registry
   review_status: upstream_seeded

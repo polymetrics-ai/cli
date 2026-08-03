@@ -13,9 +13,17 @@ DESCRIPTION
   Reads and writes Buildkite organizations, pipelines, builds, agents, teams, and clusters through the Buildkite REST API v2.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-buildkite
+  asset: icons/simple-icons/buildkite.svg
+  title: Buildkite
+  simple_icon_slug: buildkite
+  simple_icon_hex: 14CC80
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Buildkite
+  match: exact-name-or-slug
+  matched_by: buildkite
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

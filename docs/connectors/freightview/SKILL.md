@@ -11,9 +11,11 @@ Reads Freightview shipments, quotes, and tracking events through the Freightview
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

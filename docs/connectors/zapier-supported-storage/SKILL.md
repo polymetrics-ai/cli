@@ -11,6 +11,7 @@ Reads and writes Zapier Storage key/value records.
 
 ## Icon
 
+- id: zapiersupportedstorage
 - asset: icons/zapiersupportedstorage.svg
 - source: upstream_registry
 - review_status: upstream_seeded

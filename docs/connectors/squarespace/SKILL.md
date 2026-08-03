@@ -11,9 +11,17 @@ Reads Squarespace orders, products, inventory, profiles, transactions, store pag
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-squarespace
+- asset: icons/simple-icons/squarespace.svg
+- title: Squarespace
+- simple_icon_slug: squarespace
+- simple_icon_hex: 000000
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Squarespace
+- match: exact-name-or-slug
+- matched_by: squarespace
 
 ## Capabilities
 

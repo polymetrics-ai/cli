@@ -11,6 +11,7 @@ Reads configured datasets from the US Census Bureau's API via a caller-supplied 
 
 ## Icon
 
+- id: uscensus
 - asset: icons/uscensus.svg
 - source: upstream_registry
 - review_status: upstream_seeded

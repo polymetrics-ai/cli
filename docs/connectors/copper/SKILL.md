@@ -11,6 +11,7 @@ Reads Copper CRM people, companies, opportunities, leads, and tasks through the 
 
 ## Icon
 
+- id: copper
 - asset: icons/copper.svg
 - source: upstream_registry
 - review_status: upstream_seeded

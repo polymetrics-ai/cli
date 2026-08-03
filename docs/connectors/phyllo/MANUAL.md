@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Phyllo users, accounts, profiles, social content/comments, audience, and income data, and writes user/webhook/account-config mutations using Basic-auth REST endpoints.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

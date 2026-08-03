@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Airtable bases, tables, records, webhooks, and record comments, and writes record/table/field/comment/webhook mutations, through the Airtable Web API.
 
 ICON
+  id: airtable
   asset: icons/airtable.svg
   source: upstream_registry
   review_status: upstream_seeded

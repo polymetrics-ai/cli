@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using HTTP Basic auth (email + API token). Read-only.
 
 ICON
+  id: jira
   asset: icons/jira.svg
   source: upstream_registry
   review_status: upstream_seeded

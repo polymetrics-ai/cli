@@ -11,6 +11,7 @@ Reads and writes Circa events, contacts, companies, teams, custom fields, and ev
 
 ## Icon
 
+- id: circa
 - asset: icons/circa.svg
 - source: official
 - review_status: official_verified

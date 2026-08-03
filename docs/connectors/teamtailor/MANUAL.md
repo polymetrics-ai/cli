@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Teamtailor jobs, candidates, job applications, departments, locations, roles, stages, teams, users, and regions, and writes approved recruiting mutations (jobs, candidates, job applications, departments, locations, teams, todos, notes) through the Teamtailor JSON:API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

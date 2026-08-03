@@ -11,6 +11,7 @@ Reads Webflow sites, collections, collection items, pages, forms, form submissio
 
 ## Icon
 
+- id: webflow
 - asset: icons/webflow.svg
 - source: upstream_registry
 - review_status: upstream_seeded

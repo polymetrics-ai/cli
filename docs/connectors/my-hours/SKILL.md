@@ -11,6 +11,7 @@ Reads My Hours clients, projects, team members, tags, and time log activity thro
 
 ## Icon
 
+- id: my-hours
 - asset: icons/my-hours.svg
 - source: upstream_registry
 - review_status: upstream_seeded

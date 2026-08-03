@@ -11,6 +11,7 @@ Reads and writes WorkRamp users and groups, and reads guides, resources, and SCO
 
 ## Icon
 
+- id: workramp
 - asset: icons/workramp.svg
 - source: upstream_registry
 - review_status: upstream_seeded

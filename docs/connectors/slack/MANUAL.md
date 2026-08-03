@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Slack workspace users, channels, and channel messages through the Slack Web API. Read-only.
 
 ICON
+  id: slack
   asset: icons/slack.svg
   source: upstream_registry
   review_status: upstream_seeded

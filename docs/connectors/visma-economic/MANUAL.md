@@ -13,6 +13,7 @@ DESCRIPTION
   Reads customers, suppliers, products, invoices, orders, quotes, departments, payment terms, units, and accounts from the Visma e-conomic REST API, and writes customers, suppliers, products, units, and payment terms.
 
 ICON
+  id: visma-economic
   asset: icons/visma-economic.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes WaiterAid restaurant reservations, meals, guests, and queue entries.
 
 ICON
+  id: waiteraid
   asset: icons/waiteraid.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads and writes Thinkific Admin API v1 courses, bundles, categories, coupons, e
 
 ## Icon
 
+- id: thinkific
 - asset: icons/thinkific.svg
 - source: official
 - review_status: official_verified

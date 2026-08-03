@@ -48,6 +48,29 @@ Create and integrate a parent remediation PR that enforces connector implementat
 
 ## Slice plan
 
+### Slice 1a — icon registry single-source foundation (#3595)
+
+Write scope:
+
+- `internal/connectors/icon_data.json`
+- `internal/connectors/icons.go`
+- `cmd/iconregistrygen/**`
+- `website/scripts/gen-connector-bundles.mjs`
+- `website/scripts/fetch-simple-icons.mjs`
+- deletion of `website/data/icon_overrides.json`
+- canonical SVG assets under `docs/connectors/icons/**`; `website/public/connectors/**` icons are generated/copied outputs only
+- focused tests and authoritative docs
+
+Outcomes:
+
+- One authored connector-to-icon registry with canonical bare connector identifiers.
+- No `source-*` / `destination-*` mapping fallback in runtime, website, fetching, or ownership consumers.
+- Curated Simple Icons and all fetch/review metadata live in the canonical registry and canonical docs asset tree.
+- Website output contains no mapping or SVG that exists only in the website tree.
+- Source/destination collapses are audited without silent prefix stripping or ordering choices.
+
+TDD first evidence: failing registry/consumer/ownership tests or proofs before production edits.
+
 ### Slice 1 — target-scope contract and core validator
 
 Write scope:

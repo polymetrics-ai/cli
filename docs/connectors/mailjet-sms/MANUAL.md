@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Mailjet SMS messages, message counts, and export job status; writes SMS send and export-request actions.
 
 ICON
+  id: mailjetsms
   asset: icons/mailjetsms.svg
   source: upstream_registry
   review_status: upstream_seeded

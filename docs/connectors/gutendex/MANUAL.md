@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Project Gutenberg books from the free, public Gutendex JSON API (books, popular, latest, and English-language views). Read-only; no credentials required.
 
 ICON
+  id: source-gutendex
   asset: icons/source-gutendex.svg
   source: upstream_registry
   review_status: upstream_seeded

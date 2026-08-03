@@ -11,6 +11,7 @@ Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, private
 
 ## Icon
 
+- id: clazar
 - asset: icons/clazar.svg
 - source: upstream_registry
 - review_status: upstream_seeded

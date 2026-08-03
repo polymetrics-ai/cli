@@ -13,6 +13,7 @@ DESCRIPTION
   Reads projects, sections, tasks, comments, labels, and project collaborators, and writes project/section/task/comment/label create, update, and delete actions (plus task close/reopen), through the Todoist REST API.
 
 ICON
+  id: todoist
   asset: icons/todoist.svg
   source: upstream_registry
   review_status: upstream_seeded

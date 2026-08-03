@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and controls, and writes rows/pages, through the Coda REST API v1.
 
 ICON
+  id: coda
   asset: icons/coda.svg
   source: upstream_registry
   review_status: upstream_seeded

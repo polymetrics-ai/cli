@@ -13,9 +13,11 @@ DESCRIPTION
   Reads dbt Cloud projects, runs, repositories, users, environments, jobs, invites, licenses, notifications, and SSH tunnels, and writes job/notification/SSH-tunnel mutations and run-control actions (trigger/retry/cancel), through the dbt Cloud Administrative API v2.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Facebook Marketing ad accounts, campaigns, ads, ad sets, ad creatives, custom audiences, and performance insights, and creates/updates campaigns and ad sets, through the Graph API.
 
 ICON
+  id: facebook
   asset: icons/facebook.svg
   source: upstream_registry
   review_status: upstream_seeded

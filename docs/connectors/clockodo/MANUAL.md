@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Clockodo customers, projects, services, users, time entries, absences, teams, surcharges, lump-sum services, nonbusiness groups/days, holiday/overtime carryovers, target hours, and current-user settings, and writes customers/projects/services/teams/lump-sum services through the Clockodo REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

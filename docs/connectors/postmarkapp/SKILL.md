@@ -11,6 +11,7 @@ Reads Postmark server-token API resources including messages, bounces, templates
 
 ## Icon
 
+- id: postmark
 - asset: icons/postmark.svg
 - source: official
 - review_status: official_verified

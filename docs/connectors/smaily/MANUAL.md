@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Smaily campaigns, segments, contacts, templates, automations, and organization users; creates/updates subscribers and segments, unsubscribes recipients, sends messages, and triggers automation workflows.
 
 ICON
+  id: smaily
   asset: icons/smaily.svg
   source: upstream_registry
   review_status: upstream_seeded

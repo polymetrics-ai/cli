@@ -11,6 +11,7 @@ Reads and writes BambooHR employee, metadata, reporting, time off, applicant tra
 
 ## Icon
 
+- id: bamboohr
 - asset: icons/bamboohr.svg
 - source: upstream_registry
 - review_status: upstream_seeded

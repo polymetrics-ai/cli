@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Printify shops, catalog resources, products, orders, uploads, and webhooks through the Printify public API.
 
 ICON
+  id: printify
   asset: icons/printify.svg
   source: official
   review_status: official_verified

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Copper CRM people, companies, opportunities, leads, and tasks through the Copper REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: copper
   asset: icons/copper.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads Devin AI sessions, session child resources, playbooks, knowledge notes, re
 
 ## Icon
 
+- id: devin-ai
 - asset: icons/devin-ai.svg
 - source: upstream_registry
 - review_status: upstream_seeded

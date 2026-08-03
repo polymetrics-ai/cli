@@ -11,6 +11,7 @@ Reads Google Analytics 4 reports (active users, traffic sources, devices, pages)
 
 ## Icon
 
+- id: google-analytics
 - asset: icons/google-analytics.svg
 - source: upstream_registry
 - review_status: upstream_seeded

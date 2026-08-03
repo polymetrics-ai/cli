@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: lokalise
   asset: icons/lokalise.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads and manages Amplitude behavioral cohorts, chart annotations, annotation ca
 
 ## Icon
 
+- id: amplitude
 - asset: icons/amplitude.svg
 - source: upstream_registry
 - review_status: upstream_seeded

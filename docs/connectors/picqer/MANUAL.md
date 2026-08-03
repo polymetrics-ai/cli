@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Picqer products, customers, orders, picklists, warehouses, suppliers, purchase orders, returns, and warehouse-operations reference data, and writes order/purchase-order/return lifecycle and catalog mutations through the Picqer REST API.
 
 ICON
+  id: picqer
   asset: icons/picqer.svg
   source: official
   review_status: official_verified

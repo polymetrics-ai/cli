@@ -13,6 +13,7 @@ DESCRIPTION
   Reads the authenticated Strava athlete's profile, activities, lifetime stats, and clubs through the Strava v3 REST API.
 
 ICON
+  id: strava
   asset: icons/strava.svg
   source: upstream_registry
   review_status: upstream_seeded

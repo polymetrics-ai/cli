@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, messages, exports, transactional templates, object types, reporting webhooks, sender identities, snippets, subscription channels/topics, workspaces, and collections; writes snippet/webhook/segment mutations and can send transactional email or trigger broadcasts, through the Customer.io App API.
 
 ICON
+  id: customer-io
   asset: icons/customer-io.svg
   source: upstream_registry
   review_status: upstream_seeded

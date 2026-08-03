@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Acuity Scheduling appointments, clients, appointment types, calendars, forms, products, orders, and labels, and writes appointment/block/certificate mutations, through the Acuity REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

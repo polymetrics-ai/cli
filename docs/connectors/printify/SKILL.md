@@ -11,6 +11,7 @@ Reads and writes Printify shops, catalog resources, products, orders, uploads, a
 
 ## Icon
 
+- id: printify
 - asset: icons/printify.svg
 - source: official
 - review_status: official_verified

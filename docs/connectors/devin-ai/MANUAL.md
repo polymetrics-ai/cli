@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Devin AI sessions, session child resources, playbooks, knowledge notes, repositories, schedules, membership, metrics, consumption, and secret metadata through the Devin v3 REST API; writes documented organization-scoped JSON mutations.
 
 ICON
+  id: devin-ai
   asset: icons/devin-ai.svg
   source: upstream_registry
   review_status: upstream_seeded

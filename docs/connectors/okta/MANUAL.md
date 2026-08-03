@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes documented Okta Admin Management API resources through the Okta REST APIs.
 
 ICON
+  id: okta
   asset: icons/okta.svg
   source: official
   review_status: official_verified

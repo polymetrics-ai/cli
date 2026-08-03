@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Datadog monitors, dashboards, dashboard lists, users, SLOs, SLO corrections, scheduled downtimes, notebooks, organizations, hosts, Synthetics tests/locations/variables, and API/application keys, and writes monitor/dashboard/downtime/notebook/SLO/user/event/Synthetics-test/API-key mutations, through the Datadog v1 REST API.
 
 ICON
+  id: datadog
   asset: icons/datadog.svg
   source: upstream_registry
   review_status: upstream_seeded

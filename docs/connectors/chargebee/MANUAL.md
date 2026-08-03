@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Chargebee subscription billing data (customers, subscriptions, invoices, plans, items, item prices, coupons, credit notes, transactions, orders, quotes, payment sources, events, and more) through the Chargebee v2 REST API.
 
 ICON
+  id: chargebee
   asset: icons/chargebee.svg
   source: upstream_registry
   review_status: upstream_seeded

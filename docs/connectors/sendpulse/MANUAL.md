@@ -13,6 +13,7 @@ DESCRIPTION
   Reads SendPulse address books, campaigns, senders, per-book emails, and the account blacklist, and writes address-book/sender/blacklist lifecycle mutations and campaign create/cancel actions through the SendPulse API.
 
 ICON
+  id: sendpulse
   asset: icons/sendpulse.svg
   source: official
   review_status: official_verified

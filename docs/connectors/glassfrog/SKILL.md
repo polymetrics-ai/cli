@@ -11,6 +11,7 @@ Reads GlassFrog circles, roles, people, projects, and assignments through the Gl
 
 ## Icon
 
+- id: glassfrog
 - asset: icons/glassfrog.svg
 - source: upstream_registry
 - review_status: upstream_seeded

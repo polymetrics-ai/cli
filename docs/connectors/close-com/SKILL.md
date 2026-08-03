@@ -11,6 +11,7 @@ Reads Close CRM leads, contacts, opportunities, activities, users, tasks, lead/o
 
 ## Icon
 
+- id: close
 - asset: icons/close.svg
 - source: upstream_registry
 - review_status: upstream_seeded

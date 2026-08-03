@@ -11,6 +11,7 @@ Reads OneSignal account-level applications through the OneSignal REST API. Devic
 
 ## Icon
 
+- id: onesignal
 - asset: icons/onesignal.svg
 - source: upstream_registry
 - review_status: upstream_seeded

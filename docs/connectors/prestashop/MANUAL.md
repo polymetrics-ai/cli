@@ -13,6 +13,7 @@ DESCRIPTION
   Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: prestashop
   asset: icons/prestashop.svg
   source: official
   review_status: official_verified

@@ -11,6 +11,7 @@ Reads Braze campaigns, Canvases, segments (list + per-id details/analytics-summa
 
 ## Icon
 
+- id: braze
 - asset: icons/braze.svg
 - source: upstream_registry
 - review_status: upstream_seeded

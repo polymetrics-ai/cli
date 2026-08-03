@@ -11,6 +11,7 @@ Reads messages from Amazon SQS via signed ReceiveMessage calls. Read-only; messa
 
 ## Icon
 
+- id: amazon-sqs
 - asset: icons/amazon-sqs.svg
 - source: upstream_registry
 - review_status: upstream_seeded

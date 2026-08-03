@@ -13,6 +13,7 @@ DESCRIPTION
   Reads SonarCloud issues, components, projects, hotspots, rules, metrics, languages, quality gates, measures, webhooks, and project analyses through the Web API; writes webhook lifecycle, issue comment/assign/tag/transition, and project-tag mutations.
 
 ICON
+  id: sonarcloud
   asset: icons/sonarcloud.svg
   source: upstream_registry
   review_status: upstream_seeded

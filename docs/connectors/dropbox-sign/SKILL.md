@@ -11,9 +11,17 @@ Reads Dropbox Sign (HelloSign) signature requests, templates, team members, and 
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-dropbox
+- asset: icons/simple-icons/dropbox.svg
+- title: Dropbox
+- simple_icon_slug: dropbox
+- simple_icon_hex: 0061FF
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Dropbox
+- match: curated-alias
+- matched_by: dropbox
 
 ## Capabilities
 

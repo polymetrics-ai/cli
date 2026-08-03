@@ -11,6 +11,7 @@ Reads MailerSend email activity, analytics, domains, messages, recipients, templ
 
 ## Icon
 
+- id: mailersend
 - asset: icons/mailersend.svg
 - source: upstream_registry
 - review_status: upstream_seeded

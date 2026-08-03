@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Capsule CRM parties, opportunities, cases, tasks, users, tags, custom field definitions, teams, pipelines, milestones, lost reasons, task categories, boards, and stages, and writes party/opportunity/case/task create, update, and delete actions, through the Capsule v2 REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

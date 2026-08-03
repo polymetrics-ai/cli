@@ -11,6 +11,7 @@ Reads PayPal transactions, balances, catalog products, and customer disputes thr
 
 ## Icon
 
+- id: paypal
 - asset: icons/paypal.svg
 - source: upstream_registry
 - review_status: upstream_seeded

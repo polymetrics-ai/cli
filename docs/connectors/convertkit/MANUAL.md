@@ -13,6 +13,7 @@ DESCRIPTION
   Reads ConvertKit (Kit) subscribers, forms, sequences, tags, broadcasts, custom fields, and purchases, and writes subscriber/tag/form/sequence/broadcast/custom-field/purchase/webhook mutations, through the ConvertKit v3 REST API.
 
 ICON
+  id: convertkit
   asset: icons/convertkit.svg
   source: upstream_registry
   review_status: upstream_seeded

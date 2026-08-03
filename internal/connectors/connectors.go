@@ -266,7 +266,8 @@ type LocalWarehouseMaterializer interface {
 }
 
 type Registry struct {
-	connectors map[string]Connector
+	connectors            map[string]Connector
+	iconCoverageValidated bool
 }
 
 func NewEmptyRegistry() *Registry {
@@ -275,10 +276,13 @@ func NewEmptyRegistry() *Registry {
 
 func NewRegistry() *Registry {
 	if builder := registeredDefaultRegistryBuilder(); builder != nil {
-		return builder()
+		registry := builder()
+		registry.MustValidateIconCoverage()
+		return registry
 	}
 	r := NewEmptyRegistry()
 	r.RegisterBuiltins()
+	r.MustValidateIconCoverage()
 	return r
 }
 
@@ -293,6 +297,7 @@ func (r *Registry) RegisterBuiltins() {
 
 func (r *Registry) Register(c Connector) {
 	r.connectors[c.Name()] = c
+	r.iconCoverageValidated = false
 }
 
 func (r *Registry) Get(name string) (Connector, bool) {

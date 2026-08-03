@@ -11,6 +11,7 @@ Reads Ashby applicant-tracking data — candidates, jobs, applications, and user
 
 ## Icon
 
+- id: ashby
 - asset: icons/ashby.svg
 - source: upstream_registry
 - review_status: upstream_seeded

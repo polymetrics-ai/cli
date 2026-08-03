@@ -11,9 +11,17 @@ Reads and writes events, orders, issued tickets, event series, holds, discounts,
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-tickettailor
+- asset: icons/simple-icons/tickettailor.svg
+- title: Ticket Tailor
+- simple_icon_slug: tickettailor
+- simple_icon_hex: 222432
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Ticket%20Tailor
+- match: exact-name-or-slug
+- matched_by: tickettailor
 
 ## Capabilities
 

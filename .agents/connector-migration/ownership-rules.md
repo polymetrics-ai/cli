@@ -33,6 +33,9 @@ A worker assigned connector `<name>` owns:
 - `internal/connectors/native/<name>/*_test.go` — red-first package tests
 - `cmd/connectorgen/<name>_..._test.go` and `internal/connectors/engine/<name>_..._test.go` —
   connector-specific tests that live directly in a shared package directory
+- connector icon assets, only as resolved by `ConnectorIconOwnerForPath`; see
+  `docs/migration/icon-registry-single-source.md` for which icon paths attribute to a connector
+  and which are rejected
 
 ## Rules
 

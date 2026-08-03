@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Codefresh projects, pipelines, builds, runner agents, shared contexts, container images, registries, triggers, and annotations, and can create/update/delete/run projects, pipelines, contexts, and agents through the Codefresh REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-codefresh
+  asset: icons/simple-icons/codefresh.svg
+  title: Codefresh
+  simple_icon_slug: codefresh
+  simple_icon_hex: 08B1AB
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Codefresh
+  match: exact-name-or-slug
+  matched_by: codefresh
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

@@ -11,9 +11,11 @@ Reads and writes ServiceNow incident, user, and group table data through the Ser
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

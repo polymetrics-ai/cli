@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Clockify workspaces, clients, projects, tags, users, tasks, time entries, custom fields, user groups, holidays, expense categories, and time-off policies, and writes clients/projects/tags/tasks through the Clockify REST API v1.
 
 ICON
+  id: clockify
   asset: icons/clockify.svg
   source: upstream_registry
   review_status: upstream_seeded

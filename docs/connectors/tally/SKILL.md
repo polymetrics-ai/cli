@@ -11,6 +11,7 @@ Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and wri
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics

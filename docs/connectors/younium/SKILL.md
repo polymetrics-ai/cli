@@ -11,6 +11,7 @@ Reads and writes Younium accounts, subscriptions, invoices, products, payment te
 
 ## Icon
 
+- id: younium
 - asset: icons/younium.svg
 - source: upstream_registry
 - review_status: upstream_seeded

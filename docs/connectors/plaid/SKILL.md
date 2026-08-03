@@ -11,6 +11,7 @@ Reads Plaid institutions and category metadata through read-only POST endpoints.
 
 ## Icon
 
+- id: plaid
 - asset: icons/plaid.svg
 - source: official
 - review_status: official_verified

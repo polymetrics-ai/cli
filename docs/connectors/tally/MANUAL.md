@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Tally.so forms, form-scoped submissions, webhooks, and workspaces, and writes form/webhook/workspace mutations through the Tally REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics

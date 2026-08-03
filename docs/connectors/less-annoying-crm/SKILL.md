@@ -11,6 +11,7 @@ Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Le
 
 ## Icon
 
+- id: less-annoying-crm
 - asset: icons/less-annoying-crm.svg
 - source: official
 - review_status: official_verified

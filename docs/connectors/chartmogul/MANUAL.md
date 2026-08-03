@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes ChartMogul customers, contacts, subscription activities, plans, invoices, tasks, customer-count metrics, and account details through the ChartMogul REST API.
 
 ICON
+  id: chartmogul
   asset: icons/chartmogul.svg
   source: upstream_registry
   review_status: upstream_seeded

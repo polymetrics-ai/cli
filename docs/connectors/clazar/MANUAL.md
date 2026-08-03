@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Clazar cloud GTM data (buyers, listings, contracts, opportunities, private offers, reseller offers, contacts, and metering records) and writes buyer/opportunity/contract/private-offer/contact/metering mutations, contract activation, and metering-record submission, through the Clazar REST API using OAuth2 client credentials.
 
 ICON
+  id: clazar
   asset: icons/clazar.svg
   source: upstream_registry
   review_status: upstream_seeded

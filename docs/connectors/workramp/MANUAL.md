@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes WorkRamp users and groups, and reads guides, resources, and SCORM courses, through the real WorkRamp Employee Learning Cloud API (app.workramp.com/api/v1).
 
 ICON
+  id: workramp
   asset: icons/workramp.svg
   source: upstream_registry
   review_status: upstream_seeded

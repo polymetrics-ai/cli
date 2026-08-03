@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Cart.com orders, customers, products, and inventory through a read-only REST API.
 
 ICON
+  id: cart
   asset: icons/cart.svg
   source: upstream_registry
   review_status: upstream_seeded

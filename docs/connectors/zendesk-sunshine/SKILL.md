@@ -11,6 +11,7 @@ Reads and writes Zendesk Sunshine legacy custom object types, objects, relations
 
 ## Icon
 
+- id: zendesk-sunshine
 - asset: icons/zendesk-sunshine.svg
 - source: upstream_registry
 - review_status: upstream_seeded

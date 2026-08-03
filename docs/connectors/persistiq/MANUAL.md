@@ -13,6 +13,7 @@ DESCRIPTION
   Reads PersistIQ leads, users, campaigns, mailboxes, activities, accounts, DNC domains, events, lead fields/statuses, tags, webhook plugin settings, and per-campaign leads/replies, and creates/updates leads and campaigns, adds/removes campaign leads, replies to campaign messages, and adds DNC domains, through v1 REST endpoints.
 
 ICON
+  id: persistiq
   asset: icons/persistiq.svg
   source: official
   review_status: official_verified

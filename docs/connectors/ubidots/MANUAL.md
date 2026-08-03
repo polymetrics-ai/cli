@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Ubidots devices, variables, variable values, device groups, device types, dashboards, and events, and writes device/variable lifecycle mutations and new variable data points through API v2.0.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
