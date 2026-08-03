@@ -7,7 +7,7 @@
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Reddit OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>) ONLY as a fallback when refresh_token is not configured. Reddit bearer tokens expire 1 hour after issuance; a caller-supplied access_token with no refresh_token is not schedulable (any sync running longer than an hour, or any recurring sync, will fail once the token expires) -- configure client_id/client_secret/refresh_token instead so this connector mints a fresh token before every read/write/check. Never logged."
+      "description": "Reddit OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>). LEAVE THIS UNSET if you configure refresh_token: when both are present, access_token takes precedence (declaration order in streams.json's base.auth) so existing stored connections keep working unchanged, but that means a set access_token silently DISABLES the auto-refresh flow even if refresh_token is also configured. Reddit bearer tokens expire 1 hour after issuance; a caller-supplied access_token with no refresh_token is not schedulable (any sync running longer than an hour, or any recurring sync, will fail once the token expires) -- configure client_id/client_secret/refresh_token instead, and leave this field empty, so this connector mints a fresh token before every read/write/check. Never logged."
     },
     "refresh_token": {
       "type": "string",

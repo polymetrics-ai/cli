@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/users/search",
+    "query": {
+      "limit": "100",
+      "raw_json": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "Listing",
+      "data": {
+        "after": null,
+        "children": [
+          {
+            "kind": "t2",
+            "data": {
+              "id": "ufixture_1",
+              "name": "t2_ufixture_1",
+              "link_karma": 1,
+              "comment_karma": 1,
+              "created_utc": 1767225601,
+              "is_mod": false,
+              "verified": true
+            }
+          }
+        ]
+      }
+    }
+  }
+}

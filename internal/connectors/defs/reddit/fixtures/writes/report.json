@@ -1,0 +1,28 @@
+{
+  "record": {
+    "additional_info": "fixture_additional_info",
+    "custom_text": "fixture_custom_text",
+    "from_help_desk": true,
+    "from_modmail": true,
+    "modmail_conv_id": "fixture_modmail_conv_id",
+    "other_reason": "fixture_other_reason",
+    "reason": "fixture_reason",
+    "rule_reason": "fixture_rule_reason",
+    "site_reason": "fixture_site_reason",
+    "sr_name": "fixture_sr_name",
+    "thing_id": "fixture_thing_id",
+    "usernames": "fixture_usernames"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/report"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

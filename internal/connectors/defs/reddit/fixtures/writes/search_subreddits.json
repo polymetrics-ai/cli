@@ -1,0 +1,22 @@
+{
+  "record": {
+    "exact": true,
+    "include_over_18": true,
+    "include_unadvertisable": true,
+    "query": "fixture_query",
+    "search_query_id": "fixture_search_query_id",
+    "typeahead_active": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/search_subreddits"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

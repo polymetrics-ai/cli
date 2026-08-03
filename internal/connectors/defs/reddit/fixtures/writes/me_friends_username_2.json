@@ -1,0 +1,17 @@
+{
+  "record": {
+    "username": "fixture_username"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v1/me/friends/fixture_username"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

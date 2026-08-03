@@ -1,0 +1,18 @@
+{
+  "record": {
+    "section": "fixture_section",
+    "json": "fixture_json"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/r/synthetic-conformance-value/api/widget_order/fixture_section"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

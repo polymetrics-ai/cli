@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/live/synthetic-conformance-value",
+    "query": {
+      "limit": "100",
+      "raw_json": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "Listing",
+      "data": {
+        "after": null,
+        "children": [
+          {
+            "kind": "LiveUpdate",
+            "data": {
+              "id": "LiveUpdate_fixture_1",
+              "name": "LiveUpdate_fixture_1",
+              "author": "fixture_user",
+              "body": "Fixture live update",
+              "created_utc": 1767225601,
+              "stricken": false
+            }
+          }
+        ]
+      }
+    }
+  }
+}

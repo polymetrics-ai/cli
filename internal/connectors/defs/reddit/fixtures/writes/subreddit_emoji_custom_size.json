@@ -1,0 +1,18 @@
+{
+  "record": {
+    "height": 1,
+    "width": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/{{ record.subreddit }}/emoji_custom_size"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

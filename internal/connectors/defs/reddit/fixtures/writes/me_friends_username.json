@@ -1,0 +1,18 @@
+{
+  "record": {
+    "username": "fixture_username",
+    "id": "fixture_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/me/friends/fixture_username"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

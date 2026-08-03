@@ -1,0 +1,15 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/delete_sr_banner"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

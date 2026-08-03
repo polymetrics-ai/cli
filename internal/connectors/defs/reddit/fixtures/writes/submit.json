@@ -1,0 +1,37 @@
+{
+  "record": {
+    "ad": true,
+    "app": "fixture_app",
+    "collection_id": "fixture_collection_id",
+    "extension": "fixture_extension",
+    "flair_id": "fixture_flair_id",
+    "flair_text": "fixture_flair_text",
+    "g-recaptcha-response": "fixture_g-recaptcha-response",
+    "kind": "fixture_kind",
+    "nsfw": true,
+    "post_set_default_post_id": "fixture_post_set_default_post_id",
+    "post_set_id": "fixture_post_set_id",
+    "recaptcha_token": "fixture_recaptcha_token",
+    "resubmit": true,
+    "richtext_json": "fixture_richtext_json",
+    "sendreplies": true,
+    "spoiler": true,
+    "sr": "fixture_sr",
+    "text": "fixture_text",
+    "title": "fixture_title",
+    "url": "fixture_url",
+    "video_poster_url": "fixture_video_poster_url"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/submit"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

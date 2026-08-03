@@ -1,0 +1,19 @@
+{
+  "record": {
+    "note_id": "fixture_note_id",
+    "subreddit": "fixture_subreddit",
+    "user": "fixture_user"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/mod/notes"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "img_name": "fixture_img_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/delete_sr_img"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

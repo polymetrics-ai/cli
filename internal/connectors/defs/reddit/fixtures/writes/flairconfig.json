@@ -1,0 +1,21 @@
+{
+  "record": {
+    "flair_enabled": true,
+    "flair_position": "fixture_flair_position",
+    "flair_self_assign_enabled": true,
+    "link_flair_position": "fixture_link_flair_position",
+    "link_flair_self_assign_enabled": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/flairconfig"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

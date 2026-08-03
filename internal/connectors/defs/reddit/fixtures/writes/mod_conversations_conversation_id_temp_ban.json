@@ -1,0 +1,18 @@
+{
+  "record": {
+    "conversation_id": "fixture_conversation_id",
+    "duration": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/mod/conversations/:conversation_id/temp_ban"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

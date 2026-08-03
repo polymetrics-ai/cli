@@ -1,0 +1,18 @@
+{
+  "record": {
+    "entity": "fixture_entity",
+    "state": "fixture_state"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/mod/bulk_read"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

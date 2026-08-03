@@ -1,0 +1,17 @@
+{
+  "record": {
+    "flair_csv": "fixture_flair_csv"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/flaircsv"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

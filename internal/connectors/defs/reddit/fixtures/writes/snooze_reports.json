@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "reason": "fixture_reason"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/snooze_reports"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

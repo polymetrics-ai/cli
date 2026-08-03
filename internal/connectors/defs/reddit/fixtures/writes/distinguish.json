@@ -1,0 +1,19 @@
+{
+  "record": {
+    "how": "fixture_how",
+    "id": "fixture_id",
+    "sticky": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/distinguish"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/r/synthetic-conformance-value/wiki/revisions/synthetic-conformance-value",
+    "query": {
+      "limit": "100",
+      "raw_json": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "Listing",
+      "data": {
+        "after": null,
+        "children": [
+          {
+            "id": "wikirev_fixture_1",
+            "timestamp": 1767225601,
+            "author": {
+              "kind": "t2",
+              "data": {
+                "name": "fixture_user"
+              }
+            },
+            "reason": "Fixture edit"
+          }
+        ]
+      }
+    }
+  }
+}

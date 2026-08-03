@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "sort": "fixture_sort"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/set_suggested_sort"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

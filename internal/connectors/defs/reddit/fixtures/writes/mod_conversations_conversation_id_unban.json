@@ -1,0 +1,17 @@
+{
+  "record": {
+    "conversation_id": "fixture_conversation_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/mod/conversations/:conversation_id/unban"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

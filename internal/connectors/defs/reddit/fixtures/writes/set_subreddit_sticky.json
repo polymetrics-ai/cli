@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "num": 1,
+    "state": true,
+    "to_profile": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/set_subreddit_sticky"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

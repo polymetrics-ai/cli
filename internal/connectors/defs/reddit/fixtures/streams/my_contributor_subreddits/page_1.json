@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/subreddits/mine/contributor",
+    "query": {
+      "limit": "100",
+      "raw_json": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "Listing",
+      "data": {
+        "after": null,
+        "children": [
+          {
+            "kind": "t5",
+            "data": {
+              "id": "sfixture_1",
+              "name": "t5_sfixture_1",
+              "display_name": "fixture",
+              "title": "Fixture subreddit",
+              "public_description": "A fixture subreddit",
+              "subscribers": 1,
+              "created_utc": 1767225601,
+              "url": "/r/fixture/",
+              "over18": false
+            }
+          }
+        ]
+      }
+    }
+  }
+}

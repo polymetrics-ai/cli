@@ -1,0 +1,19 @@
+{
+  "record": {
+    "action": "fixture_action",
+    "action_source": "fixture_action_source",
+    "skip_initial_defaults": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/subscribe"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

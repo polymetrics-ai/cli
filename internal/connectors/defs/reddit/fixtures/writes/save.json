@@ -1,0 +1,18 @@
+{
+  "record": {
+    "category": "fixture_category",
+    "id": "fixture_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/save"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

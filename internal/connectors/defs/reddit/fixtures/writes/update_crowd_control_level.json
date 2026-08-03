@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "level": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/update_crowd_control_level"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

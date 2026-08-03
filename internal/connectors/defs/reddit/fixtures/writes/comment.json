@@ -1,0 +1,22 @@
+{
+  "record": {
+    "recaptcha_token": "fixture_recaptcha_token",
+    "return_rtjson": true,
+    "richtext_json": "fixture_richtext_json",
+    "text": "fixture_text",
+    "thing_id": "fixture_thing_id",
+    "video_poster_url": "fixture_video_poster_url"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/comment"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

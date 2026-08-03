@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "flair_list",
+  "type": "object",
+  "properties": {
+    "user": {
+      "type": "string"
+    },
+    "flair_text": {
+      "type": "string"
+    },
+    "flair_css_class": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "user"
+  ]
+}

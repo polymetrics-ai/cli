@@ -1,0 +1,21 @@
+{
+  "record": {
+    "label": "fixture_label",
+    "note": "fixture_note",
+    "reddit_id": "fixture_reddit_id",
+    "subreddit": "fixture_subreddit",
+    "user": "fixture_user"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/mod/notes"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "css_class": "fixture_css_class",
+    "flair_template_id": "fixture_flair_template_id",
+    "flair_type": "fixture_flair_type",
+    "text": "fixture_text",
+    "text_editable": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/flairtemplate"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

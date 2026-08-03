@@ -1,0 +1,18 @@
+{
+  "record": {
+    "thread": "fixture_thread",
+    "id": "fixture_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/live/fixture_thread/rm_contributor_invite"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

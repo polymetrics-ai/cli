@@ -1,0 +1,18 @@
+{
+  "record": {
+    "follow": true,
+    "fullname": "fixture_fullname"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/follow_post"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

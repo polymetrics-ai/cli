@@ -1,0 +1,17 @@
+{
+  "record": {
+    "emoji_name": "fixture_emoji_name"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/v1/{{ record.subreddit }}/emoji/fixture_emoji_name"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

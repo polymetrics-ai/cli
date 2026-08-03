@@ -1,0 +1,20 @@
+{
+  "record": {
+    "container": "fixture_container",
+    "id": "fixture_id",
+    "name": "fixture_name",
+    "type": "fixture_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/unfriend"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

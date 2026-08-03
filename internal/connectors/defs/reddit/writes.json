@@ -1,0 +1,3161 @@
+{
+  "actions": [
+    {
+      "name": "me_prefs",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v1/me/prefs",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "risk": "external mutation via PATCH /api/v1/me/prefs; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "announcements_v1_hide",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/announcements/v1/hide",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "string",
+            "description": "(beta) comma separated list of announcement fullnames, prefixed ann_"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/announcements/v1/hide; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "announcements_v1_read",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/announcements/v1/read",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "string",
+            "description": "(beta) comma separated list of announcement fullnames, prefixed ann_"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/announcements/v1/read; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "announcements_v1_read_all",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/announcements/v1/read_all",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "risk": "external mutation via POST /api/announcements/v1/read_all; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "subreddit_emoji_json",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/{{ record.subreddit }}/emoji.json",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "mod_flair_only": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the emoji to be created. It can be alphanumeric without any special characters except '-' & '_' and cannot exceed 24 characters."
+          },
+          "post_flair_allowed": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "s3_key": {
+            "type": "string",
+            "description": "S3 key of the uploaded image which can be obtained from the S3 url. This is of the form subreddit/hash_value."
+          },
+          "user_flair_allowed": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/v1/{subreddit}/emoji.json; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "subreddit_emoji_emoji_name",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/{{ record.subreddit }}/emoji/{{ record.emoji_name }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "emoji_name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via DELETE /api/v1/{subreddit}/emoji/{emoji_name}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "emoji_name"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "subreddit_emoji_custom_size",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/v1/{{ record.subreddit }}/emoji_custom_size",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "height": {
+            "type": "integer",
+            "description": "an integer between 1 and 40 (default: 0)"
+          },
+          "width": {
+            "type": "integer",
+            "description": "an integer between 1 and 40 (default: 0)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/v1/{subreddit}/emoji_custom_size; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "clearflairtemplates",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/clearflairtemplates",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "flair_type": {
+            "type": "string",
+            "description": "one of (USER_FLAIR, LINK_FLAIR)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/clearflairtemplates; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "deleteflair",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/deleteflair",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "a user by name"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/deleteflair; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "deleteflairtemplate",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/deleteflairtemplate",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "flair_template_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/deleteflairtemplate; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "flair",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/flair",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "css_class": {
+            "type": "string",
+            "description": "a valid subreddit image name"
+          },
+          "link": {
+            "type": "string",
+            "description": "a fullname of a link"
+          },
+          "name": {
+            "type": "string",
+            "description": "a user by name"
+          },
+          "text": {
+            "type": "string",
+            "description": "a string no longer than 64 characters"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/flair; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "flair_template_order",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/r/{{ config.subreddit }}/api/flair_template_order",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "flair_type": {
+            "type": "string",
+            "description": "one of (USER_FLAIR, LINK_FLAIR)"
+          },
+          "subreddit": {
+            "type": "string",
+            "description": "subreddit name"
+          }
+        }
+      },
+      "risk": "external mutation via PATCH /r/{subreddit}/api/flair_template_order; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "flairconfig",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/flairconfig",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "flair_enabled": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "flair_position": {
+            "type": "string",
+            "description": "one of (left, right)"
+          },
+          "flair_self_assign_enabled": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "link_flair_position": {
+            "type": "string",
+            "description": "one of (`,left,right`)"
+          },
+          "link_flair_self_assign_enabled": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/flairconfig; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "flaircsv",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/flaircsv",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "flair_csv": {
+            "type": "string",
+            "description": "comma-seperated flair information"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/flaircsv; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "flairselector",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/flairselector",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "is_newlink": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "link": {
+            "type": "string",
+            "description": "a fullname of a link"
+          },
+          "name": {
+            "type": "string",
+            "description": "a user by name"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/flairselector; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "flairtemplate",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/flairtemplate",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "css_class": {
+            "type": "string",
+            "description": "a valid subreddit image name"
+          },
+          "flair_template_id": {
+            "type": "string"
+          },
+          "flair_type": {
+            "type": "string",
+            "description": "one of (USER_FLAIR, LINK_FLAIR)"
+          },
+          "text": {
+            "type": "string",
+            "description": "a string no longer than 64 characters"
+          },
+          "text_editable": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/flairtemplate; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "flairtemplate_v2",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/flairtemplate_v2",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "allowable_content": {
+            "type": "string",
+            "description": "one of (all, emoji, text)"
+          },
+          "background_color": {
+            "type": "string",
+            "description": "a 6-digit rgb hex color, e.g. #AABBCC"
+          },
+          "css_class": {
+            "type": "string",
+            "description": "a valid subreddit image name"
+          },
+          "flair_template_id": {
+            "type": "string"
+          },
+          "flair_type": {
+            "type": "string",
+            "description": "one of (USER_FLAIR, LINK_FLAIR)"
+          },
+          "max_emojis": {
+            "type": "integer",
+            "description": "an integer between 1 and 10 (default: 10)"
+          },
+          "mod_only": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "override_css": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string",
+            "description": "a string no longer than 64 characters"
+          },
+          "text_color": {
+            "type": "string",
+            "description": "one of (light, dark)"
+          },
+          "text_editable": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/flairtemplate_v2; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "selectflair",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/selectflair",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "background_color": {
+            "type": "string",
+            "description": "a 6-digit rgb hex color, e.g. #AABBCC"
+          },
+          "css_class": {
+            "type": "string",
+            "description": "a valid subreddit image name"
+          },
+          "flair_template_id": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string",
+            "description": "a fullname of a link"
+          },
+          "name": {
+            "type": "string",
+            "description": "a user by name"
+          },
+          "return_rtson": {
+            "type": "string",
+            "description": "[all|only|none]: \"all\" saves attributes and returns rtjson \"only\" only returns rtjson\"none\" only saves attributes"
+          },
+          "text": {
+            "type": "string",
+            "description": "a string no longer than 64 characters"
+          },
+          "text_color": {
+            "type": "string",
+            "description": "one of (light, dark)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/selectflair; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "setflairenabled",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/setflairenabled",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "flair_enabled": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/setflairenabled; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "comment",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/comment",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "recaptcha_token": {
+            "type": "string",
+            "description": "a string"
+          },
+          "return_rtjson": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "richtext_json": {
+            "type": "string",
+            "description": "JSON data"
+          },
+          "text": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "thing_id": {
+            "type": "string",
+            "description": "fullname of parent thing"
+          },
+          "video_poster_url": {
+            "type": "string",
+            "description": "a string"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/comment; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "del",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/del",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing created by the user"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/del; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "editusertext",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/editusertext",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "return_rtjson": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "richtext_json": {
+            "type": "string",
+            "description": "JSON data"
+          },
+          "text": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "thing_id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          },
+          "video_poster_url": {
+            "type": "string",
+            "description": "a string"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/editusertext; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "follow_post",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/follow_post",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "follow": {
+            "type": "boolean",
+            "description": "boolean: True to follow or False to unfollow"
+          },
+          "fullname": {
+            "type": "string",
+            "description": "fullname of a link"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/follow_post; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "hide",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/hide",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A comma-separated list of link fullnames"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/hide; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "lock",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/lock",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/lock; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "marknsfw",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/marknsfw",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/marknsfw; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "report",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/report",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "additional_info": {
+            "type": "string",
+            "description": "a string no longer than 2000 characters"
+          },
+          "custom_text": {
+            "type": "string",
+            "description": "a string no longer than 2000 characters"
+          },
+          "from_help_desk": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "from_modmail": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "modmail_conv_id": {
+            "type": "string",
+            "description": "base36 modmail conversation id"
+          },
+          "other_reason": {
+            "type": "string",
+            "description": "a string no longer than 100 characters"
+          },
+          "reason": {
+            "type": "string",
+            "description": "a string no longer than 100 characters"
+          },
+          "rule_reason": {
+            "type": "string",
+            "description": "a string no longer than 100 characters"
+          },
+          "site_reason": {
+            "type": "string",
+            "description": "a string no longer than 100 characters"
+          },
+          "sr_name": {
+            "type": "string",
+            "description": "a string no longer than 1000 characters"
+          },
+          "thing_id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          },
+          "usernames": {
+            "type": "string",
+            "description": "A comma-separated list of items"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/report; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "save",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/save",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "a category name"
+          },
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/save; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "sendreplies",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/sendreplies",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing created by the user"
+          },
+          "state": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/sendreplies; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "set_contest_mode",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/set_contest_mode",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "state": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/set_contest_mode; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "set_subreddit_sticky",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/set_subreddit_sticky",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "num": {
+            "type": "integer",
+            "description": "an integer between 1 and 4"
+          },
+          "state": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "to_profile": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/set_subreddit_sticky; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "set_suggested_sort",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/set_suggested_sort",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sort": {
+            "type": "string",
+            "description": "one of (confidence, top, new, controversial, old, random, qa, live, blank)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/set_suggested_sort; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "spoiler",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/spoiler",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a link"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/spoiler; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "submit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/submit",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "ad": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "app": {
+            "type": "string"
+          },
+          "collection_id": {
+            "type": "string",
+            "description": "(beta) the UUID of a collection"
+          },
+          "extension": {
+            "type": "string",
+            "description": "extension used for redirects"
+          },
+          "flair_id": {
+            "type": "string",
+            "description": "a string no longer than 36 characters"
+          },
+          "flair_text": {
+            "type": "string",
+            "description": "a string no longer than 64 characters"
+          },
+          "g-recaptcha-response": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "description": "one of (link, self, image, video, videogif)"
+          },
+          "nsfw": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "post_set_default_post_id": {
+            "type": "string",
+            "description": "a string"
+          },
+          "post_set_id": {
+            "type": "string",
+            "description": "a string"
+          },
+          "recaptcha_token": {
+            "type": "string",
+            "description": "a string"
+          },
+          "resubmit": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "richtext_json": {
+            "type": "string",
+            "description": "JSON data"
+          },
+          "sendreplies": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "spoiler": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "sr": {
+            "type": "string",
+            "description": "subreddit name"
+          },
+          "text": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "title": {
+            "type": "string",
+            "description": "title of the submission. up to 300 characters long"
+          },
+          "url": {
+            "type": "string",
+            "description": "a valid URL"
+          },
+          "video_poster_url": {
+            "type": "string",
+            "description": "a valid URL"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/submit; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "unhide",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/unhide",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A comma-separated list of link fullnames"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/unhide; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unlock",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/unlock",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/unlock; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unmarknsfw",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/unmarknsfw",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/unmarknsfw; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "unsave",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/unsave",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/unsave; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "unspoiler",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/unspoiler",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a link"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/unspoiler; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "live_create",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/live/create",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "nsfw": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "resources": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "title": {
+            "type": "string",
+            "description": "a string no longer than 120 characters"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/create; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "live_thread_accept_contributor_invite",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/accept_contributor_invite",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/accept_contributor_invite; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "live_thread_close_thread",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/close_thread",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/close_thread; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "live_thread_delete_update",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/delete_update",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "the ID of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/delete_update; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "live_thread_edit",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/edit",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "nsfw": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "resources": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "title": {
+            "type": "string",
+            "description": "a string no longer than 120 characters"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/edit; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "live_thread_hide_discussion",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/hide_discussion",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string",
+            "description": "The base 36 ID of a Link"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/hide_discussion; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "live_thread_invite_contributor",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/invite_contributor",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "description": "the name of an existing user"
+          },
+          "permissions": {
+            "type": "string",
+            "description": "permission description e.g. +update,+edit,-manage"
+          },
+          "type": {
+            "type": "string",
+            "description": "one of (liveupdate_contributor_invite, liveupdate_contributor)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/invite_contributor; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "live_thread_leave_contributor",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/leave_contributor",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/leave_contributor; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "live_thread_report",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/report",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "one of (spam, vote-manipulation, personal-information, sexualizing-minors, site-breaking)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/report; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "live_thread_rm_contributor",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/rm_contributor",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "fullname of a account"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/rm_contributor; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "live_thread_rm_contributor_invite",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/rm_contributor_invite",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "fullname of a account"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/rm_contributor_invite; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "live_thread_set_contributor_permissions",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/set_contributor_permissions",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "description": "the name of an existing user"
+          },
+          "permissions": {
+            "type": "string",
+            "description": "permission description e.g. +update,+edit,-manage"
+          },
+          "type": {
+            "type": "string",
+            "description": "one of (liveupdate_contributor_invite, liveupdate_contributor)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/set_contributor_permissions; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "live_thread_strike_update",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/strike_update",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "the ID of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/strike_update; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "live_thread_unhide_discussion",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/unhide_discussion",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string",
+            "description": "The base 36 ID of a Link"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/unhide_discussion; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "live_thread_update",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/live/{{ record.thread }}/update",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "thread": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string",
+            "description": "raw markdown text"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/live/{thread}/update; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "thread"
+      ]
+    },
+    {
+      "name": "compose",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/compose",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "from_sr": {
+            "type": "string",
+            "description": "subreddit name"
+          },
+          "g-recaptcha-response": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string",
+            "description": "a string no longer than 100 characters"
+          },
+          "text": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "to": {
+            "type": "string",
+            "description": "the name of an existing user"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/compose; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "del_msg",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/del_msg",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/del_msg; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "read_all_messages",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/read_all_messages",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "filter_types": {
+            "type": "string",
+            "description": "A comma-separated list of items"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/read_all_messages; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "read_message",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/read_message",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A comma-separated list of thing fullnames"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/read_message; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "accept_moderator_invite",
+      "kind": "create",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/accept_moderator_invite",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/accept_moderator_invite; requires the connected account to moderate the target subreddit (scope: modself); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "approve",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/approve",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/approve; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "distinguish",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/distinguish",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "how": {
+            "type": "string",
+            "description": "one of (yes, no, admin, special)"
+          },
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          },
+          "sticky": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/distinguish; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "ignore_reports",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/ignore_reports",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/ignore_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "leavecontributor",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/leavecontributor",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/leavecontributor; requires the connected account to moderate the target subreddit (scope: modself); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "leavemoderator",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/leavemoderator",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/leavemoderator; requires the connected account to moderate the target subreddit (scope: modself); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "remove",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/remove",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          },
+          "spam": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/remove; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "show_comment",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/show_comment",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/show_comment; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "snooze_reports",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/snooze_reports",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/snooze_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "unignore_reports",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/unignore_reports",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/unignore_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "unsnooze_reports",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/unsnooze_reports",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/unsnooze_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_crowd_control_level",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/update_crowd_control_level",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          },
+          "level": {
+            "type": "integer",
+            "description": "an integer between 0 and 3"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/update_crowd_control_level; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_bulk_read",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/bulk_read",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "entity": {
+            "type": "string",
+            "description": "comma-delimited list of subreddit names"
+          },
+          "state": {
+            "type": "string",
+            "description": "one of (all, appeals, notifications, inbox, filtered, inprogress, mod, archived, default, highlighted, admin, join_requests, new)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/bulk_read; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "isAuthorHidden": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "srName": {
+            "type": "string",
+            "description": "subreddit name"
+          },
+          "subject": {
+            "type": "string",
+            "description": "a string no longer than 100 characters"
+          },
+          "to": {
+            "type": "string",
+            "description": "Modmail conversation recipient fullname"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_conversation_id",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "conversation_id": {
+            "type": "string",
+            "description": "A Modmail Conversation ID, in the form ModmailConversation_<id>"
+          },
+          "isAuthorHidden": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "isInternal": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/:conversation_id; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_conversation_id_approve",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/approve",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "base36 modmail conversation id"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/:conversation_id/approve; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_conversation_id_archive",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/archive",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "A Modmail Conversation ID, in the form ModmailConversation_<id>"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/:conversation_id/archive; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_conversation_id_disapprove",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/disapprove",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "base36 modmail conversation id"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/:conversation_id/disapprove; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_conversation_id_highlight",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/mod/conversations/:conversation_id/highlight",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "A Modmail Conversation ID, in the form ModmailConversation_<id>"
+          }
+        }
+      },
+      "risk": "external mutation via DELETE /api/mod/conversations/:conversation_id/highlight; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "mod_conversations_conversation_id_highlight_2",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/highlight",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "A Modmail Conversation ID, in the form ModmailConversation_<id>"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/:conversation_id/highlight; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_conversation_id_mute",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/mute",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "base36 modmail conversation id"
+          },
+          "num_hours": {
+            "type": "string",
+            "description": "one of (72, 168, 672)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/:conversation_id/mute; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_conversation_id_temp_ban",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/temp_ban",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "base36 modmail conversation id"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "an integer between 1 and 999"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/:conversation_id/temp_ban; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_conversation_id_unarchive",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/unarchive",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "A Modmail Conversation ID, in the form ModmailConversation_<id>"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/:conversation_id/unarchive; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_conversation_id_unban",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/unban",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "base36 modmail conversation id"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/:conversation_id/unban; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_conversation_id_unmute",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/unmute",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "description": "base36 modmail conversation id"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/:conversation_id/unmute; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "mod_conversations_read",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/read",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversationIds": {
+            "type": "string",
+            "description": "A comma-separated list of items"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/read; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_conversations_unread",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/conversations/unread",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "conversationIds": {
+            "type": "string",
+            "description": "A comma-separated list of items"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/conversations/unread; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "mod_notes",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/mod/notes",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "note_id": {
+            "type": "string",
+            "description": "a unique ID for the note to be deleted (should have a ModNote_ prefix)"
+          },
+          "subreddit": {
+            "type": "string",
+            "description": "subreddit name"
+          },
+          "user": {
+            "type": "string",
+            "description": "account username"
+          }
+        }
+      },
+      "risk": "external mutation via DELETE /api/mod/notes; requires the connected account to moderate the target subreddit (scope: modnote); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "mod_notes_2",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/mod/notes",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "(optional) one of (BOT_BAN, PERMA_BAN, BAN, ABUSE_WARNING, SPAM_WARNING, SPAM_WATCH, SOLID_CONTRIBUTOR, HELPFUL_USER, USER_SUMMARY)"
+          },
+          "note": {
+            "type": "string",
+            "description": "Content of the note, should be a string with a maximum character limit of 250"
+          },
+          "reddit_id": {
+            "type": "string",
+            "description": "(optional) a fullname of a comment or post (should have either a t1 or t3 prefix)"
+          },
+          "subreddit": {
+            "type": "string",
+            "description": "subreddit name"
+          },
+          "user": {
+            "type": "string",
+            "description": "account username"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/mod/notes; requires the connected account to moderate the target subreddit (scope: modnote); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "multi_copy",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/multi/copy",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "description_md": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "display_name": {
+            "type": "string",
+            "description": "a string no longer than 50 characters"
+          },
+          "expand_srs": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "from": {
+            "type": "string",
+            "description": "multireddit url path"
+          },
+          "to": {
+            "type": "string",
+            "description": "destination multireddit url path"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/multi/copy; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "multi_multipath",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/multi/{{ record.multipath }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "multipath": {
+            "type": "string"
+          },
+          "expand_srs": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via DELETE /api/multi/{multipath}; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "multipath"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "multi_multipath_2",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/multi/{{ record.multipath }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "multipath": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string",
+            "description": "json data: { \"description_md\": raw markdown text, \"display_name\": a string no longer than 50 characters, \"icon_img\": one of (`png`, `jpg`, `jpeg`), \"key_color\": a 6-digit rgb hex color, e.g. `#AABBCC`, \"subreddits\": [ { \"name\": subreddit name, }, ... ], \"visibility\": one of (`private`, `public`, `hi"
+          },
+          "expand_srs": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/multi/{multipath}; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "multipath"
+      ]
+    },
+    {
+      "name": "multi_multipath_3",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/multi/{{ record.multipath }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "multipath": {
+            "type": "string"
+          },
+          "expand_srs": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "model": {
+            "type": "string",
+            "description": "json data: { \"description_md\": raw markdown text, \"display_name\": a string no longer than 50 characters, \"icon_img\": one of (`png`, `jpg`, `jpeg`), \"key_color\": a 6-digit rgb hex color, e.g. `#AABBCC`, \"subreddits\": [ { \"name\": subreddit name, }, ... ], \"visibility\": one of (`private`, `public`, `hi"
+          }
+        }
+      },
+      "risk": "external mutation via PUT /api/multi/{multipath}; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "multipath"
+      ]
+    },
+    {
+      "name": "multi_multipath_description",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/multi/{{ record.multipath }}/description",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "multipath": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string",
+            "description": "json data: { \"body_md\": raw markdown text, }"
+          }
+        }
+      },
+      "risk": "external mutation via PUT /api/multi/{multipath}/description; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "multipath"
+      ]
+    },
+    {
+      "name": "multi_multipath_r_srname",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/multi/{{ record.multipath }}/r/{{ record.srname }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "multipath": {
+            "type": "string"
+          },
+          "srname": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via DELETE /api/multi/{multipath}/r/{srname}; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "multipath",
+        "srname"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "multi_multipath_r_srname_2",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/multi/{{ record.multipath }}/r/{{ record.srname }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "multipath": {
+            "type": "string"
+          },
+          "srname": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string",
+            "description": "json data: { \"name\": subreddit name, }"
+          }
+        }
+      },
+      "risk": "external mutation via PUT /api/multi/{multipath}/r/{srname}; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "multipath",
+        "srname"
+      ]
+    },
+    {
+      "name": "delete_sr_banner",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/delete_sr_banner",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/delete_sr_banner; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_sr_header",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/delete_sr_header",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/delete_sr_header; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_sr_icon",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/delete_sr_icon",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/delete_sr_icon; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_sr_img",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/delete_sr_img",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "img_name": {
+            "type": "string",
+            "description": "a valid subreddit image name"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/delete_sr_img; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "search_reddit_names",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/search_reddit_names",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "exact": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "include_over_18": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "include_unadvertisable": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "query": {
+            "type": "string",
+            "description": "a string up to 50 characters long, consisting of printable characters."
+          },
+          "search_query_id": {
+            "type": "string",
+            "description": "a uuid"
+          },
+          "typeahead_active": {
+            "type": "boolean",
+            "description": "boolean value or None"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/search_reddit_names; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "search_subreddits",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/search_subreddits",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "exact": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "include_over_18": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "include_unadvertisable": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "query": {
+            "type": "string",
+            "description": "a string up to 50 characters long, consisting of printable characters."
+          },
+          "search_query_id": {
+            "type": "string",
+            "description": "a uuid"
+          },
+          "typeahead_active": {
+            "type": "boolean",
+            "description": "boolean value or None"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/search_subreddits; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "site_admin",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/site_admin",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "accept_followers": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "admin_override_spam_comments": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "admin_override_spam_links": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "admin_override_spam_selfposts": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "all_original_content": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_chat_post_creation": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_discovery": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_galleries": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_images": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_polls": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_post_crossposts": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_prediction_contributors": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_predictions": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_predictions_tournament": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_talks": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_top": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "allow_videos": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "collapse_deleted_comments": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "comment_contribution_settings": {
+            "type": "string",
+            "description": "json data: { \"allowed_media_types\": [ one of (`unknown`, `giphy`, `static`, `video`, `animated`, `expression`), ... ], }"
+          },
+          "comment_score_hide_mins": {
+            "type": "integer",
+            "description": "an integer between 0 and 1440 (default: 0)"
+          },
+          "crowd_control_chat_level": {
+            "type": "integer",
+            "description": "an integer between 0 and 3"
+          },
+          "crowd_control_filter": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "crowd_control_level": {
+            "type": "integer",
+            "description": "an integer between 0 and 3"
+          },
+          "crowd_control_mode": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "crowd_control_post_level": {
+            "type": "integer",
+            "description": "an integer between 0 and 3"
+          },
+          "description": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "disable_contributor_requests": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "exclude_banned_modqueue": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "free_form_reports": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "g-recaptcha-response": {
+            "type": "string"
+          },
+          "hateful_content_threshold_abuse": {
+            "type": "integer",
+            "description": "an integer between 0 and 3"
+          },
+          "hateful_content_threshold_identity": {
+            "type": "integer",
+            "description": "an integer between 0 and 3"
+          },
+          "header-title": {
+            "type": "string",
+            "description": "a string no longer than 500 characters"
+          },
+          "hide_ads": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "key_color": {
+            "type": "string",
+            "description": "a 6-digit rgb hex color, e.g. #AABBCC"
+          },
+          "link_type": {
+            "type": "string",
+            "description": "one of (any, link, self)"
+          },
+          "modmail_harassment_filter_enabled": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "name": {
+            "type": "string",
+            "description": "subreddit name"
+          },
+          "new_pinned_post_pns_enabled": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "original_content_tag_enabled": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "over_18": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "prediction_leaderboard_entry_type": {
+            "type": "integer",
+            "description": "an integer between 0 and 2"
+          },
+          "public_description": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "restrict_commenting": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "restrict_posting": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "should_archive_posts": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "show_media": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "show_media_preview": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "spam_comments": {
+            "type": "string",
+            "description": "one of (low, high, all)"
+          },
+          "spam_links": {
+            "type": "string",
+            "description": "one of (low, high, all)"
+          },
+          "spam_selfposts": {
+            "type": "string",
+            "description": "one of (low, high, all)"
+          },
+          "spoilers_enabled": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "sr": {
+            "type": "string",
+            "description": "fullname of a thing"
+          },
+          "submit_link_label": {
+            "type": "string",
+            "description": "a string no longer than 60 characters"
+          },
+          "submit_text": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "submit_text_label": {
+            "type": "string",
+            "description": "a string no longer than 60 characters"
+          },
+          "subreddit_discovery_settings": {
+            "type": "string",
+            "description": "json data: { \"disabled_discovery_types\": [ one of (`unknown`, `onboarding`), ... ], }"
+          },
+          "suggested_comment_sort": {
+            "type": "string",
+            "description": "one of (confidence, top, new, controversial, old, random, qa, live)"
+          },
+          "title": {
+            "type": "string",
+            "description": "a string no longer than 100 characters"
+          },
+          "toxicity_threshold_chat_level": {
+            "type": "integer",
+            "description": "an integer between 0 and 1"
+          },
+          "type": {
+            "type": "string",
+            "description": "one of (gold_restricted, archived, restricted, private, employees_only, gold_only, public, user)"
+          },
+          "user_flair_pns_enabled": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "welcome_message_enabled": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "welcome_message_text": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "wiki_edit_age": {
+            "type": "integer",
+            "description": "an integer between 0 and 36600 (default: 0)"
+          },
+          "wiki_edit_karma": {
+            "type": "integer",
+            "description": "an integer between 0 and 1000000000 (default: 0)"
+          },
+          "wikimode": {
+            "type": "string",
+            "description": "one of (disabled, modonly, anyone)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/site_admin; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "subreddit_stylesheet",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/subreddit_stylesheet",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "description": "one of (save, preview)"
+          },
+          "reason": {
+            "type": "string",
+            "description": "a string up to 256 characters long, consisting of printable characters."
+          },
+          "stylesheet_contents": {
+            "type": "string",
+            "description": "the new stylesheet content"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/subreddit_stylesheet; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "subscribe",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/subscribe",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "one of (sub, unsub)"
+          },
+          "action_source": {
+            "type": "string",
+            "description": "one of (onboarding, autosubscribe)"
+          },
+          "skip_initial_defaults": {
+            "type": "boolean",
+            "description": "boolean value"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/subscribe; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "friend",
+      "kind": "create",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/friend",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "ban_context": {
+            "type": "string",
+            "description": "fullname of a thing"
+          },
+          "ban_message": {
+            "type": "string",
+            "description": "raw markdown text"
+          },
+          "ban_reason": {
+            "type": "string",
+            "description": "a string no longer than 100 characters"
+          },
+          "container": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "an integer between 1 and 999"
+          },
+          "name": {
+            "type": "string",
+            "description": "the name of an existing user"
+          },
+          "note": {
+            "type": "string",
+            "description": "a string no longer than 300 characters"
+          },
+          "permissions": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "one of (friend, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/friend; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "report_user",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/report_user",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "details": {
+            "type": "string",
+            "description": "JSON data"
+          },
+          "reason": {
+            "type": "string",
+            "description": "a string no longer than 100 characters"
+          },
+          "('user',)": {
+            "type": "string",
+            "description": "A valid, existing reddit username"
+          }
+        }
+      },
+      "risk": "external mutation via POST /api/report_user; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "setpermissions",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/setpermissions",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "the name of an existing user"
+          },
+          "permissions": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/setpermissions; requires the connected account to moderate the target subreddit (scope: modothers); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "unfriend",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/unfriend",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "container": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "fullname of a thing"
+          },
+          "name": {
+            "type": "string",
+            "description": "the name of an existing user"
+          },
+          "type": {
+            "type": "string",
+            "description": "one of (friend, enemy, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/unfriend; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "me_friends_username",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/api/v1/me/friends/{{ record.username }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "A valid, existing reddit username"
+          }
+        }
+      },
+      "risk": "external mutation via DELETE /api/v1/me/friends/{username}; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "username"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "me_friends_username_2",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/api/v1/me/friends/{{ record.username }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via PUT /api/v1/me/friends/{username}; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "username"
+      ]
+    },
+    {
+      "name": "widget",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/widget",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "json": {
+            "type": "boolean",
+            "description": "json data: { \"data\": [ { \"height\": an integer, \"linkUrl\": A valid URL (optional), \"url\": a valid URL of a reddit-hosted image, \"width\": an integer, }, ... ], \"kind\": one of (`image`), \"shortName\": a string no longer than 30 characters, \"styles\": { \"backgroundColor\": a 6-digit rgb hex color, e.g. `#A"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/widget; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "widget_widget_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/r/{{ config.subreddit }}/api/widget/{{ record.widget_id }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "widget_id": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "external mutation via DELETE /r/{subreddit}/api/widget/{widget_id}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "widget_id"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "widget_widget_id_2",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/r/{{ config.subreddit }}/api/widget/{{ record.widget_id }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "widget_id": {
+            "type": "string"
+          },
+          "json": {
+            "type": "boolean",
+            "description": "json data: { \"data\": [ { \"height\": an integer, \"linkUrl\": A valid URL (optional), \"url\": a valid URL of a reddit-hosted image, \"width\": an integer, }, ... ], \"kind\": one of (`image`), \"shortName\": a string no longer than 30 characters, \"styles\": { \"backgroundColor\": a 6-digit rgb hex color, e.g. `#A"
+          }
+        }
+      },
+      "risk": "external mutation via PUT /r/{subreddit}/api/widget/{widget_id}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "widget_id"
+      ]
+    },
+    {
+      "name": "widget_order_section",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/r/{{ config.subreddit }}/api/widget_order/{{ record.section }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "section": {
+            "type": "string"
+          },
+          "json": {
+            "type": "string",
+            "description": "json data: [ a string, ... ]"
+          }
+        }
+      },
+      "risk": "external mutation via PATCH /r/{subreddit}/api/widget_order/{section}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "section"
+      ]
+    },
+    {
+      "name": "wiki_alloweditor_act",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/wiki/alloweditor/{{ record.act }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "act": {
+            "type": "string"
+          },
+          "page": {
+            "type": "string",
+            "description": "the name of an existing wiki page"
+          },
+          "username": {
+            "type": "string",
+            "description": "the name of an existing user"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/wiki/alloweditor/{act}; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "act"
+      ]
+    },
+    {
+      "name": "wiki_edit",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/wiki/edit",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "page": {
+            "type": "string",
+            "description": "the name of an existing page or a new page to create"
+          },
+          "previous": {
+            "type": "string",
+            "description": "the starting point revision for this edit"
+          },
+          "reason": {
+            "type": "string",
+            "description": "a string up to 256 characters long, consisting of printable characters."
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/wiki/edit; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "wiki_hide",
+      "kind": "create",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/wiki/hide",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "string",
+            "description": "the name of an existing wiki page"
+          },
+          "revision": {
+            "type": "string",
+            "description": "a wiki revision ID"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/wiki/hide; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "wiki_revert",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/wiki/revert",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "string",
+            "description": "the name of an existing wiki page"
+          },
+          "revision": {
+            "type": "string",
+            "description": "a wiki revision ID"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/wiki/revert; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "wiki_settings_page",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/wiki/settings/{{ record.page }}",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "string"
+          },
+          "listed": {
+            "type": "boolean",
+            "description": "boolean value"
+          },
+          "permlevel": {
+            "type": "integer",
+            "description": "an integer"
+          }
+        }
+      },
+      "risk": "external mutation via POST /r/{subreddit}/wiki/settings/{page}; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "path_fields": [
+        "page"
+      ]
+    }
+  ]
+}

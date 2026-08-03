@@ -1,0 +1,19 @@
+{
+  "record": {
+    "multipath": "fixture_multipath",
+    "model": "fixture_model",
+    "expand_srs": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/multi/fixture_multipath"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

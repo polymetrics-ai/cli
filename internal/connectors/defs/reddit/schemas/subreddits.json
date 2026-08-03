@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "subreddits",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "public_description": {
+      "type": "string"
+    },
+    "subscribers": {
+      "type": "integer"
+    },
+    "created_utc": {
+      "type": "number"
+    },
+    "url": {
+      "type": "string"
+    },
+    "over18": {
+      "type": "boolean"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

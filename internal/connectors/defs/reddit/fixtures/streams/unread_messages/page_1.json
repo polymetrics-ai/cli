@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/message/unread",
+    "query": {
+      "limit": "100",
+      "raw_json": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "Listing",
+      "data": {
+        "after": null,
+        "children": [
+          {
+            "kind": "t4",
+            "data": {
+              "id": "mfixture_1",
+              "name": "t4_mfixture_1",
+              "author": "fixture_user",
+              "dest": "fixture_recipient",
+              "subject": "Fixture subject",
+              "body": "Fixture body",
+              "created_utc": 1767225601,
+              "was_comment": false,
+              "new": true
+            }
+          }
+        ]
+      }
+    }
+  }
+}

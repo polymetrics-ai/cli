@@ -1,0 +1,20 @@
+{
+  "record": {
+    "css_class": "fixture_css_class",
+    "link": "fixture_link",
+    "name": "fixture_name",
+    "text": "fixture_text"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/flair"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "messages",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "dest": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "created_utc": {
+      "type": "number"
+    },
+    "was_comment": {
+      "type": "boolean"
+    },
+    "new": {
+      "type": "boolean"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ],
+  "x-cursor-field": "created_utc"
+}
