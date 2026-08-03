@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "interview_list",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for the interview"
+    },
+    "title": {
+      "type": "string",
+      "description": "The internal title of the interview"
+    },
+    "externalTitle": {
+      "type": "string",
+      "description": "The title of the interview shown to candidates"
+    },
+    "type": {
+      "type": "string",
+      "description": "The interview definition type, such as Interview, TakeHome, or Debrief",
+      "enum": [
+        "Assessment",
+        "Interview",
+        "InterviewWithoutSchedule",
+        "TakeHome",
+        "Debrief"
+      ]
+    },
+    "isArchived": {
+      "type": "boolean",
+      "description": "Whether the interview is archived"
+    },
+    "isDebrief": {
+      "type": "boolean",
+      "description": "Whether the interview is a debrief"
+    },
+    "isFeedbackRequired": {
+      "type": "boolean",
+      "description": "Whether feedback is required for this interview"
+    },
+    "isFeedbackRequested": {
+      "type": "boolean",
+      "description": "Whether feedback is requested for this interview"
+    },
+    "instructionsHtml": {
+      "type": "string"
+    },
+    "instructionsPlain": {
+      "type": "string"
+    },
+    "jobId": {
+      "type": "string"
+    },
+    "feedbackFormDefinitionId": {
+      "type": "string",
+      "description": "The unique identifier for the feedback form definition used by this interview"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

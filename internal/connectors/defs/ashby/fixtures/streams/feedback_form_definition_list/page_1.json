@@ -1,0 +1,54 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/feedbackFormDefinition.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "feedback_form_definition_list_id_fixture_19",
+          "organizationId": "feedback_form_definition_list_organizationid_fixture_19",
+          "title": "Title fixture 19",
+          "isArchived": true,
+          "isDefaultForm": true,
+          "formDefinition": {
+            "sections": [
+              {
+                "title": "Title fixture 19",
+                "descriptionHtml": "<p>Descriptionhtml fixture 19</p>",
+                "descriptionPlain": "feedback_form_definition_list_descriptionplain_fixture_19",
+                "fields": [
+                  {
+                    "isRequired": true,
+                    "descriptionHtml": "<p>Descriptionhtml fixture 19</p>",
+                    "descriptionPlain": "feedback_form_definition_list_descriptionplain_fixture_19",
+                    "field": {
+                      "id": "feedback_form_definition_list_id_fixture_19",
+                      "type": "fixture",
+                      "path": "feedback_form_definition_list_path_fixture_19",
+                      "humanReadablePath": "feedback_form_definition_list_humanreadablepath_fixture_19",
+                      "title": "Title fixture 19",
+                      "isNullable": true,
+                      "selectableValues": [
+                        {
+                          "label": "feedback_form_definition_list_label_fixture_19",
+                          "value": "feedback_form_definition_list_value_fixture_19"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "interviewId": "feedback_form_definition_list_interviewid_fixture_19"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

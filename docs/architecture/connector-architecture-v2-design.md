@@ -61,7 +61,7 @@ internal/connectors/defs/
     docs.md                   // human/agent guide
 ```
 
-`defs/defs.go` is the only Go file:
+`defs/defs.go` owns the runtime embed:
 
 ```go
 // Package defs embeds every connector definition bundle.
@@ -75,7 +75,12 @@ var FS embed.FS
 
 (`writes.json`, `operations.json`, `cli_surface.json`, and `certification.json` are optional per
 connector; the loader tolerates absence. `api_surface.json` and `fixtures/` stay on disk for
-authoring/conformance validation and are not embedded in the production `defs.FS`.
+authoring/conformance validation and are not embedded in the production `defs.FS`, which keeps
+tens of megabytes of inert replay JSON out of every shipped binary. A connector whose `spec.json`
+publishes a fixture-replay `mode` as a documented connection-spec property is the one exception: it
+adds its own `defs/<name>/fixtures_embed.go` embedding only that connector's `fixtures/` tree, so
+the documented mode also resolves from an installed binary rather than only from a source checkout
+(`defs/ashby/fixtures_embed.go`). `defs.FS` itself never grows a `fixtures/**` pattern.
 Directory name = connector name = the one true identifier: `github`, not `source-github`.)
 
 ### `metadata.json` (github example)

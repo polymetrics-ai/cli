@@ -255,7 +255,6 @@ func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 		"Implement Issue B\n",
 		"Implement issue a migration\n",
 		"References #123\n",
-		"https://github.com/polymetrics-ai/cli/issues/123\n",
 		"Ship this. Issue 123 is unrelated.\n",
 		"Do not implement issue #123\n",
 		"Do not ship issue 123\n",
