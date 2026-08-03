@@ -88,6 +88,21 @@ node --check website/scripts/gen-connector-bundles.mjs
 node --check website/scripts/lib/simple-icons.mjs
 ```
 
+Review repair round 10 (CodeQL alert #93 fetched-content checksum pinning) focused gate:
+
+```bash
+cd website
+node --test scripts/icon-registry.test.mjs
+node --check scripts/fetch-simple-icons.mjs
+node --check scripts/lib/simple-icons.mjs
+pnpm run lint
+pnpm run typecheck
+pnpm run gen:website-data   # must diff clean
+node scripts/fetch-simple-icons.mjs --update-lockfile   # real network; regenerates website/data/simple-icons.lock.json
+node scripts/fetch-simple-icons.mjs                      # real network; verifies against the lockfile just written
+git status --short                                       # only the lockfile + code changes; no docs/website SVG diff
+```
+
 ## Repository gates before integration
 
 ```bash
@@ -135,3 +150,9 @@ If a gate is not applicable or blocked by environment, record the exact reason a
 - GREEN CodeQL fetch-simple-icons input validation gate: `node --test scripts/icon-registry.test.mjs` (8/8, equivalently `pnpm run test:scripts`) — `../`-traversal path rejected, nested `../` path rejected, absolute path rejected, slug containing `/` rejected before any fetch, slug containing a scheme rejected before any fetch, empty slug rejected, valid bare slug + in-tree path resolves unchanged.
 - GREEN `pnpm run lint`, `pnpm run typecheck`, `pnpm run gen:website-data` (zero diff): pass after the CodeQL fix, confirming no regression to generated website data.
 - Review round 9 (PR #3596 review commit `4b182b1ba`) hardened the round-8 fetch boundary so an in-tree non-icon or non-string registry path is rejected as well as an escaping one, deduped `assertInside` into `website/scripts/lib/connector-icons.mjs`, and memoized `Registry.MustValidateIconCoverage` with invalidation on `Register`. Its focused gate commands are listed above; the gate results are owned by the enclosing no-mistakes validation run for PR #3596 and are not restated here.
+- CodeQL alert #93 traced to a distinct dataflow (fetched SVG response body → `writeFileSync`) that no prior round validated; decision key `pr3596-codeql-93-svg-content-checksum-20260803` required checksum-pinning keyed by connector.
+- RED `node --test scripts/icon-registry.test.mjs` (from `website/`): failed before implementation — `readSimpleIconsLockfile`/`sha256Hex`/`verifyFetchedIconDigest`/`writeSimpleIconsLockfile` did not exist.
+- GREEN review round 10 (CodeQL #93 checksum pinning) focused Node gate: 14/14, including matching/tampered/missing-entry digest verification, independent per-connector verification for two connectors sharing one digest, and sorted lockfile round-trip persistence.
+- GREEN real end-to-end regeneration against the live Simple Icons CDN: `node scripts/fetch-simple-icons.mjs --update-lockfile` wrote 61 real connector entries to `website/data/simple-icons.lock.json`, confirming duplicate digests for `ebay-finance`/`ebay-fulfillment` and all 8 `zoho-*` connectors, not deduped; a second real run in default verify mode passed 61/61.
+- GREEN real end-to-end tamper proof: corrupted one real lockfile entry's `sha256`, reran the real script — exited 1 naming the connector plus expected/received digests, and the real on-disk SVG (verified via MD5 sentinel) was left unchanged.
+- GREEN `pnpm run lint`, `pnpm run typecheck`, `pnpm run gen:website-data` (zero diff): pass after the fix. `git status --short` after the real regeneration shows only the new lockfile and the code diff — every re-fetched SVG under `docs/connectors/icons/simple-icons/**` and its website public copy is byte-identical to what was already committed.

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import {
   existsSync,
   mkdirSync,
@@ -19,9 +20,17 @@ import {
   validConnectorIconPath,
 } from './lib/connector-icons.mjs';
 import {
+  readSimpleIconsLockfile,
   resolveSimpleIconRequest,
+  sha256Hex,
   validSimpleIconSlug,
+  verifyFetchedIconDigest,
+  writeSimpleIconsLockfile,
 } from './lib/simple-icons.mjs';
+
+function digestOf(content) {
+  return createHash('sha256').update(content, 'utf8').digest('hex');
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '../..');
@@ -178,6 +187,88 @@ test('website scripts consume only the canonical registry', () => {
     /resolveSimpleIconRequest/,
     'Simple Icons fetcher must validate the slug and output path before any fetch or write',
   );
+  assert.match(
+    fetchScript,
+    /verifyFetchedIconDigest/,
+    'Simple Icons fetcher must checksum-verify fetched content before any write',
+  );
+});
+
+test('Simple Icons digest verification accepts content matching the recorded connector entry', () => {
+  const content = '<svg>github</svg>';
+  const lockfile = { github: { slug: 'github', sha256: digestOf(content) } };
+  assert.doesNotThrow(() => verifyFetchedIconDigest(lockfile, { connector: 'github', slug: 'github' }, content));
+});
+
+test('Simple Icons digest verification rejects tampered content before anything is written', () => {
+  const content = '<svg>github</svg>';
+  const lockfile = { github: { slug: 'github', sha256: digestOf(content) } };
+  assert.throws(
+    () => verifyFetchedIconDigest(lockfile, { connector: 'github', slug: 'github' }, '<svg>tampered</svg>'),
+    /content mismatch/,
+    'a tampered body must be rejected before mkdirSync/writeFileSync are ever reached',
+  );
+});
+
+test('Simple Icons digest verification rejects a fetched connector with no lockfile entry', () => {
+  assert.throws(
+    () => verifyFetchedIconDigest({}, { connector: 'github', slug: 'github' }, '<svg>github</svg>'),
+    /missing Simple Icons lockfile entry/,
+    'an unpinned fetch must never quietly succeed',
+  );
+});
+
+test('Simple Icons digest verification checks connectors sharing one icon independently', () => {
+  const content = '<svg>shared</svg>';
+  const sharedLockfile = {
+    'zoho-books': { slug: 'zoho', sha256: digestOf(content) },
+    'zoho-desk': { slug: 'zoho', sha256: digestOf(content) },
+  };
+  // Duplicate digests under different connector keys are expected and legitimate; do not dedupe.
+  assert.doesNotThrow(() => verifyFetchedIconDigest(sharedLockfile, { connector: 'zoho-books', slug: 'zoho' }, content));
+  assert.doesNotThrow(() => verifyFetchedIconDigest(sharedLockfile, { connector: 'zoho-desk', slug: 'zoho' }, content));
+
+  const oneStaleLockfile = {
+    'zoho-books': { slug: 'zoho', sha256: digestOf(content) },
+    'zoho-desk': { slug: 'zoho', sha256: digestOf('<svg>old</svg>') },
+  };
+  assert.doesNotThrow(
+    () => verifyFetchedIconDigest(oneStaleLockfile, { connector: 'zoho-books', slug: 'zoho' }, content),
+    'a sibling connector verifying correctly must not mask the other',
+  );
+  assert.throws(
+    () => verifyFetchedIconDigest(oneStaleLockfile, { connector: 'zoho-desk', slug: 'zoho' }, content),
+    /zoho-desk/,
+    'one connector failing must name that connector and not silently pass',
+  );
+});
+
+test('Simple Icons lockfile round-trips sorted by connector for reviewable diffs', (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'polymetrics-icon-lockfile-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const path = join(dir, 'simple-icons.lock.json');
+
+  assert.deepEqual(readSimpleIconsLockfile(path), {}, 'a missing lockfile file reads as empty, not an error');
+
+  writeSimpleIconsLockfile(path, {
+    zeta: { slug: 'zeta', sha256: digestOf('z') },
+    alpha: { slug: 'alpha', sha256: digestOf('a') },
+  });
+  const contents = readFileSync(path, 'utf8');
+  assert.ok(
+    contents.indexOf('"alpha"') < contents.indexOf('"zeta"'),
+    'entries must be sorted by connector key for a stable, reviewable diff',
+  );
+  assert.deepEqual(readSimpleIconsLockfile(path), {
+    alpha: { slug: 'alpha', sha256: digestOf('a') },
+    zeta: { slug: 'zeta', sha256: digestOf('z') },
+  });
+});
+
+test('sha256Hex is deterministic for identical content and differs for different content', () => {
+  assert.equal(sha256Hex('same'), sha256Hex('same'));
+  assert.notEqual(sha256Hex('same'), sha256Hex('different'));
+  assert.equal(sha256Hex('same'), digestOf('same'));
 });
 
 test('Simple Icons slug validation accepts only bare lowercase alphanumeric identifiers', () => {

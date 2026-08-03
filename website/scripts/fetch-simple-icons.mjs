@@ -10,14 +10,20 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
+  readSimpleIconsLockfile,
   resolveSimpleIconRequest,
+  sha256Hex,
   validSimpleIconPath,
   validSimpleIconSlug,
+  verifyFetchedIconDigest,
+  writeSimpleIconsLockfile,
 } from './lib/simple-icons.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ICON_DATA = resolve(__dirname, '../../internal/connectors/icon_data.json');
 const DOCS_CONNECTORS = resolve(__dirname, '../../docs/connectors');
+const LOCKFILE = resolve(__dirname, '../data/simple-icons.lock.json');
+const UPDATE_LOCKFILE = process.argv.includes('--update-lockfile');
 
 function fail(message) {
   console.error(`fetch-simple-icons: ${message}`);
@@ -58,6 +64,8 @@ for (const icon of registry) {
   simpleIcons.push({ connector, slug, path, hex: icon.simple_icon_hex });
 }
 
+const lockfile = UPDATE_LOCKFILE ? {} : readSimpleIconsLockfile(LOCKFILE);
+
 let written = 0;
 for (const icon of simpleIcons) {
   let request;
@@ -79,9 +87,25 @@ for (const icon of simpleIcons) {
     fail(`unexpected SVG payload for ${icon.slug}`);
   }
 
+  if (UPDATE_LOCKFILE) {
+    lockfile[icon.connector] = { slug: icon.slug, sha256: sha256Hex(svg) };
+  } else {
+    try {
+      verifyFetchedIconDigest(lockfile, icon, svg);
+    } catch (error) {
+      fail(`${icon.connector}: ${error.message}`);
+      throw error;
+    }
+  }
+
   mkdirSync(dirname(outputPath), { recursive: true });
   writeFileSync(outputPath, tintSvg(svg, icon.hex), 'utf8');
   written += 1;
+}
+
+if (UPDATE_LOCKFILE) {
+  writeSimpleIconsLockfile(LOCKFILE, lockfile);
+  console.log(`Updated Simple Icons lockfile with ${Object.keys(lockfile).length} connector entries.`);
 }
 
 console.log(`Fetched ${written} Simple Icons SVGs into docs/connectors/icons.`);
