@@ -377,23 +377,37 @@ type IncrementalSpec struct {
 
 // WriteAction is one entry in writes.json's "actions" array.
 type WriteAction struct {
-	Name         string              `json:"name"`
-	Kind         string              `json:"kind"` // create|update|upsert|delete|custom
-	Method       string              `json:"method"`
-	Path         string              `json:"path"`
-	PathFields   []string            `json:"path_fields,omitempty"`
-	RedactFields []string            `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
-	BodyType     string              `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart
-	BodyFields   []string            `json:"body_fields,omitempty"`
-	BodyField    string              `json:"body_field,omitempty"`
-	BodySchema   json.RawMessage     `json:"body_schema,omitempty"`
-	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
-	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
-	RecordSchema json.RawMessage     `json:"record_schema"`
-	Delete       *DeleteSpec         `json:"delete,omitempty"`
-	Risk         string              `json:"risk"`
-	Confirm      string              `json:"confirm,omitempty"` // "" | "destructive"
-	Hook         string              `json:"hook,omitempty"`
+	Name       string   `json:"name"`
+	Kind       string   `json:"kind"` // create|update|upsert|delete|custom
+	Method     string   `json:"method"`
+	Path       string   `json:"path"`
+	PathFields []string `json:"path_fields,omitempty"`
+	// Query is the OPTIONAL write-action query-parameter map. It is the
+	// SAME construct (and the same QueryParam type, so the same
+	// bare-string-or-object dialect) that streams.json's stream.Query has
+	// always used — see QueryParam's doc comment — resolved through the
+	// same resolveQueryParams helper read.go already shares between stream
+	// reads and check reads, so all three surfaces resolve query templates
+	// identically by construction rather than by convention.
+	//
+	// Absent/empty means the request carries no query string at all, which
+	// is exactly the behavior every write action had before this field
+	// existed (executeWriteRecord passed a nil url.Values in all six
+	// body_type branches). The field is strictly additive and opt-in: no
+	// existing bundle changes behavior by its introduction.
+	Query        map[string]QueryParam `json:"query,omitempty"`
+	RedactFields []string              `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
+	BodyType     string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart
+	BodyFields   []string              `json:"body_fields,omitempty"`
+	BodyField    string                `json:"body_field,omitempty"`
+	BodySchema   json.RawMessage       `json:"body_schema,omitempty"`
+	GraphQL      *GraphQLRequestSpec   `json:"graphql,omitempty"`
+	Multipart    *MultipartSpec        `json:"multipart,omitempty"`
+	RecordSchema json.RawMessage       `json:"record_schema"`
+	Delete       *DeleteSpec           `json:"delete,omitempty"`
+	Risk         string                `json:"risk"`
+	Confirm      string                `json:"confirm,omitempty"` // "" | "destructive"
+	Hook         string                `json:"hook,omitempty"`
 }
 
 // GraphQLRequestSpec describes a fixed GraphQL document whose variables are

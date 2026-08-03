@@ -17,6 +17,7 @@
           "method": { "type": "string" },
           "path": { "type": "string" },
           "path_fields": { "type": "array", "items": { "type": "string" } },
+          "query": { "type": "object" },
           "redact_fields": { "type": "array", "items": { "type": "string" } },
           "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart"] },
           "body_fields": { "type": "array", "items": { "type": "string" } },

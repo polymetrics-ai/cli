@@ -41,11 +41,21 @@ Status legend: `planned` → `RED` (failing test committed/observed) → `GREEN`
 
 | # | Test | Asserts | Status |
 | --- | --- | --- | --- |
-| 3.1 | `TestWriteActionQueryPlainString` | plain-string entry resolves; unresolved key is a hard error | planned |
-| 3.2 | `TestWriteActionQueryOmitWhenAbsent` | object form drops the param instead of erroring | planned |
-| 3.3 | `TestWriteActionQueryDefault` | object form sends the literal default | planned |
-| 3.4 | `TestWriteActionQueryAllBodyTypes` | query reaches the wire for all six body types | planned |
-| 3.5 | `TestWriteActionNoQueryUnchanged` | **regression guard**: no `query` declared → no query string, byte-identical to today | planned |
+| 3.1 | `TestWriteActionQueryPlainString` | plain-string entry resolves; unresolved key is a hard error | GREEN |
+| 3.2 | `TestWriteActionQueryOmitWhenAbsent` | object form drops the param instead of erroring | GREEN |
+| 3.3 | `TestWriteActionQueryDefault` | object form sends the literal default | GREEN |
+| 3.4 | `TestWriteActionQueryAllBodyTypes` | query reaches the wire for json/form/none/json_array/graphql | GREEN |
+| 3.5 | `TestWriteActionNoQueryUnchanged` | **regression guard**: no `query` declared → no query string, byte-identical to today | GREEN |
+| 3.6 | `TestWriteActionQueryMultipartBodyType` | the sixth branch (needs a real file, so separate from the table) | GREEN |
+| 3.7 | `TestWriteActionQueryFromRecordField` | query templates see the same `Vars` the path does | GREEN |
+| 3.8 | `TestWriteActionQueryParsesBothDialects` | both dialects parse via the existing `QueryParam.UnmarshalJSON`, no second parser | GREEN |
+| 3.9 | `TestWritesSchemaAcceptsQuery` | `writes.schema.json` accepts the optional `query` object | GREEN |
+
+**Red evidence (task 3):** before implementation the package did not compile —
+`unknown field Query in struct literal of type WriteAction` at write_query_test.go lines
+46, 74, 95, 116, 149, 205, 208. **Green evidence:** `go test ./internal/connectors/engine/ -run
+'TestWriteAction|TestWritesSchema'` → `ok`. Full-package regression `go test
+./internal/connectors/engine/ ./internal/connectors/connsdk/` → `ok`, `ok`.
 
 ## Task 4 — typed dynamic-key write bodies
 

@@ -397,17 +397,27 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	}
 	method := methodOrDefault(action.Method)
 
+	// Resolved ONCE here and threaded through every body_type branch, so a
+	// declared query can never silently apply to some body types and not
+	// others. buildWriteQuery returns a nil url.Values when the action
+	// declares no query, which is byte-identical to the literal nil every
+	// branch passed before write-action query support existed.
+	query, err := buildWriteQuery(action, vars)
+	if err != nil {
+		return err
+	}
+
 	switch bodyTypeOf(action) {
 	case "form":
 		form := buildForm(rec, action.PathFields)
-		_, err := rt.Requester.DoForm(ctx, method, path, nil, form)
+		_, err := rt.Requester.DoForm(ctx, method, path, query, form)
 		return err
 	case "graphql":
 		payload, err := buildGraphQLPayload(action.GraphQL, vars)
 		if err != nil {
 			return err
 		}
-		resp, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		resp, err := rt.Requester.Do(ctx, method, path, query, payload)
 		if err != nil {
 			return err
 		}
@@ -415,24 +425,24 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {
-			_, err := rt.Requester.Do(ctx, method, path, nil, nil)
+			_, err := rt.Requester.Do(ctx, method, path, query, nil)
 			return err
 		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, body)
+		_, err := rt.Requester.Do(ctx, method, path, query, body)
 		return err
 	case "json_array":
 		payload, err := buildJSONArrayPayload(action, rec)
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err = rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	case "multipart":
 		form, err := buildMultipartPayload(action, rec, recordIndex, cfg)
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.DoMultipart(ctx, method, path, nil, form)
+		_, err = rt.Requester.DoMultipart(ctx, method, path, query, form)
 		return err
 	default: // "json" (default)
 		var body map[string]any
@@ -445,9 +455,30 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		if len(body) > 0 {
 			payload = body
 		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err := rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	}
+}
+
+// buildWriteQuery resolves action.Query against vars using the IDENTICAL
+// resolveQueryParams semantics stream.Query and check.query use — see that
+// function's doc comment in read.go. vars is the same Vars the path was just
+// interpolated from, so a query template may reference record fields exactly
+// as a path template can.
+//
+// A nil/empty Query returns a nil url.Values rather than an empty one: an
+// empty url.Values would still take resolveURL's "len(query) > 0" branch as
+// false, but returning nil keeps the pre-existing call shape literally
+// unchanged for every action that declares no query.
+func buildWriteQuery(action WriteAction, vars Vars) (url.Values, error) {
+	if len(action.Query) == 0 {
+		return nil, nil
+	}
+	q, err := resolveQueryParams(action.Query, vars)
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: %w", action.Name, err)
+	}
+	return q, nil
 }
 
 func bodyTypeOf(action WriteAction) string {
