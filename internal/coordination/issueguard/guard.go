@@ -136,13 +136,7 @@ func addCheckpointIssueRefs(seen map[int]IssueRef, text string) {
 }
 
 func hasCompletedTaskWording(text string) bool {
-	for _, loc := range completedTaskPattern.FindAllStringIndex(text, -1) {
-		if hasNegationPrefix(text, loc[0]) {
-			continue
-		}
-		return true
-	}
-	return false
+	return hasNonNegatedMatch(completedTaskPattern, text)
 }
 
 func hasNoMistakesDeliveryRecord(text string) bool {
@@ -202,7 +196,11 @@ func addIssueRef(seen map[int]IssueRef, rawNumber, keyword string) {
 }
 
 func hasExplicitIssueWording(text string) bool {
-	for _, loc := range letteredDeliveryIssuePhrasePattern.FindAllStringIndex(text, -1) {
+	return hasNonNegatedMatch(letteredDeliveryIssuePhrasePattern, text)
+}
+
+func hasNonNegatedMatch(re *regexp.Regexp, text string) bool {
+	for _, loc := range re.FindAllStringIndex(text, -1) {
 		if hasNegationPrefix(text, loc[0]) {
 			continue
 		}

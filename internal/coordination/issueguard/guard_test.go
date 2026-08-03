@@ -148,6 +148,26 @@ func TestValidatePRRejectsCanonicalIssueSectionWithoutCompletedTaskWording(t *te
 	}
 }
 
+func TestValidatePRRejectsCanonicalIssueSectionWithoutCheckpointHeading(t *testing.T) {
+	body := strings.Join([]string{
+		"## Staged parity branch record",
+		"",
+		"This draft pull request is an unvalidated cloud checkpoint for the completed `cli-airtable-parity-wave03-r1` connector parity task.",
+		"",
+		"## Canonical issue links preserved from the task record",
+		"",
+		"- https://github.com/polymetrics-ai/cli/issues/3070",
+		"",
+	}, "\n")
+	result := ValidatePR("chore(airtable): stage unvalidated parity checkpoint", body)
+	if result.OK {
+		t.Fatal("ValidatePR() OK = true, want false")
+	}
+	if !containsViolation(result.Violations, "PR body must reference an issue") {
+		t.Fatalf("ValidatePR() violations = %v", result.Violations)
+	}
+}
+
 func TestValidatePRAllowsLetteredDeliveryIssueMigrationIntent(t *testing.T) {
 	body := "Implement the focused connector-boundary Issue B migration on branch refactor/connector-engine-policy-migration: remove GitHub-specific shared runtime policy names."
 	result := ValidatePR("feat(connectors): genericize repository read policies", body)
