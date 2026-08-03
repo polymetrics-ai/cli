@@ -1,3 +1,7 @@
+---
+name: pm-airtable
+description: Airtable connector knowledge and safe action guide.
+---
 
 # pm-airtable
 
@@ -7,6 +11,7 @@ Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, ente
 
 ## Icon
 
+- id: airtable
 - asset: icons/airtable.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -448,4 +453,3 @@ pm connectors inspect airtable --json
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
 - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
-

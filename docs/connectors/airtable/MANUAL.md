@@ -1,3 +1,4 @@
+# pm connectors inspect airtable
 
 ```text
 NAME
@@ -12,6 +13,7 @@ DESCRIPTION
   Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, enterprise/admin data, and HyperDB direct reads; executes typed single-resource mutations while batch array-cardinality operations stay blocked until enforceable.
 
 ICON
+  id: airtable
   asset: icons/airtable.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -444,4 +446,3 @@ EXIT STATUS
   2 usage error
 
 ```
-
