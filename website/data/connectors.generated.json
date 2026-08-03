@@ -75676,14 +75676,14 @@
   {
     "slug": "hubplanner",
     "name": "Hubplanner",
-    "description": "Reads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through the Hubplanner REST API.",
+    "description": "Reads Hubplanner scheduling, project, resource, client, billing, time, vacation, custom-field, and webhook-subscription data and exposes typed reverse-ETL writes for documented Hubplanner REST resources.",
     "docs_url": "https://github.com/hubplanner/API",
     "integration_type": "api",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": false
@@ -75744,11 +75744,4524 @@
         ],
         "cursor": "",
         "incremental": false
+      },
+      {
+        "name": "booking_categories",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "resource_custom_field_templates",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "project_custom_field_templates",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "project_groups",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "resource_groups",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "cost_categories",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "project_managers",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "project_tags",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "resource_tags",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "time_entries",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "unassigned_work",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "vacations",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webhook_subscriptions",
+        "primary_key": [
+          "_id"
+        ],
+        "cursor": "",
+        "incremental": false
       }
     ],
-    "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through\nthe Hubplanner REST API.\n\nReadable streams: `resources`, `projects`, `clients`, `events`, `holidays`, `bookings`,\n`billing_rates`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://github.com/hubplanner/API.\n\n## Auth setup\n\nConnection fields:\n\n- `api_key` (required, secret, string); Hubplanner API key, sent verbatim (no Bearer prefix) as the\n  Authorization header. Never logged.\n- `base_url` (optional, string); default `https://api.hubplanner.com/v1`; format `uri`; Hubplanner\n  API base URL override for tests or proxies.\n- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust\n  the stream.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `200`; Records per page (1-1000).\n\nSecret fields are redacted in logs and write previews: `api_key`.\n\nDefault configuration values: `base_url=https://api.hubplanner.com/v1`, `max_pages=0`,\n`page_size=200`.\n\nAuthentication behavior:\n\n- API key authentication in `Authorization` using `secrets.api_key`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/resource` with query `limit`=`1`; `page`=`0`.\n\n## Streams notes\n\nDefault pagination: page-number pagination; page parameter `page`; size parameter `limit`; starts at\n0; page size 200.\n\n- `resources`: GET `/resource` - records at response root; page-number pagination; page parameter\n  `page`; size parameter `limit`; starts at 0; page size 200.\n- `projects`: GET `/project` - records at response root; page-number pagination; page parameter\n  `page`; size parameter `limit`; starts at 0; page size 200.\n- `clients`: GET `/client` - records at response root; page-number pagination; page parameter\n  `page`; size parameter `limit`; starts at 0; page size 200.\n- `events`: GET `/event` - records at response root; page-number pagination; page parameter `page`;\n  size parameter `limit`; starts at 0; page size 200.\n- `holidays`: GET `/holiday` - records at response root; page-number pagination; page parameter\n  `page`; size parameter `limit`; starts at 0; page size 200.\n- `bookings`: GET `/booking` - records at response root; page-number pagination; page parameter\n  `page`; size parameter `limit`; starts at 0; page size 200.\n- `billing_rates`: GET `/billingrate` - records at response root; page-number pagination; page\n  parameter `page`; size parameter `limit`; starts at 0; page size 200.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external Hubplanner API read of scheduling, project, and\nbilling data.\n\n## Known limits\n\n- Batch defaults: read_page_size=200.\n- API coverage includes 7 stream-backed endpoint group(s).\n",
+    "write_actions": [
+      {
+        "name": "create_billing_rate",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_billing_rate",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_billing_rate",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_booking_category",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_booking_category",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "create_booking",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_booking",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "patch_booking",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_booking",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_bookings",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_client",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_client",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_client",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_resource_custom_field_template",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_resource_custom_field_template",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_resource_custom_field_template",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_project_custom_field_template",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_project_custom_field_template",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_project_custom_field_template",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_event",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_event",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_event",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_project_group",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_project_group",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_project_group",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_holiday",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_holiday",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_holiday",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_milestone",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_milestone",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_milestone",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_cost_category",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_cost_category",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_cost_category",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_project_tag",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_project_tag",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_project_tag",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_resource_tag",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_resource_tag",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_resource_tag",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_project",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "patch_project",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_project",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_projects",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_resource",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "patch_resource",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_resource",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_resources",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_time_entry",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_time_entry",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_time_entry",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_time_entries",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_unassigned_work",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_unassigned_work",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_unassigned_work",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_vacation",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_vacation",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "patch_vacation",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_vacation",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_webhook_subscription",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_webhook_subscription",
+        "method": "DELETE",
+        "kind": "delete"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Inspect, sync, directly read, and safely plan typed Hubplanner operations.",
+      "usage": "pm hubplanner <command> [flags]",
+      "source_cli": {
+        "name": "Hubplanner API",
+        "docs": "https://github.com/hubplanner/API",
+        "reference": "Provider-owned Sections/*.md endpoint reference",
+        "source": "provider_api"
+      },
+      "groups": [
+        {
+          "id": "billing-rates",
+          "title": "Billing Rates",
+          "commands": [
+            "billing-rates create",
+            "billing-rates delete",
+            "billing-rates get",
+            "billing-rates list",
+            "billing-rates update"
+          ]
+        },
+        {
+          "id": "booking-categories",
+          "title": "Booking Categories",
+          "commands": [
+            "booking-categories create",
+            "booking-categories get",
+            "booking-categories list",
+            "booking-categories update"
+          ]
+        },
+        {
+          "id": "bookings",
+          "title": "Bookings",
+          "commands": [
+            "bookings create",
+            "bookings delete",
+            "bookings delete-many",
+            "bookings get",
+            "bookings list",
+            "bookings patch",
+            "bookings update"
+          ]
+        },
+        {
+          "id": "clients",
+          "title": "Clients",
+          "commands": [
+            "clients create",
+            "clients delete",
+            "clients get",
+            "clients list",
+            "clients update"
+          ]
+        },
+        {
+          "id": "cost-categories",
+          "title": "Cost Categories",
+          "commands": [
+            "cost-categories create",
+            "cost-categories delete",
+            "cost-categories get",
+            "cost-categories list",
+            "cost-categories update"
+          ]
+        },
+        {
+          "id": "events",
+          "title": "Events",
+          "commands": [
+            "events create",
+            "events delete",
+            "events get",
+            "events list",
+            "events update"
+          ]
+        },
+        {
+          "id": "holidays",
+          "title": "Holidays",
+          "commands": [
+            "holidays create",
+            "holidays delete",
+            "holidays get",
+            "holidays list",
+            "holidays update"
+          ]
+        },
+        {
+          "id": "milestones",
+          "title": "Milestones",
+          "commands": [
+            "milestones create",
+            "milestones delete",
+            "milestones get",
+            "milestones update"
+          ]
+        },
+        {
+          "id": "project-custom-field-templates",
+          "title": "Project Custom Field Templates",
+          "commands": [
+            "project-custom-field-templates create",
+            "project-custom-field-templates delete",
+            "project-custom-field-templates list",
+            "project-custom-field-templates update"
+          ]
+        },
+        {
+          "id": "project-custom-fields",
+          "title": "Project Custom Fields",
+          "commands": [
+            "project-custom-fields search"
+          ]
+        },
+        {
+          "id": "project-groups",
+          "title": "Project Groups",
+          "commands": [
+            "project-groups create",
+            "project-groups delete",
+            "project-groups get",
+            "project-groups list",
+            "project-groups update"
+          ]
+        },
+        {
+          "id": "project-managers",
+          "title": "Project Managers",
+          "commands": [
+            "project-managers list"
+          ]
+        },
+        {
+          "id": "project-tags",
+          "title": "Project Tags",
+          "commands": [
+            "project-tags create",
+            "project-tags delete",
+            "project-tags list",
+            "project-tags update"
+          ]
+        },
+        {
+          "id": "projects",
+          "title": "Projects",
+          "commands": [
+            "projects create",
+            "projects delete",
+            "projects delete-many",
+            "projects get",
+            "projects list",
+            "projects patch"
+          ]
+        },
+        {
+          "id": "resource-custom-field-templates",
+          "title": "Resource Custom Field Templates",
+          "commands": [
+            "resource-custom-field-templates create",
+            "resource-custom-field-templates delete",
+            "resource-custom-field-templates list",
+            "resource-custom-field-templates update"
+          ]
+        },
+        {
+          "id": "resource-custom-fields",
+          "title": "Resource Custom Fields",
+          "commands": [
+            "resource-custom-fields search"
+          ]
+        },
+        {
+          "id": "resource-groups",
+          "title": "Resource Groups",
+          "commands": [
+            "resource-groups list"
+          ]
+        },
+        {
+          "id": "resource-tags",
+          "title": "Resource Tags",
+          "commands": [
+            "resource-tags create",
+            "resource-tags delete",
+            "resource-tags list",
+            "resource-tags update"
+          ]
+        },
+        {
+          "id": "resources",
+          "title": "Resources",
+          "commands": [
+            "resources create",
+            "resources delete",
+            "resources delete-many",
+            "resources get",
+            "resources list",
+            "resources patch"
+          ]
+        },
+        {
+          "id": "time-entries",
+          "title": "Time Entries",
+          "commands": [
+            "time-entries create",
+            "time-entries delete",
+            "time-entries delete-many",
+            "time-entries get",
+            "time-entries list",
+            "time-entries update"
+          ]
+        },
+        {
+          "id": "unassigned-work",
+          "title": "Unassigned Work",
+          "commands": [
+            "unassigned-work create",
+            "unassigned-work delete",
+            "unassigned-work get",
+            "unassigned-work list",
+            "unassigned-work update"
+          ]
+        },
+        {
+          "id": "vacations",
+          "title": "Vacations",
+          "commands": [
+            "vacations create",
+            "vacations delete",
+            "vacations get",
+            "vacations list",
+            "vacations patch",
+            "vacations update"
+          ]
+        },
+        {
+          "id": "webhook-events",
+          "title": "Webhook Events",
+          "commands": [
+            "webhook-events booking-create",
+            "webhook-events booking-delete",
+            "webhook-events booking-delete-multiple",
+            "webhook-events booking-update",
+            "webhook-events project-update",
+            "webhook-events resource-update",
+            "webhook-events timeEntry-create",
+            "webhook-events timeEntry-create-update",
+            "webhook-events timeEntry-delete",
+            "webhook-events timeEntry-update"
+          ]
+        },
+        {
+          "id": "webhook-subscriptions",
+          "title": "Webhook Subscriptions",
+          "commands": [
+            "webhook-subscriptions create",
+            "webhook-subscriptions delete",
+            "webhook-subscriptions list"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential name to use for the Hubplanner request.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Alias for --credential.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum ETL records to emit.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "max-bytes",
+          "type": "integer",
+          "summary": "Maximum direct-read response bytes, capped by each typed operation.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "preview",
+          "type": "boolean",
+          "summary": "Preview a reverse-ETL write command without making a network mutation.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "approve",
+          "type": "string",
+          "summary": "Approval token required to execute a reverse-ETL plan.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "confirm",
+          "type": "string",
+          "summary": "Typed confirmation challenge for destructive reverse-ETL writes.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "resources list",
+          "summary": "List Hubplanner resources as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "resources",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/resource.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner resources list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "projects list",
+          "summary": "List Hubplanner projects as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "projects",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner projects list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "clients list",
+          "summary": "List Hubplanner clients as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "clients",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/clients.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner clients list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "events list",
+          "summary": "List Hubplanner events as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "events",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/events.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner events list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "holidays list",
+          "summary": "List Hubplanner holidays as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "holidays",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/holidays.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner holidays list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "bookings list",
+          "summary": "List Hubplanner bookings as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "bookings",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/bookings.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner bookings list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "billing-rates list",
+          "summary": "List Hubplanner billing rates as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "billing_rates",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/billingrate.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner billing-rates list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "booking-categories list",
+          "summary": "List Hubplanner booking categories as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "booking_categories",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/booking-categories.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner booking-categories list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "resource-custom-field-templates list",
+          "summary": "List Hubplanner resource custom field templates as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "resource_custom_field_templates",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/custom-fields.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner resource-custom-field-templates list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "project-custom-field-templates list",
+          "summary": "List Hubplanner project custom field templates as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "project_custom_field_templates",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/custom-fields.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner project-custom-field-templates list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "project-groups list",
+          "summary": "List Hubplanner project groups as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "project_groups",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/groups.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner project-groups list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "resource-groups list",
+          "summary": "List Hubplanner resource groups as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "resource_groups",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/groups.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner resource-groups list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "cost-categories list",
+          "summary": "List Hubplanner project cost categories as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "cost_categories",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project-cost-categories.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner cost-categories list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "project-managers list",
+          "summary": "List Hubplanner project managers as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "project_managers",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project-manager.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner project-managers list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "project-tags list",
+          "summary": "List Hubplanner project tags as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "project_tags",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project-tag.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner project-tags list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "resource-tags list",
+          "summary": "List Hubplanner resource tags as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "resource_tags",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/resource-tag.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner resource-tags list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "time-entries list",
+          "summary": "List Hubplanner time entries as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "time_entries",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/timesheets.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner time-entries list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "unassigned-work list",
+          "summary": "List Hubplanner unassigned work as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "unassigned_work",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/unassigned-work.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner unassigned-work list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "vacations list",
+          "summary": "List Hubplanner vacations as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "vacations",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/vacation.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner vacations list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "webhook-subscriptions list",
+          "summary": "List Hubplanner webhook subscriptions as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "webhook_subscriptions",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [
+            "pm hubplanner webhook-subscriptions list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "billing-rates get",
+          "summary": "Get a Hubplanner billing rate by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.billing_rates_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/billingrate.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner billing-rates get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "booking-categories get",
+          "summary": "Get a Hubplanner booking category by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.booking_categories_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/booking-categories.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner booking-categories get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "bookings get",
+          "summary": "Get a Hubplanner booking by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.bookings_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/bookings.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner bookings get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "clients get",
+          "summary": "Get a Hubplanner client by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.clients_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/clients.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner clients get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "events get",
+          "summary": "Get a Hubplanner event by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.events_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/events.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner events get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "project-groups get",
+          "summary": "Get a Hubplanner project group by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.project_groups_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/groups.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-groups get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "holidays get",
+          "summary": "Get a Hubplanner holiday by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.holidays_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/holidays.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner holidays get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "milestones get",
+          "summary": "Get a Hubplanner milestone by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.milestones_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/milestones.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner milestones get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "cost-categories get",
+          "summary": "Get a Hubplanner project cost category by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.cost_categories_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project-cost-categories.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner cost-categories get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "projects get",
+          "summary": "Get a Hubplanner project by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.projects_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/project.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner projects get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "resources get",
+          "summary": "Get a Hubplanner resource by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.resources_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/resource.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner resources get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "time-entries get",
+          "summary": "Get a Hubplanner time entry by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.time_entries_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/timesheets.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner time-entries get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "unassigned-work get",
+          "summary": "Get a Hubplanner unassigned-work record by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.unassigned_work_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/unassigned-work.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner unassigned-work get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "vacations get",
+          "summary": "Get a Hubplanner vacation by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.vacations_get",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/vacation.md",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Hubplanner object id.",
+              "values": [],
+              "maps_to": "path.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner vacations get --id fixture_id --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "resource-custom-fields search",
+          "summary": "Search Hubplanner resource custom field templates.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.resource_custom_field_template_search",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/custom-fields.md",
+          "flags": [
+            {
+              "name": "type",
+              "type": "enum",
+              "summary": "Documented custom-field type filter.",
+              "values": [
+                "TEXT",
+                "TEXTAREA",
+                "EMAIL",
+                "DATE",
+                "COLOR",
+                "NUMBER",
+                "CHECKBOX",
+                "SELECT",
+                "RADIO"
+              ],
+              "maps_to": "body.type"
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Documented custom-field label filter.",
+              "values": [],
+              "maps_to": "body.label",
+              "allow_empty": false
+            },
+            {
+              "name": "required",
+              "type": "boolean",
+              "summary": "Filter required custom fields.",
+              "values": [],
+              "maps_to": "body.isRequired"
+            }
+          ],
+          "examples": [
+            "pm hubplanner resource-custom-fields search --type CHECKBOX --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "project-custom-fields search",
+          "summary": "Search Hubplanner project custom field templates.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "hubplanner.project_custom_field_template_search",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/custom-fields.md",
+          "flags": [
+            {
+              "name": "type",
+              "type": "enum",
+              "summary": "Documented custom-field type filter.",
+              "values": [
+                "TEXT",
+                "TEXTAREA",
+                "EMAIL",
+                "DATE",
+                "COLOR",
+                "NUMBER",
+                "CHECKBOX",
+                "SELECT",
+                "RADIO"
+              ],
+              "maps_to": "body.type"
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Documented custom-field label filter.",
+              "values": [],
+              "maps_to": "body.label",
+              "allow_empty": false
+            },
+            {
+              "name": "required",
+              "type": "boolean",
+              "summary": "Filter required custom fields.",
+              "values": [],
+              "maps_to": "body.isRequired"
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-custom-fields search --type CHECKBOX --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "billing-rates create",
+          "summary": "Plan or preview Hubplanner write action `create_billing_rate`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_billing_rate",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Value for record.label.",
+              "values": [],
+              "maps_to": "record.label",
+              "allow_empty": false
+            },
+            {
+              "name": "rate",
+              "type": "integer",
+              "summary": "Value for record.rate.",
+              "values": [],
+              "maps_to": "record.rate"
+            },
+            {
+              "name": "currency",
+              "type": "string",
+              "summary": "Value for record.currency.",
+              "values": [],
+              "maps_to": "record.currency",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner billing-rates create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner billing rate",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "billing-rates update",
+          "summary": "Plan or preview Hubplanner write action `update_billing_rate`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_billing_rate",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Value for record.label.",
+              "values": [],
+              "maps_to": "record.label",
+              "allow_empty": false
+            },
+            {
+              "name": "rate",
+              "type": "integer",
+              "summary": "Value for record.rate.",
+              "values": [],
+              "maps_to": "record.rate"
+            },
+            {
+              "name": "currency",
+              "type": "string",
+              "summary": "Value for record.currency.",
+              "values": [],
+              "maps_to": "record.currency",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner billing-rates update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner billing rate",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "billing-rates delete",
+          "summary": "Plan or preview Hubplanner write action `delete_billing_rate`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_billing_rate",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner billing-rates delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner billing rate",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "booking-categories create",
+          "summary": "Plan or preview Hubplanner write action `create_booking_category`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_booking_category",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "Value for record.type.",
+              "values": [],
+              "maps_to": "record.type",
+              "allow_empty": false
+            },
+            {
+              "name": "gridColor",
+              "type": "string",
+              "summary": "Value for record.gridColor.",
+              "values": [],
+              "maps_to": "record.gridColor",
+              "allow_empty": false
+            },
+            {
+              "name": "group",
+              "type": "string",
+              "summary": "Value for record.group.",
+              "values": [],
+              "maps_to": "record.group",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner booking-categories create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner booking category",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "booking-categories update",
+          "summary": "Plan or preview Hubplanner write action `update_booking_category`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_booking_category",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "Value for record.type.",
+              "values": [],
+              "maps_to": "record.type",
+              "allow_empty": false
+            },
+            {
+              "name": "gridColor",
+              "type": "string",
+              "summary": "Value for record.gridColor.",
+              "values": [],
+              "maps_to": "record.gridColor",
+              "allow_empty": false
+            },
+            {
+              "name": "group",
+              "type": "string",
+              "summary": "Value for record.group.",
+              "values": [],
+              "maps_to": "record.group",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner booking-categories update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner booking category",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "bookings create",
+          "summary": "Plan or preview Hubplanner write action `create_booking`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_booking",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "resource",
+              "type": "string",
+              "summary": "Value for record.resource.",
+              "values": [],
+              "maps_to": "record.resource",
+              "allow_empty": false
+            },
+            {
+              "name": "project",
+              "type": "string",
+              "summary": "Value for record.project.",
+              "values": [],
+              "maps_to": "record.project",
+              "allow_empty": false
+            },
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Value for record.start.",
+              "values": [],
+              "maps_to": "record.start",
+              "allow_empty": false
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Value for record.end.",
+              "values": [],
+              "maps_to": "record.end",
+              "allow_empty": false
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Value for record.note.",
+              "values": [],
+              "maps_to": "record.note",
+              "allow_empty": false
+            },
+            {
+              "name": "state",
+              "type": "string",
+              "summary": "Value for record.state.",
+              "values": [],
+              "maps_to": "record.state",
+              "allow_empty": false
+            },
+            {
+              "name": "category",
+              "type": "string",
+              "summary": "Value for record.category.",
+              "values": [],
+              "maps_to": "record.category",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner bookings create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner booking",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "bookings update",
+          "summary": "Plan or preview Hubplanner write action `update_booking`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_booking",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "resource",
+              "type": "string",
+              "summary": "Value for record.resource.",
+              "values": [],
+              "maps_to": "record.resource",
+              "allow_empty": false
+            },
+            {
+              "name": "project",
+              "type": "string",
+              "summary": "Value for record.project.",
+              "values": [],
+              "maps_to": "record.project",
+              "allow_empty": false
+            },
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Value for record.start.",
+              "values": [],
+              "maps_to": "record.start",
+              "allow_empty": false
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Value for record.end.",
+              "values": [],
+              "maps_to": "record.end",
+              "allow_empty": false
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Value for record.note.",
+              "values": [],
+              "maps_to": "record.note",
+              "allow_empty": false
+            },
+            {
+              "name": "state",
+              "type": "string",
+              "summary": "Value for record.state.",
+              "values": [],
+              "maps_to": "record.state",
+              "allow_empty": false
+            },
+            {
+              "name": "category",
+              "type": "string",
+              "summary": "Value for record.category.",
+              "values": [],
+              "maps_to": "record.category",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner bookings update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner booking",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "bookings patch",
+          "summary": "Plan or preview Hubplanner write action `patch_booking`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "patch_booking",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "resource",
+              "type": "string",
+              "summary": "Value for record.resource.",
+              "values": [],
+              "maps_to": "record.resource",
+              "allow_empty": false
+            },
+            {
+              "name": "project",
+              "type": "string",
+              "summary": "Value for record.project.",
+              "values": [],
+              "maps_to": "record.project",
+              "allow_empty": false
+            },
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Value for record.start.",
+              "values": [],
+              "maps_to": "record.start",
+              "allow_empty": false
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Value for record.end.",
+              "values": [],
+              "maps_to": "record.end",
+              "allow_empty": false
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Value for record.note.",
+              "values": [],
+              "maps_to": "record.note",
+              "allow_empty": false
+            },
+            {
+              "name": "state",
+              "type": "string",
+              "summary": "Value for record.state.",
+              "values": [],
+              "maps_to": "record.state",
+              "allow_empty": false
+            },
+            {
+              "name": "category",
+              "type": "string",
+              "summary": "Value for record.category.",
+              "values": [],
+              "maps_to": "record.category",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner bookings patch --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "patches selected Hubplanner booking fields",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "bookings delete",
+          "summary": "Plan or preview Hubplanner write action `delete_booking`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_booking",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner bookings delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner booking",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "bookings delete-many",
+          "summary": "Plan or preview Hubplanner write action `delete_bookings` (bulk).",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_bookings",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "ids",
+              "type": "string",
+              "summary": "Comma-separated Hubplanner ids for the fixed bulk-delete target.",
+              "values": [],
+              "maps_to": "record.ids",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner bookings delete-many --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes multiple Hubplanner bookings by ids",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "clients create",
+          "summary": "Plan or preview Hubplanner write action `create_client`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_client",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "summary": "Value for record.email.",
+              "values": [],
+              "maps_to": "record.email",
+              "allow_empty": false
+            },
+            {
+              "name": "phone",
+              "type": "string",
+              "summary": "Value for record.phone.",
+              "values": [],
+              "maps_to": "record.phone",
+              "allow_empty": false
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Value for record.note.",
+              "values": [],
+              "maps_to": "record.note",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner clients create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner client",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "clients update",
+          "summary": "Plan or preview Hubplanner write action `update_client`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_client",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "summary": "Value for record.email.",
+              "values": [],
+              "maps_to": "record.email",
+              "allow_empty": false
+            },
+            {
+              "name": "phone",
+              "type": "string",
+              "summary": "Value for record.phone.",
+              "values": [],
+              "maps_to": "record.phone",
+              "allow_empty": false
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Value for record.note.",
+              "values": [],
+              "maps_to": "record.note",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner clients update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner client",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "clients delete",
+          "summary": "Plan or preview Hubplanner write action `delete_client`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_client",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner clients delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner client",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "resource-custom-field-templates create",
+          "summary": "Plan or preview Hubplanner write action `create_resource_custom_field_template`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_resource_custom_field_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Value for record.label.",
+              "values": [],
+              "maps_to": "record.label",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "enum",
+              "summary": "Value for record.type.",
+              "values": [
+                "TEXT",
+                "TEXTAREA",
+                "EMAIL",
+                "DATE",
+                "COLOR",
+                "NUMBER",
+                "CHECKBOX",
+                "SELECT",
+                "RADIO"
+              ],
+              "maps_to": "record.type"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            },
+            {
+              "name": "instructions",
+              "type": "string",
+              "summary": "Value for record.instructions.",
+              "values": [],
+              "maps_to": "record.instructions",
+              "allow_empty": false
+            },
+            {
+              "name": "choices",
+              "type": "string_array",
+              "summary": "Value for record.choices.",
+              "values": [],
+              "maps_to": "record.choices"
+            }
+          ],
+          "examples": [
+            "pm hubplanner resource-custom-field-templates create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner resource custom field template",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "resource-custom-field-templates update",
+          "summary": "Plan or preview Hubplanner write action `update_resource_custom_field_template`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_resource_custom_field_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Value for record.label.",
+              "values": [],
+              "maps_to": "record.label",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "enum",
+              "summary": "Value for record.type.",
+              "values": [
+                "TEXT",
+                "TEXTAREA",
+                "EMAIL",
+                "DATE",
+                "COLOR",
+                "NUMBER",
+                "CHECKBOX",
+                "SELECT",
+                "RADIO"
+              ],
+              "maps_to": "record.type"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            },
+            {
+              "name": "instructions",
+              "type": "string",
+              "summary": "Value for record.instructions.",
+              "values": [],
+              "maps_to": "record.instructions",
+              "allow_empty": false
+            },
+            {
+              "name": "choices",
+              "type": "string_array",
+              "summary": "Value for record.choices.",
+              "values": [],
+              "maps_to": "record.choices"
+            }
+          ],
+          "examples": [
+            "pm hubplanner resource-custom-field-templates update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner resource custom field template",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "resource-custom-field-templates delete",
+          "summary": "Plan or preview Hubplanner write action `delete_resource_custom_field_template`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_resource_custom_field_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner resource-custom-field-templates delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner resource custom field template",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "project-custom-field-templates create",
+          "summary": "Plan or preview Hubplanner write action `create_project_custom_field_template`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_project_custom_field_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Value for record.label.",
+              "values": [],
+              "maps_to": "record.label",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "enum",
+              "summary": "Value for record.type.",
+              "values": [
+                "TEXT",
+                "TEXTAREA",
+                "EMAIL",
+                "DATE",
+                "COLOR",
+                "NUMBER",
+                "CHECKBOX",
+                "SELECT",
+                "RADIO"
+              ],
+              "maps_to": "record.type"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            },
+            {
+              "name": "instructions",
+              "type": "string",
+              "summary": "Value for record.instructions.",
+              "values": [],
+              "maps_to": "record.instructions",
+              "allow_empty": false
+            },
+            {
+              "name": "choices",
+              "type": "string_array",
+              "summary": "Value for record.choices.",
+              "values": [],
+              "maps_to": "record.choices"
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-custom-field-templates create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner project custom field template",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "project-custom-field-templates update",
+          "summary": "Plan or preview Hubplanner write action `update_project_custom_field_template`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_project_custom_field_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Value for record.label.",
+              "values": [],
+              "maps_to": "record.label",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "enum",
+              "summary": "Value for record.type.",
+              "values": [
+                "TEXT",
+                "TEXTAREA",
+                "EMAIL",
+                "DATE",
+                "COLOR",
+                "NUMBER",
+                "CHECKBOX",
+                "SELECT",
+                "RADIO"
+              ],
+              "maps_to": "record.type"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            },
+            {
+              "name": "instructions",
+              "type": "string",
+              "summary": "Value for record.instructions.",
+              "values": [],
+              "maps_to": "record.instructions",
+              "allow_empty": false
+            },
+            {
+              "name": "choices",
+              "type": "string_array",
+              "summary": "Value for record.choices.",
+              "values": [],
+              "maps_to": "record.choices"
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-custom-field-templates update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner project custom field template",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "project-custom-field-templates delete",
+          "summary": "Plan or preview Hubplanner write action `delete_project_custom_field_template`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_project_custom_field_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-custom-field-templates delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner project custom field template",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "events create",
+          "summary": "Plan or preview Hubplanner write action `create_event`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_event",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "eventCode",
+              "type": "string",
+              "summary": "Value for record.eventCode.",
+              "values": [],
+              "maps_to": "record.eventCode",
+              "allow_empty": false
+            },
+            {
+              "name": "backgroundColor",
+              "type": "string",
+              "summary": "Value for record.backgroundColor.",
+              "values": [],
+              "maps_to": "record.backgroundColor",
+              "allow_empty": false
+            },
+            {
+              "name": "metadata",
+              "type": "string",
+              "summary": "Value for record.metadata.",
+              "values": [],
+              "maps_to": "record.metadata",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner events create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner event",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "events update",
+          "summary": "Plan or preview Hubplanner write action `update_event`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_event",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "eventCode",
+              "type": "string",
+              "summary": "Value for record.eventCode.",
+              "values": [],
+              "maps_to": "record.eventCode",
+              "allow_empty": false
+            },
+            {
+              "name": "backgroundColor",
+              "type": "string",
+              "summary": "Value for record.backgroundColor.",
+              "values": [],
+              "maps_to": "record.backgroundColor",
+              "allow_empty": false
+            },
+            {
+              "name": "metadata",
+              "type": "string",
+              "summary": "Value for record.metadata.",
+              "values": [],
+              "maps_to": "record.metadata",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner events update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner event",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "events delete",
+          "summary": "Plan or preview Hubplanner write action `delete_event`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_event",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner events delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner event",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "project-groups create",
+          "summary": "Plan or preview Hubplanner write action `create_project_group`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_project_group",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "parentGroupId",
+              "type": "string",
+              "summary": "Value for record.parentGroupId.",
+              "values": [],
+              "maps_to": "record.parentGroupId",
+              "allow_empty": false
+            },
+            {
+              "name": "projects",
+              "type": "string_array",
+              "summary": "Project ids to include in record.projects.",
+              "values": [],
+              "maps_to": "record.projects"
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-groups create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner project group",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "project-groups update",
+          "summary": "Plan or preview Hubplanner write action `update_project_group`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_project_group",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "parentGroupId",
+              "type": "string",
+              "summary": "Value for record.parentGroupId.",
+              "values": [],
+              "maps_to": "record.parentGroupId",
+              "allow_empty": false
+            },
+            {
+              "name": "projects",
+              "type": "string_array",
+              "summary": "Project ids to include in record.projects.",
+              "values": [],
+              "maps_to": "record.projects"
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-groups update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner project group",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "project-groups delete",
+          "summary": "Plan or preview Hubplanner write action `delete_project_group`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_project_group",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-groups delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner project group",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "holidays create",
+          "summary": "Plan or preview Hubplanner write action `create_holiday`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_holiday",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "Value for record.date.",
+              "values": [],
+              "maps_to": "record.date",
+              "allow_empty": false
+            },
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Value for record.start.",
+              "values": [],
+              "maps_to": "record.start",
+              "allow_empty": false
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Value for record.end.",
+              "values": [],
+              "maps_to": "record.end",
+              "allow_empty": false
+            },
+            {
+              "name": "holidayGroup",
+              "type": "string",
+              "summary": "Value for record.holidayGroup.",
+              "values": [],
+              "maps_to": "record.holidayGroup",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner holidays create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner holiday",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "holidays update",
+          "summary": "Plan or preview Hubplanner write action `update_holiday`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_holiday",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "Value for record.date.",
+              "values": [],
+              "maps_to": "record.date",
+              "allow_empty": false
+            },
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Value for record.start.",
+              "values": [],
+              "maps_to": "record.start",
+              "allow_empty": false
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Value for record.end.",
+              "values": [],
+              "maps_to": "record.end",
+              "allow_empty": false
+            },
+            {
+              "name": "holidayGroup",
+              "type": "string",
+              "summary": "Value for record.holidayGroup.",
+              "values": [],
+              "maps_to": "record.holidayGroup",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner holidays update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner holiday",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "holidays delete",
+          "summary": "Plan or preview Hubplanner write action `delete_holiday`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_holiday",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner holidays delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner holiday",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "milestones create",
+          "summary": "Plan or preview Hubplanner write action `create_milestone`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_milestone",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "Value for record.date.",
+              "values": [],
+              "maps_to": "record.date",
+              "allow_empty": false
+            },
+            {
+              "name": "project",
+              "type": "string",
+              "summary": "Value for record.project.",
+              "values": [],
+              "maps_to": "record.project",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner milestones create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner milestone",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "milestones update",
+          "summary": "Plan or preview Hubplanner write action `update_milestone`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_milestone",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "Value for record.date.",
+              "values": [],
+              "maps_to": "record.date",
+              "allow_empty": false
+            },
+            {
+              "name": "project",
+              "type": "string",
+              "summary": "Value for record.project.",
+              "values": [],
+              "maps_to": "record.project",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner milestones update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner milestone",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "milestones delete",
+          "summary": "Plan or preview Hubplanner write action `delete_milestone`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_milestone",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner milestones delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner milestone",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "cost-categories create",
+          "summary": "Plan or preview Hubplanner write action `create_cost_category`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_cost_category",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner cost-categories create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner project cost category",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "cost-categories update",
+          "summary": "Plan or preview Hubplanner write action `update_cost_category`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_cost_category",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner cost-categories update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner project cost category",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "cost-categories delete",
+          "summary": "Plan or preview Hubplanner write action `delete_cost_category`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_cost_category",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner cost-categories delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner project cost category",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "project-tags create",
+          "summary": "Plan or preview Hubplanner write action `create_project_tag`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_project_tag",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "value",
+              "type": "string",
+              "summary": "Value for record.value.",
+              "values": [],
+              "maps_to": "record.value",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-tags create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner project tag",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "project-tags update",
+          "summary": "Plan or preview Hubplanner write action `update_project_tag`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_project_tag",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "summary": "Value for record.value.",
+              "values": [],
+              "maps_to": "record.value",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-tags update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner project tag",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "project-tags delete",
+          "summary": "Plan or preview Hubplanner write action `delete_project_tag`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_project_tag",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner project-tags delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner project tag",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "resource-tags create",
+          "summary": "Plan or preview Hubplanner write action `create_resource_tag`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_resource_tag",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "value",
+              "type": "string",
+              "summary": "Value for record.value.",
+              "values": [],
+              "maps_to": "record.value",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner resource-tags create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner resource tag",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "resource-tags update",
+          "summary": "Plan or preview Hubplanner write action `update_resource_tag`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_resource_tag",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "summary": "Value for record.value.",
+              "values": [],
+              "maps_to": "record.value",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner resource-tags update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner resource tag",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "resource-tags delete",
+          "summary": "Plan or preview Hubplanner write action `delete_resource_tag`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_resource_tag",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner resource-tags delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner resource tag",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "projects create",
+          "summary": "Plan or preview Hubplanner write action `create_project`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_project",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record._id.",
+              "values": [],
+              "maps_to": "record._id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            },
+            {
+              "name": "projectCode",
+              "type": "string",
+              "summary": "Value for record.projectCode.",
+              "values": [],
+              "maps_to": "record.projectCode",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner projects create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner project",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "projects patch",
+          "summary": "Plan or preview Hubplanner write action `patch_project`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "patch_project",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record._id.",
+              "values": [],
+              "maps_to": "record._id",
+              "allow_empty": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Value for record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            },
+            {
+              "name": "projectCode",
+              "type": "string",
+              "summary": "Value for record.projectCode.",
+              "values": [],
+              "maps_to": "record.projectCode",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner projects patch --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "patches a Hubplanner project by _id in the typed body",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "projects delete",
+          "summary": "Plan or preview Hubplanner write action `delete_project`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_project",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner projects delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner project",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "projects delete-many",
+          "summary": "Plan or preview Hubplanner write action `delete_projects` (bulk).",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_projects",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "ids",
+              "type": "string_array",
+              "summary": "Hubplanner ids for the fixed bulk-delete request body.",
+              "values": [],
+              "maps_to": "record.ids"
+            }
+          ],
+          "examples": [
+            "pm hubplanner projects delete-many --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes multiple Hubplanner projects by ids",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "resources create",
+          "summary": "Plan or preview Hubplanner write action `create_resource`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_resource",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record._id.",
+              "values": [],
+              "maps_to": "record._id",
+              "allow_empty": false
+            },
+            {
+              "name": "firstName",
+              "type": "string",
+              "summary": "Value for record.firstName.",
+              "values": [],
+              "maps_to": "record.firstName",
+              "allow_empty": false
+            },
+            {
+              "name": "lastName",
+              "type": "string",
+              "summary": "Value for record.lastName.",
+              "values": [],
+              "maps_to": "record.lastName",
+              "allow_empty": false
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "summary": "Value for record.email.",
+              "values": [],
+              "maps_to": "record.email",
+              "allow_empty": false
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner resources create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner resource",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "resources patch",
+          "summary": "Plan or preview Hubplanner write action `patch_resource`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "patch_resource",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record._id.",
+              "values": [],
+              "maps_to": "record._id",
+              "allow_empty": false
+            },
+            {
+              "name": "firstName",
+              "type": "string",
+              "summary": "Value for record.firstName.",
+              "values": [],
+              "maps_to": "record.firstName",
+              "allow_empty": false
+            },
+            {
+              "name": "lastName",
+              "type": "string",
+              "summary": "Value for record.lastName.",
+              "values": [],
+              "maps_to": "record.lastName",
+              "allow_empty": false
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "summary": "Value for record.email.",
+              "values": [],
+              "maps_to": "record.email",
+              "allow_empty": false
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner resources patch --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "patches a Hubplanner resource by _id in the typed body",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "resources delete",
+          "summary": "Plan or preview Hubplanner write action `delete_resource`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_resource",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner resources delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner resource",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "resources delete-many",
+          "summary": "Plan or preview Hubplanner write action `delete_resources` (bulk).",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_resources",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "ids",
+              "type": "string_array",
+              "summary": "Hubplanner ids for the fixed bulk-delete request body.",
+              "values": [],
+              "maps_to": "record.ids"
+            }
+          ],
+          "examples": [
+            "pm hubplanner resources delete-many --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes multiple Hubplanner resources by ids",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "time-entries create",
+          "summary": "Plan or preview Hubplanner write action `create_time_entry`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_time_entry",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "resource",
+              "type": "string",
+              "summary": "Value for record.resource.",
+              "values": [],
+              "maps_to": "record.resource",
+              "allow_empty": false
+            },
+            {
+              "name": "project",
+              "type": "string",
+              "summary": "Value for record.project.",
+              "values": [],
+              "maps_to": "record.project",
+              "allow_empty": false
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "Value for record.date.",
+              "values": [],
+              "maps_to": "record.date",
+              "allow_empty": false
+            },
+            {
+              "name": "minutes",
+              "type": "integer",
+              "summary": "Value for record.minutes.",
+              "values": [],
+              "maps_to": "record.minutes"
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Value for record.note.",
+              "values": [],
+              "maps_to": "record.note",
+              "allow_empty": false
+            },
+            {
+              "name": "categoryTemplateId",
+              "type": "string",
+              "summary": "Value for record.categoryTemplateId.",
+              "values": [],
+              "maps_to": "record.categoryTemplateId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner time-entries create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner time entry",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "time-entries update",
+          "summary": "Plan or preview Hubplanner write action `update_time_entry`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_time_entry",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "resource",
+              "type": "string",
+              "summary": "Value for record.resource.",
+              "values": [],
+              "maps_to": "record.resource",
+              "allow_empty": false
+            },
+            {
+              "name": "project",
+              "type": "string",
+              "summary": "Value for record.project.",
+              "values": [],
+              "maps_to": "record.project",
+              "allow_empty": false
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "Value for record.date.",
+              "values": [],
+              "maps_to": "record.date",
+              "allow_empty": false
+            },
+            {
+              "name": "minutes",
+              "type": "integer",
+              "summary": "Value for record.minutes.",
+              "values": [],
+              "maps_to": "record.minutes"
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Value for record.note.",
+              "values": [],
+              "maps_to": "record.note",
+              "allow_empty": false
+            },
+            {
+              "name": "categoryTemplateId",
+              "type": "string",
+              "summary": "Value for record.categoryTemplateId.",
+              "values": [],
+              "maps_to": "record.categoryTemplateId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner time-entries update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner time entry",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "time-entries delete",
+          "summary": "Plan or preview Hubplanner write action `delete_time_entry`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_time_entry",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner time-entries delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner time entry",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "time-entries delete-many",
+          "summary": "Plan or preview Hubplanner write action `delete_time_entries` (bulk).",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_time_entries",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "ids",
+              "type": "string_array",
+              "summary": "Hubplanner ids for the fixed bulk-delete request body.",
+              "values": [],
+              "maps_to": "record.ids"
+            }
+          ],
+          "examples": [
+            "pm hubplanner time-entries delete-many --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes multiple Hubplanner time entries by ids",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "unassigned-work create",
+          "summary": "Plan or preview Hubplanner write action `create_unassigned_work`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_unassigned_work",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "value",
+              "type": "string",
+              "summary": "Value for record.value.",
+              "values": [],
+              "maps_to": "record.value",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner unassigned-work create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates Hubplanner unassigned work",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "unassigned-work update",
+          "summary": "Plan or preview Hubplanner write action `update_unassigned_work`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_unassigned_work",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "summary": "Value for record.value.",
+              "values": [],
+              "maps_to": "record.value",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner unassigned-work update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates Hubplanner unassigned work",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "unassigned-work delete",
+          "summary": "Plan or preview Hubplanner write action `delete_unassigned_work`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_unassigned_work",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner unassigned-work delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes Hubplanner unassigned work",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "vacations create",
+          "summary": "Plan or preview Hubplanner write action `create_vacation`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_vacation",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "resource",
+              "type": "string",
+              "summary": "Value for record.resource.",
+              "values": [],
+              "maps_to": "record.resource",
+              "allow_empty": false
+            },
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Value for record.start.",
+              "values": [],
+              "maps_to": "record.start",
+              "allow_empty": false
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Value for record.end.",
+              "values": [],
+              "maps_to": "record.end",
+              "allow_empty": false
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Value for record.note.",
+              "values": [],
+              "maps_to": "record.note",
+              "allow_empty": false
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner vacations create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner vacation",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "vacations update",
+          "summary": "Plan or preview Hubplanner write action `update_vacation`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_vacation",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "resource",
+              "type": "string",
+              "summary": "Value for record.resource.",
+              "values": [],
+              "maps_to": "record.resource",
+              "allow_empty": false
+            },
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Value for record.start.",
+              "values": [],
+              "maps_to": "record.start",
+              "allow_empty": false
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Value for record.end.",
+              "values": [],
+              "maps_to": "record.end",
+              "allow_empty": false
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Value for record.note.",
+              "values": [],
+              "maps_to": "record.note",
+              "allow_empty": false
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner vacations update --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "updates a Hubplanner vacation",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "vacations patch",
+          "summary": "Plan or preview Hubplanner write action `patch_vacation`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "patch_vacation",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "resource",
+              "type": "string",
+              "summary": "Value for record.resource.",
+              "values": [],
+              "maps_to": "record.resource",
+              "allow_empty": false
+            },
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Value for record.start.",
+              "values": [],
+              "maps_to": "record.start",
+              "allow_empty": false
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Value for record.end.",
+              "values": [],
+              "maps_to": "record.end",
+              "allow_empty": false
+            },
+            {
+              "name": "note",
+              "type": "string",
+              "summary": "Value for record.note.",
+              "values": [],
+              "maps_to": "record.note",
+              "allow_empty": false
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Value for record.status.",
+              "values": [],
+              "maps_to": "record.status",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner vacations patch --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "patches selected Hubplanner vacation fields",
+          "approval": "reverse ETL plan -> preview -> approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "vacations delete",
+          "summary": "Plan or preview Hubplanner write action `delete_vacation`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_vacation",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner vacations delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner vacation",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "webhook-subscriptions create",
+          "summary": "Plan or preview Hubplanner write action `create_webhook_subscription`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_webhook_subscription",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "target-url",
+              "type": "string",
+              "summary": "Value for record.target_url.",
+              "values": [],
+              "maps_to": "record.target_url",
+              "allow_empty": false
+            },
+            {
+              "name": "event",
+              "type": "enum",
+              "summary": "Value for record.event.",
+              "values": [
+                "project.update",
+                "resource.update",
+                "booking.create",
+                "timeEntry.create",
+                "timeEntry.update",
+                "timeEntry.create.update",
+                "timeEntry.delete",
+                "booking.update",
+                "booking.delete",
+                "booking.delete.multiple"
+              ],
+              "maps_to": "record.event"
+            }
+          ],
+          "examples": [
+            "pm hubplanner webhook-subscriptions create --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "creates a Hubplanner webhook subscription that can deliver future event payloads to the approved HTTPS target URL",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation for future webhook data egress",
+          "notes": ""
+        },
+        {
+          "path": "webhook-subscriptions delete",
+          "summary": "Plan or preview Hubplanner write action `delete_webhook_subscription`.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_webhook_subscription",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Value for record.id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm hubplanner webhook-subscriptions delete --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "deletes a Hubplanner webhook subscription",
+          "approval": "reverse ETL plan -> preview -> approval -> execute with destructive confirmation",
+          "notes": ""
+        },
+        {
+          "path": "webhook-events project-update",
+          "summary": "Webhook event delivery surface `project.update` is documented but blocked.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
+        },
+        {
+          "path": "webhook-events resource-update",
+          "summary": "Webhook event delivery surface `resource.update` is documented but blocked.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
+        },
+        {
+          "path": "webhook-events booking-create",
+          "summary": "Webhook event delivery surface `booking.create` is documented but blocked.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
+        },
+        {
+          "path": "webhook-events timeEntry-create",
+          "summary": "Webhook event delivery surface `timeEntry.create` is documented but blocked.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
+        },
+        {
+          "path": "webhook-events timeEntry-update",
+          "summary": "Webhook event delivery surface `timeEntry.update` is documented but blocked.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
+        },
+        {
+          "path": "webhook-events timeEntry-create-update",
+          "summary": "Webhook event delivery surface `timeEntry.create.update` is documented but blocked.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
+        },
+        {
+          "path": "webhook-events timeEntry-delete",
+          "summary": "Webhook event delivery surface `timeEntry.delete` is documented but blocked.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
+        },
+        {
+          "path": "webhook-events booking-update",
+          "summary": "Webhook event delivery surface `booking.update` is documented but blocked.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
+        },
+        {
+          "path": "webhook-events booking-delete",
+          "summary": "Webhook event delivery surface `booking.delete` is documented but blocked.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
+        },
+        {
+          "path": "webhook-events booking-delete-multiple",
+          "summary": "Webhook event delivery surface `booking.delete.multiple` is documented but blocked.",
+          "intent": "docs_only",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://github.com/hubplanner/API/blob/master/Sections/webhooks.md",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "Hubplanner sends this provider callback to an external service; the current connector contract cannot receive it as CDC without the shared CDC/changefeed runtime."
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "hubplanner safety",
+          "summary": "Hubplanner writes require reverse-ETL plan, preview, approval, and destructive confirmation for deletes."
+        }
+      ]
+    },
+    "docs_md": "# Hubplanner connector\n\n## Overview\n\nHubplanner (`hubplanner`) uses the provider-owned Hubplanner API v1 documentation in `hubplanner/API` at the source set recorded by issue #3239. This bundle now records the complete official operation ledger from `Sections/*.md` plus the `webhooks.md` supported event table: 107 official operations total, with 97 implemented as declarative streams, bounded typed direct reads, or typed reverse-ETL writes, and 10 outbound webhook event deliveries blocked on the shared CDC/changefeed runtime.\n\n## Auth setup\n\nCreate credentials with `pm credentials add` using `api_key` from an environment variable or stdin. The connector sends that value in the Hubplanner `Authorization` header. Do not paste API keys into prompts, shell history, fixtures, issue comments, or docs. `base_url` defaults to `https://api.hubplanner.com/v1`.\n\n## Streams notes\n\nList-style GET resources use the shared Hubplanner `page=0&limit=200` pagination shape. The first stream (`resources`) keeps a two-page fixture to prove the zero-indexed page-number paginator terminates; other stream fixtures are sanitized single-page provider-shape samples. Detail GET endpoints that require an object id are exposed as bounded direct reads instead of ETL streams because the declarative stream contract has no per-record path-parameter input. The official operation allocation represented in `api_surface.json` is: 33 read operations, 59 reverse-ETL write operations, 2 provider-search/direct-read operations, and 13 CDC/webhook operations.\n\n## Write actions & risks\n\n`writes.json` declares 61 typed write actions: the 59 official reverse-ETL operations plus create/delete webhook subscription control operations from the CDC lane. Every action uses a fixed documented Hubplanner path, a closed `record_schema`, fixture-backed request-shape validation, and no raw method/path/body/query escape hatch. Delete actions and webhook-subscription creation are marked `confirm: destructive` because webhook creation approves future data egress to an HTTPS target; operators must use plan -> preview -> explicit approval -> execute, with typed confirmation for destructive actions. The Hubplanner docs do not document a universal idempotent-delete status contract, so delete actions do not claim missing-404 success unless a future provider source adds that evidence.\n\n## Known limits\n\n- Fixture-only parity is not live certification. `certification.json` records a default stream but no live-safe write pairing or direct-read candidate; no provider credentials or live Hubplanner calls were used.\n- `create_webhook_subscription` intentionally does not expose the optional `authorization_token` request field because command records are persisted for plan/preview evidence; accepting a secret-bearing webhook token requires a future non-persisted secret input path.\n- The 10 outbound webhook event names in `webhooks.md` (`project.update`, `resource.update`, `booking.create`, `timeEntry.create`, `timeEntry.update`, `timeEntry.create.update`, `timeEntry.delete`, `booking.update`, `booking.delete`, and `booking.delete.multiple`) are ledgered as blocked because the current connector contract cannot receive provider callbacks as CDC. The documented shared dependency is the CDC/changefeed runtime foundation tracked by #2986 and #2988.\n- Relationship/helper endpoints present in the Markdown prose but outside the fixed r2 audit allocation (for example project/resource group membership helpers and project/resource tag attachment helpers) are not added as generic writes; adding them requires a future official-count refresh and typed action evidence.\n",
     "icon": {
       "id": "hubplanner",
       "path": "icons/hubplanner.svg",
