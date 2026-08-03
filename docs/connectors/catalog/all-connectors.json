@@ -9708,6 +9708,7 @@
         "primary_key": [
           "id"
         ],
+        "cursor_field": "candidate",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
@@ -9774,6 +9775,7 @@
         "primary_key": [
           "id"
         ],
+        "cursor_field": "candidateId",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
@@ -11378,9 +11380,9 @@
   {
     "name": "aws-cloudtrail",
     "display_name": "AWS CloudTrail",
-    "description": "Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API using AWS Signature V4 authentication. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; CloudTrail event and Insights record reads are blocked/planned. See the connector docs migration note.",
     "integration_type": "api",
-    "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+    "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -11402,97 +11404,250 @@
         "aws_key_id": {
           "type": "string",
           "x-secret": true,
-          "description": "manual intervention needed"
+          "description": "AWS access key ID. Provide with --from-env or stdin; never paste the value into chat or logs."
         },
         "aws_region_name": {
           "type": "string",
-          "description": "The default AWS Region to use, for example, us-west-1 or us-west-2. When specifying a Region inline during client initialization, this property is named region_name."
+          "description": "AWS region for CloudTrail, for example us-east-1."
         },
         "aws_secret_key": {
           "type": "string",
           "x-secret": true,
-          "description": "manual intervention needed"
-        },
-        "lookup_attributes_filter": {
-          "type": "string"
-        },
-        "start_date": {
-          "type": "string",
-          "description": "The date you would like to replicate data. Data in AWS CloudTrail is available for last 90 days only. Format: YYYY-MM-DD."
+          "description": "AWS secret access key. Provide with --from-env or stdin; never paste the value into chat or logs."
         },
         "base_url": {
           "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+          "description": "Optional CloudTrail endpoint override for fixture/local testing. Production defaults to https://cloudtrail.\u003cregion\u003e.amazonaws.com."
+        },
+        "page_size": {
+          "type": "string",
+          "description": "Optional bounded MaxResults value for paginated read streams."
+        },
+        "max_pages": {
+          "type": "string",
+          "description": "Optional maximum page count for paginated read streams; use a positive integer."
         },
         "mode": {
           "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "description": "Set to fixture for credential-free native fixture tests."
         }
       }
     },
     "streams": [
       {
-        "name": "management_events",
+        "name": "describe_trails",
         "primary_key": [
-          "EventId"
+          "pm_record_id"
         ],
-        "cursor_field": "EventTime",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
-        "name": "read_only_events",
+        "name": "get_channel",
         "primary_key": [
-          "EventId"
+          "pm_record_id"
         ],
-        "cursor_field": "EventTime",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
-        "name": "write_only_events",
+        "name": "get_dashboard",
         "primary_key": [
-          "EventId"
+          "pm_record_id"
         ],
-        "cursor_field": "EventTime",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
-        "name": "console_logins",
+        "name": "get_event_configuration",
         "primary_key": [
-          "EventId"
+          "pm_record_id"
         ],
-        "cursor_field": "EventTime",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_event_data_store",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_event_selectors",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_import",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_insight_selectors",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_resource_policy",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_trail",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "get_trail_status",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_channels",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_dashboards",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_event_data_stores",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_import_failures",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_imports",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_public_keys",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_tags",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "list_trails",
+        "primary_key": [
+          "pm_record_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],
     "risk": {
-      "read": "external AWS CloudTrail API reads performed by the legacy connector via a Tier-2 hook",
-      "write": "unsupported",
-      "approval": "none; read-only"
+      "read": "bounded AWS CloudTrail JSON-RPC reads using fixed action names, SigV4 authentication, and connector-local resource discovery for parameterized streams",
+      "write": "blocked/planned: CloudTrail write/admin actions require typed write metadata plus shared promoted-native command-surface, validation, and dry-run forwarding before they can be safely exposed.",
+      "approval": "No CloudTrail writes are exposed in the current connector surface; future writes must preserve plan -\u003e preview -\u003e approval -\u003e execute."
     },
     "icon": {
       "id": "aws-cloudtrail",

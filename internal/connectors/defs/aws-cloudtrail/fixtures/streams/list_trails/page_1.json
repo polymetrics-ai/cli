@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Trails": [
+        {
+          "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
+          "Name": "fixture-trail",
+          "HomeRegion": "us-east-1"
+        }
+      ]
+    }
+  }
+}

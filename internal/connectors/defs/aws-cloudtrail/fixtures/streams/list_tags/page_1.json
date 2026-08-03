@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "ResourceTagList": [
+        {
+          "ResourceId": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
+          "TagsList": [
+            {
+              "Key": "Environment",
+              "Value": "fixture"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "read_query": {
+    "ResourceIdList": "[\"arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail\"]"
+  }
+}

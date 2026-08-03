@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "EventDataStores": [
+        {
+          "EventDataStoreArn": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store",
+          "Name": "fixture-store",
+          "Status": "ENABLED",
+          "CreatedTimestamp": 1767225600.25,
+          "UpdatedTimestamp": 1767225600.25,
+          "MultiRegionEnabled": true,
+          "OrganizationEnabled": false,
+          "RetentionPeriod": 90
+        }
+      ]
+    }
+  }
+}

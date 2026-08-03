@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pm_record_id": "get_event_data_store_fixture_1",
+      "operation": "GetEventDataStore",
+      "AdvancedEventSelectors": [
+        {
+          "Name": "fixture"
+        }
+      ],
+      "BillingMode": "fixture-billing-mode",
+      "CreatedTimestamp": 1767225600.25,
+      "EventDataStoreArn": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
+      "FederationRoleArn": "arn:aws:iam::123456789012:role/fixture-cloudtrail-federation",
+      "FederationStatus": "fixture-federation-status",
+      "KmsKeyId": "fixture-kms-key-id",
+      "MultiRegionEnabled": true,
+      "Name": "trail-fixture",
+      "OrganizationEnabled": true,
+      "PartitionKeys": [
+        {
+          "Name": "fixture"
+        }
+      ],
+      "RetentionPeriod": 90,
+      "Status": "fixture-status",
+      "TerminationProtectionEnabled": true,
+      "UpdatedTimestamp": 1767225600.25
+    }
+  },
+  "read_query": {
+    "EventDataStore": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
+  }
+}

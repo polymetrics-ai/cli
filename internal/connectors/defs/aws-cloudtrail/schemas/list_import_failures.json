@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_import_failures",
+  "type": "object",
+  "x-primary-key": [
+    "pm_record_id"
+  ],
+  "properties": {
+    "pm_record_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "Location": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ErrorType": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ErrorMessage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LastUpdatedTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    }
+  },
+  "additionalProperties": true
+}

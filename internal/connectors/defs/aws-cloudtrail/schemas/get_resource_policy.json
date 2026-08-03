@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_resource_policy",
+  "type": "object",
+  "x-primary-key": [
+    "pm_record_id"
+  ],
+  "properties": {
+    "pm_record_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "DelegatedAdminResourcePolicy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ResourceArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ResourcePolicy": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

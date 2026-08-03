@@ -11,32 +11,32 @@
     "aws_key_id": {
       "type": "string",
       "x-secret": true,
-      "description": "manual intervention needed"
+      "description": "AWS access key ID. Provide with --from-env or stdin; never paste the value into chat or logs."
     },
     "aws_region_name": {
       "type": "string",
-      "description": "The default AWS Region to use, for example, us-west-1 or us-west-2. When specifying a Region inline during client initialization, this property is named region_name."
+      "description": "AWS region for CloudTrail, for example us-east-1."
     },
     "aws_secret_key": {
       "type": "string",
       "x-secret": true,
-      "description": "manual intervention needed"
-    },
-    "lookup_attributes_filter": {
-      "type": "string"
-    },
-    "start_date": {
-      "type": "string",
-      "description": "The date you would like to replicate data. Data in AWS CloudTrail is available for last 90 days only. Format: YYYY-MM-DD."
+      "description": "AWS secret access key. Provide with --from-env or stdin; never paste the value into chat or logs."
     },
     "base_url": {
       "type": "string",
-      "default": "https://example.invalid",
-      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+      "description": "Optional CloudTrail endpoint override for fixture/local testing. Production defaults to https://cloudtrail.<region>.amazonaws.com."
+    },
+    "page_size": {
+      "type": "string",
+      "description": "Optional bounded MaxResults value for paginated read streams."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Optional maximum page count for paginated read streams; use a positive integer."
     },
     "mode": {
       "type": "string",
-      "description": "Set to fixture for credential-free legacy fixture tests."
+      "description": "Set to fixture for credential-free native fixture tests."
     }
   }
 }

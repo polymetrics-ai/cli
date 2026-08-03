@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "pm_record_id": "get_dashboard_fixture_1",
+      "operation": "GetDashboard",
+      "CreatedTimestamp": 1767225600.25,
+      "DashboardArn": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
+      "LastRefreshFailureReason": "fixture-last-refresh-failure-reason",
+      "LastRefreshId": "fixture-last-refresh-id",
+      "RefreshSchedule": {
+        "Name": "fixture"
+      },
+      "Status": "fixture-status",
+      "TerminationProtectionEnabled": true,
+      "Type": "fixture-type",
+      "UpdatedTimestamp": 1767225600.25,
+      "Widgets": [
+        {
+          "Name": "fixture"
+        }
+      ]
+    }
+  },
+  "read_query": {
+    "DashboardId": "arn:aws:cloudtrail:us-east-1:123456789012:dashboard/fixture-dashboard"
+  }
+}

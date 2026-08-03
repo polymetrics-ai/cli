@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_dashboards",
+  "type": "object",
+  "x-primary-key": [
+    "pm_record_id"
+  ],
+  "properties": {
+    "pm_record_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "DashboardArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "DashboardId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "RefreshSchedule": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "Widgets": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

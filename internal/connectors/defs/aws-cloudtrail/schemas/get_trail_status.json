@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_trail_status",
+  "type": "object",
+  "x-primary-key": [
+    "pm_record_id"
+  ],
+  "properties": {
+    "pm_record_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "IsLogging": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "LatestCloudWatchLogsDeliveryError": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestCloudWatchLogsDeliveryTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "LatestDeliveryAttemptSucceeded": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestDeliveryAttemptTime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestDeliveryError": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestDeliveryTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "LatestDigestDeliveryError": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestDigestDeliveryTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "LatestNotificationAttemptSucceeded": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestNotificationAttemptTime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestNotificationError": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestNotificationTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "StartLoggingTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "StopLoggingTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "TimeLoggingStarted": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TimeLoggingStopped": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

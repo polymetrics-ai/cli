@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_event_data_store",
+  "type": "object",
+  "x-primary-key": [
+    "pm_record_id"
+  ],
+  "properties": {
+    "pm_record_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "AdvancedEventSelectors": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "BillingMode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "CreatedTimestamp": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "EventDataStoreArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "FederationRoleArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "FederationStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "KmsKeyId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "MultiRegionEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "OrganizationEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "PartitionKeys": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "RetentionPeriod": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TerminationProtectionEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "UpdatedTimestamp": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    }
+  },
+  "additionalProperties": true
+}

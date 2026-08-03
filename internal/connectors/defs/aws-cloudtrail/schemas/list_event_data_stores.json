@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "list_event_data_stores",
+  "type": "object",
+  "x-primary-key": [
+    "pm_record_id"
+  ],
+  "properties": {
+    "pm_record_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "EventDataStoreArn": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "AdvancedEventSelectors": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "CreatedTimestamp": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "UpdatedTimestamp": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "MultiRegionEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "OrganizationEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "RetentionPeriod": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "TerminationProtectionEnabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "BillingMode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "KmsKeyId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

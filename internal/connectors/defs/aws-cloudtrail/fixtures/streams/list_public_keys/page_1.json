@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "PublicKeyList": [
+        {
+          "Fingerprint": "fixture-public-key-fingerprint",
+          "ValidityStartTime": 1767225600.25,
+          "ValidityEndTime": 1767312000.5,
+          "Value": "fixture-public-key-value"
+        }
+      ]
+    }
+  }
+}

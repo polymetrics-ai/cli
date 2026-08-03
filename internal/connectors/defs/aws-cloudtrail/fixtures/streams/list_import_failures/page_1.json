@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Failures": [
+        {
+          "Location": "s3://fixture-cloudtrail-bucket/imports/failure.json.gz",
+          "Status": "FAILED",
+          "ErrorType": "InvalidEventData",
+          "ErrorMessage": "fixture import failure",
+          "LastUpdatedTime": 1767225600.25
+        }
+      ]
+    }
+  },
+  "read_query": {
+    "ImportId": "22222222-2222-2222-2222-222222222222"
+  }
+}

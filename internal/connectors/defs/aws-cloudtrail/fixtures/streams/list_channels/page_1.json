@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Channels": [
+        {
+          "ChannelArn": "arn:aws:cloudtrail:us-east-1:123456789012:channel/fixture-channel",
+          "Name": "fixture-channel",
+          "Source": "aws.partner/fixture",
+          "Destinations": [
+            {
+              "Type": "EVENT_DATA_STORE",
+              "Location": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

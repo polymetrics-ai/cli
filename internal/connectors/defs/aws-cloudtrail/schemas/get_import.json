@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_import",
+  "type": "object",
+  "x-primary-key": [
+    "pm_record_id"
+  ],
+  "properties": {
+    "pm_record_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "CreatedTimestamp": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "Destinations": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "EndEventTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "ImportId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ImportSource": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "ImportStatistics": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true
+    },
+    "ImportStatus": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "StartEventTime": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    },
+    "UpdatedTimestamp": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "AWS JSON timestamp as Unix epoch seconds."
+    }
+  },
+  "additionalProperties": true
+}
