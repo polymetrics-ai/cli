@@ -39,16 +39,11 @@ import (
 
 type definitionConnector struct {
 	connectors.Connector
-	base   engine.Base
-	bundle engine.Bundle
+	base engine.Base
 }
 
 func (c definitionConnector) Definition() connectors.Definition {
 	return c.base.Definition()
-}
-
-func (c definitionConnector) Manifest() connectors.Manifest {
-	return engine.New(c.bundle, nil).Manifest()
 }
 
 func withBundleDefinition(name string, c connectors.Connector) connectors.Connector {
@@ -56,7 +51,7 @@ func withBundleDefinition(name string, c connectors.Connector) connectors.Connec
 	if err != nil {
 		panic("native/" + name + ": failed to load defs/" + name + " bundle: " + err.Error())
 	}
-	return definitionConnector{Connector: c, base: engine.NewBase(bundle), bundle: bundle}
+	return definitionConnector{Connector: c, base: engine.NewBase(bundle)}
 }
 
 func promotedFactories() []Factory {
