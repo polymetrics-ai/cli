@@ -11,9 +11,17 @@ Reads TestRail projects, suites, cases, milestones, plans, runs, users, and refe
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-testrail
+- asset: icons/simple-icons/testrail.svg
+- title: TestRail
+- simple_icon_slug: testrail
+- simple_icon_hex: 65C179
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=TestRail
+- match: exact-name-or-slug
+- matched_by: testrail
 
 ## Capabilities
 

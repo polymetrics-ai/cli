@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Google Calendar calendar lists, events, settings, and access control rules through the Calendar API v3 using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-googlecalendar
+  asset: icons/simple-icons/googlecalendar.svg
+  title: Google Calendar
+  simple_icon_slug: googlecalendar
+  simple_icon_hex: 4285F4
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Google%20Calendar
+  match: exact-name-or-slug
+  matched_by: google-calendar
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

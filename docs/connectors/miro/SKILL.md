@@ -11,9 +11,17 @@ Reads and writes documented Miro Platform, Enterprise, SCIM, and experimental RE
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-miro
+- asset: icons/simple-icons/miro.svg
+- title: Miro
+- simple_icon_slug: miro
+- simple_icon_hex: 050038
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Miro
+- match: exact-name-or-slug
+- matched_by: miro
 
 ## Capabilities
 

@@ -11,6 +11,7 @@ Reads MailerLite subscribers, campaigns, groups, segments, and automations throu
 
 ## Icon
 
+- id: mailerlite
 - asset: icons/mailerlite.svg
 - source: upstream_registry
 - review_status: upstream_seeded

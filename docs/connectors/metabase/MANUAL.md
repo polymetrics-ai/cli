@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using session-token authentication. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: metabase
   asset: icons/metabase.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads Open Exchange Rates account usage/plan status through the Open Exchange Ra
 
 ## Icon
 
+- id: open-exchange-rates
 - asset: icons/open-exchange-rates.svg
 - source: upstream_registry
 - review_status: upstream_seeded

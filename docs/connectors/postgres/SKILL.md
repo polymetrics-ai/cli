@@ -11,10 +11,11 @@ Reads PostgreSQL tables: discovers schemas/columns from information_schema, snap
 
 ## Icon
 
+- id: postgresql
 - asset: icons/postgresql.svg
 - source: upstream_registry
 - review_status: upstream_seeded
-- review_url: https://www.postgresql.org/docs/
+- review_url: https://www.postgresql.org/docs/current/
 
 ## Capabilities
 

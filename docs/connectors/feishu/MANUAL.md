@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open Platform REST API using a tenant_access_token exchange. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: feishu
   asset: icons/feishu.svg
   source: official
   review_status: official_verified

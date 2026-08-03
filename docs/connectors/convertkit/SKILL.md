@@ -11,6 +11,7 @@ Reads ConvertKit (Kit) subscribers, forms, sequences, tags, broadcasts, custom f
 
 ## Icon
 
+- id: convertkit
 - asset: icons/convertkit.svg
 - source: upstream_registry
 - review_status: upstream_seeded

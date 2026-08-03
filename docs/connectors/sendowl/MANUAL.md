@@ -13,9 +13,11 @@ DESCRIPTION
   Reads SendOwl orders, products, subscriptions, discounts, bundles, and licenses, and writes product/subscription/discount/bundle lifecycle mutations and order actions (refund, cancel subscription, resend email) through the SendOwl API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

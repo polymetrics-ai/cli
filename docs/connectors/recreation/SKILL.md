@@ -11,6 +11,7 @@ Reads Recreation.gov RIDB facilities, campsites, activities, organizations, and 
 
 ## Icon
 
+- id: recreation
 - asset: icons/recreation.svg
 - source: upstream_registry
 - review_status: upstream_seeded

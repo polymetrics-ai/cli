@@ -11,6 +11,7 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
 
 ## Icon
 
+- id: github
 - asset: icons/github.svg
 - source: upstream_registry
 - review_status: upstream_seeded

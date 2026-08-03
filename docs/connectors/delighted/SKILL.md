@@ -11,6 +11,7 @@ Reads Delighted survey responses, people, bounces, unsubscribes, and aggregate m
 
 ## Icon
 
+- id: delighted
 - asset: icons/delighted.svg
 - source: upstream_registry
 - review_status: upstream_seeded

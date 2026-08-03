@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Auth0 users, clients, connections, roles, organizations, role assignments, and organization memberships, and creates/updates users, clients, roles, and organizations, through the Auth0 Management API v2.
 
 ICON
+  id: auth0
   asset: icons/auth0.svg
   source: official
   review_status: official_verified

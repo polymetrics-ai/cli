@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Opsgenie alerts, incidents, users, teams, and services through the Opsgenie REST API.
 
 ICON
+  id: source-opsgenie
   asset: icons/source-opsgenie.svg
   source: upstream_registry
   review_status: upstream_seeded

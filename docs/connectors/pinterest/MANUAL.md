@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Pinterest ad accounts, boards, campaigns, ad groups, and audiences through the Pinterest API v5 (OAuth2 refresh-token auth). Read-only.
 
 ICON
+  id: pinterest
   asset: icons/pinterest.svg
   source: upstream_registry
   review_status: upstream_seeded

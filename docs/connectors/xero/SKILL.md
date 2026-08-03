@@ -11,6 +11,7 @@ Reads and writes Xero Accounting API resources through declarative JSON bundle s
 
 ## Icon
 
+- id: xero
 - asset: icons/xero.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads saved Pocket items through the v3 retrieve API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: pocket
   asset: icons/pocket.svg
   source: upstream_registry
   review_status: upstream_seeded

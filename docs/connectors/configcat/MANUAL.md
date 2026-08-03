@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes ConfigCat feature-flag platform data: organizations, products, configs, environments, settings/feature flags, deleted settings, SDK keys, segments, webhooks, permission groups, integrations, proxy profiles, members, audit logs, stale flags, tags, and the authenticated user's own profile through the ConfigCat Public Management API.
 
 ICON
+  id: configcat
   asset: icons/configcat.svg
   source: upstream_registry
   review_status: upstream_seeded

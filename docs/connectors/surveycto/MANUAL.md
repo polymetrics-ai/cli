@@ -13,6 +13,7 @@ DESCRIPTION
   Reads SurveyCTO form IDs, submissions, datasets (including case-management datasets), dataset records, groups, roles, teams, and users, and writes dataset lifecycle mutations, dataset record creation, and user lifecycle mutations, through the SurveyCTO Server API v2.
 
 ICON
+  id: surveycto
   asset: icons/surveycto.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -11,9 +11,11 @@ Reads Split.io workspaces, environments, feature flags, segments, groups, traffi
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

@@ -11,6 +11,7 @@ Reads Clockify workspaces, clients, projects, tags, users, tasks, time entries, 
 
 ## Icon
 
+- id: clockify
 - asset: icons/clockify.svg
 - source: upstream_registry
 - review_status: upstream_seeded

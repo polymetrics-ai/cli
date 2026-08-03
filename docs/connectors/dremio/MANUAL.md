@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Dremio catalog entries, reflections, sources, users, and roles through the Dremio REST API.
 
 ICON
+  id: dremio
   asset: icons/dremio.svg
   source: upstream_registry
   review_status: upstream_seeded

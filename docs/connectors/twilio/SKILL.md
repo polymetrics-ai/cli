@@ -11,6 +11,7 @@ Reads and writes Twilio public REST API v2010 resources through declarative JSON
 
 ## Icon
 
+- id: twilio
 - asset: icons/twilio.svg
 - source: upstream_registry
 - review_status: upstream_seeded

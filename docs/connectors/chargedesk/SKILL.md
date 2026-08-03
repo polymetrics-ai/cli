@@ -11,9 +11,11 @@ Reads ChargeDesk charges, customers, subscriptions, and products through the Cha
 
 ## Icon
 
+- id: pm-sample
 - asset: icons/pm-sample.svg
 - source: polymetrics
 - review_status: polymetrics
+- review_url: https://github.com/polymetrics-ai/cli
 
 ## Capabilities
 

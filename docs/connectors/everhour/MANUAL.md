@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Everhour projects, clients, team members, team time records, per-project tasks and sections, time-off types, time-off allocations, expenses, expense categories, and invoices, and writes client/project/task/section/time-record/expense mutations, through the Everhour REST API.
 
 ICON
+  id: everhour
   asset: icons/everhour.svg
   source: upstream_registry
   review_status: upstream_seeded

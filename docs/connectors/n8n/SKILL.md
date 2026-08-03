@@ -11,6 +11,7 @@ Reads n8n workflows, executions, tags, users, variables, projects, data tables, 
 
 ## Icon
 
+- id: n8n
 - asset: icons/n8n.svg
 - source: upstream_registry
 - review_status: upstream_seeded

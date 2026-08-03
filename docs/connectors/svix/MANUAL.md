@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Svix applications, endpoints, event types, messages, message delivery attempts, background tasks, connectors, and operational webhook endpoints, and writes application/endpoint/event-type/connector/operational-webhook-endpoint lifecycle mutations and outgoing messages, through the Svix REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

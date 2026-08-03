@@ -11,9 +11,17 @@ Reads SparkPost recipient lists, templates, sending domains, transmissions, supp
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-sparkpost
+- asset: icons/simple-icons/sparkpost.svg
+- title: SparkPost
+- simple_icon_slug: sparkpost
+- simple_icon_hex: FA6423
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=SparkPost
+- match: exact-name-or-slug
+- matched_by: sparkpost
 
 ## Capabilities
 

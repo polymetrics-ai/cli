@@ -11,6 +11,7 @@ Reads Apify dataset items and dataset metadata (item_collection, dataset_collect
 
 ## Icon
 
+- id: apify
 - asset: icons/apify.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -11,6 +11,7 @@ Reads ShipStation orders, shipments, products, and customers through the ShipSta
 
 ## Icon
 
+- id: shipstation
 - asset: icons/shipstation.svg
 - source: official
 - review_status: official_verified

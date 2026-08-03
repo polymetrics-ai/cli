@@ -11,9 +11,17 @@ Reads Formbricks surveys, responses, contacts, contact attributes, action classe
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-formbricks
+- asset: icons/simple-icons/formbricks.svg
+- title: Formbricks
+- simple_icon_slug: formbricks
+- simple_icon_hex: 00C4B8
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Formbricks
+- match: exact-name-or-slug
+- matched_by: formbricks
 
 ## Capabilities
 

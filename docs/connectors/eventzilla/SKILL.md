@@ -11,6 +11,7 @@ Reads Eventzilla events, categories, users, attendees, ticket types, and transac
 
 ## Icon
 
+- id: eventzilla
 - asset: icons/eventzilla.svg
 - source: official
 - review_status: official_verified

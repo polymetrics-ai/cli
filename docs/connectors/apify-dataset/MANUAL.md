@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Apify dataset items and dataset metadata (item_collection, dataset_collection, dataset) through the Apify API v2. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: apify
   asset: icons/apify.svg
   source: upstream_registry
   review_status: upstream_seeded

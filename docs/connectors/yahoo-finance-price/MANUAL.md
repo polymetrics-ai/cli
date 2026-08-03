@@ -13,6 +13,7 @@ DESCRIPTION
   Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: yahoo-finance-price
   asset: icons/yahoo-finance-price.svg
   source: upstream_registry
   review_status: upstream_seeded

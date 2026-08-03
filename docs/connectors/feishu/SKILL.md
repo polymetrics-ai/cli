@@ -11,6 +11,7 @@ Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open
 
 ## Icon
 
+- id: feishu
 - asset: icons/feishu.svg
 - source: official
 - review_status: official_verified

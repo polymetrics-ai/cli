@@ -11,6 +11,7 @@ Reads FastBill customers, invoices, products, recurring invoices, and revenues t
 
 ## Icon
 
+- id: fastbill
 - asset: icons/fastbill.svg
 - source: upstream_registry
 - review_status: upstream_seeded

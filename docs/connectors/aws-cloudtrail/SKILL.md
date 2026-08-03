@@ -11,6 +11,7 @@ Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API u
 
 ## Icon
 
+- id: aws-cloudtrail
 - asset: icons/aws-cloudtrail.svg
 - source: upstream_registry
 - review_status: upstream_seeded

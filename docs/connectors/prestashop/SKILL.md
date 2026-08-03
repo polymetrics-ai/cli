@@ -11,6 +11,7 @@ Reads PrestaShop customers, orders, products, addresses, and carts through the P
 
 ## Icon
 
+- id: prestashop
 - asset: icons/prestashop.svg
 - source: official
 - review_status: official_verified

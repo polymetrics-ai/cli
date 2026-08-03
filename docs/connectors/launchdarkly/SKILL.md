@@ -11,6 +11,7 @@ Reads LaunchDarkly projects, members, audit log entries, feature flags, and envi
 
 ## Icon
 
+- id: launchdarkly
 - asset: icons/launchdarkly.svg
 - source: upstream_registry
 - review_status: upstream_seeded

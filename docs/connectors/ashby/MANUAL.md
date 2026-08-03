@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Ashby applicant-tracking data — candidates, jobs, applications, and users — through the Ashby REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: ashby
   asset: icons/ashby.svg
   source: upstream_registry
   review_status: upstream_seeded

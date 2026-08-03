@@ -11,6 +11,7 @@ Reads and writes RD Station Marketing platform contacts, segmentation contacts, 
 
 ## Icon
 
+- id: rdstation
 - asset: icons/rdstation.svg
 - source: official
 - review_status: official_verified

@@ -13,9 +13,11 @@ DESCRIPTION
   Reads SmartReach teams, campaigns, prospects, email settings, do-not-contact records, users, and accounts; creates/updates prospects and accounts, manages campaign membership/status, do-not-contact entries, and task status.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

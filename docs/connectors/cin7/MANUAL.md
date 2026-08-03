@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Cin7 Core (DEAR Inventory) products, customers, suppliers, sales, purchases, inventory availability, and reference/lookup data, and writes products, customers, suppliers, and reference-table records, through the Cin7 Core External API v2.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

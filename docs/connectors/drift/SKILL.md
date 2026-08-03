@@ -11,6 +11,7 @@ Reads Drift users, accounts, conversations, contacts, and teams, and writes cont
 
 ## Icon
 
+- id: drift
 - asset: icons/drift.svg
 - source: upstream_registry
 - review_status: upstream_seeded

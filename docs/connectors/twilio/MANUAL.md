@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes Twilio public REST API v2010 resources through declarative JSON bundle streams and typed write actions.
 
 ICON
+  id: twilio
   asset: icons/twilio.svg
   source: upstream_registry
   review_status: upstream_seeded

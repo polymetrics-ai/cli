@@ -11,6 +11,7 @@ Reads Pendo Engage visitors, accounts, product objects, guides, reports, metadat
 
 ## Icon
 
+- id: pendo
 - asset: icons/pendo.svg
 - source: upstream_registry
 - review_status: upstream_seeded

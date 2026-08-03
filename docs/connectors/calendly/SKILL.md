@@ -11,9 +11,17 @@ Reads Calendly scheduled events (and their invitees), event types, organization 
 
 ## Icon
 
-- asset: icons/pm-sample.svg
-- source: polymetrics
-- review_status: polymetrics
+- id: simple-icons-calendly
+- asset: icons/simple-icons/calendly.svg
+- title: Calendly
+- simple_icon_slug: calendly
+- simple_icon_hex: 006BFF
+- source: simple-icons
+- license: CC0-1.0
+- review_status: cc0_with_trademark_caveat
+- review_url: https://simpleicons.org/?q=Calendly
+- match: exact-name-or-slug
+- matched_by: calendly
 
 ## Capabilities
 

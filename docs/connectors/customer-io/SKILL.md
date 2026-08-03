@@ -11,6 +11,7 @@ Reads Customer.io campaigns, newsletters, segments, broadcasts, activities, mess
 
 ## Icon
 
+- id: customer-io
 - asset: icons/customer-io.svg
 - source: upstream_registry
 - review_status: upstream_seeded

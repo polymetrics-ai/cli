@@ -11,6 +11,7 @@ Reads SonarCloud issues, components, projects, hotspots, rules, metrics, languag
 
 ## Icon
 
+- id: sonarcloud
 - asset: icons/sonarcloud.svg
 - source: upstream_registry
 - review_status: upstream_seeded

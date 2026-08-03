@@ -11,6 +11,7 @@ Reads SurveyCTO form IDs, submissions, datasets (including case-management datas
 
 ## Icon
 
+- id: surveycto
 - asset: icons/surveycto.svg
 - source: upstream_registry
 - review_status: upstream_seeded

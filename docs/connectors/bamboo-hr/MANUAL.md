@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes BambooHR employee, metadata, reporting, time off, applicant tracking, benefits, goals, training, time tracking, scheduling, and webhook resources that are available through the documented Basic-auth API surface.
 
 ICON
+  id: bamboohr
   asset: icons/bamboohr.svg
   source: upstream_registry
   review_status: upstream_seeded

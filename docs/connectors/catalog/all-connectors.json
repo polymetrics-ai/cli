@@ -194,7 +194,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -1646,7 +1647,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -2012,7 +2014,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -2314,7 +2317,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -2519,7 +2523,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -3433,7 +3438,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -3581,10 +3587,17 @@
       "approval": "required for both write actions"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-algolia",
+      "path": "icons/simple-icons/algolia.svg",
+      "title": "Algolia",
+      "simple_icon_slug": "algolia",
+      "simple_icon_hex": "003DFF",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Algolia",
+      "match": "exact-name-or-slug",
+      "matched_by": "algolia"
     }
   },
   {
@@ -3764,7 +3777,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -7672,7 +7686,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -7957,7 +7972,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -8381,10 +8397,17 @@
       "approval": "none; read-only, no reverse-ETL write surface"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-apple",
+      "path": "icons/simple-icons/apple.svg",
+      "title": "Apple",
+      "simple_icon_slug": "apple",
+      "simple_icon_hex": "000000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Apple",
+      "match": "curated-alias",
+      "matched_by": "apple"
     }
   },
   {
@@ -8577,7 +8600,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -9161,7 +9185,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -9475,7 +9500,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -9773,7 +9799,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -10323,7 +10350,7 @@
       "approval": "reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions require --confirm destructive"
     },
     "icon": {
-      "id": "pm-bahmni",
+      "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
       "review_status": "polymetrics",
@@ -12265,10 +12292,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-basecamp",
+      "path": "icons/simple-icons/basecamp.svg",
+      "title": "Basecamp",
+      "simple_icon_slug": "basecamp",
+      "simple_icon_hex": "1D2D35",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Basecamp",
+      "match": "exact-name-or-slug",
+      "matched_by": "basecamp"
     }
   },
   {
@@ -12511,7 +12545,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -12924,7 +12959,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -15213,7 +15249,7 @@
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and typed destructive confirmation for destructive actions."
     },
     "icon": {
-      "id": "pm-bitbucket",
+      "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
       "review_status": "polymetrics",
@@ -15501,10 +15537,17 @@
       "approval": "required for destructive actions (delete_bitlink, delete_webhook, delete_qr_code, delete_bitlink_tags) and for webhook URL mutations; creates/updates of bitlinks, campaigns, channels, and QR codes are low-risk"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-bitly",
+      "path": "icons/simple-icons/bitly.svg",
+      "title": "Bitly",
+      "simple_icon_slug": "bitly",
+      "simple_icon_hex": "EE6123",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Bitly",
+      "match": "exact-name-or-slug",
+      "matched_by": "bitly"
     }
   },
   {
@@ -15645,10 +15688,17 @@
       "approval": "none; read-only, no reverse-ETL write surface"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-blogger",
+      "path": "icons/simple-icons/blogger.svg",
+      "title": "Blogger",
+      "simple_icon_slug": "blogger",
+      "simple_icon_hex": "FF5722",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Blogger",
+      "match": "exact-name-or-slug",
+      "matched_by": "blogger"
     }
   },
   {
@@ -15917,7 +15967,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -16166,7 +16217,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -16450,10 +16502,17 @@
       "approval": "required for every write action; read remains unapproved"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-box",
+      "path": "icons/simple-icons/box.svg",
+      "title": "Box",
+      "simple_icon_slug": "box",
+      "simple_icon_hex": "0061D5",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Box",
+      "match": "exact-name-or-slug",
+      "matched_by": "box"
     }
   },
   {
@@ -16569,7 +16628,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -17702,7 +17762,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -17979,10 +18040,17 @@
       "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-brevo",
+      "path": "icons/simple-icons/brevo.svg",
+      "title": "Brevo",
+      "simple_icon_slug": "brevo",
+      "simple_icon_hex": "0B996E",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Brevo",
+      "match": "exact-name-or-slug",
+      "matched_by": "brevo"
     }
   },
   {
@@ -18329,10 +18397,17 @@
       "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-brex",
+      "path": "icons/simple-icons/brex.svg",
+      "title": "Brex",
+      "simple_icon_slug": "brex",
+      "simple_icon_hex": "212121",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Brex",
+      "match": "exact-name-or-slug",
+      "matched_by": "brex"
     }
   },
   {
@@ -18468,7 +18543,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -18720,10 +18796,17 @@
       "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-buildkite",
+      "path": "icons/simple-icons/buildkite.svg",
+      "title": "Buildkite",
+      "simple_icon_slug": "buildkite",
+      "simple_icon_hex": "14CC80",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Buildkite",
+      "match": "exact-name-or-slug",
+      "matched_by": "buildkite"
     }
   },
   {
@@ -18852,7 +18935,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -18946,7 +19030,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -19145,10 +19230,17 @@
       "approval": "required for every write action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-caldotcom",
+      "path": "icons/simple-icons/caldotcom.svg",
+      "title": "Cal.com",
+      "simple_icon_slug": "caldotcom",
+      "simple_icon_hex": "292929",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Cal.com",
+      "match": "curated-alias",
+      "matched_by": "caldotcom"
     }
   },
   {
@@ -19434,10 +19526,17 @@
       "approval": "required for every write action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-calendly",
+      "path": "icons/simple-icons/calendly.svg",
+      "title": "Calendly",
+      "simple_icon_slug": "calendly",
+      "simple_icon_hex": "006BFF",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Calendly",
+      "match": "exact-name-or-slug",
+      "matched_by": "calendly"
     }
   },
   {
@@ -20215,10 +20314,17 @@
       "approval": "required for campaign-send and subscriber-delete actions; list/segment/subscriber-add/update mutations are lower risk"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-campaignmonitor",
+      "path": "icons/simple-icons/campaignmonitor.svg",
+      "title": "Campaign Monitor",
+      "simple_icon_slug": "campaignmonitor",
+      "simple_icon_hex": "111324",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Campaign%20Monitor",
+      "match": "exact-name-or-slug",
+      "matched_by": "campaign-monitor"
     }
   },
   {
@@ -20357,7 +20463,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -20479,7 +20586,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -20776,7 +20884,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -20980,7 +21089,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -21464,7 +21574,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -21730,7 +21841,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -22697,7 +22809,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -23316,11 +23429,17 @@
       "write": "external mutation of Chatwoot contacts, conversations, messages, and labels; agent-visible and customer-visible side effects"
     },
     "icon": {
-      "id": "pm-chatwoot",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics",
-      "review_url": "https://github.com/polymetrics-ai/cli"
+      "id": "simple-icons-chatwoot",
+      "path": "icons/simple-icons/chatwoot.svg",
+      "title": "Chatwoot",
+      "simple_icon_slug": "chatwoot",
+      "simple_icon_hex": "1F93FF",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Chatwoot",
+      "match": "exact-name-or-slug",
+      "matched_by": "chatwoot"
     }
   },
   {
@@ -23577,7 +23696,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -23659,7 +23779,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -23990,7 +24111,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -24477,10 +24599,17 @@
       "write": "external mutation of CircleCI project configuration: schedule/environment-variable/checkout-key create and delete; never triggers, cancels, or approves a live CI run"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-circleci",
+      "path": "icons/simple-icons/circleci.svg",
+      "title": "CircleCI",
+      "simple_icon_slug": "circleci",
+      "simple_icon_hex": "343434",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=CircleCI",
+      "match": "exact-name-or-slug",
+      "matched_by": "circleci"
     }
   },
   {
@@ -24760,7 +24889,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -24904,10 +25034,17 @@
       "approval": "required for update_application and delete_dataset (destructive or full-replace semantics); create_application and create_dataset are low-risk (additive only)"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-clarifai",
+      "path": "icons/simple-icons/clarifai.svg",
+      "title": "Clarifai",
+      "simple_icon_slug": "clarifai",
+      "simple_icon_hex": "1955FF",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Clarifai",
+      "match": "curated-alias",
+      "matched_by": "clarifai"
     }
   },
   {
@@ -26102,7 +26239,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -26921,7 +27059,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -27186,7 +27325,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -27627,10 +27767,17 @@
       "approval": "required for all write actions; read is unrestricted"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-codefresh",
+      "path": "icons/simple-icons/codefresh.svg",
+      "title": "Codefresh",
+      "simple_icon_slug": "codefresh",
+      "simple_icon_hex": "08B1AB",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Codefresh",
+      "match": "exact-name-or-slug",
+      "matched_by": "codefresh"
     }
   },
   {
@@ -29455,7 +29602,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -30487,9 +30635,9 @@
     "icon": {
       "id": "convex",
       "path": "icons/convex.svg",
-      "source": "upstream_registry",
-      "review_status": "upstream_seeded",
-      "review_url": "https://docs.convex.dev/http-api/"
+      "source": "official",
+      "review_status": "official_verified",
+      "review_url": "https://docs.convex.dev/"
     }
   },
   {
@@ -30745,7 +30893,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -31407,7 +31556,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -32287,7 +32437,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -32442,7 +32593,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -32830,7 +32982,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -33569,7 +33722,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -33656,10 +33810,17 @@
       "approval": "none; read-only source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-discord",
+      "path": "icons/simple-icons/discord.svg",
+      "title": "Discord",
+      "simple_icon_slug": "discord",
+      "simple_icon_hex": "5865F2",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Discord",
+      "match": "exact-name-or-slug",
+      "matched_by": "discord"
     }
   },
   {
@@ -34046,7 +34207,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -34372,10 +34534,17 @@
       "approval": "required for every write action; delete_* actions are irreversible in Dolibarr"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-dolibarr",
+      "path": "icons/simple-icons/dolibarr.svg",
+      "title": "Dolibarr",
+      "simple_icon_slug": "dolibarr",
+      "simple_icon_hex": "263C5C",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Dolibarr",
+      "match": "exact-name-or-slug",
+      "matched_by": "dolibarr"
     }
   },
   {
@@ -35009,7 +35178,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -35201,10 +35371,17 @@
       "write": "external mutation of signature requests (update/cancel/remind/release_hold/remove), templates (delete/add_user/remove_user), teams (create/update/add_member/remove_member), and account settings; several actions are destructive/not reversible (cancel_signature_request, remove_signature_request, delete_template, remove_team_member) and require approval"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-dropbox",
+      "path": "icons/simple-icons/dropbox.svg",
+      "title": "Dropbox",
+      "simple_icon_slug": "dropbox",
+      "simple_icon_hex": "0061FF",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Dropbox",
+      "match": "curated-alias",
+      "matched_by": "dropbox"
     }
   },
   {
@@ -35416,7 +35593,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -35813,7 +35991,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -36407,7 +36586,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -36529,7 +36709,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -36630,10 +36811,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-ebay-finance",
+      "path": "icons/simple-icons/ebay-finance.svg",
+      "title": "eBay",
+      "simple_icon_slug": "ebay",
+      "simple_icon_hex": "E53238",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=eBay",
+      "match": "curated-alias",
+      "matched_by": "ebay"
     }
   },
   {
@@ -36764,10 +36952,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-ebay-fulfillment",
+      "path": "icons/simple-icons/ebay-fulfillment.svg",
+      "title": "eBay",
+      "simple_icon_slug": "ebay",
+      "simple_icon_hex": "E53238",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=eBay",
+      "match": "curated-alias",
+      "matched_by": "ebay"
     }
   },
   {
@@ -37174,7 +37369,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -37274,9 +37470,9 @@
     "icon": {
       "id": "elasticsearch",
       "path": "icons/elasticsearch.svg",
-      "source": "upstream_registry",
-      "review_status": "upstream_seeded",
-      "review_url": "https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html"
+      "source": "official",
+      "review_status": "official_verified",
+      "review_url": "https://www.elastic.co/docs/reference/elasticsearch"
     }
   },
   {
@@ -38440,7 +38636,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -38543,7 +38740,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -38668,7 +38866,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -39028,7 +39227,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -39819,7 +40019,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -40170,7 +40371,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -40211,10 +40413,17 @@
       "approval": "none required; no external data is read or written"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-faker",
+      "path": "icons/simple-icons/faker.svg",
+      "title": "Faker",
+      "simple_icon_slug": "faker",
+      "simple_icon_hex": "779B2E",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Faker",
+      "match": "exact-name-or-slug",
+      "matched_by": "faker"
     }
   },
   {
@@ -40437,10 +40646,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-fastly",
+      "path": "icons/simple-icons/fastly.svg",
+      "title": "Fastly",
+      "simple_icon_slug": "fastly",
+      "simple_icon_hex": "FF282D",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Fastly",
+      "match": "exact-name-or-slug",
+      "matched_by": "fastly"
     }
   },
   {
@@ -40677,10 +40893,17 @@
       "approval": "required for write actions; none for read"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-fillout",
+      "path": "icons/simple-icons/fillout.svg",
+      "title": "Fillout",
+      "simple_icon_slug": "fillout",
+      "simple_icon_hex": "FFC738",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Fillout",
+      "match": "exact-name-or-slug",
+      "matched_by": "fillout"
     }
   },
   {
@@ -40835,7 +41058,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -41086,7 +41310,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -41197,7 +41422,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -41313,7 +41539,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -44857,7 +45084,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -44975,7 +45203,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -45092,7 +45321,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -45598,7 +45828,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -45716,7 +45947,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -46037,10 +46269,17 @@
       "approval": "reverse ETL writes require plan preview and approval token"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-formbricks",
+      "path": "icons/simple-icons/formbricks.svg",
+      "title": "Formbricks",
+      "simple_icon_slug": "formbricks",
+      "simple_icon_hex": "00C4B8",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Formbricks",
+      "match": "exact-name-or-slug",
+      "matched_by": "formbricks"
     }
   },
   {
@@ -46177,7 +46416,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -46266,7 +46506,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -46392,7 +46633,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -47012,7 +47254,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -51849,7 +52092,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -51970,7 +52214,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -53224,7 +53469,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -53466,10 +53712,17 @@
       "approval": "none; read-only public media source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-giphy",
+      "path": "icons/simple-icons/giphy.svg",
+      "title": "GIPHY",
+      "simple_icon_slug": "giphy",
+      "simple_icon_hex": "FF6666",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=GIPHY",
+      "match": "exact-name-or-slug",
+      "matched_by": "giphy"
     }
   },
   {
@@ -56992,10 +57245,17 @@
       "approval": "reverse ETL writes require plan preview and approval token before execution"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-gitbook",
+      "path": "icons/simple-icons/gitbook.svg",
+      "title": "GitBook",
+      "simple_icon_slug": "gitbook",
+      "simple_icon_hex": "BBDDE5",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=GitBook",
+      "match": "exact-name-or-slug",
+      "matched_by": "gitbook"
     }
   },
   {
@@ -59841,10 +60101,17 @@
       "approval": "reverse ETL plan approval required before writes; several actions (send_message, send_draft, delete_message, delete_thread, delete_draft, create_delegate, update_auto_forwarding) warrant elevated operator scrutiny -- see docs.md Write actions \u0026 risks"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-gmail",
+      "path": "icons/simple-icons/gmail.svg",
+      "title": "Gmail",
+      "simple_icon_slug": "gmail",
+      "simple_icon_hex": "EA4335",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Gmail",
+      "match": "exact-name-or-slug",
+      "matched_by": "gmail"
     }
   },
   {
@@ -61620,7 +61887,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -62444,10 +62712,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googlecalendar",
+      "path": "icons/simple-icons/googlecalendar.svg",
+      "title": "Google Calendar",
+      "simple_icon_slug": "googlecalendar",
+      "simple_icon_hex": "4285F4",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Calendar",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-calendar"
     }
   },
   {
@@ -62571,10 +62846,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googleclassroom",
+      "path": "icons/simple-icons/googleclassroom.svg",
+      "title": "Google Classroom",
+      "simple_icon_slug": "googleclassroom",
+      "simple_icon_hex": "0F9D58",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Classroom",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-classroom"
     }
   },
   {
@@ -62803,10 +63085,17 @@
       "approval": "none; read-only source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googleforms",
+      "path": "icons/simple-icons/googleforms.svg",
+      "title": "Google Forms",
+      "simple_icon_slug": "googleforms",
+      "simple_icon_hex": "7248B9",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Forms",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-forms"
     }
   },
   {
@@ -63213,10 +63502,17 @@
       "read": "external Google Tasks API read of the authenticated user's task lists and tasks"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googletasks",
+      "path": "icons/simple-icons/googletasks.svg",
+      "title": "Google Tasks",
+      "simple_icon_slug": "googletasks",
+      "simple_icon_hex": "2684FC",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Tasks",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-tasks"
     }
   },
   {
@@ -63457,7 +63753,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -64938,7 +65235,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -65557,7 +65855,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -65787,10 +66086,17 @@
       "approval": "none; read-only, no obviously-safe reverse-ETL writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-helpscout",
+      "path": "icons/simple-icons/helpscout.svg",
+      "title": "Help Scout",
+      "simple_icon_slug": "helpscout",
+      "simple_icon_hex": "1292EE",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Help%20Scout",
+      "match": "exact-name-or-slug",
+      "matched_by": "help-scout"
     }
   },
   {
@@ -65993,7 +66299,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -66369,10 +66676,17 @@
       "approval": "none; read-only, no obviously-safe reverse-ETL writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-huggingface",
+      "path": "icons/simple-icons/huggingface.svg",
+      "title": "Hugging Face",
+      "simple_icon_slug": "huggingface",
+      "simple_icon_hex": "FFD21E",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Hugging%20Face",
+      "match": "curated-alias",
+      "matched_by": "huggingface"
     }
   },
   {
@@ -66489,7 +66803,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -66597,7 +66912,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -67220,7 +67536,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -67314,7 +67631,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -67430,7 +67748,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -67548,7 +67867,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -67653,7 +67973,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -68976,7 +69297,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -70178,7 +70500,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -70292,10 +70615,17 @@
       "approval": "none; read-only, no reverse-ETL writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-invoiceninja",
+      "path": "icons/simple-icons/invoiceninja.svg",
+      "title": "Invoice Ninja",
+      "simple_icon_slug": "invoiceninja",
+      "simple_icon_hex": "000000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Invoice%20Ninja",
+      "match": "exact-name-or-slug",
+      "matched_by": "invoiceninja"
     }
   },
   {
@@ -70611,7 +70941,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -70807,7 +71138,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -70913,7 +71245,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -71385,7 +71718,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -71458,7 +71792,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -71558,7 +71893,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -71766,10 +72102,17 @@
       "read": "external Katana MRP API read of inventory, sales, and customer data"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-katana",
+      "path": "icons/simple-icons/katana.svg",
+      "title": "Katana",
+      "simple_icon_slug": "katana",
+      "simple_icon_hex": "000000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Katana",
+      "match": "exact-name-or-slug",
+      "matched_by": "katana"
     }
   },
   {
@@ -72749,7 +73092,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -72866,7 +73210,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -73535,7 +73880,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -73756,7 +74102,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -74251,7 +74598,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -74361,7 +74709,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -74484,10 +74833,17 @@
       "approval": "none; read-only source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-linear",
+      "path": "icons/simple-icons/linear.svg",
+      "title": "Linear",
+      "simple_icon_slug": "linear",
+      "simple_icon_hex": "5E6AD2",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Linear",
+      "match": "exact-name-or-slug",
+      "matched_by": "linear"
     }
   },
   {
@@ -74823,7 +75179,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -74954,7 +75311,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -75835,7 +76193,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -76791,7 +77150,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -76883,10 +77243,17 @@
       "read": "external Mailtrap API read of account-management data"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-mailtrap",
+      "path": "icons/simple-icons/mailtrap.svg",
+      "title": "Mailtrap",
+      "simple_icon_slug": "mailtrap",
+      "simple_icon_hex": "22D172",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Mailtrap",
+      "match": "exact-name-or-slug",
+      "matched_by": "mailtrap"
     }
   },
   {
@@ -79449,7 +79816,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -79671,7 +80039,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -79799,10 +80168,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-mendeley",
+      "path": "icons/simple-icons/mendeley.svg",
+      "title": "Mendeley",
+      "simple_icon_slug": "mendeley",
+      "simple_icon_hex": "9D1620",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Mendeley",
+      "match": "exact-name-or-slug",
+      "matched_by": "mendeley"
     }
   },
   {
@@ -79953,7 +80329,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -80107,7 +80484,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -80502,7 +80880,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -80784,7 +81163,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -80925,7 +81305,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -82802,10 +83183,17 @@
       "approval": "required for every write action; destructive deletes require destructive confirmation"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-miro",
+      "path": "icons/simple-icons/miro.svg",
+      "title": "Miro",
+      "simple_icon_slug": "miro",
+      "simple_icon_hex": "050038",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Miro",
+      "match": "exact-name-or-slug",
+      "matched_by": "miro"
     }
   },
   {
@@ -82912,7 +83300,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -83020,7 +83409,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -83369,7 +83759,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -83599,7 +83990,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -84584,7 +84976,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -85060,7 +85453,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -85567,7 +85961,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -85690,7 +86085,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -85896,7 +86292,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -86585,7 +86982,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -86677,7 +87075,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -87906,7 +88305,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -88022,7 +88422,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -94493,7 +94894,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -94618,7 +95020,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -96194,7 +96597,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -96373,7 +96777,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -96465,7 +96870,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -96917,7 +97323,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -97126,7 +97533,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -97325,7 +97733,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -98069,7 +98478,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -98192,7 +98602,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -100786,7 +101197,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -101052,7 +101464,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -102164,7 +102577,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -102244,7 +102658,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -102334,7 +102749,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -103968,7 +104384,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -104451,7 +104868,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -105539,7 +105957,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -105690,7 +106109,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -105821,7 +106241,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -106284,7 +106705,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -106710,7 +107132,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -107614,10 +108037,17 @@
       "approval": "required for update_check/update_contact/update_team/delete_check/delete_contact/delete_team/delete_maintenance; create_check/create_contact/create_team/create_maintenance require no approval (low-risk, non-destructive)"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-pingdom",
+      "path": "icons/simple-icons/pingdom.svg",
+      "title": "Pingdom",
+      "simple_icon_slug": "pingdom",
+      "simple_icon_hex": "FFF000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Pingdom",
+      "match": "exact-name-or-slug",
+      "matched_by": "pingdom"
     }
   },
   {
@@ -108284,7 +108714,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -109464,10 +109895,17 @@
       "approval": "none; read-only analytics sync"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-matomo",
+      "path": "icons/simple-icons/matomo.svg",
+      "title": "Matomo",
+      "simple_icon_slug": "matomo",
+      "simple_icon_hex": "3152A0",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Matomo",
+      "match": "curated-alias",
+      "matched_by": "matomo"
     }
   },
   {
@@ -109661,7 +110099,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -111402,7 +111841,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -111493,7 +111933,7 @@
       "path": "icons/postgresql.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
-      "review_url": "https://www.postgresql.org/docs/"
+      "review_url": "https://www.postgresql.org/docs/current/"
     }
   },
   {
@@ -112359,7 +112799,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -113030,7 +113471,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -114496,7 +114938,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -115837,10 +116280,17 @@
       "approval": "none; read-only, caller-supplied OAuth token"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-reddit",
+      "path": "icons/simple-icons/reddit.svg",
+      "title": "Reddit",
+      "simple_icon_slug": "reddit",
+      "simple_icon_hex": "FF4500",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Reddit",
+      "match": "exact-name-or-slug",
+      "matched_by": "reddit"
     }
   },
   {
@@ -116271,7 +116721,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -116413,7 +116864,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -116532,7 +116984,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -119110,7 +119563,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -120474,7 +120928,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -121112,7 +121567,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -121765,10 +122221,17 @@
       "write": "external Rollbar API mutations for items, projects, teams, assignments, invitations, notification settings/rules, service links, occurrences, and session replay deletes; approval required before execution"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-rollbar",
+      "path": "icons/simple-icons/rollbar.svg",
+      "title": "Rollbar",
+      "simple_icon_slug": "rollbar",
+      "simple_icon_hex": "3569F3",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Rollbar",
+      "match": "exact-name-or-slug",
+      "matched_by": "rollbar"
     }
   },
   {
@@ -121856,7 +122319,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -122011,7 +122475,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -122095,7 +122560,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -122370,7 +122836,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -122733,7 +123200,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -122832,9 +123300,9 @@
     "icon": {
       "id": "salesforce",
       "path": "icons/salesforce.svg",
-      "source": "upstream_registry",
-      "review_status": "upstream_seeded",
-      "review_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/rest_rns.htm"
+      "source": "official",
+      "review_status": "official_verified",
+      "review_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm"
     }
   },
   {
@@ -123334,7 +123802,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -123401,7 +123870,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -123651,7 +124121,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -124066,7 +124537,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -124680,7 +125152,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -125066,7 +125539,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -125161,7 +125635,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -127310,7 +127785,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -128372,7 +128848,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -128471,7 +128948,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -128560,7 +129038,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -128777,7 +129256,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -128849,7 +129329,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -129013,7 +129494,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -129699,7 +130181,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -131259,7 +131742,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -131868,7 +132352,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -132721,10 +133206,17 @@
       "approval": "required for all write actions; create_transmission sends real, externally-visible email"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-sparkpost",
+      "path": "icons/simple-icons/sparkpost.svg",
+      "title": "SparkPost",
+      "simple_icon_slug": "sparkpost",
+      "simple_icon_hex": "FA6423",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=SparkPost",
+      "match": "exact-name-or-slug",
+      "matched_by": "sparkpost"
     }
   },
   {
@@ -132904,7 +133396,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -133049,7 +133542,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -133180,7 +133674,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -133450,10 +133945,17 @@
       "approval": "reverse ETL plan approval required before destructive writes (delete_webhook_subscription); create_webhook_subscription is low-risk"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-squarespace",
+      "path": "icons/simple-icons/squarespace.svg",
+      "title": "Squarespace",
+      "simple_icon_slug": "squarespace",
+      "simple_icon_hex": "000000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Squarespace",
+      "match": "exact-name-or-slug",
+      "matched_by": "squarespace"
     }
   },
   {
@@ -133776,7 +134278,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -134034,7 +134537,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -137078,7 +137582,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -137295,7 +137800,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -137380,7 +137886,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -137548,7 +138055,7 @@
       "approval": "reverse ETL plan approval required before writes"
     },
     "icon": {
-      "id": "pm-tally",
+      "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
       "review_status": "polymetrics",
@@ -137626,7 +138133,7 @@
       "approval": "none required for read-only sync"
     },
     "icon": {
-      "id": "pm-tally-prime",
+      "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
       "review_status": "polymetrics",
@@ -137899,7 +138406,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -138137,7 +138645,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -138348,7 +138857,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -138724,10 +139234,17 @@
       "approval": "reverse ETL plan approval required before writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-testrail",
+      "path": "icons/simple-icons/testrail.svg",
+      "title": "TestRail",
+      "simple_icon_slug": "testrail",
+      "simple_icon_hex": "65C179",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=TestRail",
+      "match": "exact-name-or-slug",
+      "matched_by": "testrail"
     }
   },
   {
@@ -140327,7 +140844,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -140845,10 +141363,17 @@
       "approval": "required for delete_event_series (confirm: destructive); other writes are low-risk additive/idempotent mutations, no approval required"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-tickettailor",
+      "path": "icons/simple-icons/tickettailor.svg",
+      "title": "Ticket Tailor",
+      "simple_icon_slug": "tickettailor",
+      "simple_icon_hex": "222432",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Ticket%20Tailor",
+      "match": "exact-name-or-slug",
+      "matched_by": "tickettailor"
     }
   },
   {
@@ -140951,10 +141476,17 @@
       "approval": "reverse ETL plan approval required before writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-ticktick",
+      "path": "icons/simple-icons/ticktick.svg",
+      "title": "TickTick",
+      "simple_icon_slug": "ticktick",
+      "simple_icon_hex": "4772FA",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=TickTick",
+      "match": "exact-name-or-slug",
+      "matched_by": "ticktick"
     }
   },
   {
@@ -141285,7 +141817,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -143584,7 +144117,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -143882,7 +144416,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -144164,7 +144699,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -146746,7 +147282,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -147061,7 +147598,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -147271,7 +147809,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -147581,10 +148120,17 @@
       "approval": "none required; delete_suggestion is UserVoice's own soft-delete/moderation action (reversible via restore_suggestion, not modeled), not an irreversible destructive delete"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-uservoice",
+      "path": "icons/simple-icons/uservoice.svg",
+      "title": "UserVoice",
+      "simple_icon_slug": "uservoice",
+      "simple_icon_hex": "FF6720",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=UserVoice",
+      "match": "exact-name-or-slug",
+      "matched_by": "uservoice"
     }
   },
   {
@@ -148979,10 +149525,17 @@
       "approval": "read: none; write: required for every action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-vercel",
+      "path": "icons/simple-icons/vercel.svg",
+      "title": "Vercel",
+      "simple_icon_slug": "vercel",
+      "simple_icon_hex": "000000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Vercel",
+      "match": "exact-name-or-slug",
+      "matched_by": "vercel"
     }
   },
   {
@@ -149597,7 +150150,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -149733,7 +150287,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -149987,7 +150542,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -150219,7 +150775,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -151257,10 +151814,17 @@
       "approval": "read: none; write: required for every create/update/delete action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-wheniwork",
+      "path": "icons/simple-icons/wheniwork.svg",
+      "title": "When I Work",
+      "simple_icon_slug": "wheniwork",
+      "simple_icon_hex": "51A33D",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=When%20I%20Work",
+      "match": "exact-name-or-slug",
+      "matched_by": "when-i-work"
     }
   },
   {
@@ -151943,10 +152507,17 @@
       "approval": "read: none; write: required for every create/update/delete action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-wordpress",
+      "path": "icons/simple-icons/wordpress.svg",
+      "title": "WordPress",
+      "simple_icon_slug": "wordpress",
+      "simple_icon_hex": "21759B",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=WordPress",
+      "match": "exact-name-or-slug",
+      "matched_by": "wordpress"
     }
   },
   {
@@ -152956,7 +153527,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -153100,7 +153672,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -153544,7 +154117,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -155698,7 +156272,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -156320,7 +156895,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -156702,7 +157278,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -157007,7 +157584,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -157255,7 +157833,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -158472,7 +159051,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -158674,10 +159254,17 @@
       "approval": "required for write actions (sync_datasource/refetch_view_data); read access uses the same OAuth refresh-token grant with no separate approval"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-analytics-metadata-api",
+      "path": "icons/simple-icons/zoho-analytics-metadata-api.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -158942,7 +159529,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -159026,10 +159614,17 @@
       "read": "external Zoho Billing API read of customer and billing data"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-billing",
+      "path": "icons/simple-icons/zoho-billing.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -165563,10 +166158,17 @@
       "approval": "writes require explicit user approval before execution; destructive deletes are marked destructive"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-books",
+      "path": "icons/simple-icons/zoho-books.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -165661,10 +166263,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-campaign",
+      "path": "icons/simple-icons/zoho-campaign.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -165763,10 +166372,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-desk",
+      "path": "icons/simple-icons/zoho-desk.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -166817,10 +167433,17 @@
       "approval": "writes require explicit operator approval through the reverse ETL approval flow"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-expense",
+      "path": "icons/simple-icons/zoho-expense.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -166919,10 +167542,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-inventory",
+      "path": "icons/simple-icons/zoho-inventory.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -167021,10 +167651,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-invoice",
+      "path": "icons/simple-icons/zoho-invoice.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -167402,7 +168039,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {

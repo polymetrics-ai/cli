@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: less-annoying-crm
   asset: icons/less-annoying-crm.svg
   source: official
   review_status: official_verified

@@ -11,6 +11,7 @@ Reads Snapchat Marketing (Ads API) organizations, ad accounts, campaigns, ad squ
 
 ## Icon
 
+- id: snapchat
 - asset: icons/snapchat.svg
 - source: upstream_registry
 - review_status: upstream_seeded

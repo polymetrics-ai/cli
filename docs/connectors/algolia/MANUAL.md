@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Algolia indices, API keys, index settings, dictionaries, security sources, and logs, and writes index settings/API keys, through the Algolia Search REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-algolia
+  asset: icons/simple-icons/algolia.svg
+  title: Algolia
+  simple_icon_slug: algolia
+  simple_icon_hex: 003DFF
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Algolia
+  match: exact-name-or-slug
+  matched_by: algolia
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

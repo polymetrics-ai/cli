@@ -11,6 +11,7 @@ Reads Genesys Cloud users, queues, groups, and divisions through the Genesys Clo
 
 ## Icon
 
+- id: genesys
 - asset: icons/genesys.svg
 - source: upstream_registry
 - review_status: upstream_seeded

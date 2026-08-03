@@ -11,6 +11,7 @@ Reads Facebook Marketing ad accounts, campaigns, ads, ad sets, ad creatives, cus
 
 ## Icon
 
+- id: facebook
 - asset: icons/facebook.svg
 - source: upstream_registry
 - review_status: upstream_seeded

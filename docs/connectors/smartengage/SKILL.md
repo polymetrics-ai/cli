@@ -11,6 +11,7 @@ Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers; crea
 
 ## Icon
 
+- id: smartengage
 - asset: icons/smartengage.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Basecamp 3 projects, people, and account activity events through the Basecamp REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-basecamp
+  asset: icons/simple-icons/basecamp.svg
+  title: Basecamp
+  simple_icon_slug: basecamp
+  simple_icon_hex: 1D2D35
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Basecamp
+  match: exact-name-or-slug
+  matched_by: basecamp
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false

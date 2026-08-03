@@ -11,6 +11,7 @@ Reads BreezoMeter (Google Environment) air quality, pollen, weather, and wildfir
 
 ## Icon
 
+- id: breezometer
 - asset: icons/breezometer.svg
 - source: upstream_registry
 - review_status: upstream_seeded

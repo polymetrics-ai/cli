@@ -11,6 +11,7 @@ Reads Coda docs and doc-scoped tables, rows, columns, pages, formulas, and contr
 
 ## Icon
 
+- id: coda
 - asset: icons/coda.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Delighted survey responses, people, bounces, unsubscribes, and aggregate metrics through the Delighted REST API; can create/update and delete people.
 
 ICON
+  id: delighted
   asset: icons/delighted.svg
   source: upstream_registry
   review_status: upstream_seeded

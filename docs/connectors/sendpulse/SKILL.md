@@ -11,6 +11,7 @@ Reads SendPulse address books, campaigns, senders, per-book emails, and the acco
 
 ## Icon
 
+- id: sendpulse
 - asset: icons/sendpulse.svg
 - source: official
 - review_status: official_verified

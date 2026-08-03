@@ -13,6 +13,7 @@ DESCRIPTION
   Reads orders, products, customers, warehouses, suppliers, purchase orders, sales channels, delivery methods, and tags from the Veeqo API, and writes orders, products, customers, suppliers, warehouses, delivery methods, tags, sales channels, product properties, payments, and shipments.
 
 ICON
+  id: veeqo
   asset: icons/veeqo.svg
   source: official
   review_status: official_verified

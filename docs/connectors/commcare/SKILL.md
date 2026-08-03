@@ -11,6 +11,7 @@ Reads CommCare HQ project, application, form, case, user, group, report, locatio
 
 ## Icon
 
+- id: commcare
 - asset: icons/commcare.svg
 - source: upstream_registry
 - review_status: upstream_seeded

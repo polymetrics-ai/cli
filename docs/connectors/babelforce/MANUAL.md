@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Babelforce call reporting, recordings, numbers, and users through the Babelforce v2 REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
+  id: babelforce
   asset: icons/babelforce.svg
   source: upstream_registry
   review_status: upstream_seeded

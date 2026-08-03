@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Pingdom checks, probes, actions, maintenance windows/occurrences, alerting contacts/teams, credits, transaction checks, and reference data, and writes check/contact/team/maintenance mutations through API 3.1.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-pingdom
+  asset: icons/simple-icons/pingdom.svg
+  title: Pingdom
+  simple_icon_slug: pingdom
+  simple_icon_hex: FFF000
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Pingdom
+  match: exact-name-or-slug
+  matched_by: pingdom
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false

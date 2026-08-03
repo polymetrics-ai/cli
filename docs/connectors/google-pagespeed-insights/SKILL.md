@@ -11,6 +11,7 @@ Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-pr
 
 ## Icon
 
+- id: google-pagespeed-insights
 - asset: icons/google-pagespeed-insights.svg
 - source: upstream_registry
 - review_status: upstream_seeded

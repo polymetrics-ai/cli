@@ -13,6 +13,7 @@ DESCRIPTION
   Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers; creates/updates subscribers, tags, custom fields, and sequence enrollments.
 
 ICON
+  id: smartengage
   asset: icons/smartengage.svg
   source: upstream_registry
   review_status: upstream_seeded

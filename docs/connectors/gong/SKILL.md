@@ -11,6 +11,7 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
 
 ## Icon
 
+- id: gong
 - asset: icons/gong.svg
 - source: upstream_registry
 - review_status: upstream_seeded

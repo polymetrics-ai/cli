@@ -11,6 +11,7 @@ Reads Auth0 users, clients, connections, roles, organizations, role assignments,
 
 ## Icon
 
+- id: auth0
 - asset: icons/auth0.svg
 - source: official
 - review_status: official_verified

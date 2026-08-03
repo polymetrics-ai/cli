@@ -11,6 +11,7 @@ Reads DataScope locations, form answers, lists, notifications, task assignments,
 
 ## Icon
 
+- id: datascope
 - asset: icons/datascope.svg
 - source: upstream_registry
 - review_status: upstream_seeded

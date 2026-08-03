@@ -11,6 +11,7 @@ Reads and writes Dremio catalog entries, reflections, sources, users, and roles 
 
 ## Icon
 
+- id: dremio
 - asset: icons/dremio.svg
 - source: upstream_registry
 - review_status: upstream_seeded

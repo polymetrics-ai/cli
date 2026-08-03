@@ -13,6 +13,7 @@ DESCRIPTION
   Reads and writes time entries, projects, clients, tags, tasks, and users through the Toggl Track API.
 
 ICON
+  id: toggl
   asset: icons/toggl.svg
   source: upstream_registry
   review_status: upstream_seeded
