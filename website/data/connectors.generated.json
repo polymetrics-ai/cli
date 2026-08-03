@@ -14673,7 +14673,7 @@
         "primary_key": [
           "id"
         ],
-        "cursor": "",
+        "cursor": "candidate",
         "incremental": false
       },
       {
@@ -14721,7 +14721,7 @@
         "primary_key": [
           "id"
         ],
-        "cursor": "",
+        "cursor": "candidateId",
         "incremental": false
       },
       {
@@ -20237,11 +20237,10 @@
             },
             {
               "name": "assessment-result-value",
-              "type": "string",
+              "type": "boolean",
               "summary": "The assessment data value, whose type depends on the type field",
               "values": [],
-              "maps_to": "record.assessment.result.value",
-              "allow_empty": false
+              "maps_to": "record.assessment.result.value"
             },
             {
               "name": "assessment-metadata-0-identifier",
@@ -20277,11 +20276,10 @@
             },
             {
               "name": "assessment-metadata-0-value",
-              "type": "string",
+              "type": "boolean",
               "summary": "The assessment data value, whose type depends on the type field",
               "values": [],
-              "maps_to": "record.assessment.metadata.0.value",
-              "allow_empty": false
+              "maps_to": "record.assessment.metadata.0.value"
             },
             {
               "name": "timestamp",
