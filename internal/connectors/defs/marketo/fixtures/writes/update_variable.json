@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": 123,
+    "name": "name-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/email/123/variable/name-fixture.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

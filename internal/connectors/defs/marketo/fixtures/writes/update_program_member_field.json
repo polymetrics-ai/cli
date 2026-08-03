@@ -1,0 +1,32 @@
+{
+  "record": {
+    "field_api_name": "field_api_name-fixture",
+    "input": [
+      {
+        "description": "description-fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/programs/members/schema/fields/field_api_name-fixture.json",
+    "body": {
+      "input": [
+        {
+          "description": "description-fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

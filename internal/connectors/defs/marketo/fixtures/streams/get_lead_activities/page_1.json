@@ -4,7 +4,8 @@
     "path": "/rest/v1/activities.json",
     "query": {
       "batchSize": "300",
-      "activityTypeIds": "synthetic-conformance-value"
+      "activityTypeIds": "synthetic-conformance-value",
+      "nextPageToken": "synthetic-conformance-value"
     }
   },
   "response": {

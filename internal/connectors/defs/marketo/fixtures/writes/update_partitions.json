@@ -1,0 +1,33 @@
+{
+  "record": {
+    "input": [
+      {
+        "id": 123,
+        "partitionName": "partitionname-fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/leads/partitions.json",
+    "body": {
+      "input": [
+        {
+          "id": 123,
+          "partitionName": "partitionname-fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

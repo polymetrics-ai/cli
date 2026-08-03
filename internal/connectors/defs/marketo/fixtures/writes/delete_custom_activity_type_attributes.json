@@ -1,0 +1,34 @@
+{
+  "record": {
+    "api_name": "api_name-fixture",
+    "attributes": [
+      {
+        "apiName": "apiname-fixture",
+        "name": "name-fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/activities/external/type/api_name-fixture/attributes/delete.json",
+    "body": {
+      "attributes": [
+        {
+          "apiName": "apiname-fixture",
+          "name": "name-fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

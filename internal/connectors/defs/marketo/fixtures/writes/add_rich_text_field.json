@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": 123,
+    "text": "dynamic.go"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/form/123/richText.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

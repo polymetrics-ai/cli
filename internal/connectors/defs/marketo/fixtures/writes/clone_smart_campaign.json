@@ -1,0 +1,25 @@
+{
+  "record": {
+    "id": 123,
+    "folder": {
+      "id": 123,
+      "type": "Folder"
+    },
+    "name": "name-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/smartCampaign/123/clone.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

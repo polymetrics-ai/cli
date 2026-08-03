@@ -1,0 +1,32 @@
+{
+  "record": {
+    "list_id": 123,
+    "input": [
+      {
+        "id": 123
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/lists/123/leads.json",
+    "body": {
+      "input": [
+        {
+          "id": 123
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

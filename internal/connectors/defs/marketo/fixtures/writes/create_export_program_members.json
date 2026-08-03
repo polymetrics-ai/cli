@@ -1,0 +1,39 @@
+{
+  "record": {
+    "fields": [
+      "field-fixture"
+    ],
+    "filter": {
+      "programId": 123,
+      "programIds": [
+        123
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bulk/v1/program/members/export/create.json",
+    "body": {
+      "fields": [
+        "field-fixture"
+      ],
+      "filter": {
+        "programId": 123,
+        "programIds": [
+          123
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

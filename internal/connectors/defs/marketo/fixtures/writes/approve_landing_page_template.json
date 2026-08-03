@@ -1,0 +1,20 @@
+{
+  "record": {
+    "id": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/landingPageTemplate/123/approveDraft.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}
