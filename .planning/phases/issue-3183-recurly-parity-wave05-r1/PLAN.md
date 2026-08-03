@@ -37,6 +37,38 @@ Parent #3183 with subissues #3184-#3190. Connector-local implementation under `i
 6. Run required gates: focused connectorgen validation for Recurly, focused conformance, focused CLI tests, `go build ./cmd/pm`, `make connector-boundary`, `make verify`, and `git diff --check`.
 7. Commit the clean result on `fm/cli-recurly-parity-wave05-r1`; do not push or invoke `/no-mistakes`.
 
+## Resume session — close the CLI command-surface gap
+
+The previous wave committed a complete operation ledger (197 ops) but left only 8
+`direct_read` commands in `cli_surface.json`: the 93 ETL streams and 96 typed
+reverse-ETL writes had no individual `pm recurly <command>` entries, so the
+connector failed the complete-parity bar (an ETL-only connector). This session:
+
+1. Wrote `scripts/gen-recurly-cli-surface.py` (deterministic generator reading
+   streams/writes/operations/api_surface) and `scripts/regen-recurly-surface.sh`
+   to produce the full 197-command surface: 93 implemented ETL stream commands,
+   96 implemented reverse-ETL write commands (required record fields mapped to
+   typed leaf flags), plus the preserved 5 implemented direct-reads and 3 planned
+   bounded binary operations. All 96 writes are executable (implemented); none
+   required a partial/blocked disposition because every required mapping-path
+   leaf is scalar/array-mappable.
+2. Verified each command resolves against streams.json/writes.json/operations.json:
+   `go run ./cmd/connectorgen validate` → 549 connectors, 0 findings (no
+   `cli_surface_unknown_target`).
+3. Regenerated Recurly MANUAL/SKILL, the connectors catalog (Recurly now shows
+   93 streams / 96 writes with `read, write` capability), and the website
+   connector data — scoped so only Recurly-owned files changed.
+4. Added `cmd/connectorgen/recurly_full_surface_test.go` locking the invariant:
+   every stream/write has a command, coverage counts (stream=93, write=96,
+   direct_read=5, operation=3), and 194 implemented / 3 planned.
+
+### Command-surface verification
+- [x] Full surface: 197 commands; intents etl=93, reverse_etl=96, direct_read=8.
+- [x] availability implemented=194, planned=3 (bounded binary metadata).
+- [x] connectorgen validate 0 findings; conformance recurly PASS.
+- [x] internal/cli suite, commandrunner, engine, defs, bundleregistry, conformance, connectorgen all PASS.
+- [x] `pm docs validate` PASS; MANUAL/SKILL/catalog/website regenerated; scope limited to Recurly-owned files.
+
 ## Safety gates
 
 - Secrets: all fixtures use synthetic placeholders; no credential prompts or values.
