@@ -121,3 +121,11 @@ Implementation steps:
 - `scripts/gsd doctor` passed; the required `scripts/gsd prompt programming-loop init --phase issue-3134-amazon-sqs-parity-wave04-r1 --dry-run` remains unavailable as `unknown GSD command: programming-loop`, so the manual GSD/TDD fallback continues here.
 - Required skills loaded: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-testing`, `golang-safety`, `golang-security`, `golang-error-handling`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-lint`.
 - Execution decision: `local_critical_path`; this assigned review fix is one validator plus its collocated regression case, and subagent delegation is not authorized for this turn.
+
+## 2026-08-03 CI verify staticcheck lint-fix slice
+
+- Reproduced the failing remote gate before production edits: PR #3541 `verify` failed with `S1003: should use strings.ContainsAny(exponentText, "eE") instead (staticcheck)` at `internal/connectors/native/amazon-sqs/message_attribute_values.go:17:28`, introduced by the 2026-08-02 message-attribute semantic validation commit (`6d996aad1`), which made `golangci-lint` exit 2 and failed the workflow.
+- Root cause is a single non-idiomatic membership check at the shared native SQS Number-attribute boundary; no behavior change is intended or made. The one-line fix stays inside `internal/connectors/native/amazon-sqs` and this phase trace.
+- `scripts/gsd doctor` passed; the required `scripts/gsd prompt programming-loop init --phase issue-3134-amazon-sqs-parity-wave04-r1 --dry-run` remains unavailable as `unknown GSD command: programming-loop`, so the manual GSD/TDD fallback continues here.
+- Required skills loaded: `gsd-programming-loop`, `no-mistakes`, `golang-how-to`, `golang-lint`, `golang-safety`, `golang-error-handling`, `golang-testing`, and `golang-code-style`.
+- Execution decision: `local_critical_path`; the fix is one idempotent lint correction with no new runtime behavior and no subagent delegation needed.

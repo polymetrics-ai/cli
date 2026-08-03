@@ -52,3 +52,12 @@ Forward corrective commit evidence:
 - [x] `go test ./internal/connectors/native/amazon-sqs -count=1`
 - Focused coverage rejects newline-only standard-base64 input that decodes to zero bytes before preview while preserving valid nonempty binary attributes.
 - No full repository, lint, push, PR, CI, live AWS, or credentialed connector phase was run.
+
+## 2026-08-03 CI verify staticcheck lint verification
+
+- [x] `golangci-lint run ./internal/connectors/native/...` returns `0 issues` after the `strings.ContainsAny` correction (pre-fix run reproduced `S1003` at `message_attribute_values.go:17:28`, matching the PR #3541 `verify` annotation).
+- [x] `go test ./internal/connectors/native/amazon-sqs -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs/amazon-sqs --json` reports no findings or warnings.
+- [x] `pm docs validate --connectors-dir docs/connectors` passes.
+- [x] Parity re-audit: all 23 official AWS SQS operations (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html) map to the `messages` stream, a typed direct read, a typed reverse-ETL write, or an explicit disposition; `api_surface.json` lists 23/23 endpoints with coverage mapping and `cli_surface.json` exposes 23/23 commands, all `[availability=implemented]` in `pm amazon-sqs --help`.
+- No live AWS, credentialed connector, push, PR, or CI phase was run in this worktree; the commit is pushed by the no-mistakes pipeline.
