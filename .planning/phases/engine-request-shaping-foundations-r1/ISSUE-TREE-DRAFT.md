@@ -1,6 +1,13 @@
 # Issue tree draft — engine request-shaping foundations
 
-**Status: DRAFTED, NOT CREATED.**
+**Status: CREATED.** Parent #3686; sub-issues #3690 (array cardinality, unblocks 25), #3691
+(start_index pagination, unblocks 2), #3692 (required_query, unblocks 1), #3693 (bounded base64
+upload, unblocks 1). All four are linked as sub-issues of #3686.
+
+The captain authorised a bounded exception after this file was first written: because no Alfred
+credential exists, the tree was created under `karthik-sivadas`. The exception covers **issue
+creation only** — approvals, merges and branch-protection changes remain the captain's, and
+firstmate still owns every merge. The original blocker analysis is kept below for the record.
 
 Issue and PR creation is supposed to use the Alfred account (`alfred-polymetrics-ai`). No Alfred
 credential exists in this environment — verified directly in this lane, not assumed:
@@ -52,10 +59,10 @@ afterwards.
 
 ### Sub-issues
 
-- [ ] Sub 1 — array cardinality (`minItems`/`maxItems`) in the engine schema dialect — unblocks 25
-- [ ] Sub 2 — `start_index` pagination strategy (SCIM RFC 7644 §3.4.2.4) — unblocks 2
-- [ ] Sub 3 — `required_query` any-of constraint on operations — unblocks 1
-- [ ] Sub 4 — bounded base64 upload write body — unblocks 1
+- [ ] #3690 — array cardinality (`minItems`/`maxItems`) in the engine schema dialect — unblocks 25
+- [ ] #3691 — `start_index` pagination strategy (SCIM RFC 7644 §3.4.2.4) — unblocks 2
+- [ ] #3692 — `required_query` any-of constraint on operations — unblocks 1
+- [ ] #3693 — bounded base64 upload write body — unblocks 1
 
 ### Standing constraints
 

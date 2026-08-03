@@ -20,20 +20,54 @@
     "cmd/**"
   ],
   "tasks": [
-    { "id": 1, "name": "array-cardinality-min-max-items", "unblocks_operations": 25, "connector": "airtable", "state": "planned" },
-    { "id": 2, "name": "start-index-pagination", "unblocks_operations": 2, "connector": "airtable", "state": "planned" },
-    { "id": 3, "name": "required-query-any-of", "unblocks_operations": 1, "connector": "airtable", "state": "planned" },
-    { "id": 4, "name": "bounded-base64-upload", "unblocks_operations": 1, "connector": "airtable", "state": "planned" }
+    {
+      "id": 1,
+      "name": "array-cardinality-min-max-items",
+      "unblocks_operations": 25,
+      "connector": "airtable",
+      "state": "planned",
+      "issue": 3690
+    },
+    {
+      "id": 2,
+      "name": "start-index-pagination",
+      "unblocks_operations": 2,
+      "connector": "airtable",
+      "state": "planned",
+      "issue": 3691
+    },
+    {
+      "id": 3,
+      "name": "required-query-any-of",
+      "unblocks_operations": 1,
+      "connector": "airtable",
+      "state": "planned",
+      "issue": 3692
+    },
+    {
+      "id": 4,
+      "name": "bounded-base64-upload",
+      "unblocks_operations": 1,
+      "connector": "airtable",
+      "state": "planned",
+      "issue": 3693
+    }
   ],
   "issue_tree": {
-    "state": "drafted_not_created",
-    "reason": "no alfred-polymetrics-ai credential in this environment; GitHub authorship is immutable so create-then-reattribute is impossible",
+    "state": "created",
+    "parent": 3686,
+    "identity": "karthik-sivadas",
+    "identity_exception": "captain authorised a bounded exception covering issue creation only; no alfred-polymetrics-ai credential exists and GitHub authorship cannot be reattributed",
     "draft_path": ".planning/phases/engine-request-shaping-foundations-r1/ISSUE-TREE-DRAFT.md"
   },
   "parallel_lane_overlap": {
     "lane": "cli-engine-bounded-binary-read-r1",
     "branch": "engine-shared-capabilities-r1",
-    "shared_files": ["internal/connectors/engine/bundle.go", "internal/connectors/engine/write.go", "internal/connectors/engine/schema/writes.schema.json"],
+    "shared_files": [
+      "internal/connectors/engine/bundle.go",
+      "internal/connectors/engine/write.go",
+      "internal/connectors/engine/schema/writes.schema.json"
+    ],
     "note": "disjoint concerns inside shared files; upload bounds/safety rules deliberately mirror that lane's download design"
   }
 }
