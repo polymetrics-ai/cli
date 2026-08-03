@@ -74,3 +74,7 @@ and comments.
 - Reddit enforces 100 queries per minute per OAuth client id; on HTTP 429 check the
   `X-Ratelimit-Used`, `X-Ratelimit-Remaining`, and `X-Ratelimit-Reset` response headers for the
   current budget and reset time.
+- Reddit's Data API terms require removing user content that has been deleted from Reddit and
+  recommend purging stored Reddit content within 48 hours. This connector does not implement
+  automatic deletion propagation or retention enforcement for rows it has already synced; honoring
+  that obligation for any persisted data is the operator's responsibility, not this connector's.
