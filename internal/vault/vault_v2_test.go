@@ -335,3 +335,50 @@ type badSizedProtector struct{}
 
 func (badSizedProtector) Name() string                           { return "bad" }
 func (badSizedProtector) LoadOrCreateKey(string) ([]byte, error) { return []byte("too-short"), nil }
+
+// TestListReturnsOneEntryPerNamespaceWithBothFiles pins List's contract that
+// a logical namespace appears exactly once regardless of how many of its two
+// backing files exist, and that RotateKey therefore stages each file once.
+// A duplicated entry made RotateKey stage two items over one tmp path, commit
+// the first rename, then fail the second with "no such file or directory" —
+// after the new key had already been persisted, leaving the caller told
+// rotation failed while it had in fact succeeded.
+func TestListReturnsOneEntryPerNamespaceWithBothFiles(t *testing.T) {
+	v := testVault(t)
+	ctx := t.Context()
+	ns := vault.Namespace{Connector: "whatsapp", Profile: "default", Kind: "session"}
+
+	if err := v.PutNamespaced(ctx, ns, map[string]string{"token": "secret-value"}); err != nil {
+		t.Fatalf("PutNamespaced: %v", err)
+	}
+	if err := v.PutBlob(ctx, ns, []byte("device-store-bytes")); err != nil {
+		t.Fatalf("PutBlob: %v", err)
+	}
+
+	got, err := v.List(ctx, "whatsapp")
+	if err != nil {
+		t.Fatalf("List: %v", err)
+	}
+	if len(got) != 1 || got[0] != ns {
+		t.Fatalf("List() = %+v, want exactly one entry %+v", got, ns)
+	}
+
+	if err := v.RotateKey(ctx); err != nil {
+		t.Fatalf("RotateKey with both a credential and a blob in one namespace: %v", err)
+	}
+
+	secret, err := v.GetNamespaced(ctx, ns)
+	if err != nil {
+		t.Fatalf("GetNamespaced after rotation: %v", err)
+	}
+	if secret["token"] != "secret-value" {
+		t.Fatalf("credential after rotation = %v, want token=secret-value", secret)
+	}
+	blob, err := v.GetBlob(ctx, ns)
+	if err != nil {
+		t.Fatalf("GetBlob after rotation: %v", err)
+	}
+	if string(blob) != "device-store-bytes" {
+		t.Fatalf("blob after rotation = %q, want device-store-bytes", blob)
+	}
+}

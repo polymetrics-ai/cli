@@ -79,6 +79,11 @@ type SessionCredential struct {
 	// FingerprintRef names the resolved browser build that captured this
 	// session (driver.Resolution.Version) — recorded because captured
 	// cookies are only coherent with the browser build that produced them.
+	// It is the browser's reported version string where the binary reports
+	// one, the pinned revision for a downloaded Chromium, and otherwise a
+	// content fingerprint of the binary. The guarantee it supports is
+	// therefore "did the browser build change since capture?", not a
+	// semantic version comparison.
 	FingerprintRef string
 	CapturedAt     time.Time
 	ExpiresHint    *time.Time

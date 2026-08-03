@@ -85,7 +85,7 @@ schedule:
 | Command | Subcommands | Primary docs |
 |---|---|---|
 | `pm init` | workspace creation | [/docs/quickstart](/docs/quickstart) |
-| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help` | [/docs/connectors](/docs/connectors) |
+| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors enable`, `pm connectors help` | [/docs/connectors](/docs/connectors) |
 | `pm credentials` | `pm credentials add`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
 | `pm connections` | `pm connections create`, `pm connections list` | this page |
 | `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
@@ -176,9 +176,15 @@ pm connectors port-plan --all --json
 pm connectors port-plan postgres --json
 pm connectors inspect 100ms --json
 pm connectors help 100ms
+pm connectors enable <name>
+pm connectors enable <name> --profile <p> --accept-risk <sha256>
 ```
 
 `pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
+
+Every connector declares `metadata.mechanism.kind`: `official_api` (an approved provider API, the default) or `web_session` (an unofficial, experimental captured browser session). `pm connectors list` prints an `[UNOFFICIAL]` marker beside a `web_session` connector, and `pm connectors inspect --json` includes the full mechanism block.
+
+`web_session` connectors ship present but disabled. `pm connectors enable <name>` prints the connector's plain-language risk warning and that warning's SHA-256 hash, then exits without changing anything. Re-run with `--accept-risk <hash>` using the hash it printed to actually enable it for a profile — a bare boolean accept flag is deliberately not offered, so the hash proves the current warning text was read.
 
 ## Extract, query, and write
 

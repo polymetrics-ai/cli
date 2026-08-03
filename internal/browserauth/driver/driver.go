@@ -26,9 +26,15 @@ package driver
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
+	"io"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -45,8 +51,15 @@ import (
 type Resolution struct {
 	// Source is exactly one of "user_specified", "installed", or
 	// "pinned_download" — which of the three resolution steps produced Path.
-	Source  string
-	Path    string
+	Source string
+	Path   string
+	// Version identifies the exact browser build, and is never empty for a
+	// successful Resolve. For a pinned download it is the pinned revision.
+	// Otherwise it is the binary's own `--version` output when the binary
+	// reports one, and failing that a content fingerprint of the binary
+	// ("<abs path>@sha256:<digest>") — which still changes whenever the
+	// browser is upgraded in place, which is the coherence signal callers
+	// actually need.
 	Version string
 }
 
@@ -62,9 +75,11 @@ type Config struct {
 	// happens without explicit opt-in — no silent download.
 	AllowDownload bool
 
-	// LoginURL is the real provider login page to navigate to. It is never
-	// pre-filled with any credential — the user completes the login
-	// themselves in the visible page.
+	// LoginURL is the real provider login page to navigate to. New opens it
+	// as soon as the page exists; leave it empty to have New leave the page
+	// blank and navigate later via Session.Navigate. It is never pre-filled
+	// with any credential — the user completes the login themselves in the
+	// visible page.
 	LoginURL string
 
 	// RequiredCookies is the named minimum this connector's mechanism
@@ -104,10 +119,10 @@ func Resolve(cfg Config) (Resolution, error) {
 		if _, err := os.Stat(cfg.BrowserPath); err != nil {
 			return Resolution{}, fmt.Errorf("driver: configured browser path %q: %w", cfg.BrowserPath, err)
 		}
-		return Resolution{Source: "user_specified", Path: cfg.BrowserPath}, nil
+		return Resolution{Source: "user_specified", Path: cfg.BrowserPath, Version: browserBuildID(cfg.BrowserPath)}, nil
 	}
 	if found, ok := lookInstalledBrowser(); ok {
-		return Resolution{Source: "installed", Path: found}, nil
+		return Resolution{Source: "installed", Path: found, Version: browserBuildID(found)}, nil
 	}
 	if !cfg.AllowDownload {
 		return Resolution{}, errors.New("driver: no installed Chrome/Chromium/Edge found; set Config.AllowDownload to fetch a pinned Chromium revision (this package never downloads a browser silently)")
@@ -118,6 +133,48 @@ func Resolve(cfg Config) (Resolution, error) {
 		return Resolution{}, fmt.Errorf("driver: download pinned Chromium revision %d: %w", b.Revision, err)
 	}
 	return Resolution{Source: "pinned_download", Path: path, Version: fmt.Sprintf("chromium-%d", b.Revision)}, nil
+}
+
+// browserVersionProbeTimeout bounds the `<binary> --version` probe so a
+// wedged or non-responsive binary cannot stall resolution.
+const browserVersionProbeTimeout = 5 * time.Second
+
+// browserBuildID identifies the exact build at path. Chrome-family binaries
+// print a parseable version for `--version`; anything that does not (a
+// wrapper script, a stripped build, an unexpected platform) falls back to a
+// content fingerprint rather than leaving Resolution.Version empty.
+func browserBuildID(path string) string {
+	if v := probeBrowserVersion(path); v != "" {
+		return v
+	}
+	return binaryContentFingerprint(path)
+}
+
+func probeBrowserVersion(path string) string {
+	ctx, cancel := context.WithTimeout(context.Background(), browserVersionProbeTimeout)
+	defer cancel()
+	out, err := exec.CommandContext(ctx, path, "--version").Output()
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(string(out))
+}
+
+func binaryContentFingerprint(path string) string {
+	abs, err := filepath.Abs(path)
+	if err != nil {
+		abs = path
+	}
+	f, err := os.Open(path)
+	if err != nil {
+		return abs
+	}
+	defer func() { _ = f.Close() }()
+	sum := sha256.New()
+	if _, err := io.Copy(sum, f); err != nil {
+		return abs
+	}
+	return abs + "@sha256:" + hex.EncodeToString(sum.Sum(nil))
 }
 
 // Snapshot is a point-in-time read of the driven page, passed to a WaitFor
@@ -171,6 +228,14 @@ func New(ctx context.Context, cfg Config) (Session, error) {
 		_ = browser.Close()
 		l.Kill()
 		return nil, fmt.Errorf("driver: open page: %w", err)
+	}
+
+	if cfg.LoginURL != "" {
+		if err := page.Context(ctx).Navigate(cfg.LoginURL); err != nil {
+			_ = browser.Close()
+			l.Kill()
+			return nil, fmt.Errorf("driver: navigate to login URL: %w", err)
+		}
 	}
 
 	names := make(map[string]bool, len(cfg.RequiredCookies))
