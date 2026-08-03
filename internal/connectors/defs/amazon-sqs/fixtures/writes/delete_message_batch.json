@@ -1,0 +1,10 @@
+{
+  "record": {
+    "id": "entry1",
+    "receipt_handle": "fixture-receipt-handle"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "SQS.DeleteMessageBatch"
+  }
+}

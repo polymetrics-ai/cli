@@ -4215,22 +4215,944 @@
   {
     "slug": "amazon-sqs",
     "name": "Amazon SQS",
-    "description": "Reads messages from Amazon SQS via signed ReceiveMessage calls. Read-only; messages are not deleted.",
+    "description": "Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue actions through fixed AWS Query API operations.",
     "docs_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html",
     "integration_type": "queue",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": true
     },
-    "streams": [],
-    "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads messages from Amazon SQS via signed ReceiveMessage calls. Read-only; messages are not deleted.\n\nThis connector discovers available streams and schemas from the configured service at runtime.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation:\nhttps://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html.\n\n## Auth setup\n\nConnection fields:\n\n- `access_key` (required, secret, string); AWS access key id used for SigV4 request signing. Never\n  logged.\n- `attributes_to_return` (optional, string); default `All`; Comma-separated list of\n  MessageAttributeName values to request. Defaults to All.\n- `max_batch_size` (optional, string); default `10`; Messages requested per ReceiveMessage call\n  (MaxNumberOfMessages), clamped to 1-10.\n- `max_polls` (optional, string); default `1`; Maximum number of ReceiveMessage calls per Read,\n  clamped to 1-100. A poll returning zero messages stops early.\n- `max_wait_time` (optional, string); default `0`; SQS long-poll WaitTimeSeconds, clamped to 0-20.\n- `mode` (optional, string).\n- `queue_url` (required, string); format `uri`; Full SQS queue URL (e.g.\n  https://sqs.us-east-1.amazonaws.com/123456789012/my-queue).\n- `region` (required, string); AWS region the queue lives in (e.g. us-east-1), used for SigV4\n  request signing.\n- `secret_key` (required, secret, string); AWS secret access key used for SigV4 request signing.\n  Never logged.\n- `session_token` (optional, secret, string); Optional AWS session token for temporary/STS\n  credentials, sent as X-Amz-Security-Token when set.\n- `visibility_timeout` (optional, string); Optional VisibilityTimeout override in seconds, clamped\n  to 0-43200. Uses the queue's own default when unset.\n\nSecret fields are redacted in logs and write previews: `access_key`, `secret_key`, `session_token`.\n\nDefault configuration values: `attributes_to_return=All`, `max_batch_size=10`, `max_polls=1`,\n`max_wait_time=0`.\n\nProvide the secret fields listed above. Authentication is applied by the connector-specific\nimplementation for this service.\n\n## Streams notes\n\nThe connector discovers catalogs and records directly from the configured service instead of using\nfixed stream declarations.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external AWS SQS queue read via signed ReceiveMessage\ncalls (visibility timeout side effects per SQS semantics).\n\n## Known limits\n\n- Schemas and stream availability depend on the configured service at runtime.\n",
+    "streams": [
+      {
+        "name": "messages",
+        "primary_key": [
+          "message_id"
+        ],
+        "cursor": "",
+        "incremental": false
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "add_permission",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "cancel_message_move_task",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "change_message_visibility",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "change_message_visibility_batch",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_queue",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_message",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_message_batch",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_queue",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "purge_queue",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "remove_permission",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "send_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_message_batch",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "set_queue_attributes",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "start_message_move_task",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "tag_queue",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "untag_queue",
+        "method": "POST",
+        "kind": "delete"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Inspect and safely operate Amazon SQS queues through fixed typed commands.",
+      "usage": "pm amazon-sqs <command> [options]",
+      "source_cli": {
+        "name": "AWS CLI sqs",
+        "docs": "https://docs.aws.amazon.com/cli/latest/reference/sqs/",
+        "reference": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
+        "source": "aws sqs"
+      },
+      "groups": [
+        {
+          "id": "read",
+          "title": "Read",
+          "commands": [
+            "messages receive",
+            "queue attributes",
+            "queue url",
+            "queues list",
+            "queue tags",
+            "dead-letter-source-queues list",
+            "message-move-tasks list"
+          ]
+        },
+        {
+          "id": "write",
+          "title": "Typed write/admin actions",
+          "commands": [
+            "permission add",
+            "message-move-task cancel",
+            "message change-visibility",
+            "message change-visibility-batch",
+            "queue create",
+            "message delete",
+            "message delete-batch",
+            "queue delete",
+            "queue purge",
+            "permission remove",
+            "message send",
+            "message send-batch",
+            "queue set-attributes",
+            "message-move-task start",
+            "queue tag",
+            "queue untag"
+          ]
+        }
+      ],
+      "global_flags": [],
+      "commands": [
+        {
+          "path": "messages receive",
+          "summary": "Read bounded messages from the configured queue without deleting them.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "messages",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm amazon-sqs messages receive --credential sqs-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "queue attributes",
+          "summary": "Read selected attributes for the configured queue.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "get_queue_attributes",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "attribute-names",
+              "type": "string_array",
+              "summary": "Attribute names to request; defaults to All.",
+              "values": [],
+              "maps_to": "body.attribute_names"
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs queue attributes --credential sqs-prod --attribute-names QueueArn,ApproximateNumberOfMessages"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "queue url",
+          "summary": "Resolve a queue URL by queue name and optional owner account id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "get_queue_url",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "queue-name",
+              "type": "string",
+              "summary": "Queue name to resolve.",
+              "values": [],
+              "maps_to": "body.queue_name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "queue-owner-aws-account-id",
+              "type": "string",
+              "summary": "Optional owner AWS account id.",
+              "values": [],
+              "maps_to": "body.queue_owner_aws_account_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs queue url --credential sqs-prod --queue-name orders"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "queues list",
+          "summary": "List queue URLs in the configured region endpoint.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "list_queues",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "queue-name-prefix",
+              "type": "string",
+              "summary": "Optional queue name prefix.",
+              "values": [],
+              "maps_to": "body.queue_name_prefix",
+              "allow_empty": false
+            },
+            {
+              "name": "next-token",
+              "type": "string",
+              "summary": "Pagination token from a prior response.",
+              "values": [],
+              "maps_to": "body.next_token",
+              "allow_empty": false
+            },
+            {
+              "name": "max-results",
+              "type": "integer",
+              "summary": "Maximum queue URLs to return (bounded by SQS).",
+              "values": [],
+              "maps_to": "body.max_results"
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs queues list --credential sqs-prod --max-results 25"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "queue tags",
+          "summary": "Read tags for the configured queue.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "list_queue_tags",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm amazon-sqs queue tags --credential sqs-prod"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "dead-letter-source-queues list",
+          "summary": "List queues configured with the current queue as a dead-letter queue.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "list_dead_letter_source_queues",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "next-token",
+              "type": "string",
+              "summary": "Pagination token from a prior response.",
+              "values": [],
+              "maps_to": "body.next_token",
+              "allow_empty": false
+            },
+            {
+              "name": "max-results",
+              "type": "integer",
+              "summary": "Maximum queue URLs to return (bounded by SQS).",
+              "values": [],
+              "maps_to": "body.max_results"
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs dead-letter-source-queues list --credential sqs-prod --max-results 25"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "message-move-tasks list",
+          "summary": "List recent dead-letter message move tasks for a source queue ARN.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "list_message_move_tasks",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "source-arn",
+              "type": "string",
+              "summary": "Source queue ARN.",
+              "values": [],
+              "maps_to": "body.source_arn",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "max-results",
+              "type": "integer",
+              "summary": "Maximum tasks to return (bounded by SQS).",
+              "values": [],
+              "maps_to": "body.max_results"
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs message-move-tasks list --credential sqs-prod --source-arn arn:aws:sqs:us-east-1:123456789012:orders-dlq"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "permission add",
+          "summary": "Plan a typed Amazon SQS add permission operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "add_permission",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Permission statement label.",
+              "values": [],
+              "maps_to": "record.label",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "aws-account-ids",
+              "type": "string_array",
+              "summary": "AWS account ids to grant.",
+              "values": [],
+              "maps_to": "record.aws_account_ids",
+              "required": true
+            },
+            {
+              "name": "actions",
+              "type": "string_array",
+              "summary": "SQS action names to allow.",
+              "values": [],
+              "maps_to": "record.actions",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs permission add --credential sqs-prod --label fixture-permission --aws-account-ids 000000000000 --actions SendMessage --preview"
+          ],
+          "output_policy": "",
+          "risk": "adds an SQS queue resource policy permission statement for listed AWS account ids",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "message-move-task cancel",
+          "summary": "Plan a typed Amazon SQS cancel message move task operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "cancel_message_move_task",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "task-handle",
+              "type": "string",
+              "summary": "Task handle returned by StartMessageMoveTask/ListMessageMoveTasks.",
+              "values": [],
+              "maps_to": "record.task_handle",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs message-move-task cancel --credential sqs-prod --task-handle task-handle-placeholder --preview"
+          ],
+          "output_policy": "",
+          "risk": "cancels an in-flight dead-letter-queue message move task",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "message change-visibility",
+          "summary": "Plan a typed Amazon SQS change message visibility operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "change_message_visibility",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "receipt-handle",
+              "type": "string",
+              "summary": "Receipt handle from ReceiveMessage.",
+              "values": [],
+              "maps_to": "record.receipt_handle",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "visibility-timeout",
+              "type": "integer",
+              "summary": "New visibility timeout in seconds.",
+              "values": [],
+              "maps_to": "record.visibility_timeout",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs message change-visibility --credential sqs-prod --receipt-handle receipt-handle-placeholder --visibility-timeout 30 --preview"
+          ],
+          "output_policy": "",
+          "risk": "changes the visibility timeout for one in-flight message",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "message change-visibility-batch",
+          "summary": "Plan a typed Amazon SQS change message visibility batch operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "change_message_visibility_batch",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Optional batch entry id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "receipt-handle",
+              "type": "string",
+              "summary": "Receipt handle from ReceiveMessage.",
+              "values": [],
+              "maps_to": "record.receipt_handle",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "visibility-timeout",
+              "type": "integer",
+              "summary": "New visibility timeout in seconds.",
+              "values": [],
+              "maps_to": "record.visibility_timeout",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs message change-visibility-batch --credential sqs-prod --receipt-handle receipt-handle-placeholder --visibility-timeout 30 --preview"
+          ],
+          "output_policy": "",
+          "risk": "changes visibility timeout for up to 10 in-flight messages per SQS batch request",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "queue create",
+          "summary": "Plan a typed Amazon SQS create queue operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_queue",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "queue-name",
+              "type": "string",
+              "summary": "Queue name to create.",
+              "values": [],
+              "maps_to": "record.queue_name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs queue create --credential sqs-prod --queue-name fixture-queue --preview"
+          ],
+          "output_policy": "",
+          "risk": "creates an SQS queue; SQS returns an existing queue URL when name and attributes match",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "message delete",
+          "summary": "Plan a typed Amazon SQS delete message operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "receipt-handle",
+              "type": "string",
+              "summary": "Receipt handle from ReceiveMessage.",
+              "values": [],
+              "maps_to": "record.receipt_handle",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs message delete --credential sqs-prod --receipt-handle receipt-handle-placeholder --preview"
+          ],
+          "output_policy": "",
+          "risk": "deletes one received message by receipt handle",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "message delete-batch",
+          "summary": "Plan a typed Amazon SQS delete message batch operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_message_batch",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Optional batch entry id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "receipt-handle",
+              "type": "string",
+              "summary": "Receipt handle from ReceiveMessage.",
+              "values": [],
+              "maps_to": "record.receipt_handle",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs message delete-batch --credential sqs-prod --receipt-handle receipt-handle-placeholder --preview"
+          ],
+          "output_policy": "",
+          "risk": "deletes up to 10 received messages per SQS batch request",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "queue delete",
+          "summary": "Plan a typed Amazon SQS delete queue operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_queue",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm amazon-sqs queue delete --credential sqs-prod --preview"
+          ],
+          "output_policy": "",
+          "risk": "deletes the configured SQS queue",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "queue purge",
+          "summary": "Plan a typed Amazon SQS purge queue operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "purge_queue",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm amazon-sqs queue purge --credential sqs-prod --preview"
+          ],
+          "output_policy": "",
+          "risk": "purges all available messages from the configured queue",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "permission remove",
+          "summary": "Plan a typed Amazon SQS remove permission operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "remove_permission",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "label",
+              "type": "string",
+              "summary": "Permission statement label to remove.",
+              "values": [],
+              "maps_to": "record.label",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs permission remove --credential sqs-prod --label fixture-permission --preview"
+          ],
+          "output_policy": "",
+          "risk": "removes an SQS queue resource policy permission statement",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "message send",
+          "summary": "Plan a typed Amazon SQS send message operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "send_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "message-body",
+              "type": "string",
+              "summary": "Message body string.",
+              "values": [],
+              "maps_to": "record.message_body",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "delay-seconds",
+              "type": "integer",
+              "summary": "Optional per-message delay seconds.",
+              "values": [],
+              "maps_to": "record.delay_seconds"
+            },
+            {
+              "name": "message-deduplication-id",
+              "type": "string",
+              "summary": "FIFO deduplication id.",
+              "values": [],
+              "maps_to": "record.message_deduplication_id",
+              "allow_empty": false
+            },
+            {
+              "name": "message-group-id",
+              "type": "string",
+              "summary": "FIFO message group id.",
+              "values": [],
+              "maps_to": "record.message_group_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs message send --credential sqs-prod --message-body fixture-message --preview"
+          ],
+          "output_policy": "",
+          "risk": "sends one message to the configured queue; FIFO queues may use message_deduplication_id for provider-supported idempotency",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "message send-batch",
+          "summary": "Plan a typed Amazon SQS send message batch operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "send_message_batch",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Optional batch entry id.",
+              "values": [],
+              "maps_to": "record.id",
+              "allow_empty": false
+            },
+            {
+              "name": "message-body",
+              "type": "string",
+              "summary": "Message body string.",
+              "values": [],
+              "maps_to": "record.message_body",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "delay-seconds",
+              "type": "integer",
+              "summary": "Optional per-message delay seconds.",
+              "values": [],
+              "maps_to": "record.delay_seconds"
+            },
+            {
+              "name": "message-deduplication-id",
+              "type": "string",
+              "summary": "FIFO deduplication id.",
+              "values": [],
+              "maps_to": "record.message_deduplication_id",
+              "allow_empty": false
+            },
+            {
+              "name": "message-group-id",
+              "type": "string",
+              "summary": "FIFO message group id.",
+              "values": [],
+              "maps_to": "record.message_group_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs message send-batch --credential sqs-prod --message-body fixture-message --preview"
+          ],
+          "output_policy": "",
+          "risk": "sends up to 10 messages per SQS batch request; FIFO queues may use message_deduplication_id for provider-supported idempotency",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "queue set-attributes",
+          "summary": "Plan a typed Amazon SQS set queue attributes operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "set_queue_attributes",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "attribute-name",
+              "type": "string",
+              "summary": "Queue attribute name to set, for example VisibilityTimeout or Policy.",
+              "values": [],
+              "maps_to": "record.attribute_name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "attribute-value",
+              "type": "string",
+              "summary": "Queue attribute value. Sensitive values are redacted in previews/errors.",
+              "values": [],
+              "maps_to": "record.attribute_value",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs queue set-attributes --credential sqs-prod --attribute-name VisibilityTimeout --attribute-value 30 --preview"
+          ],
+          "output_policy": "",
+          "risk": "sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "message-move-task start",
+          "summary": "Plan a typed Amazon SQS start message move task operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "start_message_move_task",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "source-arn",
+              "type": "string",
+              "summary": "Source dead-letter queue ARN.",
+              "values": [],
+              "maps_to": "record.source_arn",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "destination-arn",
+              "type": "string",
+              "summary": "Optional destination queue ARN.",
+              "values": [],
+              "maps_to": "record.destination_arn",
+              "allow_empty": false
+            },
+            {
+              "name": "max-number-of-messages-per-second",
+              "type": "integer",
+              "summary": "Optional move rate limit.",
+              "values": [],
+              "maps_to": "record.max_number_of_messages_per_second"
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs message-move-task start --credential sqs-prod --source-arn arn:aws:sqs:us-east-1:000000000000:fixture-dlq --preview"
+          ],
+          "output_policy": "",
+          "risk": "starts an SQS dead-letter queue redrive message move task",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "queue tag",
+          "summary": "Plan a typed Amazon SQS tag queue operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "tag_queue",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "tag-key",
+              "type": "string",
+              "summary": "Tag key to add or update.",
+              "values": [],
+              "maps_to": "record.tag_key",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "tag-value",
+              "type": "string",
+              "summary": "Tag value to add or update.",
+              "values": [],
+              "maps_to": "record.tag_value",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs queue tag --credential sqs-prod --tag-key environment --tag-value fixture --preview"
+          ],
+          "output_policy": "",
+          "risk": "adds or updates tags on the configured SQS queue",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "queue untag",
+          "summary": "Plan a typed Amazon SQS untag queue operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "untag_queue",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "tag-keys",
+              "type": "string_array",
+              "summary": "Tag keys to remove.",
+              "values": [],
+              "maps_to": "record.tag_keys",
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm amazon-sqs queue untag --credential sqs-prod --tag-keys environment --preview"
+          ],
+          "output_policy": "",
+          "risk": "removes tags from the configured SQS queue",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "safety",
+          "summary": "Amazon SQS write commands always use reverse ETL plan, preview, approval, and execute; destructive commands require typed confirmation."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nAmazon SQS (`amazon-sqs`) is a Tier-3 native connector for the AWS SQS Query API\n(API version `2012-11-05`). It signs fixed SQS `Action` requests with AWS SigV4,\ndecodes XML responses, reads bounded message batches, and exposes typed\napproval-gated write/admin actions. It does not expose arbitrary AWS actions,\nraw HTTP, raw body/query passthrough, shell, or file escape hatches.\n\nOfficial sources re-audited for this parity slice:\n\n- AWS-owned Smithy model: https://raw.githubusercontent.com/aws/aws-sdk-go-v2/main/codegen/sdk-codegen/aws-models/sqs.json\n- AWS SQS API Reference operation list: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html\n\nThe complete operation ledger covers all 23 documented operations: 1 bounded\nmessage stream (`ReceiveMessage`), 6 typed direct-read operations, and 16 typed\nreverse-ETL write/admin actions. Fixture-only/local evidence is not a live AWS\ncertification claim.\n\n## Auth setup\n\nRequired connection fields:\n\n- `queue_url` — full SQS queue URL. Queue-specific reads/writes are fixed to\n  this target. The URL is canonicalized and must be absolute, contain no\n  userinfo/query/fragment, and use `https` except localhost fixture/test\n  endpoints. Account-level operations derive the regional endpoint from this\n  URL unless `endpoint_url` is set.\n- `region` — AWS region used in the SigV4 credential scope.\n- `access_key` (secret) — AWS access key id.\n- `secret_key` (secret) — AWS secret access key.\n\nOptional fields:\n\n- `session_token` (secret) — STS/session token sent as `X-Amz-Security-Token`.\n- `endpoint_url` — AWS-compatible regional endpoint override for local or\n  AWS-compatible SQS implementations. Overrides must be root service endpoints\n  with no userinfo/query/fragment and must use `https` except localhost\n  fixture/test endpoints.\n- `max_batch_size` — `ReceiveMessage.MaxNumberOfMessages`, clamped to 1-10.\n- `max_wait_time` — `ReceiveMessage.WaitTimeSeconds`, clamped to 0-20.\n- `visibility_timeout` — optional `ReceiveMessage.VisibilityTimeout`, clamped\n  to 0-43200.\n- `attributes_to_return` — comma-separated message attribute names; default\n  `All`.\n- `system_attributes_to_return` — comma-separated system attribute names;\n  default `All`.\n- `max_polls` — bounded ReceiveMessage polls per read, clamped to 1-100.\n- `mode=fixture` — local fixture mode for credential-free tests; no network.\n\nSecret fields are `access_key`, `secret_key`, and `session_token`. Do not place\nsecret values in prompt text, docs, fixtures, or issue comments.\n\n## Streams notes\n\nThe `messages` stream executes bounded `ReceiveMessage` calls against the\nconfigured queue and emits records shaped like:\n\n- `message_id`\n- `md5_of_body`\n- `receipt_handle` (redacted by provider command surfaces)\n- `body` (JSON-decoded when the message body is JSON; otherwise a string)\n- message/system attributes projected to snake_case fields such as\n  `sent_timestamp`, `approximate_receive_count`, `message_group_id`, and\n  `sequence_number`\n\nReads do **not** delete messages. Standard SQS receive semantics still apply:\nreceived messages may become temporarily invisible according to the queue or\nrequest visibility timeout. `ReceiveMessage` has no timestamp or offset cursor,\nso CDC/changefeed is not advertised; the parent audit counts it as a queue poll\noperation, not CDC.\n\nTyped direct-read commands cover the other read operations:\n\n- `queue attributes` -> `GetQueueAttributes`\n- `queue url` -> `GetQueueUrl`\n- `dead-letter-source-queues list` -> `ListDeadLetterSourceQueues`\n- `message-move-tasks list` -> `ListMessageMoveTasks`\n- `queues list` -> `ListQueues`\n- `queue tags` -> `ListQueueTags`\n\nEvery direct read is fixed-target, bounded by the command runner's operation\nread byte cap, decoded from XML to JSON, and redacted through the\n`json_redacted` output policy equivalent in the native implementation.\n\n## Write actions & risks\n\nAll writes require the existing reverse ETL safety path: plan -> preview ->\nexplicit approval -> execute. Destructive actions also carry\n`confirm: \"destructive\"`, so execution requires the typed destructive\nconfirmation challenge.\n\nTyped actions:\n\n| Action | Official operation | Confirmation | Risk |\n| --- | --- | --- | --- |\n| `add_permission` | `AddPermission` | approval | Adds a queue resource policy permission statement. |\n| `cancel_message_move_task` | `CancelMessageMoveTask` | destructive | Cancels an active dead-letter redrive/move task. |\n| `change_message_visibility` | `ChangeMessageVisibility` | approval | Changes visibility for one in-flight message. |\n| `change_message_visibility_batch` | `ChangeMessageVisibilityBatch` | approval | Changes visibility for up to 10 in-flight messages per request. |\n| `create_queue` | `CreateQueue` | approval | Creates a queue; SQS is idempotent for matching existing queue name/attributes. |\n| `delete_message` | `DeleteMessage` | destructive | Deletes one message by receipt handle. |\n| `delete_message_batch` | `DeleteMessageBatch` | destructive | Deletes up to 10 messages per request. |\n| `delete_queue` | `DeleteQueue` | destructive | Deletes the configured queue. |\n| `purge_queue` | `PurgeQueue` | destructive | Removes available messages from the configured queue. |\n| `remove_permission` | `RemovePermission` | destructive | Removes a queue policy statement. |\n| `send_message` | `SendMessage` | approval | Sends one message; FIFO queues may use `message_deduplication_id`. |\n| `send_message_batch` | `SendMessageBatch` | approval | Sends up to 10 messages per request. |\n| `set_queue_attributes` | `SetQueueAttributes` | approval | Mutates queue attributes such as policy, encryption, redrive, and retention settings. |\n| `start_message_move_task` | `StartMessageMoveTask` | approval | Starts a dead-letter queue redrive/move task. |\n| `tag_queue` | `TagQueue` | approval | Adds or updates queue tags. |\n| `untag_queue` | `UntagQueue` | destructive | Removes queue tags. |\n\nClosed schemas are declared in `writes.json`. Receipt handles, message bodies,\nmessage attributes, task handles, and queue attribute maps are redacted in\npreviews/errors where they may carry sensitive payload or control data.\n\n## Known limits\n\n- This is a Tier-3 native SigV4/XML connector. Declarative dynamic conformance\n  replay is explicitly skipped with native httptest fixtures as substitute\n  evidence; `api_surface.json`, `fixtures/**`, and native tests are the\n  operation-level proof for fixture-only/local validation.\n- No live AWS call, credentialed check, certification claim, release claim, or\n  provider write was made by this parity implementation.\n- Batch write actions chunk records into SQS-supported batches of 10. SQS can\n  return per-entry batch failures in a 200 response; the connector reports\n  those as failed records.\n- Account-level operations such as `CreateQueue`, `GetQueueUrl`, and\n  `ListQueues` use the derived regional endpoint from `queue_url` (or\n  `endpoint_url` when configured); queue-level operations remain fixed to the\n  configured queue target.\n- No generic provider search/query or binary file surface is applicable to the\n  official SQS operation list.\n",
     "icon": {
       "id": "amazon-sqs",
       "path": "icons/amazon-sqs.svg",

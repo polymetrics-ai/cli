@@ -1,0 +1,11 @@
+{
+  "record": {
+    "id": "entry1",
+    "receipt_handle": "fixture-receipt-handle",
+    "visibility_timeout": 30
+  },
+  "expect": {
+    "method": "POST",
+    "path": "SQS.ChangeMessageVisibilityBatch"
+  }
+}
