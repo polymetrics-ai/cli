@@ -17,6 +17,322 @@
           "code": {
             "type": "string",
             "description": "The unique identifier of the account. This cannot be changed once the account is created."
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "preferred_locale": {
+            "type": "string"
+          },
+          "preferred_time_zone": {
+            "type": "string"
+          },
+          "cc_emails": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "vat_number": {
+            "type": "string"
+          },
+          "tax_exempt": {
+            "type": "boolean"
+          },
+          "exemption_certificate": {
+            "type": "string"
+          },
+          "override_business_entity_id": {
+            "type": "string"
+          },
+          "parent_account_code": {
+            "type": "string"
+          },
+          "parent_account_id": {
+            "type": "string"
+          },
+          "bill_to": {
+            "type": "string"
+          },
+          "transaction_type": {
+            "type": "string"
+          },
+          "dunning_campaign_id": {
+            "type": "string"
+          },
+          "invoice_template_id": {
+            "type": "string"
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string",
+                "description": "Phone number."
+              },
+              "street1": {
+                "type": "string",
+                "description": "Street address line 1."
+              },
+              "street2": {
+                "type": "string",
+                "description": "Street address line 2."
+              },
+              "city": {
+                "type": "string",
+                "description": "City."
+              },
+              "region": {
+                "type": "string",
+                "description": "State or province."
+              },
+              "postal_code": {
+                "type": "string",
+                "description": "Zip or postal code."
+              },
+              "country": {
+                "type": "string",
+                "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+              },
+              "geo_code": {
+                "type": "string",
+                "description": "Geographic entity code (Vertex/Avalara)."
+              }
+            },
+            "additionalProperties": false
+          },
+          "billing_info": {
+            "type": "object",
+            "properties": {
+              "token_id": {
+                "type": "string",
+                "description": "Recurly token representing the billing info."
+              },
+              "first_name": {
+                "type": "string"
+              },
+              "last_name": {
+                "type": "string"
+              },
+              "company": {
+                "type": "string"
+              },
+              "address": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "type": "string",
+                    "description": "Phone number."
+                  },
+                  "street1": {
+                    "type": "string",
+                    "description": "Street address line 1."
+                  },
+                  "street2": {
+                    "type": "string",
+                    "description": "Street address line 2."
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "City."
+                  },
+                  "region": {
+                    "type": "string",
+                    "description": "State or province."
+                  },
+                  "postal_code": {
+                    "type": "string",
+                    "description": "Zip or postal code."
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+                  },
+                  "geo_code": {
+                    "type": "string",
+                    "description": "Geographic entity code (Vertex/Avalara)."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "number": {
+                "type": "string",
+                "description": "Credit card number (write-only)."
+              },
+              "month": {
+                "type": "string",
+                "description": "Credit card expiration month."
+              },
+              "year": {
+                "type": "string",
+                "description": "Credit card expiration year."
+              },
+              "cvv": {
+                "type": "string",
+                "description": "Credit card verification value (write-only)."
+              },
+              "currency": {
+                "type": "string",
+                "description": "3-letter ISO 4217 currency code."
+              },
+              "vat_number": {
+                "type": "string"
+              },
+              "ip_address": {
+                "type": "string"
+              },
+              "gateway_token": {
+                "type": "string"
+              },
+              "gateway_code": {
+                "type": "string",
+                "description": "Gateway-specific identifier."
+              },
+              "payment_gateway_references": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "reference_type": {
+                      "type": "string",
+                      "enum": [
+                        "stripe_confirmation_token",
+                        "upi_vpa"
+                      ]
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "reference_type"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "gateway_attributes": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "amazon_billing_agreement_id": {
+                "type": "string"
+              },
+              "paypal_billing_agreement_id": {
+                "type": "string"
+              },
+              "roku_billing_agreement_id": {
+                "type": "string"
+              },
+              "fraud_session_id": {
+                "type": "string"
+              },
+              "adyen_risk_profile_reference_id": {
+                "type": "string"
+              },
+              "transaction_type": {
+                "type": "string"
+              },
+              "three_d_secure_action_result_token_id": {
+                "type": "string"
+              },
+              "iban": {
+                "type": "string"
+              },
+              "name_on_account": {
+                "type": "string"
+              },
+              "account_number": {
+                "type": "string"
+              },
+              "routing_number": {
+                "type": "string"
+              },
+              "sort_code": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "description": "Billing info type."
+              },
+              "account_type": {
+                "type": "string"
+              },
+              "tax_identifier": {
+                "type": "string"
+              },
+              "tax_identifier_type": {
+                "type": "string"
+              },
+              "primary_payment_method": {
+                "type": "boolean"
+              },
+              "backup_payment_method": {
+                "type": "boolean"
+              },
+              "external_hpp_type": {
+                "type": "string"
+              },
+              "online_banking_payment_type": {
+                "type": "string"
+              },
+              "card_type": {
+                "type": "string"
+              },
+              "card_network_preference": {
+                "type": "string"
+              },
+              "return_url": {
+                "type": "string"
+              },
+              "authentication_method": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "custom_fields": {
+            "type": "array",
+            "description": "Custom fields; sending an empty array removes none, sending a name with null/empty removes that field.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The custom field's name."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The custom field's value; null/empty removes an existing value."
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "updated_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "entity_use_code": {
+            "type": "string"
+          },
+          "bill_date": {
+            "type": "string"
           }
         },
         "required": [
@@ -26,7 +342,30 @@
       },
       "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
       "body_fields": [
-        "code"
+        "code",
+        "username",
+        "email",
+        "preferred_locale",
+        "preferred_time_zone",
+        "cc_emails",
+        "first_name",
+        "last_name",
+        "company",
+        "vat_number",
+        "tax_exempt",
+        "exemption_certificate",
+        "override_business_entity_id",
+        "parent_account_code",
+        "parent_account_id",
+        "bill_to",
+        "transaction_type",
+        "dunning_campaign_id",
+        "invoice_template_id",
+        "address",
+        "billing_info",
+        "custom_fields",
+        "entity_use_code",
+        "bill_date"
       ]
     },
     {
@@ -41,13 +380,329 @@
         "billing_info",
         "vat_number"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "type": "object",
         "properties": {
           "account_id": {
             "type": "string",
             "description": "Path parameter `account_id`."
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "preferred_locale": {
+            "type": "string"
+          },
+          "preferred_time_zone": {
+            "type": "string"
+          },
+          "cc_emails": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "vat_number": {
+            "type": "string"
+          },
+          "tax_exempt": {
+            "type": "boolean"
+          },
+          "exemption_certificate": {
+            "type": "string"
+          },
+          "override_business_entity_id": {
+            "type": "string"
+          },
+          "parent_account_code": {
+            "type": "string"
+          },
+          "parent_account_id": {
+            "type": "string"
+          },
+          "bill_to": {
+            "type": "string"
+          },
+          "transaction_type": {
+            "type": "string"
+          },
+          "dunning_campaign_id": {
+            "type": "string"
+          },
+          "invoice_template_id": {
+            "type": "string"
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string",
+                "description": "Phone number."
+              },
+              "street1": {
+                "type": "string",
+                "description": "Street address line 1."
+              },
+              "street2": {
+                "type": "string",
+                "description": "Street address line 2."
+              },
+              "city": {
+                "type": "string",
+                "description": "City."
+              },
+              "region": {
+                "type": "string",
+                "description": "State or province."
+              },
+              "postal_code": {
+                "type": "string",
+                "description": "Zip or postal code."
+              },
+              "country": {
+                "type": "string",
+                "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+              },
+              "geo_code": {
+                "type": "string",
+                "description": "Geographic entity code (Vertex/Avalara)."
+              }
+            },
+            "additionalProperties": false
+          },
+          "billing_info": {
+            "type": "object",
+            "properties": {
+              "token_id": {
+                "type": "string",
+                "description": "Recurly token representing the billing info."
+              },
+              "first_name": {
+                "type": "string"
+              },
+              "last_name": {
+                "type": "string"
+              },
+              "company": {
+                "type": "string"
+              },
+              "address": {
+                "type": "object",
+                "properties": {
+                  "phone": {
+                    "type": "string",
+                    "description": "Phone number."
+                  },
+                  "street1": {
+                    "type": "string",
+                    "description": "Street address line 1."
+                  },
+                  "street2": {
+                    "type": "string",
+                    "description": "Street address line 2."
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "City."
+                  },
+                  "region": {
+                    "type": "string",
+                    "description": "State or province."
+                  },
+                  "postal_code": {
+                    "type": "string",
+                    "description": "Zip or postal code."
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+                  },
+                  "geo_code": {
+                    "type": "string",
+                    "description": "Geographic entity code (Vertex/Avalara)."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "number": {
+                "type": "string",
+                "description": "Credit card number (write-only)."
+              },
+              "month": {
+                "type": "string",
+                "description": "Credit card expiration month."
+              },
+              "year": {
+                "type": "string",
+                "description": "Credit card expiration year."
+              },
+              "cvv": {
+                "type": "string",
+                "description": "Credit card verification value (write-only)."
+              },
+              "currency": {
+                "type": "string",
+                "description": "3-letter ISO 4217 currency code."
+              },
+              "vat_number": {
+                "type": "string"
+              },
+              "ip_address": {
+                "type": "string"
+              },
+              "gateway_token": {
+                "type": "string"
+              },
+              "gateway_code": {
+                "type": "string",
+                "description": "Gateway-specific identifier."
+              },
+              "payment_gateway_references": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "reference_type": {
+                      "type": "string",
+                      "enum": [
+                        "stripe_confirmation_token",
+                        "upi_vpa"
+                      ]
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "reference_type"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "gateway_attributes": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "amazon_billing_agreement_id": {
+                "type": "string"
+              },
+              "paypal_billing_agreement_id": {
+                "type": "string"
+              },
+              "roku_billing_agreement_id": {
+                "type": "string"
+              },
+              "fraud_session_id": {
+                "type": "string"
+              },
+              "adyen_risk_profile_reference_id": {
+                "type": "string"
+              },
+              "transaction_type": {
+                "type": "string"
+              },
+              "three_d_secure_action_result_token_id": {
+                "type": "string"
+              },
+              "iban": {
+                "type": "string"
+              },
+              "name_on_account": {
+                "type": "string"
+              },
+              "account_number": {
+                "type": "string"
+              },
+              "routing_number": {
+                "type": "string"
+              },
+              "sort_code": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "description": "Billing info type."
+              },
+              "account_type": {
+                "type": "string"
+              },
+              "tax_identifier": {
+                "type": "string"
+              },
+              "tax_identifier_type": {
+                "type": "string"
+              },
+              "primary_payment_method": {
+                "type": "boolean"
+              },
+              "backup_payment_method": {
+                "type": "boolean"
+              },
+              "external_hpp_type": {
+                "type": "string"
+              },
+              "online_banking_payment_type": {
+                "type": "string"
+              },
+              "card_type": {
+                "type": "string"
+              },
+              "card_network_preference": {
+                "type": "string"
+              },
+              "return_url": {
+                "type": "string"
+              },
+              "authentication_method": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "custom_fields": {
+            "type": "array",
+            "description": "Custom fields; sending an empty array removes none, sending a name with null/empty removes that field.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The custom field's name."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The custom field's value; null/empty removes an existing value."
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "updated_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "entity_use_code": {
+            "type": "string"
+          },
+          "bill_date": {
+            "type": "string"
           }
         },
         "required": [
@@ -55,7 +710,32 @@
         ],
         "additionalProperties": false
       },
-      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "username",
+        "email",
+        "preferred_locale",
+        "preferred_time_zone",
+        "cc_emails",
+        "first_name",
+        "last_name",
+        "company",
+        "vat_number",
+        "tax_exempt",
+        "exemption_certificate",
+        "override_business_entity_id",
+        "parent_account_code",
+        "parent_account_id",
+        "bill_to",
+        "transaction_type",
+        "dunning_campaign_id",
+        "invoice_template_id",
+        "address",
+        "billing_info",
+        "custom_fields",
+        "entity_use_code",
+        "bill_date"
+      ]
     },
     {
       "name": "deactivate_account",
@@ -348,13 +1028,196 @@
         "token_id",
         "vat_number"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "type": "object",
         "properties": {
           "account_id": {
             "type": "string",
             "description": "Path parameter `account_id`."
+          },
+          "token_id": {
+            "type": "string",
+            "description": "Recurly token representing the billing info."
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "phone": {
+                "type": "string",
+                "description": "Phone number."
+              },
+              "street1": {
+                "type": "string",
+                "description": "Street address line 1."
+              },
+              "street2": {
+                "type": "string",
+                "description": "Street address line 2."
+              },
+              "city": {
+                "type": "string",
+                "description": "City."
+              },
+              "region": {
+                "type": "string",
+                "description": "State or province."
+              },
+              "postal_code": {
+                "type": "string",
+                "description": "Zip or postal code."
+              },
+              "country": {
+                "type": "string",
+                "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+              },
+              "geo_code": {
+                "type": "string",
+                "description": "Geographic entity code (Vertex/Avalara)."
+              }
+            },
+            "additionalProperties": false
+          },
+          "number": {
+            "type": "string",
+            "description": "Credit card number (write-only)."
+          },
+          "month": {
+            "type": "string",
+            "description": "Credit card expiration month."
+          },
+          "year": {
+            "type": "string",
+            "description": "Credit card expiration year."
+          },
+          "cvv": {
+            "type": "string",
+            "description": "Credit card verification value (write-only)."
+          },
+          "currency": {
+            "type": "string",
+            "description": "3-letter ISO 4217 currency code."
+          },
+          "vat_number": {
+            "type": "string"
+          },
+          "ip_address": {
+            "type": "string"
+          },
+          "gateway_token": {
+            "type": "string"
+          },
+          "gateway_code": {
+            "type": "string",
+            "description": "Gateway-specific identifier."
+          },
+          "payment_gateway_references": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reference_type": {
+                  "type": "string",
+                  "enum": [
+                    "stripe_confirmation_token",
+                    "upi_vpa"
+                  ]
+                },
+                "token": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "reference_type"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "gateway_attributes": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "amazon_billing_agreement_id": {
+            "type": "string"
+          },
+          "paypal_billing_agreement_id": {
+            "type": "string"
+          },
+          "roku_billing_agreement_id": {
+            "type": "string"
+          },
+          "fraud_session_id": {
+            "type": "string"
+          },
+          "adyen_risk_profile_reference_id": {
+            "type": "string"
+          },
+          "transaction_type": {
+            "type": "string"
+          },
+          "three_d_secure_action_result_token_id": {
+            "type": "string"
+          },
+          "iban": {
+            "type": "string"
+          },
+          "name_on_account": {
+            "type": "string"
+          },
+          "account_number": {
+            "type": "string"
+          },
+          "routing_number": {
+            "type": "string"
+          },
+          "sort_code": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "description": "Billing info type."
+          },
+          "account_type": {
+            "type": "string"
+          },
+          "tax_identifier": {
+            "type": "string"
+          },
+          "tax_identifier_type": {
+            "type": "string"
+          },
+          "primary_payment_method": {
+            "type": "boolean"
+          },
+          "backup_payment_method": {
+            "type": "boolean"
+          },
+          "external_hpp_type": {
+            "type": "string"
+          },
+          "online_banking_payment_type": {
+            "type": "string"
+          },
+          "card_type": {
+            "type": "string"
+          },
+          "card_network_preference": {
+            "type": "string"
+          },
+          "return_url": {
+            "type": "string"
+          },
+          "authentication_method": {
+            "type": "string"
           }
         },
         "required": [
@@ -362,7 +1225,49 @@
         ],
         "additionalProperties": false
       },
-      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "token_id",
+        "first_name",
+        "last_name",
+        "company",
+        "address",
+        "number",
+        "month",
+        "year",
+        "cvv",
+        "currency",
+        "vat_number",
+        "ip_address",
+        "gateway_token",
+        "gateway_code",
+        "payment_gateway_references",
+        "gateway_attributes",
+        "amazon_billing_agreement_id",
+        "paypal_billing_agreement_id",
+        "roku_billing_agreement_id",
+        "fraud_session_id",
+        "adyen_risk_profile_reference_id",
+        "transaction_type",
+        "three_d_secure_action_result_token_id",
+        "iban",
+        "name_on_account",
+        "account_number",
+        "routing_number",
+        "sort_code",
+        "type",
+        "account_type",
+        "tax_identifier",
+        "tax_identifier_type",
+        "primary_payment_method",
+        "backup_payment_method",
+        "external_hpp_type",
+        "online_banking_payment_type",
+        "card_type",
+        "card_network_preference",
+        "return_url",
+        "authentication_method"
+      ]
     },
     {
       "name": "update_a_billing_info",
@@ -1993,6 +2898,76 @@
               "line_items"
             ],
             "description": "The type of refund. Amount and line items cannot both be specified in the request."
+          },
+          "amount": {
+            "type": "number",
+            "description": "The total amount to refund. Must be used when type is `amount`."
+          },
+          "percentage": {
+            "type": "integer",
+            "description": "The percentage of the invoice's remaining balance to refund. Must be used when type is `percentage`."
+          },
+          "line_items": {
+            "type": "array",
+            "description": "Line items to refund. Must be used when type is `line_items`.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Line item ID."
+                },
+                "quantity": {
+                  "type": "integer",
+                  "description": "Line item quantity to refund."
+                },
+                "quantity_decimal": {
+                  "type": "string",
+                  "description": "Decimal quantity to refund."
+                },
+                "amount": {
+                  "type": "number",
+                  "description": "Specific amount to refund from the adjustment."
+                },
+                "percentage": {
+                  "type": "integer",
+                  "description": "Percentage of the adjustment's remaining balance to refund (1-100)."
+                },
+                "prorate": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "refund_method": {
+            "type": "string",
+            "description": "How to refund: `all_credit`, `all_transaction`, or `transaction_first`."
+          },
+          "credit_customer_notes": {
+            "type": "string",
+            "description": "Notes to append to the credit invoice."
+          },
+          "external_refund": {
+            "type": "object",
+            "description": "Indicates the refund was settled outside of Recurly and a manual transaction should be created to track it.",
+            "properties": {
+              "payment_method": {
+                "type": "string"
+              },
+              "reference": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "recorded_at": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "additionalProperties": true
           }
         },
         "required": [
@@ -2001,10 +2976,17 @@
         ],
         "additionalProperties": false
       },
-      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "risk": "critical \u2014 refund_invoice moves money by refunding an invoice; requires destructive confirmation and reverse ETL plan/preview/approval/execute. Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; do not reuse idempotency keys across different records.",
       "body_fields": [
-        "type"
-      ]
+        "type",
+        "amount",
+        "percentage",
+        "line_items",
+        "refund_method",
+        "credit_customer_notes",
+        "external_refund"
+      ],
+      "confirm": "destructive"
     },
     {
       "name": "create_invoice_retry",
@@ -2546,13 +3528,148 @@
         "gateway_code",
         "po_number"
       ],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "type": "object",
         "properties": {
           "subscription_id": {
             "type": "string",
             "description": "Path parameter `subscription_id`."
+          },
+          "collection_method": {
+            "type": "string"
+          },
+          "custom_fields": {
+            "type": "array",
+            "description": "Custom fields; sending an empty array removes none, sending a name with null/empty removes that field.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The custom field's name."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The custom field's value; null/empty removes an existing value."
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "updated_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "remaining_billing_cycles": {
+            "type": "integer"
+          },
+          "renewal_billing_cycles": {
+            "type": "integer"
+          },
+          "auto_renew": {
+            "type": "boolean"
+          },
+          "next_bill_date": {
+            "type": "string"
+          },
+          "revenue_schedule_type": {
+            "type": "string"
+          },
+          "terms_and_conditions": {
+            "type": "string"
+          },
+          "customer_notes": {
+            "type": "string"
+          },
+          "po_number": {
+            "type": "string"
+          },
+          "price_segment_id": {
+            "type": "string"
+          },
+          "net_terms": {
+            "type": "integer"
+          },
+          "net_terms_type": {
+            "type": "string"
+          },
+          "credit_application_policy": {
+            "type": "string"
+          },
+          "gateway_code": {
+            "type": "string"
+          },
+          "tax_inclusive": {
+            "type": "boolean"
+          },
+          "shipping": {
+            "type": "object",
+            "properties": {
+              "object": {
+                "type": "string"
+              },
+              "address": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "address1": {
+                    "type": "string"
+                  },
+                  "address2": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "zip": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "string"
+                  },
+                  "company": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "address_id": {
+                "type": "string",
+                "description": "Assign a shipping address from the account's existing shipping addresses."
+              }
+            },
+            "additionalProperties": false
+          },
+          "billing_info_id": {
+            "type": "string"
+          },
+          "transaction_descriptor_suffix": {
+            "type": "string"
           }
         },
         "required": [
@@ -2560,7 +3677,28 @@
         ],
         "additionalProperties": false
       },
-      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "collection_method",
+        "custom_fields",
+        "remaining_billing_cycles",
+        "renewal_billing_cycles",
+        "auto_renew",
+        "next_bill_date",
+        "revenue_schedule_type",
+        "terms_and_conditions",
+        "customer_notes",
+        "po_number",
+        "price_segment_id",
+        "net_terms",
+        "net_terms_type",
+        "credit_application_policy",
+        "gateway_code",
+        "tax_inclusive",
+        "shipping",
+        "billing_info_id",
+        "transaction_descriptor_suffix"
+      ]
     },
     {
       "name": "terminate_subscription",
@@ -2837,7 +3975,7 @@
         "add_on_id"
       ],
       "redact_fields": [],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "type": "object",
         "properties": {
@@ -2848,6 +3986,22 @@
           "add_on_id": {
             "type": "string",
             "description": "Path parameter `add_on_id`."
+          },
+          "merchant_tag": {
+            "type": "string",
+            "description": "Custom field used to identify the usage record."
+          },
+          "amount": {
+            "type": "number",
+            "description": "Used to determine the unit amount of the usage to record."
+          },
+          "recording_timestamp": {
+            "type": "string",
+            "description": "When the usage was recorded."
+          },
+          "usage_timestamp": {
+            "type": "string",
+            "description": "When the usage actually occurred."
           }
         },
         "required": [
@@ -2856,7 +4010,13 @@
         ],
         "additionalProperties": false
       },
-      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "merchant_tag",
+        "amount",
+        "recording_timestamp",
+        "usage_timestamp"
+      ]
     },
     {
       "name": "update_usage",
@@ -2867,13 +4027,29 @@
         "usage_id"
       ],
       "redact_fields": [],
-      "body_type": "none",
+      "body_type": "json",
       "record_schema": {
         "type": "object",
         "properties": {
           "usage_id": {
             "type": "string",
             "description": "Path parameter `usage_id`."
+          },
+          "merchant_tag": {
+            "type": "string",
+            "description": "Custom field used to identify the usage record."
+          },
+          "amount": {
+            "type": "number",
+            "description": "Used to determine the unit amount of the usage to record."
+          },
+          "recording_timestamp": {
+            "type": "string",
+            "description": "When the usage was recorded."
+          },
+          "usage_timestamp": {
+            "type": "string",
+            "description": "When the usage actually occurred."
           }
         },
         "required": [
@@ -2881,7 +4057,13 @@
         ],
         "additionalProperties": false
       },
-      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "body_fields": [
+        "merchant_tag",
+        "amount",
+        "recording_timestamp",
+        "usage_timestamp"
+      ]
     },
     {
       "name": "remove_usage",

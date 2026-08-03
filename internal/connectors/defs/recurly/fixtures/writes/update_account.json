@@ -1,10 +1,16 @@
 {
   "record": {
-    "account_id": "fixture_account_id"
+    "account_id": "fixture_account_id",
+    "first_name": "fixture_first_name",
+    "company": "Fixture Co"
   },
   "expect": {
     "method": "PUT",
-    "path": "/accounts/fixture_account_id"
+    "path": "/accounts/fixture_account_id",
+    "body": {
+      "first_name": "fixture_first_name",
+      "company": "Fixture Co"
+    }
   },
   "response": {
     "status": 200,

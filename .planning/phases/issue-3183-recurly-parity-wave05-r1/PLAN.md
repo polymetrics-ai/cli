@@ -69,6 +69,44 @@ connector failed the complete-parity bar (an ETL-only connector). This session:
 - [x] internal/cli suite, commandrunner, engine, defs, bundleregistry, conformance, connectorgen all PASS.
 - [x] `pm docs validate` PASS; MANUAL/SKILL/catalog/website regenerated; scope limited to Recurly-owned files.
 
+## Captain review-fix session (complete-parity fixes)
+
+The captain authorized fixing all four review ask-user findings. Guarded custody
+recover (`no-mistakes axi sync --recover --keep-local`) was attempted first and
+refused again (`blocked_recover_gate_diverged`: gate branch 459bf2781 !=
+preserved pipeline head 3f8ce5a5; no files/refs changed); per the captain's
+explicit instruction no unguarded reset was run. The four fixes were then
+implemented and validated locally.
+
+1. **Required-body writes** — update_account, create_billing_info, create_usage,
+   update_subscription, update_usage changed to `body_type: "json"` with
+   self-contained record_schemas capturing the official AccountUpdate /
+   BillingInfoCreate / UsageCreate / SubscriptionUpdate request shapes. Write
+   fixtures updated to assert the serialized request body.
+2. **create_account / update_account** — record_schemas now accept
+   `billing_info`, `address`, `custom_fields`, and `company` (full AccountUpdate
+   body), not just `code`.
+3. **get_account_balance** — `schemas/get_account_balance.json` rewritten to the
+   real AccountBalance shape (`object`/`account`/`past_due`/`balances`) with no
+   fabricated `id` primary key and no fake `code`/`state`/`created_at`/
+   `updated_at`; fixture matches the real shape.
+4. **refund_invoice** — added `confirm: "destructive"` and expanded
+   record_schema with `amount`/`percentage`/`line_items`/`refund_method`/
+   `credit_customer_notes`/`external_refund`; risk escalated to critical with
+   money-moving rationale.
+
+Added `TestRecurlyReviewFixFindings` to `cmd/connectorgen/recurly_full_surface_test.go`
+locks all four fixes. All gates green locally: connectorgen validate 0 findings,
+recurly conformance, engine/commandrunner/defs/bundleregistry/connectorgen,
+`go test ./internal/cli` (348s), docs validate, and Recurly-scoped docs/
+catalog/website regeneration.
+
+### Blocked — custody escalation
+
+/ no-mistakes re-run is blocked on custody recovery (`blocked_recover_gate_diverged`)
+which the guarded path refuses; resolving it is a firstmate/captain decision.
+No unguarded reset was run.
+
 ## Safety gates
 
 - Secrets: all fixtures use synthetic placeholders; no credential prompts or values.

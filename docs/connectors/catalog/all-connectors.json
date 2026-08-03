@@ -118515,13 +118515,9 @@
       },
       {
         "name": "get_account_balance",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
@@ -119924,7 +119920,8 @@
         "kind": "create",
         "method": "POST",
         "path": "/invoices/{{ record.invoice_id }}/refund",
-        "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records."
+        "risk": "critical — refund_invoice moves money by refunding an invoice; requires destructive confirmation and reverse ETL plan/preview/approval/execute. Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; do not reuse idempotency keys across different records.",
+        "confirm": "destructive"
       },
       {
         "name": "create_invoice_retry",

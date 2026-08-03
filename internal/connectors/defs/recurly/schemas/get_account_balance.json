@@ -2,47 +2,69 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "get_account_balance",
   "type": "object",
-  "x-primary-key": [
-    "id"
-  ],
   "properties": {
-    "id": {
-      "type": [
-        "string",
-        "integer"
-      ]
-    },
     "object": {
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": "string"
     },
-    "code": {
-      "type": [
-        "string",
-        "null"
-      ]
+    "account": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "object": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "parent_account_id": {
+          "type": "string"
+        },
+        "bill_to": {
+          "type": "string"
+        },
+        "dunning_campaign_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
     },
-    "state": {
-      "type": [
-        "string",
-        "null"
-      ]
+    "past_due": {
+      "type": "boolean"
     },
-    "created_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
-    },
-    "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
+    "balances": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "processing_prepayment_amount": {
+            "type": "number"
+          },
+          "available_credit_amount": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": true
+      }
     }
   },
   "additionalProperties": true
