@@ -1,0 +1,39 @@
+{
+  "phase": "engine-request-shaping-foundations-r1",
+  "gsd_command": "/gsd-plan-phase engine-request-shaping-foundations-r1",
+  "adapter": "pi-project-local",
+  "runtime": "claude-code",
+  "runtime_fallback": "manual-GSD inline execution; Pi runtime subagents unavailable in this session",
+  "trace": ".planning/traces/gsd-plan-phase-engine-request-shaping-foundations-r1-prompt.md",
+  "status": "planned",
+  "branch": "fm/cli-airtable-request-foundations-r1",
+  "owned_paths": [
+    "internal/connectors/engine/**",
+    ".planning/**"
+  ],
+  "excluded_paths": [
+    "internal/connectors/defs/**",
+    "internal/connectors/connsdk/**",
+    "internal/connectors/certify/**",
+    "internal/connectors/commandrunner/**",
+    "internal/app/**",
+    "cmd/**"
+  ],
+  "tasks": [
+    { "id": 1, "name": "array-cardinality-min-max-items", "unblocks_operations": 25, "connector": "airtable", "state": "planned" },
+    { "id": 2, "name": "start-index-pagination", "unblocks_operations": 2, "connector": "airtable", "state": "planned" },
+    { "id": 3, "name": "required-query-any-of", "unblocks_operations": 1, "connector": "airtable", "state": "planned" },
+    { "id": 4, "name": "bounded-base64-upload", "unblocks_operations": 1, "connector": "airtable", "state": "planned" }
+  ],
+  "issue_tree": {
+    "state": "drafted_not_created",
+    "reason": "no alfred-polymetrics-ai credential in this environment; GitHub authorship is immutable so create-then-reattribute is impossible",
+    "draft_path": ".planning/phases/engine-request-shaping-foundations-r1/ISSUE-TREE-DRAFT.md"
+  },
+  "parallel_lane_overlap": {
+    "lane": "cli-engine-bounded-binary-read-r1",
+    "branch": "engine-shared-capabilities-r1",
+    "shared_files": ["internal/connectors/engine/bundle.go", "internal/connectors/engine/write.go", "internal/connectors/engine/schema/writes.schema.json"],
+    "note": "disjoint concerns inside shared files; upload bounds/safety rules deliberately mirror that lane's download design"
+  }
+}
