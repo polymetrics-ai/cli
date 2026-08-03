@@ -503,6 +503,87 @@ func TestNativeCloudTrailReadSkipsInsightSelectorsNotEnabledTrails(t *testing.T)
 	}
 }
 
+func TestNativeCloudTrailSkipsEventConfigurationInapplicableResources(t *testing.T) {
+	eventDataStore := "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/inactive-store"
+	var requests []string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action := strings.TrimPrefix(r.Header.Get("X-Amz-Target"), cloudTrailTargetPrefix)
+		var body map[string]any
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		switch action {
+		case "DescribeTrails":
+			_, _ = w.Write([]byte(`{"trailList":[{"Name":"deleted-trail"},{"Name":"configured-trail"}]}`))
+		case "ListEventDataStores":
+			_, _ = w.Write([]byte(`{"EventDataStores":[{"EventDataStoreArn":"` + eventDataStore + `"}]}`))
+		case "GetEventConfiguration":
+			trailName, _ := body["TrailName"].(string)
+			if store, ok := body["EventDataStore"].(string); ok {
+				requests = append(requests, store)
+				w.WriteHeader(http.StatusBadRequest)
+				_, _ = w.Write([]byte(`{"__type":"InactiveEventDataStoreException","Message":"event data store is not active"}`))
+				return
+			}
+			requests = append(requests, trailName)
+			if trailName == "deleted-trail" {
+				w.WriteHeader(http.StatusBadRequest)
+				_, _ = w.Write([]byte(`{"__type":"TrailNotFoundException","Message":"unknown trail"}`))
+				return
+			}
+			_, _ = w.Write([]byte(`{"MaxEventSize":"Standard"}`))
+		default:
+			t.Fatalf("unexpected target %s", action)
+		}
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	var records []connectors.Record
+	err := c.Read(context.Background(), connectors.ReadRequest{Stream: "get_event_configuration", Config: fixtureRuntimeConfig(srv.URL)}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if got, want := strings.Join(requests, ","), "deleted-trail,configured-trail,"+eventDataStore; got != want {
+		t.Fatalf("event configuration requests = %s, want %s", got, want)
+	}
+	if len(records) != 1 || records[0]["pm_record_id"] != "configured-trail" {
+		t.Fatalf("records = %#v", records)
+	}
+}
+
+func TestNativeCloudTrailPropagatesEventConfigurationAccessErrors(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action := strings.TrimPrefix(r.Header.Get("X-Amz-Target"), cloudTrailTargetPrefix)
+		w.Header().Set("Content-Type", "application/json")
+		switch action {
+		case "DescribeTrails":
+			_, _ = w.Write([]byte(`{"trailList":[{"Name":"configured-trail"}]}`))
+		case "ListEventDataStores":
+			_, _ = w.Write([]byte(`{"EventDataStores":[]}`))
+		case "GetEventConfiguration":
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = w.Write([]byte(`{"__type":"InsufficientDependencyServiceAccessPermissionException","Message":"missing permission"}`))
+		default:
+			t.Fatalf("unexpected target %s", action)
+		}
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	err := c.Read(context.Background(), connectors.ReadRequest{Stream: "get_event_configuration", Config: fixtureRuntimeConfig(srv.URL)}, func(connectors.Record) error {
+		t.Fatal("emit called for a permission failure")
+		return nil
+	})
+	if err == nil {
+		t.Fatal("Read unexpectedly succeeded despite a permission failure")
+	}
+}
+
 func TestNativeCloudTrailRejectsRepeatedNextToken(t *testing.T) {
 	requests := 0
 	var requestTokens []string

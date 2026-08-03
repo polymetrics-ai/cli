@@ -40,6 +40,14 @@ Every implemented stream uses a fixed AWS CloudTrail JSON-RPC action with SigV4 
 
 No CloudTrail reverse-ETL write actions are exposed by the current runtime surface. The audited write/admin API actions remain blocked/planned in `api_surface.json`; they must not be documented as executable until typed write definitions and shared promoted-native command surfaces, write validation, and dry-run previews are available. Any future write slice must preserve the standard plan -> preview -> explicit approval -> execute flow, destructive confirmation metadata, fixed CloudTrail `X-Amz-Target` mapping, and no raw AWS action or request-body escape hatch.
 
+## Generated manual fidelity
+
+`docs/connectors/aws-cloudtrail/MANUAL.md` and `SKILL.md` are written by `pm docs generate` and are intentionally sparse right now: they show no ETL STREAMS section, no SYNC MODES section, `No connector-specific config fields.` under CONFIGURATION, generic `connector-specific` read/write risk instead of the authored risk text in `metadata.json`, and — misleadingly — `No secret authentication is required for this connector.` under AUTHENTICATION. This connector does require the `aws_key_id` and `aws_secret_key` secrets plus the `aws_region_name` config field; the authoritative list is the Auth setup section above and `spec.json`.
+
+That is not a gap in this connector. Those sections are built from `connectors.ManifestOf`, and the shared `definitionConnector` wrapper in `internal/connectors/native/nativeset/promoted.go` currently implements only `Definition()`, so `ManifestOf` falls back to a metadata-only manifest for every bundle-backed promoted native (~30 connectors today). The fix is foundation PR #3676, `fix(connectors): derive nativeset manifest from bundle definition`, which is deliberately owned outside this connector-local branch. Once #3676 merges and this branch rebases onto it, re-running `pm docs generate` fills in the full ETL STREAMS, CONFIGURATION, SYNC MODES, and authored SECURITY sections from this bundle with no change to the connector itself.
+
+Until then, `pm connectors catalog --json`, `pm etl catalog`, the generated connector catalog under `docs/connectors/catalog/`, and the website data read the bundle directly and already report the complete 19-stream, 0-write surface.
+
 ## Known limits
 
 - This work is fixture-only and local-test verified; it does not certify live AWS provider behavior.

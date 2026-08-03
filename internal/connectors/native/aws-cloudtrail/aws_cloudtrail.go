@@ -390,12 +390,32 @@ func shouldSkipDerivedActionError(action string, err error) bool {
 	body := strings.ToLower(httpErr.Body)
 	switch action {
 	case "GetResourcePolicy":
-		return httpErr.Status == 404 || strings.Contains(body, "notfound") || strings.Contains(body, "not found")
+		return httpErr.Status == http.StatusNotFound || containsAny(body, "notfound", "not found")
 	case "GetInsightSelectors":
-		return httpErr.Status == http.StatusBadRequest && (strings.Contains(body, "insightnotenabledexception") || strings.Contains(body, "insight not enabled") || strings.Contains(body, "insights not enabled"))
+		return httpErr.Status == http.StatusBadRequest && containsAny(body, "insightnotenabledexception", "insight not enabled", "insights not enabled")
+	case "GetEventConfiguration":
+		if httpErr.Status == http.StatusNotFound {
+			return true
+		}
+		return httpErr.Status == http.StatusBadRequest && containsAny(body,
+			"trailnotfoundexception",
+			"eventdatastorenotfoundexception",
+			"inactiveeventdatastoreexception",
+			"invalideventdatastorecategoryexception",
+			"unsupportedoperationexception",
+		)
 	default:
 		return false
 	}
+}
+
+func containsAny(value string, markers ...string) bool {
+	for _, marker := range markers {
+		if strings.Contains(value, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 // OperationDirectRead rejects provider query/lookup operations until shared
