@@ -14,7 +14,7 @@ func validateSQSNumberAttributeValue(value string) error {
 	if index := strings.IndexAny(value, "eE"); index >= 0 {
 		mantissa = value[:index]
 		exponentText := value[index+1:]
-		if exponentText == "" || strings.IndexAny(exponentText, "eE") >= 0 {
+		if exponentText == "" || strings.ContainsAny(exponentText, "eE") {
 			return errors.New("number string_value must be a valid SQS number")
 		}
 		parsed, err := strconv.ParseInt(exponentText, 10, 64)

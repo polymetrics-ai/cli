@@ -67,3 +67,11 @@ Red evidence is the reproduced boundary behavior from the fresh review: a newlin
 Regression coverage authored before production edits adds a table-driven newline-only BinaryValue rejection case at the public dry-run boundary. Per the review-phase contract, the focused package test runs once after the complete fix round.
 
 Green evidence: `go test ./internal/connectors/native/amazon-sqs -count=1` passed after the decoded-byte invariant was enforced; all inputs and endpoints remain local and synthetic.
+
+## 2026-08-03 CI verify staticcheck lint-fix
+
+Red evidence is the reproduced remote gate: `golangci-lint run ./internal/connectors/native/...` on the pre-fix head (`1f7971684`) reports `S1003: should use strings.ContainsAny(exponentText, "eE") instead (staticcheck)` at `message_attribute_values.go:17:28`, matching the PR #3541 `verify` failure annotation exactly.
+
+Regression coverage is the idempotent one-line correction itself: `strings.IndexAny(exponentText, "eE") >= 0` -> `strings.ContainsAny(exponentText, "eE")` preserves the exact predicate semantics, so the existing table-driven Number validation cases continue to hold without new test lines.
+
+Green evidence: `golangci-lint run ./internal/connectors/native/...` returns `0 issues` after the fix, `go test ./internal/connectors/native/amazon-sqs -count=1` still passes, `go run ./cmd/connectorgen validate internal/connectors/defs/amazon-sqs --json` reports no findings, and `pm docs validate --connectors-dir docs/connectors` passes; all inputs remain local and synthetic.

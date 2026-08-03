@@ -714,6 +714,7 @@
         "message_body",
         "message_attributes",
         "message_system_attributes",
+        "attribute_value",
         "attributes",
         "task_handle"
       ],
