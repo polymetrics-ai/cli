@@ -1,0 +1,19 @@
+{
+  "record": {
+    "page": "fixture_page",
+    "listed": true,
+    "permlevel": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/wiki/settings/fixture_page"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "multipath": "fixture_multipath",
+    "srname": "fixture_srname"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/multi/fixture_multipath/r/fixture_srname"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

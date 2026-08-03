@@ -1,0 +1,18 @@
+{
+  "record": {
+    "multipath": "fixture_multipath",
+    "expand_srs": true
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/api/multi/fixture_multipath"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

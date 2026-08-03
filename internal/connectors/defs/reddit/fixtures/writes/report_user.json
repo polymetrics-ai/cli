@@ -1,0 +1,19 @@
+{
+  "record": {
+    "details": "fixture_details",
+    "reason": "fixture_reason",
+    "('user',)": "fixture_('user',)"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/report_user"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

@@ -5,27 +5,57 @@
       "User-Agent": "go:ai.polymetrics.cli:v1 (by /u/{{ config.reddit_username }})"
     },
     "auth": [
-      { "mode": "custom", "hook": "reddit", "when": "{{ secrets.refresh_token }}" },
-      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "custom",
+        "hook": "reddit",
+        "when": "{{ secrets.refresh_token }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
       "cursor_param": "after",
       "token_path": "data.after"
     },
-    "check": { "method": "GET", "path": "/r/{{ config.subreddit }}/new", "query": { "limit": "1", "raw_json": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/r/{{ config.subreddit }}/new",
+      "query": {
+        "limit": "1",
+        "raw_json": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "reddit access_token is missing, invalid, or expired (reddit bearer tokens expire 1 hour after issuance and this connector does not refresh them); re-run pm credentials add reddit with a freshly issued token" },
-      { "status": 403, "hint": "reddit account lacks access for this subreddit" },
-      { "status": 429, "class": "rate_limited", "hint": "reddit rate limit exceeded; check the X-Ratelimit-Used, X-Ratelimit-Remaining, and X-Ratelimit-Reset response headers for the current budget and reset time; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "reddit access_token is missing, invalid, or expired (reddit bearer tokens expire 1 hour after issuance and this connector does not refresh them); re-run pm credentials add reddit with a freshly issued token"
+      },
+      {
+        "status": 403,
+        "hint": "reddit account lacks access for this subreddit"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "reddit rate limit exceeded; check the X-Ratelimit-Used, X-Ratelimit-Remaining, and X-Ratelimit-Reset response headers for the current budget and reset time; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "posts",
       "path": "/r/{{ config.subreddit }}/new",
-      "query": { "limit": "100", "raw_json": "1" },
-      "records": { "path": "data.children" },
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
       "computed_fields": {
         "id": "{{ record.data.id }}",
         "name": "{{ record.data.name }}",
@@ -40,8 +70,13 @@
     {
       "name": "comments",
       "path": "/r/{{ config.subreddit }}/comments",
-      "query": { "limit": "100", "raw_json": "1" },
-      "records": { "path": "data.children" },
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
       "computed_fields": {
         "id": "{{ record.data.id }}",
         "name": "{{ record.data.name }}",
@@ -52,6 +87,1083 @@
         "permalink": "{{ record.data.permalink }}"
       },
       "schema": "schemas/comments.json"
+    },
+    {
+      "name": "friends_list",
+      "path": "/prefs/friends",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/relationships.json"
+    },
+    {
+      "name": "blocked_list",
+      "path": "/prefs/blocked",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/relationships.json"
+    },
+    {
+      "name": "trusted_list",
+      "path": "/prefs/trusted",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/relationships.json"
+    },
+    {
+      "name": "flair_list",
+      "path": "/r/{{ config.subreddit }}/api/flairlist",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "users"
+      },
+      "computed_fields": {
+        "user": "{{ record.user }}",
+        "flair_text": "{{ record.flair_text }}",
+        "flair_css_class": "{{ record.flair_css_class }}"
+      },
+      "schema": "schemas/flair_list.json"
+    },
+    {
+      "name": "best_posts",
+      "path": "/best",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "duplicate_posts",
+      "path": "/duplicates/{{ query.article }}",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "hot_posts",
+      "path": "/r/{{ config.subreddit }}/hot",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "rising_posts",
+      "path": "/r/{{ config.subreddit }}/rising",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "top_posts",
+      "path": "/r/{{ config.subreddit }}/top",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "controversial_posts",
+      "path": "/r/{{ config.subreddit }}/controversial",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "live_thread_updates",
+      "path": "/live/{{ query.thread }}",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "author": "{{ record.data.author }}",
+        "body": "{{ record.data.body }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "stricken": "{{ record.data.stricken }}"
+      },
+      "schema": "schemas/live_updates.json"
+    },
+    {
+      "name": "live_thread_discussions",
+      "path": "/live/{{ query.thread }}/discussions",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "inbox_messages",
+      "path": "/message/inbox",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "author": "{{ record.data.author }}",
+        "dest": "{{ record.data.dest }}",
+        "subject": "{{ record.data.subject }}",
+        "body": "{{ record.data.body }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "was_comment": "{{ record.data.was_comment }}",
+        "new": "{{ record.data.new }}"
+      },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "unread_messages",
+      "path": "/message/unread",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "author": "{{ record.data.author }}",
+        "dest": "{{ record.data.dest }}",
+        "subject": "{{ record.data.subject }}",
+        "body": "{{ record.data.body }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "was_comment": "{{ record.data.was_comment }}",
+        "new": "{{ record.data.new }}"
+      },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "sent_messages",
+      "path": "/message/sent",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "author": "{{ record.data.author }}",
+        "dest": "{{ record.data.dest }}",
+        "subject": "{{ record.data.subject }}",
+        "body": "{{ record.data.body }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "was_comment": "{{ record.data.was_comment }}",
+        "new": "{{ record.data.new }}"
+      },
+      "schema": "schemas/messages.json"
+    },
+    {
+      "name": "mod_log",
+      "path": "/r/{{ config.subreddit }}/about/log",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "action": "{{ record.data.action }}",
+        "mod": "{{ record.data.mod }}",
+        "target_fullname": "{{ record.data.target_fullname }}",
+        "target_author": "{{ record.data.target_author }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "details": "{{ record.data.details }}",
+        "description": "{{ record.data.description }}"
+      },
+      "schema": "schemas/mod_actions.json"
+    },
+    {
+      "name": "mod_reports_queue",
+      "path": "/r/{{ config.subreddit }}/about/reports",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "mod_spam_queue",
+      "path": "/r/{{ config.subreddit }}/about/spam",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "mod_modqueue",
+      "path": "/r/{{ config.subreddit }}/about/modqueue",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "mod_unmoderated_queue",
+      "path": "/r/{{ config.subreddit }}/about/unmoderated",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "mod_edited_queue",
+      "path": "/r/{{ config.subreddit }}/about/edited",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "search_results",
+      "path": "/r/{{ config.subreddit }}/search",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "subreddit_moderators",
+      "path": "/r/{{ config.subreddit }}/about/moderators",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/relationships.json"
+    },
+    {
+      "name": "subreddit_contributors",
+      "path": "/r/{{ config.subreddit }}/about/contributors",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/relationships.json"
+    },
+    {
+      "name": "subreddit_wiki_contributors",
+      "path": "/r/{{ config.subreddit }}/about/wikicontributors",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/relationships.json"
+    },
+    {
+      "name": "subreddit_banned_users",
+      "path": "/r/{{ config.subreddit }}/about/banned",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/relationships.json"
+    },
+    {
+      "name": "subreddit_muted_users",
+      "path": "/r/{{ config.subreddit }}/about/muted",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/relationships.json"
+    },
+    {
+      "name": "subreddit_wiki_banned_users",
+      "path": "/r/{{ config.subreddit }}/about/wikibanned",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "name": "{{ record.name }}",
+        "date": "{{ record.date }}"
+      },
+      "schema": "schemas/relationships.json"
+    },
+    {
+      "name": "my_subscribed_subreddits",
+      "path": "/subreddits/mine/subscriber",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "display_name": "{{ record.data.display_name }}",
+        "title": "{{ record.data.title }}",
+        "public_description": "{{ record.data.public_description }}",
+        "subscribers": "{{ record.data.subscribers }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "url": "{{ record.data.url }}",
+        "over18": "{{ record.data.over18 }}"
+      },
+      "schema": "schemas/subreddits.json"
+    },
+    {
+      "name": "my_contributor_subreddits",
+      "path": "/subreddits/mine/contributor",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "display_name": "{{ record.data.display_name }}",
+        "title": "{{ record.data.title }}",
+        "public_description": "{{ record.data.public_description }}",
+        "subscribers": "{{ record.data.subscribers }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "url": "{{ record.data.url }}",
+        "over18": "{{ record.data.over18 }}"
+      },
+      "schema": "schemas/subreddits.json"
+    },
+    {
+      "name": "my_moderated_subreddits",
+      "path": "/subreddits/mine/moderator",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "display_name": "{{ record.data.display_name }}",
+        "title": "{{ record.data.title }}",
+        "public_description": "{{ record.data.public_description }}",
+        "subscribers": "{{ record.data.subscribers }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "url": "{{ record.data.url }}",
+        "over18": "{{ record.data.over18 }}"
+      },
+      "schema": "schemas/subreddits.json"
+    },
+    {
+      "name": "my_streams_subreddits",
+      "path": "/subreddits/mine/streams",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "display_name": "{{ record.data.display_name }}",
+        "title": "{{ record.data.title }}",
+        "public_description": "{{ record.data.public_description }}",
+        "subscribers": "{{ record.data.subscribers }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "url": "{{ record.data.url }}",
+        "over18": "{{ record.data.over18 }}"
+      },
+      "schema": "schemas/subreddits.json"
+    },
+    {
+      "name": "subreddit_search_results",
+      "path": "/subreddits/search",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "display_name": "{{ record.data.display_name }}",
+        "title": "{{ record.data.title }}",
+        "public_description": "{{ record.data.public_description }}",
+        "subscribers": "{{ record.data.subscribers }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "url": "{{ record.data.url }}",
+        "over18": "{{ record.data.over18 }}"
+      },
+      "schema": "schemas/subreddits.json"
+    },
+    {
+      "name": "popular_subreddits",
+      "path": "/subreddits/popular",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "display_name": "{{ record.data.display_name }}",
+        "title": "{{ record.data.title }}",
+        "public_description": "{{ record.data.public_description }}",
+        "subscribers": "{{ record.data.subscribers }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "url": "{{ record.data.url }}",
+        "over18": "{{ record.data.over18 }}"
+      },
+      "schema": "schemas/subreddits.json"
+    },
+    {
+      "name": "new_subreddits",
+      "path": "/subreddits/new",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "display_name": "{{ record.data.display_name }}",
+        "title": "{{ record.data.title }}",
+        "public_description": "{{ record.data.public_description }}",
+        "subscribers": "{{ record.data.subscribers }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "url": "{{ record.data.url }}",
+        "over18": "{{ record.data.over18 }}"
+      },
+      "schema": "schemas/subreddits.json"
+    },
+    {
+      "name": "user_search_results",
+      "path": "/users/search",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "link_karma": "{{ record.data.link_karma }}",
+        "comment_karma": "{{ record.data.comment_karma }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "is_mod": "{{ record.data.is_mod }}",
+        "verified": "{{ record.data.verified }}"
+      },
+      "schema": "schemas/accounts.json"
+    },
+    {
+      "name": "popular_user_subreddits",
+      "path": "/users/popular",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "display_name": "{{ record.data.display_name }}",
+        "title": "{{ record.data.title }}",
+        "public_description": "{{ record.data.public_description }}",
+        "subscribers": "{{ record.data.subscribers }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "url": "{{ record.data.url }}",
+        "over18": "{{ record.data.over18 }}"
+      },
+      "schema": "schemas/subreddits.json"
+    },
+    {
+      "name": "new_user_subreddits",
+      "path": "/users/new",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "display_name": "{{ record.data.display_name }}",
+        "title": "{{ record.data.title }}",
+        "public_description": "{{ record.data.public_description }}",
+        "subscribers": "{{ record.data.subscribers }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "url": "{{ record.data.url }}",
+        "over18": "{{ record.data.over18 }}"
+      },
+      "schema": "schemas/subreddits.json"
+    },
+    {
+      "name": "user_overview",
+      "path": "/user/{{ query.username }}/overview",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "user_submitted",
+      "path": "/user/{{ query.username }}/submitted",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "user_comments",
+      "path": "/user/{{ query.username }}/comments",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "body": "{{ record.data.body }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "link_id": "{{ record.data.link_id }}",
+        "parent_id": "{{ record.data.parent_id }}",
+        "score": "{{ record.data.score }}"
+      },
+      "schema": "schemas/comments.json"
+    },
+    {
+      "name": "user_upvoted",
+      "path": "/user/{{ query.username }}/upvoted",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "user_downvoted",
+      "path": "/user/{{ query.username }}/downvoted",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "user_hidden",
+      "path": "/user/{{ query.username }}/hidden",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "user_saved",
+      "path": "/user/{{ query.username }}/saved",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "user_gilded",
+      "path": "/user/{{ query.username }}/gilded",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "wiki_page_discussions",
+      "path": "/r/{{ config.subreddit }}/wiki/discussions/{{ query.page }}",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data.children"
+      },
+      "computed_fields": {
+        "id": "{{ record.data.id }}",
+        "name": "{{ record.data.name }}",
+        "title": "{{ record.data.title }}",
+        "subreddit": "{{ record.data.subreddit }}",
+        "author": "{{ record.data.author }}",
+        "created_utc": "{{ record.data.created_utc }}",
+        "permalink": "{{ record.data.permalink }}",
+        "url": "{{ record.data.url }}",
+        "score": "{{ record.data.score }}",
+        "num_comments": "{{ record.data.num_comments }}",
+        "over_18": "{{ record.data.over_18 }}"
+      },
+      "schema": "schemas/posts.json"
+    },
+    {
+      "name": "wiki_page_revisions",
+      "path": "/r/{{ config.subreddit }}/wiki/revisions/{{ query.page }}",
+      "query": {
+        "limit": "100",
+        "raw_json": "1"
+      },
+      "records": {
+        "path": "data"
+      },
+      "computed_fields": {
+        "id": "{{ record.id }}",
+        "timestamp": "{{ record.timestamp }}",
+        "author": "{{ record.author.data.name }}",
+        "reason": "{{ record.reason }}"
+      },
+      "schema": "schemas/wiki_revisions.json"
     }
   ]
 }

@@ -1,14 +1,1611 @@
 {
   "api": "Reddit OAuth API (https://oauth.reddit.com)",
   "docs": "https://www.reddit.com/dev/api/",
-  "reviewed_at": "2026-08-03",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only (posts, comments); legacy itself ships no writes (capabilities.write is false), no OAuth token acquisition (the caller supplies a valid access_token), and no other Reddit resource is modeled. CAVEAT (cli-reddit-rdtcli-official-api-parity-r1 report §4.3, dated 2026-08-03): the comments stream's GET /r/{subreddit}/comments is NOT among the 202 endpoints documented at https://www.reddit.com/dev/api/ -- the only documented comments listing is the per-article tree GET [/r/subreddit]/comments/{article} (see the excluded entry for that path below). The bare sub-wide route is live and working (it is what the legacy connector always called) but is undocumented surface; kept as-is rather than migrated because the documented per-article route returns a two-element top-level Listing array ([post_listing, comment_listing]) that this engine's records.path dialect (dotted-key traversal only, no array-index selection; connsdk.RecordsAt) cannot parse, and because migrating would require an N+1 fan-out over every post in the subreddit against Reddit's 100 QPM budget -- both real engine/budget gaps, not oversights.",
+  "reviewed_at": "2026-08-04",
+  "scope": "Full documented-parity migration (cli-reddit-full-parity-r1, 2026-08-04): all 202 endpoints documented at https://www.reddit.com/dev/api/ (re-verified live via headed Chrome DOM extraction on 2026-08-04, reproducing the same 202/78-GET/109-POST/3-PATCH/7-DELETE/5-PUT and 19-section counts as the prior research report) are dispositioned exactly once below: covered by an ETL stream, a direct-read command, or a reverse-ETL write action, or excluded with a named reason. Per the captain's 2026-08-04 ruling, moderator-scoped (81, of which 3 also carry a binary_payload S3-lease disposition) and live-thread-management-scoped (10) endpoints are BUILT as real commands rather than ledgered-only -- they function only when the token holder moderates/owns the target subreddit or live thread, which is a runtime authorization outcome, not a reason to withhold implementation; the required OAuth scope is declared per stream/action so an operator sees exactly what they are granting. POST /api/vote is ledgered as excluded pending a generic writes.schema.json batchable:false engine primitive (tracked as a separate foundation PR) needed to guarantee it can never be reached by a scheduled sync or bulk reverse-ETL plan, honoring Reddit's human-one-for-one voting rule. 7 endpoints are blocked by a named Reddit-side dependency (approved-app-only, premium-subscription-only, deprecated, or an S3-lease binary upload). Reddit's commercial-use contract requirement and its content-deletion propagation obligation are open captain decisions outside this PR's scope; see docs.md. 228 rows total, not 202: 26 documented endpoints use a generic {where}/{sort}/{location} placeholder covering multiple genuinely distinct concrete resources (e.g. /user/{username}/submitted vs /user/{username}/saved), so each concrete resolved path gets its own row here even though it is one doc block on reddit.com/dev/api/ -- 49 concrete streams from 23 documented listing endpoints; the exact variant split is a reasoned interpretation, not a re-derivation of the prior research report's 234 figure. CAVEAT (carried from PR #3677): the comments stream's GET /r/{subreddit}/comments is NOT among the 202 documented endpoints -- the only documented comments listing is the per-article tree GET [/r/subreddit]/comments/{article} (see its excluded row below). The bare route is live and working but undocumented surface; kept as-is because the documented per-article route returns a two-element top-level Listing array this engine's records.path dialect cannot parse, and migrating would require an N+1 fan-out over every post in the subreddit against Reddit's 100 QPM budget.",
   "endpoints": [
     {
       "method": "GET",
-      "path": "/r/{subreddit}/new",
+      "path": "/api/v1/me",
+      "covered_by": {
+        "direct_read": "account me"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/karma",
+      "covered_by": {
+        "direct_read": "account me-karma"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/prefs",
+      "covered_by": {
+        "direct_read": "account me-prefs"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/me/prefs",
+      "covered_by": {
+        "write": "me_prefs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/me/trophies",
+      "covered_by": {
+        "direct_read": "account me-trophies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prefs/friends",
+      "covered_by": {
+        "stream": "friends_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prefs/blocked",
+      "covered_by": {
+        "stream": "blocked_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prefs/trusted",
+      "covered_by": {
+        "stream": "trusted_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/announcements/v1",
+      "covered_by": {
+        "direct_read": "announcements announcements-v1"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/announcements/v1/hide",
+      "covered_by": {
+        "write": "announcements_v1_hide"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/announcements/v1/read",
+      "covered_by": {
+        "write": "announcements_v1_read"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/announcements/v1/read_all",
+      "covered_by": {
+        "write": "announcements_v1_read_all"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/needs_captcha",
+      "excluded": {
+        "category": "non_data_endpoint",
+        "reason": "Check whether ReCAPTCHAs are needed for API methods -- only meaningful inside Reddit's legacy captcha flow; not a syncable data resource."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/{subreddit}/emoji.json",
+      "covered_by": {
+        "write": "subreddit_emoji_json"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/{subreddit}/emoji/{emoji_name}",
+      "covered_by": {
+        "write": "subreddit_emoji_emoji_name"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/{subreddit}/emoji_asset_upload_s3.json",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Acquires an upload lease to an S3 temp bucket requiring a second multipart PUT to a third-party host; binary_payload disposition (used elsewhere in this repo) until a bounded-transfer executor exists."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/{subreddit}/emoji_custom_size",
+      "covered_by": {
+        "write": "subreddit_emoji_custom_size"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/{subreddit}/emojis/all",
+      "covered_by": {
+        "direct_read": "emoji subreddit-emojis-all"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/clearflairtemplates",
+      "covered_by": {
+        "write": "clearflairtemplates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/deleteflair",
+      "covered_by": {
+        "write": "deleteflair"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/deleteflairtemplate",
+      "covered_by": {
+        "write": "deleteflairtemplate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/flair",
+      "covered_by": {
+        "write": "flair"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/r/{subreddit}/api/flair_template_order",
+      "covered_by": {
+        "write": "flair_template_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/flairconfig",
+      "covered_by": {
+        "write": "flairconfig"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/flaircsv",
+      "covered_by": {
+        "write": "flaircsv"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/api/flairlist",
+      "covered_by": {
+        "stream": "flair_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/flairselector",
+      "covered_by": {
+        "write": "flairselector"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/flairtemplate",
+      "covered_by": {
+        "write": "flairtemplate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/flairtemplate_v2",
+      "covered_by": {
+        "write": "flairtemplate_v2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/api/link_flair",
+      "covered_by": {
+        "direct_read": "flair link-flair"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/api/link_flair_v2",
+      "covered_by": {
+        "direct_read": "flair link-flair-v2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/selectflair",
+      "covered_by": {
+        "write": "selectflair"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/setflairenabled",
+      "covered_by": {
+        "write": "setflairenabled"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/api/user_flair",
+      "covered_by": {
+        "direct_read": "flair user-flair"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/api/user_flair_v2",
+      "covered_by": {
+        "direct_read": "flair user-flair-v2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/comment",
+      "covered_by": {
+        "write": "comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/del",
+      "covered_by": {
+        "write": "del"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/editusertext",
+      "covered_by": {
+        "write": "editusertext"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/follow_post",
+      "covered_by": {
+        "write": "follow_post"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/hide",
+      "covered_by": {
+        "write": "hide"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/api/info",
+      "covered_by": {
+        "direct_read": "links-and-comments info"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/lock",
+      "covered_by": {
+        "write": "lock"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/marknsfw",
+      "covered_by": {
+        "write": "marknsfw"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/morechildren",
+      "covered_by": {
+        "direct_read": "links-and-comments morechildren"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/report",
+      "covered_by": {
+        "write": "report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/save",
+      "covered_by": {
+        "write": "save"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/saved_categories",
+      "covered_by": {
+        "direct_read": "links-and-comments saved-categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/sendreplies",
+      "covered_by": {
+        "write": "sendreplies"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/set_contest_mode",
+      "covered_by": {
+        "write": "set_contest_mode"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/set_subreddit_sticky",
+      "covered_by": {
+        "write": "set_subreddit_sticky"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/set_suggested_sort",
+      "covered_by": {
+        "write": "set_suggested_sort"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/spoiler",
+      "covered_by": {
+        "write": "spoiler"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/store_visits",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Requires a subscription to reddit premium (verbatim from Reddit's docs) -- an account-tier gate, not a code change."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/submit",
+      "covered_by": {
+        "write": "submit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/unhide",
+      "covered_by": {
+        "write": "unhide"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/unlock",
+      "covered_by": {
+        "write": "unlock"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/unmarknsfw",
+      "covered_by": {
+        "write": "unmarknsfw"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/unsave",
+      "covered_by": {
+        "write": "unsave"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/unspoiler",
+      "covered_by": {
+        "write": "unspoiler"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/vote",
+      "excluded": {
+        "category": "out_of_scope",
+        "reason": "Verbatim from Reddit's docs: \"votes must be cast by humans. That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.\" The captain ruled on 2026-08-04 that pm reddit vote should ship as a human-invoked, non-batchable interactive command, one vote per explicit confirmation -- never reachable from a scheduled sync or bulk reverse-ETL plan. Verified against internal/app/app.go's PlanReverseETL and engine/direct_read.go: the write engine has no way to express that exclusion today (writes.json has no non-batchable marker; operations.json's rest_write kind is schema-declared with zero execution path). A generic writes.schema.json batchable:false field + a PlanReverseETL guard is tracked as a separate foundation PR (not connector-scoped). Ledgered here pending that primitive; flip to covered_by.write once it lands."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bestrss support",
+      "covered_by": {
+        "stream": "best_posts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/by_id/{names}",
+      "covered_by": {
+        "direct_read": "listings by-id-names"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/comments/{article}rss support",
+      "covered_by": {
+        "direct_read": "listings comments-article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/duplicates/{article}rss support",
+      "covered_by": {
+        "stream": "duplicate_posts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/hotrss support",
+      "covered_by": {
+        "stream": "hot_posts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/newrss support",
       "covered_by": {
         "stream": "posts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/risingrss support",
+      "covered_by": {
+        "stream": "rising_posts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/top",
+      "covered_by": {
+        "stream": "top_posts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/controversial",
+      "covered_by": {
+        "stream": "controversial_posts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/live/by_id/{names}",
+      "covered_by": {
+        "direct_read": "live live-by-id-names"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/create",
+      "covered_by": {
+        "write": "live_create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/live/happening_now",
+      "covered_by": {
+        "direct_read": "live live-happening-now"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/accept_contributor_invite",
+      "covered_by": {
+        "write": "live_thread_accept_contributor_invite"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/close_thread",
+      "covered_by": {
+        "write": "live_thread_close_thread"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/delete_update",
+      "covered_by": {
+        "write": "live_thread_delete_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/edit",
+      "covered_by": {
+        "write": "live_thread_edit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/hide_discussion",
+      "covered_by": {
+        "write": "live_thread_hide_discussion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/invite_contributor",
+      "covered_by": {
+        "write": "live_thread_invite_contributor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/leave_contributor",
+      "covered_by": {
+        "write": "live_thread_leave_contributor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/report",
+      "covered_by": {
+        "write": "live_thread_report"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/rm_contributor",
+      "covered_by": {
+        "write": "live_thread_rm_contributor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/rm_contributor_invite",
+      "covered_by": {
+        "write": "live_thread_rm_contributor_invite"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/set_contributor_permissions",
+      "covered_by": {
+        "write": "live_thread_set_contributor_permissions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/strike_update",
+      "covered_by": {
+        "write": "live_thread_strike_update"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/unhide_discussion",
+      "covered_by": {
+        "write": "live_thread_unhide_discussion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/live/{thread}/update",
+      "covered_by": {
+        "write": "live_thread_update"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/live/{thread}rss support",
+      "covered_by": {
+        "stream": "live_thread_updates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/live/{thread}/about",
+      "covered_by": {
+        "direct_read": "live live-thread-about"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/live/{thread}/contributors",
+      "covered_by": {
+        "direct_read": "live live-thread-contributors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/live/{thread}/discussionsrss support",
+      "covered_by": {
+        "stream": "live_thread_discussions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/live/{thread}/updates/{update_id}",
+      "covered_by": {
+        "direct_read": "live live-thread-updates-update-id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compose",
+      "covered_by": {
+        "write": "compose"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/del_msg",
+      "covered_by": {
+        "write": "del_msg"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/read_all_messages",
+      "covered_by": {
+        "write": "read_all_messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/read_message",
+      "covered_by": {
+        "write": "read_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message/inbox",
+      "covered_by": {
+        "stream": "inbox_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message/unread",
+      "covered_by": {
+        "stream": "unread_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message/sent",
+      "covered_by": {
+        "stream": "sent_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/scopes",
+      "covered_by": {
+        "direct_read": "misc scopes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/logrss support",
+      "covered_by": {
+        "stream": "mod_log"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/reports",
+      "covered_by": {
+        "stream": "mod_reports_queue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/spam",
+      "covered_by": {
+        "stream": "mod_spam_queue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/modqueue",
+      "covered_by": {
+        "stream": "mod_modqueue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/unmoderated",
+      "covered_by": {
+        "stream": "mod_unmoderated_queue"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/edited",
+      "covered_by": {
+        "stream": "mod_edited_queue"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/accept_moderator_invite",
+      "covered_by": {
+        "write": "accept_moderator_invite"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/approve",
+      "covered_by": {
+        "write": "approve"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/distinguish",
+      "covered_by": {
+        "write": "distinguish"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/ignore_reports",
+      "covered_by": {
+        "write": "ignore_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/leavecontributor",
+      "covered_by": {
+        "write": "leavecontributor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/leavemoderator",
+      "covered_by": {
+        "write": "leavemoderator"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/remove",
+      "covered_by": {
+        "write": "remove"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/show_comment",
+      "covered_by": {
+        "write": "show_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/snooze_reports",
+      "covered_by": {
+        "write": "snooze_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/unignore_reports",
+      "covered_by": {
+        "write": "unignore_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/unsnooze_reports",
+      "covered_by": {
+        "write": "unsnooze_reports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/update_crowd_control_level",
+      "covered_by": {
+        "write": "update_crowd_control_level"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/stylesheet",
+      "covered_by": {
+        "direct_read": "moderation stylesheet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/bulk_read",
+      "covered_by": {
+        "write": "mod_bulk_read"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mod/conversations",
+      "covered_by": {
+        "direct_read": "modmail mod-conversations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations",
+      "covered_by": {
+        "write": "mod_conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mod/conversations/:conversation_id",
+      "covered_by": {
+        "direct_read": "modmail mod-conversations-conversation-id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/approve",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id_approve"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/archive",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id_archive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/disapprove",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id_disapprove"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/mod/conversations/:conversation_id/highlight",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id_highlight"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/highlight",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id_highlight_2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/mute",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id_mute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/temp_ban",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id_temp_ban"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/unarchive",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id_unarchive"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/unban",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id_unban"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/:conversation_id/unmute",
+      "covered_by": {
+        "write": "mod_conversations_conversation_id_unmute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/read",
+      "covered_by": {
+        "write": "mod_conversations_read"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mod/conversations/subreddits",
+      "covered_by": {
+        "direct_read": "modmail mod-conversations-subreddits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/conversations/unread",
+      "covered_by": {
+        "write": "mod_conversations_unread"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mod/conversations/unread/count",
+      "covered_by": {
+        "direct_read": "modmail mod-conversations-unread-count"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/mod/notes",
+      "covered_by": {
+        "write": "mod_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mod/notes",
+      "covered_by": {
+        "direct_read": "modnote mod-notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/mod/notes",
+      "covered_by": {
+        "write": "mod_notes_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/mod/notes/recent",
+      "covered_by": {
+        "direct_read": "modnote mod-notes-recent"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/multi/copy",
+      "covered_by": {
+        "write": "multi_copy"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/multi/mine",
+      "covered_by": {
+        "direct_read": "multis multi-mine"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/multi/user/{username}",
+      "covered_by": {
+        "direct_read": "multis multi-user-username"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/multi/{multipath}",
+      "covered_by": {
+        "write": "multi_multipath"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/multi/{multipath}",
+      "covered_by": {
+        "direct_read": "multis multi-multipath"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/multi/{multipath}",
+      "covered_by": {
+        "write": "multi_multipath_2"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/multi/{multipath}",
+      "covered_by": {
+        "write": "multi_multipath_3"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/multi/{multipath}/description",
+      "covered_by": {
+        "direct_read": "multis multi-multipath-description"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/multi/{multipath}/description",
+      "covered_by": {
+        "write": "multi_multipath_description"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/multi/{multipath}/r/{srname}",
+      "covered_by": {
+        "write": "multi_multipath_r_srname"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/multi/{multipath}/r/{srname}",
+      "covered_by": {
+        "direct_read": "multis multi-multipath-r-srname"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/multi/{multipath}/r/{srname}",
+      "covered_by": {
+        "write": "multi_multipath_r_srname_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/searchrss support",
+      "covered_by": {
+        "stream": "search_results"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/moderators",
+      "covered_by": {
+        "stream": "subreddit_moderators"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/contributors",
+      "covered_by": {
+        "stream": "subreddit_contributors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/wikicontributors",
+      "covered_by": {
+        "stream": "subreddit_wiki_contributors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/banned",
+      "covered_by": {
+        "stream": "subreddit_banned_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/muted",
+      "covered_by": {
+        "stream": "subreddit_muted_users"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/wikibanned",
+      "covered_by": {
+        "stream": "subreddit_wiki_banned_users"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/delete_sr_banner",
+      "covered_by": {
+        "write": "delete_sr_banner"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/delete_sr_header",
+      "covered_by": {
+        "write": "delete_sr_header"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/delete_sr_icon",
+      "covered_by": {
+        "write": "delete_sr_icon"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/delete_sr_img",
+      "covered_by": {
+        "write": "delete_sr_img"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/recommend/sr/{srnames}",
+      "excluded": {
+        "category": "deprecated",
+        "reason": "DEPRECATED: Return subreddits recommended for the given subreddit(s) (verbatim marker from Reddit's docs)."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/search_reddit_names",
+      "covered_by": {
+        "direct_read": "subreddits search-reddit-names"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/search_reddit_names",
+      "covered_by": {
+        "write": "search_reddit_names"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/search_subreddits",
+      "covered_by": {
+        "write": "search_subreddits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/site_admin",
+      "covered_by": {
+        "write": "site_admin"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/api/submit_text",
+      "covered_by": {
+        "direct_read": "subreddits submit-text"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/subreddit_autocomplete",
+      "covered_by": {
+        "direct_read": "subreddits subreddit-autocomplete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/subreddit_autocomplete_v2",
+      "covered_by": {
+        "direct_read": "subreddits subreddit-autocomplete-v2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/subreddit_stylesheet",
+      "covered_by": {
+        "write": "subreddit_stylesheet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/subscribe",
+      "covered_by": {
+        "write": "subscribe"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/upload_sr_img",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Acquires an upload lease to an S3 temp bucket requiring a second multipart PUT to a third-party host; binary_payload disposition, same as the other 2 S3-lease upload endpoints."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/{subreddit}/post_requirements",
+      "covered_by": {
+        "direct_read": "subreddits subreddit-post-requirements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about",
+      "covered_by": {
+        "direct_read": "subreddits r-subreddit-about"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/edit",
+      "covered_by": {
+        "direct_read": "subreddits r-subreddit-about-edit"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/rules",
+      "covered_by": {
+        "direct_read": "subreddits r-subreddit-about-rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/about/traffic",
+      "covered_by": {
+        "direct_read": "subreddits r-subreddit-about-traffic"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/sidebar",
+      "covered_by": {
+        "direct_read": "subreddits sidebar"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/sticky",
+      "covered_by": {
+        "direct_read": "subreddits sticky"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subreddits/mine/subscriber",
+      "covered_by": {
+        "stream": "my_subscribed_subreddits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subreddits/mine/contributor",
+      "covered_by": {
+        "stream": "my_contributor_subreddits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subreddits/mine/moderator",
+      "covered_by": {
+        "stream": "my_moderated_subreddits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subreddits/mine/streams",
+      "covered_by": {
+        "stream": "my_streams_subreddits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subreddits/searchrss support",
+      "covered_by": {
+        "stream": "subreddit_search_results"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subreddits/popular",
+      "covered_by": {
+        "stream": "popular_subreddits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subreddits/new",
+      "covered_by": {
+        "stream": "new_subreddits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/searchrss support",
+      "covered_by": {
+        "stream": "user_search_results"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/popular",
+      "covered_by": {
+        "stream": "popular_user_subreddits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/new",
+      "covered_by": {
+        "stream": "new_user_subreddits"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/block_user",
+      "excluded": {
+        "category": "requires_elevated_scope",
+        "reason": "Only accessible to approved OAuth applications (verbatim from Reddit's docs) -- a Reddit-side app approval, not a code change."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/friend",
+      "covered_by": {
+        "write": "friend"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/report_user",
+      "covered_by": {
+        "write": "report_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/setpermissions",
+      "covered_by": {
+        "write": "setpermissions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/unfriend",
+      "covered_by": {
+        "write": "unfriend"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/user_data_by_account_ids",
+      "covered_by": {
+        "direct_read": "users user-data-by-account-ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/username_available",
+      "covered_by": {
+        "direct_read": "users username-available"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/me/friends/{username}",
+      "covered_by": {
+        "write": "me_friends_username"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/me/friends/{username}",
+      "covered_by": {
+        "write": "me_friends_username_2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/user/{username}/trophies",
+      "covered_by": {
+        "direct_read": "users user-username-trophies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{username}/about",
+      "covered_by": {
+        "direct_read": "users user-username-about"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{username}/overview",
+      "covered_by": {
+        "stream": "user_overview"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{username}/submitted",
+      "covered_by": {
+        "stream": "user_submitted"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{username}/comments",
+      "covered_by": {
+        "stream": "user_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{username}/upvoted",
+      "covered_by": {
+        "stream": "user_upvoted"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{username}/downvoted",
+      "covered_by": {
+        "stream": "user_downvoted"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{username}/hidden",
+      "covered_by": {
+        "stream": "user_hidden"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{username}/saved",
+      "covered_by": {
+        "stream": "user_saved"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user/{username}/gilded",
+      "covered_by": {
+        "stream": "user_gilded"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/widget",
+      "covered_by": {
+        "write": "widget"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/r/{subreddit}/api/widget/{widget_id}",
+      "covered_by": {
+        "write": "widget_widget_id"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/r/{subreddit}/api/widget/{widget_id}",
+      "covered_by": {
+        "write": "widget_widget_id_2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/widget_image_upload_s3",
+      "excluded": {
+        "category": "binary_payload",
+        "reason": "Acquires an upload lease to an S3 temp bucket requiring a second multipart PUT to a third-party host; binary_payload disposition, same as the other 2 S3-lease upload endpoints."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/r/{subreddit}/api/widget_order/{section}",
+      "covered_by": {
+        "write": "widget_order_section"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/api/widgets",
+      "covered_by": {
+        "direct_read": "widgets widgets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/wiki/alloweditor/{act}",
+      "covered_by": {
+        "write": "wiki_alloweditor_act"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/wiki/edit",
+      "covered_by": {
+        "write": "wiki_edit"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/wiki/hide",
+      "covered_by": {
+        "write": "wiki_hide"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/api/wiki/revert",
+      "covered_by": {
+        "write": "wiki_revert"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/wiki/discussions/{page}",
+      "covered_by": {
+        "stream": "wiki_page_discussions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/wiki/pages",
+      "covered_by": {
+        "direct_read": "wiki wiki-pages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/wiki/revisions",
+      "covered_by": {
+        "direct_read": "wiki wiki-revisions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/wiki/revisions/{page}",
+      "covered_by": {
+        "stream": "wiki_page_revisions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/wiki/settings/{page}",
+      "covered_by": {
+        "direct_read": "wiki wiki-settings-page"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/r/{subreddit}/wiki/settings/{page}",
+      "covered_by": {
+        "write": "wiki_settings_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/r/{subreddit}/wiki/{page}",
+      "covered_by": {
+        "direct_read": "wiki wiki-page"
       }
     },
     {
@@ -24,54 +1621,6 @@
       "excluded": {
         "category": "out_of_scope",
         "reason": "the only endpoint reddit.com/dev/api/ documents for comment listings (a single post's comment tree); the comments stream instead calls the undocumented sub-wide GET /r/{subreddit}/comments (see this file's top-level scope note) because this per-article route's two-element top-level Listing array response ([post_listing, comment_listing]) is not expressible via records.path's dotted-key-only traversal, and a per-post fan-out (via the posts stream) would multiply request volume N-to-1 against Reddit's 100 QPM budget"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/r/{subreddit}/hot",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented the hot listing sort"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/r/{subreddit}/top",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented the top listing sort"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/submit",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented post/comment submission"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/comment",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented comment replies"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/access_token",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "OAuth token acquisition is intentionally out of scope; the caller supplies a valid access_token"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v1/me",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "authenticated-user profile introspection, not a syncable object stream"
       }
     }
   ]

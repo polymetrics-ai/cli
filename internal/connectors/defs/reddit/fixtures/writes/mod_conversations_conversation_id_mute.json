@@ -1,0 +1,18 @@
+{
+  "record": {
+    "conversation_id": "fixture_conversation_id",
+    "num_hours": "fixture_num_hours"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/mod/conversations/:conversation_id/mute"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

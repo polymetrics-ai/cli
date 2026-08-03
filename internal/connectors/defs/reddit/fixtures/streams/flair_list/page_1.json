@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/r/synthetic-conformance-value/api/flairlist",
+    "query": {
+      "limit": "100",
+      "raw_json": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "users": [
+        {
+          "user": "fixture_user",
+          "flair_text": "Fixture flair",
+          "flair_css_class": "fixture-css"
+        }
+      ]
+    }
+  }
+}

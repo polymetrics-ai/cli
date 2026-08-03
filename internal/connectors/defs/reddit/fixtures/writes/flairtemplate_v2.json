@@ -1,0 +1,27 @@
+{
+  "record": {
+    "allowable_content": "fixture_allowable_content",
+    "background_color": "fixture_background_color",
+    "css_class": "fixture_css_class",
+    "flair_template_id": "fixture_flair_template_id",
+    "flair_type": "fixture_flair_type",
+    "max_emojis": 1,
+    "mod_only": true,
+    "override_css": "fixture_override_css",
+    "text": "fixture_text",
+    "text_color": "fixture_text_color",
+    "text_editable": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/flairtemplate_v2"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

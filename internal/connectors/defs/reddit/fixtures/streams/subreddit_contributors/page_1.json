@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/r/synthetic-conformance-value/about/contributors",
+    "query": {
+      "limit": "100",
+      "raw_json": "1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "UserList",
+      "data": {
+        "children": [
+          {
+            "id": "rel_fixture_1",
+            "name": "fixture_user",
+            "date": 1767225601
+          }
+        ]
+      }
+    }
+  }
+}

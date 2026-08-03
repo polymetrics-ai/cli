@@ -1,0 +1,21 @@
+{
+  "record": {
+    "from_sr": "fixture_from_sr",
+    "g-recaptcha-response": "fixture_g-recaptcha-response",
+    "subject": "fixture_subject",
+    "text": "fixture_text",
+    "to": "fixture_to"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/compose"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

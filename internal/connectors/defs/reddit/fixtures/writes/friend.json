@@ -1,0 +1,25 @@
+{
+  "record": {
+    "ban_context": "fixture_ban_context",
+    "ban_message": "fixture_ban_message",
+    "ban_reason": "fixture_ban_reason",
+    "container": "fixture_container",
+    "duration": 1,
+    "name": "fixture_name",
+    "note": "fixture_note",
+    "permissions": "fixture_permissions",
+    "type": "fixture_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/friend"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

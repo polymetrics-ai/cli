@@ -1,0 +1,15 @@
+{
+  "record": {},
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v1/me/prefs"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

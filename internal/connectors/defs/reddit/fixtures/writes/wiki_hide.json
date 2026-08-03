@@ -1,0 +1,18 @@
+{
+  "record": {
+    "page": "fixture_page",
+    "revision": "fixture_revision"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/wiki/hide"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

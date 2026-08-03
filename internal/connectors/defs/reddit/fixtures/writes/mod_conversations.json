@@ -1,0 +1,21 @@
+{
+  "record": {
+    "body": "fixture_body",
+    "isAuthorHidden": true,
+    "srName": "fixture_srName",
+    "subject": "fixture_subject",
+    "to": "fixture_to"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/mod/conversations"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

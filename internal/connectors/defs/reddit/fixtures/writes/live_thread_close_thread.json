@@ -1,0 +1,17 @@
+{
+  "record": {
+    "thread": "fixture_thread"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/live/fixture_thread/close_thread"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

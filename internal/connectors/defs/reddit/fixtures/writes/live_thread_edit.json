@@ -1,0 +1,21 @@
+{
+  "record": {
+    "thread": "fixture_thread",
+    "description": "fixture_description",
+    "nsfw": true,
+    "resources": "fixture_resources",
+    "title": "fixture_title"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/live/fixture_thread/edit"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

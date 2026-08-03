@@ -1,0 +1,21 @@
+{
+  "record": {
+    "description_md": "fixture_description_md",
+    "display_name": "fixture_display_name",
+    "expand_srs": true,
+    "from": "fixture_from",
+    "to": "fixture_to"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/multi/copy"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

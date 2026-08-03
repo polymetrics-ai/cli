@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "wiki_revisions",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "number"
+    },
+    "author": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    }
+  },
+  "x-primary-key": [
+    "id"
+  ]
+}

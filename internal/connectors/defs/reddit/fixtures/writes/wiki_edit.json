@@ -1,0 +1,20 @@
+{
+  "record": {
+    "content": "fixture_content",
+    "page": "fixture_page",
+    "previous": "fixture_previous",
+    "reason": "fixture_reason"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/wiki/edit"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

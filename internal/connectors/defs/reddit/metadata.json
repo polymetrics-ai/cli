@@ -1,14 +1,14 @@
 {
   "name": "reddit",
   "display_name": "Reddit",
-  "description": "Reads subreddit posts and comments through the Reddit OAuth API listing endpoints.",
+  "description": "Full documented parity with Reddit's OAuth API: reads (posts, comments, listings, search, users, subreddits, moderation, modmail, wiki, live threads) and reverse-ETL writes (submit, vote-adjacent moderation actions, flair, wiki, multireddits, live threads) behind plan/preview/approve/execute.",
   "integration_type": "api",
   "docs_url": "https://www.reddit.com/dev/api/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,7 +17,8 @@
     "read_page_size": 100
   },
   "risk": {
-    "read": "external Reddit OAuth API read of public subreddit posts and comments",
-    "approval": "none; read-only, caller-supplied OAuth token"
+    "read": "external Reddit OAuth API reads spanning public listings and, when the connected account has the relevant OAuth scope, private/moderator-only data (private messages, saved/hidden/downvoted history, moderator queues, modmail, mod notes)",
+    "write": "external Reddit OAuth API mutations behind reverse ETL plan -> preview -> explicit approval -> execute; destructive writes (delete, remove, unfriend/ban, multireddit/live-update deletion) require an additional typed destructive confirmation",
+    "approval": "plan -> preview -> explicit approval -> execute for every write; typed destructive confirmation additionally required for delete-shaped actions"
   }
 }

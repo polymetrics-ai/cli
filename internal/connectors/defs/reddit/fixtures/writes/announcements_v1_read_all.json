@@ -1,0 +1,15 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/api/announcements/v1/read_all"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

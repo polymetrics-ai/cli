@@ -1,0 +1,20 @@
+{
+  "record": {
+    "description": "fixture_description",
+    "nsfw": true,
+    "resources": "fixture_resources",
+    "title": "fixture_title"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/live/create"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "mod_flair_only": true,
+    "name": "fixture_name",
+    "post_flair_allowed": true,
+    "s3_key": "fixture_s3_key",
+    "user_flair_allowed": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/{{ record.subreddit }}/emoji.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

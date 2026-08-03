@@ -1,0 +1,17 @@
+{
+  "record": {
+    "conversationIds": "fixture_conversationIds"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/mod/conversations/read"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

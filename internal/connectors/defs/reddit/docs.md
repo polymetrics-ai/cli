@@ -1,80 +1,49 @@
 # Overview
-
-Reads subreddit posts and comments through the Reddit OAuth API listing endpoints.
-
-Readable streams: `posts`, `comments`.
-
-This connector is read-only; no write actions are declared.
-
+Full documented parity with Reddit's OAuth API (https://www.reddit.com/dev/api/): 194 of the 202 endpoints documented there (re-verified live via headed-Chrome DOM extraction on 2026-08-04) are reachable as `pm reddit <command>` -- 50 ETL streams (49 concrete listing paths plus the pre-existing `posts`), 53 bounded direct reads, and 118 reverse-ETL write actions (23 of them destructive, requiring an additional typed confirmation). Per the captain's 2026-08-04 ruling, this includes 78 moderator-scoped and 10 live-thread-management operations: they are built as real commands, not ledgered-only, because a subreddit moderator or live-thread owner is a legitimate user of this connector -- they simply require the connected account to hold that role on the target subreddit/thread, which is a Reddit-side runtime authorization outcome, not a reason to withhold implementation. 8 endpoints are blocked by a named Reddit-side dependency; `POST /api/vote` is ledgered pending a generic engine primitive (see Known limits).
 Service API documentation: https://www.reddit.com/dev/api/.
-
 ## Auth setup
+This connector supports two authentication modes, evaluated in this declared order (`streams.json`'s `base.auth`):
+1. **`access_token`** (legacy, if set) -- a caller-supplied Bearer token used as-is. Reddit bearer tokens expire 1 hour after issuance and this connector does not refresh a bare `access_token`; not schedulable for anything longer-running than an hour.
+2. **`refresh_token` + `client_id` (+ `client_secret`)** (recommended) -- exchanged for a fresh `access_token` via `POST https://www.reddit.com/api/v1/access_token` (`grant_type=refresh_token`) before every read/write/check, so scheduled and long-running syncs never see a stale token. Obtain `refresh_token` from a one-time `authorization_code` exchange with `duration=permanent` (https://github.com/reddit-archive/reddit/wiki/OAuth2#refreshing-the-token). This grants USER-CONTEXT access, unlike Reddit's `client_credentials` grant (deliberately not used here: Reddit's own docs state that grant mints an application-only token that never receives a refresh_token and cannot act on behalf of a user -- no moderation, messages, votes, or saves).
+**Leave `access_token` unset if you configure `refresh_token`.** When both are present, `access_token` wins (declared first, for backward compatibility with existing stored connections) -- silently disabling the auto-refresh flow.
+Every request sends `User-Agent: go:ai.polymetrics.cli:v1 (by /u/<reddit_username>)`, matching Reddit's required `<platform>:<app ID>:<version> (by /u/<reddit username>)` format; non-conforming User-Agents are drastically rate-limited.
+### OAuth scopes
+28 distinct OAuth scopes appear across the 202 documented endpoints. This connector declares the scope(s) each stream/write action needs in that command's `risk`/`notes` field (`cli_surface.json`) and in the per-command help text, since the engine has no dedicated scopes field in `streams.json`/`writes.json` today -- `pm connectors inspect reddit` surfaces these via the command list. Flagged here as unusually sensitive:
+- **`privatemessages`** -- full DM inbox/sent content, plus a bulk account-resolution endpoint
+- **`history`** -- another user's downvoted/hidden/saved items; whether these variants expose other users' data is NOT STATED in Reddit's docs and is unverified -- treat as if it could
+- **`modmail`** -- private moderator conversations, including the user-facing side
+- **`modnote`** -- moderators' private notes about named users
+- **`account`** -- mutates preferences, blocks users
+- **`vote`** -- sensitive by policy; never requested by this connector (pm reddit vote is ledgered pending a foundation-engine primitive, see Known limits)
 
-Connection fields:
-
-- `access_token` (required, secret, string); Reddit OAuth access token, sent as a Bearer token
-  (Authorization: Bearer <access_token>). OAuth token acquisition/refresh is out of scope; the
-  caller supplies a valid token. Reddit bearer tokens expire 1 hour after issuance and this
-  connector does not refresh them, so any sync expected to run longer than an hour, or any
-  recurring/scheduled sync, needs a freshly issued token supplied before each run. Never logged.
-- `base_url` (optional, string); default `https://oauth.reddit.com`; format `uri`; Reddit OAuth API
-  base URL override for tests or proxies.
-- `reddit_username` (required, string); Reddit username of the account that authorized
-  access_token, e.g. "my_bot_account" without the /u/ prefix. Sent as the required identity
-  component of the User-Agent header Reddit's API rules mandate (`<platform>:<app ID>:<version>
-  (by /u/<reddit username>)`); non-conforming User-Agents are drastically rate-limited. Not a
-  secret; used for no other purpose.
-- `subreddit` (required, string); Subreddit name to read posts/comments from (path-scoped as
-  /r/{subreddit}/...).
-
-Secret fields are redacted in logs and write previews: `access_token`.
-
-Default configuration values: `base_url=https://oauth.reddit.com`.
-
-Authentication behavior:
-
-- Bearer token authentication using `secrets.access_token`.
-- Every request sends `User-Agent: go:ai.polymetrics.cli:v1 (by /u/<reddit_username>)`, matching
-  Reddit's required `<platform>:<app ID>:<version string> (by /u/<reddit username>)` format.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks call GET `/r/{{ config.subreddit }}/new` with query `limit`=`1`; `raw_json`=`1`.
-
+Moderator-privilege scopes (`modconfig`, `modflair`, `modlog`, `modmail`, `modnote`, `modothers`, `modposts`, `modself`, `modwiki`, `structuredstyles`, `livemanage`) ask the connected user to grant this connector moderator or live-thread-owner authority over their communities/threads. Only request them if the operator genuinely intends to run moderator or live-thread commands.
 ## Streams notes
+50 streams, grouped by Reddit's own doc sections:
+- **Account**: `friends_list`, `blocked_list`, `trusted_list`
+- **Flair**: `flair_list`
+- **Listings**: `best_posts`, `duplicate_posts`, `hot_posts`, `posts`, `rising_posts`, `top_posts`, `controversial_posts`
+- **Live threads**: `live_thread_updates`, `live_thread_discussions`
+- **Private messages**: `inbox_messages`, `unread_messages`, `sent_messages`
+- **Moderation**: `mod_log`, `mod_reports_queue`, `mod_spam_queue`, `mod_modqueue`, `mod_unmoderated_queue`, `mod_edited_queue`
+- **Search**: `search_results`
+- **Subreddits**: `subreddit_moderators`, `subreddit_contributors`, `subreddit_wiki_contributors`, `subreddit_banned_users`, `subreddit_muted_users`, `subreddit_wiki_banned_users`, `my_subscribed_subreddits`, `my_contributor_subreddits`, `my_moderated_subreddits`, `my_streams_subreddits`, `subreddit_search_results`, `popular_subreddits`, `new_subreddits`, `user_search_results`, `popular_user_subreddits`, `new_user_subreddits`
+- **Users**: `user_overview`, `user_submitted`, `user_comments`, `user_upvoted`, `user_downvoted`, `user_hidden`, `user_saved`, `user_gilded`
+- **Wiki**: `wiki_page_discussions`, `wiki_page_revisions`
 
-Default pagination: cursor pagination; cursor parameter `after`; next token from `data.after`.
-
-- `posts`: GET `/r/{{ config.subreddit }}/new` - records path `data.children`; query `limit`=`100`;
-  `raw_json`=`1`; cursor pagination; cursor parameter `after`; next token from `data.after`;
-  computed output fields `author`, `created_utc`, `id`, `name`, `permalink`, `subreddit`, `title`.
-- `comments`: GET `/r/{{ config.subreddit }}/comments` - records path `data.children`; query
-  `limit`=`100`; `raw_json`=`1`; cursor pagination; cursor parameter `after`; next token from
-  `data.after`; computed output fields `author`, `body`, `created_utc`, `id`, `name`, `permalink`,
-  `subreddit`.
-
+All listing streams share `posts`/`comments`'s cursor pagination (`after`/`before`, `limit` capped at Reddit's documented maximum, default page size 100). Streams whose documented endpoint uses a generic `{where}`/`{sort}`/`{location}` placeholder are expanded into one concrete stream per genuinely distinct resource (e.g. `user_submitted` vs `user_saved` are different datasets, not the same stream with a parameter) -- see `api_surface.json`'s top-level `scope` note for the full accounting.
 ## Write actions & risks
+118 reverse-ETL write actions, all behind plan -> preview -> explicit approval -> execute. Destructive actions (delete/remove-shaped) additionally require a typed destructive confirmation, under their own canonical command name -- no synthetic shared 'delete' command hides distinct endpoints.
+Moderator-scoped and live-thread-scoped write actions function only when the connected account moderates the target subreddit / owns-or-contributes-to the target live thread; Reddit returns 403 otherwise. This is a runtime authorization outcome, not a connector defect -- see each command's `notes`/`risk` text (`cli_surface.json`) for its required scope.
 
-This connector is read-only. Read behavior: external Reddit OAuth API read of public subreddit posts
-and comments.
-
+Destructive (typed confirmation required): `del`, `del_msg`, `delete_sr_banner`, `delete_sr_header`, `delete_sr_icon`, `delete_sr_img`, `live_thread_delete_update`, `live_thread_leave_contributor`, `live_thread_unhide_discussion`, `me_friends_username`, `mod_conversations_conversation_id_highlight`, `mod_conversations_conversation_id_unmute`, `mod_notes`, `multi_multipath`, `multi_multipath_r_srname`, `remove`, `subreddit_emoji_emoji_name`, `unfriend`, `unhide`, `unignore_reports`, `unlock`, `unspoiler`, `widget_widget_id`.
 ## Known limits
-
-- Batch defaults: read_page_size=100.
-- API coverage includes 2 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  non_data_endpoint=1, out_of_scope=6.
-- The `comments` stream calls `GET /r/{subreddit}/comments`, a route that is live and working but
-  is not among Reddit's documented endpoints at https://www.reddit.com/dev/api/; the only
-  documented comments listing is the per-article tree `GET [/r/subreddit]/comments/{article}` (see
-  `api_surface.json` for the full citation and why this connector does not migrate to it).
-- `access_token` is caller-supplied and never refreshed by this connector; Reddit bearer tokens
-  expire 1 hour after issuance, so any sync longer than an hour, or any scheduled sync, needs a
-  fresh token supplied before each run.
-- Reddit enforces 100 queries per minute per OAuth client id; on HTTP 429 check the
-  `X-Ratelimit-Used`, `X-Ratelimit-Remaining`, and `X-Ratelimit-Reset` response headers for the
-  current budget and reset time.
-- Reddit's Data API terms require removing user content that has been deleted from Reddit and
-  recommend purging stored Reddit content within 48 hours. This connector does not implement
-  automatic deletion propagation or retention enforcement for rows it has already synced; honoring
-  that obligation for any persisted data is the operator's responsibility, not this connector's.
+- **`POST /api/vote` is not executable in this round.** The captain ruled it should ship as a human-invoked, non-batchable command (Reddit's docs: "votes must be cast by humans... bots deciding how to vote on content or amplifying a human's vote are not"). Verified against `internal/app/app.go`'s `PlanReverseETL` and `engine/direct_read.go`: the write engine cannot express "never reachable from a bulk/scheduled reverse-ETL plan" today -- `writes.json` has no non-batchable marker, and `operations.json`'s `rest_write` kind is schema-declared with no execution path. A generic `writes.schema.json` `batchable:false` field plus a `PlanReverseETL` guard is tracked as a separate foundation PR. `vote` is ledgered `excluded` (`api_surface.json`) pending that primitive.
+- **The `comments` stream calls the undocumented `GET /r/{subreddit}/comments`**, not the documented per-article `GET [/r/subreddit]/comments/{article}` (see `api_surface.json` for the full citation) -- unchanged from PR #3677.
+- **Mixed-kind listings are projected through the `posts` schema.** Several documented endpoints (e.g. moderation queues, a user's overview/upvoted/saved history) can return a mix of Link and Comment things in the same listing; this connector projects every record through the `post` (Link) schema for simplicity, so Comment-kind items in those listings lose comment-only fields like `body`. Use the dedicated `user_comments` stream for a pure comment listing.
+- **`flair_list` uses a different response envelope** (`{"users": [...]}`, not the standard `Listing` `data.children` wrapper); `records.path` is set to `users` for that one stream.
+- **3 moderator-scoped S3-lease upload endpoints are blocked** (`binary_payload`): acquiring the lease is a simple POST, but completing the upload requires a second multipart PUT to a third-party S3 host, which this connector's declarative write engine does not support.
+- **`GET /api/morechildren` is implemented as a direct read but is a hard concurrency constraint, not a code limitation**: Reddit's own docs state "you may only make one request at a time to this API endpoint" -- callers must serialize repeated calls themselves.
+- Reddit enforces 100 queries per minute per OAuth client id; on HTTP 429 check the `X-Ratelimit-Used`, `X-Ratelimit-Remaining`, and `X-Ratelimit-Reset` response headers.
+- Reddit's Data API terms require removing user content that has been deleted from Reddit and recommend purging stored Reddit content within 48 hours. This connector does not implement automatic deletion propagation or retention enforcement for rows it has already synced; honoring that obligation for any persisted data is the operator's responsibility.
+- Reddit's Developer/Data API Terms require written permission/a contract for commercial use of the Data API. Whether/how that applies to this product is an open captain decision outside this connector's scope; using this connector in a monetized product without confirming that requirement is the operator's responsibility.
+- `GET /api/needs_captcha`, `POST /api/block_user`, `POST /api/store_visits`, and `GET /api/recommend/sr/{srnames}` are blocked by a named Reddit-side dependency (legacy captcha flow, approved-app-only, premium-subscription-only, and DEPRECATED respectively) -- see `api_surface.json` for the verbatim reason on each.

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "spam": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/remove"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

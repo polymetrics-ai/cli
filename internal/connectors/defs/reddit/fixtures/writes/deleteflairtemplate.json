@@ -1,0 +1,17 @@
+{
+  "record": {
+    "flair_template_id": "fixture_flair_template_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/deleteflairtemplate"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

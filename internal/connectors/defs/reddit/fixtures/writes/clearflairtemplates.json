@@ -1,0 +1,17 @@
+{
+  "record": {
+    "flair_type": "fixture_flair_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/clearflairtemplates"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

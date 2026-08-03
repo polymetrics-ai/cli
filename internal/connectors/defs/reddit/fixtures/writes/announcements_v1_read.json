@@ -1,0 +1,17 @@
+{
+  "record": {
+    "ids": "fixture_ids"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/announcements/v1/read"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

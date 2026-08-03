@@ -1,0 +1,17 @@
+{
+  "record": {
+    "filter_types": "fixture_filter_types"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/read_all_messages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

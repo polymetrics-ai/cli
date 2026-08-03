@@ -1,0 +1,19 @@
+{
+  "record": {
+    "op": "fixture_op",
+    "reason": "fixture_reason",
+    "stylesheet_contents": "fixture_stylesheet_contents"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/subreddit_stylesheet"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

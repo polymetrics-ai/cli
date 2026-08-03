@@ -1,0 +1,18 @@
+{
+  "record": {
+    "id": "fixture_id",
+    "state": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/sendreplies"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "record": {
+    "is_newlink": true,
+    "link": "fixture_link",
+    "name": "fixture_name"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/flairselector"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

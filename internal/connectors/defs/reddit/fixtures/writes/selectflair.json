@@ -1,0 +1,24 @@
+{
+  "record": {
+    "background_color": "fixture_background_color",
+    "css_class": "fixture_css_class",
+    "flair_template_id": "fixture_flair_template_id",
+    "link": "fixture_link",
+    "name": "fixture_name",
+    "return_rtson": "fixture_return_rtson",
+    "text": "fixture_text",
+    "text_color": "fixture_text_color"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/selectflair"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

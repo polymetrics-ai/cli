@@ -1,0 +1,19 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "permissions": "fixture_permissions",
+    "type": "fixture_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/setpermissions"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

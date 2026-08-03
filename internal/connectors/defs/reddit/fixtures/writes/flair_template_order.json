@@ -1,0 +1,18 @@
+{
+  "record": {
+    "flair_type": "fixture_flair_type",
+    "subreddit": "fixture_subreddit"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/r/synthetic-conformance-value/api/flair_template_order"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}

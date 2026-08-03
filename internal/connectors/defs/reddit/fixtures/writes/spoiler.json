@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "fixture_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/spoiler"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "errors": []
+      }
+    }
+  }
+}
