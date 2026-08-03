@@ -28,3 +28,19 @@
 ## Not run by design
 
 - Live provider checks, credentialed Recurly calls, certification claims, pushes, PR updates, VPS, Thaalam changes, `/no-mistakes`, and shared-runtime edits were intentionally not run for this wave.
+
+## Resume session — CLI command-surface close (fresh worker)
+
+- [x] Isolation reconfirmed on `fm/cli-recurly-parity-wave05-r1` at `459bf2781`.
+- [x] Full 197-command surface built via `scripts/gen-recurly-cli-surface.py`: etl=93, reverse_etl=96, direct_read=8; availability implemented=194, planned=3 (bounded binary), no partial.
+- [x] Every stream and every write has its own `pm recurly <command>` entry; required record fields map to typed leaf flags (kebab-case flags over `record.*` targets).
+- [x] `go run ./cmd/connectorgen validate` → 549 connectors, 0 findings (no unknown targets).
+- [x] `recurly_full_surface_test.go` added and passing (coverage stream=93, write=96, direct_read=5, operation=3).
+- [x] Conformance: `go test ./internal/connectors/conformance -run 'TestConformance/recurly' -count=1` PASS.
+- [x] Test suites PASS: internal/cli (338s), connectorgen, engine, commandrunner, defs, bundleregistry, conformance.
+- [x] `pm docs validate --connectors-dir docs/connectors` PASS; MANUAL/SKILL/catalog (Recurly 93/96 read+write) and website connector data regenerated; diff scope limited to Recurly-owned files.
+- [x] The 3 official binary/export endpoints remain honest `planned` (bounded metadata) dispositions; no certification claims.
+
+### Kept out of scope (unchanged)
+
+- No live/credentialed Recurly calls; no shared-runtime edits; no other connectors touched; no pushes/merges; PR stays draft for firstmate.
