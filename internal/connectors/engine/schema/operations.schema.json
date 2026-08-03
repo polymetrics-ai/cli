@@ -130,7 +130,11 @@
               "path": { "type": "string" },
               "max_bytes": { "type": "integer" },
               "allow_overwrite": { "type": "boolean" },
-              "extract_archives": { "type": "boolean" }
+              "extract_archives": { "type": "boolean" },
+              "allow_cross_host": { "type": "boolean" },
+              "allowed_hosts": { "type": "array", "items": { "type": "string" } },
+              "content_types": { "type": "array", "items": { "type": "string" } },
+              "stall_timeout_seconds": { "type": "integer" }
             }
           },
           "file": {

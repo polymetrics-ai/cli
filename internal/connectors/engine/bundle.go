@@ -603,11 +603,32 @@ type XMLOperationSpec struct {
 }
 
 type BinaryOperationSpec struct {
-	Method          string `json:"method"`
-	Path            string `json:"path"`
-	MaxBytes        int    `json:"max_bytes,omitempty"`
-	AllowOverwrite  bool   `json:"allow_overwrite,omitempty"`
-	ExtractArchives bool   `json:"extract_archives,omitempty"`
+	Method   string `json:"method"`
+	Path     string `json:"path"`
+	MaxBytes int    `json:"max_bytes,omitempty"`
+	// AllowOverwrite permits replacing an existing destination file.
+	AllowOverwrite bool `json:"allow_overwrite,omitempty"`
+	// ExtractArchives is DECLARED by two existing github operations but is
+	// refused at execution time: archive extraction is zip-slip and
+	// decompression-bomb territory and is a separate capability, never a
+	// flag. The field is retained so those bundles keep validating.
+	ExtractArchives bool `json:"extract_archives,omitempty"`
+	// AllowCrossHost permits redirects to ANY other origin. Credentials are
+	// stripped on such a hop regardless. Off by default: download endpoints
+	// redirect to CDNs constantly and 71 connectors authenticate with a
+	// custom header that Go does NOT strip across domains.
+	AllowCrossHost bool `json:"allow_cross_host,omitempty"`
+	// AllowedHosts permits redirects to exactly these hosts. Credentials are
+	// stripped on such a hop regardless.
+	AllowedHosts []string `json:"allowed_hosts,omitempty"`
+	// ContentTypes records the content types this operation is documented to
+	// return. It is metadata for authors and is deliberately NOT enforced:
+	// providers mislabel binary payloads routinely.
+	ContentTypes []string `json:"content_types,omitempty"`
+	// StallTimeoutSeconds bounds how long the download may make NO progress.
+	// It is not a wall-clock deadline, which would turn the byte cap into a
+	// bandwidth requirement.
+	StallTimeoutSeconds int `json:"stall_timeout_seconds,omitempty"`
 }
 
 type FileOperationSpec struct {

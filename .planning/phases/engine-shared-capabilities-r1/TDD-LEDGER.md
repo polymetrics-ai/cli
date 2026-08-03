@@ -10,32 +10,63 @@ Status legend: `planned` → `RED` (failing test committed/observed) → `GREEN`
 
 | # | Test | Asserts | Status |
 | --- | --- | --- | --- |
-| 1.1 | `TestDoStreamReturnsOpenBody` | body is streamed, not buffered; caller closes | planned |
-| 1.2 | `TestDoStreamRejectsCrossOriginRedirect` | fail-closed on a redirect to another host | planned |
-| 1.3 | `TestDoStreamStripsCustomAuthHeaderCrossOrigin` | a custom auth header (the 71-connector case Go does **not** strip) is absent on the cross-origin hop when it is explicitly allowed | planned |
-| 1.4 | `TestDoStreamKeepsAuthSameOrigin` | same-origin redirect still carries credentials | planned |
-| 1.5 | `TestDoStreamRejectsSchemeDowngrade` | https→http on the same host is refused | planned |
-| 1.6 | `TestDoStreamRetryDiscardsPartialBody` | a retried attempt never concatenates partial bytes | planned |
-| 1.7 | `TestDoStreamDoesNotMutateSharedClient` | `CheckRedirect` is set on a clone, not `r.Client` | planned |
+| 1.1 | `TestDoStreamReturnsOpenBody` | body is streamed, not buffered; caller closes | GREEN |
+| 1.2 | `TestDoStreamRejectsCrossOriginRedirect` | fail-closed on a redirect to another host | GREEN |
+| 1.3 | `TestDoStreamStripsCustomAuthHeaderCrossOrigin` | a custom auth header (the 71-connector case Go does **not** strip), a default header, and Authorization are all absent on a permitted cross-origin hop | GREEN |
+| 1.4 | `TestDoStreamKeepsAuthSameOrigin` | same-origin redirect still carries credentials | GREEN |
+| 1.5 | `TestDoStreamAllowedHostsPermitsNamedHost` | per-operation allowlist admits exactly that host, still credential-free; others stay refused | GREEN |
+| 1.6 | `TestDoStreamRetryDiscardsPartialBody` | a retried attempt never concatenates partial bytes | GREEN |
+| 1.7 | `TestDoStreamDoesNotMutateSharedClient` | `CheckRedirect` is set on a clone, not `r.Client` | GREEN |
+| 1.8 | `TestDoStreamHTTPErrorClosesBody` | a terminal 4xx returns `*HTTPError` and no dangling reader | GREEN |
+| 1.9 | `TestDoStreamRejectsRedirectLoop` | hop cap re-stated (installing CheckRedirect replaces Go's default 10) | GREEN |
+
+**Red evidence (task 1):** `r.DoStream undefined (type *Requester has no field or method DoStream)`
+and `undefined: StreamOptions` across stream_test.go. **Green evidence:** all 9 pass.
+
+**Design note:** the first implementation smuggled the credential-header list to the redirect policy
+through an internal `X-Polymetrics-Internal-Credential-Headers` request header. That worked but put
+an implementation artifact on the wire. Replaced with a closure variable captured by the per-call
+client clone — nothing extra is ever sent.
 
 ## Task 2 — engine bounded binary download executor
 
 | # | Test | Asserts | Status |
 | --- | --- | --- | --- |
-| 2.1 | `TestBinaryDownloadWritesBoundedFile` | happy path: file on disk, correct size, correct SHA-256 | planned |
-| 2.2 | `TestBinaryDownloadRejectsOverflow` | a body one byte past the limit is rejected, not silently truncated | planned |
-| 2.3 | `TestBinaryDownloadClampsMaxBytes` | request → spec → ceiling clamping order | planned |
-| 2.4 | `TestBinaryDownloadRejectsExtractArchives` | `extract_archives: true` is a hard execution error | planned |
-| 2.5 | `TestBinaryDownloadRejectsNonBinaryKind` | a `rest_read` operation cannot be run as a download | planned |
-| 2.6 | `TestBinaryDownloadRejectsNonGET` | non-GET refused | planned |
-| 2.7 | `TestBinaryDownloadContainsPathTraversal` | `../` and absolute filenames cannot escape the root | planned |
-| 2.8 | `TestBinaryDownloadRejectsSymlinkEscape` | a symlink inside the root pointing out of it is refused (`os.Root`) | planned |
-| 2.9 | `TestBinaryDownloadHonoursAllowOverwrite` | `O_CREATE\|O_EXCL` unless `allow_overwrite` | planned |
-| 2.10 | `TestBinaryDownloadRecordIsFlatAndUnredacted` | flat scalars only; uses `source_ref`, and the record survives `shouldRedactJSONField` unredacted | planned |
-| 2.11 | `TestBinaryDownloadSniffsContentType` | sniffed type recorded alongside the provider's claim; mismatch surfaced, not rejected | planned |
-| 2.12 | `TestBinaryDownloadFilePermissions` | files `0o600`, dirs `0o700` | planned |
-| 2.13 | `TestBinaryDownloadProviderFilenameSanitized` | `Content-Disposition` with `..\..\etc\passwd` and with an RFC 5987 `filename*` is sanitized | planned |
-| 2.14 | `TestBinaryDownloadRequiresDeclaredEndpoint` | an endpoint absent from `api_surface` is refused | planned |
+| 2.1 | `TestBinaryDownloadWritesBoundedFile` | file on disk, correct size and SHA-256, contained in root | GREEN |
+| 2.2 | `TestBinaryDownloadRejectsOverflow` | one byte past the limit is rejected, and leaves no file behind | GREEN |
+| 2.3 | `TestBinaryDownloadExactLimitSucceeds` | read-one-past introduces no off-by-one rejection | GREEN |
+| 2.4 | `TestBinaryDownloadClampsMaxBytes` | request clamps below spec; request cannot raise spec | GREEN |
+| 2.5 | `TestBinaryDownloadRejectsExtractArchives` | hard execution error naming `extract_archives` | GREEN |
+| 2.6 | `TestBinaryDownloadRejectsWrongKind` | a `rest_read` operation cannot be run as a download | GREEN |
+| 2.7 | `TestBinaryDownloadRejectsNonGET` | non-GET refused | GREEN |
+| 2.8 | `TestBinaryDownloadRejectsAbsoluteEndpoint` | connector-relative invariant preserved | GREEN |
+| 2.9 | `TestBinaryDownloadRequiresDeclaredEndpoint` | endpoint absent from `api_surface` refused | GREEN |
+| 2.10 | `TestBinaryDownloadFilenameSanitized` | 5 hostile `Content-Disposition` values contained | GREEN |
+| 2.11 | `TestBinaryDownloadRFC5987Filename` | `filename*` decoded from the **unstarred** key | GREEN |
+| 2.12 | `TestBinaryDownloadCallerFileNameContained` | traversing caller names refused | GREEN |
+| 2.13 | `TestBinaryDownloadCallerFileNameNotRewritten` | refused, **not** silently basename-ed | GREEN |
+| 2.14 | `TestBinaryDownloadRejectsSymlinkEscape` | never writes *through* an escaping symlink (`os.Root`) | GREEN |
+| 2.15 | `TestBinaryDownloadHonoursAllowOverwrite` | refuses by default without clobbering; replaces when declared | GREEN |
+| 2.16 | `TestBinaryDownloadFilePermissions` | file mode `0o600` | GREEN |
+| 2.17 | `TestBinaryDownloadSniffsContentType` | mismatch recorded on both fields, download NOT rejected | GREEN |
+| 2.18 | `TestBinaryDownloadRecordIsFlatAndSurvivesRedaction` | flat scalars only; no field trips `shouldRedactJSONField`; all 10 fields present; no `download_url` | GREEN |
+| 2.19 | `TestBinaryDownloadRequiresDestRoot` | no implicit destination | GREEN |
+| 2.20 | `TestBinaryDownloadHTTPErrorLeavesNoFile` | a 403 leaves the destination empty | GREEN |
+| 2.21 | `TestOperationsSchemaAcceptsBinaryPolicyFields` | new optional `binary` fields declared (block is `additionalProperties:false`) | GREEN |
+
+**Red evidence (task 2):** `undefined: OperationBinaryDownload`, `undefined:
+BinaryDownloadRequest`.
+
+**Two real defects the tests caught, worth recording:**
+
+1. The first sanitizer applied `filepath.Base` to a CALLER-supplied name, silently rewriting
+   `../escape.txt` to `escape.txt`. That hides a traversal attempt instead of reporting it. Split
+   into a strict `isLocalSingleSegment` for caller input (refuses, never rewrites) and the lenient
+   sanitizer for untrusted provider text, where falling back to a safe name beats failing the
+   download.
+2. The first symlink test only exercised name validation, not containment. Rewritten to plant an
+   escaping symlink under a perfectly valid single-segment name and assert the file outside the root
+   is never written through.
 
 ## Task 3 — query parameters on write actions
 
