@@ -1,0 +1,20 @@
+{
+  "record": {
+    "target_url": "https://example.invalid/hubplanner-webhook",
+    "event": "project.update"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/subscription",
+    "body": {
+      "target_url": "https://example.invalid/hubplanner-webhook",
+      "event": "project.update"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_webhook_subscription_fixture"
+    }
+  }
+}

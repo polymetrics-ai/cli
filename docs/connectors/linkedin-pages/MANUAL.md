@@ -13,6 +13,7 @@ DESCRIPTION
   Reads LinkedIn organization (company page) profile, follower statistics, share statistics, and total follower count through the LinkedIn Community Management REST API.
 
 ICON
+  id: linkedin
   asset: icons/linkedin.svg
   source: upstream_registry
   review_status: upstream_seeded

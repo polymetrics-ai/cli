@@ -1,0 +1,19 @@
+{
+  "record": {
+    "id": "cost_category_fixture_1",
+    "name": "Updated Cost Category"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/costCategories/cost_category_fixture_1",
+    "body": {
+      "name": "Updated Cost Category"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "cost_category_fixture_1"
+    }
+  }
+}

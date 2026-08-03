@@ -11,6 +11,7 @@ Reads SurveyCTO form IDs, submissions, datasets (including case-management datas
 
 ## Icon
 
+- id: surveycto
 - asset: icons/surveycto.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -66,12 +67,13 @@ Reads SurveyCTO form IDs, submissions, datasets (including case-management datas
 
 - create_dataset:
   - endpoint: POST /datasets
-  - optional fields: id, title, discriminator, uniqueRecordField, allowOfflineUpdates
+  - required fields: discriminator
+  - optional fields: id, title, uniqueRecordField, allowOfflineUpdates
   - risk: creates a new server dataset (a general-purpose, enumerator, or case-management dataset); low-risk external mutation, no approval required
 - update_dataset:
   - endpoint: PUT /datasets/{{ record.id }}
-  - required fields: id
-  - optional fields: title, discriminator, uniqueRecordField, allowOfflineUpdates
+  - required fields: id, discriminator
+  - optional fields: title, uniqueRecordField, allowOfflineUpdates
   - risk: updates an existing dataset's metadata/configuration (the dataset type/discriminator itself cannot be changed after creation, per SurveyCTO's own API); external mutation, no approval required
 - delete_dataset:
   - endpoint: DELETE /datasets/{{ record.id }}
@@ -83,6 +85,7 @@ Reads SurveyCTO form IDs, submissions, datasets (including case-management datas
   - risk: adds a new record to a dataset; the field name set is dataset-defined (SurveyCTO's own DatasetRecordFieldMap has no fixed schema), so record_schema only requires the routing field dataset_id -- every other record property is sent verbatim as the record's field-name/value map; low-risk external mutation, no approval required
 - create_user:
   - endpoint: POST /users
+  - required fields: username, roleId, password
   - risk: creates a new SurveyCTO server user AND sets their initial password in the same call; a credential-provisioning action, not an ordinary data mutation -- approval required
 - update_user:
   - endpoint: PUT /users/{{ record.username }}

@@ -28,12 +28,16 @@ Follow the GSD universal programming loop strictly:
 1. Plan before coding. Update the issue's GSD plan, TDD ledger, and verification checklist before
    production edits, and keep them current as the implementation changes.
 2. Capture red test or validation evidence before production edits for behavior changes.
-3. Implement the minimal green slice that satisfies the issue's acceptance criteria.
-4. Run local gates after each coherent slice: `gofmt -w cmd internal`, `go vet ./...`,
+3. For connector implementation lanes, require exactly one target connector. Record target
+   connector scope, ownership guard evidence, and changed-path compliance before handoff. If the
+   work needs shared runtime/tooling, schema, generated-index, or unrelated connector edits, stop
+   and report the needed foundation issue/PR path; do not absorb those changes into the connector PR.
+4. Implement the minimal green slice that satisfies the issue's acceptance criteria.
+5. Run local gates after each coherent slice: `gofmt -w cmd internal`, `go vet ./...`,
    `go build ./cmd/pm`, the focused package tests, and `make verify` when feasible.
-5. Commit and push coherent green slices to the issue/PR branch after local gates pass. Never
+6. Commit and push coherent green slices to the issue/PR branch after local gates pass. Never
    push to `main`.
-6. Use compact caveman-style status for handoffs, but keep code, commands, exact test output,
+7. Use compact caveman-style status for handoffs, but keep code, commands, exact test output,
    security warnings, destructive-action warnings, and human gates exact.
 
 Tool scope:
@@ -59,7 +63,9 @@ Hard stops (human gates):
 
 Handoff back to the orchestrator using `.agents/agentic-delivery/contracts/worker-handoff-template.md`:
 branch, commits pushed, tests added/changed, local-gate results, review disposition status,
-follow-ups, and the exact `spawned`/`local_critical_path`/`not_spawned_*` decision for this run.
+connector implementation scope when applicable, ownership guard evidence, changed-path compliance,
+foundation PR path or blocker, follow-ups, and the exact `spawned`/`local_critical_path`/
+`not_spawned_*` decision for this run.
 
 Handoff economy: your final handoff is a CONDENSED digest (branch, SHAs, artifacts, gate results,
 gaps) — never a transcript or full diff; reviewers pull detail from the branch and the trace

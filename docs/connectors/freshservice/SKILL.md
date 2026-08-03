@@ -11,6 +11,7 @@ Reads and writes documented Freshservice REST API v2 resources, preserving legac
 
 ## Icon
 
+- id: freshservice
 - asset: icons/freshservice.svg
 - source: upstream_registry
 - review_status: upstream_seeded

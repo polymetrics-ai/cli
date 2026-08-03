@@ -19,6 +19,7 @@ body:
       options:
         - parent-orchestration
         - pr-guardrail
+        - connector-implementation
         - parent-roadmap
         - stacked-pr
         - operation-ledger
@@ -62,6 +63,20 @@ body:
         - Worker handoff template: .agents/agentic-delivery/contracts/worker-handoff-template.md
         - Automated review coverage route:
         - Copilot fallback route:
+    validations:
+      required: false
+  - type: textarea
+    id: connector_scope
+    attributes:
+      label: Connector implementation scope
+      description: Fill when task type is connector-implementation; leave not applicable otherwise.
+      value: |
+        - Target connector scope (exactly one connector slug):
+        - Connector-owned paths:
+        - Ownership guard evidence required:
+        - Changed-path compliance required:
+        - Foundation issue/PR path for shared runtime/tooling, schema, generated-index, or unrelated connector work:
+        - no-mistakes handling: stop/ask for foundation split instead of auto-absorbing generic shared changes into the connector PR.
     validations:
       required: false
   - type: textarea

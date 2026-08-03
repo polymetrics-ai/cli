@@ -33,7 +33,7 @@
 - [apple-search-ads](apple-search-ads/MANUAL.md): Reads Apple Search Ads campaigns, ad groups, targeting keywords, and ads via the Apple Search Ads Campaign Management API using an OAuth2 client-credentials grant scoped to an organization. Read-only.
 - [appsflyer](appsflyer/MANUAL.md): Reads AppsFlyer raw-data CSV export reports (installs, in-app events) through the AppsFlyer Pull API. Read-only.
 - [apptivo](apptivo/MANUAL.md): Reads Apptivo CRM customers, contacts, leads, and opportunities through the Apptivo REST DAO API (full refresh); deletes CRM customer records via the documented deleteCustomer DAO action.
-- [asana](asana/MANUAL.md): Reads implemented Asana project-management streams and safely plans implemented task/project/section/tag reverse-ETL actions. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.
+- [asana](asana/MANUAL.md): Reads implemented Asana project-management streams and executes typed, approval-gated reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, and workspaces. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.
 - [ashby](ashby/MANUAL.md): Reads Ashby applicant-tracking data and exposes typed, gated Ashby reverse-ETL writes through the documented REST API.
 - [assemblyai](assemblyai/MANUAL.md): Reads AssemblyAI transcripts, per-transcript detail, sentences, paragraphs, and word-search matches, and submits new transcription jobs, through the AssemblyAI REST API.
 - [auth0](auth0/MANUAL.md): Reads Auth0 users, clients, connections, roles, organizations, role assignments, and organization memberships, and creates/updates users, clients, roles, and organizations, through the Auth0 Management API v2.
@@ -220,7 +220,7 @@
 - [hibob](hibob/MANUAL.md): Reads HiBob HR data: employee profiles, company named lists, and people field definitions via the HiBob REST API (read-only).
 - [high-level](high-level/MANUAL.md): Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipelines, custom fields, and form submissions for a location through the HighLevel REST API.
 - [hoorayhr](hoorayhr/MANUAL.md): Reads HoorayHR users, time-off, leave-types, and sick-leave records through the HoorayHR REST API using session-token authentication.
-- [hubplanner](hubplanner/MANUAL.md): Reads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through the Hubplanner REST API.
+- [hubplanner](hubplanner/MANUAL.md): Reads Hubplanner scheduling, project, resource, client, billing, time, vacation, custom-field, and webhook-subscription data and exposes typed reverse-ETL writes for documented Hubplanner REST resources.
 - [hubspot](hubspot/MANUAL.md): Connector-local HubSpot official API operation ledger and planned typed command surface.
 - [hugging-face-datasets](hugging-face-datasets/MANUAL.md): Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer REST API. Read-only; an optional user access token unlocks gated and private datasets.
 - [humanitix](humanitix/MANUAL.md): Reads Humanitix events, orders, tickets, and tags through the Humanitix public REST API.

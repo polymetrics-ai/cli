@@ -75,11 +75,35 @@ type Catalog struct {
 	Streams   []Stream `json:"streams"`
 }
 
+// SecretStore writes a single rotated secret back to the caller's credential
+// store. It exists for provider-rotated credentials — an OAuth2 refresh token
+// that the provider replaces on every exchange and invalidates the old value
+// of, so dropping the new one silently breaks the connector on its next run.
+//
+// It is deliberately narrow. There is no Get (the current values already
+// arrive in RuntimeConfig.Secrets), no Delete, and no enumeration: nothing here
+// gives a connector a way to read secrets it was not given, or to reach a
+// credential other than its own.
+//
+// Implementations must persist encrypted and locally — the CLI's is backed by
+// internal/vault (AES-256-GCM under .polymetrics/vault) — must be safe for
+// concurrent use, and must never place a secret value in an error string.
+//
+// A nil SecretStore is valid and means "this caller has no credential store".
+// Rotation is then held in memory for the process lifetime; it is never
+// downgraded to a plaintext write.
+type SecretStore interface {
+	PutSecret(ctx context.Context, key, value string) error
+}
+
 type RuntimeConfig struct {
 	ProjectDir            string            `json:"-"`
 	Config                map[string]string `json:"config"`
 	Secrets               map[string]string `json:"-"`
 	ApprovedPayloadSHA256 map[string]string `json:"-"`
+	// SecretStore, when set, persists a provider-rotated secret back to the
+	// caller's encrypted credential store. Optional; see SecretStore.
+	SecretStore SecretStore `json:"-"`
 }
 
 // PayloadApprovalKey identifies a file field within an approved write batch.
@@ -131,6 +155,40 @@ type DirectReader interface {
 
 type OperationDirectReader interface {
 	OperationDirectRead(context.Context, OperationDirectReadRequest) (DirectReadResult, error)
+}
+
+// OperationBinaryDownloadRequest is one bounded binary/file download driven by
+// a declared binary_download operation.
+//
+// DestRoot is required and is the directory the download is confined beneath;
+// there is no implicit destination, because a CLI that guesses where to write
+// a file is a CLI that eventually writes it somewhere it should not.
+type OperationBinaryDownloadRequest struct {
+	Operation  string
+	Config     RuntimeConfig
+	PathParams map[string]string
+	Query      map[string]string
+	// MaxBytes may only lower the operation's declared cap, never raise it.
+	MaxBytes int64
+	DestRoot string
+	// FileName optionally names the file within DestRoot. It must be a local,
+	// single-segment name; traversal is refused.
+	FileName     string
+	RedactFields []string
+}
+
+// OperationBinaryDownloadResult describes what landed on disk. Bytes are never
+// inlined: a 25 MiB attachment would become a 34 MiB JSON line.
+type OperationBinaryDownloadResult struct {
+	Connector string `json:"connector"`
+	Operation string `json:"operation"`
+	Record    Record `json:"record"`
+}
+
+// OperationBinaryDownloader is implemented by connectors that can execute a
+// declared binary_download operation.
+type OperationBinaryDownloader interface {
+	OperationBinaryDownload(context.Context, OperationBinaryDownloadRequest) (OperationBinaryDownloadResult, error)
 }
 
 var ErrReadLimitReached = errors.New("connector read limit reached")
@@ -266,7 +324,8 @@ type LocalWarehouseMaterializer interface {
 }
 
 type Registry struct {
-	connectors map[string]Connector
+	connectors            map[string]Connector
+	iconCoverageValidated bool
 }
 
 func NewEmptyRegistry() *Registry {
@@ -275,10 +334,13 @@ func NewEmptyRegistry() *Registry {
 
 func NewRegistry() *Registry {
 	if builder := registeredDefaultRegistryBuilder(); builder != nil {
-		return builder()
+		registry := builder()
+		registry.MustValidateIconCoverage()
+		return registry
 	}
 	r := NewEmptyRegistry()
 	r.RegisterBuiltins()
+	r.MustValidateIconCoverage()
 	return r
 }
 
@@ -293,6 +355,7 @@ func (r *Registry) RegisterBuiltins() {
 
 func (r *Registry) Register(c Connector) {
 	r.connectors[c.Name()] = c
+	r.iconCoverageValidated = false
 }
 
 func (r *Registry) Get(name string) (Connector, bool) {

@@ -11,6 +11,7 @@ Reads Survicate surveys, survey questions, responses, and respondent attributes,
 
 ## Icon
 
+- id: survicate
 - asset: icons/survicate.svg
 - source: official
 - review_status: official_verified

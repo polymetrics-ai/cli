@@ -299,7 +299,11 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	directReads := map[string]bool{}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
-			if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+			// binary_download commands consume an api_surface endpoint the same
+			// way a direct read does and are tracked by the same covered_by
+			// bookkeeping, so they satisfy that coverage too.
+			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download") &&
+				cmd.Availability == "implemented" {
 				directReads[cmd.Path] = true
 			}
 		}

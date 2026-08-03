@@ -13,6 +13,7 @@ DESCRIPTION
   Reads records from a configured Senseforce dataset through the Senseforce API.
 
 ICON
+  id: senseforce
   asset: icons/senseforce.svg
   source: upstream_registry
   review_status: upstream_seeded

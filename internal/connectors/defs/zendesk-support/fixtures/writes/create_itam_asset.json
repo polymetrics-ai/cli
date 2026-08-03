@@ -1,0 +1,20 @@
+{
+  "record": {
+    "asset": {
+      "name": "fixture-name",
+      "status_id": "fixture-status-id",
+      "asset_tag": "fixture-asset-tag"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/it_asset_management/assets",
+    "body": {
+      "asset": {
+        "name": "fixture-name",
+        "status_id": "fixture-status-id",
+        "asset_tag": "fixture-asset-tag"
+      }
+    }
+  }
+}

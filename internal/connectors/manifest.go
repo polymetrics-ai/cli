@@ -39,7 +39,18 @@ type WriteActionSpec struct {
 	Path           string   `json:"path,omitempty"`
 	RedactFields   []string `json:"redact_fields,omitempty"`
 	Risk           string   `json:"risk,omitempty"`
-	Confirm        string   `json:"confirm,omitempty"`
+	// Batchable mirrors the bundle's "batchable" declaration. nil means the
+	// action never declared it and is therefore batchable; see IsBatchable for
+	// why this is a pointer rather than a bool.
+	Batchable *bool  `json:"batchable,omitempty"`
+	Confirm   string `json:"confirm,omitempty"`
+}
+
+// IsBatchable reports whether the action may run from a bulk reverse ETL plan.
+// Only an explicit false says no, so connectors that never declare the field —
+// which is all of them today — stay batchable.
+func (s WriteActionSpec) IsBatchable() bool {
+	return s.Batchable == nil || *s.Batchable
 }
 
 type AuthModeSpec struct {

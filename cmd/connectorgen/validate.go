@@ -576,7 +576,11 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	directReads := map[string]bool{}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
-			if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
+			// binary_download commands consume an api_surface endpoint the same
+			// way a direct read does and are tracked by the same covered_by
+			// bookkeeping, so they satisfy that coverage too.
+			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download") &&
+				cmd.Availability == "implemented" {
 				directReads[cmd.Path] = true
 			}
 		}
@@ -849,19 +853,25 @@ func checkCLISurfaceOperationSafety(
 	cmd engine.CLICommand,
 	operations map[string]engine.OperationSpec,
 ) []Finding {
-	if cmd.Availability != "implemented" || cmd.Operation == "" || strings.TrimSpace(cmd.OutputPolicy) == "" {
+	// An empty output_policy is NOT a reason to skip: it is precisely the
+	// state the runtime rejects. Skipping here is what gave GitHub's
+	// operation-backed commands zero validation from either path.
+	if cmd.Availability != "implemented" || cmd.Operation == "" {
 		return nil
 	}
 	op, ok := operations[cmd.Operation]
 	if !ok {
 		return nil
 	}
+	if cmd.Intent == "binary_download" {
+		return checkCLISurfaceBinaryOperationSafety(b, i, cmd, op)
+	}
 	if cmd.Intent != "direct_read" {
 		return []Finding{{
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented command %d (%q) references operation %q, but only direct_read rest_read operation execution is supported", i, cmd.Path, cmd.Operation),
+			Message:   fmt.Sprintf("implemented command %d (%q) references operation %q, but only direct_read rest_read and binary_download operation execution is supported", i, cmd.Path, cmd.Operation),
 		}}
 	}
 	var findings []Finding
@@ -1009,6 +1019,17 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		}
 		if flag.AllowEmpty != nil && flag.Type != "string" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s allow_empty is supported only for string flags", i, cmd.Path, flag.Name)})
+		}
+		// The meta-schema dialect has no "minimum", so these bounds are checked
+		// here instead of being declarable in cli_surface.schema.json.
+		if (flag.MaxItems != 0 || flag.MinItems != 0) && flag.Type != "string_array" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s max_items/min_items are supported only for string_array flags", i, cmd.Path, flag.Name)})
+		}
+		if flag.MaxItems < 0 || flag.MinItems < 0 {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s max_items/min_items must not be negative", i, cmd.Path, flag.Name)})
+		}
+		if flag.MaxItems > 0 && flag.MinItems > flag.MaxItems {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s min_items %d exceeds max_items %d", i, cmd.Path, flag.Name, flag.MinItems, flag.MaxItems)})
 		}
 	}
 	for j, constraint := range cmd.Constraints {
@@ -1400,6 +1421,16 @@ func cliFlagTypeMatchesSchema(flagType string, node *cliRecordSchemaNode) bool {
 	}
 }
 
+// directReadMethodRequirement names the methods a direct read command may
+// reference, matching commandrunner: operation-backed commands may POST for
+// bounded read-queries, endpoint-backed commands are GET-only.
+func directReadMethodRequirement(cmd engine.CLICommand) string {
+	if cmd.Operation != "" {
+		return "GET or POST"
+	}
+	return "GET"
+}
+
 func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
 	if cmd.Availability != "implemented" {
 		return nil
@@ -1425,9 +1456,10 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 			}}
 		}
 	case "direct_read":
-		if cmd.Operation != "" {
-			return nil
-		}
+		// Operation-backed commands are NOT exempt. The runtime
+		// (commandrunner.validateOperationDirectReadCommand) enforces exactly
+		// these rules on them, so exempting them here is what let 174 commands
+		// ship as "implemented" while blocking on every invocation.
 		var findings []Finding
 		if len(cmd.APISurface) != 1 {
 			findings = append(findings, Finding{
@@ -1438,12 +1470,16 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 			})
 		}
 		for _, ep := range cmd.APISurface {
-			if strings.ToUpper(strings.TrimSpace(ep.Method)) != "GET" {
+			// Operation-backed direct reads may use POST for bounded
+			// read-queries; endpoint-backed ones stay GET-only. This mirrors
+			// commandrunner exactly.
+			method := strings.ToUpper(strings.TrimSpace(ep.Method))
+			if method != "GET" && (cmd.Operation == "" || method != "POST") {
 				findings = append(findings, Finding{
 					Connector: b.Name,
 					File:      "cli_surface.json",
 					Rule:      ruleCLISurfaceSafety,
-					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a GET api_surface endpoint, got %s", i, cmd.Path, strings.ToUpper(ep.Method)),
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a %s api_surface endpoint, got %s", i, cmd.Path, directReadMethodRequirement(cmd), method),
 				})
 			}
 			if isAbsoluteHTTPURL(ep.Path) {
@@ -1463,6 +1499,8 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 				})
 			}
 		}
+		// Asserted unconditionally: an empty output_policy is the finding, not
+		// a reason to skip. The runtime rejects both empty and unsupported.
 		if !directReadOutputPolicies[cmd.OutputPolicy] {
 			findings = append(findings, Finding{
 				Connector: b.Name,
@@ -1470,6 +1508,47 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 				Rule:      ruleCLISurfaceSafety,
 				Message:   fmt.Sprintf("implemented direct read command %d (%q) must declare a supported output_policy", i, cmd.Path),
 			})
+		}
+		if len(findings) > 0 {
+			return findings
+		}
+	case "binary_download":
+		// Mirrors commandrunner.validateBinaryDownloadCommand. No output_policy
+		// applies: the response becomes a file, not a JSON body.
+		var findings []Finding
+		if cmd.Operation == "" {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented binary download command %d (%q) must reference an operation", i, cmd.Path),
+			})
+		}
+		if len(cmd.APISurface) != 1 {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented binary download command %d (%q) must reference exactly one api_surface endpoint", i, cmd.Path),
+			})
+		}
+		for _, ep := range cmd.APISurface {
+			if strings.ToUpper(strings.TrimSpace(ep.Method)) != "GET" {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented binary download command %d (%q) must reference a GET api_surface endpoint, got %s", i, cmd.Path, strings.ToUpper(ep.Method)),
+				})
+			}
+			if isAbsoluteHTTPURL(ep.Path) {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented binary download command %d (%q) must reference a connector-relative api_surface endpoint", i, cmd.Path),
+				})
+			}
 		}
 		if len(findings) > 0 {
 			return findings
@@ -1546,7 +1625,11 @@ func checkCLISurfaceEndpointCoverage(
 			if cmd.Operation != "" && state.operation != nil {
 				continue
 			}
-			if cmd.Intent == "direct_read" && directReadCoverageMatches(state.coveredBy, cmd.Path) {
+			// binary_download shares direct_read's coverage bookkeeping: an
+			// api_surface row records the command that consumes the endpoint,
+			// and which executor runs it does not change who covers it.
+			if (cmd.Intent == "direct_read" || cmd.Intent == "binary_download") &&
+				directReadCoverageMatches(state.coveredBy, cmd.Path) {
 				continue
 			}
 			findings = append(findings, Finding{
@@ -1872,4 +1955,69 @@ func specPropertyHasDateShapedFormat(rawSpec []byte, key string) bool {
 		return false
 	}
 	return dateShapedSpecFormats[prop.Format]
+}
+
+// checkCLISurfaceBinaryOperationSafety enforces, against the operation a
+// binary_download command references, exactly what engine.OperationBinaryDownload
+// enforces at execution time.
+//
+// extract_archives is checked here rather than only at execution because a
+// command backed by an extracting operation can never succeed: the executor
+// refuses it outright, since archive extraction is zip-slip and
+// decompression-bomb territory and is a separate capability, never a flag.
+func checkCLISurfaceBinaryOperationSafety(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	var findings []Finding
+	if op.Kind != "binary_download" || op.Binary == nil {
+		return append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented binary download command %d (%q) operation %q must be binary_download", i, cmd.Path, cmd.Operation),
+		})
+	}
+	if method := strings.ToUpper(strings.TrimSpace(op.Binary.Method)); method != "GET" {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented binary download command %d (%q) operation %q must use GET, got %s", i, cmd.Path, cmd.Operation, method),
+		})
+	}
+	if isAbsoluteHTTPURL(op.Binary.Path) {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented binary download command %d (%q) operation %q must use connector-relative path", i, cmd.Path, cmd.Operation),
+		})
+	}
+	if op.Binary.MaxBytes <= 0 {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented binary download command %d (%q) operation %q must declare positive binary.max_bytes", i, cmd.Path, cmd.Operation),
+		})
+	}
+	if op.Binary.ExtractArchives {
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented binary download command %d (%q) operation %q declares extract_archives, which the executor refuses; archive extraction is a separate capability", i, cmd.Path, cmd.Operation),
+		})
+	}
+	for _, flag := range cmd.Flags {
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		if strings.HasPrefix(mapsTo, "path.") || strings.HasPrefix(mapsTo, "query.") {
+			continue
+		}
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented binary download command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo),
+		})
+	}
+	return findings
 }

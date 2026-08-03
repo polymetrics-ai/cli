@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Qualaroo nudges and reporting response records through the Qualaroo API. Read-only.
 
 ICON
+  id: qualaroo
   asset: icons/qualaroo.svg
   source: upstream_registry
   review_status: upstream_seeded

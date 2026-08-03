@@ -11,6 +11,7 @@ Reads Facebook Page metadata and posts from the Graph API. Read-only.
 
 ## Icon
 
+- id: facebook
 - asset: icons/facebook.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads lemlist campaigns, activities, team metadata, CRM contacts/companies, schedules, tasks, webhooks, unsubscribes, field definitions, and signal-agent data through the lemlist REST API.
 
 ICON
+  id: lemlist
   asset: icons/lemlist.svg
   source: upstream_registry
   review_status: upstream_seeded

@@ -194,7 +194,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -1646,7 +1647,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -2012,7 +2014,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -2314,7 +2317,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -2519,7 +2523,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -3433,7 +3438,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -3581,10 +3587,17 @@
       "approval": "required for both write actions"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-algolia",
+      "path": "icons/simple-icons/algolia.svg",
+      "title": "Algolia",
+      "simple_icon_slug": "algolia",
+      "simple_icon_hex": "003DFF",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Algolia",
+      "match": "exact-name-or-slug",
+      "matched_by": "algolia"
     }
   },
   {
@@ -3764,7 +3777,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -7820,7 +7834,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -8105,7 +8120,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -8529,10 +8545,17 @@
       "approval": "none; read-only, no reverse-ETL write surface"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-apple",
+      "path": "icons/simple-icons/apple.svg",
+      "title": "Apple",
+      "simple_icon_slug": "apple",
+      "simple_icon_hex": "000000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Apple",
+      "match": "curated-alias",
+      "matched_by": "apple"
     }
   },
   {
@@ -8725,13 +8748,14 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
     "name": "asana",
     "display_name": "Asana",
-    "description": "Reads implemented Asana project-management streams and safely plans implemented task/project/section/tag reverse-ETL actions. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.",
+    "description": "Reads implemented Asana project-management streams and executes typed, approval-gated reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, and workspaces. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.",
     "integration_type": "api",
     "docs_url": "https://developers.asana.com/reference/rest-api-reference",
     "release_stage": "ga",
@@ -9012,6 +9036,426 @@
         "method": "POST",
         "path": "/tasks/{{ record.task_gid }}/stories",
         "risk": "external mutation; posts a task story/comment visible to task collaborators; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_custom_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/custom_fields",
+        "risk": "external mutation; medium-risk create against POST /custom_fields; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_custom_field",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/custom_fields/{{ record.custom_field_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /custom_fields/{custom_field_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_enum_option_for_custom_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/custom_fields/{{ record.custom_field_gid }}/enum_options",
+        "risk": "external mutation; medium-risk create against POST /custom_fields/{custom_field_gid}/enum_options; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "insert_enum_option_for_custom_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/custom_fields/{{ record.custom_field_gid }}/enum_options/insert",
+        "risk": "external mutation; medium-risk create against POST /custom_fields/{custom_field_gid}/enum_options/insert; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_enum_option",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/enum_options/{{ record.enum_option_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /enum_options/{enum_option_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_graph_export",
+        "kind": "create",
+        "method": "POST",
+        "path": "/exports/graph",
+        "risk": "external mutation; medium-risk create against POST /exports/graph; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_resource_export",
+        "kind": "create",
+        "method": "POST",
+        "path": "/exports/resource",
+        "risk": "external mutation; medium-risk create against POST /exports/resource; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_goal_relationship",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/goal_relationships/{{ record.goal_relationship_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /goal_relationships/{goal_relationship_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_supporting_relationship",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/addSupportingRelationship",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/addSupportingRelationship; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_goal",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/goals/{{ record.goal_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /goals/{goal_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_goal",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals",
+        "risk": "external mutation; medium-risk create against POST /goals; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_goal_metric",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/setMetric",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/setMetric; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_goal_metric",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/setMetricCurrentValue",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/setMetricCurrentValue; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_followers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/addFollowers",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/addFollowers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_custom_field_setting_for_goal",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/addCustomFieldSetting",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/addCustomFieldSetting; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_ooo_entry",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/ooo_entries/{{ record.ooo_entry_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /ooo_entries/{ooo_entry_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_ooo_entry",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ooo_entries",
+        "risk": "external mutation; medium-risk create against POST /ooo_entries; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "/portfolios",
+        "risk": "external mutation; medium-risk create against POST /portfolios; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_portfolio",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/portfolios/{{ record.portfolio_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /portfolios/{portfolio_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_item_for_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/addItem",
+        "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addItem; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_custom_field_setting_for_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/addCustomFieldSetting",
+        "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addCustomFieldSetting; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_members_for_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/addMembers",
+        "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addMembers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "duplicate_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/duplicate",
+        "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/duplicate; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_project_brief",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/project_briefs/{{ record.project_brief_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /project_briefs/{project_brief_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_project_brief",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/project_briefs",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/project_briefs; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_project_portfolio_setting",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/project_portfolio_settings/{{ record.project_portfolio_setting_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /project_portfolio_settings/{project_portfolio_setting_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_project_status_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/project_statuses",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/project_statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "instantiate_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/project_templates/{{ record.project_template_gid }}/instantiateProject",
+        "risk": "external mutation; medium-risk create against POST /project_templates/{project_template_gid}/instantiateProject; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "duplicate_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/duplicate",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/duplicate; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_project_for_team",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_gid }}/projects",
+        "risk": "external mutation; medium-risk create against POST /teams/{team_gid}/projects; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_project_for_workspace",
+        "kind": "create",
+        "method": "POST",
+        "path": "/workspaces/{{ record.workspace_gid }}/projects",
+        "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/projects; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_custom_field_setting_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/addCustomFieldSetting",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/addCustomFieldSetting; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_members_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/addMembers",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/addMembers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_followers_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/addFollowers",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/addFollowers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "project_save_as_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/saveAsTemplate",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/saveAsTemplate; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "trigger_rule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rule_triggers/{{ record.rule_trigger_gid }}/run",
+        "risk": "external mutation; medium-risk create against POST /rule_triggers/{rule_trigger_gid}/run; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_task_for_section",
+        "kind": "create",
+        "method": "POST",
+        "path": "/sections/{{ record.section_gid }}/addTask",
+        "risk": "external mutation; medium-risk create against POST /sections/{section_gid}/addTask; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "insert_section_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/sections/insert",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/sections/insert; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_status_for_object",
+        "kind": "create",
+        "method": "POST",
+        "path": "/status_updates",
+        "risk": "external mutation; medium-risk create against POST /status_updates; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_story",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/stories/{{ record.story_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /stories/{story_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_story_for_goal",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/stories",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/stories; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_tag_for_workspace",
+        "kind": "create",
+        "method": "POST",
+        "path": "/workspaces/{{ record.workspace_gid }}/tags",
+        "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/tags; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "instantiate_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/task_templates/{{ record.task_template_gid }}/instantiateTask",
+        "risk": "external mutation; medium-risk create against POST /task_templates/{task_template_gid}/instantiateTask; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "duplicate_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/duplicate",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/duplicate; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_subtask_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/subtasks",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/subtasks; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "set_parent_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/setParent",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/setParent; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_dependencies_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/addDependencies",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addDependencies; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_dependents_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/addDependents",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addDependents; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_project_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/addProject",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addProject; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_tag_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/addTag",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addTag; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_followers_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/addFollowers",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addFollowers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_team",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams",
+        "risk": "external mutation; medium-risk create against POST /teams; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_team",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/teams/{{ record.team_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /teams/{team_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_user_for_team",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_gid }}/addUser",
+        "risk": "external mutation; medium-risk create against POST /teams/{team_gid}/addUser; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_time_tracking_entry",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/time_tracking_entries",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/time_tracking_entries; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_time_tracking_entry",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/time_tracking_entries/{{ record.time_tracking_entry_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /time_tracking_entries/{time_tracking_entry_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/users/{{ record.user_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /users/{user_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_user_for_workspace",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/workspaces/{{ record.workspace_gid }}/users/{{ record.user_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /workspaces/{workspace_gid}/users/{user_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_workspace",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/workspaces/{{ record.workspace_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /workspaces/{workspace_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_user_for_workspace",
+        "kind": "create",
+        "method": "POST",
+        "path": "/workspaces/{{ record.workspace_gid }}/addUser",
+        "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/addUser; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       }
     ],
     "risk": {
@@ -10762,7 +11206,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -11076,7 +11521,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -11374,7 +11820,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -12292,7 +12739,7 @@
       "approval": "reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions require --confirm destructive"
     },
     "icon": {
-      "id": "pm-bahmni",
+      "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
       "review_status": "polymetrics",
@@ -14234,10 +14681,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-basecamp",
+      "path": "icons/simple-icons/basecamp.svg",
+      "title": "Basecamp",
+      "simple_icon_slug": "basecamp",
+      "simple_icon_hex": "1D2D35",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Basecamp",
+      "match": "exact-name-or-slug",
+      "matched_by": "basecamp"
     }
   },
   {
@@ -14480,7 +14934,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -14893,7 +15348,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -17182,7 +17638,7 @@
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and typed destructive confirmation for destructive actions."
     },
     "icon": {
-      "id": "pm-bitbucket",
+      "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
       "review_status": "polymetrics",
@@ -17470,10 +17926,17 @@
       "approval": "required for destructive actions (delete_bitlink, delete_webhook, delete_qr_code, delete_bitlink_tags) and for webhook URL mutations; creates/updates of bitlinks, campaigns, channels, and QR codes are low-risk"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-bitly",
+      "path": "icons/simple-icons/bitly.svg",
+      "title": "Bitly",
+      "simple_icon_slug": "bitly",
+      "simple_icon_hex": "EE6123",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Bitly",
+      "match": "exact-name-or-slug",
+      "matched_by": "bitly"
     }
   },
   {
@@ -17614,10 +18077,17 @@
       "approval": "none; read-only, no reverse-ETL write surface"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-blogger",
+      "path": "icons/simple-icons/blogger.svg",
+      "title": "Blogger",
+      "simple_icon_slug": "blogger",
+      "simple_icon_hex": "FF5722",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Blogger",
+      "match": "exact-name-or-slug",
+      "matched_by": "blogger"
     }
   },
   {
@@ -17886,7 +18356,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -18135,7 +18606,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -18419,10 +18891,17 @@
       "approval": "required for every write action; read remains unapproved"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-box",
+      "path": "icons/simple-icons/box.svg",
+      "title": "Box",
+      "simple_icon_slug": "box",
+      "simple_icon_hex": "0061D5",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Box",
+      "match": "exact-name-or-slug",
+      "matched_by": "box"
     }
   },
   {
@@ -18538,7 +19017,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -19671,7 +20151,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -19948,10 +20429,17 @@
       "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-brevo",
+      "path": "icons/simple-icons/brevo.svg",
+      "title": "Brevo",
+      "simple_icon_slug": "brevo",
+      "simple_icon_hex": "0B996E",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Brevo",
+      "match": "exact-name-or-slug",
+      "matched_by": "brevo"
     }
   },
   {
@@ -20298,10 +20786,17 @@
       "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-brex",
+      "path": "icons/simple-icons/brex.svg",
+      "title": "Brex",
+      "simple_icon_slug": "brex",
+      "simple_icon_hex": "212121",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Brex",
+      "match": "exact-name-or-slug",
+      "matched_by": "brex"
     }
   },
   {
@@ -20437,7 +20932,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -20689,10 +21185,17 @@
       "approval": "required for all write actions; each action's per-record risk string in writes.json is the authoritative summary"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-buildkite",
+      "path": "icons/simple-icons/buildkite.svg",
+      "title": "Buildkite",
+      "simple_icon_slug": "buildkite",
+      "simple_icon_hex": "14CC80",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Buildkite",
+      "match": "exact-name-or-slug",
+      "matched_by": "buildkite"
     }
   },
   {
@@ -20821,7 +21324,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -20915,7 +21419,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -21114,10 +21619,17 @@
       "approval": "required for every write action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-caldotcom",
+      "path": "icons/simple-icons/caldotcom.svg",
+      "title": "Cal.com",
+      "simple_icon_slug": "caldotcom",
+      "simple_icon_hex": "292929",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Cal.com",
+      "match": "curated-alias",
+      "matched_by": "caldotcom"
     }
   },
   {
@@ -21403,10 +21915,17 @@
       "approval": "required for every write action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-calendly",
+      "path": "icons/simple-icons/calendly.svg",
+      "title": "Calendly",
+      "simple_icon_slug": "calendly",
+      "simple_icon_hex": "006BFF",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Calendly",
+      "match": "exact-name-or-slug",
+      "matched_by": "calendly"
     }
   },
   {
@@ -22184,10 +22703,17 @@
       "approval": "required for campaign-send and subscriber-delete actions; list/segment/subscriber-add/update mutations are lower risk"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-campaignmonitor",
+      "path": "icons/simple-icons/campaignmonitor.svg",
+      "title": "Campaign Monitor",
+      "simple_icon_slug": "campaignmonitor",
+      "simple_icon_hex": "111324",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Campaign%20Monitor",
+      "match": "exact-name-or-slug",
+      "matched_by": "campaign-monitor"
     }
   },
   {
@@ -22326,7 +22852,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -22448,7 +22975,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -22745,7 +23273,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -22949,7 +23478,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -23433,7 +23963,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -23699,7 +24230,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -24666,7 +25198,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -25285,11 +25818,17 @@
       "write": "external mutation of Chatwoot contacts, conversations, messages, and labels; agent-visible and customer-visible side effects"
     },
     "icon": {
-      "id": "pm-chatwoot",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics",
-      "review_url": "https://github.com/polymetrics-ai/cli"
+      "id": "simple-icons-chatwoot",
+      "path": "icons/simple-icons/chatwoot.svg",
+      "title": "Chatwoot",
+      "simple_icon_slug": "chatwoot",
+      "simple_icon_hex": "1F93FF",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Chatwoot",
+      "match": "exact-name-or-slug",
+      "matched_by": "chatwoot"
     }
   },
   {
@@ -25546,7 +26085,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -25628,7 +26168,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -25959,7 +26500,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -26446,10 +26988,17 @@
       "write": "external mutation of CircleCI project configuration: schedule/environment-variable/checkout-key create and delete; never triggers, cancels, or approves a live CI run"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-circleci",
+      "path": "icons/simple-icons/circleci.svg",
+      "title": "CircleCI",
+      "simple_icon_slug": "circleci",
+      "simple_icon_hex": "343434",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=CircleCI",
+      "match": "exact-name-or-slug",
+      "matched_by": "circleci"
     }
   },
   {
@@ -26729,7 +27278,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -26873,10 +27423,17 @@
       "approval": "required for update_application and delete_dataset (destructive or full-replace semantics); create_application and create_dataset are low-risk (additive only)"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-clarifai",
+      "path": "icons/simple-icons/clarifai.svg",
+      "title": "Clarifai",
+      "simple_icon_slug": "clarifai",
+      "simple_icon_hex": "1955FF",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Clarifai",
+      "match": "curated-alias",
+      "matched_by": "clarifai"
     }
   },
   {
@@ -28071,7 +28628,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -28890,7 +29448,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -29155,7 +29714,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -29596,10 +30156,17 @@
       "approval": "required for all write actions; read is unrestricted"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-codefresh",
+      "path": "icons/simple-icons/codefresh.svg",
+      "title": "Codefresh",
+      "simple_icon_slug": "codefresh",
+      "simple_icon_hex": "08B1AB",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Codefresh",
+      "match": "exact-name-or-slug",
+      "matched_by": "codefresh"
     }
   },
   {
@@ -31424,7 +31991,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -32456,9 +33024,9 @@
     "icon": {
       "id": "convex",
       "path": "icons/convex.svg",
-      "source": "upstream_registry",
-      "review_status": "upstream_seeded",
-      "review_url": "https://docs.convex.dev/http-api/"
+      "source": "official",
+      "review_status": "official_verified",
+      "review_url": "https://docs.convex.dev/"
     }
   },
   {
@@ -32714,7 +33282,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -33376,7 +33945,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -34256,7 +34826,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -34411,7 +34982,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -34799,7 +35371,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -35538,7 +36111,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -35625,10 +36199,17 @@
       "approval": "none; read-only source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-discord",
+      "path": "icons/simple-icons/discord.svg",
+      "title": "Discord",
+      "simple_icon_slug": "discord",
+      "simple_icon_hex": "5865F2",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Discord",
+      "match": "exact-name-or-slug",
+      "matched_by": "discord"
     }
   },
   {
@@ -36015,7 +36596,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -36341,10 +36923,17 @@
       "approval": "required for every write action; delete_* actions are irreversible in Dolibarr"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-dolibarr",
+      "path": "icons/simple-icons/dolibarr.svg",
+      "title": "Dolibarr",
+      "simple_icon_slug": "dolibarr",
+      "simple_icon_hex": "263C5C",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Dolibarr",
+      "match": "exact-name-or-slug",
+      "matched_by": "dolibarr"
     }
   },
   {
@@ -36978,7 +37567,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -37170,10 +37760,17 @@
       "write": "external mutation of signature requests (update/cancel/remind/release_hold/remove), templates (delete/add_user/remove_user), teams (create/update/add_member/remove_member), and account settings; several actions are destructive/not reversible (cancel_signature_request, remove_signature_request, delete_template, remove_team_member) and require approval"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-dropbox",
+      "path": "icons/simple-icons/dropbox.svg",
+      "title": "Dropbox",
+      "simple_icon_slug": "dropbox",
+      "simple_icon_hex": "0061FF",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Dropbox",
+      "match": "curated-alias",
+      "matched_by": "dropbox"
     }
   },
   {
@@ -37385,7 +37982,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -37782,7 +38380,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -38376,7 +38975,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -38498,7 +39098,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -38599,10 +39200,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-ebay-finance",
+      "path": "icons/simple-icons/ebay-finance.svg",
+      "title": "eBay",
+      "simple_icon_slug": "ebay",
+      "simple_icon_hex": "E53238",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=eBay",
+      "match": "curated-alias",
+      "matched_by": "ebay"
     }
   },
   {
@@ -38733,10 +39341,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-ebay-fulfillment",
+      "path": "icons/simple-icons/ebay-fulfillment.svg",
+      "title": "eBay",
+      "simple_icon_slug": "ebay",
+      "simple_icon_hex": "E53238",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=eBay",
+      "match": "curated-alias",
+      "matched_by": "ebay"
     }
   },
   {
@@ -39143,7 +39758,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -39243,9 +39859,9 @@
     "icon": {
       "id": "elasticsearch",
       "path": "icons/elasticsearch.svg",
-      "source": "upstream_registry",
-      "review_status": "upstream_seeded",
-      "review_url": "https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html"
+      "source": "official",
+      "review_status": "official_verified",
+      "review_url": "https://www.elastic.co/docs/reference/elasticsearch"
     }
   },
   {
@@ -40409,7 +41025,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -40512,7 +41129,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -40637,7 +41255,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -40997,7 +41616,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -41788,7 +42408,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -42139,7 +42760,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -42180,10 +42802,17 @@
       "approval": "none required; no external data is read or written"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-faker",
+      "path": "icons/simple-icons/faker.svg",
+      "title": "Faker",
+      "simple_icon_slug": "faker",
+      "simple_icon_hex": "779B2E",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Faker",
+      "match": "exact-name-or-slug",
+      "matched_by": "faker"
     }
   },
   {
@@ -42406,10 +43035,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-fastly",
+      "path": "icons/simple-icons/fastly.svg",
+      "title": "Fastly",
+      "simple_icon_slug": "fastly",
+      "simple_icon_hex": "FF282D",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Fastly",
+      "match": "exact-name-or-slug",
+      "matched_by": "fastly"
     }
   },
   {
@@ -42646,10 +43282,17 @@
       "approval": "required for write actions; none for read"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-fillout",
+      "path": "icons/simple-icons/fillout.svg",
+      "title": "Fillout",
+      "simple_icon_slug": "fillout",
+      "simple_icon_hex": "FFC738",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Fillout",
+      "match": "exact-name-or-slug",
+      "matched_by": "fillout"
     }
   },
   {
@@ -42804,7 +43447,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -43055,7 +43699,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -43166,7 +43811,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -43282,7 +43928,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -46826,7 +47473,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -46944,7 +47592,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -47061,7 +47710,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -47567,7 +48217,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -47685,7 +48336,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -48006,10 +48658,17 @@
       "approval": "reverse ETL writes require plan preview and approval token"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-formbricks",
+      "path": "icons/simple-icons/formbricks.svg",
+      "title": "Formbricks",
+      "simple_icon_slug": "formbricks",
+      "simple_icon_hex": "00C4B8",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Formbricks",
+      "match": "exact-name-or-slug",
+      "matched_by": "formbricks"
     }
   },
   {
@@ -48146,7 +48805,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -48235,7 +48895,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -48361,7 +49022,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -48981,7 +49643,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -53818,7 +54481,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -53939,7 +54603,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -55193,7 +55858,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -55435,10 +56101,17 @@
       "approval": "none; read-only public media source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-giphy",
+      "path": "icons/simple-icons/giphy.svg",
+      "title": "GIPHY",
+      "simple_icon_slug": "giphy",
+      "simple_icon_hex": "FF6666",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=GIPHY",
+      "match": "exact-name-or-slug",
+      "matched_by": "giphy"
     }
   },
   {
@@ -58961,10 +59634,17 @@
       "approval": "reverse ETL writes require plan preview and approval token before execution"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-gitbook",
+      "path": "icons/simple-icons/gitbook.svg",
+      "title": "GitBook",
+      "simple_icon_slug": "gitbook",
+      "simple_icon_hex": "BBDDE5",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=GitBook",
+      "match": "exact-name-or-slug",
+      "matched_by": "gitbook"
     }
   },
   {
@@ -61810,10 +62490,17 @@
       "approval": "reverse ETL plan approval required before writes; several actions (send_message, send_draft, delete_message, delete_thread, delete_draft, create_delegate, update_auto_forwarding) warrant elevated operator scrutiny -- see docs.md Write actions \u0026 risks"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-gmail",
+      "path": "icons/simple-icons/gmail.svg",
+      "title": "Gmail",
+      "simple_icon_slug": "gmail",
+      "simple_icon_hex": "EA4335",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Gmail",
+      "match": "exact-name-or-slug",
+      "matched_by": "gmail"
     }
   },
   {
@@ -63589,7 +64276,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -64413,10 +65101,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googlecalendar",
+      "path": "icons/simple-icons/googlecalendar.svg",
+      "title": "Google Calendar",
+      "simple_icon_slug": "googlecalendar",
+      "simple_icon_hex": "4285F4",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Calendar",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-calendar"
     }
   },
   {
@@ -64540,10 +65235,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googleclassroom",
+      "path": "icons/simple-icons/googleclassroom.svg",
+      "title": "Google Classroom",
+      "simple_icon_slug": "googleclassroom",
+      "simple_icon_hex": "0F9D58",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Classroom",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-classroom"
     }
   },
   {
@@ -64772,10 +65474,17 @@
       "approval": "none; read-only source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googleforms",
+      "path": "icons/simple-icons/googleforms.svg",
+      "title": "Google Forms",
+      "simple_icon_slug": "googleforms",
+      "simple_icon_hex": "7248B9",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Forms",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-forms"
     }
   },
   {
@@ -65182,10 +65891,17 @@
       "read": "external Google Tasks API read of the authenticated user's task lists and tasks"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-googletasks",
+      "path": "icons/simple-icons/googletasks.svg",
+      "title": "Google Tasks",
+      "simple_icon_slug": "googletasks",
+      "simple_icon_hex": "2684FC",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Google%20Tasks",
+      "match": "exact-name-or-slug",
+      "matched_by": "google-tasks"
     }
   },
   {
@@ -65426,7 +66142,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -66907,7 +67624,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -67526,7 +68244,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -67756,10 +68475,17 @@
       "approval": "none; read-only, no obviously-safe reverse-ETL writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-helpscout",
+      "path": "icons/simple-icons/helpscout.svg",
+      "title": "Help Scout",
+      "simple_icon_slug": "helpscout",
+      "simple_icon_hex": "1292EE",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Help%20Scout",
+      "match": "exact-name-or-slug",
+      "matched_by": "help-scout"
     }
   },
   {
@@ -67962,7 +68688,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -68069,7 +68796,7 @@
   {
     "name": "hubplanner",
     "display_name": "Hubplanner",
-    "description": "Reads Hubplanner resources, projects, clients, events, holidays, bookings, and billing rates through the Hubplanner REST API.",
+    "description": "Reads Hubplanner scheduling, project, resource, client, billing, time, vacation, custom-field, and webhook-subscription data and exposes typed reverse-ETL writes for documented Hubplanner REST resources.",
     "integration_type": "api",
     "docs_url": "https://github.com/hubplanner/API",
     "release_stage": "ga",
@@ -68077,7 +68804,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -68090,28 +68817,14 @@
       "properties": {
         "api_key": {
           "type": "string",
-          "x-secret": true,
-          "description": "Hubplanner API key, sent verbatim (no Bearer prefix) as the Authorization header. Never logged."
+          "description": "Hubplanner API key passed in the Authorization header.",
+          "x-secret": true
         },
         "base_url": {
           "type": "string",
           "format": "uri",
           "default": "https://api.hubplanner.com/v1",
-          "description": "Hubplanner API base URL override for tests or proxies."
-        },
-        "page_size": {
-          "type": "string",
-          "default": "200",
-          "description": "Records per page (1-1000)."
-        },
-        "max_pages": {
-          "type": "string",
-          "default": "0",
-          "description": "Maximum pages; use 0, all, or unlimited to exhaust the stream."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+          "description": "Hubplanner API base URL."
         }
       }
     },
@@ -68192,11 +68905,607 @@
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
         ]
+      },
+      {
+        "name": "booking_categories",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "resource_custom_field_templates",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_custom_field_templates",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_groups",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "resource_groups",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "cost_categories",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_managers",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_tags",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "resource_tags",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "time_entries",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "unassigned_work",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "vacations",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "webhook_subscriptions",
+        "primary_key": [
+          "_id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "create_billing_rate",
+        "kind": "create",
+        "method": "POST",
+        "path": "/billingRate",
+        "risk": "creates a Hubplanner billing rate"
+      },
+      {
+        "name": "update_billing_rate",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/billingRate/{{ record.id }}",
+        "risk": "updates a Hubplanner billing rate"
+      },
+      {
+        "name": "delete_billing_rate",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/billingRate/{{ record.id }}",
+        "risk": "deletes a Hubplanner billing rate",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_booking_category",
+        "kind": "create",
+        "method": "POST",
+        "path": "/categories",
+        "risk": "creates a Hubplanner booking category"
+      },
+      {
+        "name": "update_booking_category",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/categories/{{ record.id }}",
+        "risk": "updates a Hubplanner booking category"
+      },
+      {
+        "name": "create_booking",
+        "kind": "create",
+        "method": "POST",
+        "path": "/booking",
+        "risk": "creates a Hubplanner booking"
+      },
+      {
+        "name": "update_booking",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/booking/{{ record.id }}",
+        "risk": "updates a Hubplanner booking"
+      },
+      {
+        "name": "patch_booking",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/booking/{{ record.id }}",
+        "risk": "patches selected Hubplanner booking fields"
+      },
+      {
+        "name": "delete_booking",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/booking/{{ record.id }}",
+        "risk": "deletes a Hubplanner booking",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_bookings",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/booking?ids={{ record.ids }}",
+        "risk": "deletes multiple Hubplanner bookings by ids",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_client",
+        "kind": "create",
+        "method": "POST",
+        "path": "/client",
+        "risk": "creates a Hubplanner client"
+      },
+      {
+        "name": "update_client",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/client/{{ record.id }}",
+        "risk": "updates a Hubplanner client"
+      },
+      {
+        "name": "delete_client",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/client/{{ record.id }}",
+        "risk": "deletes a Hubplanner client",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_resource_custom_field_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/resource/customField/template",
+        "risk": "creates a Hubplanner resource custom field template"
+      },
+      {
+        "name": "update_resource_custom_field_template",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/resource/customField/template/{{ record.id }}",
+        "risk": "updates a Hubplanner resource custom field template"
+      },
+      {
+        "name": "delete_resource_custom_field_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/resource/customField/template/{{ record.id }}",
+        "risk": "deletes a Hubplanner resource custom field template",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_project_custom_field_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/project/customField/template",
+        "risk": "creates a Hubplanner project custom field template"
+      },
+      {
+        "name": "update_project_custom_field_template",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/project/customField/template/{{ record.id }}",
+        "risk": "updates a Hubplanner project custom field template"
+      },
+      {
+        "name": "delete_project_custom_field_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project/customField/template/{{ record.id }}",
+        "risk": "deletes a Hubplanner project custom field template",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_event",
+        "kind": "create",
+        "method": "POST",
+        "path": "/event",
+        "risk": "creates a Hubplanner event"
+      },
+      {
+        "name": "update_event",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/event/{{ record.id }}",
+        "risk": "updates a Hubplanner event"
+      },
+      {
+        "name": "delete_event",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/event/{{ record.id }}",
+        "risk": "deletes a Hubplanner event",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_project_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projectgroup",
+        "risk": "creates a Hubplanner project group"
+      },
+      {
+        "name": "update_project_group",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/projectgroup/{{ record.id }}",
+        "risk": "updates a Hubplanner project group"
+      },
+      {
+        "name": "delete_project_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/projectgroup/{{ record.id }}",
+        "risk": "deletes a Hubplanner project group",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_holiday",
+        "kind": "create",
+        "method": "POST",
+        "path": "/holiday",
+        "risk": "creates a Hubplanner holiday"
+      },
+      {
+        "name": "update_holiday",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/holiday/{{ record.id }}",
+        "risk": "updates a Hubplanner holiday"
+      },
+      {
+        "name": "delete_holiday",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/holiday/{{ record.id }}",
+        "risk": "deletes a Hubplanner holiday",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_milestone",
+        "kind": "create",
+        "method": "POST",
+        "path": "/milestone",
+        "risk": "creates a Hubplanner milestone"
+      },
+      {
+        "name": "update_milestone",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/milestone/{{ record.id }}",
+        "risk": "updates a Hubplanner milestone"
+      },
+      {
+        "name": "delete_milestone",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/milestone/{{ record.id }}",
+        "risk": "deletes a Hubplanner milestone",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_cost_category",
+        "kind": "create",
+        "method": "POST",
+        "path": "/costCategories",
+        "risk": "creates a Hubplanner project cost category"
+      },
+      {
+        "name": "update_cost_category",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/costCategories/{{ record.id }}",
+        "risk": "updates a Hubplanner project cost category"
+      },
+      {
+        "name": "delete_cost_category",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/costCategories/{{ record.id }}",
+        "risk": "deletes a Hubplanner project cost category",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_project_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/project-tag",
+        "risk": "creates a Hubplanner project tag"
+      },
+      {
+        "name": "update_project_tag",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/project-tag/{{ record.id }}",
+        "risk": "updates a Hubplanner project tag"
+      },
+      {
+        "name": "delete_project_tag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project-tag/{{ record.id }}",
+        "risk": "deletes a Hubplanner project tag",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_resource_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/resource-tag",
+        "risk": "creates a Hubplanner resource tag"
+      },
+      {
+        "name": "update_resource_tag",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/resource-tag/{{ record.id }}",
+        "risk": "updates a Hubplanner resource tag"
+      },
+      {
+        "name": "delete_resource_tag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/resource-tag/{{ record.id }}",
+        "risk": "deletes a Hubplanner resource tag",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/project",
+        "risk": "creates a Hubplanner project"
+      },
+      {
+        "name": "patch_project",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/project",
+        "risk": "patches a Hubplanner project by _id in the typed body"
+      },
+      {
+        "name": "delete_project",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project/{{ record.id }}",
+        "risk": "deletes a Hubplanner project",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_projects",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/project",
+        "risk": "deletes multiple Hubplanner projects by ids",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_resource",
+        "kind": "create",
+        "method": "POST",
+        "path": "/resource",
+        "risk": "creates a Hubplanner resource"
+      },
+      {
+        "name": "patch_resource",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/resource",
+        "risk": "patches a Hubplanner resource by _id in the typed body"
+      },
+      {
+        "name": "delete_resource",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/resource/{{ record.id }}",
+        "risk": "deletes a Hubplanner resource",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_resources",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/resource",
+        "risk": "deletes multiple Hubplanner resources by ids",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_time_entry",
+        "kind": "create",
+        "method": "POST",
+        "path": "/timeentry",
+        "risk": "creates a Hubplanner time entry"
+      },
+      {
+        "name": "update_time_entry",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/timeentry/{{ record.id }}",
+        "risk": "updates a Hubplanner time entry"
+      },
+      {
+        "name": "delete_time_entry",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/timeentry/{{ record.id }}",
+        "risk": "deletes a Hubplanner time entry",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_time_entries",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/timeentry",
+        "risk": "deletes multiple Hubplanner time entries by ids",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_unassigned_work",
+        "kind": "create",
+        "method": "POST",
+        "path": "/unassigned-work",
+        "risk": "creates Hubplanner unassigned work"
+      },
+      {
+        "name": "update_unassigned_work",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/unassigned-work/{{ record.id }}",
+        "risk": "updates Hubplanner unassigned work"
+      },
+      {
+        "name": "delete_unassigned_work",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/unassigned-work/{{ record.id }}",
+        "risk": "deletes Hubplanner unassigned work",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_vacation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/vacation",
+        "risk": "creates a Hubplanner vacation"
+      },
+      {
+        "name": "update_vacation",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/vacation/{{ record.id }}",
+        "risk": "updates a Hubplanner vacation"
+      },
+      {
+        "name": "patch_vacation",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/vacation/{{ record.id }}",
+        "risk": "patches selected Hubplanner vacation fields"
+      },
+      {
+        "name": "delete_vacation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/vacation/{{ record.id }}",
+        "risk": "deletes a Hubplanner vacation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_webhook_subscription",
+        "kind": "create",
+        "method": "POST",
+        "path": "/subscription",
+        "risk": "creates a Hubplanner webhook subscription that can deliver future event payloads to the approved HTTPS target URL",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_webhook_subscription",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/subscription/{{ record.id }}",
+        "risk": "deletes a Hubplanner webhook subscription",
+        "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external Hubplanner API read of scheduling, project, and billing data",
-      "approval": "none; read-only, no reverse-ETL write surface"
+      "read": "external Hubplanner API reads of scheduling, project, resource, client, time, vacation, billing, and webhook-subscription data",
+      "write": "typed reverse-ETL actions create, update, patch, and delete Hubplanner records using fixed documented REST paths only",
+      "approval": "reverse ETL writes require plan, preview, explicit approval, and destructive confirmation for deletes"
     },
     "icon": {
       "id": "hubplanner",
@@ -68338,10 +69647,17 @@
       "approval": "none; read-only, no obviously-safe reverse-ETL writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-huggingface",
+      "path": "icons/simple-icons/huggingface.svg",
+      "title": "Hugging Face",
+      "simple_icon_slug": "huggingface",
+      "simple_icon_hex": "FFD21E",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Hugging%20Face",
+      "match": "curated-alias",
+      "matched_by": "huggingface"
     }
   },
   {
@@ -68458,7 +69774,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -68566,7 +69883,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -69189,7 +70507,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -69283,7 +70602,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -69399,7 +70719,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -69517,7 +70838,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -69622,7 +70944,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -70945,7 +72268,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -72147,7 +73471,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -72261,10 +73586,17 @@
       "approval": "none; read-only, no reverse-ETL writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-invoiceninja",
+      "path": "icons/simple-icons/invoiceninja.svg",
+      "title": "Invoice Ninja",
+      "simple_icon_slug": "invoiceninja",
+      "simple_icon_hex": "000000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Invoice%20Ninja",
+      "match": "exact-name-or-slug",
+      "matched_by": "invoiceninja"
     }
   },
   {
@@ -72580,7 +73912,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -72776,7 +74109,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -72882,7 +74216,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -73354,7 +74689,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -73427,7 +74763,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -73527,7 +74864,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -73735,10 +75073,17 @@
       "read": "external Katana MRP API read of inventory, sales, and customer data"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-katana",
+      "path": "icons/simple-icons/katana.svg",
+      "title": "Katana",
+      "simple_icon_slug": "katana",
+      "simple_icon_hex": "000000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Katana",
+      "match": "exact-name-or-slug",
+      "matched_by": "katana"
     }
   },
   {
@@ -74718,7 +76063,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -74835,7 +76181,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -75504,7 +76851,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -75725,7 +77073,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -76220,7 +77569,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -76330,7 +77680,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -76453,10 +77804,17 @@
       "approval": "none; read-only source connector"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-linear",
+      "path": "icons/simple-icons/linear.svg",
+      "title": "Linear",
+      "simple_icon_slug": "linear",
+      "simple_icon_hex": "5E6AD2",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Linear",
+      "match": "exact-name-or-slug",
+      "matched_by": "linear"
     }
   },
   {
@@ -76792,7 +78150,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -76923,7 +78282,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -77804,7 +79164,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -78760,7 +80121,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -78852,10 +80214,17 @@
       "read": "external Mailtrap API read of account-management data"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-mailtrap",
+      "path": "icons/simple-icons/mailtrap.svg",
+      "title": "Mailtrap",
+      "simple_icon_slug": "mailtrap",
+      "simple_icon_hex": "22D172",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Mailtrap",
+      "match": "exact-name-or-slug",
+      "matched_by": "mailtrap"
     }
   },
   {
@@ -81418,7 +82787,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -81640,7 +83010,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -81768,10 +83139,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-mendeley",
+      "path": "icons/simple-icons/mendeley.svg",
+      "title": "Mendeley",
+      "simple_icon_slug": "mendeley",
+      "simple_icon_hex": "9D1620",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Mendeley",
+      "match": "exact-name-or-slug",
+      "matched_by": "mendeley"
     }
   },
   {
@@ -81922,7 +83300,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -82076,7 +83455,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -82471,7 +83851,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -82753,7 +84134,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -82894,7 +84276,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -84771,10 +86154,17 @@
       "approval": "required for every write action; destructive deletes require destructive confirmation"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-miro",
+      "path": "icons/simple-icons/miro.svg",
+      "title": "Miro",
+      "simple_icon_slug": "miro",
+      "simple_icon_hex": "050038",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Miro",
+      "match": "exact-name-or-slug",
+      "matched_by": "miro"
     }
   },
   {
@@ -84881,7 +86271,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -84989,7 +86380,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -85338,7 +86730,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -85568,7 +86961,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -86553,7 +87947,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -87029,7 +88424,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -87536,7 +88932,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -87659,7 +89056,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -87865,7 +89263,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -88554,7 +89953,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -88646,7 +90046,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -89875,7 +91276,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -89991,7 +91393,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -96462,7 +97865,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -96587,7 +97991,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -98163,7 +99568,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -98342,7 +99748,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -98434,7 +99841,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -98886,7 +100294,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -99095,7 +100504,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -99294,7 +100704,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -100038,7 +101449,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -100161,7 +101573,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -102755,7 +104168,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -103021,7 +104435,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -104133,7 +105548,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -104213,7 +105629,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -104303,7 +105720,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -105937,7 +107355,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -106420,7 +107839,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -107508,7 +108928,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -107659,7 +109080,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -107790,7 +109212,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -108253,7 +109676,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -108679,7 +110103,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -109583,10 +111008,17 @@
       "approval": "required for update_check/update_contact/update_team/delete_check/delete_contact/delete_team/delete_maintenance; create_check/create_contact/create_team/create_maintenance require no approval (low-risk, non-destructive)"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-pingdom",
+      "path": "icons/simple-icons/pingdom.svg",
+      "title": "Pingdom",
+      "simple_icon_slug": "pingdom",
+      "simple_icon_hex": "FFF000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Pingdom",
+      "match": "exact-name-or-slug",
+      "matched_by": "pingdom"
     }
   },
   {
@@ -110253,7 +111685,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -111433,10 +112866,17 @@
       "approval": "none; read-only analytics sync"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-matomo",
+      "path": "icons/simple-icons/matomo.svg",
+      "title": "Matomo",
+      "simple_icon_slug": "matomo",
+      "simple_icon_hex": "3152A0",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Matomo",
+      "match": "curated-alias",
+      "matched_by": "matomo"
     }
   },
   {
@@ -111630,7 +113070,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -113371,7 +114812,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -113462,7 +114904,7 @@
       "path": "icons/postgresql.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
-      "review_url": "https://www.postgresql.org/docs/"
+      "review_url": "https://www.postgresql.org/docs/current/"
     }
   },
   {
@@ -114328,7 +115770,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -114999,7 +116442,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -116465,7 +117909,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -117806,10 +119251,17 @@
       "approval": "none; read-only, caller-supplied OAuth token"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-reddit",
+      "path": "icons/simple-icons/reddit.svg",
+      "title": "Reddit",
+      "simple_icon_slug": "reddit",
+      "simple_icon_hex": "FF4500",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Reddit",
+      "match": "exact-name-or-slug",
+      "matched_by": "reddit"
     }
   },
   {
@@ -118240,7 +119692,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -118382,7 +119835,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -118501,7 +119955,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -121079,7 +122534,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -122443,7 +123899,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -123081,7 +124538,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -123734,10 +125192,17 @@
       "write": "external Rollbar API mutations for items, projects, teams, assignments, invitations, notification settings/rules, service links, occurrences, and session replay deletes; approval required before execution"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-rollbar",
+      "path": "icons/simple-icons/rollbar.svg",
+      "title": "Rollbar",
+      "simple_icon_slug": "rollbar",
+      "simple_icon_hex": "3569F3",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Rollbar",
+      "match": "exact-name-or-slug",
+      "matched_by": "rollbar"
     }
   },
   {
@@ -123825,7 +125290,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -123980,7 +125446,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -124064,7 +125531,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -124339,7 +125807,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -124702,7 +126171,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -124801,9 +126271,9 @@
     "icon": {
       "id": "salesforce",
       "path": "icons/salesforce.svg",
-      "source": "upstream_registry",
-      "review_status": "upstream_seeded",
-      "review_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/rest_rns.htm"
+      "source": "official",
+      "review_status": "official_verified",
+      "review_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm"
     }
   },
   {
@@ -125303,7 +126773,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -125370,7 +126841,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -125620,7 +127092,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -126035,7 +127508,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -126649,7 +128123,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -127035,7 +128510,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -127130,7 +128606,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -129279,7 +130756,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -130341,7 +131819,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -130440,7 +131919,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -130529,7 +132009,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -130746,7 +132227,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -130818,7 +132300,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -130982,7 +132465,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -131668,7 +133152,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -133228,7 +134713,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -133837,7 +135323,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -134690,10 +136177,17 @@
       "approval": "required for all write actions; create_transmission sends real, externally-visible email"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-sparkpost",
+      "path": "icons/simple-icons/sparkpost.svg",
+      "title": "SparkPost",
+      "simple_icon_slug": "sparkpost",
+      "simple_icon_hex": "FA6423",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=SparkPost",
+      "match": "exact-name-or-slug",
+      "matched_by": "sparkpost"
     }
   },
   {
@@ -134873,7 +136367,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -135018,7 +136513,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -135149,7 +136645,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -135419,10 +136916,17 @@
       "approval": "reverse ETL plan approval required before destructive writes (delete_webhook_subscription); create_webhook_subscription is low-risk"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-squarespace",
+      "path": "icons/simple-icons/squarespace.svg",
+      "title": "Squarespace",
+      "simple_icon_slug": "squarespace",
+      "simple_icon_hex": "000000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Squarespace",
+      "match": "exact-name-or-slug",
+      "matched_by": "squarespace"
     }
   },
   {
@@ -135745,7 +137249,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -136003,7 +137508,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -139047,7 +140553,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -139264,7 +140771,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -139349,7 +140857,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -139517,7 +141026,7 @@
       "approval": "reverse ETL plan approval required before writes"
     },
     "icon": {
-      "id": "pm-tally",
+      "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
       "review_status": "polymetrics",
@@ -139595,7 +141104,7 @@
       "approval": "none required for read-only sync"
     },
     "icon": {
-      "id": "pm-tally-prime",
+      "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
       "review_status": "polymetrics",
@@ -139868,7 +141377,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -140106,7 +141616,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -140317,7 +141828,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -140693,10 +142205,17 @@
       "approval": "reverse ETL plan approval required before writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-testrail",
+      "path": "icons/simple-icons/testrail.svg",
+      "title": "TestRail",
+      "simple_icon_slug": "testrail",
+      "simple_icon_hex": "65C179",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=TestRail",
+      "match": "exact-name-or-slug",
+      "matched_by": "testrail"
     }
   },
   {
@@ -142296,7 +143815,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -142814,10 +144334,17 @@
       "approval": "required for delete_event_series (confirm: destructive); other writes are low-risk additive/idempotent mutations, no approval required"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-tickettailor",
+      "path": "icons/simple-icons/tickettailor.svg",
+      "title": "Ticket Tailor",
+      "simple_icon_slug": "tickettailor",
+      "simple_icon_hex": "222432",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Ticket%20Tailor",
+      "match": "exact-name-or-slug",
+      "matched_by": "tickettailor"
     }
   },
   {
@@ -142920,10 +144447,17 @@
       "approval": "reverse ETL plan approval required before writes"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-ticktick",
+      "path": "icons/simple-icons/ticktick.svg",
+      "title": "TickTick",
+      "simple_icon_slug": "ticktick",
+      "simple_icon_hex": "4772FA",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=TickTick",
+      "match": "exact-name-or-slug",
+      "matched_by": "ticktick"
     }
   },
   {
@@ -143254,7 +144788,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -145553,7 +147088,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -145851,7 +147387,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -146133,7 +147670,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -148715,7 +150253,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -149030,7 +150569,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -149240,7 +150780,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -149550,10 +151091,17 @@
       "approval": "none required; delete_suggestion is UserVoice's own soft-delete/moderation action (reversible via restore_suggestion, not modeled), not an irreversible destructive delete"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-uservoice",
+      "path": "icons/simple-icons/uservoice.svg",
+      "title": "UserVoice",
+      "simple_icon_slug": "uservoice",
+      "simple_icon_hex": "FF6720",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=UserVoice",
+      "match": "exact-name-or-slug",
+      "matched_by": "uservoice"
     }
   },
   {
@@ -150948,10 +152496,17 @@
       "approval": "read: none; write: required for every action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-vercel",
+      "path": "icons/simple-icons/vercel.svg",
+      "title": "Vercel",
+      "simple_icon_slug": "vercel",
+      "simple_icon_hex": "000000",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Vercel",
+      "match": "exact-name-or-slug",
+      "matched_by": "vercel"
     }
   },
   {
@@ -151566,7 +153121,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -151702,7 +153258,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -151956,7 +153513,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -152188,7 +153746,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -153226,10 +154785,17 @@
       "approval": "read: none; write: required for every create/update/delete action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-wheniwork",
+      "path": "icons/simple-icons/wheniwork.svg",
+      "title": "When I Work",
+      "simple_icon_slug": "wheniwork",
+      "simple_icon_hex": "51A33D",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=When%20I%20Work",
+      "match": "exact-name-or-slug",
+      "matched_by": "when-i-work"
     }
   },
   {
@@ -153912,10 +155478,17 @@
       "approval": "read: none; write: required for every create/update/delete action"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-wordpress",
+      "path": "icons/simple-icons/wordpress.svg",
+      "title": "WordPress",
+      "simple_icon_slug": "wordpress",
+      "simple_icon_hex": "21759B",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=WordPress",
+      "match": "exact-name-or-slug",
+      "matched_by": "wordpress"
     }
   },
   {
@@ -154925,7 +156498,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -155069,7 +156643,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -155513,7 +157088,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -157667,7 +159243,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -158289,7 +159866,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -158671,7 +160249,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -158976,7 +160555,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -159224,7 +160804,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -160125,6 +161706,405 @@
         "path": "/api/v2/ticket_fields/{{ record.id }}",
         "risk": "deletes a Zendesk ticket field record; destructive external mutation requiring approval",
         "confirm": "destructive"
+      },
+      {
+        "name": "update_account_email_settings",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/account/email_settings",
+        "risk": "external mutation; high-risk update against PUT /api/v2/account/email_settings; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_approval_request",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/approval_requests",
+        "risk": "external mutation; high-risk create against POST /api/v2/approval_requests; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_attachment",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/attachments/{{ record.attachment_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/attachments/{attachment_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_bookmark",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/bookmarks",
+        "risk": "external mutation; medium-risk create against POST /api/v2/bookmarks; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_brand",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/brands",
+        "risk": "external mutation; high-risk create against POST /api/v2/brands; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_brand",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/brands/{{ record.brand_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/brands/{brand_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_ticket_or_voicemail_ticket",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/channels/voice/tickets",
+        "risk": "external mutation; medium-risk create against POST /api/v2/channels/voice/tickets; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_custom_object",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_access_rule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/access_rules",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/access_rules; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_access_rule",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/access_rules/{{ record.id }}",
+        "risk": "external mutation; high-risk update against PATCH /api/v2/custom_objects/{custom_object_key}/access_rules/{id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_custom_object_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/fields",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/fields; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "custom_object_record_bulk_jobs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/jobs",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/jobs; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_custom_object_record",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/records; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "upsert_custom_object_record_by_external_id_or_name",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records",
+        "risk": "external mutation; high-risk update against PATCH /api/v2/custom_objects/{custom_object_key}/records; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_custom_object_record_attachment",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments/{{ record.id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_object_trigger",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/triggers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_object_trigger",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/{{ record.trigger_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_many_object_triggers",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/update_many",
+        "risk": "external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/triggers/update_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "bulk_update_default_custom_status",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/custom_status/default",
+        "risk": "external mutation; high-risk update against PUT /api/v2/custom_status/default; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_custom_status",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_statuses",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_custom_status",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/custom_statuses/{{ record.custom_status_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/custom_statuses/{custom_status_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_ticket_form_statuses_for_custom_status",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_statuses/{{ record.custom_status_id }}/ticket_form_statuses",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_statuses/{custom_status_id}/ticket_form_statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_deletion_schedule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/deletion_schedules",
+        "risk": "external mutation; high-risk create against POST /api/v2/deletion_schedules; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_deletion_schedule",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/deletion_schedules/{{ record.deletion_schedule_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/deletion_schedules/{deletion_schedule_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_group_membership",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/group_memberships",
+        "risk": "external mutation; high-risk create against POST /api/v2/group_memberships; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "group_membership_bulk_create",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/group_memberships/create_many",
+        "risk": "external mutation; high-risk create against POST /api/v2/group_memberships/create_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "ticket_import",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/imports/tickets",
+        "risk": "external mutation; high-risk create against POST /api/v2/imports/tickets; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "ticket_bulk_import",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/imports/tickets/create_many",
+        "risk": "external mutation; high-risk create against POST /api/v2/imports/tickets/create_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_itam_asset_type",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/asset_types",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/asset_types; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_itam_asset_type_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/asset_types/{asset_type_id}/fields; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_itam_asset",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/assets",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/assets; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "itam_asset_bulk_jobs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/assets/jobs",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/assets/jobs; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_itam_location",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/locations",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/locations; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_itam_status",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/statuses",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_itam_status",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v2/it_asset_management/statuses/{{ record.status_id }}",
+        "risk": "external mutation; high-risk update against PATCH /api/v2/it_asset_management/statuses/{status_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_many_macros",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/macros/update_many",
+        "risk": "external mutation; high-risk update against PUT /api/v2/macros/update_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_organization_subscription",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/organization_subscriptions",
+        "risk": "external mutation; high-risk create against POST /api/v2/organization_subscriptions; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_saved_search",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/saved_searches",
+        "risk": "external mutation; medium-risk create against POST /api/v2/saved_searches; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_saved_search",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/saved_searches/{{ record.id }}",
+        "risk": "external mutation; medium-risk update against PUT /api/v2/saved_searches/{id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "bulk_recover_suspended_tickets",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/suspended_tickets/bulk_recover",
+        "risk": "external mutation; high-risk update against PUT /api/v2/suspended_tickets/bulk_recover; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_task_list_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/task_list_templates",
+        "risk": "external mutation; high-risk create against POST /api/v2/task_list_templates; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_task_list_template",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/task_list_templates/{{ record.task_list_template_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/task_list_templates/{task_list_template_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_ticket_content_pin",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/ticket_content_pins",
+        "risk": "external mutation; high-risk create against POST /api/v2/ticket_content_pins; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_ticket_form_statuses",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses",
+        "risk": "external mutation; high-risk create against POST /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_ticket_form_statuses",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses",
+        "risk": "external mutation; high-risk update against PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_ticket_form_status_by_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses/{{ record.ticket_form_status_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_task_list",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/tickets/{{ record.ticket_id }}/task_lists",
+        "risk": "external mutation; medium-risk create against POST /api/v2/tickets/{ticket_id}/task_lists; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "tickets_create_many",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/tickets/create_many",
+        "risk": "external mutation; high-risk create against POST /api/v2/tickets/create_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_trigger_category",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/trigger_categories",
+        "risk": "external mutation; high-risk create against POST /api/v2/trigger_categories; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_trigger_category",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v2/trigger_categories/{{ record.trigger_category_id }}",
+        "risk": "external mutation; high-risk update against PATCH /api/v2/trigger_categories/{trigger_category_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "batch_operate_trigger_categories",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/trigger_categories/jobs",
+        "risk": "external mutation; high-risk create against POST /api/v2/trigger_categories/jobs; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_many_triggers",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/triggers/update_many",
+        "risk": "external mutation; high-risk update against PUT /api/v2/triggers/update_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_user_group_membership",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/users/{{ record.user_id }}/group_memberships",
+        "risk": "external mutation; high-risk create against POST /api/v2/users/{user_id}/group_memberships; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_current_user_settings",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/users/me/settings",
+        "risk": "external mutation; high-risk update against PUT /api/v2/users/me/settings; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_workspace",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/workspaces",
+        "risk": "external mutation; high-risk create against POST /api/v2/workspaces; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_workspace",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/workspaces/{{ record.workspace_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/workspaces/{workspace_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "reorder_workspaces",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/workspaces/reorder",
+        "risk": "external mutation; high-risk update against PUT /api/v2/workspaces/reorder; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       }
     ],
     "risk": {
@@ -160441,7 +162421,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -160643,10 +162624,17 @@
       "approval": "required for write actions (sync_datasource/refetch_view_data); read access uses the same OAuth refresh-token grant with no separate approval"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-analytics-metadata-api",
+      "path": "icons/simple-icons/zoho-analytics-metadata-api.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -160911,7 +162899,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {
@@ -160995,10 +162984,17 @@
       "read": "external Zoho Billing API read of customer and billing data"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-billing",
+      "path": "icons/simple-icons/zoho-billing.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -167532,10 +169528,17 @@
       "approval": "writes require explicit user approval before execution; destructive deletes are marked destructive"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-books",
+      "path": "icons/simple-icons/zoho-books.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -167630,10 +169633,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-campaign",
+      "path": "icons/simple-icons/zoho-campaign.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -167732,10 +169742,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-desk",
+      "path": "icons/simple-icons/zoho-desk.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -168786,10 +170803,17 @@
       "approval": "writes require explicit operator approval through the reverse ETL approval flow"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-expense",
+      "path": "icons/simple-icons/zoho-expense.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -168888,10 +170912,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-inventory",
+      "path": "icons/simple-icons/zoho-inventory.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -168990,10 +171021,17 @@
       "approval": "none; read-only"
     },
     "icon": {
-      "id": "pm-sample",
-      "path": "icons/pm-sample.svg",
-      "source": "polymetrics",
-      "review_status": "polymetrics"
+      "id": "simple-icons-zoho-invoice",
+      "path": "icons/simple-icons/zoho-invoice.svg",
+      "title": "Zoho",
+      "simple_icon_slug": "zoho",
+      "simple_icon_hex": "E42527",
+      "source": "simple-icons",
+      "license": "CC0-1.0",
+      "review_status": "cc0_with_trademark_caveat",
+      "review_url": "https://simpleicons.org/?q=Zoho",
+      "match": "curated-alias",
+      "matched_by": "zoho"
     }
   },
   {
@@ -169371,7 +171409,8 @@
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
-      "review_status": "polymetrics"
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
     }
   },
   {

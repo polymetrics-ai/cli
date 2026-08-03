@@ -2,9 +2,14 @@ package engine
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"math"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -397,17 +402,27 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	}
 	method := methodOrDefault(action.Method)
 
+	// Resolved ONCE here and threaded through every body_type branch, so a
+	// declared query can never silently apply to some body types and not
+	// others. buildWriteQuery returns a nil url.Values when the action
+	// declares no query, which is byte-identical to the literal nil every
+	// branch passed before write-action query support existed.
+	query, err := buildWriteQuery(action, vars)
+	if err != nil {
+		return err
+	}
+
 	switch bodyTypeOf(action) {
 	case "form":
 		form := buildForm(rec, action.PathFields)
-		_, err := rt.Requester.DoForm(ctx, method, path, nil, form)
+		_, err := rt.Requester.DoForm(ctx, method, path, query, form)
 		return err
 	case "graphql":
 		payload, err := buildGraphQLPayload(action.GraphQL, vars)
 		if err != nil {
 			return err
 		}
-		resp, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		resp, err := rt.Requester.Do(ctx, method, path, query, payload)
 		if err != nil {
 			return err
 		}
@@ -415,24 +430,36 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {
-			_, err := rt.Requester.Do(ctx, method, path, nil, nil)
+			_, err := rt.Requester.Do(ctx, method, path, query, nil)
 			return err
 		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, body)
+		_, err := rt.Requester.Do(ctx, method, path, query, body)
 		return err
 	case "json_array":
 		payload, err := buildJSONArrayPayload(action, rec)
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err = rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	case "multipart":
-		form, err := buildMultipartPayload(action, rec, recordIndex, cfg)
+		root, err := openMultipartRoot(cfg.ProjectDir)
+		if err != nil {
+			return fmt.Errorf("engine: write action %q: %w", action.Name, err)
+		}
+		defer func() { _ = root.Close() }()
+		form, err := buildMultipartPayload(action, rec, recordIndex, cfg, root)
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.DoMultipart(ctx, method, path, nil, form)
+		_, err = rt.Requester.DoMultipart(ctx, method, path, query, form)
+		return err
+	case "base64_upload":
+		payload, err := buildBase64UploadPayload(action, rec, recordIndex, cfg)
+		if err != nil {
+			return err
+		}
+		_, err = rt.Requester.Do(ctx, method, path, nil, payload)
 		return err
 	default: // "json" (default)
 		var body map[string]any
@@ -441,13 +468,198 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		} else {
 			body = buildJSONBody(rec, action.PathFields)
 		}
+		body, err = applyDynamicFields(action, rec, body)
+		if err != nil {
+			return err
+		}
 		var payload any
 		if len(body) > 0 {
 			payload = body
 		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err := rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	}
+}
+
+const (
+	defaultDynamicFieldsMaxKeys       = 100
+	defaultDynamicFieldsMaxValueBytes = 4096
+)
+
+// applyDynamicFields is the execution-time half of the typed dynamic-key
+// contract (the declaration-time half is bundle.go's validateDynamicFields).
+// It is the ONLY path by which a caller-supplied key reaches a request body,
+// and it is deliberately narrow:
+//
+//   - the region must be a JSON object under the declared field;
+//   - every key must match the bundle-declared, both-ends-anchored pattern;
+//   - every value must be a SCALAR of a declared type — an object or array is
+//     rejected outright, which is what stops caller input from ever becoming
+//     request structure;
+//   - no key may shadow a structural key already present in the body.
+//
+// A nil spec returns body untouched, so actions without dynamic_fields behave
+// exactly as they did before this capability existed.
+func applyDynamicFields(action WriteAction, rec connectors.Record, body map[string]any) (map[string]any, error) {
+	spec := action.DynamicFields
+	if spec == nil {
+		return body, nil
+	}
+	fail := func(format string, args ...any) error {
+		return fmt.Errorf("engine: write action %q: dynamic_fields: "+format, append([]any{action.Name}, args...)...)
+	}
+
+	raw, present := rec[spec.Field]
+	// The container is always consumed, so it never also serializes as a
+	// nested object when the target is inline.
+	delete(body, spec.Field)
+	if !present || raw == nil {
+		return body, nil
+	}
+	region, ok := raw.(map[string]any)
+	if !ok {
+		return nil, fail("field %q must be an object, got %T", spec.Field, raw)
+	}
+	if len(region) == 0 {
+		return body, nil
+	}
+
+	maxKeys := spec.MaxKeys
+	if maxKeys <= 0 {
+		maxKeys = defaultDynamicFieldsMaxKeys
+	}
+	if len(region) > maxKeys {
+		return nil, fail("%d keys exceeds max_keys %d", len(region), maxKeys)
+	}
+	maxValueBytes := spec.MaxValueBytes
+	if maxValueBytes <= 0 {
+		maxValueBytes = defaultDynamicFieldsMaxValueBytes
+	}
+	pattern, err := compileDynamicKeyPattern(spec.KeyPattern)
+	if err != nil {
+		return nil, fail("key_pattern: %w", err)
+	}
+	allowed := map[string]bool{}
+	for _, vt := range spec.ValueTypes {
+		allowed[vt] = true
+	}
+	if len(allowed) == 0 {
+		allowed = dynamicFieldsValueTypes
+	}
+
+	// Structural keys a dynamic key must never shadow.
+	reserved := toSet(action.PathFields)
+	for _, bf := range action.BodyFields {
+		reserved[bf] = true
+	}
+	if action.BodyField != "" {
+		reserved[action.BodyField] = true
+	}
+	reserved[spec.Field] = true
+
+	// Sorted for deterministic error messages across runs.
+	keys := make([]string, 0, len(region))
+	for k := range region {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	out := make(map[string]any, len(region))
+	for _, key := range keys {
+		if !pattern.MatchString(key) {
+			return nil, fail("key %q does not match key_pattern %q", key, spec.KeyPattern)
+		}
+		if reserved[key] {
+			return nil, fail("key %q collides with a declared path/body field", key)
+		}
+		typeName, err := dynamicScalarType(region[key])
+		if err != nil {
+			return nil, fail("key %q: %w", key, err)
+		}
+		if !allowed[typeName] {
+			return nil, fail("key %q has value type %q which is not in value_types", key, typeName)
+		}
+		if n := dynamicValueEncodedLen(region[key]); n > maxValueBytes {
+			return nil, fail("key %q value is %d bytes, exceeds max_value_bytes %d", key, n, maxValueBytes)
+		}
+		out[key] = region[key]
+	}
+
+	if strings.TrimSpace(spec.Target) == "nested" {
+		if body == nil {
+			body = map[string]any{}
+		}
+		body[spec.Field] = out
+		return body, nil
+	}
+	if body == nil {
+		body = make(map[string]any, len(out))
+	}
+	for key, value := range out {
+		// Guards against a dynamic key shadowing a body key that came from
+		// the record itself rather than from a declared field list.
+		if _, exists := body[key]; exists {
+			return nil, fail("key %q collides with an existing body key", key)
+		}
+		body[key] = value
+	}
+	return body, nil
+}
+
+// dynamicScalarType names the JSON scalar type of v, or errors when v is a
+// composite. Rejecting composites here is the load-bearing anti-escape-hatch
+// invariant, so this deliberately has no "flatten" or "coerce" branch.
+func dynamicScalarType(v any) (string, error) {
+	switch v.(type) {
+	case nil:
+		return "null", nil
+	case string:
+		return "string", nil
+	case bool:
+		return "boolean", nil
+	case json.Number, float64, float32,
+		int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64:
+		return "number", nil
+	case map[string]any, []any:
+		return "", fmt.Errorf("value must be a scalar (string, number, boolean, null), got %T", v)
+	default:
+		return "", fmt.Errorf("value must be a scalar (string, number, boolean, null), got %T", v)
+	}
+}
+
+func dynamicValueEncodedLen(v any) int {
+	if s, ok := v.(string); ok {
+		return len(s)
+	}
+	raw, err := json.Marshal(v)
+	if err != nil {
+		// Unmarshalable values are already rejected by dynamicScalarType;
+		// treat an encoding failure as maximally large rather than as zero.
+		return math.MaxInt
+	}
+	return len(raw)
+}
+
+// buildWriteQuery resolves action.Query against vars using the IDENTICAL
+// resolveQueryParams semantics stream.Query and check.query use — see that
+// function's doc comment in read.go. vars is the same Vars the path was just
+// interpolated from, so a query template may reference record fields exactly
+// as a path template can.
+//
+// A nil/empty Query returns a nil url.Values rather than an empty one: an
+// empty url.Values would still take resolveURL's "len(query) > 0" branch as
+// false, but returning nil keeps the pre-existing call shape literally
+// unchanged for every action that declares no query.
+func buildWriteQuery(action WriteAction, vars Vars) (url.Values, error) {
+	if len(action.Query) == 0 {
+		return nil, nil
+	}
+	q, err := resolveQueryParams(action.Query, vars)
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: %w", action.Name, err)
+	}
+	return q, nil
 }
 
 func bodyTypeOf(action WriteAction) string {
@@ -503,7 +715,230 @@ func buildJSONArrayPayload(action WriteAction, rec connectors.Record) (any, erro
 	return value, nil
 }
 
-func buildMultipartPayload(action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig) (connsdk.MultipartForm, error) {
+// maxBase64UploadDecodedBytes is the hard ceiling a declared max_decoded_bytes
+// is clamped against, mirroring maxOperationDirectReadBytes on the inbound
+// side. A base64 body is inherently buffered — there is no streaming form of it
+// — so the ceiling IS the containment against memory exhaustion.
+const maxBase64UploadDecodedBytes = 16 << 20
+
+// buildBase64UploadPayload builds the JSON body for body_type
+// "base64_upload": the ordinary declared body, with the source field removed
+// and the declared content field set to a validated, canonically encoded
+// payload.
+//
+// Bounds and containment deliberately mirror the bounded binary-download
+// direction so the two halves of file transfer obey one set of rules: clamp the
+// declared bound against a hard engine ceiling, read one byte past the limit and
+// REJECT rather than truncate (a truncated attachment is a silently corrupt
+// upload), confine filesystem access with os.Root, and verify the approved
+// payload digest before anything is transmitted.
+func buildBase64UploadPayload(action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig) (map[string]any, error) {
+	spec := action.Base64Upload
+	if spec == nil {
+		return nil, fmt.Errorf("engine: write action %q: base64_upload spec is required", action.Name)
+	}
+
+	var body map[string]any
+	if len(action.BodyFields) > 0 {
+		body = buildBodyFieldsPayload(rec, action.BodyFields)
+	} else {
+		body = buildJSONBody(rec, action.PathFields)
+	}
+	if body == nil {
+		body = map[string]any{}
+	}
+
+	decoded, err := resolveBase64UploadPayload(action, spec, rec, recordIndex, cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	encoded := base64.StdEncoding.EncodeToString(decoded)
+	if maxEncoded := base64UploadMaxEncodedBytes(spec); int64(len(encoded)) > maxEncoded {
+		return nil, fmt.Errorf("engine: write action %q: base64 upload too large: %d encoded bytes exceeds limit %d", action.Name, len(encoded), maxEncoded)
+	}
+
+	// The source field must never reach the wire: in "path" mode it is a local
+	// filesystem path, and transmitting it would hand the provider the
+	// operator's directory layout.
+	delete(body, spec.SourceField)
+	body[spec.ContentField] = encoded
+	return body, nil
+}
+
+// resolveBase64UploadPayload returns the decoded payload bytes for either source
+// mode, bounded by the clamped decoded limit.
+func resolveBase64UploadPayload(action WriteAction, spec *Base64UploadSpec, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig) ([]byte, error) {
+	maxDecoded := clampBase64UploadDecodedBytes(spec.MaxDecodedBytes)
+
+	raw, err := resolveRecordPathValue(map[string]any(rec), []string{spec.SourceField})
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: resolve base64_upload source_field %q: %w", action.Name, spec.SourceField, err)
+	}
+	value, ok := raw.(string)
+	if !ok || strings.TrimSpace(value) == "" {
+		return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q requires a non-empty string", action.Name, spec.SourceField)
+	}
+
+	if spec.Source == "base64" {
+		// "Official base64" in the sense the operation ledgers use: RFC 4648
+		// standard alphabet, canonical padding, no embedded line breaks.
+		//
+		// Two checks, because neither alone is enough. Strict() rejects
+		// non-zero trailing padding bits, which the ordinary decoder silently
+		// accepts — but Go's decoder skips \r and \n UNCONDITIONALLY, in Strict
+		// mode too, so a wrapped MIME-style payload would sail through and be
+		// re-encoded into something the operator never wrote. The alphabet check
+		// is what actually enforces "one canonical token".
+		if err := requireCanonicalBase64Alphabet(value); err != nil {
+			return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q: %w", action.Name, spec.SourceField, err)
+		}
+		decoded, err := base64.StdEncoding.Strict().DecodeString(value)
+		if err != nil {
+			return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q is not canonical base64: %w", action.Name, spec.SourceField, err)
+		}
+		if int64(len(decoded)) > maxDecoded {
+			return nil, fmt.Errorf("engine: write action %q: base64 upload too large: %d decoded bytes exceeds limit %d", action.Name, len(decoded), maxDecoded)
+		}
+		return decoded, nil
+	}
+
+	decoded, err := readBoundedProjectFile(cfg.ProjectDir, value, maxDecoded)
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q: %w", action.Name, spec.SourceField, err)
+	}
+	if err := verifyApprovedPayload(action, spec.SourceField, recordIndex, decoded, cfg); err != nil {
+		return nil, err
+	}
+	return decoded, nil
+}
+
+// requireCanonicalBase64Alphabet rejects any byte outside RFC 4648's standard
+// alphabet and its padding character — line breaks and whitespace included, and
+// the URL-safe '-'/'_' pair with them.
+func requireCanonicalBase64Alphabet(value string) error {
+	for i := 0; i < len(value); i++ {
+		c := value[i]
+		switch {
+		case c >= 'A' && c <= 'Z', c >= 'a' && c <= 'z', c >= '0' && c <= '9':
+		case c == '+', c == '/', c == '=':
+		default:
+			return fmt.Errorf("value is not canonical base64: unexpected character at offset %d", i)
+		}
+	}
+	return nil
+}
+
+// verifyApprovedPayload binds the bytes about to be transmitted to the bytes the
+// operator approved, mirroring the multipart file part's contract exactly: when
+// the runtime carries an approval map at all, this field must appear in it and
+// its digest must match. A nil map means no approval flow is in play (a direct
+// engine.Write, e.g. from a test), which is the existing multipart behaviour.
+func verifyApprovedPayload(action WriteAction, field string, recordIndex int, payload []byte, cfg connectors.RuntimeConfig) error {
+	if cfg.ApprovedPayloadSHA256 == nil {
+		return nil
+	}
+	expected := cfg.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(recordIndex, field)]
+	if expected == "" {
+		return fmt.Errorf("engine: write action %q: base64_upload source_field %q is missing its approved payload digest", action.Name, field)
+	}
+	sum := sha256.Sum256(payload)
+	if !strings.EqualFold(hex.EncodeToString(sum[:]), expected) {
+		return fmt.Errorf("engine: write action %q: base64_upload source_field %q payload does not match its approved digest", action.Name, field)
+	}
+	return nil
+}
+
+// readBoundedProjectFile reads at most maxBytes from a regular file confined to
+// projectDir.
+//
+// Containment is os.Root, not a lexical prefix check: os.Root refuses a path
+// that escapes the root through "..", through an absolute component, or through
+// a symlink, and it does so on the OPEN rather than on a separate stat, which
+// closes the check-then-open race that resolveMultipartFilePath's
+// EvalSymlinks-then-Stat sequence leaves open. The lexical
+// safety.ValidateLocalWritePath check still runs first: it is cheap, it rejects
+// control characters, and it produces the error message operators already know.
+func readBoundedProjectFile(projectDir, raw string, maxBytes int64) ([]byte, error) {
+	if strings.TrimSpace(projectDir) == "" {
+		projectDir = "."
+	}
+	if err := safety.ValidateLocalWritePath(projectDir, raw, "base64 upload source path", false); err != nil {
+		return nil, err
+	}
+	rootAbs, err := filepath.Abs(projectDir)
+	if err != nil {
+		return nil, fmt.Errorf("resolve project root: %w", err)
+	}
+
+	rel := filepath.Clean(filepath.FromSlash(raw))
+	if filepath.IsAbs(rel) {
+		rel, err = filepath.Rel(rootAbs, rel)
+		if err != nil {
+			return nil, fmt.Errorf("compare source path to project root: %w", err)
+		}
+	}
+	if !filepath.IsLocal(rel) {
+		return nil, fmt.Errorf("source path outside the project root is not allowed")
+	}
+
+	root, err := os.OpenRoot(rootAbs)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = root.Close() }()
+
+	file, err := root.Open(rel)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = file.Close() }()
+
+	info, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+	if !info.Mode().IsRegular() {
+		return nil, fmt.Errorf("source must be a regular file")
+	}
+	if info.Size() > maxBytes {
+		return nil, fmt.Errorf("base64 upload too large: %d bytes exceeds limit %d", info.Size(), maxBytes)
+	}
+
+	// Read one byte past the bound so a file that grew between Stat and Read is
+	// rejected rather than silently truncated into a corrupt upload.
+	payload, err := io.ReadAll(io.LimitReader(file, maxBytes+1))
+	if err != nil {
+		return nil, err
+	}
+	if int64(len(payload)) > maxBytes {
+		return nil, fmt.Errorf("base64 upload too large: exceeds limit %d", maxBytes)
+	}
+	return payload, nil
+}
+
+// clampBase64UploadDecodedBytes clamps a declared bound against the engine
+// ceiling, matching clampOperationDirectReadMaxBytes's request → spec → ceiling
+// shape on the inbound side. Bundle load already requires a positive bound; the
+// non-positive fallback here keeps a hand-built spec (a test, a future caller)
+// bounded rather than unbounded.
+func clampBase64UploadDecodedBytes(declared int64) int64 {
+	if declared <= 0 || declared > maxBase64UploadDecodedBytes {
+		return maxBase64UploadDecodedBytes
+	}
+	return declared
+}
+
+// base64UploadMaxEncodedBytes returns the encoded-size bound, defaulting to the
+// base64 length of the clamped decoded bound when none is declared.
+func base64UploadMaxEncodedBytes(spec *Base64UploadSpec) int64 {
+	if spec.MaxEncodedBytes > 0 {
+		return spec.MaxEncodedBytes
+	}
+	return int64(base64.StdEncoding.EncodedLen(int(clampBase64UploadDecodedBytes(spec.MaxDecodedBytes))))
+}
+
+func buildMultipartPayload(action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, root *os.Root) (connsdk.MultipartForm, error) {
 	if action.Multipart == nil {
 		return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart spec is required", action.Name)
 	}
@@ -535,7 +970,7 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 			if cfg.ApprovedPayloadSHA256 != nil && expectedSHA256 == "" {
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart file part %q is missing its approved payload digest", action.Name, part.Name)
 			}
-			resolved, size, err := resolveMultipartFilePath(cfg.ProjectDir, path, part.MaxBytes)
+			relPath, size, err := resolveMultipartFilePath(root, cfg.ProjectDir, path, part.MaxBytes)
 			if err != nil {
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart file part %q: %w", action.Name, part.Name, err)
 			}
@@ -544,11 +979,16 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart payload too large: %d bytes exceeds limit %d", action.Name, total, action.Multipart.MaxBytes)
 			}
 			form.Files = append(form.Files, connsdk.MultipartFile{
-				FieldName:      part.Name,
-				Path:           resolved,
-				ContentType:    part.ContentType,
-				MaxBytes:       part.MaxBytes,
-				ExpectedSHA256: expectedSHA256,
+				FieldName: part.Name,
+				// Root and RelPath, not an absolute path: every later Stat and
+				// Open re-checks containment instead of trusting this one.
+				Root:              root,
+				RelPath:           relPath,
+				Path:              relPath,
+				ContentType:       part.ContentType,
+				AllowedMediaTypes: part.AllowedMediaTypes,
+				MaxBytes:          part.MaxBytes,
+				ExpectedSHA256:    expectedSHA256,
 			})
 		default:
 			return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart part %q has unsupported type %q", action.Name, part.Name, part.Type)
@@ -557,34 +997,41 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 	return form, nil
 }
 
-func resolveMultipartFilePath(projectDir, raw string, maxBytes int64) (string, int64, error) {
+// openMultipartRoot opens the containment root for a multipart upload. Every
+// access to a multipart source file goes through this root, so an escaping path
+// is refused at each open rather than by a single check performed beforehand.
+func openMultipartRoot(projectDir string) (*os.Root, error) {
+	if strings.TrimSpace(projectDir) == "" {
+		projectDir = "."
+	}
+	root, err := os.OpenRoot(projectDir)
+	if err != nil {
+		return nil, fmt.Errorf("open project root: %w", err)
+	}
+	return root, nil
+}
+
+// resolveMultipartFilePath converts a record-supplied path into a path relative
+// to root and pre-checks its type and size.
+//
+// The returned path is deliberately root-relative rather than absolute: it is
+// re-resolved through os.Root on every subsequent Stat and Open, which is what
+// closes the check-then-open race the previous EvalSymlinks-then-compare
+// approach left open. The lexical safety check is kept ahead of it as a cheap
+// first filter with a clearer message, but it is no longer load-bearing for
+// containment.
+func resolveMultipartFilePath(root *os.Root, projectDir, raw string, maxBytes int64) (string, int64, error) {
 	if strings.TrimSpace(projectDir) == "" {
 		projectDir = "."
 	}
 	if err := safetyRejectLocalFilePath(projectDir, raw); err != nil {
 		return "", 0, err
 	}
-	rootAbs, err := filepath.Abs(projectDir)
-	if err != nil {
-		return "", 0, fmt.Errorf("resolve project root: %w", err)
-	}
-	if resolvedRoot, err := filepath.EvalSymlinks(rootAbs); err == nil {
-		rootAbs = resolvedRoot
-	}
-	var candidate string
-	if filepath.IsAbs(raw) {
-		candidate = filepath.Clean(raw)
-	} else {
-		candidate = filepath.Join(rootAbs, filepath.Clean(raw))
-	}
-	resolved, err := filepath.EvalSymlinks(candidate)
+	rel, err := multipartRootRelativePath(projectDir, raw)
 	if err != nil {
 		return "", 0, err
 	}
-	if err := requireInsideRoot(rootAbs, resolved); err != nil {
-		return "", 0, err
-	}
-	info, err := os.Stat(resolved)
+	info, err := root.Stat(rel)
 	if err != nil {
 		return "", 0, err
 	}
@@ -594,22 +1041,45 @@ func resolveMultipartFilePath(projectDir, raw string, maxBytes int64) (string, i
 	if maxBytes > 0 && info.Size() > maxBytes {
 		return "", 0, fmt.Errorf("file too large: %d bytes exceeds limit %d", info.Size(), maxBytes)
 	}
-	return resolved, info.Size(), nil
+	return rel, info.Size(), nil
+}
+
+// multipartRootRelativePath expresses raw relative to projectDir. Absolute paths
+// inside the project directory stay accepted, as they were before, but they are
+// converted to root-relative form so os.Root can confine them. The project
+// directory is compared both as given and with symlinks resolved, because on
+// macOS a configured "/var/..." root and an absolute "/private/var/..." record
+// value denote the same directory.
+func multipartRootRelativePath(projectDir, raw string) (string, error) {
+	clean := filepath.Clean(raw)
+	if !filepath.IsAbs(clean) {
+		if !filepath.IsLocal(clean) {
+			return "", fmt.Errorf("multipart file path must stay inside the project root")
+		}
+		return clean, nil
+	}
+	rootAbs, err := filepath.Abs(projectDir)
+	if err != nil {
+		return "", fmt.Errorf("resolve project root: %w", err)
+	}
+	candidates := []string{rootAbs}
+	if resolvedRoot, err := filepath.EvalSymlinks(rootAbs); err == nil && resolvedRoot != rootAbs {
+		candidates = append(candidates, resolvedRoot)
+	}
+	for _, base := range candidates {
+		rel, err := filepath.Rel(base, clean)
+		if err != nil {
+			continue
+		}
+		if rel == "." || filepath.IsLocal(rel) {
+			return rel, nil
+		}
+	}
+	return "", fmt.Errorf("multipart file path outside the project root is not allowed")
 }
 
 func safetyRejectLocalFilePath(projectDir, raw string) error {
 	return safety.ValidateLocalWritePath(projectDir, raw, "multipart file path", false)
-}
-
-func requireInsideRoot(rootAbs, pathAbs string) error {
-	rel, err := filepath.Rel(rootAbs, pathAbs)
-	if err != nil {
-		return fmt.Errorf("compare multipart file path to project root: %w", err)
-	}
-	if rel == "." || (rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)) && !filepath.IsAbs(rel)) {
-		return nil
-	}
-	return fmt.Errorf("multipart file path outside the project root is not allowed")
 }
 
 // buildForm builds a url.Values form body from every record field not

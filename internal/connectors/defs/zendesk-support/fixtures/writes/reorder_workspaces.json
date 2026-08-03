@@ -1,0 +1,16 @@
+{
+  "record": {
+    "ids": [
+      1
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/workspaces/reorder",
+    "body": {
+      "ids": [
+        1
+      ]
+    }
+  }
+}

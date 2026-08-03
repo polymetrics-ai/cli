@@ -183,7 +183,9 @@ not a full override by default.
   belong in the connector's CLI surface metadata, never in provider-named shared runner branches.
   Use `flags[].format:"date-time"` for RFC3339/ISO-8601 timestamp flags,
   `flags[].allow_empty:false` to reject present blank string flags, `flags[].required:true` for
-  command inputs that must be present before execution, and `constraints[]` `kind:"order"` /
+  command inputs that must be present before execution, `flags[].max_items`/`flags[].min_items`
+  to bound a `string_array` flag's item count against the flag the user typed (before the
+  assembled body is validated), and `constraints[]` `kind:"order"` /
   `op:"lt"` / `value_type:"date-time"` over mapped `query.*` or `body.*` targets for provider
   date-range rules. Optional `config.*` fallbacks preserve connection-level defaults when the
   command flag is absent. For implemented direct-read POST operations, every required
@@ -192,18 +194,31 @@ not a full override by default.
   `internal/connectors/engine/schema/cli_surface.schema.json` is the schema source of truth, and
   `connectorgen validate` rejects unsupported formats, operators, fallback namespaces, unmapped
   constraint targets, missing required body mappings, and multi-line validation messages. The
-  shared-code boundary guard (`docs/migration/connector-boundary-guard.md`) enforces this ownership
-  rule outside connector defs/hooks/native escape hatches.
+  command fields that are derivable from `operations.json` — `api_surface`, flag `maps_to`,
+  `output_policy`, and `rest.max_bytes` — are not hand-authored:
+  `go run ./cmd/connectorgen surface-sync` fills them and `--check` fails on drift (see AGENTS.md,
+  "Command Surface Must Stay Executable"). The shared-code boundary guard
+  (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
+  defs/hooks/native escape hatches.
 - **Direct-read `output_policy` stays generic and bounded**: use `repository_contents_file_metadata`
   for a single repository file metadata response and `repository_contents_directory` for repository
   directory listings. Both policies reject sensitive repository paths before network access and
   redact `content` plus download URLs from returned JSON. Use `json_redacted` or
   `clinical_json_redacted` for non-repository direct reads, paired with `redact_fields` when the
-  operation has connector-specific sensitive response fields. Use `binary_file_bounded` only for
-  reviewed file/binary operation metadata with explicit byte bounds; it must stay blocked until the
-  shared bounded-transfer executor exists. Do not add provider-prefixed output policy names in shared
-  Go; new response families need a generic policy name and regression tests proving reuse by more
-  than one connector shape.
+  operation has connector-specific sensitive response fields. `binary_file_bounded` is not one of
+  them: `commandrunner` blocks a `direct_read` command that declares it, because a file/binary
+  command is no longer a direct read (see the next bullet). Do not add provider-prefixed output
+  policy names in shared Go; new response families need a generic policy name and regression tests
+  proving reuse by more than one connector shape.
+- **File/binary commands are their own intent**: declare `intent:"binary_download"` with an
+  `operation` of kind `binary_download` and exactly one connector-relative GET `api_surface`
+  endpoint, and leave the command's `output_policy` unset — the response becomes a file on disk,
+  not a JSON body, so no direct-read policy applies. Do not declare the destination flags in the
+  bundle: `--dest-root` (required), `--file-name`, and `--max-bytes` are runtime-owned, read from
+  `internal/connectors/binary_download_flags.json` by runtime help, the generated `MANUAL.md`/
+  `SKILL.md`, and the website generator, so one declaration keeps all three documenting the same
+  flag surface. `--max-bytes` may only lower the operation's declared `binary.max_bytes`, never
+  raise it.
 - **`certification.json` stays definition-owned and harness-only**: connector-specific certify
   contracts belong beside the connector bundle, never in provider-named shared certify branches.
   This optional file may declare `source.default_stream`, source credential defaults,
@@ -353,7 +368,58 @@ statically, exactly like `token_url`/`client_id`/`client_secret`/`scopes` — th
 `connectorgen validate` for free via the existing `engine.ResolveCheckAuthSpec(a, specKeys)` call in
 `checkInterpolations`, no `cmd/connectorgen/validate.go` change was needed.
 
-**Pagination — 6 types + none** (`bundle.go`'s `PaginationSpec`, `paginate.go`'s `newPaginator`):
+**`oauth2_refresh_token` — user-context tokens that expire** (`connsdk.OAuth2RefreshToken`,
+`engine/auth.go`'s `buildOAuth2RefreshToken`). Use this, NOT `oauth2_client_credentials`, whenever
+the provider's endpoints act on behalf of an end user. Client-credentials obtains an **app-only**
+token: it authenticates the application, so it cannot reach a user's own resources however many
+scopes it carries. A user-context token comes from the authorization-code flow and is renewed with
+a refresh token, which is what this mode does. Reddit is the motivating case — its bearer tokens
+expire one hour after issuance, so a caller-supplied `access_token` cannot survive a scheduled sync.
+
+```json
+{
+  "mode": "oauth2_refresh_token",
+  "token_url": "https://www.reddit.com/api/v1/access_token",
+  "client_id": "{{ config.client_id }}",
+  "client_secret": "{{ secrets.client_secret }}",
+  "refresh_token": "{{ secrets.refresh_token }}",
+  "refresh_token_store_key": "refresh_token",
+  "scopes": "identity read"
+}
+```
+
+`token_url`/`client_id`/`client_secret`/`scopes`/`extra_params` are the SAME fields
+`oauth2_client_credentials` uses, with the same `Interpolate` semantics (an unresolved key hard
+errors; never a silently unauthenticated request). Only the grant and two fields differ:
+
+- **`refresh_token`** — templated, normally `{{ secrets.refresh_token }}`.
+- **`refresh_token_store_key`** — OPTIONAL, and the one field that needs a decision. Many providers
+  rotate the refresh token on every exchange and invalidate the previous one; dropping the new value
+  means the connector works for one process lifetime and then fails with `invalid_grant` on the next
+  run, long after the run that caused it. Declaring this key (normally the same key `refresh_token`
+  reads from) persists the rotated value into the credential's encrypted vault entry, so the next
+  run picks it up through the ordinary `secrets` path. **Omit it only if you have confirmed the
+  provider does not rotate** — omitted means nothing is ever written, and the engine deliberately
+  does NOT guess a key name from the `refresh_token` template (a resolved template yields a value,
+  not a key; guessing would silently overwrite the wrong secret whenever it guessed wrong).
+
+Runtime behaviour a bundle gets for free, none of which is declarable: the access token is exchanged
+once and reused until shortly before expiry (safety margin clamped to half the lifetime, so a very
+short-lived token still caches rather than re-exchanging per request); a missing/zero/unparseable
+`expires_in` is treated as a conservative five-minute life, never as "never expires"; a 401 triggers
+at most ONE refresh-and-retry per request, so a revoked grant terminates instead of hammering the
+token endpoint; and the exchange is serialised, so concurrent callers sharing an authenticator
+produce one exchange whose result they share. Rotation persistence is per-credential and local —
+`internal/vault`, AES-256-GCM, `0600` under `.polymetrics/vault` — with zero centralized custody.
+The refresh token, client secret and access token never appear in argv, logs or error text: the
+token endpoint's error body is never surfaced (RFC 6749 §5.2 lets it echo the grant back), and
+transport errors are rendered through `safety.RedactErrorText`.
+
+`ResolveCheckAuthSpec` statically validates `refresh_token` alongside
+`token_url`/`client_id`/`client_secret`/`scopes`, and checks `refresh_token_store_key` as an
+identifier, so both flow into `connectorgen validate` for free.
+
+**Pagination — 7 types + none** (`bundle.go`'s `PaginationSpec`, `paginate.go`'s `newPaginator`):
 
 | `type` | Fields used | When to use |
 |---|---|---|
@@ -364,6 +430,9 @@ statically, exactly like `token_url`/`client_id`/`client_secret`/`scopes` — th
 | `cursor` (`token_path`) | `cursor_param`, `token_path`, optional `stop_path` | next-page token read from the response body; optional `stop_path` (gap-loop cycle-1 item 5) names a body path whose falsy value stops pagination REGARDLESS of whether the token itself is still non-empty (Zendesk's `meta.has_more`: its own docs warn the cursor properties may be populated even when `has_more` is false) — a spec that never sets `stop_path` keeps the exact prior stop-on-empty-token-only behavior; also loop-guards against the same token repeating twice in a row |
 | `cursor` (`last_record_field`+`stop_path`) | `cursor_param`, `last_record_field`, `stop_path` | Stripe-style `starting_after`/`has_more`: next cursor = a named field on the **last record** of the current page; `stop_path` names a body path whose falsy value stops (its absence, or an empty/malformed page, is defensive "never loop forever") |
 | `next_url` | `next_url_path`, `allow_cross_host` | absolute next-page URL read from the body (aircall-style); same-host SSRF guard by default (THREAT-MODEL §3) — set `allow_cross_host: true` to opt out; also loop-guards against requesting the same URL twice |
+| `start_index` | `start_index_param` (default `startIndex`), `count_param` (default `count`), `total_path` (default `totalResults`), `start_index_path` (default `startIndex`), `start_index_base` (pointer; default 1 — an explicit `0` is honored for a 0-based server), `page_size` | 1-based index-plus-total pagination — the SCIM 2.0 list shape, RFC 7644 §3.4.2.4: `?startIndex=1&count=N` → `{totalResults, itemsPerPage, startIndex, Resources}`. Named for the mechanism, not for SCIM: any API that pages by an index and reports a total is served by the same walk. Every field defaults to SCIM's name, so a SCIM stream declares only `{"type":"start_index","page_size":N}` |
+
+The `start_index` walk advances by the records the engine **actually extracted at the stream's records path** (`recordCount`), never by a server-claimed `itemsPerPage` — a server that claims 100 while returning 2 would otherwise make the walk skip 98 records silently. There is deliberately no declarable `items_per_page_path` field (the reason is recorded beside the type in `bundle.go`/`paginate.go`); a non-advancing index is a sticky `Err()` rather than a silent stop, mirroring the `tokenPathCursor`/`nextURL` loop guards, and `total_path` bounds the walk so an over-reported total can never make it loop.
 
 A `stop_path` body value (both cursor variants) is read via `connsdk.StringAt`; ANY value other than
 the literal string `"true"` (a JSON `false`, a missing path, or a read error) is falsy and stops
@@ -725,13 +794,13 @@ client-side" (see stripe's `docs.md`). Any key on `metadata.json.rate_limit` bey
 `requests_per_minute` (e.g. a `strategy` field) is not even a field on the Go type and is silently
 dropped — don't declare one.
 
-**Write body construction** (`write.go`): `body_type` is `"json"` (default), `"form"`, or
-`"none"`. Default body = every record field **except** those named in `path_fields` (the path
-already carries them, e.g. `{{ record.id }}` for an update). `body_fields` (if set) restricts the
-body to an explicit allow-list instead (used for delete-with-body actions). `"form"` builds a
-`url.Values` body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for
-deterministic encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body
-at all (pure path-parameterized mutation/delete).
+**Write body construction** (`write.go`): `body_type` is one of `"json"` (default), `"form"`, `"none"`, `"graphql"`, `"json_array"`, `"multipart"`, or `"base64_upload"` (the `body_type` enum in `internal/connectors/engine/schema/writes.schema.json` is the authority). Default body = every record field **except** those named in `path_fields` (the path already carries them, e.g. `{{ record.id }}` for an update). `body_fields` (if set) restricts the body to an explicit allow-list instead (used for delete-with-body actions). `"form"` builds a `url.Values` body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for deterministic encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body at all (pure path-parameterized mutation/delete).
+
+`"base64_upload"` is a **typed** JSON body, not a raw request escape hatch — method, path and body structure stay bundle metadata. It carries a base64-encoded payload in exactly one declared JSON property, everything else being an ordinary record field governed by the action's closed `record_schema`. Declare it via a `base64_upload` block with `source` (`"path"` default — read a local file — or `"base64"` — take an already-encoded string), `source_field`, `content_field`, `max_decoded_bytes` (required, positive, clamped to a 16 MiB engine ceiling — an unbounded inline upload is a memory-exhaustion vector), and optional `max_encoded_bytes` (defaults to the base64 length of the decoded bound). Two properties every author must know: the `source_field` is **removed from the body before transmission** — in `"path"` mode it holds a local filesystem path, and transmitting it would leak the operator's directory layout to the provider; and in path mode the file is read under `os.Root` containment (refuses traversal, symlink escape and the check-then-open TOCTOU race in one primitive, not a lexical prefix check), bounded (read one byte past the limit and REJECT rather than truncate — a truncated attachment is a silently corrupt upload), and verified against the approved-payload SHA-256 digest exactly as the `multipart` file part does, so plan/preview/approve/execute still binds the approved bytes.
+
+`"multipart"` is the streaming counterpart for `multipart/form-data` uploads, and is what a provider documenting a file/image endpoint with a size cap wants. Each entry in `multipart.parts` is a `field` part (a record value sent as a form field) or a `file` part (a local file streamed as an upload). A `file` part is subject to the same containment and bounding rules as `base64_upload`'s path mode — `os.Root` confinement, a size pre-check, a read one byte past the limit that REJECTS rather than truncates, and approved-digest verification — but it streams through a bounded temp snapshot instead of buffering the whole payload, so the per-part `max_bytes` and the form-wide `multipart.max_bytes` are the real memory bound rather than an engine ceiling.
+
+A `file` part may also declare `allowed_media_types`, which bounds what the file's **own bytes** may sniff as (`http.DetectContentType`), checked before any request is made. Three consequences worth knowing: it is the only restriction on a part's type, so **a single-entry list is how a bundle demands exactly one type**; when it is present the part's wire `Content-Type` header is set from the sniffed type rather than from the declared `content_type`, because the sniffed type has just been proven to be one the bundle accepts and asserting the declared one over disagreeing bytes would be a claim we had already falsified; and when it is absent the declared `content_type` is sent untouched, since nothing verified the sniff and `http.DetectContentType` is coarse (every CSV sniffs as `text/plain`). Omit the key to leave a part unconstrained — a present-but-empty list is a load-time error rather than a silent "allow anything", and a `content_type` outside its own `allowed_media_types` is rejected at load time as an unsatisfiable declaration.
 
 `redact_fields` is an action-local list of record paths whose values must be removed from
 operator-visible write surfaces. It is for non-secret identifiers or clinical values that can appear
@@ -739,6 +808,21 @@ in templated paths or upstream error text; reverse-plan creation persists the li
 sample fields, `DryRunWrite` replaces those path values in the resolved request preview, and `Write`
 redacts raw and URL-encoded literal forms from returned write errors while preserving typed error
 wrapping.
+
+`batchable` declares whether the action may run from a **bulk** reverse ETL plan — the
+`pm reverse plan --source-table ...` shape that fans one action out over many warehouse rows under
+a single approval. It defaults to `true`; omit it unless you mean to restrict the action. Declaring
+`"batchable": false` makes `PlanReverseETL` refuse the action before it stores a plan or mints an
+approval token, and makes `RunReverseETL` re-check the live manifest before executing an
+already-stored bulk plan. The action remains fully executable as its own `pm <connector> <command>`
+via `cli_surface.json`, which is the entire point: it stays available to a human invoking it one
+record at a time.
+
+Declare it for operations that must never be bulk-automated — moderation actions, irreversible
+sends, rate-sensitive endpoints, and anything governed by a provider rule about human intent. Do
+**not** reach for it as a severity signal: that is `confirm`'s job, and the two are independent. An
+action can be non-batchable without being destructive (casting a vote) or destructive without being
+non-batchable (a bulk delete), so neither one implies the other.
 
 **Delete semantics**: `kind: "delete"` + `delete.missing_ok_status: [404, ...]` means those HTTP
 statuses on the delete request count as **written, not failed** (idempotent delete) — any other

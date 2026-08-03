@@ -88,6 +88,7 @@ Required reading before acting:
 ## Hard stops (stop and report — do not proceed)
 
 - Do not push to `main`; do not merge a parent PR to `main`; do not mark human-ready without the human gate.
+- For connector implementation lanes, require exactly one target connector and stop/split to a separate foundation issue/PR when shared runtime/tooling, schema, generated-index, or unrelated connector work is required; do not let the connector PR absorb it.
 - Do not request, print, store, summarize, or invent secrets.
 - Do not add dependencies, change token scopes, run destructive external actions, deploy to
   production, or weaken tests/gates.

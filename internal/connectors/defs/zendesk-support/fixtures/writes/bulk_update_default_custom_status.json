@@ -1,0 +1,12 @@
+{
+  "record": {
+    "ids": "fixture-ids"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/custom_status/default",
+    "body": {
+      "ids": "fixture-ids"
+    }
+  }
+}

@@ -669,41 +669,6 @@
       }
     },
     {
-      "id": "create_custom_field",
-      "kind": "rest_write",
-      "summary": "Create a custom field",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createcustomfield",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_custom_field",
-      "rest": {
-        "method": "POST",
-        "path": "/custom_fields",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_custom_field",
       "kind": "rest_read",
       "summary": "Get a custom field",
@@ -722,46 +687,6 @@
         "method": "GET",
         "path": "/custom_fields/{custom_field_gid}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "update_custom_field",
-      "kind": "rest_write",
-      "summary": "Update a custom field",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updatecustomfield",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_custom_field",
-      "rest": {
-        "method": "PUT",
-        "path": "/custom_fields/{custom_field_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "custom_field_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "custom_field_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -804,126 +729,6 @@
         "steps": [
           "stream:custom_fields"
         ]
-      }
-    },
-    {
-      "id": "create_enum_option_for_custom_field",
-      "kind": "rest_write",
-      "summary": "Create an enum option",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createenumoptionforcustomfield",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_enum_option_for_custom_field",
-      "rest": {
-        "method": "POST",
-        "path": "/custom_fields/{custom_field_gid}/enum_options",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "custom_field_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "custom_field_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "insert_enum_option_for_custom_field",
-      "kind": "rest_write",
-      "summary": "Reorder a custom field's enum",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/insertenumoptionforcustomfield",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.insert_enum_option_for_custom_field",
-      "rest": {
-        "method": "POST",
-        "path": "/custom_fields/{custom_field_gid}/enum_options/insert",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "custom_field_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "custom_field_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "update_enum_option",
-      "kind": "rest_write",
-      "summary": "Update an enum option",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updateenumoption",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_enum_option",
-      "rest": {
-        "method": "PUT",
-        "path": "/enum_options/{enum_option_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "enum_option_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "enum_option_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -990,76 +795,6 @@
       }
     },
     {
-      "id": "create_graph_export",
-      "kind": "rest_write",
-      "summary": "Initiate a graph export",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/creategraphexport",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_graph_export",
-      "rest": {
-        "method": "POST",
-        "path": "/exports/graph",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "create_resource_export",
-      "kind": "rest_write",
-      "summary": "Initiate a resource export",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createresourceexport",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_resource_export",
-      "rest": {
-        "method": "POST",
-        "path": "/exports/resource",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_goal_relationship",
       "kind": "rest_read",
       "summary": "Get a goal relationship",
@@ -1081,46 +816,6 @@
       }
     },
     {
-      "id": "update_goal_relationship",
-      "kind": "rest_write",
-      "summary": "Update a goal relationship",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updategoalrelationship",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_goal_relationship",
-      "rest": {
-        "method": "PUT",
-        "path": "/goal_relationships/{goal_relationship_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "goal_relationship_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "goal_relationship_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_goal_relationships",
       "kind": "rest_read",
       "summary": "Get goal relationships",
@@ -1139,46 +834,6 @@
         "method": "GET",
         "path": "/goal_relationships",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "add_supporting_relationship",
-      "kind": "rest_write",
-      "summary": "Add a supporting goal relationship",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addsupportingrelationship",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_supporting_relationship",
-      "rest": {
-        "method": "POST",
-        "path": "/goals/{goal_gid}/addSupportingRelationship",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "goal_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "goal_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -1243,46 +898,6 @@
       }
     },
     {
-      "id": "update_goal",
-      "kind": "rest_write",
-      "summary": "Update a goal",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updategoal",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_goal",
-      "rest": {
-        "method": "PUT",
-        "path": "/goals/{goal_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "goal_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "goal_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "delete_goal",
       "kind": "rest_write",
       "summary": "Delete a goal",
@@ -1322,161 +937,6 @@
         "method": "GET",
         "path": "/goals",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "create_goal",
-      "kind": "rest_write",
-      "summary": "Create a goal",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/creategoal",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_goal",
-      "rest": {
-        "method": "POST",
-        "path": "/goals",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "create_goal_metric",
-      "kind": "rest_write",
-      "summary": "Create a goal metric",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/creategoalmetric",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_goal_metric",
-      "rest": {
-        "method": "POST",
-        "path": "/goals/{goal_gid}/setMetric",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "goal_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "goal_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "update_goal_metric",
-      "kind": "rest_write",
-      "summary": "Update a goal metric",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updategoalmetric",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.update_goal_metric",
-      "rest": {
-        "method": "POST",
-        "path": "/goals/{goal_gid}/setMetricCurrentValue",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "goal_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "goal_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "add_followers",
-      "kind": "rest_write",
-      "summary": "Add a collaborator to a goal",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addfollowers",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_followers",
-      "rest": {
-        "method": "POST",
-        "path": "/goals/{goal_gid}/addFollowers",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "goal_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "goal_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -1538,46 +998,6 @@
         "method": "GET",
         "path": "/goals/{goal_gid}/parentGoals",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "add_custom_field_setting_for_goal",
-      "kind": "rest_write",
-      "summary": "Add a custom field to a goal",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addcustomfieldsettingforgoal",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_custom_field_setting_for_goal",
-      "rest": {
-        "method": "POST",
-        "path": "/goals/{goal_gid}/addCustomFieldSetting",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "goal_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "goal_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -1801,46 +1221,6 @@
       }
     },
     {
-      "id": "update_ooo_entry",
-      "kind": "rest_write",
-      "summary": "Update an OOO entry",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updateoooentry",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_ooo_entry",
-      "rest": {
-        "method": "PUT",
-        "path": "/ooo_entries/{ooo_entry_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "ooo_entry_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "ooo_entry_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "delete_ooo_entry",
       "kind": "rest_write",
       "summary": "Delete an OOO entry",
@@ -1880,41 +1260,6 @@
         "method": "GET",
         "path": "/ooo_entries",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "create_ooo_entry",
-      "kind": "rest_write",
-      "summary": "Create an OOO entry",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createoooentry",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_ooo_entry",
-      "rest": {
-        "method": "POST",
-        "path": "/ooo_entries",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "data"
-          ]
-        }
       }
     },
     {
@@ -2058,41 +1403,6 @@
       }
     },
     {
-      "id": "create_portfolio",
-      "kind": "rest_write",
-      "summary": "Create a portfolio",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createportfolio",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_portfolio",
-      "rest": {
-        "method": "POST",
-        "path": "/portfolios",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_portfolio",
       "kind": "rest_read",
       "summary": "Get a portfolio",
@@ -2111,46 +1421,6 @@
         "method": "GET",
         "path": "/portfolios/{portfolio_gid}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "update_portfolio",
-      "kind": "rest_write",
-      "summary": "Update a portfolio",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updateportfolio",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_portfolio",
-      "rest": {
-        "method": "PUT",
-        "path": "/portfolios/{portfolio_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "portfolio_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "portfolio_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -2196,46 +1466,6 @@
       }
     },
     {
-      "id": "add_item_for_portfolio",
-      "kind": "rest_write",
-      "summary": "Add a portfolio item",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/additemforportfolio",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_item_for_portfolio",
-      "rest": {
-        "method": "POST",
-        "path": "/portfolios/{portfolio_gid}/addItem",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "portfolio_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "portfolio_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "remove_item_for_portfolio",
       "kind": "rest_write",
       "summary": "Remove a portfolio item",
@@ -2253,46 +1483,6 @@
       "rest": {
         "method": "POST",
         "path": "/portfolios/{portfolio_gid}/removeItem",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "portfolio_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "portfolio_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "add_custom_field_setting_for_portfolio",
-      "kind": "rest_write",
-      "summary": "Add a custom field to a portfolio",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addcustomfieldsettingforportfolio",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_custom_field_setting_for_portfolio",
-      "rest": {
-        "method": "POST",
-        "path": "/portfolios/{portfolio_gid}/addCustomFieldSetting",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -2356,46 +1546,6 @@
       }
     },
     {
-      "id": "add_members_for_portfolio",
-      "kind": "rest_write",
-      "summary": "Add users to a portfolio",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addmembersforportfolio",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_members_for_portfolio",
-      "rest": {
-        "method": "POST",
-        "path": "/portfolios/{portfolio_gid}/addMembers",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "portfolio_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "portfolio_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "remove_members_for_portfolio",
       "kind": "rest_write",
       "summary": "Remove users from a portfolio",
@@ -2413,46 +1563,6 @@
       "rest": {
         "method": "POST",
         "path": "/portfolios/{portfolio_gid}/removeMembers",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "portfolio_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "portfolio_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "duplicate_portfolio",
-      "kind": "rest_write",
-      "summary": "Duplicate a portfolio",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/duplicateportfolio",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.duplicate_portfolio",
-      "rest": {
-        "method": "POST",
-        "path": "/portfolios/{portfolio_gid}/duplicate",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -2497,46 +1607,6 @@
       }
     },
     {
-      "id": "update_project_brief",
-      "kind": "rest_write",
-      "summary": "Update a project brief",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updateprojectbrief",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_project_brief",
-      "rest": {
-        "method": "PUT",
-        "path": "/project_briefs/{project_brief_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_brief_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_brief_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "delete_project_brief",
       "kind": "rest_write",
       "summary": "Delete a project brief",
@@ -2555,46 +1625,6 @@
         "method": "DELETE",
         "path": "/project_briefs/{project_brief_gid}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "create_project_brief",
-      "kind": "rest_write",
-      "summary": "Create a project brief",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createprojectbrief",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_project_brief",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{project_gid}/project_briefs",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -2658,46 +1688,6 @@
         "method": "GET",
         "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "update_project_portfolio_setting",
-      "kind": "rest_write",
-      "summary": "Update a project portfolio setting",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updateprojectportfoliosetting",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_project_portfolio_setting",
-      "rest": {
-        "method": "PUT",
-        "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_portfolio_setting_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_portfolio_setting_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -2806,46 +1796,6 @@
       }
     },
     {
-      "id": "create_project_status_for_project",
-      "kind": "rest_write",
-      "summary": "Create a project status",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createprojectstatusforproject",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_project_status_for_project",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{project_gid}/project_statuses",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_project_template",
       "kind": "rest_read",
       "summary": "Get a project template",
@@ -2927,46 +1877,6 @@
         "method": "GET",
         "path": "/teams/{team_gid}/project_templates",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "instantiate_project",
-      "kind": "rest_write",
-      "summary": "Instantiate a project from a project template",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/instantiateproject",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.instantiate_project",
-      "rest": {
-        "method": "POST",
-        "path": "/project_templates/{project_template_gid}/instantiateProject",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_template_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_template_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -3108,46 +2018,6 @@
       }
     },
     {
-      "id": "duplicate_project",
-      "kind": "rest_write",
-      "summary": "Duplicate a project",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/duplicateproject",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.duplicate_project",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{project_gid}/duplicate",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_projects_for_task",
       "kind": "rest_read",
       "summary": "Get projects a task is in",
@@ -3190,46 +2060,6 @@
       }
     },
     {
-      "id": "create_project_for_team",
-      "kind": "rest_write",
-      "summary": "Create a project in a team",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createprojectforteam",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_project_for_team",
-      "rest": {
-        "method": "POST",
-        "path": "/teams/{team_gid}/projects",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "team_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "team_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_projects_for_workspace",
       "kind": "rest_read",
       "summary": "Get all projects in a workspace",
@@ -3251,46 +2081,6 @@
       }
     },
     {
-      "id": "create_project_for_workspace",
-      "kind": "rest_write",
-      "summary": "Create a project in a workspace",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createprojectforworkspace",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_project_for_workspace",
-      "rest": {
-        "method": "POST",
-        "path": "/workspaces/{workspace_gid}/projects",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "workspace_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "workspace_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "search_projects_for_workspace",
       "kind": "rest_read",
       "summary": "Search projects in a workspace",
@@ -3309,46 +2099,6 @@
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/projects/search",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "add_custom_field_setting_for_project",
-      "kind": "rest_write",
-      "summary": "Add a custom field to a project",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addcustomfieldsettingforproject",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_custom_field_setting_for_project",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{project_gid}/addCustomFieldSetting",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -3413,46 +2163,6 @@
       }
     },
     {
-      "id": "add_members_for_project",
-      "kind": "rest_write",
-      "summary": "Add users to a project",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addmembersforproject",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_members_for_project",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{project_gid}/addMembers",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "remove_members_for_project",
       "kind": "rest_write",
       "summary": "Remove users from a project",
@@ -3493,46 +2203,6 @@
       }
     },
     {
-      "id": "add_followers_for_project",
-      "kind": "rest_write",
-      "summary": "Add followers to a project",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addfollowersforproject",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_followers_for_project",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{project_gid}/addFollowers",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "remove_followers_for_project",
       "kind": "rest_write",
       "summary": "Remove followers from a project",
@@ -3550,46 +2220,6 @@
       "rest": {
         "method": "POST",
         "path": "/projects/{project_gid}/removeFollowers",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "project_save_as_template",
-      "kind": "rest_write",
-      "summary": "Create a project template from a project",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/projectsaveastemplate",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.project_save_as_template",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{project_gid}/saveAsTemplate",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -3910,46 +2540,6 @@
       }
     },
     {
-      "id": "trigger_rule",
-      "kind": "rest_write",
-      "summary": "Trigger a rule",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/triggerrule",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.trigger_rule",
-      "rest": {
-        "method": "POST",
-        "path": "/rule_triggers/{rule_trigger_gid}/run",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "rule_trigger_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "rule_trigger_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_section",
       "kind": "rest_read",
       "summary": "Get a section",
@@ -4093,86 +2683,6 @@
       }
     },
     {
-      "id": "add_task_for_section",
-      "kind": "rest_write",
-      "summary": "Add task to section",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addtaskforsection",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_task_for_section",
-      "rest": {
-        "method": "POST",
-        "path": "/sections/{section_gid}/addTask",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "section_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "section_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "insert_section_for_project",
-      "kind": "rest_write",
-      "summary": "Move or Insert sections",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/insertsectionforproject",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.insert_section_for_project",
-      "rest": {
-        "method": "POST",
-        "path": "/projects/{project_gid}/sections/insert",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "project_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "project_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_status",
       "kind": "rest_read",
       "summary": "Get a status update",
@@ -4236,41 +2746,6 @@
       }
     },
     {
-      "id": "create_status_for_object",
-      "kind": "rest_write",
-      "summary": "Create a status update",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createstatusforobject",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_status_for_object",
-      "rest": {
-        "method": "POST",
-        "path": "/status_updates",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_story",
       "kind": "rest_read",
       "summary": "Get a story",
@@ -4289,46 +2764,6 @@
         "method": "GET",
         "path": "/stories/{story_gid}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "update_story",
-      "kind": "rest_write",
-      "summary": "Update a story",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updatestory",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_story",
-      "rest": {
-        "method": "PUT",
-        "path": "/stories/{story_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "story_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "story_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -4432,46 +2867,6 @@
         "method": "GET",
         "path": "/goals/{goal_gid}/stories",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "create_story_for_goal",
-      "kind": "rest_write",
-      "summary": "Create a story on a goal",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createstoryforgoal",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_story_for_goal",
-      "rest": {
-        "method": "POST",
-        "path": "/goals/{goal_gid}/stories",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "goal_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "goal_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -4655,46 +3050,6 @@
       }
     },
     {
-      "id": "create_tag_for_workspace",
-      "kind": "rest_write",
-      "summary": "Create a tag in a workspace",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createtagforworkspace",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_tag_for_workspace",
-      "rest": {
-        "method": "POST",
-        "path": "/workspaces/{workspace_gid}/tags",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "workspace_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "workspace_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_task_templates",
       "kind": "rest_read",
       "summary": "Get multiple task templates",
@@ -4755,46 +3110,6 @@
         "method": "DELETE",
         "path": "/task_templates/{task_template_gid}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "instantiate_task",
-      "kind": "rest_write",
-      "summary": "Instantiate a task from a task template",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/instantiatetask",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.instantiate_task",
-      "rest": {
-        "method": "POST",
-        "path": "/task_templates/{task_template_gid}/instantiateTask",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "task_template_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "task_template_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -4936,46 +3251,6 @@
       }
     },
     {
-      "id": "duplicate_task",
-      "kind": "rest_write",
-      "summary": "Duplicate a task",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/duplicatetask",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.duplicate_task",
-      "rest": {
-        "method": "POST",
-        "path": "/tasks/{task_gid}/duplicate",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "task_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "task_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_tasks_for_project",
       "kind": "rest_read",
       "summary": "Get tasks from a project",
@@ -5081,86 +3356,6 @@
       }
     },
     {
-      "id": "create_subtask_for_task",
-      "kind": "rest_write",
-      "summary": "Create a subtask",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createsubtaskfortask",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_subtask_for_task",
-      "rest": {
-        "method": "POST",
-        "path": "/tasks/{task_gid}/subtasks",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "task_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "task_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "set_parent_for_task",
-      "kind": "rest_write",
-      "summary": "Set the parent of a task",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/setparentfortask",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.set_parent_for_task",
-      "rest": {
-        "method": "POST",
-        "path": "/tasks/{task_gid}/setParent",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "task_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "task_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_dependencies_for_task",
       "kind": "rest_read",
       "summary": "Get dependencies from a task",
@@ -5179,46 +3374,6 @@
         "method": "GET",
         "path": "/tasks/{task_gid}/dependencies",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "add_dependencies_for_task",
-      "kind": "rest_write",
-      "summary": "Set dependencies for a task",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/adddependenciesfortask",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_dependencies_for_task",
-      "rest": {
-        "method": "POST",
-        "path": "/tasks/{task_gid}/addDependencies",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "task_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "task_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -5283,46 +3438,6 @@
       }
     },
     {
-      "id": "add_dependents_for_task",
-      "kind": "rest_write",
-      "summary": "Set dependents for a task",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/adddependentsfortask",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_dependents_for_task",
-      "rest": {
-        "method": "POST",
-        "path": "/tasks/{task_gid}/addDependents",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "task_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "task_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "remove_dependents_for_task",
       "kind": "rest_write",
       "summary": "Unlink dependents from a task",
@@ -5340,46 +3455,6 @@
       "rest": {
         "method": "POST",
         "path": "/tasks/{task_gid}/removeDependents",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "task_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "task_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "add_project_for_task",
-      "kind": "rest_write",
-      "summary": "Add a project to a task",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addprojectfortask",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_project_for_task",
-      "rest": {
-        "method": "POST",
-        "path": "/tasks/{task_gid}/addProject",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -5443,46 +3518,6 @@
       }
     },
     {
-      "id": "add_tag_for_task",
-      "kind": "rest_write",
-      "summary": "Add a tag to a task",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addtagfortask",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_tag_for_task",
-      "rest": {
-        "method": "POST",
-        "path": "/tasks/{task_gid}/addTag",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "task_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "task_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "remove_tag_for_task",
       "kind": "rest_write",
       "summary": "Remove a tag from a task",
@@ -5500,46 +3535,6 @@
       "rest": {
         "method": "POST",
         "path": "/tasks/{task_gid}/removeTag",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "task_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "task_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "add_followers_for_task",
-      "kind": "rest_write",
-      "summary": "Add followers to a task",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/addfollowersfortask",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_followers_for_task",
-      "rest": {
-        "method": "POST",
-        "path": "/tasks/{task_gid}/addFollowers",
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
@@ -5729,41 +3724,6 @@
       }
     },
     {
-      "id": "create_team",
-      "kind": "rest_write",
-      "summary": "Create a team",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createteam",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_team",
-      "rest": {
-        "method": "POST",
-        "path": "/teams",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_team",
       "kind": "rest_read",
       "summary": "Get a team",
@@ -5782,46 +3742,6 @@
         "method": "GET",
         "path": "/teams/{team_gid}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "update_team",
-      "kind": "rest_write",
-      "summary": "Update a team",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updateteam",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_team",
-      "rest": {
-        "method": "PUT",
-        "path": "/teams/{team_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "team_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "team_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -5864,46 +3784,6 @@
         "method": "GET",
         "path": "/users/{user_gid}/teams",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "add_user_for_team",
-      "kind": "rest_write",
-      "summary": "Add a user to a team",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/adduserforteam",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_user_for_team",
-      "rest": {
-        "method": "POST",
-        "path": "/teams/{team_gid}/addUser",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "team_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "team_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -6169,46 +4049,6 @@
       }
     },
     {
-      "id": "create_time_tracking_entry",
-      "kind": "rest_write",
-      "summary": "Create a time tracking entry",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/createtimetrackingentry",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.create_time_tracking_entry",
-      "rest": {
-        "method": "POST",
-        "path": "/tasks/{task_gid}/time_tracking_entries",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "task_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "task_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_time_tracking_entry",
       "kind": "rest_read",
       "summary": "Get a time tracking entry",
@@ -6227,46 +4067,6 @@
         "method": "GET",
         "path": "/time_tracking_entries/{time_tracking_entry_gid}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "update_time_tracking_entry",
-      "kind": "rest_write",
-      "summary": "Update a time tracking entry",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updatetimetrackingentry",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_time_tracking_entry",
-      "rest": {
-        "method": "PUT",
-        "path": "/time_tracking_entries/{time_tracking_entry_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "time_tracking_entry_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "time_tracking_entry_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -6534,46 +4334,6 @@
       }
     },
     {
-      "id": "update_user",
-      "kind": "rest_write",
-      "summary": "Update a user",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updateuser",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_user",
-      "rest": {
-        "method": "PUT",
-        "path": "/users/{user_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "user_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "user_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
       "id": "get_favorites_for_user",
       "kind": "rest_read",
       "summary": "Get a user's favorites",
@@ -6655,51 +4415,6 @@
         "method": "GET",
         "path": "/workspaces/{workspace_gid}/users/{user_gid}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "update_user_for_workspace",
-      "kind": "rest_write",
-      "summary": "Update a user in a workspace or organization",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updateuserforworkspace",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_user_for_workspace",
-      "rest": {
-        "method": "PUT",
-        "path": "/workspaces/{workspace_gid}/users/{user_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "workspace_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "user_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "workspace_gid",
-            "user_gid",
-            "data"
-          ]
-        }
       }
     },
     {
@@ -6943,86 +4658,6 @@
         "method": "GET",
         "path": "/workspaces/{workspace_gid}",
         "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "update_workspace",
-      "kind": "rest_write",
-      "summary": "Update a workspace",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/updateworkspace",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "update",
-      "destructive": false,
-      "audit_event": "asana.update_workspace",
-      "rest": {
-        "method": "PUT",
-        "path": "/workspaces/{workspace_gid}",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "workspace_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "workspace_gid",
-            "data"
-          ]
-        }
-      }
-    },
-    {
-      "id": "add_user_for_workspace",
-      "kind": "rest_write",
-      "summary": "Add a user to a workspace or organization",
-      "description": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-      "source_url": "https://developers.asana.com/reference/adduserforworkspace",
-      "risk": "medium",
-      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute",
-      "output_policy": "json_redacted",
-      "auth_scopes": [
-        "asana:personal-access-token"
-      ],
-      "mutation_class": "create",
-      "destructive": false,
-      "audit_event": "asana.add_user_for_workspace",
-      "rest": {
-        "method": "POST",
-        "path": "/workspaces/{workspace_gid}/addUser",
-        "max_bytes": 1048576,
-        "content_type": "application/json",
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "workspace_gid": {
-              "type": "string",
-              "minLength": 1
-            },
-            "data": {
-              "type": "object",
-              "additionalProperties": true
-            }
-          },
-          "required": [
-            "workspace_gid",
-            "data"
-          ]
-        }
       }
     },
     {

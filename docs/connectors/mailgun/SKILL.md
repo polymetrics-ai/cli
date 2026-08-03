@@ -11,6 +11,7 @@ Reads Mailgun sending domains, email events, mailing lists, and analytics tags t
 
 ## Icon
 
+- id: mailgun
 - asset: icons/mailgun.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -37,12 +37,19 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	if op.Kind != "rest_read" || op.REST == nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires rest_read operation, got %q", op.Kind)
+	// provider_search shares this executor deliberately: its response bounding,
+	// clamping, redaction and output-policy handling are the same as any other
+	// bounded read. What differs is the stricter front half, which is enforced at
+	// bundle load (validateProviderSearchSemantics), not here.
+	if (op.Kind != "rest_read" && op.Kind != "provider_search") || op.REST == nil {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 	if method != http.MethodGet && method != http.MethodPost {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
+	}
+	if op.Kind == "provider_search" && method != http.MethodPost {
+		return connectors.DirectReadResult{}, fmt.Errorf("provider search requires POST, got %s", method)
 	}
 	if isAbsoluteHTTPURL(op.REST.Path) {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
@@ -70,6 +77,9 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	}
 	for key, value := range req.Query {
 		queryMap[key] = value
+	}
+	if err := requireOperationQueryGroups(op, queryMap); err != nil {
+		return connectors.DirectReadResult{}, err
 	}
 	query, err := directReadQuery(queryMap)
 	if err != nil {
@@ -224,6 +234,37 @@ func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath string) e
 		}
 	}
 	return fmt.Errorf("api_surface endpoint %s %s not found", method, endpointPath)
+}
+
+// requireOperationQueryGroups enforces rest.required_query against the merged
+// query (the operation's own declared values plus the caller's) BEFORE any
+// network call. Some endpoints answer an unfiltered request with the entire
+// tenant; declaring the filter mandatory is what lets such an endpoint be
+// executable at all instead of permanently blocked.
+//
+// A parameter counts as supplied only when its value is non-blank: a
+// present-but-empty value produces exactly the unfiltered request the
+// constraint exists to prevent.
+func requireOperationQueryGroups(op OperationSpec, query map[string]string) error {
+	if op.REST == nil {
+		return nil
+	}
+	for _, group := range op.REST.RequiredQuery {
+		if queryGroupSatisfied(group, query) {
+			continue
+		}
+		return fmt.Errorf("operation %q requires at least one of query parameters %s", op.ID, strings.Join(group.AnyOf, ", "))
+	}
+	return nil
+}
+
+func queryGroupSatisfied(group RequiredQueryGroup, query map[string]string) bool {
+	for _, name := range group.AnyOf {
+		if strings.TrimSpace(query[strings.TrimSpace(name)]) != "" {
+			return true
+		}
+	}
+	return false
 }
 
 func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) {

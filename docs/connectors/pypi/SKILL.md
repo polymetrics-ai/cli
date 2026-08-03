@@ -11,6 +11,7 @@ Reads PyPI project metadata through the PyPI JSON API. Read-only and credential-
 
 ## Icon
 
+- id: pypi
 - asset: icons/pypi.svg
 - source: upstream_registry
 - review_status: upstream_seeded

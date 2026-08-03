@@ -33,6 +33,8 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 
 ## Branch and PR policy
 
+- Connector implementation sub-issues must declare exactly one target connector, ownership guard evidence, changed-path compliance requirements, and any foundation issue/PR path before worker spawn.
+- Shared runtime/tooling, schema, generated-index, or unrelated connector work discovered by a connector lane is split to a separate foundation issue/PR before the connector implementation proceeds.
 - Parent branch starts from `main`.
 - Parent PR targets `main` and is created as soon as the parent branch exists.
 - Parent PR stays draft and may use `Refs #<parent-issue>` until all required sub-issues are
@@ -58,6 +60,10 @@ true:
 - automated review coverage exists through the sub-PR, through a parent PR fallback review that
   covers the newly integrated commit range, or through an explicitly recorded Copilot/human fallback
   because Claude is blocked
+- connector implementation sub-PRs include exactly one target connector and no generic shared
+  runtime/tooling or unrelated connector changes; naming or linking a foundation issue/PR does not
+  authorize those paths in the connector PR, and they must move into the foundation PR before
+  target-aware validation or integration
 - no human gate is triggered
 - no requested-changes review is open
 - the parent branch is current enough that the sub-PR diff is reviewable

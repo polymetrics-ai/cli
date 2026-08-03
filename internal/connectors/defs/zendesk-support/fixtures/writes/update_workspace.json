@@ -1,0 +1,25 @@
+{
+  "record": {
+    "workspace_id": "fixture-workspace-id",
+    "workspace": {
+      "title": "fixture-title",
+      "description": "fixture-description",
+      "macros": [
+        1
+      ]
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/workspaces/fixture-workspace-id",
+    "body": {
+      "workspace": {
+        "title": "fixture-title",
+        "description": "fixture-description",
+        "macros": [
+          1
+        ]
+      }
+    }
+  }
+}

@@ -210,9 +210,10 @@ projection**: by default the engine emits only declared properties (today's hand
 }
 ```
 
-Pagination types (all four already exist in `connsdk/paginate.go`): `link_header`, `page_number`,
+Pagination types (all five already exist in `connsdk/paginate.go`): `link_header`, `page_number`,
 `offset_limit`, `cursor` (body token), plus `next_url` (aircall's `meta.next_page_link`, a cursor
-variant where the token is a full URL) and `none`.
+variant where the token is a full URL), `start_index` (SCIM 2.0 RFC 7644 §3.4.2.4 1-based index
+pagination that carries its own total), and `none`.
 
 ### `writes.json` (github, abridged)
 
@@ -296,6 +297,22 @@ Write semantics baked into the format:
   `create_pull_request` + reviewer follow-up) use a **write hook** (§B.7).
 - **`confirm: "destructive"`** feeds the existing plan → preview → approve flow with per-action
   risk tiering.
+- **`batchable: false`** gates an action out of SourceTable-driven bulk reverse ETL. It defaults to
+  `true`, so an action that omits it is unaffected. `PlanReverseETL` refuses a declared
+  non-batchable action before it stores a plan or mints an approval token, and `RunReverseETL`
+  re-checks the live manifest before executing a stored bulk plan, so a hand-edited `state.json`
+  cannot launder one through. The action stays fully executable as its own
+  `pm <connector> <command>` — that single-record path is what the declaration exists to preserve.
+
+  Use it for operations that must never be fanned out over N records under one approval:
+  moderation actions, irreversible sends, rate-sensitive endpoints, and anything governed by a
+  provider rule about human intent (for example an API that permits proxying a human's action
+  one-for-one but forbids a bot amplifying it).
+
+  `batchable` and `confirm` are **orthogonal**. `confirm` asks how severe one call is; `batchable`
+  asks whether the action may be fanned out at all. A vote is non-batchable but not destructive; a
+  bulk delete is destructive but legitimately batchable. An action may declare either, both, or
+  neither.
 
 ## B. The declarative runtime engine
 
@@ -357,11 +374,14 @@ type HTTPBase struct {
 }
 
 type AuthSpec struct {
-    Mode   string `json:"mode"`   // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|custom
+    Mode   string `json:"mode"`   // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|oauth2_refresh_token|custom
     Token  string `json:"token,omitempty"`
     Username, Password string     // basic
     Header, Prefix, Param, Value string // api_key_*
-    TokenURL, ClientID, ClientSecret, Scopes string // oauth2_client_credentials
+    TokenURL, ClientID, ClientSecret, Scopes string // oauth2_client_credentials + oauth2_refresh_token
+    ExtraParams map[string]string `json:"extra_params,omitempty"` // extra token-request form params
+    RefreshToken string `json:"refresh_token,omitempty"`                    // oauth2_refresh_token
+    RefreshTokenStoreKey string `json:"refresh_token_store_key,omitempty"`  // oauth2_refresh_token: where a rotated grant is persisted
     Hook   string `json:"hook,omitempty"` // custom: hook name resolved via hooks registry
     When   string `json:"when,omitempty"` // condition over config values
 }
@@ -401,7 +421,7 @@ type WriteAction struct {
     Method, Path string
     PathFields   []string        `json:"path_fields,omitempty"`
     RedactFields []string        `json:"redact_fields,omitempty"` // record fields redacted from plan samples, write previews/errors
-    BodyType     string          `json:"body_type,omitempty"` // json (default) | form | none
+    BodyType     string          `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload
     BodyFields   []string        `json:"body_fields,omitempty"`
     RecordSchema json.RawMessage `json:"record_schema"`
     Delete       *DeleteSpec     `json:"delete,omitempty"` // idempotent, missing_ok_status
@@ -579,7 +599,9 @@ process-global `RegisterFactory` path is gone.
     for `hooks/*`, ~15 lines) and `native/nativeset/nativeset_gen.go` (~10 lines).
   - `new <name>` — scaffolds a defs bundle from templates.
 - `cmd/pm-cataloggen` (Airbyte importer) — **deleted**.
-- `cmd/iconregistrygen` — unchanged; keys become bare names.
+- `cmd/iconregistrygen` — emits bare connector keys, scopes rows to implemented defs plus runtime
+  builtins, and treats the existing registry as curated authored state. See
+  `docs/migration/icon-registry-single-source.md` for the registry contract.
 
 ### C.4 Catalog: generated from connectors, and the 646 vs 556 divergence
 

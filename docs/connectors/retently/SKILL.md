@@ -11,6 +11,7 @@ Reads Retently customers, survey responses, surveys, and campaigns through the R
 
 ## Icon
 
+- id: retently
 - asset: icons/retently.svg
 - source: upstream_registry
 - review_status: upstream_seeded

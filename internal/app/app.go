@@ -644,6 +644,12 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 	if req.Limit <= 0 {
 		req.Limit = 100000
 	}
+	// Refuse before any rows are read, any plan row is stored, or any approval
+	// token is minted: a non-batchable action must leave nothing approvable
+	// behind.
+	if err := a.guardBatchableAction(req.DestinationConnector, req.Action, req.SourceTable); err != nil {
+		return ReversePlan{}, err
+	}
 	records, err := a.QueryTable(ctx, QueryTableRequest{Table: req.SourceTable, Limit: req.Limit})
 	if err != nil {
 		return ReversePlan{}, err
@@ -911,7 +917,14 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 		return ReverseRun{}, err
 	}
 	if plan.Mode == reversePlanModeConnectorCommand {
+		// The single-record connector-command path is exactly what a
+		// non-batchable action is FOR, so it is deliberately not guarded.
 		return a.runConnectorCommandPlan(ctx, planIndex, plan)
+	}
+	// Re-check the live manifest before executing a stored bulk plan: the plan
+	// may predate the declaration, or state.json may have been hand-edited.
+	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
+		return ReverseRun{}, err
 	}
 	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
 	if err != nil {
@@ -1107,7 +1120,15 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 	for k, v := range overlay {
 		config[k] = v
 	}
-	return cred, connectors.RuntimeConfig{ProjectDir: a.projectDir, Config: config, Secrets: secrets}, nil
+	return cred, connectors.RuntimeConfig{
+		ProjectDir: a.projectDir,
+		Config:     config,
+		Secrets:    secrets,
+		// Scoped to this credential, so a provider-rotated secret (an OAuth2
+		// refresh token) is written back to the same encrypted vault entry it
+		// was read from, and to no other.
+		SecretStore: a.credentialSecretStore(cred.ID),
+	}, nil
 }
 
 func (a *App) findCredential(name string) (CredentialMeta, bool) {

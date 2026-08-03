@@ -11,6 +11,7 @@ Reads RSS channel metadata and feed items from any RSS 2.0 feed URL. Read-only a
 
 ## Icon
 
+- id: rss
 - asset: icons/rss.svg
 - source: upstream_registry
 - review_status: upstream_seeded

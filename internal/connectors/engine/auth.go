@@ -9,6 +9,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/safety"
 )
 
 // authVars builds the interpolation environment for AuthSpec fields: config
@@ -100,6 +101,9 @@ func buildAuthenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec 
 	case "oauth2_client_credentials":
 		return buildOAuth2ClientCredentials(spec, vars)
 
+	case "oauth2_refresh_token":
+		return buildOAuth2RefreshToken(cfg, spec, vars)
+
 	case "custom":
 		return buildCustomAuth(ctx, cfg, spec, h)
 
@@ -131,7 +135,7 @@ func buildOAuth2ClientCredentials(spec AuthSpec, vars Vars) (connsdk.Authenticat
 		scopes = strings.Fields(resolved)
 	}
 
-	extraParams, err := resolveExtraParams(spec.ExtraParams, vars)
+	extraParams, err := resolveExtraParams("oauth2_client_credentials", spec.ExtraParams, vars)
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +159,7 @@ func buildOAuth2ClientCredentials(spec AuthSpec, vars Vars) (connsdk.Authenticat
 // silently omit a param a real OAuth2 provider may require). A nil/empty
 // map returns a nil url.Values (connsdk.OAuth2ClientCredentials.ExtraParams
 // ranges over a nil map with zero iterations, so this is a true no-op).
-func resolveExtraParams(params map[string]string, vars Vars) (url.Values, error) {
+func resolveExtraParams(mode string, params map[string]string, vars Vars) (url.Values, error) {
 	if len(params) == 0 {
 		return nil, nil
 	}
@@ -163,11 +167,95 @@ func resolveExtraParams(params map[string]string, vars Vars) (url.Values, error)
 	for k, tmpl := range params {
 		val, err := Interpolate(tmpl, vars)
 		if err != nil {
-			return nil, fmt.Errorf("oauth2_client_credentials: extra_params %q: %w", k, err)
+			return nil, fmt.Errorf("%s: extra_params %q: %w", mode, k, err)
 		}
 		out.Set(k, val)
 	}
 	return out, nil
+}
+
+// buildOAuth2RefreshToken constructs the oauth2_refresh_token authenticator:
+// the OAuth2 refresh-token grant (RFC 6749 §6), which renews a USER-CONTEXT
+// access token.
+//
+// oauth2_client_credentials cannot stand in for it. That grant obtains an
+// app-only token — it authenticates the application, not a user — so it cannot
+// reach any endpoint acting on behalf of an end user. A connector bundle has
+// nowhere to put a token exchange, an expiry clock, a rotation callback or a
+// 401 retry, which is why this is shared-runtime behaviour rather than
+// something a connector lane can add for itself.
+//
+// Field resolution is identical to buildOAuth2ClientCredentials: every
+// templated field goes through Interpolate and an unresolved config/secrets key
+// is a hard error, never a silently dropped credential.
+//
+// cfg is threaded in (unlike the client-credentials builder) only for
+// cfg.SecretStore, which is how a provider-rotated refresh token reaches the
+// caller's encrypted credential store. Secret VALUES still come from vars, and
+// none of them reaches an error message.
+func buildOAuth2RefreshToken(cfg connectors.RuntimeConfig, spec AuthSpec, vars Vars) (connsdk.Authenticator, error) {
+	const mode = "oauth2_refresh_token"
+
+	tokenURL, err := Interpolate(spec.TokenURL, vars)
+	if err != nil {
+		return nil, fmt.Errorf("%s: token_url: %w", mode, err)
+	}
+	clientID, err := Interpolate(spec.ClientID, vars)
+	if err != nil {
+		return nil, fmt.Errorf("%s: client_id: %w", mode, err)
+	}
+	clientSecret, err := Interpolate(spec.ClientSecret, vars)
+	if err != nil {
+		return nil, fmt.Errorf("%s: client_secret: %w", mode, err)
+	}
+	refreshToken, err := Interpolate(spec.RefreshToken, vars)
+	if err != nil {
+		return nil, fmt.Errorf("%s: refresh_token: %w", mode, err)
+	}
+
+	var scopes []string
+	if spec.Scopes != "" {
+		resolved, err := Interpolate(spec.Scopes, vars)
+		if err != nil {
+			return nil, fmt.Errorf("%s: scopes: %w", mode, err)
+		}
+		scopes = strings.Fields(resolved)
+	}
+
+	extraParams, err := resolveExtraParams(mode, spec.ExtraParams, vars)
+	if err != nil {
+		return nil, err
+	}
+
+	auth := &connsdk.OAuth2RefreshToken{
+		TokenURL:     tokenURL,
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
+		RefreshToken: refreshToken,
+		Scopes:       scopes,
+		ExtraParams:  extraParams,
+	}
+
+	// Rotation persistence is opt-in and requires BOTH a declared key and a
+	// store. A bundle that declares no key never writes anything — the engine
+	// does not guess which secret to overwrite (see AuthSpec.RefreshTokenStoreKey).
+	// A caller with no store (conformance harnesses, tests) keeps rotation in
+	// memory for the process lifetime; it is never downgraded to a plaintext
+	// write.
+	storeKey := strings.TrimSpace(spec.RefreshTokenStoreKey)
+	if storeKey != "" {
+		if err := safety.ValidateIdentifier(storeKey, mode+": refresh_token_store_key"); err != nil {
+			return nil, err
+		}
+		if cfg.SecretStore != nil {
+			store := cfg.SecretStore
+			auth.OnRefreshTokenRotated = func(ctx context.Context, rotated string) error {
+				return store.PutSecret(ctx, storeKey, rotated)
+			}
+		}
+	}
+
+	return auth, nil
 }
 
 // buildCustomAuth resolves an AuthHook for spec.Hook via h. A nil Hooks, or

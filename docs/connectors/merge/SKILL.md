@@ -11,6 +11,7 @@ Reads Merge ATS common-model objects (candidates, applications, jobs, offers, de
 
 ## Icon
 
+- id: merge
 - asset: icons/merge.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads tyntec SMS messages, templates, sender IDs, and delivery reports through API list endpoints, and sends approved SMS messages through the Messaging API.
 
 ICON
+  id: tyntec
   asset: icons/tyntec.svg
   source: upstream_registry
   review_status: upstream_seeded
@@ -51,6 +52,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   send_message:
     endpoint: POST sms/v1/messages
+    required fields: to, from, text
     risk: sends a billable SMS message to the recipient phone number and may notify an external user
 
 SECURITY

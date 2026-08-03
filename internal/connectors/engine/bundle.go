@@ -3,9 +3,11 @@
 package engine
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/fs"
+	"mime"
 	"regexp"
 	"sort"
 	"strconv"
@@ -126,7 +128,7 @@ type RequestSpec struct {
 // AuthSpec describes one candidate authenticator, selected by "when" (first
 // match wins).
 type AuthSpec struct {
-	Mode  string `json:"mode"` // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|custom
+	Mode  string `json:"mode"` // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|oauth2_refresh_token|custom
 	Token string `json:"token,omitempty"`
 
 	Username string `json:"username,omitempty"`
@@ -152,6 +154,35 @@ type AuthSpec struct {
 	// ExtraParams url.Values field; this is the engine-side dialect that
 	// populates it (connsdk itself needed no change).
 	ExtraParams map[string]string `json:"extra_params,omitempty"`
+
+	// RefreshToken is the templated initial refresh token for the
+	// oauth2_refresh_token mode (normally "{{ secrets.refresh_token }}"). It is
+	// resolved through Interpolate like every other AuthSpec field, so an
+	// unresolved config/secrets key is a hard error rather than a silently
+	// unauthenticated request.
+	//
+	// The mode reuses token_url/client_id/client_secret/scopes/extra_params
+	// verbatim from oauth2_client_credentials rather than introducing a
+	// parallel vocabulary for the same four fields; only the grant differs.
+	RefreshToken string `json:"refresh_token,omitempty"`
+
+	// RefreshTokenStoreKey names the secret key under which a PROVIDER-ROTATED
+	// refresh token is persisted back to the caller's encrypted local
+	// credential store — normally the same key RefreshToken reads from, e.g.
+	// "refresh_token".
+	//
+	// It is declared rather than inferred on purpose. Interpolate resolves a
+	// template to its VALUE, so the engine cannot recover a key name from
+	// RefreshToken, and pattern-matching "{{ secrets.X }}" back to X would
+	// silently overwrite a caller's secret whenever the guess happened to be
+	// right and silently do nothing whenever it was not.
+	//
+	// Omitted means "this provider does not rotate": nothing is ever written,
+	// and a rotated value (if one arrives anyway) is held in memory for the
+	// process lifetime only. A connector whose provider DOES rotate must
+	// declare this key, or it will present an invalidated grant on its next
+	// run.
+	RefreshTokenStoreKey string `json:"refresh_token_store_key,omitempty"`
 
 	Hook string `json:"hook,omitempty"` // custom: hook name resolved via hooks registry
 	When string `json:"when,omitempty"` // condition over config values
@@ -185,6 +216,26 @@ type PaginationSpec struct {
 	StopPath        string `json:"stop_path,omitempty"`         // cursor: falsy body value stops (stripe)
 
 	NextURLPath string `json:"next_url_path,omitempty"` // next_url type
+
+	// start_index type — 1-based index pagination that carries its own total,
+	// the shape SCIM 2.0 list responses use (RFC 7644 §3.4.2.4):
+	//
+	//	request:  ?startIndex=1&count=100
+	//	response: {"totalResults":N,"itemsPerPage":M,"startIndex":S,"Resources":[…]}
+	//
+	// Named for the mechanism rather than for SCIM: any API that pages by a
+	// 1-based index and reports a total is served by the same walk. Every field
+	// below defaults to SCIM's own name, so a SCIM stream declares nothing
+	// beyond {"type":"start_index","page_size":N}.
+	StartIndexParam string `json:"start_index_param,omitempty"` // default "startIndex"
+	CountParam      string `json:"count_param,omitempty"`       // default "count"
+	TotalPath       string `json:"total_path,omitempty"`        // default "totalResults"
+	StartIndexPath  string `json:"start_index_path,omitempty"`  // default "startIndex"
+	// StartIndexBase is a pointer for the same reason StartPage is: an explicit
+	// 0 (a 0-based server that still reports a total) must stay distinguishable
+	// from an absent key, which unmarshals to the identical Go zero value. nil
+	// means "not declared", defaulting to 1 — SCIM's first index.
+	StartIndexBase *int `json:"start_index_base,omitempty"`
 
 	PageSize int `json:"page_size,omitempty"`
 	MaxPages int `json:"max_pages,omitempty"`
@@ -377,23 +428,103 @@ type IncrementalSpec struct {
 
 // WriteAction is one entry in writes.json's "actions" array.
 type WriteAction struct {
-	Name         string              `json:"name"`
-	Kind         string              `json:"kind"` // create|update|upsert|delete|custom
-	Method       string              `json:"method"`
-	Path         string              `json:"path"`
-	PathFields   []string            `json:"path_fields,omitempty"`
-	RedactFields []string            `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
-	BodyType     string              `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart
-	BodyFields   []string            `json:"body_fields,omitempty"`
-	BodyField    string              `json:"body_field,omitempty"`
-	BodySchema   json.RawMessage     `json:"body_schema,omitempty"`
-	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
-	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
-	RecordSchema json.RawMessage     `json:"record_schema"`
-	Delete       *DeleteSpec         `json:"delete,omitempty"`
-	Risk         string              `json:"risk"`
-	Confirm      string              `json:"confirm,omitempty"` // "" | "destructive"
-	Hook         string              `json:"hook,omitempty"`
+	Name       string   `json:"name"`
+	Kind       string   `json:"kind"` // create|update|upsert|delete|custom
+	Method     string   `json:"method"`
+	Path       string   `json:"path"`
+	PathFields []string `json:"path_fields,omitempty"`
+	// Query is the OPTIONAL write-action query-parameter map. It is the
+	// SAME construct (and the same QueryParam type, so the same
+	// bare-string-or-object dialect) that streams.json's stream.Query has
+	// always used — see QueryParam's doc comment — resolved through the
+	// same resolveQueryParams helper read.go already shares between stream
+	// reads and check reads, so all three surfaces resolve query templates
+	// identically by construction rather than by convention.
+	//
+	// Absent/empty means the request carries no query string at all, which
+	// is exactly the behavior every write action had before this field
+	// existed (executeWriteRecord passed a nil url.Values in all six
+	// body_type branches). The field is strictly additive and opt-in: no
+	// existing bundle changes behavior by its introduction.
+	Query        map[string]QueryParam `json:"query,omitempty"`
+	RedactFields []string              `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
+	BodyType     string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart | base64_upload
+	BodyFields   []string              `json:"body_fields,omitempty"`
+	BodyField    string                `json:"body_field,omitempty"`
+	BodySchema   json.RawMessage       `json:"body_schema,omitempty"`
+	GraphQL      *GraphQLRequestSpec   `json:"graphql,omitempty"`
+	Multipart    *MultipartSpec        `json:"multipart,omitempty"`
+	Base64Upload *Base64UploadSpec     `json:"base64_upload,omitempty"`
+	RecordSchema json.RawMessage       `json:"record_schema"`
+	// DynamicFields optionally declares ONE record field as a typed
+	// dynamic-key region. Absent means today's exact behavior.
+	DynamicFields *DynamicFieldsSpec `json:"dynamic_fields,omitempty"`
+	Delete        *DeleteSpec        `json:"delete,omitempty"`
+	Risk          string             `json:"risk"`
+	// Batchable gates the action out of SourceTable-driven bulk reverse ETL
+	// when explicitly false. It is a pointer because bool's zero value is
+	// false, and false is the restrictive setting: a plain bool would silently
+	// mark every hand-constructed WriteAction as non-batchable. nil means the
+	// bundle did not declare it, which is the permissive default every shipped
+	// action relies on. Read it through IsBatchable, never directly.
+	Batchable *bool  `json:"batchable,omitempty"`
+	Confirm   string `json:"confirm,omitempty"` // "" | "destructive"
+	Hook      string `json:"hook,omitempty"`
+}
+
+// DynamicFieldsSpec declares ONE record field as a typed dynamic-key region,
+// for providers that accept tenant-defined custom fields with no fixed,
+// enumerable official set.
+//
+// It is deliberately NOT a raw-body escape hatch, and every field below exists
+// to hold that line. Everything about the region is bundle metadata; only the
+// keys and the SCALAR values inside it come from the caller:
+//
+//   - Values must be scalars drawn from ValueTypes, so no caller input can ever
+//     become request STRUCTURE. This is the load-bearing invariant: an object
+//     or array value is a hard error, never a coercion.
+//   - Keys must match KeyPattern, which is declared in the bundle and is never
+//     caller input.
+//   - Keys may not collide with path_fields, body_fields, body_field, or any
+//     key the body already carries, so a dynamic key can never shadow a
+//     structural one.
+//   - The region is merged into the JSON body only, AFTER path interpolation.
+//     It reaches no other part of the request — not the URL, not the method,
+//     not headers.
+//   - MaxKeys and MaxValueBytes bound growth.
+//
+// record_schema stays CLOSED. The bundle declares the container field in it as
+// an object; this spec validates the interior separately. That is what lets
+// tenant-defined keys become expressible without opening additionalProperties.
+type DynamicFieldsSpec struct {
+	// Field is the record field holding the dynamic-key map.
+	Field string `json:"field"`
+	// KeyPattern is the regexp every caller-supplied key must match. It is
+	// anchored at both ends when compiled, so a partial match cannot pass.
+	KeyPattern string `json:"key_pattern"`
+	// MaxKeys bounds how many dynamic keys one record may carry. 0 means the
+	// built-in default.
+	MaxKeys int `json:"max_keys,omitempty"`
+	// ValueTypes is the allow-list of permitted JSON scalar types:
+	// string, number, boolean, null. Empty means all four.
+	ValueTypes []string `json:"value_types,omitempty"`
+	// MaxValueBytes bounds the encoded length of a single dynamic value. 0
+	// means the built-in default.
+	MaxValueBytes int `json:"max_value_bytes,omitempty"`
+	// Target selects where the region lands: "inline" (default) merges it at
+	// the body root; "nested" keeps it under Field. Providers differ; both are
+	// declarative and neither is caller-controlled.
+	Target string `json:"target,omitempty"`
+}
+
+// IsBatchable reports whether the action may be executed from a bulk reverse
+// ETL plan. Only an explicit "batchable": false in the bundle says no.
+//
+// Batchability is independent of Confirm: Confirm asks how severe one call is,
+// IsBatchable asks whether the action may be fanned out over many records under
+// a single approval. An action may declare either, both, or neither.
+func (a WriteAction) IsBatchable() bool {
+	return a.Batchable == nil || *a.Batchable
 }
 
 // GraphQLRequestSpec describes a fixed GraphQL document whose variables are
@@ -411,13 +542,58 @@ type MultipartSpec struct {
 	Parts    []MultipartPartSpec `json:"parts,omitempty"`
 }
 
+// Base64UploadSpec describes body_type "base64_upload": a JSON body carrying a
+// base64-encoded payload in one declared property. It exists because APIs that
+// want an inline encoded upload (Airtable's uploadAttachment among them) had no
+// typed route at all — the only alternative would have been letting a caller
+// hand the engine a raw body, which is banned outright.
+//
+// The spec stays deliberately small. The body is built by the ordinary rules
+// (body_fields if declared, otherwise every record field minus path_fields) and
+// exactly two things then happen: SourceField is REMOVED and ContentField is set
+// to the validated base64 string. Everything else an API needs alongside the
+// payload — a filename, a content type — is an ordinary record field already
+// governed by the action's closed record_schema, so nothing here duplicates a
+// constraint the schema dialect can already express.
+type Base64UploadSpec struct {
+	// Source selects where the payload comes from: "path" (default) reads a
+	// local file, "base64" takes an already-encoded string. Both converge on the
+	// same validated, canonically re-encoded string.
+	Source string `json:"source,omitempty"`
+
+	// SourceField is the record field holding the file path (Source "path") or
+	// the encoded payload (Source "base64"). It never reaches the wire — in
+	// "path" mode it holds a local filesystem path, and transmitting that would
+	// leak the operator's directory layout to the provider.
+	SourceField string `json:"source_field"`
+
+	// ContentField is the JSON body property that receives the base64 payload.
+	ContentField string `json:"content_field"`
+
+	// MaxDecodedBytes bounds the payload's decoded size. Required and positive:
+	// an unbounded inline upload is a memory-exhaustion vector, and the engine
+	// additionally clamps this to maxBase64UploadDecodedBytes.
+	MaxDecodedBytes int64 `json:"max_decoded_bytes"`
+
+	// MaxEncodedBytes bounds the transmitted (encoded) size. Optional; defaults
+	// to the base64 length of MaxDecodedBytes. Declared explicitly because real
+	// APIs document the encoded limit — Airtable's attachment cap is 5 MB of
+	// base64, not 5 MB of file.
+	MaxEncodedBytes int64 `json:"max_encoded_bytes,omitempty"`
+}
+
 type MultipartPartSpec struct {
 	Name        string `json:"name"`
 	Type        string `json:"type"`
 	Field       string `json:"field"`
 	ContentType string `json:"content_type,omitempty"`
-	Required    bool   `json:"required,omitempty"`
-	MaxBytes    int64  `json:"max_bytes,omitempty"`
+	// AllowedMediaTypes bounds what the part's bytes may sniff as. ContentType
+	// is what the bundle asserts to the provider; this is what makes that
+	// assertion checkable. Absent means unconstrained; present and empty is a
+	// load error, so "bounded" and "unbounded" can never be confused.
+	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
+	Required          bool     `json:"required,omitempty"`
+	MaxBytes          int64    `json:"max_bytes,omitempty"`
 }
 
 type DeleteSpec struct {
@@ -508,6 +684,22 @@ type RESTOperationSpec struct {
 	Query       map[string]string `json:"query,omitempty"`
 	Body        map[string]any    `json:"body,omitempty"`
 	BodySchema  json.RawMessage   `json:"body_schema,omitempty"`
+	// RequiredQuery declares query-parameter cardinality for endpoints that
+	// must never be called unfiltered — a listing that returns an entire
+	// enterprise when no filter is supplied, for example. Every group must be
+	// satisfied by at least one of its named parameters carrying a non-blank
+	// value on the outgoing request; a value hardcoded in Query counts, since
+	// the constraint is about the wire request rather than about who supplied
+	// it. Empty (the default) imposes nothing.
+	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
+}
+
+// RequiredQueryGroup is one "at least one of these" constraint. Several groups
+// compose as AND-of-ORs: "at least one of A or B, and at least one of C" is two
+// groups, which is the shape of an endpoint requiring both a subject filter and
+// a time window.
+type RequiredQueryGroup struct {
+	AnyOf []string `json:"any_of"`
 }
 
 // SensitivePolicySpec is the reverse-ETL sensitive/admin policy for an operation
@@ -541,11 +733,32 @@ type XMLOperationSpec struct {
 }
 
 type BinaryOperationSpec struct {
-	Method          string `json:"method"`
-	Path            string `json:"path"`
-	MaxBytes        int    `json:"max_bytes,omitempty"`
-	AllowOverwrite  bool   `json:"allow_overwrite,omitempty"`
-	ExtractArchives bool   `json:"extract_archives,omitempty"`
+	Method   string `json:"method"`
+	Path     string `json:"path"`
+	MaxBytes int    `json:"max_bytes,omitempty"`
+	// AllowOverwrite permits replacing an existing destination file.
+	AllowOverwrite bool `json:"allow_overwrite,omitempty"`
+	// ExtractArchives is DECLARED by two existing github operations but is
+	// refused at execution time: archive extraction is zip-slip and
+	// decompression-bomb territory and is a separate capability, never a
+	// flag. The field is retained so those bundles keep validating.
+	ExtractArchives bool `json:"extract_archives,omitempty"`
+	// AllowCrossHost permits redirects to ANY other origin. Credentials are
+	// stripped on such a hop regardless. Off by default: download endpoints
+	// redirect to CDNs constantly and 71 connectors authenticate with a
+	// custom header that Go does NOT strip across domains.
+	AllowCrossHost bool `json:"allow_cross_host,omitempty"`
+	// AllowedHosts permits redirects to exactly these hosts. Credentials are
+	// stripped on such a hop regardless.
+	AllowedHosts []string `json:"allowed_hosts,omitempty"`
+	// ContentTypes records the content types this operation is documented to
+	// return. It is metadata for authors and is deliberately NOT enforced:
+	// providers mislabel binary payloads routinely.
+	ContentTypes []string `json:"content_types,omitempty"`
+	// StallTimeoutSeconds bounds how long the download may make NO progress.
+	// It is not a wall-clock deadline, which would turn the byte cap into a
+	// bandwidth requirement.
+	StallTimeoutSeconds int `json:"stall_timeout_seconds,omitempty"`
 }
 
 type FileOperationSpec struct {
@@ -612,6 +825,11 @@ type CLIFlag struct {
 	Format     string   `json:"format,omitempty"`
 	AllowEmpty *bool    `json:"allow_empty,omitempty"`
 	Required   bool     `json:"required,omitempty"`
+	// MaxItems/MinItems bound a string_array flag's item count so a bounded
+	// provider-search list can be enforced against the flag the user typed, not
+	// only against the assembled body.
+	MaxItems int `json:"max_items,omitempty"`
+	MinItems int `json:"min_items,omitempty"`
 }
 
 // CLIConstraint describes a provider-neutral validation rule over mapped
@@ -1061,14 +1279,92 @@ func validateStreamGraphQL(streams []StreamSpec) error {
 	return nil
 }
 
+// dynamicFieldsValueTypes is the closed set of JSON SCALAR types a dynamic
+// value may take. "object" and "array" are deliberately absent and must never
+// be added: admitting them would let caller input become request structure,
+// which is exactly the escape hatch this primitive exists to avoid.
+var dynamicFieldsValueTypes = map[string]bool{
+	"string": true, "number": true, "boolean": true, "null": true,
+}
+
+// validateDynamicFields enforces the declaration-time half of the dynamic-key
+// contract. The execution-time half lives in write.go's applyDynamicFields.
+func validateDynamicFields(i int, action WriteAction) error {
+	spec := action.DynamicFields
+	if spec == nil {
+		return nil
+	}
+	if bodyType := bodyTypeOf(action); bodyType != "json" {
+		return fmt.Errorf("action %d (%q) dynamic_fields requires body_type json, got %q", i, action.Name, bodyType)
+	}
+	field := strings.TrimSpace(spec.Field)
+	if field == "" {
+		return fmt.Errorf("action %d (%q) dynamic_fields requires field", i, action.Name)
+	}
+	if strings.TrimSpace(spec.KeyPattern) == "" {
+		return fmt.Errorf("action %d (%q) dynamic_fields requires key_pattern", i, action.Name)
+	}
+	if _, err := compileDynamicKeyPattern(spec.KeyPattern); err != nil {
+		return fmt.Errorf("action %d (%q) dynamic_fields key_pattern: %w", i, action.Name, err)
+	}
+	for _, vt := range spec.ValueTypes {
+		if !dynamicFieldsValueTypes[vt] {
+			return fmt.Errorf("action %d (%q) dynamic_fields value_types contains unsupported type %q (scalars only)", i, action.Name, vt)
+		}
+	}
+	switch strings.TrimSpace(spec.Target) {
+	case "", "inline", "nested":
+	default:
+		return fmt.Errorf("action %d (%q) dynamic_fields target must be inline or nested, got %q", i, action.Name, spec.Target)
+	}
+	if spec.MaxKeys < 0 || spec.MaxValueBytes < 0 {
+		return fmt.Errorf("action %d (%q) dynamic_fields bounds must be non-negative", i, action.Name)
+	}
+	// The container field is consumed by the region itself, so it must not
+	// also be claimed as a path or body field.
+	for _, pf := range action.PathFields {
+		if pf == field {
+			return fmt.Errorf("action %d (%q) dynamic_fields field %q also declared in path_fields", i, action.Name, field)
+		}
+	}
+	for _, bf := range action.BodyFields {
+		if bf == field {
+			return fmt.Errorf("action %d (%q) dynamic_fields field %q also declared in body_fields", i, action.Name, field)
+		}
+	}
+	if action.BodyField == field {
+		return fmt.Errorf("action %d (%q) dynamic_fields field %q also declared as body_field", i, action.Name, field)
+	}
+	return nil
+}
+
+// compileDynamicKeyPattern anchors the declared pattern at both ends so a
+// partial match can never admit a key the bundle did not intend.
+func compileDynamicKeyPattern(pattern string) (*regexp.Regexp, error) {
+	p := pattern
+	if !strings.HasPrefix(p, "^") {
+		p = "^" + p
+	}
+	if !strings.HasSuffix(p, "$") {
+		p += "$"
+	}
+	return regexp.Compile(p)
+}
+
 func validateWriteBodies(actions []WriteAction) error {
 	for i, action := range actions {
+		if err := validateDynamicFields(i, action); err != nil {
+			return err
+		}
 		bodyType := bodyTypeOf(action)
 		if action.GraphQL != nil && bodyType != "graphql" {
 			return fmt.Errorf("action %d (%q) declares graphql but body_type is %q", i, action.Name, bodyType)
 		}
 		if action.Multipart != nil && bodyType != "multipart" {
 			return fmt.Errorf("action %d (%q) declares multipart but body_type is %q", i, action.Name, bodyType)
+		}
+		if action.Base64Upload != nil && bodyType != "base64_upload" {
+			return fmt.Errorf("action %d (%q) declares base64_upload but body_type is %q", i, action.Name, bodyType)
 		}
 		switch bodyType {
 		case "graphql":
@@ -1091,6 +1387,10 @@ func validateWriteBodies(actions []WriteAction) error {
 			if len(action.BodySchema) == 0 {
 				return fmt.Errorf("action %d (%q) body_type json_array requires body_schema", i, action.Name)
 			}
+		case "base64_upload":
+			if err := validateBase64UploadSpec(i, action); err != nil {
+				return err
+			}
 		case "multipart":
 			if action.Multipart == nil || len(action.Multipart.Parts) == 0 {
 				return fmt.Errorf("action %d (%q) body_type multipart requires multipart.parts", i, action.Name)
@@ -1104,10 +1404,228 @@ func validateWriteBodies(actions []WriteAction) error {
 				default:
 					return fmt.Errorf("action %d (%q) multipart part %d has unsupported type %q", i, action.Name, j, part.Type)
 				}
+				if err := validateMultipartMediaTypes(part); err != nil {
+					return fmt.Errorf("action %d (%q) multipart part %d: %w", i, action.Name, j, err)
+				}
 			}
 		}
 	}
 	return nil
+}
+
+// validateBase64UploadSpec fails a bundle whose base64_upload declaration could
+// not be executed safely. Each rule closes a way the declaration could look
+// valid but behave wrongly at runtime, which for an upload means transmitting
+// something the author did not intend.
+func validateBase64UploadSpec(i int, action WriteAction) error {
+	spec := action.Base64Upload
+	if spec == nil {
+		return fmt.Errorf("action %d (%q) body_type base64_upload requires base64_upload", i, action.Name)
+	}
+	switch spec.Source {
+	case "", "path", "base64":
+	default:
+		return fmt.Errorf("action %d (%q) base64_upload source must be path or base64, got %q", i, action.Name, spec.Source)
+	}
+	if strings.TrimSpace(spec.SourceField) == "" {
+		return fmt.Errorf("action %d (%q) base64_upload requires source_field", i, action.Name)
+	}
+	if strings.TrimSpace(spec.ContentField) == "" {
+		return fmt.Errorf("action %d (%q) base64_upload requires content_field", i, action.Name)
+	}
+	// In path mode the source field holds a local filesystem path. Naming the
+	// same field as the content target would mean the removal and the
+	// assignment collide, and whether the path leaks would depend on ordering.
+	// In base64 mode the two may legitimately coincide: the field is simply
+	// replaced by its canonically re-encoded self.
+	if spec.Source != "base64" && spec.SourceField == spec.ContentField {
+		return fmt.Errorf("action %d (%q) base64_upload source_field and content_field must differ in path mode", i, action.Name)
+	}
+	if spec.MaxDecodedBytes <= 0 {
+		return fmt.Errorf("action %d (%q) base64_upload requires positive max_decoded_bytes", i, action.Name)
+	}
+	if spec.MaxDecodedBytes > maxBase64UploadDecodedBytes {
+		return fmt.Errorf("action %d (%q) base64_upload max_decoded_bytes %d exceeds the engine ceiling %d", i, action.Name, spec.MaxDecodedBytes, maxBase64UploadDecodedBytes)
+	}
+	// An encoded bound below the encoded length of the decoded bound can never
+	// be satisfied by a payload at the decoded bound, so the pair is
+	// contradictory — an authoring mistake, caught here rather than as a
+	// runtime rejection of every large payload.
+	if spec.MaxEncodedBytes > 0 {
+		needed := int64(base64.StdEncoding.EncodedLen(int(spec.MaxDecodedBytes)))
+		if spec.MaxEncodedBytes < needed {
+			return fmt.Errorf("action %d (%q) base64_upload max_encoded_bytes %d cannot hold max_decoded_bytes %d (needs %d)", i, action.Name, spec.MaxEncodedBytes, spec.MaxDecodedBytes, needed)
+		}
+	}
+	return nil
+}
+
+// validateProviderSearchSemantics enforces the provider_search contract at load
+// time, so an unbounded or open-bodied declaration cannot ship.
+//
+// provider_search is a read that carries a fixed POST body containing bounded
+// lists. It is a distinct kind rather than a convention over rest_read because
+// these rules have to be enforceable, and because #2985's recorded decision is
+// that provider search is a separate typed capability — `pm query` stays
+// warehouse-focused. Nothing here lets a caller choose the method, the path, or
+// a body key the schema does not declare.
+func validateProviderSearchSemantics(i int, op OperationSpec) error {
+	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+	if method != "POST" {
+		return fmt.Errorf("operation %d (%q) provider_search method must be POST, got %s", i, op.ID, method)
+	}
+	if isAbsoluteHTTPURL(op.REST.Path) {
+		return fmt.Errorf("operation %d (%q) provider_search path must be connector-relative, got an absolute URL", i, op.ID)
+	}
+	if !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+		return fmt.Errorf("operation %d (%q) provider_search requires application/json content_type", i, op.ID)
+	}
+	if op.REST.MaxBytes <= 0 {
+		return fmt.Errorf("operation %d (%q) provider_search must declare positive max_bytes", i, op.ID)
+	}
+	if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
+		return fmt.Errorf("operation %d (%q) provider_search is a read and must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
+	}
+	if len(op.REST.BodySchema) == 0 {
+		return fmt.Errorf("operation %d (%q) provider_search must declare body_schema", i, op.ID)
+	}
+	var body map[string]any
+	if err := json.Unmarshal(op.REST.BodySchema, &body); err != nil {
+		return fmt.Errorf("operation %d (%q) provider_search body_schema is not an object: %w", i, op.ID, err)
+	}
+	if closed, ok := body["additionalProperties"].(bool); !ok || closed {
+		return fmt.Errorf("operation %d (%q) provider_search body_schema must declare additionalProperties: false so no undeclared body key can be supplied", i, op.ID)
+	}
+	if _, err := CompileSchema(op.REST.BodySchema); err != nil {
+		return fmt.Errorf("operation %d (%q) provider_search body_schema: %w", i, op.ID, err)
+	}
+	return requireBoundedArrays(i, op.ID, body, "body_schema")
+}
+
+// requireBoundedArrays walks a provider_search body schema and refuses any array
+// property that does not declare maxItems. This is what makes the kind bounded
+// by construction rather than by convention: an unbounded list cannot be
+// declared, so it cannot reach a provider.
+func requireBoundedArrays(i int, id string, node map[string]any, path string) error {
+	if isArrayType(node) {
+		if _, ok := node["maxItems"]; !ok {
+			return fmt.Errorf("operation %d (%q) provider_search %s declares an array without maxItems; every list must be bounded", i, id, path)
+		}
+	}
+	if isObjectType(node) {
+		if closed, ok := node["additionalProperties"].(bool); !ok || closed {
+			return fmt.Errorf("operation %d (%q) provider_search %s is an object and must declare additionalProperties: false so no undeclared body key can be supplied inside it", i, id, path)
+		}
+	}
+	if items, ok := node["items"].(map[string]any); ok {
+		if err := requireBoundedArrays(i, id, items, path+"/items"); err != nil {
+			return err
+		}
+	}
+	props, ok := node["properties"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	names := make([]string, 0, len(props))
+	for name := range props {
+		names = append(names, name)
+	}
+	sort.Strings(names) // deterministic error for a bundle with several unbounded lists
+	for _, name := range names {
+		child, ok := props[name].(map[string]any)
+		if !ok {
+			continue
+		}
+		if err := requireBoundedArrays(i, id, child, path+"/"+name); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// isObjectType reports whether a schema node is an object. It recognises the
+// single string form ("object") as well as the multi-form type list that
+// compileTypes accepts (e.g. ["object","null"]), and a properties-bearing node
+// with no string type at all. Every object node in a provider_search body must
+// be closed, regardless of how the dialect lets it be declared.
+func isObjectType(node map[string]any) bool {
+	switch typeOf := node["type"].(type) {
+	case string:
+		return typeOf == "object"
+	case []any:
+		for _, t := range typeOf {
+			if s, ok := t.(string); ok && s == "object" {
+				return true
+			}
+		}
+		return false
+	}
+	_, hasProps := node["properties"]
+	return hasProps
+}
+
+// isArrayType reports whether a schema node is an array. It recognises the
+// single string form ("array") as well as the multi-form type list that
+// compileTypes accepts (e.g. ["array","null"]), and an items-bearing node with
+// no string type at all. The bound must hold regardless of how the dialect lets
+// a list be declared, so ["array","null"] cannot smuggle an unbounded list in.
+func isArrayType(node map[string]any) bool {
+	switch typeOf := node["type"].(type) {
+	case string:
+		if typeOf == "array" {
+			return true
+		}
+		return false
+	case []any:
+		for _, t := range typeOf {
+			if s, ok := t.(string); ok && s == "array" {
+				return true
+			}
+		}
+		return false
+	}
+	if _, ok := node["items"]; ok {
+		return true
+	}
+	return false
+}
+
+// validateMultipartMediaTypes enforces the media-type declaration on one part.
+// A present-but-empty list is rejected rather than read as "allow anything":
+// absent means unconstrained and present means bounded, and a bundle must not be
+// able to look bounded while permitting everything.
+func validateMultipartMediaTypes(part MultipartPartSpec) error {
+	if part.AllowedMediaTypes == nil {
+		return nil
+	}
+	if len(part.AllowedMediaTypes) == 0 {
+		return fmt.Errorf("allowed_media_types must not be empty; omit it to leave the part unconstrained")
+	}
+	if part.Type != "file" {
+		return fmt.Errorf("allowed_media_types is only meaningful on a file part, got type %q", part.Type)
+	}
+	parsed := make([]string, 0, len(part.AllowedMediaTypes))
+	for _, raw := range part.AllowedMediaTypes {
+		value, _, err := mime.ParseMediaType(raw)
+		if err != nil {
+			return fmt.Errorf("allowed_media_types entry %q is not a valid media type: %w", raw, err)
+		}
+		parsed = append(parsed, value)
+	}
+	declared := strings.TrimSpace(part.ContentType)
+	if declared == "" {
+		return nil
+	}
+	want, _, err := mime.ParseMediaType(declared)
+	if err != nil {
+		return fmt.Errorf("content_type %q is not a valid media type: %w", declared, err)
+	}
+	for _, allowed := range parsed {
+		if strings.EqualFold(allowed, want) {
+			return nil
+		}
+	}
+	return fmt.Errorf("content_type %q is not among its own allowed_media_types %s", declared, strings.Join(part.AllowedMediaTypes, ", "))
 }
 
 func validateGraphQLSpec(spec *GraphQLRequestSpec, operationKind string) error {
@@ -1304,7 +1822,7 @@ func operationExecutionBlock(op OperationSpec) (string, int) {
 
 func expectedOperationBlock(kind string) string {
 	switch kind {
-	case "rest_read", "rest_write":
+	case "rest_read", "rest_write", "provider_search":
 		return "rest"
 	case "graphql_query", "graphql_mutation":
 		return "graphql"
@@ -1327,7 +1845,32 @@ func expectedOperationBlock(kind string) string {
 	}
 }
 
+// validateRequiredQuery rejects a required_query group that could never be
+// satisfied. The meta-schema already enforces a non-empty any_of; this catches
+// the blank-name case it cannot express. Both failures are load errors rather
+// than silent no-ops: a constraint that never fires is worse than an absent one,
+// because the bundle author believes the endpoint is protected.
+func validateRequiredQuery(i int, op OperationSpec) error {
+	if op.REST == nil {
+		return nil
+	}
+	for j, group := range op.REST.RequiredQuery {
+		if len(group.AnyOf) == 0 {
+			return fmt.Errorf("operation %d (%q) required_query group %d must name at least one parameter", i, op.ID, j)
+		}
+		for _, name := range group.AnyOf {
+			if strings.TrimSpace(name) == "" {
+				return fmt.Errorf("operation %d (%q) required_query group %d has a blank parameter name", i, op.ID, j)
+			}
+		}
+	}
+	return nil
+}
+
 func validateOperationSemantics(i int, op OperationSpec) error {
+	if err := validateRequiredQuery(i, op); err != nil {
+		return err
+	}
 	switch op.Kind {
 	case "rest_read":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
@@ -1339,6 +1882,10 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
 			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
+		}
+	case "provider_search":
+		if err := validateProviderSearchSemantics(i, op); err != nil {
+			return err
 		}
 	case "rest_write":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))

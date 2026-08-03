@@ -11,6 +11,7 @@ Reads LinkedIn Ads accounts, campaign groups, campaigns, and creatives through t
 
 ## Icon
 
+- id: linkedin
 - asset: icons/linkedin.svg
 - source: upstream_registry
 - review_status: upstream_seeded

@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Xsolla merchant transaction search/registry, payouts, payout currency breakdown, and financial report data, and writes full/partial transaction refunds through the Xsolla Pay Station API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -71,11 +73,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   request_refund:
     endpoint: PUT /merchants/{{ config.merchant_id }}/reports/transactions/{{ record.transaction_id }}/refund
-    required fields: transaction_id
+    required fields: transaction_id, description
     risk: irreversible external mutation; issues a full refund to the user for the given transaction; approval required
   request_partial_refund:
     endpoint: PUT /merchants/{{ config.merchant_id }}/reports/transactions/{{ record.transaction_id }}/partial_refund
-    required fields: transaction_id
+    required fields: transaction_id, description, refund_amount
     risk: irreversible external mutation; issues a partial refund to the user for the given transaction; approval required
 
 SECURITY

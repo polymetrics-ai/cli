@@ -1,0 +1,21 @@
+{
+  "record": {
+    "goal_gid": "fixture-goal-gid",
+    "data": {
+      "unit": "fixture-unit",
+      "currency_code": "fixture-currency-code",
+      "current_number_value": 1
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/goals/fixture-goal-gid/setMetric",
+    "body": {
+      "data": {
+        "unit": "fixture-unit",
+        "currency_code": "fixture-currency-code",
+        "current_number_value": 1
+      }
+    }
+  }
+}

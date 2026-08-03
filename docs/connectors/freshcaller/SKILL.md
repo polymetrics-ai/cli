@@ -11,6 +11,7 @@ Reads Freshcaller calls, agents, teams, and phone numbers through the Freshcalle
 
 ## Icon
 
+- id: freshcaller
 - asset: icons/freshcaller.svg
 - source: upstream_registry
 - review_status: upstream_seeded
