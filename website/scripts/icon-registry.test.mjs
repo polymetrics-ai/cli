@@ -212,6 +212,21 @@ test('Simple Icons request resolution enforces the CodeQL-flagged input boundari
     'absolute path must be rejected',
   );
   assert.throws(
+    () => resolveSimpleIconRequest(root, { ...validIcon, path: 'index.md' }),
+    /must stay under icons\/simple-icons\//,
+    'in-tree non-icon path must be rejected before anything is written',
+  );
+  assert.throws(
+    () => resolveSimpleIconRequest(root, { ...validIcon, path: 'icons/github.svg' }),
+    /must stay under icons\/simple-icons\//,
+    'in-tree curated icon path must be rejected before anything is written',
+  );
+  assert.throws(
+    () => resolveSimpleIconRequest(root, { ...validIcon, path: undefined }),
+    /Invalid Simple Icons path/,
+    'missing path must be rejected before anything is written',
+  );
+  assert.throws(
     () => resolveSimpleIconRequest(root, { ...validIcon, slug: 'foo/bar' }),
     /Invalid Simple Icons slug/,
     'slug containing / must be rejected before any fetch',

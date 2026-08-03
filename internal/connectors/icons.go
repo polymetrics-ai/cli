@@ -239,11 +239,17 @@ func (r *Registry) ValidateIconCoverage() error {
 // MustValidateIconCoverage enforces canonical icon coverage while constructing a
 // process registry. Coverage drift means the embedded registry no longer
 // describes the compiled connector set, so it aborts with the remediation
-// instead of serving connectors with missing icon identity.
+// instead of serving connectors with missing icon identity. Layered
+// constructors may each enforce it: a registry that has not been mutated since
+// its last successful validation is already covered, so repeat calls are free.
 func (r *Registry) MustValidateIconCoverage() {
+	if r.iconCoverageValidated {
+		return
+	}
 	if err := r.ValidateIconCoverage(); err != nil {
 		panic("validate connector icon coverage: " + err.Error() + "; regenerate internal/connectors/icon_data.json with `make icons-generate`")
 	}
+	r.iconCoverageValidated = true
 }
 
 func ValidateConnectorIcons(connectorsDir string, defs []Definition, metas []Metadata) error {

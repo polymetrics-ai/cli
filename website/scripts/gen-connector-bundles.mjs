@@ -9,11 +9,12 @@ import {
   mkdirSync,
   readdirSync,
 } from 'node:fs';
-import { dirname, relative, resolve, join, sep } from 'node:path';
+import { dirname, resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { mapCLISurface } from './lib/cli-surface.mjs';
 import {
+  assertInside,
   collectConnectorIconPaths,
   syncConnectorIcons,
   validConnectorIconPath,
@@ -56,13 +57,6 @@ function normalizePrimaryKey(value) {
   }
   if (trim(value)) return [trim(value)];
   return [];
-}
-
-function assertInside(root, target, label) {
-  const rel = relative(root, target);
-  if (rel.startsWith('..') || rel === '..' || rel.includes(`..${sep}`) || rel === '') {
-    throw new Error(`${label} escapes expected root: ${target}`);
-  }
 }
 
 function readSchema(base, schemaPath) {

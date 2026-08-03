@@ -152,6 +152,21 @@ func TestRegistryIconCoverageRequiresExplicitCanonicalEntry(t *testing.T) {
 	}
 }
 
+func TestMustValidateIconCoverageRevalidatesAfterRegistration(t *testing.T) {
+	registry := NewEmptyRegistry()
+	registry.RegisterBuiltins()
+	registry.MustValidateIconCoverage()
+	registry.MustValidateIconCoverage()
+
+	defer func() {
+		if recover() == nil {
+			t.Fatal("MustValidateIconCoverage() did not panic for a connector registered after validation")
+		}
+	}()
+	registry.Register(missingIconConnector{})
+	registry.MustValidateIconCoverage()
+}
+
 func TestConnectorIconPathOwnershipMapsCanonicalAndGeneratedCopies(t *testing.T) {
 	cases := []struct {
 		path string

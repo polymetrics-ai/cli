@@ -9,7 +9,11 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { resolveSimpleIconRequest, validSimpleIconSlug } from './lib/simple-icons.mjs';
+import {
+  resolveSimpleIconRequest,
+  validSimpleIconPath,
+  validSimpleIconSlug,
+} from './lib/simple-icons.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ICON_DATA = resolve(__dirname, '../../internal/connectors/icon_data.json');
@@ -18,10 +22,6 @@ const DOCS_CONNECTORS = resolve(__dirname, '../../docs/connectors');
 function fail(message) {
   console.error(`fetch-simple-icons: ${message}`);
   process.exit(1);
-}
-
-function validIconPath(path) {
-  return /^icons\/simple-icons\/[A-Za-z0-9._-]+\.svg$/.test(path);
 }
 
 function tintSvg(svg, hex) {
@@ -52,7 +52,7 @@ for (const icon of registry) {
   seenConnectors.add(connector);
   if (!slug && icon.source !== 'simple-icons') continue;
   if (!slug || !validSimpleIconSlug(slug)) fail(`invalid simple_icon_slug for ${connector}: ${slug}`);
-  if (!validIconPath(path)) fail(`invalid Simple Icons path for ${connector}: ${path}`);
+  if (!validSimpleIconPath(path)) fail(`invalid Simple Icons path for ${connector}: ${path}`);
   if (seenPaths.has(path)) fail(`duplicate Simple Icons path: ${path}`);
   seenPaths.add(path);
   simpleIcons.push({ connector, slug, path, hex: icon.simple_icon_hex });
@@ -64,7 +64,8 @@ for (const icon of simpleIcons) {
   try {
     request = resolveSimpleIconRequest(DOCS_CONNECTORS, icon);
   } catch (error) {
-    fail(error.message);
+    fail(`${icon.connector}: ${error.message}`);
+    throw error;
   }
   const { url, outputPath } = request;
 
