@@ -39,7 +39,7 @@ const (
 
 const (
 	ownershipClassIgnored              = "ignored"
-	ownershipClassWorkerArtifact       = "worker_artifact"
+	ownershipClassPlanningArtifact     = "planning_artifact"
 	ownershipClassConnectorDefs        = "connector_defs"
 	ownershipClassConnectorHooks       = "connector_hooks"
 	ownershipClassConnectorNative      = "connector_native"
@@ -47,6 +47,7 @@ const (
 	ownershipClassConnectorDocs        = "connector_docs"
 	ownershipClassConnectorIcon        = "connector_icon"
 	ownershipClassConnectorWebsiteIcon = "connector_website_icon"
+	ownershipClassConnectorOwnedTest   = "connector_owned_test"
 	ownershipClassSharedGenerated      = "shared_generated_index"
 	ownershipClassGateConfig           = "gate_config"
 	ownershipClassSharedRuntime        = "shared_runtime"
@@ -356,8 +357,8 @@ func classifyOwnershipChangedPath(rel string, lx lexicon) ownershipPathClass {
 	if rel == "" {
 		return ownershipPathClass{Path: rel, Class: ownershipClassIgnored, Ignored: true}
 	}
-	if isWorkerArtifactPath(rel) {
-		return ownershipPathClass{Path: rel, Class: ownershipClassWorkerArtifact, Ignored: true}
+	if isConnectorPlanningArtifactPath(rel) {
+		return ownershipPathClass{Path: rel, Class: ownershipClassPlanningArtifact, Ignored: true}
 	}
 	if isIgnoredOwnershipPath(rel) {
 		return ownershipPathClass{Path: rel, Class: ownershipClassIgnored, Ignored: true}
@@ -388,6 +389,9 @@ func classifyOwnershipChangedPath(rel string, lx lexicon) ownershipPathClass {
 	}
 	if connector, ok := connectorIconPath(rel, "website/public/connectors/icons/", lx); ok {
 		return ownershipPathClass{Path: rel, Class: ownershipClassConnectorWebsiteIcon, Connector: connector, InferConnector: true, Generated: true}
+	}
+	if connector, ok := connectorOwnedSharedPackageTestPath(rel, lx); ok {
+		return ownershipPathClass{Path: rel, Class: ownershipClassConnectorOwnedTest, Connector: connector, InferConnector: true}
 	}
 	if strings.HasPrefix(rel, "cmd/") || strings.HasPrefix(rel, "scripts/") || rel == "Makefile" {
 		return ownershipPathClass{Path: rel, Class: ownershipClassSharedTooling, Shared: true}
@@ -543,15 +547,30 @@ func isIgnoredOwnershipPath(rel string) bool {
 		strings.HasPrefix(rel, "build/")
 }
 
-func isWorkerArtifactPath(rel string) bool {
-	return strings.HasPrefix(rel, ".planning/phases/") && strings.Contains(rel, "/workers/issue-")
+// isConnectorPlanningArtifactPath allows a connector implementation lane to
+// commit its own GSD plan/TDD/verification artifacts under .planning/phases/,
+// which AGENTS.md requires connector lanes to produce. It is intentionally
+// unscoped to any single phase directory, matching how the rest of this
+// package treats planning evidence as lane-local and non-shared.
+func isConnectorPlanningArtifactPath(rel string) bool {
+	return strings.HasPrefix(rel, ".planning/phases/")
 }
 
+// isOwnershipGateConfigPath rejects edits to the guardrail's own
+// implementation, exception ledger, and required-check wiring. It is
+// deliberately narrow: cmd/connectorgen/ hosts connector-owned tests
+// (see connectorOwnedSharedPackageTestPath) alongside the guard's CLI
+// entrypoints, so only the guard's own files are listed here.
 func isOwnershipGateConfigPath(rel string) bool {
-	return rel == DefaultExceptionsPath ||
-		rel == "docs/migration/connector-boundary-guard.md" ||
-		strings.HasPrefix(rel, "internal/connectors/boundary/") ||
-		strings.HasPrefix(rel, "cmd/connectorgen/") ||
+	switch rel {
+	case DefaultExceptionsPath,
+		"docs/migration/connector-boundary-guard.md",
+		"cmd/connectorgen/ownership.go",
+		"cmd/connectorgen/ownership_test.go",
+		"cmd/connectorgen/boundary.go":
+		return true
+	}
+	return strings.HasPrefix(rel, "internal/connectors/boundary/") ||
 		strings.HasPrefix(rel, dotGHPathPrefix()+"workflows/")
 }
 
@@ -560,6 +579,9 @@ func dotGHPathPrefix() string {
 }
 
 func isNarrowSharedOwnershipOutput(rel string) bool {
+	if strings.HasPrefix(rel, "docs/cli/") {
+		return true
+	}
 	switch rel {
 	case "internal/connectors/defs/defs.go",
 		"internal/connectors/hooks/hookset/hookset_gen.go",
@@ -567,16 +589,53 @@ func isNarrowSharedOwnershipOutput(rel string) bool {
 		"internal/connectors/icons.go",
 		"docs/connectors/README.md",
 		"docs/connectors/UNPORTED.md",
-		"docs/cli/connectors.md",
+		"docs/connectors/catalog/all-connectors.json",
+		"docs/connectors/catalog/all-connectors.md",
 		"internal/cli/testdata/golden_transcripts.json",
 		"website/data/connectors.generated.json",
 		"website/lib/connectors.generated.ts",
 		"website/lib/connectors.catalog.generated.ts",
-		"website/lib/connectors.catalog.data.generated.json":
+		"website/lib/connectors.catalog.data.generated.json",
+		"website/lib/docs.generated.ts":
 		return true
 	default:
 		return false
 	}
+}
+
+// connectorOwnedSharedPackageTestPath recognizes connector-specific test
+// files that live directly inside a shared package directory rather than
+// under internal/connectors/defs|hooks|native/<connector>/, following the
+// established <connector>_..._test.go naming convention (for example
+// cmd/connectorgen/xero_api_surface_test.go and
+// internal/connectors/engine/xero_operations_test.go). Only files whose name
+// is prefixed by a known connector slug qualify, so generic shared test
+// files such as main_test.go or write_test.go are unaffected.
+func connectorOwnedSharedPackageTestPath(rel string, lx lexicon) (string, bool) {
+	for _, dir := range []string{"cmd/connectorgen/", "internal/connectors/engine/"} {
+		if !strings.HasPrefix(rel, dir) {
+			continue
+		}
+		rest := strings.TrimPrefix(rel, dir)
+		if strings.Contains(rest, "/") || !strings.HasSuffix(rest, "_test.go") {
+			continue
+		}
+		base := strings.TrimSuffix(rest, "_test.go")
+		best := ""
+		for connector := range lx.byName {
+			slug := strings.ReplaceAll(connector, "-", "_")
+			if base != slug && !strings.HasPrefix(base, slug+"_") {
+				continue
+			}
+			if len(connector) > len(best) {
+				best = connector
+			}
+		}
+		if best != "" {
+			return best, true
+		}
+	}
+	return "", false
 }
 
 func ownershipFinding(rule, connector, path, match, message, remediation string) Finding {

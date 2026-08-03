@@ -35,9 +35,15 @@ Scope file contract:
 
 The `connectors` array must contain exactly one connector slug. The validator allows target
 `internal/connectors/defs/<slug>/`, target hooks/native/legacy connector paths, target generated
-connector docs/icons/manual outputs, and a narrow set of shared generated indexes/goldens. It rejects
-shared runtime/tooling, unrelated connectors, unrelated generated docs/website churn, and guardrail
-exception/config edits; use a separate foundation PR for those changes.
+connector docs/icons/manual outputs, connector-owned test files that follow the
+`<slug>_..._test.go` naming convention inside `cmd/connectorgen/` or `internal/connectors/engine/`,
+the lane's own `.planning/phases/**` GSD plan/TDD/verification artifacts, and a narrow set of shared
+generated indexes/goldens (including `docs/cli/**`, `docs/connectors/catalog/all-connectors.{json,md}`,
+and `website/lib/docs.generated.ts`). It rejects shared runtime/tooling, unrelated connectors,
+unrelated generated docs/website churn, and guardrail exception/config edits (the guard's own files
+under `internal/connectors/boundary/`, `cmd/connectorgen/ownership.go`,
+`cmd/connectorgen/ownership_test.go`, `cmd/connectorgen/boundary.go`, this doc, and required-check
+workflow files); use a separate foundation PR for those changes.
 
 ## Output and exit status
 

@@ -127,11 +127,19 @@ func TestOwnershipAllowsTargetDefinitionsFixturesDocsAndNarrowSharedOutputs(t *t
 			"internal/connectors/native/nativeset/nativeset_gen.go",
 			"docs/connectors/README.md",
 			"docs/cli/connectors.md",
+			"docs/cli/reverse.md",
 			"internal/cli/testdata/golden_transcripts.json",
 			"website/data/connectors.generated.json",
 			"website/lib/connectors.generated.ts",
 			"website/lib/connectors.catalog.generated.ts",
 			"website/lib/connectors.catalog.data.generated.json",
+			"website/lib/docs.generated.ts",
+			"docs/connectors/catalog/all-connectors.json",
+			"docs/connectors/catalog/all-connectors.md",
+			".planning/phases/issue-42-github-parity/PLAN.md",
+			".planning/phases/issue-42-github-parity/workers/issue-99/DISPOSITION.md",
+			"cmd/connectorgen/github_api_surface_test.go",
+			"internal/connectors/engine/github_operations_test.go",
 		},
 		Now: fixedNow,
 	})
@@ -141,6 +149,85 @@ func TestOwnershipAllowsTargetDefinitionsFixturesDocsAndNarrowSharedOutputs(t *t
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected clean ownership report, got %+v", report.Findings)
 	}
+}
+
+func TestOwnershipAllowsAnyPlanningPhaseArtifactRegardlessOfWorkerSubpath(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"connector-scope.json": `{"api_version":"polymetrics.ai/v1","kind":"ConnectorImplementationScope","connectors":["github"]}`,
+	})
+
+	report, err := ValidateOwnership(root, OwnershipOptions{
+		ScopeFile: "connector-scope.json",
+		ChangedPaths: []string{
+			"internal/connectors/defs/github/metadata.json",
+			".planning/phases/issue-42-github-parity/PLAN.md",
+			".planning/phases/issue-42-github-parity/TDD-LEDGER.md",
+			".planning/phases/issue-42-github-parity/VERIFICATION.md",
+			".planning/phases/issue-42-github-parity/traces/gsd-plan-phase-42.prompt.md",
+		},
+		Now: fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("ValidateOwnership: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected connector lane GSD planning artifacts to be allowed, got %+v", report.Findings)
+	}
+}
+
+func TestOwnershipNarrowsGateConfigToGuardOwnFiles(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"connector-scope.json": `{"api_version":"polymetrics.ai/v1","kind":"ConnectorImplementationScope","connectors":["github"]}`,
+	})
+
+	report, err := ValidateOwnership(root, OwnershipOptions{
+		ScopeFile: "connector-scope.json",
+		ChangedPaths: []string{
+			"internal/connectors/defs/github/metadata.json",
+			"cmd/connectorgen/github_api_surface_test.go",
+			"cmd/connectorgen/main.go",
+		},
+		Now: fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("ValidateOwnership: %v", err)
+	}
+	for _, p := range report.ChangedPaths {
+		if p.Path == "cmd/connectorgen/github_api_surface_test.go" && p.Decision != ownershipDecisionAllowed {
+			t.Fatalf("connector-owned test under cmd/connectorgen/ was not allowed: %+v", p)
+		}
+	}
+	requireOwnershipFinding(t, report, RuleOwnershipSharedPath, "github", "cmd/connectorgen/main.go")
+	for _, f := range report.Findings {
+		if f.Path == "cmd/connectorgen/main.go" && f.Rule == RuleOwnershipGateConfigEdit {
+			t.Fatalf("cmd/connectorgen/main.go should no longer be treated as guardrail tooling: %+v", f)
+		}
+	}
+}
+
+func TestOwnershipRecognizesConnectorOwnedTestInSharedEnginePackage(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"connector-scope.json": `{"api_version":"polymetrics.ai/v1","kind":"ConnectorImplementationScope","connectors":["github"]}`,
+	})
+
+	report, err := ValidateOwnership(root, OwnershipOptions{
+		ScopeFile: "connector-scope.json",
+		ChangedPaths: []string{
+			"internal/connectors/defs/github/metadata.json",
+			"internal/connectors/engine/github_operations_test.go",
+			"internal/connectors/engine/write_test.go",
+		},
+		Now: fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("ValidateOwnership: %v", err)
+	}
+	for _, p := range report.ChangedPaths {
+		if p.Path == "internal/connectors/engine/github_operations_test.go" && p.Decision != ownershipDecisionAllowed {
+			t.Fatalf("connector-prefixed test in shared engine package was not allowed: %+v", p)
+		}
+	}
+	requireOwnershipFinding(t, report, RuleOwnershipSharedPath, "github", "internal/connectors/engine/write_test.go")
 }
 
 func TestOwnershipRejectsGateConfigAndExceptionEdits(t *testing.T) {
