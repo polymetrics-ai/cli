@@ -65,7 +65,7 @@ and comments.
 - Other documented endpoints are not exposed by this connector where they are classified as
   non_data_endpoint=1, out_of_scope=6.
 - The `comments` stream calls `GET /r/{subreddit}/comments`, a route that is live and working but
-  is **not** among Reddit's documented endpoints at https://www.reddit.com/dev/api/; the only
+  is not among Reddit's documented endpoints at https://www.reddit.com/dev/api/; the only
   documented comments listing is the per-article tree `GET [/r/subreddit]/comments/{article}` (see
   `api_surface.json` for the full citation and why this connector does not migrate to it).
 - `access_token` is caller-supplied and never refreshed by this connector; Reddit bearer tokens
