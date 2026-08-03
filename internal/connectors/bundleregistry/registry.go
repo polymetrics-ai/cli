@@ -2,8 +2,9 @@ package bundleregistry
 
 import (
 	"errors"
+	"fmt"
 	"io/fs"
-	"log"
+	"os"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
@@ -43,13 +44,21 @@ func New() *connectors.Registry {
 	return registry
 }
 
+// warnf emits New's diagnostics. New takes no writer (its two callers build
+// registries far from any command's plumbing), so this writes to os.Stderr
+// directly — unprefixed, matching the rest of pm's output rather than the
+// stdlib log package's timestamped format. Tests swap it to capture output.
+var warnf = func(format string, a ...any) {
+	fmt.Fprintf(os.Stderr, format, a...)
+}
+
 func reportBundleLoadFailures(err error) {
 	var loadAll *engine.LoadAllError
 	if !errors.As(err, &loadAll) {
-		log.Printf("warning: load connector definition bundles: %v", err)
+		warnf("warning: load connector definition bundles: %v\n", err)
 		return
 	}
 	for _, failure := range loadAll.GetFailures() {
-		log.Printf("warning: connector %q omitted from the catalog: %v", failure.Name, failure.Err)
+		warnf("warning: connector %q omitted from the catalog: %v\n", failure.Name, failure.Err)
 	}
 }

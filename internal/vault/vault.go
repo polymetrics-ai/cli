@@ -2,7 +2,8 @@
 // at rest, per-project directory, zero centralized custody. Vault v2 (dual-
 // mechanism connector foundations, P0) extends the original flat
 // map[string]string store with four things the browser-auth package and the
-// -web connectors need: an OS-keychain-backed key protector (protector.go),
+// -web connectors need: a pluggable key protector including an
+// OS-keychain-backed one (protector.go, opt-in — see Init),
 // opaque blob storage alongside the credential map (namespace.go), a
 // connector/profile/kind namespace for per-account isolation (namespace.go),
 // and key rotation (rotate.go). The original flat Put/Get/Delete/Redact API
@@ -25,8 +26,8 @@ import (
 
 // Vault is an encrypted local credential store rooted at
 // <projectDir>/vault. The AES-256 data key is resolved by a KeyProtector
-// (protector.go) — the OS keychain by default, with an explicit, recorded
-// fallback to a plaintext on-disk key for hosts with no keychain.
+// (protector.go) — a plaintext on-disk key by default, or the OS keychain
+// when a caller explicitly selects it via InitWithProtector.
 type Vault struct {
 	dir           string
 	key           []byte
@@ -38,10 +39,13 @@ type Vault struct {
 // ("keychain" or "filekey").
 func (v *Vault) KeyProtection() string { return v.protector.Name() }
 
-// UsingFallbackKeyProtection reports whether this vault fell back to the
-// plaintext file key because the OS keychain was unavailable when the vault
-// was first created. Callers (e.g. `pm auth login`) should surface this as a
-// one-time warning rather than silently degrading security.
+// UsingFallbackKeyProtection reports whether this vault fell back to a later
+// protector in an explicit protector chain because an earlier one was
+// unavailable when the vault was first created. Callers (e.g. `pm auth
+// login`) should surface this as a one-time warning rather than silently
+// degrading security. It is always false for the default auto-selected path,
+// which uses the plaintext file key deliberately rather than as a fallback —
+// see Init.
 func (v *Vault) UsingFallbackKeyProtection() bool { return v.usingFallback }
 
 func (v *Vault) Put(ctx context.Context, id string, secret map[string]string) error {

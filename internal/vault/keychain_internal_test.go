@@ -101,23 +101,24 @@ func TestKeychainMigratesLegacyPathDerivedEntry(t *testing.T) {
 	}
 }
 
-// TestInitNeverReachesRealKeychainUnderGoTest proves vault.Init's
-// auto-selection short-circuits to the file key while running as a test
-// binary. Without this, every t.TempDir() project root any test in this repo
-// creates would leave a fresh, never-deleted secret in the developer's own
-// OS login keychain.
-func TestInitNeverReachesRealKeychainUnderGoTest(t *testing.T) {
-	if !testing.Testing() {
-		t.Fatal("testing.Testing() is false inside a test binary")
-	}
-
+// TestInitDefaultsToFileKeyProtector locks in the decision that the OS
+// keychain is opt-in, never auto-selected. Init (the entry point
+// app.InitProject/app.Open actually use) must resolve a brand-new vault to
+// the file key without ever reaching the host's real keychain — otherwise
+// every throwaway `pm init`, every `make smoke` run, and every t.TempDir()
+// project root a test creates would leave a fresh, never-deleted secret in
+// the operator's login keychain.
+func TestInitDefaultsToFileKeyProtector(t *testing.T) {
 	root := t.TempDir()
 	v, err := Init(root)
 	if err != nil {
 		t.Fatalf("Init: %v", err)
 	}
 	if got := v.KeyProtection(); got != (filekeyProtector{}).Name() {
-		t.Fatalf("KeyProtection() = %q, want %q under go test", got, (filekeyProtector{}).Name())
+		t.Fatalf("KeyProtection() = %q, want %q", got, (filekeyProtector{}).Name())
+	}
+	if v.UsingFallbackKeyProtection() {
+		t.Fatal("UsingFallbackKeyProtection() = true; the file key is the deliberate default, not a fallback")
 	}
 
 	marker, err := os.ReadFile(filepath.Join(root, "vault", protectorMarkerFile))
@@ -125,6 +126,34 @@ func TestInitNeverReachesRealKeychainUnderGoTest(t *testing.T) {
 		t.Fatalf("read protector marker: %v", err)
 	}
 	if string(marker) != (filekeyProtector{}).Name() {
-		t.Fatalf("protector marker = %q, want %q; auto-selection reached the real OS keychain", marker, (filekeyProtector{}).Name())
+		t.Fatalf("protector marker = %q, want %q; auto-selection reached the OS keychain", marker, (filekeyProtector{}).Name())
+	}
+	if _, err := os.Stat(filepath.Join(root, "vault", vaultIDFile)); !os.IsNotExist(err) {
+		t.Fatalf("vault/%s exists after a default Init; only KeychainProtector should mint one", vaultIDFile)
+	}
+}
+
+// TestInitReusesExplicitlySelectedKeychainProtector proves the marker-file
+// pinning still works in the other direction: a vault deliberately created
+// with KeychainProtector must keep using it on a later plain Init/Open,
+// rather than silently falling to the new file-key default.
+func TestInitReusesExplicitlySelectedKeychainProtector(t *testing.T) {
+	keyring.MockInit()
+
+	root := t.TempDir()
+	first, err := InitWithProtector(root, KeychainProtector{})
+	if err != nil {
+		t.Fatalf("InitWithProtector(KeychainProtector): %v", err)
+	}
+
+	reopened, err := Init(root)
+	if err != nil {
+		t.Fatalf("Init on a keychain-pinned vault: %v", err)
+	}
+	if got := reopened.KeyProtection(); got != (KeychainProtector{}).Name() {
+		t.Fatalf("KeyProtection() = %q, want %q; the pinning marker was ignored", got, (KeychainProtector{}).Name())
+	}
+	if string(reopened.key) != string(first.key) {
+		t.Fatal("reopened vault resolved a different key than the one it was created with")
 	}
 }
