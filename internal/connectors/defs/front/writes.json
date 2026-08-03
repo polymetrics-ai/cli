@@ -5491,6 +5491,646 @@
       },
       "risk": "high: fixed Front PATCH /views/{view_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "confirm": "destructive"
+    },
+    {
+      "name": "create_call",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels/{{ record.channel_id }}/calls",
+      "path_fields": [
+        "channel_id"
+      ],
+      "redact_fields": [
+        "channel_id"
+      ],
+      "record_schema": {
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "external_call_id": {
+            "type": "string"
+          },
+          "initial_status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "ringing"
+            ]
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "inbound",
+              "outbound"
+            ]
+          },
+          "parent_external_call_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "started_at": {
+            "type": "number"
+          },
+          "agent_email_address": {
+            "type": "string"
+          },
+          "from": {
+            "type": "object",
+            "properties": {
+              "handle": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "to": {
+            "type": "object",
+            "properties": {
+              "handle": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "channel_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /channels/{channel_id}/calls mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_call",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}",
+      "path_fields": [
+        "channel_id",
+        "external_call_id"
+      ],
+      "redact_fields": [
+        "channel_id",
+        "external_call_id"
+      ],
+      "record_schema": {
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "external_call_id": {
+            "type": "string"
+          },
+          "call_status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "ringing",
+              "connected",
+              "hold",
+              "hangup",
+              "abandoned",
+              "missed",
+              "transferred"
+            ]
+          },
+          "occurred_at": {
+            "type": "number"
+          },
+          "agent_email_address": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "channel_id",
+          "external_call_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /channels/{channel_id}/calls/{external_call_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_call_recording",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}/recording",
+      "path_fields": [
+        "channel_id",
+        "external_call_id"
+      ],
+      "redact_fields": [
+        "channel_id",
+        "external_call_id"
+      ],
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 52428800,
+        "parts": [
+          {
+            "name": "attachments",
+            "type": "file",
+            "field": "recording_file_path",
+            "required": true,
+            "max_bytes": 52428800,
+            "content_type": "audio/*"
+          },
+          {
+            "name": "recording_type",
+            "type": "field",
+            "field": "recording_type",
+            "required": true
+          }
+        ]
+      },
+      "record_schema": {
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "external_call_id": {
+            "type": "string"
+          },
+          "recording_file_path": {
+            "type": "string",
+            "description": "Project-relative path to the call recording audio file."
+          },
+          "recording_type": {
+            "type": "string",
+            "enum": [
+              "call",
+              "voicemail"
+            ]
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "channel_id",
+          "external_call_id",
+          "recording_file_path",
+          "recording_type"
+        ]
+      },
+      "risk": "high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/recording mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_call_summary",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}/summary",
+      "path_fields": [
+        "channel_id",
+        "external_call_id"
+      ],
+      "redact_fields": [
+        "channel_id",
+        "external_call_id"
+      ],
+      "record_schema": {
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "external_call_id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "channel_id",
+          "external_call_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/summary mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "add_call_transcript",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}/transcript",
+      "path_fields": [
+        "channel_id",
+        "external_call_id"
+      ],
+      "redact_fields": [
+        "channel_id",
+        "external_call_id"
+      ],
+      "record_schema": {
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "external_call_id": {
+            "type": "string"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "speaker_name",
+                "content",
+                "start_time_seconds",
+                "speaker_type"
+              ],
+              "properties": {
+                "speaker_name": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "start_time_seconds": {
+                  "type": "number"
+                },
+                "speaker_type": {
+                  "type": "string",
+                  "enum": [
+                    "internal",
+                    "external"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "channel_id",
+          "external_call_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/transcript mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "sync_application_message_template",
+      "kind": "upsert",
+      "method": "PUT",
+      "path": "/channels/{{ record.channel_id }}/application_message_templates",
+      "path_fields": [
+        "channel_id"
+      ],
+      "redact_fields": [
+        "channel_id"
+      ],
+      "record_schema": {
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "external_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "blurb": {
+            "type": "string"
+          },
+          "is_disabled": {
+            "type": "boolean"
+          },
+          "status_name": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED"
+            ]
+          },
+          "variable_mappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "uid",
+                "name",
+                "type"
+              ],
+              "properties": {
+                "uid": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "template_preview": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "channel_id"
+        ]
+      },
+      "risk": "high: fixed Front PUT /channels/{channel_id}/application_message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_application_message_template",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/channels/{{ record.channel_id }}/application_message_templates/{{ record.external_id }}",
+      "path_fields": [
+        "channel_id",
+        "external_id"
+      ],
+      "redact_fields": [
+        "channel_id",
+        "external_id"
+      ],
+      "record_schema": {
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "external_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "blurb": {
+            "type": "string"
+          },
+          "is_disabled": {
+            "type": "boolean"
+          },
+          "status_name": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED"
+            ]
+          },
+          "variable_mappings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "uid",
+                "name",
+                "type"
+              ],
+              "properties": {
+                "uid": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "template_preview": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "channel_id",
+          "external_id"
+        ]
+      },
+      "risk": "high: fixed Front PATCH /channels/{channel_id}/application_message_templates/{external_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "sync_inbound_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels/{{ record.channel_id }}/inbound_messages",
+      "path_fields": [
+        "channel_id"
+      ],
+      "redact_fields": [
+        "channel_id"
+      ],
+      "record_schema": {
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "sender": {
+            "type": "object",
+            "required": [
+              "handle"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "handle": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "required": [
+              "external_id",
+              "external_conversation_id"
+            ],
+            "properties": {
+              "external_id": {
+                "type": "string"
+              },
+              "external_conversation_id": {
+                "type": "string"
+              },
+              "referenced_message_external_id": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "delivered_at": {
+            "type": "integer"
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "channel_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /channels/{channel_id}/inbound_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "sync_outbound_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/channels/{{ record.channel_id }}/outbound_messages",
+      "path_fields": [
+        "channel_id"
+      ],
+      "redact_fields": [
+        "channel_id"
+      ],
+      "record_schema": {
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "sender_name": {
+            "type": "string"
+          },
+          "to": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "handle"
+              ],
+              "properties": {
+                "handle": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "subject": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "required": [
+              "external_id",
+              "external_conversation_id"
+            ],
+            "properties": {
+              "external_id": {
+                "type": "string"
+              },
+              "external_conversation_id": {
+                "type": "string"
+              },
+              "referenced_message_external_id": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "delivered_at": {
+            "type": "integer"
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "channel_id"
+        ]
+      },
+      "risk": "high: fixed Front POST /channels/{channel_id}/outbound_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_external_message_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/channels/{{ record.channel_id }}/conversations/{{ record.conv_ext_id }}/messages/{{ record.message_ext_id }}/status",
+      "path_fields": [
+        "channel_id",
+        "conv_ext_id",
+        "message_ext_id"
+      ],
+      "redact_fields": [
+        "channel_id",
+        "conv_ext_id",
+        "message_ext_id"
+      ],
+      "record_schema": {
+        "properties": {
+          "channel_id": {
+            "type": "string"
+          },
+          "conv_ext_id": {
+            "type": "string"
+          },
+          "message_ext_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "failed"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "channel_id",
+          "conv_ext_id",
+          "message_ext_id"
+        ]
+      },
+      "risk": "high: fixed Front PUT /channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "confirm": "destructive"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "channel_id": "fixture_channel_id",
+    "conv_ext_id": "fixture_conv_1",
+    "message_ext_id": "fixture_msg_2",
+    "status": "failed",
+    "reason": "Fixture delivery failure."
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/channels/fixture_channel_id/conversations/fixture_conv_1/messages/fixture_msg_2/status",
+    "body": {
+      "status": "failed",
+      "reason": "Fixture delivery failure."
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

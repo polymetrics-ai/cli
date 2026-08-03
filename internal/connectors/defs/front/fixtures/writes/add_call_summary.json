@@ -1,0 +1,18 @@
+{
+  "record": {
+    "channel_id": "fixture_channel_id",
+    "external_call_id": "fixture_call_1",
+    "content": "Fixture call summary."
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/channels/fixture_channel_id/calls/fixture_call_1/summary",
+    "body": {
+      "content": "Fixture call summary."
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": {}
+  }
+}

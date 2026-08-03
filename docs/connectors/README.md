@@ -177,7 +177,7 @@
 - [freshdesk](freshdesk/MANUAL.md): Reads Freshdesk tickets, contacts, companies, agents, and groups through the Freshdesk REST API v2.
 - [freshsales](freshsales/MANUAL.md): Reads Freshsales (Freshworks CRM) contacts, sales accounts, deals, and leads through the Freshsales REST API.
 - [freshservice](freshservice/MANUAL.md): Reads and writes documented Freshservice REST API v2 resources, preserving legacy ticket, agent, requester, asset, and problem stream projections.
-- [front](front/MANUAL.md): Reads Front contacts, conversations, inboxes, tags, teammates, and channels through the Front Core REST API.
+- [front](front/MANUAL.md): Reads Front Core REST API streams and exposes fixed, typed, approval-gated Front write/direct/binary operation metadata for documented API parity.
 - [fulcrum](fulcrum/MANUAL.md): Reads Fulcrum forms, records, projects, choice lists, and classification sets through the Fulcrum REST API v2.
 - [fullstory](fullstory/MANUAL.md): Reads FullStory segments, users, events, and user-scoped sessions; writes server-side user and custom event data through the FullStory Server API.
 - [gainsight-px](gainsight-px/MANUAL.md): Reads Gainsight PX accounts, users, features, and segments through the aptrinsic REST API (read-only).

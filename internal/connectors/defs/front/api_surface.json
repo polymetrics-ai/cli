@@ -1760,131 +1760,71 @@
     {
       "method": "POST",
       "path": "/channels/{channel_id}/calls/{external_call_id}/recording",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
-        "source_url": "https://dev.frontapp.com/reference/add-call-recording.md",
-        "notes": "lane=disallowed; operation_id=add-call-recording"
+      "covered_by": {
+        "write": "add_call_recording"
       }
     },
     {
       "method": "POST",
       "path": "/channels/{channel_id}/calls/{external_call_id}/summary",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
-        "source_url": "https://dev.frontapp.com/reference/add-call-summary.md",
-        "notes": "lane=disallowed; operation_id=add-call-summary"
+      "covered_by": {
+        "write": "add_call_summary"
       }
     },
     {
       "method": "POST",
       "path": "/channels/{channel_id}/calls/{external_call_id}/transcript",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
-        "source_url": "https://dev.frontapp.com/reference/add-call-transcript.md",
-        "notes": "lane=disallowed; operation_id=add-call-transcript"
+      "covered_by": {
+        "write": "add_call_transcript"
       }
     },
     {
       "method": "POST",
       "path": "/channels/{channel_id}/calls",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
-        "source_url": "https://dev.frontapp.com/reference/create-call.md",
-        "notes": "lane=disallowed; operation_id=create-call"
+      "covered_by": {
+        "write": "create_call"
       }
     },
     {
       "method": "PUT",
       "path": "/channels/{channel_id}/application_message_templates",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
-        "source_url": "https://dev.frontapp.com/reference/sync-application-message-template.md",
-        "notes": "lane=disallowed; operation_id=sync-application-message-template"
+      "covered_by": {
+        "write": "sync_application_message_template"
       }
     },
     {
       "method": "POST",
       "path": "/channels/{channel_id}/inbound_messages",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
-        "source_url": "https://dev.frontapp.com/reference/sync-inbound-message.md",
-        "notes": "lane=disallowed; operation_id=sync-inbound-message"
+      "covered_by": {
+        "write": "sync_inbound_message"
       }
     },
     {
       "method": "POST",
       "path": "/channels/{channel_id}/outbound_messages",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
-        "source_url": "https://dev.frontapp.com/reference/sync-outbound-message.md",
-        "notes": "lane=disallowed; operation_id=sync-outbound-message"
+      "covered_by": {
+        "write": "sync_outbound_message"
       }
     },
     {
       "method": "PATCH",
       "path": "/channels/{channel_id}/application_message_templates/{external_id}",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
-        "source_url": "https://dev.frontapp.com/reference/update-application-message-template.md",
-        "notes": "lane=disallowed; operation_id=update-application-message-template"
+      "covered_by": {
+        "write": "update_application_message_template"
       }
     },
     {
       "method": "PATCH",
       "path": "/channels/{channel_id}/calls/{external_call_id}",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
-        "source_url": "https://dev.frontapp.com/reference/update-call.md",
-        "notes": "lane=disallowed; operation_id=update-call"
+      "covered_by": {
+        "write": "update_call"
       }
     },
     {
       "method": "PUT",
       "path": "/channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
-        "source_url": "https://dev.frontapp.com/reference/update-external-message-status.md",
-        "notes": "lane=disallowed; operation_id=update-external-message-status"
+      "covered_by": {
+        "write": "update_external_message_status"
       }
     }
   ]

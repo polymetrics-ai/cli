@@ -268,17 +268,17 @@
         "update-time-off",
         "add-view-teammates",
         "update-view",
-        "excluded add-call-recording",
-        "excluded add-call-summary",
-        "excluded add-call-transcript",
-        "excluded create-call",
-        "excluded sync-application-message-template",
-        "excluded sync-inbound-message",
-        "excluded sync-outbound-message",
-        "excluded update-application-message-template",
-        "excluded update-call",
+        "add-call-recording",
+        "add-call-summary",
+        "add-call-transcript",
+        "create-call",
+        "sync-application-message-template",
+        "sync-inbound-message",
+        "sync-outbound-message",
+        "update-application-message-template",
+        "update-call",
         "excluded update-channel",
-        "excluded update-external-message-status"
+        "update-external-message-status"
       ]
     }
   ],
@@ -6524,7 +6524,8 @@
           "name": "columns",
           "type": "string_array",
           "summary": "Maps to request body columns.",
-          "maps_to": "body.columns"
+          "maps_to": "body.columns",
+          "required": true
         }
       ],
       "output_policy": "json_redacted",
@@ -6579,19 +6580,22 @@
           "name": "start",
           "type": "integer",
           "summary": "Maps to request body start.",
-          "maps_to": "body.start"
+          "maps_to": "body.start",
+          "required": true
         },
         {
           "name": "end",
           "type": "integer",
           "summary": "Maps to request body end.",
-          "maps_to": "body.end"
+          "maps_to": "body.end",
+          "required": true
         },
         {
           "name": "metrics",
           "type": "string_array",
           "summary": "Maps to request body metrics.",
-          "maps_to": "body.metrics"
+          "maps_to": "body.metrics",
+          "required": true
         }
       ],
       "output_policy": "json_redacted",
@@ -6791,105 +6795,6 @@
       "notes": "Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker."
     },
     {
-      "path": "excluded add-call-recording",
-      "summary": "Add call recording not-applicable surface.",
-      "intent": "reverse_etl",
-      "availability": "excluded",
-      "operation": "front.add_call_recording",
-      "source_url": "https://dev.frontapp.com/reference/add-call-recording.md",
-      "risk": "critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default",
-      "approval": "not applicable to this Core REST connector; no generic write or live execution is exposed",
-      "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
-    },
-    {
-      "path": "excluded add-call-summary",
-      "summary": "Add call summary not-applicable surface.",
-      "intent": "reverse_etl",
-      "availability": "excluded",
-      "operation": "front.add_call_summary",
-      "source_url": "https://dev.frontapp.com/reference/add-call-summary.md",
-      "risk": "critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default",
-      "approval": "not applicable to this Core REST connector; no generic write or live execution is exposed",
-      "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
-    },
-    {
-      "path": "excluded add-call-transcript",
-      "summary": "Add call transcript not-applicable surface.",
-      "intent": "reverse_etl",
-      "availability": "excluded",
-      "operation": "front.add_call_transcript",
-      "source_url": "https://dev.frontapp.com/reference/add-call-transcript.md",
-      "risk": "critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default",
-      "approval": "not applicable to this Core REST connector; no generic write or live execution is exposed",
-      "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
-    },
-    {
-      "path": "excluded create-call",
-      "summary": "Create a call not-applicable surface.",
-      "intent": "reverse_etl",
-      "availability": "excluded",
-      "operation": "front.create_call",
-      "source_url": "https://dev.frontapp.com/reference/create-call.md",
-      "risk": "critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default",
-      "approval": "not applicable to this Core REST connector; no generic write or live execution is exposed",
-      "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
-    },
-    {
-      "path": "excluded sync-application-message-template",
-      "summary": "Sync application message template not-applicable surface.",
-      "intent": "reverse_etl",
-      "availability": "excluded",
-      "operation": "front.sync_application_message_template",
-      "source_url": "https://dev.frontapp.com/reference/sync-application-message-template.md",
-      "risk": "critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default",
-      "approval": "not applicable to this Core REST connector; no generic write or live execution is exposed",
-      "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
-    },
-    {
-      "path": "excluded sync-inbound-message",
-      "summary": "Sync inbound message not-applicable surface.",
-      "intent": "reverse_etl",
-      "availability": "excluded",
-      "operation": "front.sync_inbound_message",
-      "source_url": "https://dev.frontapp.com/reference/sync-inbound-message.md",
-      "risk": "critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default",
-      "approval": "not applicable to this Core REST connector; no generic write or live execution is exposed",
-      "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
-    },
-    {
-      "path": "excluded sync-outbound-message",
-      "summary": "Sync outbound message not-applicable surface.",
-      "intent": "reverse_etl",
-      "availability": "excluded",
-      "operation": "front.sync_outbound_message",
-      "source_url": "https://dev.frontapp.com/reference/sync-outbound-message.md",
-      "risk": "critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default",
-      "approval": "not applicable to this Core REST connector; no generic write or live execution is exposed",
-      "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
-    },
-    {
-      "path": "excluded update-application-message-template",
-      "summary": "Update application message template not-applicable surface.",
-      "intent": "reverse_etl",
-      "availability": "excluded",
-      "operation": "front.update_application_message_template",
-      "source_url": "https://dev.frontapp.com/reference/update-application-message-template.md",
-      "risk": "critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default",
-      "approval": "not applicable to this Core REST connector; no generic write or live execution is exposed",
-      "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
-    },
-    {
-      "path": "excluded update-call",
-      "summary": "Update call status not-applicable surface.",
-      "intent": "reverse_etl",
-      "availability": "excluded",
-      "operation": "front.update_call",
-      "source_url": "https://dev.frontapp.com/reference/update-call.md",
-      "risk": "critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default",
-      "approval": "not applicable to this Core REST connector; no generic write or live execution is exposed",
-      "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
-    },
-    {
       "path": "excluded update-channel",
       "summary": "Update Channel not-applicable surface.",
       "intent": "reverse_etl",
@@ -6901,15 +6806,330 @@
       "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
     },
     {
-      "path": "excluded update-external-message-status",
-      "summary": "Update external message status not-applicable surface.",
+      "path": "create-call",
+      "summary": "Create a call through Front reverse ETL.",
       "intent": "reverse_etl",
-      "availability": "excluded",
-      "operation": "front.update_external_message_status",
+      "availability": "implemented",
+      "write": "create_call",
+      "source_url": "https://dev.frontapp.com/reference/create-call.md",
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Maps to record.channel_id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels/{channel_id}/calls"
+        }
+      ],
+      "risk": "high: fixed Front POST /channels/{channel_id}/calls mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+    },
+    {
+      "path": "update-call",
+      "summary": "Update call status through Front reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_call",
+      "source_url": "https://dev.frontapp.com/reference/update-call.md",
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Maps to record.channel_id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        },
+        {
+          "name": "external-call-id",
+          "type": "string",
+          "summary": "Maps to record.external_call_id.",
+          "maps_to": "record.external_call_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/channels/{channel_id}/calls/{external_call_id}"
+        }
+      ],
+      "risk": "high: fixed Front PATCH /channels/{channel_id}/calls/{external_call_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+    },
+    {
+      "path": "add-call-recording",
+      "summary": "Add call recording through Front reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_call_recording",
+      "source_url": "https://dev.frontapp.com/reference/add-call-recording.md",
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Maps to record.channel_id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        },
+        {
+          "name": "external-call-id",
+          "type": "string",
+          "summary": "Maps to record.external_call_id.",
+          "maps_to": "record.external_call_id",
+          "allow_empty": false
+        },
+        {
+          "name": "recording-file-path",
+          "type": "string",
+          "summary": "Project-relative path to the call recording audio file; maps to record.recording_file_path.",
+          "maps_to": "record.recording_file_path",
+          "allow_empty": false
+        },
+        {
+          "name": "recording-type",
+          "type": "enum",
+          "summary": "Maps to record.recording_type.",
+          "maps_to": "record.recording_type",
+          "values": [
+            "call",
+            "voicemail"
+          ]
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels/{channel_id}/calls/{external_call_id}/recording"
+        }
+      ],
+      "risk": "high: uploads a call recording from a bounded project-local file path via multipart/form-data to Front; file path/content are redacted in plans and require reverse ETL approval",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Uses typed multipart write support; no generic upload command is exposed."
+    },
+    {
+      "path": "add-call-summary",
+      "summary": "Add call summary through Front reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_call_summary",
+      "source_url": "https://dev.frontapp.com/reference/add-call-summary.md",
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Maps to record.channel_id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        },
+        {
+          "name": "external-call-id",
+          "type": "string",
+          "summary": "Maps to record.external_call_id.",
+          "maps_to": "record.external_call_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels/{channel_id}/calls/{external_call_id}/summary"
+        }
+      ],
+      "risk": "high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/summary mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+    },
+    {
+      "path": "add-call-transcript",
+      "summary": "Add call transcript through Front reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_call_transcript",
+      "source_url": "https://dev.frontapp.com/reference/add-call-transcript.md",
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Maps to record.channel_id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        },
+        {
+          "name": "external-call-id",
+          "type": "string",
+          "summary": "Maps to record.external_call_id.",
+          "maps_to": "record.external_call_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels/{channel_id}/calls/{external_call_id}/transcript"
+        }
+      ],
+      "risk": "high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/transcript mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+    },
+    {
+      "path": "sync-application-message-template",
+      "summary": "Sync application message template through Front reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sync_application_message_template",
+      "source_url": "https://dev.frontapp.com/reference/sync-application-message-template.md",
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Maps to record.channel_id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/channels/{channel_id}/application_message_templates"
+        }
+      ],
+      "risk": "high: fixed Front PUT /channels/{channel_id}/application_message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Fixed Front endpoint; requires an application-type channel per provider docs. No raw method/path/body passthrough."
+    },
+    {
+      "path": "update-application-message-template",
+      "summary": "Update application message template through Front reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_application_message_template",
+      "source_url": "https://dev.frontapp.com/reference/update-application-message-template.md",
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Maps to record.channel_id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        },
+        {
+          "name": "external-id",
+          "type": "string",
+          "summary": "Maps to record.external_id.",
+          "maps_to": "record.external_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/channels/{channel_id}/application_message_templates/{external_id}"
+        }
+      ],
+      "risk": "high: fixed Front PATCH /channels/{channel_id}/application_message_templates/{external_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Fixed Front endpoint; requires an application-type channel per provider docs. No raw method/path/body passthrough."
+    },
+    {
+      "path": "sync-inbound-message",
+      "summary": "Sync inbound message through Front reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sync_inbound_message",
+      "source_url": "https://dev.frontapp.com/reference/sync-inbound-message.md",
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Maps to record.channel_id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels/{channel_id}/inbound_messages"
+        }
+      ],
+      "risk": "high: fixed Front POST /channels/{channel_id}/inbound_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Fixed Front endpoint; no raw method/path/body passthrough. Binary attachments are not modeled (see docs.md Known limits)."
+    },
+    {
+      "path": "sync-outbound-message",
+      "summary": "Sync outbound message through Front reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sync_outbound_message",
+      "source_url": "https://dev.frontapp.com/reference/sync-outbound-message.md",
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Maps to record.channel_id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/channels/{channel_id}/outbound_messages"
+        }
+      ],
+      "risk": "high: fixed Front POST /channels/{channel_id}/outbound_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Fixed Front endpoint; no raw method/path/body passthrough. Binary attachments are not modeled (see docs.md Known limits)."
+    },
+    {
+      "path": "update-external-message-status",
+      "summary": "Update external message status through Front reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_external_message_status",
       "source_url": "https://dev.frontapp.com/reference/update-external-message-status.md",
-      "risk": "critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default",
-      "approval": "not applicable to this Core REST connector; no generic write or live execution is exposed",
-      "notes": "Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path."
+      "flags": [
+        {
+          "name": "channel-id",
+          "type": "string",
+          "summary": "Maps to record.channel_id.",
+          "maps_to": "record.channel_id",
+          "allow_empty": false
+        },
+        {
+          "name": "conv-ext-id",
+          "type": "string",
+          "summary": "Maps to record.conv_ext_id.",
+          "maps_to": "record.conv_ext_id",
+          "allow_empty": false
+        },
+        {
+          "name": "message-ext-id",
+          "type": "string",
+          "summary": "Maps to record.message_ext_id.",
+          "maps_to": "record.message_ext_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status"
+        }
+      ],
+      "risk": "high: fixed Front PUT /channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
     }
   ],
   "help_topics": [
