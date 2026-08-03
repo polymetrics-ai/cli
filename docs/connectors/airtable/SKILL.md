@@ -11,6 +11,7 @@ Reads Airtable Web API metadata, records, comments, webhooks, SCIM details, ente
 
 ## Icon
 
+- id: airtable
 - asset: icons/airtable.svg
 - source: upstream_registry
 - review_status: upstream_seeded
