@@ -61,6 +61,22 @@
             }
           },
           "record_schema": { "type": "object" },
+          "dynamic_fields": {
+            "type": "object",
+            "required": ["field", "key_pattern"],
+            "additionalProperties": false,
+            "properties": {
+              "field": { "type": "string" },
+              "key_pattern": { "type": "string" },
+              "max_keys": { "type": "integer" },
+              "value_types": {
+                "type": "array",
+                "items": { "type": "string", "enum": ["string", "number", "boolean", "null"] }
+              },
+              "max_value_bytes": { "type": "integer" },
+              "target": { "type": "string", "enum": ["inline", "nested"] }
+            }
+          },
           "delete": {
             "type": "object",
             "additionalProperties": false,

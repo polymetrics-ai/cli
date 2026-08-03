@@ -61,13 +61,28 @@ Status legend: `planned` → `RED` (failing test committed/observed) → `GREEN`
 
 | # | Test | Asserts | Status |
 | --- | --- | --- | --- |
-| 4.1 | `TestDynamicFieldsAcceptsTypedScalars` | declared region accepts scalar values under matching keys | planned |
-| 4.2 | `TestDynamicFieldsRejectsNestedValue` | object/array value is a hard error — the anti-escape-hatch invariant | planned |
-| 4.3 | `TestDynamicFieldsRejectsUnmatchedKey` | key failing `key_pattern` is refused | planned |
-| 4.4 | `TestDynamicFieldsRejectsCollision` | a key shadowing `path_fields`/`body_fields` is refused | planned |
-| 4.5 | `TestDynamicFieldsEnforcesBounds` | `max_keys` and `max_value_bytes` enforced | planned |
-| 4.6 | `TestDynamicFieldsAbsentUnchanged` | **regression guard**: no `dynamic_fields` → closed schema behaviour unchanged | planned |
-| 4.7 | `TestDynamicFieldsRedactionApplies` | `redact_fields` still redacts dynamic values | planned |
+| 4.1 | `TestDynamicFieldsAcceptsTypedScalars` | declared region accepts scalar values under matching keys; inline merge | GREEN |
+| 4.2 | `TestDynamicFieldsRejectsNestedValue` | object/array value is a hard error — the anti-escape-hatch invariant | GREEN |
+| 4.3 | `TestDynamicFieldsRejectsUnmatchedKey` | keys failing `key_pattern` refused (leading digit, dash, space, empty, overlong) | GREEN |
+| 4.4 | `TestDynamicFieldsRejectsCollision` | a key shadowing a `path_field` or an existing body key is refused | GREEN |
+| 4.5 | `TestDynamicFieldsEnforcesBounds` | `max_keys` and `max_value_bytes` enforced | GREEN |
+| 4.6 | `TestDynamicFieldsAbsentUnchanged` | **regression guard**: no `dynamic_fields` → closed schema still rejects undeclared fields | GREEN |
+| 4.7 | `TestDynamicFieldsRedactionApplies` | `redact_fields` still redacts dynamic values out of error text | GREEN |
+| 4.8 | `TestDynamicFieldsNestedTarget` | `target: nested` keeps the region under its container | GREEN |
+| 4.9 | `TestDynamicFieldsRejectsDisallowedValueType` | `value_types` is an allow-list, not a suggestion | GREEN |
+| 4.10 | `TestDynamicFieldsBundleValidation` | declaration-time rejection of 8 malformed specs; valid and absent both accepted | GREEN |
+| 4.11 | `TestWritesSchemaAcceptsDynamicFields` | `writes.schema.json` accepts the block | GREEN |
+
+**Red evidence (task 4):** package did not compile — `undefined: DynamicFieldsSpec` and `unknown
+field DynamicFields in struct literal of type WriteAction` at write_dynamic_fields_test.go lines 17,
+23, 36, 37, 235-239. **Green evidence:** `go test ./internal/connectors/engine/ -run
+'TestDynamicFields|TestWritesSchema|TestWriteAction'` → `ok`.
+
+**Caught by test 4.11, worth recording:** the first schema draft used JSON Schema `minimum`, which
+this repo's `CompileSchema` does not implement (`unknown keyword "minimum"`). Because the writes
+meta-schema is compiled at bundle load, shipping it would have broken loading for **every**
+connector, not just ones using `dynamic_fields`. Replaced with plain `integer`; the non-negative
+bound is enforced in `validateDynamicFields` instead.
 
 ## Regression guards (must stay green, unmodified)
 
