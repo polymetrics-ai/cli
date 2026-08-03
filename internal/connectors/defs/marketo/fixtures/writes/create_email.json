@@ -1,0 +1,29 @@
+{
+  "record": {
+    "folder": {
+      "id": 123,
+      "type": "Folder"
+    },
+    "fromEmail": "fromemail-fixture",
+    "fromName": "fromname-fixture",
+    "name": "name-fixture",
+    "replyEmail": "replyemail-fixture",
+    "subject": "subject-fixture",
+    "template": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/emails.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

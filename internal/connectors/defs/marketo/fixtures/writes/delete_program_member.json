@@ -1,0 +1,32 @@
+{
+  "record": {
+    "program_id": 123,
+    "input": [
+      {
+        "leadId": 123
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/programs/123/members/delete.json",
+    "body": {
+      "input": [
+        {
+          "leadId": 123
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

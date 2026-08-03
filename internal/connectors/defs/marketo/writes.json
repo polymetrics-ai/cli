@@ -14,7 +14,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -67,7 +67,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -92,7 +92,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -153,7 +153,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "fromEmail": {
@@ -250,7 +250,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "body": {
@@ -279,7 +279,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "html_id": {
@@ -366,7 +366,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "module_id": {
@@ -400,7 +400,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -429,7 +429,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -456,7 +456,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "content_id": {
@@ -535,7 +535,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "emailAddress": {
@@ -576,7 +576,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -603,7 +603,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "name": {
@@ -641,7 +641,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -674,7 +674,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -699,7 +699,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -756,7 +756,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "content": {
@@ -788,7 +788,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -817,7 +817,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -846,7 +846,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -863,7 +863,7 @@
       "kind": "create",
       "method": "POST",
       "path": "/rest/asset/v1/emailTemplates.json",
-      "body_type": "json",
+      "body_type": "multipart",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -910,7 +910,38 @@
           "content"
         ]
       },
-      "risk": "external Marketo mutation; reverse ETL plan, preview, and approval required before execute"
+      "risk": "external Marketo mutation; reverse ETL plan, preview, and approval required before execute",
+      "multipart": {
+        "max_bytes": 10485760,
+        "parts": [
+          {
+            "name": "name",
+            "type": "field",
+            "field": "name",
+            "required": true
+          },
+          {
+            "name": "folder",
+            "type": "field",
+            "field": "folder",
+            "required": true
+          },
+          {
+            "name": "description",
+            "type": "field",
+            "field": "description",
+            "required": false
+          },
+          {
+            "name": "content",
+            "type": "file",
+            "field": "content",
+            "required": true,
+            "content_type": "text/html",
+            "max_bytes": 10485760
+          }
+        ]
+      }
     },
     {
       "name": "create_email",
@@ -1002,13 +1033,13 @@
       "path_fields": [
         "id"
       ],
-      "body_type": "json",
+      "body_type": "multipart",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "content": {
@@ -1022,7 +1053,20 @@
           "content"
         ]
       },
-      "risk": "external Marketo mutation; reverse ETL plan, preview, and approval required before execute"
+      "risk": "external Marketo mutation; reverse ETL plan, preview, and approval required before execute",
+      "multipart": {
+        "max_bytes": 10485760,
+        "parts": [
+          {
+            "name": "content",
+            "type": "file",
+            "field": "content",
+            "required": true,
+            "content_type": "text/html",
+            "max_bytes": 10485760
+          }
+        ]
+      }
     },
     {
       "name": "update_content",
@@ -1032,7 +1076,7 @@
       "path_fields": [
         "id"
       ],
-      "body_type": "json",
+      "body_type": "multipart",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -1052,14 +1096,27 @@
           "file"
         ]
       },
-      "risk": "external Marketo mutation; reverse ETL plan, preview, and approval required before execute"
+      "risk": "external Marketo mutation; reverse ETL plan, preview, and approval required before execute",
+      "multipart": {
+        "max_bytes": 10485760,
+        "parts": [
+          {
+            "name": "file",
+            "type": "file",
+            "field": "file",
+            "required": true,
+            "content_type": "application/octet-stream",
+            "max_bytes": 10485760
+          }
+        ]
+      }
     },
     {
       "name": "create_file",
       "kind": "create",
       "method": "POST",
       "path": "/rest/asset/v1/files.json",
-      "body_type": "json",
+      "body_type": "multipart",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
@@ -1110,7 +1167,44 @@
           "name"
         ]
       },
-      "risk": "external Marketo mutation; reverse ETL plan, preview, and approval required before execute"
+      "risk": "external Marketo mutation; reverse ETL plan, preview, and approval required before execute",
+      "multipart": {
+        "max_bytes": 10485760,
+        "parts": [
+          {
+            "name": "name",
+            "type": "field",
+            "field": "name",
+            "required": true
+          },
+          {
+            "name": "folder",
+            "type": "field",
+            "field": "folder",
+            "required": true
+          },
+          {
+            "name": "description",
+            "type": "field",
+            "field": "description",
+            "required": false
+          },
+          {
+            "name": "insertOnly",
+            "type": "field",
+            "field": "insertOnly",
+            "required": false
+          },
+          {
+            "name": "file",
+            "type": "file",
+            "field": "file",
+            "required": true,
+            "content_type": "application/octet-stream",
+            "max_bytes": 10485760
+          }
+        ]
+      }
     },
     {
       "name": "update_folder",
@@ -1126,7 +1220,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -1169,24 +1263,13 @@
       "redact_fields": [
         "id"
       ],
-      "body_type": "multipart",
-      "multipart": {
-        "max_bytes": 10485760,
-        "parts": [
-          {
-            "name": "type",
-            "type": "field",
-            "field": "type",
-            "required": true
-          }
-        ]
-      },
+      "body_type": "form",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "type": {
@@ -1217,7 +1300,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "folderType": {
@@ -1277,7 +1360,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "folderType": {
@@ -1369,7 +1452,7 @@
         "type": "object",
         "properties": {
           "form_id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter formId."
           },
           "field_id": {
@@ -1496,7 +1579,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "customCss": {
@@ -1573,7 +1656,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -1598,7 +1681,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "name": {
@@ -1658,7 +1741,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -1687,7 +1770,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -1714,7 +1797,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "field_id": {
@@ -1833,7 +1916,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "field_id": {
@@ -1864,7 +1947,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "label": {
@@ -1901,7 +1984,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "field_set_id": {
@@ -1937,7 +2020,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "blankFields": {
@@ -2047,7 +2130,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "positions": {
@@ -2105,7 +2188,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "text": {
@@ -2135,7 +2218,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "buttonPosition": {
@@ -2176,7 +2259,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "thankyou": {
@@ -2331,7 +2414,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "customHeadHTML": {
@@ -2399,7 +2482,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -2424,7 +2507,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -2485,7 +2568,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "backgroundColor": {
@@ -2588,7 +2671,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "content_id": {
@@ -2700,7 +2783,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "content_id": {
@@ -2734,7 +2817,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -2763,7 +2846,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -2790,7 +2873,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "content_id": {
@@ -2890,7 +2973,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -2916,7 +2999,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -2953,7 +3036,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -2978,7 +3061,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -3047,7 +3130,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "content": {
@@ -3080,7 +3163,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -3109,7 +3192,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -3138,7 +3221,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -3382,7 +3465,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "hostname": {
@@ -3458,7 +3541,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -3484,7 +3567,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "costs": {
@@ -3571,7 +3654,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -3596,7 +3679,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -3655,7 +3738,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -3684,7 +3767,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -3810,7 +3893,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -3892,7 +3975,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -3920,7 +4003,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -3946,7 +4029,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -4006,7 +4089,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -4032,7 +4115,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -4069,7 +4152,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -4094,7 +4177,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "name": {
@@ -4154,7 +4237,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -4183,7 +4266,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -4210,11 +4293,11 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "segment_id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter segmentId."
           },
           "type": {
@@ -4254,7 +4337,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -4332,7 +4415,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -4358,7 +4441,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "name": {
@@ -4415,7 +4498,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           },
           "description": {
@@ -4500,7 +4583,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter id."
           }
         },
@@ -5721,7 +5804,7 @@
         "type": "object",
         "properties": {
           "campaign_id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter campaignId."
           },
           "input": {
@@ -5781,7 +5864,7 @@
         "type": "object",
         "properties": {
           "campaign_id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter campaignId."
           },
           "input": {
@@ -6780,7 +6863,7 @@
         "type": "object",
         "properties": {
           "program_id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter programId."
           },
           "statusName": {
@@ -6830,7 +6913,7 @@
         "type": "object",
         "properties": {
           "program_id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter programId."
           },
           "input": {
@@ -6912,7 +6995,7 @@
         "type": "object",
         "properties": {
           "program_id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter programId."
           },
           "input": {
@@ -7096,7 +7179,7 @@
         "type": "object",
         "properties": {
           "list_id": {
-            "type": "string",
+            "type": "integer",
             "description": "Path parameter listId."
           },
           "input": {

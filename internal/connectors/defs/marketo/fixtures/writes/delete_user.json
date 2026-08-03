@@ -1,0 +1,20 @@
+{
+  "record": {
+    "userid": "userid-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/userservice/management/v1/users/userid-fixture/delete.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "record": {
+    "api_name": "api_name-fixture",
+    "input": [
+      {
+        "name": "name-fixture",
+        "displayName": "displayname-fixture",
+        "dataType": "datatype-fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/customobjects/schema/api_name-fixture/addField.json",
+    "body": {
+      "input": [
+        {
+          "name": "name-fixture",
+          "displayName": "displayname-fixture",
+          "dataType": "datatype-fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

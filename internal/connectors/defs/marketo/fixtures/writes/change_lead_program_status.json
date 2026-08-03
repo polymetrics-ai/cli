@@ -1,0 +1,34 @@
+{
+  "record": {
+    "program_id": 123,
+    "input": [
+      {
+        "id": 123
+      }
+    ],
+    "status": "status-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/leads/programs/123/status.json",
+    "body": {
+      "input": [
+        {
+          "id": 123
+        }
+      ],
+      "status": "status-fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector marketo [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Marketo leads, programs, and activities through Marketo REST endpoints. Read-only; does not refresh OAuth tokens internally.
+  Reads Marketo REST records, exposes bounded direct reads for lookup/content endpoints, and plans typed Marketo reverse-ETL mutations from the official AdobeDocs Swagger assets.
 
 ICON
   asset: icons/marketo.svg
@@ -19,7 +19,7 @@ ICON
   review_url: https://developers.marketo.com/rest-api/
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
@@ -27,30 +27,1349 @@ AUTHENTICATION
 
 CONFIGURATION
   activity_type_ids
+  api_name
   base_url
-  max_pages
+  batch_id
+  campaign_id
+  custom_object_name
+  export_id
+  fields
+  filter_type
+  filter_values
+  folder
+  id
+  lead_id
+  list_id
   mode
-  page_size
+  next_page_token
+  program_id
+  since_datetime
+  tag_type
+  tag_value
+  type
+  userid
   access_token (secret)
 
 ETL STREAMS
-  leads:
+  get_all_channels:
     primary key: id
-    fields: createdAt(), email(), id(), updatedAt()
-  programs:
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_email_by_id:
     primary key: id
-    fields: createdAt(), id(), name(), updatedAt()
-  activities:
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_email_variables:
     primary key: id
-    fields: activityDate(), activityTypeId(), id(), leadId()
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_email_ccfields:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_template_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_email_templates:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_email_template_used_by:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_email:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_file_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_files:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_folder_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_folder_content:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_tokens_by_folder_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_folder:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_all_fields:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_all_program_member_fields:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_lp_form_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_form_field_by_form_vid:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_thank_you_page_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_browse_forms2:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_form_used_by:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_landing_page_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_variables:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_landing_page_template_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_landing_page_templates:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_browse_landing_pages:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_landing_page_redirect_rules:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_landing_page_redirect_rule_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_landing_page_domains:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_program_list_by_tag:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_program_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_smart_list_by_program_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_browse_programs:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_segmentation:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_segments_for_segmentation:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_smart_campaign_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_smart_list_by_smart_campaign_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_all_smart_campaigns_get:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_snippet_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_snippet_content_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_snippet:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_smart_list_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_smart_lists:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_static_list_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_static_lists:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_tag_types:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_export_activities:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_export_activities_status:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_import_custom_object_status:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_import_program_member_status:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_import_lead_status:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_export_leads:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_export_leads_status:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_export_custom_objects:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_export_custom_objects_status:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_export_program_members:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_export_program_members_status:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_lead_activities:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_deleted_leads:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_custom_activity_type:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_custom_activity_type:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_lead_changes:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_activities_paging_token:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_all_activity_types:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_campaigns:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_campaign_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_companies:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_list_custom_objects:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_custom_objects:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_using_get_1:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_list_custom_object_types:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_custom_object_type:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_custom_object_type_field_data_types:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_custom_object_type_linkable_objects:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_custom_object_type_dependent_assets:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_lead_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_leads_by_filter:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_using_get_2:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_using_get_6:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_lead_fields:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_program_member_fields:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_company_fields:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_opportunity_fields:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_named_account_fields:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_program_member:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_program_members:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_program_member_using_get2:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_lead_partitions:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_leads_by_program_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_list_membership:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_program_membership:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_smart_campaign_membership:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_leads_by_list_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_lists:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_list_by_id:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_leads_by_list_id_using_get_1:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_named_account_list_members:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_named_account_lists:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_named_accounts:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_using_get_3:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_opportunities:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_using_get_4:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_opportunity_roles:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_opportunity_role:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_sales_person:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_describe_using_get_5:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_daily_errors:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_last7_days_errors:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_daily_usage:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_last7_days_usage:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_users:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_roles:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_workspaces:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_user_roles_and_workspaces:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_user:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
+  get_invited_user:
+    primary key: id
+    fields: activityDate(), createdAt(), id(), leadId(), name(), pm_operation(), updatedAt()
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
+REVERSE ETL ACTIONS
+  update_email:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  approve_draft:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/approveDraft.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  clone_email:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/clone.json
+    required fields: id, folder, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_email_content:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/content.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  rearrange_modules:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/content/rearrange.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_email_component_content:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/content/{{ record.html_id }}.json
+    required fields: id, html_id, type, value
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_module:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/content/{{ record.module_id }}/delete.json
+    required fields: id, module_id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  delete_email:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  discard_draft:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/discardDraft.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_email_dynamic_content:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/dynamicContent/{{ record.content_id }}.json
+    required fields: id, content_id, type, value
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  send_sample_email:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/sendSample.json
+    required fields: id, emailAddress
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  unapprove_draft:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/unapprove.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_variable:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/variable/{{ record.name }}.json
+    required fields: id, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_email_template:
+    endpoint: POST /rest/asset/v1/emailTemplate/{{ record.id }}.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  approve_draft_using_post_1:
+    endpoint: POST /rest/asset/v1/emailTemplate/{{ record.id }}/approveDraft.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  clone_template:
+    endpoint: POST /rest/asset/v1/emailTemplate/{{ record.id }}/clone.json
+    required fields: id, folder, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_email_template_content:
+    endpoint: POST /rest/asset/v1/emailTemplate/{{ record.id }}/content.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_template:
+    endpoint: POST /rest/asset/v1/emailTemplate/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  discard_draft_using_post_1:
+    endpoint: POST /rest/asset/v1/emailTemplate/{{ record.id }}/discardDraft.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  unapprove_draft_using_post_1:
+    endpoint: POST /rest/asset/v1/emailTemplate/{{ record.id }}/unapprove.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  create_email_template:
+    endpoint: POST /rest/asset/v1/emailTemplates.json
+    required fields: name, folder, content
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_email:
+    endpoint: POST /rest/asset/v1/emails.json
+    required fields: folder, fromEmail, fromName, name, replyEmail, subject, template
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_email_full_content:
+    endpoint: POST /rest/asset/v1/email/{{ record.id }}/fullContent.json
+    required fields: id, content
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_content:
+    endpoint: POST /rest/asset/v1/file/{{ record.id }}/content.json
+    required fields: id, file
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_file:
+    endpoint: POST /rest/asset/v1/files.json
+    required fields: file, folder, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_folder:
+    endpoint: POST /rest/asset/v1/folder/{{ record.id }}.json
+    required fields: id, type
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_folder:
+    endpoint: POST /rest/asset/v1/folder/{{ record.id }}/delete.json
+    required fields: id, type
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  add_token_tofolder:
+    endpoint: POST /rest/asset/v1/folder/{{ record.id }}/tokens.json
+    required fields: id, folderType, name, type, value
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_token_by_name:
+    endpoint: POST /rest/asset/v1/folder/{{ record.id }}/tokens/delete.json
+    required fields: id, folderType, name, type
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  create_folder:
+    endpoint: POST /rest/asset/v1/folders.json
+    required fields: name, parent
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  add_form_field_visibility_rule:
+    endpoint: POST /rest/asset/v1/form/{{ record.form_id }}/field/{{ record.field_id }}/visibility.json
+    required fields: form_id, field_id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_forms:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  approve_from:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/approveDraft.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  clone_lp_forms:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/clone.json
+    required fields: id, name, folder
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_form_by_id:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  discard_form_by_id:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/discardDraft.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_form_field:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/field/{{ record.field_id }}.json
+    required fields: id, field_id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_form_field:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/field/{{ record.field_id }}/delete.json
+    required fields: id, field_id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  add_field_set:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/fieldSet.json
+    required fields: id, label
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_form_field_from_field_set:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/fieldSet/{{ record.field_set_id }}/field/{{ record.field_id }}/delete.json
+    required fields: id, field_set_id, field_id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  add_field_to_aform:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/fields.json
+    required fields: id, fieldId
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_field_positions:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/reArrange.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  add_rich_text_field:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/richText.json
+    required fields: id, text
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_form_submit_button:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/submitButton.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_thank_you_page_by_id:
+    endpoint: POST /rest/asset/v1/form/{{ record.id }}/thankYouPage.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_lp_forms:
+    endpoint: POST /rest/asset/v1/forms.json
+    required fields: folder
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_landing_page:
+    endpoint: POST /rest/asset/v1/landingPage/{{ record.id }}.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  approve_landing_page:
+    endpoint: POST /rest/asset/v1/landingPage/{{ record.id }}/approveDraft.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  clone_landing_page:
+    endpoint: POST /rest/asset/v1/landingPage/{{ record.id }}/clone.json
+    required fields: id, folder, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  add_landing_page_content:
+    endpoint: POST /rest/asset/v1/landingPage/{{ record.id }}/content.json
+    required fields: id, contentId, type
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_landing_page_content:
+    endpoint: POST /rest/asset/v1/landingPage/{{ record.id }}/content/{{ record.content_id }}.json
+    required fields: id, content_id, type
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  remove_landing_page_content:
+    endpoint: POST /rest/asset/v1/landingPage/{{ record.id }}/content/{{ record.content_id }}/delete.json
+    required fields: id, content_id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  delete_landing_page_by_id:
+    endpoint: POST /rest/asset/v1/landingPage/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  discard_landing_page_by_id:
+    endpoint: POST /rest/asset/v1/landingPage/{{ record.id }}/discardDraft.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_landing_page_dynamic_content:
+    endpoint: POST /rest/asset/v1/landingPage/{{ record.id }}/dynamicContent/{{ record.content_id }}.json
+    required fields: id, content_id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  unapprove_landing_page_by_id:
+    endpoint: POST /rest/asset/v1/landingPage/{{ record.id }}/unapprove.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_lp_template:
+    endpoint: POST /rest/asset/v1/landingPageTemplate/{{ record.id }}.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  approve_landing_page_template:
+    endpoint: POST /rest/asset/v1/landingPageTemplate/{{ record.id }}/approveDraft.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  clone_lp_template:
+    endpoint: POST /rest/asset/v1/landingPageTemplate/{{ record.id }}/clone.json
+    required fields: id, folder, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_landing_page_template_content:
+    endpoint: POST /rest/asset/v1/landingPageTemplate/{{ record.id }}/content.json
+    required fields: id, content
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_lp_template:
+    endpoint: POST /rest/asset/v1/landingPageTemplate/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  discard_draft_using_post_2:
+    endpoint: POST /rest/asset/v1/landingPageTemplate/{{ record.id }}/discardDraft.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  unapprove_landing_page_template:
+    endpoint: POST /rest/asset/v1/landingPageTemplate/{{ record.id }}/unapprove.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  create_lp_template:
+    endpoint: POST /rest/asset/v1/landingPageTemplates.json
+    required fields: folder, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_landing_page:
+    endpoint: POST /rest/asset/v1/landingPages.json
+    required fields: folder, name, template
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_landing_page_redirect_rule:
+    endpoint: POST /rest/asset/v1/redirectRules.json
+    required fields: hostname, redirectFrom, redirectTo
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_landing_page_redirect_rule:
+    endpoint: POST /rest/asset/v1/redirectRule/{{ record.id }}.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_landing_page_redirect_rule:
+    endpoint: POST /rest/asset/v1/redirectRule/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_program:
+    endpoint: POST /rest/asset/v1/program/{{ record.id }}.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  approve_program:
+    endpoint: POST /rest/asset/v1/program/{{ record.id }}/approve.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  clone_program:
+    endpoint: POST /rest/asset/v1/program/{{ record.id }}/clone.json
+    required fields: id, folder, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_program:
+    endpoint: POST /rest/asset/v1/program/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  unapprove_program:
+    endpoint: POST /rest/asset/v1/program/{{ record.id }}/unapprove.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  create_program:
+    endpoint: POST /rest/asset/v1/programs.json
+    required fields: folder, name, type, channel
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_smart_campaign:
+    endpoint: POST /rest/asset/v1/smartCampaign/{{ record.id }}.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_smart_campaign:
+    endpoint: POST /rest/asset/v1/smartCampaigns.json
+    required fields: folder, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  activate_smart_campaign:
+    endpoint: POST /rest/asset/v1/smartCampaign/{{ record.id }}/activate.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  deactivate_smart_campaign:
+    endpoint: POST /rest/asset/v1/smartCampaign/{{ record.id }}/deactivate.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  clone_smart_campaign:
+    endpoint: POST /rest/asset/v1/smartCampaign/{{ record.id }}/clone.json
+    required fields: id, folder, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_smart_campaign:
+    endpoint: POST /rest/asset/v1/smartCampaign/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_snippet:
+    endpoint: POST /rest/asset/v1/snippet/{{ record.id }}.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  approve_snippet:
+    endpoint: POST /rest/asset/v1/snippet/{{ record.id }}/approveDraft.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  clone_snippet:
+    endpoint: POST /rest/asset/v1/snippet/{{ record.id }}/clone.json
+    required fields: id, name, folder
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_snippet:
+    endpoint: POST /rest/asset/v1/snippet/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  discard_snippet:
+    endpoint: POST /rest/asset/v1/snippet/{{ record.id }}/discardDraft.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_dynamic_content:
+    endpoint: POST /rest/asset/v1/snippet/{{ record.id }}/dynamicContent/{{ record.segment_id }}.json
+    required fields: id, segment_id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  unapprove_snippet:
+    endpoint: POST /rest/asset/v1/snippet/{{ record.id }}/unapprove.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  create_snippet:
+    endpoint: POST /rest/asset/v1/snippets.json
+    required fields: folder, name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_smart_list_by_id:
+    endpoint: POST /rest/asset/v1/smartList/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  clone_smart_list:
+    endpoint: POST /rest/asset/v1/smartList/{{ record.id }}/clone.json
+    required fields: id, name, folder
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_static_list:
+    endpoint: POST /rest/asset/v1/staticList/{{ record.id }}.json
+    required fields: id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_static_list:
+    endpoint: POST /rest/asset/v1/staticLists.json
+    required fields: name, folder
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_static_list_by_id:
+    endpoint: POST /rest/asset/v1/staticList/{{ record.id }}/delete.json
+    required fields: id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  create_export_activities:
+    endpoint: POST /bulk/v1/activities/export/create.json
+    required fields: fields, filter
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  cancel_export_activities:
+    endpoint: POST /bulk/v1/activities/export/{{ record.export_id }}/cancel.json
+    required fields: export_id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  enqueue_export_activities:
+    endpoint: POST /bulk/v1/activities/export/{{ record.export_id }}/enqueue.json
+    required fields: export_id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_export_leads:
+    endpoint: POST /bulk/v1/leads/export/create.json
+    required fields: fields, filter
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  cancel_export_leads:
+    endpoint: POST /bulk/v1/leads/export/{{ record.export_id }}/cancel.json
+    required fields: export_id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  enqueue_export_leads:
+    endpoint: POST /bulk/v1/leads/export/{{ record.export_id }}/enqueue.json
+    required fields: export_id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_export_custom_objects:
+    endpoint: POST /bulk/v1/customobjects/{{ record.api_name }}/export/create.json
+    required fields: api_name, fields, filter
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  cancel_export_custom_objects:
+    endpoint: POST /bulk/v1/customobjects/{{ record.api_name }}/export/{{ record.export_id }}/cancel.json
+    required fields: api_name, export_id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  enqueue_export_custom_objects:
+    endpoint: POST /bulk/v1/customobjects/{{ record.api_name }}/export/{{ record.export_id }}/enqueue.json
+    required fields: api_name, export_id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_export_program_members:
+    endpoint: POST /bulk/v1/program/members/export/create.json
+    required fields: fields, filter
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  cancel_export_program_members:
+    endpoint: POST /bulk/v1/program/members/export/{{ record.export_id }}/cancel.json
+    required fields: export_id
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  enqueue_export_program_members:
+    endpoint: POST /bulk/v1/program/members/export/{{ record.export_id }}/enqueue.json
+    required fields: export_id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  add_custom_activity:
+    endpoint: POST /rest/v1/activities/external.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_custom_activity_type:
+    endpoint: POST /rest/v1/activities/external/type.json
+    required fields: apiName, name, triggerName, filterName, primaryAttribute
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_custom_activity_type:
+    endpoint: POST /rest/v1/activities/external/type/{{ record.api_name }}.json
+    required fields: api_name, apiName, name, triggerName, filterName, primaryAttribute
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  approve_custom_activity_type:
+    endpoint: POST /rest/v1/activities/external/type/{{ record.api_name }}/approve.json
+    required fields: api_name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_custom_activity_type_attributes:
+    endpoint: POST /rest/v1/activities/external/type/{{ record.api_name }}/attributes/create.json
+    required fields: api_name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_custom_activity_type_attributes:
+    endpoint: POST /rest/v1/activities/external/type/{{ record.api_name }}/attributes/delete.json
+    required fields: api_name, attributes
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_custom_activity_type_attributes:
+    endpoint: POST /rest/v1/activities/external/type/{{ record.api_name }}/attributes/update.json
+    required fields: api_name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_custom_activity_type:
+    endpoint: POST /rest/v1/activities/external/type/{{ record.api_name }}/delete.json
+    required fields: api_name
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  discard_draftof_custom_activity_type:
+    endpoint: POST /rest/v1/activities/external/type/{{ record.api_name }}/discardDraft.json
+    required fields: api_name
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  schedule_campaign:
+    endpoint: POST /rest/v1/campaigns/{{ record.campaign_id }}/schedule.json
+    required fields: campaign_id
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  trigger_campaign:
+    endpoint: POST /rest/v1/campaigns/{{ record.campaign_id }}/trigger.json
+    required fields: campaign_id, input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  sync_companies:
+    endpoint: POST /rest/v1/companies.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_companies:
+    endpoint: POST /rest/v1/companies/delete.json
+    required fields: input, deleteBy
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  sync_custom_objects:
+    endpoint: POST /rest/v1/customobjects/{{ record.custom_object_name }}.json
+    required fields: custom_object_name, input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_custom_objects:
+    endpoint: POST /rest/v1/customobjects/{{ record.custom_object_name }}/delete.json
+    required fields: custom_object_name, input, deleteBy
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  sync_custom_object_type:
+    endpoint: POST /rest/v1/customobjects/schema.json
+    required fields: apiName, displayName
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  approve_custom_object_type:
+    endpoint: POST /rest/v1/customobjects/schema/{{ record.api_name }}/approve.json
+    required fields: api_name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  discard_custom_object_type:
+    endpoint: POST /rest/v1/customobjects/schema/{{ record.api_name }}/discardDraft.json
+    required fields: api_name
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  delete_custom_object_type:
+    endpoint: POST /rest/v1/customobjects/schema/{{ record.api_name }}/delete.json
+    required fields: api_name
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  add_custom_object_type_fields:
+    endpoint: POST /rest/v1/customobjects/schema/{{ record.api_name }}/addField.json
+    required fields: api_name, input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_custom_object_type_fields:
+    endpoint: POST /rest/v1/customobjects/schema/{{ record.api_name }}/deleteField.json
+    required fields: api_name, input
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_custom_object_type_field:
+    endpoint: POST /rest/v1/customobjects/schema/{{ record.api_name }}/{{ record.field_api_name }}/updateField.json
+    required fields: api_name, field_api_name
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  sync_lead:
+    endpoint: POST /rest/v1/leads.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_leads:
+    endpoint: POST /rest/v1/leads/delete.json
+    required fields: input
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_lead_field:
+    endpoint: POST /rest/v1/leads/schema/fields/{{ record.field_api_name }}.json
+    required fields: field_api_name, input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_lead_field:
+    endpoint: POST /rest/v1/leads/schema/fields.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  update_program_member_field:
+    endpoint: POST /rest/v1/programs/members/schema/fields/{{ record.field_api_name }}.json
+    required fields: field_api_name, input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  create_program_member_field:
+    endpoint: POST /rest/v1/programs/members/schema/fields.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  sync_program_member_status:
+    endpoint: POST /rest/v1/programs/{{ record.program_id }}/members/status.json
+    required fields: program_id, statusName, input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_program_member:
+    endpoint: POST /rest/v1/programs/{{ record.program_id }}/members/delete.json
+    required fields: program_id, input
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_partitions:
+    endpoint: POST /rest/v1/leads/partitions.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  change_lead_program_status:
+    endpoint: POST /rest/v1/leads/programs/{{ record.program_id }}/status.json
+    required fields: program_id, input, status
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  push_to_marketo:
+    endpoint: POST /rest/v1/leads/push.json
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  submit_form:
+    endpoint: POST /rest/v1/leads/submitForm.json
+    required fields: input, formId
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  add_leads_to_list:
+    endpoint: POST /rest/v1/lists/{{ record.list_id }}/leads.json
+    required fields: list_id, input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  add_named_account_list_members:
+    endpoint: POST /rest/v1/namedAccountList/{{ record.id }}/namedAccounts.json
+    required fields: id, input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  remove_named_account_list_members:
+    endpoint: POST /rest/v1/namedAccountList/{{ record.id }}/namedAccounts/remove.json
+    required fields: id, input
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  sync_named_account_lists:
+    endpoint: POST /rest/v1/namedAccountLists.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_named_account_lists:
+    endpoint: POST /rest/v1/namedAccountLists/delete.json
+    required fields: input, deleteBy
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  sync_named_accounts:
+    endpoint: POST /rest/v1/namedaccounts.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_named_accounts:
+    endpoint: POST /rest/v1/namedaccounts/delete.json
+    required fields: input, deleteBy
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  sync_opportunities:
+    endpoint: POST /rest/v1/opportunities.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_opportunities:
+    endpoint: POST /rest/v1/opportunities/delete.json
+    required fields: input, deleteBy
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  sync_opportunity_roles:
+    endpoint: POST /rest/v1/opportunities/roles.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_opportunity_roles:
+    endpoint: POST /rest/v1/opportunities/roles/delete.json
+    required fields: input, deleteBy
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  sync_sales_persons:
+    endpoint: POST /rest/v1/salespersons.json
+    required fields: input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_sales_person:
+    endpoint: POST /rest/v1/salespersons/delete.json
+    required fields: input, deleteBy
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  invite_user:
+    endpoint: POST /userservice/management/v1/users/invite.json
+    required fields: emailAddress, firstName, lastName, userRoleWorkspaces
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_user:
+    endpoint: POST /userservice/management/v1/users/{{ record.userid }}/delete.json
+    required fields: userid
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  delete_invited_user:
+    endpoint: POST /userservice/management/v1/users/{{ record.userid }}/invite/delete.json
+    required fields: userid
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+  update_user_attribute:
+    endpoint: POST /userservice/management/v1/users/{{ record.userid }}/update.json
+    required fields: userid
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  add_roles:
+    endpoint: POST /userservice/management/v1/users/{{ record.userid }}/roles/create.json
+    required fields: userid, input
+    risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute
+  delete_roles:
+    endpoint: POST /userservice/management/v1/users/{{ record.userid }}/roles/delete.json
+    required fields: userid, input
+    risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required
+
 SECURITY
-  read risk: external Marketo REST API read of lead, program, and activity data
-  approval: none; read-only Marketo REST API
+  read risk: external Marketo REST API reads through fixture-backed ETL streams and bounded redacted direct reads
+  write risk: external Marketo mutations through typed reverse ETL only; no generic raw API command is exposed
+  approval: reverse ETL writes require plan, preview, approval token, and execute; destructive actions also require typed confirmation
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Read, inspect, and safely plan typed Marketo operations without a raw API escape hatch.
+  Usage: pm marketo <etl|direct|reverse> <operation> [flags]
+  Source CLI: Adobe Marketo Engage REST API (AdobeDocs/marketo-developer.en Swagger assets)
+  Global flags:
+    --credential (string): Credential profile name; never pass secret values as flags.
+    --connection (string): Alias for --credential.
+    --config (string_array): Connector config override as key=value; use for required Marketo path/config parameters.
+    --json (boolean): Render machine-readable JSON output.
+    --limit (integer): Maximum ETL records to emit for stream-backed commands.
+    --max-bytes (integer): Maximum direct-read response bytes; typed direct reads are capped by each operation.
+    --plan (string): Execute or preview an existing reverse-ETL plan by id.
+    --preview (boolean): Preview a reverse-ETL write command without a network mutation.
+    --approve (string): Approval token required to execute a reverse-ETL plan.
+    --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
+  Fixture-backed ETL/read streams
+    etl get-activities-paging-token - Get Paging Token as fixture-backed ETL records. [intent=etl availability=implemented stream=get_activities_paging_token]; notes: GET /rest/v1/activities/pagingtoken.json; official_lane=cdc_changefeed; operation_id=getActivitiesPagingTokenUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --since-datetime
+    etl get-all-activity-types - Get Activity Types as fixture-backed ETL records. [intent=etl availability=implemented stream=get_all_activity_types]; notes: GET /rest/v1/activities/types.json; official_lane=cdc_changefeed; operation_id=getAllActivityTypesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-all-channels - Get Channels as fixture-backed ETL records. [intent=etl availability=implemented stream=get_all_channels]; notes: GET /rest/asset/v1/channels.json; official_lane=etl_read; operation_id=getAllChannelsUsingGET; source=Marketo asset REST Swagger 2.0
+    etl get-all-fields - Get Available Form Fields as fixture-backed ETL records. [intent=etl availability=implemented stream=get_all_fields]; notes: GET /rest/asset/v1/form/fields.json; official_lane=etl_read; operation_id=getAllFieldsUsingGET; source=Marketo asset REST Swagger 2.0
+    etl get-all-program-member-fields - Get Available Form Program Member Fields as fixture-backed ETL records. [intent=etl availability=implemented stream=get_all_program_member_fields]; notes: GET /rest/asset/v1/form/programMemberFields.json; official_lane=etl_read; operation_id=getAllProgramMemberFieldsUsingGET; source=Marketo asset REST Swagger 2.0
+    etl get-all-smart-campaigns-get - Get Smart Campaigns as fixture-backed ETL records. [intent=etl availability=implemented stream=get_all_smart_campaigns_get]; notes: GET /rest/asset/v1/smartCampaigns.json; official_lane=etl_read; operation_id=getAllSmartCampaignsGET; source=Marketo asset REST Swagger 2.0; flags: --folder, --earliest-updated-at, --latest-updated-at, --is-active
+    etl get-browse-forms2 - Get Forms as fixture-backed ETL records. [intent=etl availability=implemented stream=get_browse_forms2]; notes: GET /rest/asset/v1/forms.json; official_lane=etl_read; operation_id=browseForms2UsingGET; source=Marketo asset REST Swagger 2.0; flags: --status, --folder
+    etl get-browse-landing-pages - Get Landing Pages as fixture-backed ETL records. [intent=etl availability=implemented stream=get_browse_landing_pages]; notes: GET /rest/asset/v1/landingPages.json; official_lane=etl_read; operation_id=browseLandingPagesUsingGET; source=Marketo asset REST Swagger 2.0; flags: --status, --folder
+    etl get-browse-programs - Get Programs as fixture-backed ETL records. [intent=etl availability=implemented stream=get_browse_programs]; notes: GET /rest/asset/v1/programs.json; official_lane=etl_read; operation_id=browseProgramsUsingGET; source=Marketo asset REST Swagger 2.0; flags: --filter-type, --earliest-updated-at, --latest-updated-at
+    etl get-campaign-by-id - Get Campaign By Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_campaign_by_id]; notes: GET /rest/v1/campaigns/{campaignId}.json; official_lane=etl_read; operation_id=getCampaignByIdUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): campaign_id.
+    etl get-campaigns - Get Campaigns as fixture-backed ETL records. [intent=etl availability=implemented stream=get_campaigns]; notes: GET /rest/v1/campaigns.json; official_lane=etl_read; operation_id=getCampaignsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --id, --name, --program-name, --workspace-name, --is-triggerable
+    etl get-companies - Get Companies as fixture-backed ETL records. [intent=etl availability=implemented stream=get_companies]; notes: GET /rest/v1/companies.json; official_lane=etl_read; operation_id=getCompaniesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --filter-type, --filter-values, --fields
+    etl get-company-fields - Get Company Fields as fixture-backed ETL records. [intent=etl availability=implemented stream=get_company_fields]; notes: GET /rest/v1/companies/schema/fields.json; official_lane=etl_read; operation_id=getCompanyFieldsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-custom-activity-type - Get Custom Activity Types as fixture-backed ETL records. [intent=etl availability=implemented stream=get_custom_activity_type]; notes: GET /rest/v1/activities/external/types.json; official_lane=etl_read; operation_id=getCustomActivityTypeUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-custom-object-type-dependent-assets - Get Custom Object Dependent Assets as fixture-backed ETL records. [intent=etl availability=implemented stream=get_custom_object_type_dependent_assets]; notes: GET /rest/v1/customobjects/schema/{apiName}/dependentAssets.json; official_lane=etl_read; operation_id=getCustomObjectTypeDependentAssetsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): api_name.
+    etl get-custom-object-type-field-data-types - Get Custom Object Type Field Data Types as fixture-backed ETL records. [intent=etl availability=implemented stream=get_custom_object_type_field_data_types]; notes: GET /rest/v1/customobjects/schema/fieldDataTypes.json; official_lane=etl_read; operation_id=getCustomObjectTypeFieldDataTypesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-custom-object-type-linkable-objects - Get Custom Object Linkable Objects as fixture-backed ETL records. [intent=etl availability=implemented stream=get_custom_object_type_linkable_objects]; notes: GET /rest/v1/customobjects/schema/linkableObjects.json; official_lane=etl_read; operation_id=getCustomObjectTypeLinkableObjectsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-custom-objects - Get Custom Objects as fixture-backed ETL records. [intent=etl availability=implemented stream=get_custom_objects]; notes: GET /rest/v1/customobjects/{customObjectName}.json; official_lane=etl_read; operation_id=getCustomObjectsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): custom_object_name.; flags: --filter-type, --filter-values, --fields
+    etl get-daily-errors - Get Daily Errors as fixture-backed ETL records. [intent=etl availability=implemented stream=get_daily_errors]; notes: GET /rest/v1/stats/errors.json; official_lane=etl_read; operation_id=getDailyErrorsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-daily-usage - Get Daily Usage as fixture-backed ETL records. [intent=etl availability=implemented stream=get_daily_usage]; notes: GET /rest/v1/stats/usage.json; official_lane=etl_read; operation_id=getDailyUsageUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-deleted-leads - Get Deleted Leads as fixture-backed ETL records. [intent=etl availability=implemented stream=get_deleted_leads]; notes: GET /rest/v1/activities/deletedleads.json; official_lane=cdc_changefeed; operation_id=getDeletedLeadsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires initial paging token: pass --next-page-token (or --config next_page_token=...) from get_activities_paging_token.; flags: --next-page-token
+    etl get-describe - Describe Companies as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe]; notes: GET /rest/v1/companies/describe.json; official_lane=etl_read; operation_id=describeUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-describe-custom-activity-type - Describe Custom Activity Type as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_custom_activity_type]; notes: GET /rest/v1/activities/external/type/{apiName}/describe.json; official_lane=etl_read; operation_id=describeCustomActivityTypeUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): api_name.; flags: --draft
+    etl get-describe-custom-object-type - Describe Custom Object Type as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_custom_object_type]; notes: GET /rest/v1/customobjects/schema/{apiName}/describe.json; official_lane=etl_read; operation_id=describeCustomObjectTypeUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): api_name.; flags: --state
+    etl get-describe-opportunity-role - Describe Opportunity Role as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_opportunity_role]; notes: GET /rest/v1/opportunities/roles/describe.json; official_lane=etl_read; operation_id=describeOpportunityRoleUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-describe-program-member - Describe Program Member as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_program_member]; notes: GET /rest/v1/program/members/describe.json; official_lane=etl_read; operation_id=describeProgramMemberUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-describe-program-member-using-get2 - Describe Program Member as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_program_member_using_get2]; notes: GET /rest/v1/programs/members/describe.json; official_lane=etl_read; operation_id=describeProgramMemberUsingGET2; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-describe-using-get-1 - Describe Custom Objects as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_using_get_1]; notes: GET /rest/v1/customobjects/{customObjectName}/describe.json; official_lane=etl_read; operation_id=describeUsingGET_1; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): custom_object_name.
+    etl get-describe-using-get-2 - Describe Lead as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_using_get_2]; notes: GET /rest/v1/leads/describe.json; official_lane=etl_read; operation_id=describeUsingGET_2; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-describe-using-get-3 - Describe NamedAccounts as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_using_get_3]; notes: GET /rest/v1/namedaccounts/describe.json; official_lane=etl_read; operation_id=describeUsingGET_3; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-describe-using-get-4 - Describe Opportunity as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_using_get_4]; notes: GET /rest/v1/opportunities/describe.json; official_lane=etl_read; operation_id=describeUsingGET_4; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-describe-using-get-5 - Describe SalesPersons as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_using_get_5]; notes: GET /rest/v1/salespersons/describe.json; official_lane=etl_read; operation_id=describeUsingGET_5; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-describe-using-get-6 - Describe Lead2 as fixture-backed ETL records. [intent=etl availability=implemented stream=get_describe_using_get_6]; notes: GET /rest/v1/leads/describe2.json; official_lane=etl_read; operation_id=describeUsingGET_6; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-email - Get Emails as fixture-backed ETL records. [intent=etl availability=implemented stream=get_email]; notes: GET /rest/asset/v1/emails.json; official_lane=etl_read; operation_id=getEmailUsingGET; source=Marketo asset REST Swagger 2.0; flags: --status, --folder, --earliest-updated-at, --latest-updated-at
+    etl get-email-by-id - Get Email By Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_email_by_id]; notes: GET /rest/asset/v1/email/{id}.json; official_lane=etl_read; operation_id=getEmailByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-email-ccfields - Get Email CC Fields as fixture-backed ETL records. [intent=etl availability=implemented stream=get_email_ccfields]; notes: GET /rest/asset/v1/email/ccFields.json; official_lane=etl_read; operation_id=getEmailCCFieldsUsingGET; source=Marketo asset REST Swagger 2.0
+    etl get-email-template-used-by - Get Email Template Used By as fixture-backed ETL records. [intent=etl availability=implemented stream=get_email_template_used_by]; notes: GET /rest/asset/v1/emailTemplates/{id}/usedBy.json; official_lane=etl_read; operation_id=getEmailTemplateUsedByUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.
+    etl get-email-templates - Get Email Templates as fixture-backed ETL records. [intent=etl availability=implemented stream=get_email_templates]; notes: GET /rest/asset/v1/emailTemplates.json; official_lane=etl_read; operation_id=getEmailTemplatesUsingGET; source=Marketo asset REST Swagger 2.0; flags: --status
+    etl get-email-variables - Get Email Variables as fixture-backed ETL records. [intent=etl availability=implemented stream=get_email_variables]; notes: GET /rest/asset/v1/email/{id}/variables.json; official_lane=etl_read; operation_id=getEmailVariablesUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.
+    etl get-export-activities - Get Export Activity Jobs as fixture-backed ETL records. [intent=etl availability=implemented stream=get_export_activities]; notes: GET /bulk/v1/activities/export.json; official_lane=etl_read; operation_id=getExportActivitiesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --status
+    etl get-export-activities-status - Get Export Activity Job Status as fixture-backed ETL records. [intent=etl availability=implemented stream=get_export_activities_status]; notes: GET /bulk/v1/activities/export/{exportId}/status.json; official_lane=etl_read; operation_id=getExportActivitiesStatusUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): export_id.
+    etl get-export-custom-objects - Get Export Custom Object Jobs as fixture-backed ETL records. [intent=etl availability=implemented stream=get_export_custom_objects]; notes: GET /bulk/v1/customobjects/{apiName}/export.json; official_lane=etl_read; operation_id=getExportCustomObjectsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): api_name.; flags: --status
+    etl get-export-custom-objects-status - Get Export Custom Object Job Status as fixture-backed ETL records. [intent=etl availability=implemented stream=get_export_custom_objects_status]; notes: GET /bulk/v1/customobjects/{apiName}/export/{exportId}/status.json; official_lane=etl_read; operation_id=getExportCustomObjectsStatusUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): api_name, export_id.
+    etl get-export-leads - Get Export Lead Jobs as fixture-backed ETL records. [intent=etl availability=implemented stream=get_export_leads]; notes: GET /bulk/v1/leads/export.json; official_lane=etl_read; operation_id=getExportLeadsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --status
+    etl get-export-leads-status - Get Export Lead Job Status as fixture-backed ETL records. [intent=etl availability=implemented stream=get_export_leads_status]; notes: GET /bulk/v1/leads/export/{exportId}/status.json; official_lane=etl_read; operation_id=getExportLeadsStatusUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): export_id.
+    etl get-export-program-members - Get Export Program Member Jobs as fixture-backed ETL records. [intent=etl availability=implemented stream=get_export_program_members]; notes: GET /bulk/v1/program/members/export.json; official_lane=etl_read; operation_id=getExportProgramMembersUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --status
+    etl get-export-program-members-status - Get Export Program Member Job Status as fixture-backed ETL records. [intent=etl availability=implemented stream=get_export_program_members_status]; notes: GET /bulk/v1/program/members/export/{exportId}/status.json; official_lane=etl_read; operation_id=getExportProgramMembersStatusUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): export_id.
+    etl get-file-by-id - Get File by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_file_by_id]; notes: GET /rest/asset/v1/file/{id}.json; official_lane=etl_read; operation_id=getFileByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.
+    etl get-files - Get Files as fixture-backed ETL records. [intent=etl availability=implemented stream=get_files]; notes: GET /rest/asset/v1/files.json; official_lane=etl_read; operation_id=getFilesUsingGET; source=Marketo asset REST Swagger 2.0; flags: --folder
+    etl get-folder - Get Folders as fixture-backed ETL records. [intent=etl availability=implemented stream=get_folder]; notes: GET /rest/asset/v1/folders.json; official_lane=etl_read; operation_id=getFolderUsingGET; source=Marketo asset REST Swagger 2.0; flags: --root, --max-depth, --work-space
+    etl get-folder-by-id - Get Folder by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_folder_by_id]; notes: GET /rest/asset/v1/folder/{id}.json; official_lane=etl_read; operation_id=getFolderByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --type
+    etl get-folder-content - Get Folder Contents as fixture-backed ETL records. [intent=etl availability=implemented stream=get_folder_content]; notes: GET /rest/asset/v1/folder/{id}/content.json; official_lane=etl_read; operation_id=getFolderContentUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --type
+    etl get-form-field-by-form-vid - Get Fields for Form as fixture-backed ETL records. [intent=etl availability=implemented stream=get_form_field_by_form_vid]; notes: GET /rest/asset/v1/form/{id}/fields.json; official_lane=etl_read; operation_id=getFormFieldByFormVidUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-form-used-by - Get Form Used By as fixture-backed ETL records. [intent=etl availability=implemented stream=get_form_used_by]; notes: GET /rest/asset/v1/form/{id}/usedBy.json; official_lane=etl_read; operation_id=getFormUsedByUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.
+    etl get-import-custom-object-status - Get Import Custom Object Status as fixture-backed ETL records. [intent=etl availability=implemented stream=get_import_custom_object_status]; notes: GET /bulk/v1/customobjects/{apiName}/import/{batchId}/status.json; official_lane=etl_read; operation_id=getImportCustomObjectStatusUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): api_name, batch_id.
+    etl get-import-lead-status - Get Import Lead Status as fixture-backed ETL records. [intent=etl availability=implemented stream=get_import_lead_status]; notes: GET /bulk/v1/leads/batch/{batchId}.json; official_lane=etl_read; operation_id=getImportLeadStatusUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): batch_id.
+    etl get-import-program-member-status - Get Import Program Member Status as fixture-backed ETL records. [intent=etl availability=implemented stream=get_import_program_member_status]; notes: GET /bulk/v1/program/members/import/{batchId}/status.json; official_lane=etl_read; operation_id=getImportProgramMemberStatusUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): batch_id.
+    etl get-invited-user - Get Invited User by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_invited_user]; notes: GET /userservice/management/v1/users/{userid}/invite.json; official_lane=etl_read; operation_id=getInvitedUserUsingGET; source=Marketo user management REST Swagger 2.0; Requires connector config override(s) for path parameter(s): userid.
+    etl get-landing-page-by-id - Get Landing Page by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_landing_page_by_id]; notes: GET /rest/asset/v1/landingPage/{id}.json; official_lane=etl_read; operation_id=getLandingPageByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-landing-page-domains - Get Landing Page Domains as fixture-backed ETL records. [intent=etl availability=implemented stream=get_landing_page_domains]; notes: GET /rest/asset/v1/landingPageDomains.json; official_lane=etl_read; operation_id=getLandingPageDomainsUsingGET; source=Marketo asset REST Swagger 2.0
+    etl get-landing-page-redirect-rule-by-id - Get Landing Page Redirect Rule by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_landing_page_redirect_rule_by_id]; notes: GET /rest/asset/v1/redirectRule/{id}.json; official_lane=etl_read; operation_id=getLandingPageRedirectRuleByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.
+    etl get-landing-page-redirect-rules - Get Landing Page Redirect Rules as fixture-backed ETL records. [intent=etl availability=implemented stream=get_landing_page_redirect_rules]; notes: GET /rest/asset/v1/redirectRules.json; official_lane=etl_read; operation_id=getLandingPageRedirectRulesUsingGET; source=Marketo asset REST Swagger 2.0; flags: --redirect-tolanding-page-id, --redirect-to-path, --earliest-updated-at, --latest-updated-at
+    etl get-landing-page-template-by-id - Get Landing Page Template by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_landing_page_template_by_id]; notes: GET /rest/asset/v1/landingPageTemplate/{id}.json; official_lane=etl_read; operation_id=getLandingPageTemplateByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-landing-page-templates - Get Landing Page Templates as fixture-backed ETL records. [intent=etl availability=implemented stream=get_landing_page_templates]; notes: GET /rest/asset/v1/landingPageTemplates.json; official_lane=etl_read; operation_id=getLandingPageTemplatesUsingGET; source=Marketo asset REST Swagger 2.0; flags: --status, --folder
+    etl get-last7-days-errors - Get Weekly Errors as fixture-backed ETL records. [intent=etl availability=implemented stream=get_last7_days_errors]; notes: GET /rest/v1/stats/errors/last7days.json; official_lane=etl_read; operation_id=getLast7DaysErrorsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-last7-days-usage - Get Weekly Usage as fixture-backed ETL records. [intent=etl availability=implemented stream=get_last7_days_usage]; notes: GET /rest/v1/stats/usage/last7days.json; official_lane=etl_read; operation_id=getLast7DaysUsageUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-lead-activities - Get Lead Activities as fixture-backed ETL records. [intent=etl availability=implemented stream=get_lead_activities]; notes: GET /rest/v1/activities.json; official_lane=cdc_changefeed; operation_id=getLeadActivitiesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires initial paging token: pass --next-page-token (or --config next_page_token=...) from get_activities_paging_token.; flags: --next-page-token, --activity-type-ids, --asset-ids, --list-id, --lead-ids
+    etl get-lead-by-id - Get Lead by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_lead_by_id]; notes: GET /rest/v1/lead/{leadId}.json; official_lane=etl_read; operation_id=getLeadByIdUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): lead_id.; flags: --fields
+    etl get-lead-changes - Get Lead Changes as fixture-backed ETL records. [intent=etl availability=implemented stream=get_lead_changes]; notes: GET /rest/v1/activities/leadchanges.json; official_lane=cdc_changefeed; operation_id=getLeadChangesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires initial paging token: pass --next-page-token (or --config next_page_token=...) from get_activities_paging_token.; flags: --next-page-token, --fields, --list-id, --lead-ids
+    etl get-lead-fields - Get Lead Fields as fixture-backed ETL records. [intent=etl availability=implemented stream=get_lead_fields]; notes: GET /rest/v1/leads/schema/fields.json; official_lane=etl_read; operation_id=getLeadFieldsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-lead-partitions - Get Lead Partitions as fixture-backed ETL records. [intent=etl availability=implemented stream=get_lead_partitions]; notes: GET /rest/v1/leads/partitions.json; official_lane=etl_read; operation_id=getLeadPartitionsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-leads-by-filter - Get Leads by Filter Type as fixture-backed ETL records. [intent=etl availability=implemented stream=get_leads_by_filter]; notes: GET /rest/v1/leads.json; official_lane=etl_read; operation_id=getLeadsByFilterUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --filter-type, --filter-values, --fields
+    etl get-leads-by-list-id - Get Leads By List Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_leads_by_list_id]; notes: GET /rest/v1/list/{listId}/leads.json; official_lane=etl_read; operation_id=getLeadsByListIdUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): list_id.; flags: --fields
+    etl get-leads-by-list-id-using-get-1 - Get Leads By List Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_leads_by_list_id_using_get_1]; notes: GET /rest/v1/lists/{listId}/leads.json; official_lane=etl_read; operation_id=getLeadsByListIdUsingGET_1; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): list_id.; flags: --fields
+    etl get-leads-by-program-id - Get Leads by Program Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_leads_by_program_id]; notes: GET /rest/v1/leads/programs/{programId}.json; official_lane=etl_read; operation_id=getLeadsByProgramIdUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): program_id.; flags: --fields
+    etl get-list-by-id - Get List by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_list_by_id]; notes: GET /rest/v1/lists/{listId}.json; official_lane=etl_read; operation_id=getListByIdUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): list_id.
+    etl get-list-custom-object-types - List Custom Object Types as fixture-backed ETL records. [intent=etl availability=implemented stream=get_list_custom_object_types]; notes: GET /rest/v1/customobjects/schema.json; official_lane=etl_read; operation_id=listCustomObjectTypesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --names, --state
+    etl get-list-custom-objects - List Custom Objects as fixture-backed ETL records. [intent=etl availability=implemented stream=get_list_custom_objects]; notes: GET /rest/v1/customobjects.json; official_lane=etl_read; operation_id=listCustomObjectsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --names
+    etl get-list-membership - Get Lists by Lead Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_list_membership]; notes: GET /rest/v1/leads/{leadId}/listMembership.json; official_lane=etl_read; operation_id=getListMembershipUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): lead_id.
+    etl get-lists - Get Lists as fixture-backed ETL records. [intent=etl availability=implemented stream=get_lists]; notes: GET /rest/v1/lists.json; official_lane=etl_read; operation_id=getListsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --id, --name, --program-name, --workspace-name
+    etl get-lp-form-by-id - Get Form By Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_lp_form_by_id]; notes: GET /rest/asset/v1/form/{id}.json; official_lane=etl_read; operation_id=getLpFormByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-named-account-fields - Get Named Account Fields as fixture-backed ETL records. [intent=etl availability=implemented stream=get_named_account_fields]; notes: GET /rest/v1/namedaccounts/schema/fields.json; official_lane=etl_read; operation_id=getNamedAccountFieldsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-named-account-list-members - Get Named Account List Members as fixture-backed ETL records. [intent=etl availability=implemented stream=get_named_account_list_members]; notes: GET /rest/v1/namedAccountList/{id}/namedAccounts.json; official_lane=etl_read; operation_id=getNamedAccountListMembersUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --fields
+    etl get-named-account-lists - Get Named Account Lists as fixture-backed ETL records. [intent=etl availability=implemented stream=get_named_account_lists]; notes: GET /rest/v1/namedAccountLists.json; official_lane=etl_read; operation_id=getNamedAccountListsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --filter-type, --filter-values
+    etl get-named-accounts - Get NamedAccounts as fixture-backed ETL records. [intent=etl availability=implemented stream=get_named_accounts]; notes: GET /rest/v1/namedaccounts.json; official_lane=etl_read; operation_id=getNamedAccountsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --filter-type, --filter-values, --fields
+    etl get-opportunities - Get Opportunities as fixture-backed ETL records. [intent=etl availability=implemented stream=get_opportunities]; notes: GET /rest/v1/opportunities.json; official_lane=etl_read; operation_id=getOpportunitiesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --filter-type, --filter-values, --fields
+    etl get-opportunity-fields - Get Opportunity Fields as fixture-backed ETL records. [intent=etl availability=implemented stream=get_opportunity_fields]; notes: GET /rest/v1/opportunities/schema/fields.json; official_lane=etl_read; operation_id=getOpportunityFieldsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-opportunity-roles - Get Opportunity Roles as fixture-backed ETL records. [intent=etl availability=implemented stream=get_opportunity_roles]; notes: GET /rest/v1/opportunities/roles.json; official_lane=etl_read; operation_id=getOpportunityRolesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --filter-type, --filter-values, --fields
+    etl get-program-by-id - Get Program by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_program_by_id]; notes: GET /rest/asset/v1/program/{id}.json; official_lane=etl_read; operation_id=getProgramByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.
+    etl get-program-list-by-tag - Get Programs by Tag as fixture-backed ETL records. [intent=etl availability=implemented stream=get_program_list_by_tag]; notes: GET /rest/asset/v1/program/byTag.json; official_lane=etl_read; operation_id=getProgramListByTagUsingGET; source=Marketo asset REST Swagger 2.0; flags: --tag-type, --tag-value
+    etl get-program-member-fields - Get Program Member Fields as fixture-backed ETL records. [intent=etl availability=implemented stream=get_program_member_fields]; notes: GET /rest/v1/programs/members/schema/fields.json; official_lane=etl_read; operation_id=getProgramMemberFieldsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0
+    etl get-program-members - Get Program Members as fixture-backed ETL records. [intent=etl availability=implemented stream=get_program_members]; notes: GET /rest/v1/programs/{programId}/members.json; official_lane=etl_read; operation_id=getProgramMembersUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): program_id.; flags: --filter-type, --filter-values, --start-at, --end-at, --fields
+    etl get-program-membership - Get Programs by Lead Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_program_membership]; notes: GET /rest/v1/leads/{leadId}/programMembership.json; official_lane=etl_read; operation_id=getProgramMembershipUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): lead_id.; flags: --earliest-updated-at, --latest-updated-at, --filter-type, --filter-values
+    etl get-roles - Get Roles as fixture-backed ETL records. [intent=etl availability=implemented stream=get_roles]; notes: GET /userservice/management/v1/users/roles.json; official_lane=etl_read; operation_id=getRolesUsingGET; source=Marketo user management REST Swagger 2.0
+    etl get-sales-person - Get SalesPersons as fixture-backed ETL records. [intent=etl availability=implemented stream=get_sales_person]; notes: GET /rest/v1/salespersons.json; official_lane=etl_read; operation_id=getSalesPersonUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; flags: --filter-type, --filter-values, --fields
+    etl get-segmentation - Get Segmentations as fixture-backed ETL records. [intent=etl availability=implemented stream=get_segmentation]; notes: GET /rest/asset/v1/segmentation.json; official_lane=etl_read; operation_id=getSegmentationUsingGET; source=Marketo asset REST Swagger 2.0; flags: --status
+    etl get-segments-for-segmentation - Get Segments For Segmentation as fixture-backed ETL records. [intent=etl availability=implemented stream=get_segments_for_segmentation]; notes: GET /rest/asset/v1/segmentation/{id}/segments.json; official_lane=etl_read; operation_id=getSegmentsForSegmentationUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-smart-campaign-by-id - Get Smart Campaign by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_smart_campaign_by_id]; notes: GET /rest/asset/v1/smartCampaign/{id}.json; official_lane=etl_read; operation_id=getSmartCampaignByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.
+    etl get-smart-campaign-membership - Get Smart Campaigns by Lead Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_smart_campaign_membership]; notes: GET /rest/v1/leads/{leadId}/smartCampaignMembership.json; official_lane=etl_read; operation_id=getSmartCampaignMembershipUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires connector config override(s) for path parameter(s): lead_id.; flags: --earliest-updated-at, --latest-updated-at
+    etl get-smart-list-by-id - Get Smart List by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_smart_list_by_id]; notes: GET /rest/asset/v1/smartList/{id}.json; official_lane=etl_read; operation_id=getSmartListByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --include-rules
+    etl get-smart-list-by-program-id - Get Smart List by Program Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_smart_list_by_program_id]; notes: GET /rest/asset/v1/program/{programId}/smartList.json; official_lane=etl_read; operation_id=getSmartListByProgramIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): program_id.; flags: --include-rules
+    etl get-smart-list-by-smart-campaign-id - Get Smart List by Smart Campaign Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_smart_list_by_smart_campaign_id]; notes: GET /rest/asset/v1/smartCampaign/{id}/smartList.json; official_lane=etl_read; operation_id=getSmartListBySmartCampaignIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --include-rules
+    etl get-smart-lists - Get Smart Lists as fixture-backed ETL records. [intent=etl availability=implemented stream=get_smart_lists]; notes: GET /rest/asset/v1/smartLists.json; official_lane=etl_read; operation_id=getSmartListsUsingGET; source=Marketo asset REST Swagger 2.0; flags: --folder, --earliest-updated-at, --latest-updated-at
+    etl get-snippet - Get Snippets as fixture-backed ETL records. [intent=etl availability=implemented stream=get_snippet]; notes: GET /rest/asset/v1/snippets.json; official_lane=etl_read; operation_id=getSnippetUsingGET; source=Marketo asset REST Swagger 2.0; flags: --status
+    etl get-snippet-by-id - Get Snippet by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_snippet_by_id]; notes: GET /rest/asset/v1/snippet/{id}.json; official_lane=etl_read; operation_id=getSnippetByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-snippet-content-by-id - Get Snippet Content as fixture-backed ETL records. [intent=etl availability=implemented stream=get_snippet_content_by_id]; notes: GET /rest/asset/v1/snippet/{id}/content.json; official_lane=etl_read; operation_id=getSnippetContentByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-static-list-by-id - Get Static List by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_static_list_by_id]; notes: GET /rest/asset/v1/staticList/{id}.json; official_lane=etl_read; operation_id=getStaticListByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.
+    etl get-static-lists - Get Static Lists as fixture-backed ETL records. [intent=etl availability=implemented stream=get_static_lists]; notes: GET /rest/asset/v1/staticLists.json; official_lane=etl_read; operation_id=getStaticListsUsingGET; source=Marketo asset REST Swagger 2.0; flags: --folder, --earliest-updated-at, --latest-updated-at
+    etl get-tag-types - Get Tag Types as fixture-backed ETL records. [intent=etl availability=implemented stream=get_tag_types]; notes: GET /rest/asset/v1/tagTypes.json; official_lane=etl_read; operation_id=getTagTypesUsingGET; source=Marketo asset REST Swagger 2.0
+    etl get-template-by-id - Get Email Template by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_template_by_id]; notes: GET /rest/asset/v1/emailTemplate/{id}.json; official_lane=etl_read; operation_id=getTemplateByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-thank-you-page-by-id - Get Thank You Page by Form Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_thank_you_page_by_id]; notes: GET /rest/asset/v1/form/{id}/thankYouPage.json; official_lane=etl_read; operation_id=getThankYouPageByIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-tokens-by-folder-id - Get Tokens by Folder Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_tokens_by_folder_id]; notes: GET /rest/asset/v1/folder/{id}/tokens.json; official_lane=etl_read; operation_id=getTokensByFolderIdUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --folder-type
+    etl get-user - Get User by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_user]; notes: GET /userservice/management/v1/users/{userid}/user.json; official_lane=etl_read; operation_id=getUserUsingGET; source=Marketo user management REST Swagger 2.0; Requires connector config override(s) for path parameter(s): userid.
+    etl get-user-roles-and-workspaces - Get Roles and Workspaces by Id as fixture-backed ETL records. [intent=etl availability=implemented stream=get_user_roles_and_workspaces]; notes: GET /userservice/management/v1/users/{userid}/roles.json; official_lane=etl_read; operation_id=getUserRolesAndWorkspacesUsingGET; source=Marketo user management REST Swagger 2.0; Requires connector config override(s) for path parameter(s): userid.
+    etl get-users - Get Users as fixture-backed ETL records. [intent=etl availability=implemented stream=get_users]; notes: GET /userservice/management/v1/users/allusers.json; official_lane=etl_read; operation_id=getUsersUsingGET; source=Marketo user management REST Swagger 2.0
+    etl get-variables - Get Landing Page Variables as fixture-backed ETL records. [intent=etl availability=implemented stream=get_variables]; notes: GET /rest/asset/v1/landingPage/{id}/variables.json; official_lane=etl_read; operation_id=getVariablesUsingGET; source=Marketo asset REST Swagger 2.0; Requires connector config override(s) for path parameter(s): id.; flags: --status
+    etl get-workspaces - Get Workspaces as fixture-backed ETL records. [intent=etl availability=implemented stream=get_workspaces]; notes: GET /userservice/management/v1/users/workspaces.json; official_lane=etl_read; operation_id=getWorkspacesUsingGET; source=Marketo user management REST Swagger 2.0
+  Bounded direct/provider lookup reads
+    direct get-are-leads-member-of-list - Member of List [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/v1/lists/{listId}/leads/ismember.json; official_lane=direct_read_query_search; operation_id=areLeadsMemberOfListUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --list-id.; flags: --list-id, --id
+    direct get-channel-by-name - Get Channel by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/channel/byName.json; official_lane=direct_read_query_search; operation_id=getChannelByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name
+    direct get-company-field-by-name - Get Company Field by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/v1/companies/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getCompanyFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name.; flags: --field-api-name
+    direct get-dynamic-content - Get Dynamic Content [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/snippet/{id}/dynamicContent.json; official_lane=direct_read_query_search; operation_id=getDynamicContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.; flags: --id, --status
+    direct get-email-by-name - Get Email by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/email/byName.json; official_lane=direct_read_query_search; operation_id=getEmailByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name, --status, --folder
+    direct get-email-content-by-id - Get Email Content [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/email/{id}/content.json; official_lane=direct_read_query_search; operation_id=getEmailContentByIdUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.; flags: --id, --status
+    direct get-email-dynamic-content - Get Email Dynamic Content [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/email/{id}/dynamicContent/{contentId}.json; official_lane=direct_read_query_search; operation_id=getEmailDynamicContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id, --content-id.; flags: --id, --content-id, --status
+    direct get-email-full-content - Get Email Full Content [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/email/{id}/fullContent.json; official_lane=direct_read_query_search; operation_id=getEmailFullContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.; flags: --id, --status, --lead-id, --type
+    direct get-file-by-name - Get File by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/file/byName.json; official_lane=direct_read_query_search; operation_id=getFileByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name
+    direct get-folder-by-name - Get Folder by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/folder/byName.json; official_lane=direct_read_query_search; operation_id=getFolderByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name, --type, --root, --work-space
+    direct get-landing-page-by-name - Get Landing Page by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/landingPage/byName.json; official_lane=direct_read_query_search; operation_id=getLandingPageByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name, --status, --max-return, --offset
+    direct get-landing-page-content - Get Landing Page Content [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/landingPage/{id}/content.json; official_lane=direct_read_query_search; operation_id=getLandingPageContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.; flags: --id, --status
+    direct get-landing-page-dynamic-contents - Get Landing Page Dynamic Content [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/landingPage/{id}/dynamicContent/{contentId}.json; official_lane=direct_read_query_search; operation_id=getLandingPageDynamicContentsUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id, --content-id.; flags: --id, --content-id
+    direct get-landing-page-full-content - Get Landing Page Full Content [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/landingPage/{id}/fullContent.json; official_lane=direct_read_query_search; operation_id=getLandingPageFullContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.; flags: --id, --lead-id, --segmentation
+    direct get-landing-page-template-by-name - Get Landing Page Template by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/landingPageTemplate/byName.json; official_lane=direct_read_query_search; operation_id=getLandingPageTemplateByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name
+    direct get-landing-page-template-content - Get Landing Page Template Content [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/landingPageTemplate/{id}/content.json; official_lane=direct_read_query_search; operation_id=getLandingPageTemplateContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.; flags: --id, --status
+    direct get-lead-field-by-name - Get Lead Field by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/v1/leads/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getLeadFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name.; flags: --field-api-name
+    direct get-lp-form-by-name - Get Form by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/form/byName.json; official_lane=direct_read_query_search; operation_id=getLpFormByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name, --status, --folder
+    direct get-named-account-field-by-name - Get Named Account Field by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/v1/namedaccounts/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getNamedAccountFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name.; flags: --field-api-name
+    direct get-opportunity-field-by-name - Get Opportunity Field by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/v1/opportunities/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getOpportunityFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name.; flags: --field-api-name
+    direct get-program-by-name - Get Program by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/program/byName.json; official_lane=direct_read_query_search; operation_id=getProgramByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name, --include-tags, --include-costs
+    direct get-program-member-field-by-name - Get Program Member Field by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/v1/programs/members/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getProgramMemberFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name.; flags: --field-api-name
+    direct get-smart-campaign-by-name - Get Smart Campaign by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/smartCampaign/byName.json; official_lane=direct_read_query_search; operation_id=getSmartCampaignByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name
+    direct get-smart-list-by-name - Get Smart List by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/smartList/byName.json; official_lane=direct_read_query_search; operation_id=getSmartListByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name
+    direct get-static-list-by-name - Get Static List by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/staticList/byName.json; official_lane=direct_read_query_search; operation_id=getStaticListByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name
+    direct get-tag-by-name - Get Tag By Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/tagType/byName.json; official_lane=direct_read_query_search; operation_id=getTagByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name
+    direct get-template-by-name - Get Email Template by Name [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/emailTemplate/byName.json; official_lane=direct_read_query_search; operation_id=getTemplateByNameUsingGET; fixed typed endpoint, not raw API.; flags: --name, --status
+    direct get-template-content-by-id - Get Email Template Content by Id [intent=direct_read availability=implemented]; approval: none; risk: medium; notes: GET /rest/asset/v1/emailTemplate/{id}/content; official_lane=direct_read_query_search; operation_id=getTemplateContentByIdUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.; flags: --id, --status
+  Typed reverse-ETL writes
+    reverse activate-smart-campaign - Activate Smart Campaign [intent=reverse_etl availability=implemented write=activate_smart_campaign]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/smartCampaign/{id}/activate.json; official_lane=reverse_etl_write; operation_id=activateSmartCampaignUsingPOST; typed action with closed record schema.; flags: --id
+    reverse add-custom-activity - Add Custom Activities [intent=reverse_etl availability=implemented write=add_custom_activity]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/activities/external.json; official_lane=reverse_etl_write; operation_id=addCustomActivityUsingPOST; typed action with closed record schema.; flags: --input-0-activity-date, --input-0-activity-type-id, --input-0-attributes-0-name, --input-0-attributes-0-value, --input-0-lead-id, --input-0-primary-attribute-value
+    reverse add-custom-object-type-fields - Add Custom Object Type Fields [intent=reverse_etl availability=implemented write=add_custom_object_type_fields]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/customobjects/schema/{apiName}/addField.json; official_lane=reverse_etl_write; operation_id=addCustomObjectTypeFieldsUsingPOST; typed action with closed record schema.; flags: --api-name, --input-0-name, --input-0-display-name, --input-0-data-type
+    reverse add-field-set - Add Fieldset to Form [intent=reverse_etl availability=implemented write=add_field_set]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{id}/fieldSet.json; official_lane=reverse_etl_write; operation_id=addFieldSetUsingPOST; typed action with closed record schema.; flags: --id, --label
+    reverse add-field-to-aform - Add Field to Form [intent=reverse_etl availability=implemented write=add_field_to_aform]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{id}/fields.json; official_lane=reverse_etl_write; operation_id=addFieldToAFormUsingPOST; typed action with closed record schema.; flags: --id, --field-id, --blank-fields, --default-value, --field-width, --form-prefill, --is-sensitive, --hint-text, --initially-checked, --instructions, --label, --label-to-right, --label-width, --mask-input, --max-length, --max-value, --min-value, --multi-select, --required, --validation-message, --values, --visible-lines
+    reverse add-form-field-visibility-rule - Add Form Field Visibility Rules [intent=reverse_etl availability=implemented write=add_form_field_visibility_rule]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{formId}/field/{fieldId}/visibility.json; official_lane=reverse_etl_write; operation_id=addFormFieldVisibilityRuleUsingPOST; typed action with closed record schema.; flags: --form-id, --field-id
+    reverse add-landing-page-content - Add Landing Page Content Section [intent=reverse_etl availability=implemented write=add_landing_page_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPage/{id}/content.json; official_lane=reverse_etl_write; operation_id=addLandingPageContentUsingPOST; typed action with closed record schema.; flags: --id, --content-id, --type, --background-color, --border-color, --border-style, --border-width, --height, --hide-desktop, --hide-mobile, --image-open-new-window, --left, --link-url, --opacity, --top, --value, --width, --z-index
+    reverse add-leads-to-list - Add to List [intent=reverse_etl availability=implemented write=add_leads_to_list]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/lists/{listId}/leads.json; official_lane=reverse_etl_write; operation_id=addLeadsToListUsingPOST; typed action with closed record schema.; flags: --list-id, --input-0-id
+    reverse add-named-account-list-members - Add Named Account List Members [intent=reverse_etl availability=implemented write=add_named_account_list_members]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/namedAccountList/{id}/namedAccounts.json; official_lane=reverse_etl_write; operation_id=addNamedAccountListMembersUsingPOST; typed action with closed record schema.; flags: --id, --input-0-marketo-guid
+    reverse add-rich-text-field - Add Rich Text Field [intent=reverse_etl availability=implemented write=add_rich_text_field]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{id}/richText.json; official_lane=reverse_etl_write; operation_id=addRichTextFieldUsingPOST; typed action with closed record schema.; flags: --id, --text
+    reverse add-roles - Add Roles [intent=reverse_etl availability=implemented write=add_roles]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /userservice/management/v1/users/{userid}/roles/create.json; official_lane=reverse_etl_write; operation_id=addRolesUsingPOST; typed action with closed record schema.; flags: --userid, --input-0-access-role-id, --input-0-workspace-id
+    reverse add-token-tofolder - Create Token [intent=reverse_etl availability=implemented write=add_token_tofolder]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/folder/{id}/tokens.json; official_lane=reverse_etl_write; operation_id=addTokenTOFolderUsingPOST; typed action with closed record schema.; flags: --id, --folder-type, --name, --type, --value
+    reverse approve-custom-activity-type - Approve Custom Activity Type [intent=reverse_etl availability=implemented write=approve_custom_activity_type]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/activities/external/type/{apiName}/approve.json; official_lane=reverse_etl_write; operation_id=approveCustomActivityTypeUsingPOST; typed action with closed record schema.; flags: --api-name
+    reverse approve-custom-object-type - Approve Custom Object Type [intent=reverse_etl availability=implemented write=approve_custom_object_type]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/customobjects/schema/{apiName}/approve.json; official_lane=reverse_etl_write; operation_id=approveCustomObjectTypeUsingPOST; typed action with closed record schema.; flags: --api-name
+    reverse approve-draft - Approve Email Draft [intent=reverse_etl availability=implemented write=approve_draft]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/email/{id}/approveDraft.json; official_lane=reverse_etl_write; operation_id=approveDraftUsingPOST; typed action with closed record schema.; flags: --id
+    reverse approve-draft-using-post-1 - Approve Email Template Draft [intent=reverse_etl availability=implemented write=approve_draft_using_post_1]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/emailTemplate/{id}/approveDraft.json; official_lane=reverse_etl_write; operation_id=approveDraftUsingPOST_1; typed action with closed record schema.; flags: --id
+    reverse approve-from - Approve Form Draft [intent=reverse_etl availability=implemented write=approve_from]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{id}/approveDraft.json; official_lane=reverse_etl_write; operation_id=approveFromUsingPOST; typed action with closed record schema.; flags: --id
+    reverse approve-landing-page - Approve Landing Page Draft [intent=reverse_etl availability=implemented write=approve_landing_page]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPage/{id}/approveDraft.json; official_lane=reverse_etl_write; operation_id=approveLandingPageUsingPOST; typed action with closed record schema.; flags: --id
+    reverse approve-landing-page-template - Approve Landing Page Template Draft [intent=reverse_etl availability=implemented write=approve_landing_page_template]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPageTemplate/{id}/approveDraft.json; official_lane=reverse_etl_write; operation_id=approveLandingPageTemplateUsingPOST; typed action with closed record schema.; flags: --id
+    reverse approve-program - Approve Program [intent=reverse_etl availability=implemented write=approve_program]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/program/{id}/approve.json; official_lane=reverse_etl_write; operation_id=approveProgramUsingPOST; typed action with closed record schema.; flags: --id
+    reverse approve-snippet - Approve Snippet Draft [intent=reverse_etl availability=implemented write=approve_snippet]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/snippet/{id}/approveDraft.json; official_lane=reverse_etl_write; operation_id=approveSnippetUsingPOST; typed action with closed record schema.; flags: --id
+    reverse cancel-export-activities - Cancel Export Activity Job [intent=reverse_etl availability=implemented write=cancel_export_activities]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /bulk/v1/activities/export/{exportId}/cancel.json; official_lane=reverse_etl_write; operation_id=cancelExportActivitiesUsingPOST; typed action with closed record schema.; flags: --export-id
+    reverse cancel-export-custom-objects - Cancel Export Custom Object Job [intent=reverse_etl availability=implemented write=cancel_export_custom_objects]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /bulk/v1/customobjects/{apiName}/export/{exportId}/cancel.json; official_lane=reverse_etl_write; operation_id=cancelExportCustomObjectsUsingPOST; typed action with closed record schema.; flags: --api-name, --export-id
+    reverse cancel-export-leads - Cancel Export Lead Job [intent=reverse_etl availability=implemented write=cancel_export_leads]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /bulk/v1/leads/export/{exportId}/cancel.json; official_lane=reverse_etl_write; operation_id=cancelExportLeadsUsingPOST; typed action with closed record schema.; flags: --export-id
+    reverse cancel-export-program-members - Cancel Export Program Member Job [intent=reverse_etl availability=implemented write=cancel_export_program_members]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /bulk/v1/program/members/export/{exportId}/cancel.json; official_lane=reverse_etl_write; operation_id=cancelExportProgramMembersUsingPOST; typed action with closed record schema.; flags: --export-id
+    reverse change-lead-program-status - Change Lead Program Status [intent=reverse_etl availability=implemented write=change_lead_program_status]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/leads/programs/{programId}/status.json; official_lane=reverse_etl_write; operation_id=changeLeadProgramStatusUsingPOST; typed action with closed record schema.; flags: --program-id, --input-0-id, --status
+    reverse clone-email - Clone Email [intent=reverse_etl availability=implemented write=clone_email]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/email/{id}/clone.json; official_lane=reverse_etl_write; operation_id=cloneEmailUsingPOST; typed action with closed record schema.; flags: --id, --folder-id, --folder-type, --name, --description, --operational
+    reverse clone-landing-page - Clone Landing Page [intent=reverse_etl availability=implemented write=clone_landing_page]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPage/{id}/clone.json; official_lane=reverse_etl_write; operation_id=cloneLandingPageUsingPOST; typed action with closed record schema.; flags: --id, --folder-id, --folder-type, --name, --description, --template
+    reverse clone-lp-forms - Clone Form [intent=reverse_etl availability=implemented write=clone_lp_forms]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{id}/clone.json; official_lane=reverse_etl_write; operation_id=cloneLpFormsUsingPOST; typed action with closed record schema.; flags: --id, --name, --folder-id, --folder-type, --description
+    reverse clone-lp-template - Clone Landing Page Template [intent=reverse_etl availability=implemented write=clone_lp_template]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPageTemplate/{id}/clone.json; official_lane=reverse_etl_write; operation_id=cloneLpTemplateUsingPOST; typed action with closed record schema.; flags: --id, --folder-id, --folder-type, --name, --description
+    reverse clone-program - Clone Program [intent=reverse_etl availability=implemented write=clone_program]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/program/{id}/clone.json; official_lane=reverse_etl_write; operation_id=cloneProgramUsingPOST; typed action with closed record schema.; flags: --id, --folder-id, --folder-type, --name, --description
+    reverse clone-smart-campaign - Clone Smart Campaign [intent=reverse_etl availability=implemented write=clone_smart_campaign]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/smartCampaign/{id}/clone.json; official_lane=reverse_etl_write; operation_id=cloneSmartCampaignUsingPOST; typed action with closed record schema.; flags: --id, --folder-id, --folder-type, --name, --description
+    reverse clone-smart-list - Clone Smart List [intent=reverse_etl availability=implemented write=clone_smart_list]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/smartList/{id}/clone.json; official_lane=reverse_etl_write; operation_id=cloneSmartListUsingPOST; typed action with closed record schema.; flags: --id, --name, --folder-id, --folder-type, --description
+    reverse clone-snippet - Clone Snippet [intent=reverse_etl availability=implemented write=clone_snippet]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/snippet/{id}/clone.json; official_lane=reverse_etl_write; operation_id=cloneSnippetUsingPOST; typed action with closed record schema.; flags: --id, --name, --folder-id, --folder-type, --description
+    reverse clone-template - Clone Email Template [intent=reverse_etl availability=implemented write=clone_template]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/emailTemplate/{id}/clone.json; official_lane=reverse_etl_write; operation_id=cloneTemplateUsingPOST; typed action with closed record schema.; flags: --id, --folder-id, --folder-type, --name, --description
+    reverse create-custom-activity-type - Create Custom Activity Type [intent=reverse_etl availability=implemented write=create_custom_activity_type]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/activities/external/type.json; official_lane=reverse_etl_write; operation_id=createCustomActivityTypeUsingPOST; typed action with closed record schema.; flags: --api-name, --name, --trigger-name, --filter-name, --primary-attribute-api-name, --primary-attribute-name, --description
+    reverse create-custom-activity-type-attributes - Create Custom Activity Type Attributes [intent=reverse_etl availability=implemented write=create_custom_activity_type_attributes]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/activities/external/type/{apiName}/attributes/create.json; official_lane=reverse_etl_write; operation_id=createCustomActivityTypeAttributesUsingPOST; typed action with closed record schema.; flags: --api-name
+    reverse create-email - Create Email [intent=reverse_etl availability=implemented write=create_email]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/emails.json; official_lane=reverse_etl_write; operation_id=createEmailUsingPOST; typed action with closed record schema.; flags: --folder-id, --folder-type, --from-email, --from-name, --name, --reply-email, --subject, --template, --description, --operational, --text-only
+    reverse create-email-full-content - Update Email Full Content [intent=reverse_etl availability=implemented write=create_email_full_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/email/{id}/fullContent.json; official_lane=reverse_etl_write; operation_id=createEmailFullContentUsingPOST; typed action with closed record schema.; flags: --id, --content
+    reverse create-email-template - Create Email Template [intent=reverse_etl availability=implemented write=create_email_template]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/emailTemplates.json; official_lane=reverse_etl_write; operation_id=createEmailTemplateUsingPOST; typed action with closed record schema.; flags: --name, --folder-id, --folder-type, --content, --description
+    reverse create-export-activities - Create Export Activity Job [intent=reverse_etl availability=implemented write=create_export_activities]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /bulk/v1/activities/export/create.json; official_lane=reverse_etl_write; operation_id=createExportActivitiesUsingPOST; typed action with closed record schema.; flags: --fields-0, --filter-created-at-start-at, --filter-created-at-end-at, --format
+    reverse create-export-custom-objects - Create Export Custom Object Job [intent=reverse_etl availability=implemented write=create_export_custom_objects]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /bulk/v1/customobjects/{apiName}/export/create.json; official_lane=reverse_etl_write; operation_id=createExportCustomObjectsUsingPOST; typed action with closed record schema.; flags: --api-name, --fields-0, --filter-updated-at-start-at, --filter-updated-at-end-at, --filter-smart-list-id, --filter-smart-list-name, --filter-static-list-id, --filter-static-list-name, --format
+    reverse create-export-leads - Create Export Lead Job [intent=reverse_etl availability=implemented write=create_export_leads]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /bulk/v1/leads/export/create.json; official_lane=reverse_etl_write; operation_id=createExportLeadsUsingPOST; typed action with closed record schema.; flags: --fields-0, --filter-created-at-start-at, --filter-created-at-end-at, --filter-smart-list-id, --filter-smart-list-name, --filter-static-list-id, --filter-static-list-name, --filter-updated-at-start-at, --filter-updated-at-end-at, --format
+    reverse create-export-program-members - Create Export Program Member Job [intent=reverse_etl availability=implemented write=create_export_program_members]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /bulk/v1/program/members/export/create.json; official_lane=reverse_etl_write; operation_id=createExportProgramMembersUsingPOST; typed action with closed record schema.; flags: --fields-0, --filter-program-id, --filter-program-ids-0, --format
+    reverse create-file - Create File [intent=reverse_etl availability=implemented write=create_file]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/files.json; official_lane=reverse_etl_write; operation_id=createFileUsingPOST; typed action with closed record schema.; flags: --file, --folder-id, --folder-type, --name, --description, --insert-only
+    reverse create-folder - Create Folder [intent=reverse_etl availability=implemented write=create_folder]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/folders.json; official_lane=reverse_etl_write; operation_id=createFolderUsingPOST; typed action with closed record schema.; flags: --name, --parent-id, --parent-type, --description
+    reverse create-landing-page - Create Landing Page [intent=reverse_etl availability=implemented write=create_landing_page]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPages.json; official_lane=reverse_etl_write; operation_id=createLandingPageUsingPOST; typed action with closed record schema.; flags: --folder-id, --folder-type, --name, --template, --custom-head-html, --description, --facebook-og-tags, --keywords, --mobile-enabled, --prefill-form, --robots, --title, --url-page-name, --workspace
+    reverse create-landing-page-redirect-rule - Create Landing Page Redirect Rule [intent=reverse_etl availability=implemented write=create_landing_page_redirect_rule]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/redirectRules.json; official_lane=reverse_etl_write; operation_id=createLandingPageRedirectRuleUsingPOST; typed action with closed record schema.; flags: --hostname, --redirect-from-type, --redirect-from-value, --redirect-to-type, --redirect-to-value
+    reverse create-lead-field - Create Lead Fields [intent=reverse_etl availability=implemented write=create_lead_field]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/leads/schema/fields.json; official_lane=reverse_etl_write; operation_id=createLeadFieldUsingPOST; typed action with closed record schema.; flags: --input-0-display-name, --input-0-name, --input-0-data-type
+    reverse create-lp-forms - Create Form [intent=reverse_etl availability=implemented write=create_lp_forms]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/forms.json; official_lane=reverse_etl_write; operation_id=createLpFormsUsingPOST; typed action with closed record schema.; flags: --folder-id, --folder-type, --description, --font-family, --font-size, --label-position, --language, --locale, --name, --progressive-profiling, --theme
+    reverse create-lp-template - Create Landing Page Template [intent=reverse_etl availability=implemented write=create_lp_template]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPageTemplates.json; official_lane=reverse_etl_write; operation_id=createLpTemplateUsingPOST; typed action with closed record schema.; flags: --folder-id, --folder-type, --name, --description, --enable-munchkin, --template-type
+    reverse create-program - Create Program [intent=reverse_etl availability=implemented write=create_program]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/programs.json; official_lane=reverse_etl_write; operation_id=createProgramUsingPOST; typed action with closed record schema.; flags: --folder-id, --folder-type, --name, --type, --channel, --description
+    reverse create-program-member-field - Create Program Member Fields [intent=reverse_etl availability=implemented write=create_program_member_field]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/programs/members/schema/fields.json; official_lane=reverse_etl_write; operation_id=createProgramMemberFieldUsingPOST; typed action with closed record schema.; flags: --input-0-display-name, --input-0-name, --input-0-data-type
+    reverse create-smart-campaign - Create Smart Campaign [intent=reverse_etl availability=implemented write=create_smart_campaign]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/smartCampaigns.json; official_lane=reverse_etl_write; operation_id=createSmartCampaignUsingPOST; typed action with closed record schema.; flags: --folder-id, --folder-type, --name, --description
+    reverse create-snippet - Create Snippet [intent=reverse_etl availability=implemented write=create_snippet]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/snippets.json; official_lane=reverse_etl_write; operation_id=createSnippetUsingPOST; typed action with closed record schema.; flags: --folder-id, --folder-type, --name, --description
+    reverse create-static-list - Create Static List [intent=reverse_etl availability=implemented write=create_static_list]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/staticLists.json; official_lane=reverse_etl_write; operation_id=createStaticListUsingPOST; typed action with closed record schema.; flags: --name, --folder-id, --folder-type, --description
+    reverse deactivate-smart-campaign - Deactivate Smart Campaign [intent=reverse_etl availability=implemented write=deactivate_smart_campaign]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/smartCampaign/{id}/deactivate.json; official_lane=reverse_etl_write; operation_id=deactivateSmartCampaignUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-companies - Delete Companies [intent=reverse_etl availability=implemented write=delete_companies]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/companies/delete.json; official_lane=reverse_etl_write; operation_id=deleteCompaniesUsingPOST; typed action with closed record schema.; flags: --delete-by, --input-0-id
+    reverse delete-custom-activity-type - Delete Custom Activity Type [intent=reverse_etl availability=implemented write=delete_custom_activity_type]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/activities/external/type/{apiName}/delete.json; official_lane=reverse_etl_write; operation_id=deleteCustomActivityTypeUsingPOST; typed action with closed record schema.; flags: --api-name
+    reverse delete-custom-activity-type-attributes - Delete Custom Activity Type Attributes [intent=reverse_etl availability=implemented write=delete_custom_activity_type_attributes]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/activities/external/type/{apiName}/attributes/delete.json; official_lane=reverse_etl_write; operation_id=deleteCustomActivityTypeAttributesUsingPOST; typed action with closed record schema.; flags: --api-name, --attributes-0-api-name, --attributes-0-name
+    reverse delete-custom-object-type - Delete Custom Object Type [intent=reverse_etl availability=implemented write=delete_custom_object_type]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/customobjects/schema/{apiName}/delete.json; official_lane=reverse_etl_write; operation_id=deleteCustomObjectTypeUsingPOST; typed action with closed record schema.; flags: --api-name
+    reverse delete-custom-object-type-fields - Delete Custom Object Type Fields [intent=reverse_etl availability=implemented write=delete_custom_object_type_fields]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/customobjects/schema/{apiName}/deleteField.json; official_lane=reverse_etl_write; operation_id=deleteCustomObjectTypeFieldsUsingPOST; typed action with closed record schema.; flags: --api-name, --input-0-name
+    reverse delete-custom-objects - Delete Custom Objects [intent=reverse_etl availability=implemented write=delete_custom_objects]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/customobjects/{customObjectName}/delete.json; official_lane=reverse_etl_write; operation_id=deleteCustomObjectsUsingPOST; typed action with closed record schema.; flags: --custom-object-name, --input-0-marketo-guid, --delete-by
+    reverse delete-email - Delete Email [intent=reverse_etl availability=implemented write=delete_email]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/email/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteEmailUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-folder - Delete Folder [intent=reverse_etl availability=implemented write=delete_folder]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/folder/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteFolderUsingPOST; typed action with closed record schema.; flags: --id, --type
+    reverse delete-form-by-id - Delete Form [intent=reverse_etl availability=implemented write=delete_form_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/form/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteFormByIdUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-form-field - Delete Form Field [intent=reverse_etl availability=implemented write=delete_form_field]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/form/{id}/field/{fieldId}/delete.json; official_lane=reverse_etl_write; operation_id=deleteFormFieldUsingPOST; typed action with closed record schema.; flags: --id, --field-id
+    reverse delete-form-field-from-field-set - Delete Field from Fieldset [intent=reverse_etl availability=implemented write=delete_form_field_from_field_set]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/form/{id}/fieldSet/{fieldSetId}/field/{fieldId}/delete.json; official_lane=reverse_etl_write; operation_id=deleteFormFieldFromFieldSetUsingPOST; typed action with closed record schema.; flags: --id, --field-set-id, --field-id
+    reverse delete-invited-user - Delete Invited User [intent=reverse_etl availability=implemented write=delete_invited_user]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /userservice/management/v1/users/{userid}/invite/delete.json; official_lane=reverse_etl_write; operation_id=deleteInvitedUserUsingPOST; typed action with closed record schema.; flags: --userid
+    reverse delete-landing-page-by-id - Delete Landing Page [intent=reverse_etl availability=implemented write=delete_landing_page_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/landingPage/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteLandingPageByIdUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-landing-page-redirect-rule - Delete Landing Page Redirect Rule [intent=reverse_etl availability=implemented write=delete_landing_page_redirect_rule]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/redirectRule/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteLandingPageRedirectRuleUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-leads - Delete Leads [intent=reverse_etl availability=implemented write=delete_leads]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/leads/delete.json; official_lane=reverse_etl_write; operation_id=deleteLeadsUsingPOST; typed action with closed record schema.; flags: --input-0-id
+    reverse delete-lp-template - Delete Landing Page Template [intent=reverse_etl availability=implemented write=delete_lp_template]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/landingPageTemplate/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteLpTemplateUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-module - Delete Module [intent=reverse_etl availability=implemented write=delete_module]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/email/{id}/content/{moduleId}/delete.json; official_lane=reverse_etl_write; operation_id=deleteModuleUsingPOST; typed action with closed record schema.; flags: --id, --module-id
+    reverse delete-named-account-lists - Delete Named Account Lists [intent=reverse_etl availability=implemented write=delete_named_account_lists]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/namedAccountLists/delete.json; official_lane=reverse_etl_write; operation_id=deleteNamedAccountListsUsingPOST; typed action with closed record schema.; flags: --input-0-marketo-guid, --delete-by
+    reverse delete-named-accounts - Delete NamedAccounts [intent=reverse_etl availability=implemented write=delete_named_accounts]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/namedaccounts/delete.json; official_lane=reverse_etl_write; operation_id=deleteNamedAccountsUsingPOST; typed action with closed record schema.; flags: --input-0-marketo-guid, --delete-by
+    reverse delete-opportunities - Delete Opportunities [intent=reverse_etl availability=implemented write=delete_opportunities]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/opportunities/delete.json; official_lane=reverse_etl_write; operation_id=deleteOpportunitiesUsingPOST; typed action with closed record schema.; flags: --input-0-marketo-guid, --delete-by
+    reverse delete-opportunity-roles - Delete Opportunity Roles [intent=reverse_etl availability=implemented write=delete_opportunity_roles]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/opportunities/roles/delete.json; official_lane=reverse_etl_write; operation_id=deleteOpportunityRolesUsingPOST; typed action with closed record schema.; flags: --input-0-marketo-guid, --delete-by
+    reverse delete-program - Delete Program [intent=reverse_etl availability=implemented write=delete_program]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/program/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteProgramUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-program-member - Delete Program Members [intent=reverse_etl availability=implemented write=delete_program_member]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/programs/{programId}/members/delete.json; official_lane=reverse_etl_write; operation_id=deleteProgramMemberUsingPOST; typed action with closed record schema.; flags: --program-id, --input-0-lead-id
+    reverse delete-roles - Delete Roles [intent=reverse_etl availability=implemented write=delete_roles]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /userservice/management/v1/users/{userid}/roles/delete.json; official_lane=reverse_etl_write; operation_id=deleteRolesUsingPOST; typed action with closed record schema.; flags: --userid, --input-0-access-role-id, --input-0-workspace-id
+    reverse delete-sales-person - Delete SalesPersons [intent=reverse_etl availability=implemented write=delete_sales_person]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/salespersons/delete.json; official_lane=reverse_etl_write; operation_id=deleteSalesPersonUsingPOST; typed action with closed record schema.; flags: --delete-by, --input-0-id
+    reverse delete-smart-campaign - Delete Smart Campaign [intent=reverse_etl availability=implemented write=delete_smart_campaign]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/smartCampaign/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteSmartCampaignUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-smart-list-by-id - Delete Smart List [intent=reverse_etl availability=implemented write=delete_smart_list_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/smartList/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteSmartListByIdUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-snippet - Delete Snippet [intent=reverse_etl availability=implemented write=delete_snippet]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/snippet/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteSnippetUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-static-list-by-id - Delete Static List [intent=reverse_etl availability=implemented write=delete_static_list_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/staticList/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteStaticListByIdUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-template - Delete Email Template [intent=reverse_etl availability=implemented write=delete_template]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/emailTemplate/{id}/delete.json; official_lane=reverse_etl_write; operation_id=deleteTemplateUsingPOST; typed action with closed record schema.; flags: --id
+    reverse delete-token-by-name - Delete Token by Name [intent=reverse_etl availability=implemented write=delete_token_by_name]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/folder/{id}/tokens/delete.json; official_lane=reverse_etl_write; operation_id=deleteTokenByNameUsingPOST; typed action with closed record schema.; flags: --id, --folder-type, --name, --type
+    reverse delete-user - Delete User [intent=reverse_etl availability=implemented write=delete_user]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /userservice/management/v1/users/{userid}/delete.json; official_lane=reverse_etl_write; operation_id=deleteUserUsingPOST; typed action with closed record schema.; flags: --userid
+    reverse discard-custom-object-type - Discard Custom Object Type Draft [intent=reverse_etl availability=implemented write=discard_custom_object_type]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/customobjects/schema/{apiName}/discardDraft.json; official_lane=reverse_etl_write; operation_id=discardCustomObjectTypeUsingPOST; typed action with closed record schema.; flags: --api-name
+    reverse discard-draft - Discard Email Draft [intent=reverse_etl availability=implemented write=discard_draft]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/email/{id}/discardDraft.json; official_lane=reverse_etl_write; operation_id=discardDraftUsingPOST; typed action with closed record schema.; flags: --id
+    reverse discard-draft-using-post-1 - Discard Email Template Draft [intent=reverse_etl availability=implemented write=discard_draft_using_post_1]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/emailTemplate/{id}/discardDraft.json; official_lane=reverse_etl_write; operation_id=discardDraftUsingPOST_1; typed action with closed record schema.; flags: --id
+    reverse discard-draft-using-post-2 - Discard Landing Page Template Draft [intent=reverse_etl availability=implemented write=discard_draft_using_post_2]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/landingPageTemplate/{id}/discardDraft.json; official_lane=reverse_etl_write; operation_id=discardDraftUsingPOST_2; typed action with closed record schema.; flags: --id
+    reverse discard-draftof-custom-activity-type - Discard Custom Activity Type Draft [intent=reverse_etl availability=implemented write=discard_draftof_custom_activity_type]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/activities/external/type/{apiName}/discardDraft.json; official_lane=reverse_etl_write; operation_id=discardDraftofCustomActivityTypeUsingPOST; typed action with closed record schema.; flags: --api-name
+    reverse discard-form-by-id - Discard Form Draft [intent=reverse_etl availability=implemented write=discard_form_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/form/{id}/discardDraft.json; official_lane=reverse_etl_write; operation_id=discardFormByIdUsingPOST; typed action with closed record schema.; flags: --id
+    reverse discard-landing-page-by-id - Discard Landing Page Draft [intent=reverse_etl availability=implemented write=discard_landing_page_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/landingPage/{id}/discardDraft.json; official_lane=reverse_etl_write; operation_id=discardLandingPageByIdUsingPOST; typed action with closed record schema.; flags: --id
+    reverse discard-snippet - Discard Snippet Draft [intent=reverse_etl availability=implemented write=discard_snippet]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/snippet/{id}/discardDraft.json; official_lane=reverse_etl_write; operation_id=discardSnippetUsingPOST; typed action with closed record schema.; flags: --id
+    reverse enqueue-export-activities - Enqueue Export Activity Job [intent=reverse_etl availability=implemented write=enqueue_export_activities]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /bulk/v1/activities/export/{exportId}/enqueue.json; official_lane=reverse_etl_write; operation_id=enqueueExportActivitiesUsingPOST; typed action with closed record schema.; flags: --export-id
+    reverse enqueue-export-custom-objects - Enqueue Export Custom Object Job [intent=reverse_etl availability=implemented write=enqueue_export_custom_objects]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /bulk/v1/customobjects/{apiName}/export/{exportId}/enqueue.json; official_lane=reverse_etl_write; operation_id=enqueueExportCustomObjectsUsingPOST; typed action with closed record schema.; flags: --api-name, --export-id
+    reverse enqueue-export-leads - Enqueue Export Lead Job [intent=reverse_etl availability=implemented write=enqueue_export_leads]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /bulk/v1/leads/export/{exportId}/enqueue.json; official_lane=reverse_etl_write; operation_id=enqueueExportLeadsUsingPOST; typed action with closed record schema.; flags: --export-id
+    reverse enqueue-export-program-members - Enqueue Export Program Member Job [intent=reverse_etl availability=implemented write=enqueue_export_program_members]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /bulk/v1/program/members/export/{exportId}/enqueue.json; official_lane=reverse_etl_write; operation_id=enqueueExportProgramMembersUsingPOST; typed action with closed record schema.; flags: --export-id
+    reverse invite-user - Invite User [intent=reverse_etl availability=implemented write=invite_user]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /userservice/management/v1/users/invite.json; official_lane=reverse_etl_write; operation_id=inviteUserUsingPOST; typed action with closed record schema.; flags: --email-address, --first-name, --last-name, --user-role-workspaces-0-access-role-id, --user-role-workspaces-0-workspace-id, --api-only, --expires-at, --userid, --reason
+    reverse push-to-marketo - Push Lead to Marketo [intent=reverse_etl availability=implemented write=push_to_marketo]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/leads/push.json; official_lane=reverse_etl_write; operation_id=pushToMarketoUsingPOST; typed action with closed record schema.; flags: --lookup-field, --partition-name, --program-name, --program-status, --reason, --source
+    reverse rearrange-modules - Rearrange Email Modules [intent=reverse_etl availability=implemented write=rearrange_modules]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/email/{id}/content/rearrange.json; official_lane=reverse_etl_write; operation_id=rearrangeModulesUsingPOST; typed action with closed record schema.; flags: --id, --body
+    reverse remove-landing-page-content - Delete Landing Page Content Section [intent=reverse_etl availability=implemented write=remove_landing_page_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/landingPage/{id}/content/{contentId}/delete.json; official_lane=reverse_etl_write; operation_id=removeLandingPageContentUsingPOST; typed action with closed record schema.; flags: --id, --content-id
+    reverse remove-named-account-list-members - Remove Named Account List Members [intent=reverse_etl availability=implemented write=remove_named_account_list_members]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/v1/namedAccountList/{id}/namedAccounts/remove.json; official_lane=reverse_etl_write; operation_id=removeNamedAccountListMembersUsingPOST; typed action with closed record schema.; flags: --id, --input-0-marketo-guid
+    reverse schedule-campaign - Schedule Campaign [intent=reverse_etl availability=implemented write=schedule_campaign]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/campaigns/{campaignId}/schedule.json; official_lane=reverse_etl_write; operation_id=scheduleCampaignUsingPOST; typed action with closed record schema.; flags: --campaign-id
+    reverse send-sample-email - Send Sample Email [intent=reverse_etl availability=implemented write=send_sample_email]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/email/{id}/sendSample.json; official_lane=reverse_etl_write; operation_id=sendSampleEmailUsingPOST; typed action with closed record schema.; flags: --id, --email-address, --lead-id, --text-only
+    reverse submit-form - Submit Form [intent=reverse_etl availability=implemented write=submit_form]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/leads/submitForm.json; official_lane=reverse_etl_write; operation_id=SubmitFormUsingPOST; typed action with closed record schema.; flags: --input-0-lead-form-fields-email, --form-id, --program-id
+    reverse sync-companies - Sync Companies [intent=reverse_etl availability=implemented write=sync_companies]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/companies.json; official_lane=reverse_etl_write; operation_id=syncCompaniesUsingPOST; typed action with closed record schema.; flags: --input, --action, --dedupe-by
+    reverse sync-custom-object-type - Sync Custom Object Type [intent=reverse_etl availability=implemented write=sync_custom_object_type]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/customobjects/schema.json; official_lane=reverse_etl_write; operation_id=syncCustomObjectTypeUsingPOST; typed action with closed record schema.; flags: --api-name, --display-name, --action, --plural-name, --description, --show-in-lead-detail
+    reverse sync-custom-objects - Sync Custom Objects [intent=reverse_etl availability=implemented write=sync_custom_objects]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/customobjects/{customObjectName}.json; official_lane=reverse_etl_write; operation_id=syncCustomObjectsUsingPOST; typed action with closed record schema.; flags: --custom-object-name, --input-0-marketo-guid, --action, --dedupe-by
+    reverse sync-lead - Sync Leads [intent=reverse_etl availability=implemented write=sync_lead]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/leads.json; official_lane=reverse_etl_write; operation_id=syncLeadUsingPOST; typed action with closed record schema.; flags: --input, --action, --async-processing, --lookup-field, --partition-name
+    reverse sync-named-account-lists - Sync Named Account Lists [intent=reverse_etl availability=implemented write=sync_named_account_lists]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/namedAccountLists.json; official_lane=reverse_etl_write; operation_id=syncNamedAccountListsUsingPOST; typed action with closed record schema.; flags: --input-0-marketo-guid, --action, --dedupe-by
+    reverse sync-named-accounts - Sync NamedAccounts [intent=reverse_etl availability=implemented write=sync_named_accounts]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/namedaccounts.json; official_lane=reverse_etl_write; operation_id=syncNamedAccountsUsingPOST; typed action with closed record schema.; flags: --input-0-marketo-guid, --action, --dedupe-by
+    reverse sync-opportunities - Sync Opportunities [intent=reverse_etl availability=implemented write=sync_opportunities]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/opportunities.json; official_lane=reverse_etl_write; operation_id=syncOpportunitiesUsingPOST; typed action with closed record schema.; flags: --input-0-marketo-guid, --action, --dedupe-by
+    reverse sync-opportunity-roles - Sync Opportunity Roles [intent=reverse_etl availability=implemented write=sync_opportunity_roles]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/opportunities/roles.json; official_lane=reverse_etl_write; operation_id=syncOpportunityRolesUsingPOST; typed action with closed record schema.; flags: --input-0-marketo-guid, --action, --dedupe-by
+    reverse sync-program-member-status - Sync Program Member Status [intent=reverse_etl availability=implemented write=sync_program_member_status]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/programs/{programId}/members/status.json; official_lane=reverse_etl_write; operation_id=syncProgramMemberStatusUsingPOST; typed action with closed record schema.; flags: --program-id, --status-name, --input-0-lead-id
+    reverse sync-sales-persons - Sync SalesPersons [intent=reverse_etl availability=implemented write=sync_sales_persons]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/salespersons.json; official_lane=reverse_etl_write; operation_id=syncSalesPersonsUsingPOST; typed action with closed record schema.; flags: --input, --action, --dedupe-by
+    reverse trigger-campaign - Request Campaign [intent=reverse_etl availability=implemented write=trigger_campaign]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/campaigns/{campaignId}/trigger.json; official_lane=reverse_etl_write; operation_id=triggerCampaignUsingPOST; typed action with closed record schema.; flags: --campaign-id, --input-leads-0-id
+    reverse unapprove-draft - Unapprove Email [intent=reverse_etl availability=implemented write=unapprove_draft]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/email/{id}/unapprove.json; official_lane=reverse_etl_write; operation_id=unapproveDraftUsingPOST; typed action with closed record schema.; flags: --id
+    reverse unapprove-draft-using-post-1 - Unapprove Email Template Draft [intent=reverse_etl availability=implemented write=unapprove_draft_using_post_1]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/emailTemplate/{id}/unapprove.json; official_lane=reverse_etl_write; operation_id=unapproveDraftUsingPOST_1; typed action with closed record schema.; flags: --id
+    reverse unapprove-landing-page-by-id - Unapprove Landing Page [intent=reverse_etl availability=implemented write=unapprove_landing_page_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/landingPage/{id}/unapprove.json; official_lane=reverse_etl_write; operation_id=unapproveLandingPageByIdUsingPOST; typed action with closed record schema.; flags: --id
+    reverse unapprove-landing-page-template - Unapprove Landing Page Template [intent=reverse_etl availability=implemented write=unapprove_landing_page_template]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/landingPageTemplate/{id}/unapprove.json; official_lane=reverse_etl_write; operation_id=unapproveLandingPageTemplateUsingPOST; typed action with closed record schema.; flags: --id
+    reverse unapprove-program - Unapprove Program [intent=reverse_etl availability=implemented write=unapprove_program]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/program/{id}/unapprove.json; official_lane=reverse_etl_write; operation_id=unapproveProgramUsingPOST; typed action with closed record schema.; flags: --id
+    reverse unapprove-snippet - Unapprove Snippet [intent=reverse_etl availability=implemented write=unapprove_snippet]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: destructive external Marketo mutation; reverse ETL approval and typed destructive confirmation required; notes: POST /rest/asset/v1/snippet/{id}/unapprove.json; official_lane=reverse_etl_write; operation_id=unapproveSnippetUsingPOST; typed action with closed record schema.; flags: --id
+    reverse update-content - Update File Content [intent=reverse_etl availability=implemented write=update_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/file/{id}/content.json; official_lane=reverse_etl_write; operation_id=updateContentUsingPOST; typed action with closed record schema.; flags: --id, --file
+    reverse update-custom-activity-type - Update Custom Activity Type [intent=reverse_etl availability=implemented write=update_custom_activity_type]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/activities/external/type/{apiName}.json; official_lane=reverse_etl_write; operation_id=updateCustomActivityTypeUsingPOST; typed action with closed record schema.; flags: --api-name, --body-api-name, --name, --trigger-name, --filter-name, --primary-attribute-api-name, --primary-attribute-name, --description
+    reverse update-custom-activity-type-attributes - Update Custom Activity Type Attributes [intent=reverse_etl availability=implemented write=update_custom_activity_type_attributes]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/activities/external/type/{apiName}/attributes/update.json; official_lane=reverse_etl_write; operation_id=updateCustomActivityTypeAttributesUsingPOST; typed action with closed record schema.; flags: --api-name
+    reverse update-custom-object-type-field - Update Custom Object Type Field [intent=reverse_etl availability=implemented write=update_custom_object_type_field]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/customobjects/schema/{apiName}/{fieldApiName}/updateField.json; official_lane=reverse_etl_write; operation_id=updateCustomObjectTypeFieldUsingPOST; typed action with closed record schema.; flags: --api-name, --field-api-name, --name, --display-name, --data-type, --description, --is-dedupe-field
+    reverse update-dynamic-content - Update Snippet Dynamic Content [intent=reverse_etl availability=implemented write=update_dynamic_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/snippet/{id}/dynamicContent/{segmentId}.json; official_lane=reverse_etl_write; operation_id=updateDynamicContentUsingPOST; typed action with closed record schema.; flags: --id, --segment-id, --type, --value
+    reverse update-email - Update Email Metadata [intent=reverse_etl availability=implemented write=update_email]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/email/{id}.json; official_lane=reverse_etl_write; operation_id=updateEmailUsingPOST; typed action with closed record schema.; flags: --id, --description, --name, --pre-header, --operational, --published, --text-only, --web-view
+    reverse update-email-component-content - Update Email Content Section [intent=reverse_etl availability=implemented write=update_email_component_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/email/{id}/content/{htmlId}.json; official_lane=reverse_etl_write; operation_id=updateEmailComponentContentUsingPOST; typed action with closed record schema.; flags: --id, --html-id, --type, --value, --alt-text, --external-url, --height, --image, --link-url, --over-write, --style, --text-value, --video-url, --width
+    reverse update-email-content - Update Email Content [intent=reverse_etl availability=implemented write=update_email_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/email/{id}/content.json; official_lane=reverse_etl_write; operation_id=updateEmailContentUsingPOST; typed action with closed record schema.; flags: --id
+    reverse update-email-dynamic-content - Update Email Dynamic Content Section [intent=reverse_etl availability=implemented write=update_email_dynamic_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/email/{id}/dynamicContent/{contentId}.json; official_lane=reverse_etl_write; operation_id=updateEmailDynamicContentUsingPOST; typed action with closed record schema.; flags: --id, --content-id, --type, --value, --alt-text, --external-url, --height, --image, --link-url, --over-write, --style, --video-url, --width
+    reverse update-email-template - Update Email Template Metadata [intent=reverse_etl availability=implemented write=update_email_template]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/emailTemplate/{id}.json; official_lane=reverse_etl_write; operation_id=updateEmailTemplateUsingPOST; typed action with closed record schema.; flags: --id, --description, --name
+    reverse update-email-template-content - Update Email Template Content [intent=reverse_etl availability=implemented write=update_email_template_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/emailTemplate/{id}/content.json; official_lane=reverse_etl_write; operation_id=updateEmailTemplateContentUsingPOST; typed action with closed record schema.; flags: --id, --content
+    reverse update-field-positions - Update Field Positions [intent=reverse_etl availability=implemented write=update_field_positions]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{id}/reArrange.json; official_lane=reverse_etl_write; operation_id=updateFieldPositionsUsingPOST; typed action with closed record schema.; flags: --id
+    reverse update-folder - Update Folder Metadata [intent=reverse_etl availability=implemented write=update_folder]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/folder/{id}.json; official_lane=reverse_etl_write; operation_id=updateFolderUsingPOST; typed action with closed record schema.; flags: --id, --type, --description, --is-archive, --name
+    reverse update-form-field - Update Form Field [intent=reverse_etl availability=implemented write=update_form_field]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{id}/field/{fieldId}.json; official_lane=reverse_etl_write; operation_id=updateFormFieldUsingPOST; typed action with closed record schema.; flags: --id, --field-id, --blank-fields, --default-value, --field-type, --field-width, --form-prefill, --is-sensitive, --hint-text, --initially-checked, --instructions, --label, --label-to-right, --label-width, --mask-input, --max-length, --max-value, --min-value, --multi-select, --required, --validation-message, --values, --visible-lines
+    reverse update-form-submit-button - Update Submit Button [intent=reverse_etl availability=implemented write=update_form_submit_button]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{id}/submitButton.json; official_lane=reverse_etl_write; operation_id=updateFormSubmitButtonUsingPOST; typed action with closed record schema.; flags: --id, --button-position, --button-style, --label, --waiting-label
+    reverse update-forms - Update Form Metadata [intent=reverse_etl availability=implemented write=update_forms]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{id}.json; official_lane=reverse_etl_write; operation_id=updateFormsUsingPOST; typed action with closed record schema.; flags: --id, --custom-css, --description, --font-family, --font-size, --label-position, --language, --locale, --name, --progressive-profiling, --theme
+    reverse update-landing-page - Update Landing Page Metadata [intent=reverse_etl availability=implemented write=update_landing_page]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPage/{id}.json; official_lane=reverse_etl_write; operation_id=updateLandingPageUsingPOST; typed action with closed record schema.; flags: --id, --custom-head-html, --description, --facebook-og-tags, --keywords, --meta-tags-description, --mobile-enabled, --name, --robots, --style-over-ride, --title, --url-page-name
+    reverse update-landing-page-content - Update Landing Page Content Section [intent=reverse_etl availability=implemented write=update_landing_page_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPage/{id}/content/{contentId}.json; official_lane=reverse_etl_write; operation_id=updateLandingPageContentUsingPOST; typed action with closed record schema.; flags: --id, --content-id, --type, --background-color, --border-color, --border-style, --border-width, --height, --hide-desktop, --hide-mobile, --image-open-new-window, --index, --left, --link-url, --opacity, --top, --value, --width, --z-index
+    reverse update-landing-page-dynamic-content - Update Landing Page Dynamic Content Section [intent=reverse_etl availability=implemented write=update_landing_page_dynamic_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPage/{id}/dynamicContent/{contentId}.json; official_lane=reverse_etl_write; operation_id=updateLandingPageDynamicContentUsingPOST; typed action with closed record schema.; flags: --id, --content-id, --background-color, --border-color, --border-style, --border-width, --height, --hide-desktop, --hide-mobile, --image-open-new-window, --left, --link-url, --opacity, --segment, --top, --type, --value, --width, --z-index
+    reverse update-landing-page-redirect-rule - Update Landing Page Redirect Rule [intent=reverse_etl availability=implemented write=update_landing_page_redirect_rule]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/redirectRule/{id}.json; official_lane=reverse_etl_write; operation_id=updateLandingPageRedirectRuleUsingPOST; typed action with closed record schema.; flags: --id, --hostname
+    reverse update-landing-page-template-content - Update Landing Page Template Content [intent=reverse_etl availability=implemented write=update_landing_page_template_content]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPageTemplate/{id}/content.json; official_lane=reverse_etl_write; operation_id=updateLandingPageTemplateContentUsingPOST; typed action with closed record schema.; flags: --id, --content
+    reverse update-lead-field - Update Lead Field [intent=reverse_etl availability=implemented write=update_lead_field]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/leads/schema/fields/{fieldApiName}.json; official_lane=reverse_etl_write; operation_id=updateLeadFieldUsingPOST; typed action with closed record schema.; flags: --field-api-name, --input
+    reverse update-lp-template - Update Landing Page Template Metadata [intent=reverse_etl availability=implemented write=update_lp_template]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/landingPageTemplate/{id}.json; official_lane=reverse_etl_write; operation_id=updateLpTemplateUsingPOST; typed action with closed record schema.; flags: --id, --description, --enable-munchkin, --name
+    reverse update-partitions - Update Lead Partition [intent=reverse_etl availability=implemented write=update_partitions]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/leads/partitions.json; official_lane=reverse_etl_write; operation_id=updatePartitionsUsingPOST; typed action with closed record schema.; flags: --input-0-id, --input-0-partition-name
+    reverse update-program - Update Program Metadata [intent=reverse_etl availability=implemented write=update_program]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/program/{id}.json; official_lane=reverse_etl_write; operation_id=updateProgramUsingPOST; typed action with closed record schema.; flags: --id, --costs-destructive-update, --description, --end-date, --name, --start-date
+    reverse update-program-member-field - Update Program Member Field [intent=reverse_etl availability=implemented write=update_program_member_field]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/v1/programs/members/schema/fields/{fieldApiName}.json; official_lane=reverse_etl_write; operation_id=updateProgramMemberFieldUsingPOST; typed action with closed record schema.; flags: --field-api-name, --input
+    reverse update-smart-campaign - Update Smart Campaign [intent=reverse_etl availability=implemented write=update_smart_campaign]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/smartCampaign/{id}.json; official_lane=reverse_etl_write; operation_id=updateSmartCampaignUsingPOST; typed action with closed record schema.; flags: --id, --description, --name
+    reverse update-snippet - Update Snippet Metadata [intent=reverse_etl availability=implemented write=update_snippet]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/snippet/{id}.json; official_lane=reverse_etl_write; operation_id=updateSnippetUsingPOST; typed action with closed record schema.; flags: --id, --description, --is-archive, --name
+    reverse update-static-list - Update Static List Metadata [intent=reverse_etl availability=implemented write=update_static_list]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/staticList/{id}.json; official_lane=reverse_etl_write; operation_id=updateStaticListUsingPOST; typed action with closed record schema.; flags: --id, --description, --name
+    reverse update-thank-you-page-by-id - Update Thank You Page [intent=reverse_etl availability=implemented write=update_thank_you_page_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/form/{id}/thankYouPage.json; official_lane=reverse_etl_write; operation_id=updateThankYouPageByIdUsingPOST; typed action with closed record schema.; flags: --id
+    reverse update-user-attribute - Update User Attributes [intent=reverse_etl availability=implemented write=update_user_attribute]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /userservice/management/v1/users/{userid}/update.json; official_lane=reverse_etl_write; operation_id=updateUserAttributeUsingPOST; typed action with closed record schema.; flags: --userid, --api-only, --email-address, --expires-at, --first-name, --last-name
+    reverse update-variable - Update Email Variable [intent=reverse_etl availability=implemented write=update_variable]; approval: reverse ETL plan -> preview -> approval -> execute; destructive commands also require --confirm destructive; risk: external Marketo mutation; reverse ETL plan, preview, and approval required before execute; notes: POST /rest/asset/v1/email/{id}/variable/{name}.json; official_lane=reverse_etl_write; operation_id=updateVariableUsingPOST; typed action with closed record schema.; flags: --id, --name, --value, --module-id
+  Help topics:
+    auth - Marketo commands use a caller-supplied access_token secret; identity token issuance is not exposed.
+    writes - Reverse ETL commands always plan, preview, approve, and execute; destructive actions require confirmation.
+    binary - InputStream file downloads remain blocked until the shared bounded binary transfer executor exists.
 
 EXAMPLES
   # Inspect as a manual
@@ -63,6 +1382,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect marketo before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

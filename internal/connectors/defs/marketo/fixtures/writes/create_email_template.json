@@ -1,0 +1,25 @@
+{
+  "record": {
+    "name": "name-fixture",
+    "folder": {
+      "id": 123,
+      "type": "Folder"
+    },
+    "content": "dynamic.go"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/emailTemplates.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

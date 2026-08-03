@@ -1,0 +1,32 @@
+{
+  "record": {
+    "custom_object_name": "custom_object_name-fixture",
+    "input": [
+      {
+        "marketoGUID": "marketoguid-fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/customobjects/custom_object_name-fixture.json",
+    "body": {
+      "input": [
+        {
+          "marketoGUID": "marketoguid-fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

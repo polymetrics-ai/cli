@@ -1,0 +1,36 @@
+{
+  "record": {
+    "campaign_id": 123,
+    "input": {
+      "leads": [
+        {
+          "id": 123
+        }
+      ]
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/campaigns/123/trigger.json",
+    "body": {
+      "input": {
+        "leads": [
+          {
+            "id": 123
+          }
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

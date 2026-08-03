@@ -1,0 +1,37 @@
+{
+  "record": {
+    "input": [
+      {
+        "leadFormFields": {
+          "email": "email-fixture"
+        }
+      }
+    ],
+    "formId": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/leads/submitForm.json",
+    "body": {
+      "input": [
+        {
+          "leadFormFields": {
+            "email": "email-fixture"
+          }
+        }
+      ],
+      "formId": 123
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

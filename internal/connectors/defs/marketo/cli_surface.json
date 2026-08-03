@@ -648,7 +648,15 @@
       "availability": "implemented",
       "stream": "get_deleted_leads",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
-      "flags": [],
+      "flags": [
+        {
+          "name": "next-page-token",
+          "type": "string",
+          "summary": "Initial Marketo paging token from get_activities_paging_token. Required by the official API for the first live request.",
+          "maps_to": "query.nextPageToken",
+          "allow_empty": false
+        }
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -656,9 +664,10 @@
         }
       ],
       "examples": [
-        "pm marketo etl get-deleted-leads --json --limit 25"
+        "pm marketo etl get-deleted-leads --json --limit 25",
+        "pm marketo etl get-deleted-leads --json --next-page-token paging-token-fixture"
       ],
-      "notes": "GET /rest/v1/activities/deletedleads.json; official_lane=cdc_changefeed; operation_id=getDeletedLeadsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0"
+      "notes": "GET /rest/v1/activities/deletedleads.json; official_lane=cdc_changefeed; operation_id=getDeletedLeadsUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires initial paging token: pass --next-page-token (or --config next_page_token=...) from get_activities_paging_token."
     },
     {
       "path": "etl get-describe",
@@ -1779,6 +1788,13 @@
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
       "flags": [
         {
+          "name": "next-page-token",
+          "type": "string",
+          "summary": "Initial Marketo paging token from get_activities_paging_token. Required by the official API for the first live request.",
+          "maps_to": "query.nextPageToken",
+          "allow_empty": false
+        },
+        {
           "name": "activity-type-ids",
           "type": "string_array",
           "summary": "Comma-separated list of activity type ids. These can be retrieved with the Get Activity Types API.",
@@ -1810,9 +1826,10 @@
         }
       ],
       "examples": [
-        "pm marketo etl get-lead-activities --json --limit 25"
+        "pm marketo etl get-lead-activities --json --limit 25",
+        "pm marketo etl get-lead-activities --json --next-page-token paging-token-fixture"
       ],
-      "notes": "GET /rest/v1/activities.json; official_lane=cdc_changefeed; operation_id=getLeadActivitiesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0"
+      "notes": "GET /rest/v1/activities.json; official_lane=cdc_changefeed; operation_id=getLeadActivitiesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires initial paging token: pass --next-page-token (or --config next_page_token=...) from get_activities_paging_token."
     },
     {
       "path": "etl get-lead-by-id",
@@ -1850,6 +1867,13 @@
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
       "flags": [
         {
+          "name": "next-page-token",
+          "type": "string",
+          "summary": "Initial Marketo paging token from get_activities_paging_token. Required by the official API for the first live request.",
+          "maps_to": "query.nextPageToken",
+          "allow_empty": false
+        },
+        {
           "name": "fields",
           "type": "string_array",
           "summary": "Comma-separated list of field names to return changes for. Field names can be retrieved with the Describe Lead API.",
@@ -1875,9 +1899,10 @@
         }
       ],
       "examples": [
-        "pm marketo etl get-lead-changes --json --limit 25"
+        "pm marketo etl get-lead-changes --json --limit 25",
+        "pm marketo etl get-lead-changes --json --next-page-token paging-token-fixture"
       ],
-      "notes": "GET /rest/v1/activities/leadchanges.json; official_lane=cdc_changefeed; operation_id=getLeadChangesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0"
+      "notes": "GET /rest/v1/activities/leadchanges.json; official_lane=cdc_changefeed; operation_id=getLeadChangesUsingGET; source=Marketo lead database/bulk REST Swagger 2.0; Requires initial paging token: pass --next-page-token (or --config next_page_token=...) from get_activities_paging_token."
     },
     {
       "path": "etl get-lead-fields",
@@ -4136,10 +4161,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -4268,10 +4292,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "label",
@@ -4301,10 +4324,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "field-id",
@@ -4461,10 +4483,9 @@
       "flags": [
         {
           "name": "form-id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter formId.",
-          "maps_to": "record.form_id",
-          "allow_empty": false
+          "maps_to": "record.form_id"
         },
         {
           "name": "field-id",
@@ -4494,10 +4515,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "content-id",
@@ -4644,10 +4664,9 @@
       "flags": [
         {
           "name": "list-id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter listId.",
-          "maps_to": "record.list_id",
-          "allow_empty": false
+          "maps_to": "record.list_id"
         },
         {
           "name": "input-0-id",
@@ -4709,10 +4728,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "text",
@@ -4780,10 +4798,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "folder-type",
@@ -4896,10 +4913,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -4922,10 +4938,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -4948,10 +4963,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -4974,10 +4988,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -5000,10 +5013,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -5026,10 +5038,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -5052,10 +5063,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -5189,10 +5199,9 @@
       "flags": [
         {
           "name": "program-id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter programId.",
-          "maps_to": "record.program_id",
-          "allow_empty": false
+          "maps_to": "record.program_id"
         },
         {
           "name": "input-0-id",
@@ -5228,10 +5237,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "folder-id",
@@ -5290,10 +5298,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "folder-id",
@@ -5352,10 +5359,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "name",
@@ -5408,10 +5414,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "folder-id",
@@ -5464,10 +5469,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "folder-id",
@@ -5520,10 +5524,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "folder-id",
@@ -5576,10 +5579,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "name",
@@ -5632,10 +5634,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "name",
@@ -5688,10 +5689,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "folder-id",
@@ -5934,10 +5934,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "content",
@@ -7047,10 +7046,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7270,10 +7268,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7296,10 +7293,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "type",
@@ -7329,10 +7325,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7355,10 +7350,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "field-id",
@@ -7388,10 +7382,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "field-set-id",
@@ -7454,10 +7447,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7480,10 +7472,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7531,10 +7522,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7557,10 +7547,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "module-id",
@@ -7722,10 +7711,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7748,10 +7736,9 @@
       "flags": [
         {
           "name": "program-id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter programId.",
-          "maps_to": "record.program_id",
-          "allow_empty": false
+          "maps_to": "record.program_id"
         },
         {
           "name": "input-0-lead-id",
@@ -7850,10 +7837,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7876,10 +7862,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7902,10 +7887,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7928,10 +7912,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7954,10 +7937,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -7980,10 +7962,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "folder-type",
@@ -8082,10 +8063,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -8108,10 +8088,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -8134,10 +8113,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -8186,10 +8164,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -8212,10 +8189,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -8238,10 +8214,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -8515,10 +8490,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "body",
@@ -8548,10 +8522,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "content-id",
@@ -8614,10 +8587,9 @@
       "flags": [
         {
           "name": "campaign-id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter campaignId.",
-          "maps_to": "record.campaign_id",
-          "allow_empty": false
+          "maps_to": "record.campaign_id"
         }
       ],
       "api_surface": [
@@ -8640,10 +8612,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "email-address",
@@ -9114,10 +9085,9 @@
       "flags": [
         {
           "name": "program-id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter programId.",
-          "maps_to": "record.program_id",
-          "allow_empty": false
+          "maps_to": "record.program_id"
         },
         {
           "name": "status-name",
@@ -9196,10 +9166,9 @@
       "flags": [
         {
           "name": "campaign-id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter campaignId.",
-          "maps_to": "record.campaign_id",
-          "allow_empty": false
+          "maps_to": "record.campaign_id"
         },
         {
           "name": "input-leads-0-id",
@@ -9228,10 +9197,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -9254,10 +9222,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -9280,10 +9247,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -9306,10 +9272,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -9332,10 +9297,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -9358,10 +9322,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -9584,17 +9547,15 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "segment-id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter segmentId.",
-          "maps_to": "record.segment_id",
-          "allow_empty": false
+          "maps_to": "record.segment_id"
         },
         {
           "name": "type",
@@ -9633,10 +9594,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "description",
@@ -9704,10 +9664,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "html-id",
@@ -9822,10 +9781,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -9848,10 +9806,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "content-id",
@@ -9959,10 +9916,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "description",
@@ -9999,10 +9955,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "content",
@@ -10032,10 +9987,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -10058,10 +10012,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "type",
@@ -10114,10 +10067,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "field-id",
@@ -10281,10 +10233,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "button-position",
@@ -10334,10 +10285,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "custom-css",
@@ -10429,10 +10379,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "custom-head-html",
@@ -10531,10 +10480,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "content-id",
@@ -10688,10 +10636,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "content-id",
@@ -10838,10 +10785,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "hostname",
@@ -10871,10 +10817,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "content",
@@ -10936,10 +10881,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "description",
@@ -11014,10 +10958,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "costs-destructive-update",
@@ -11106,10 +11049,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "description",
@@ -11146,10 +11088,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "description",
@@ -11193,10 +11134,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "description",
@@ -11233,10 +11173,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         }
       ],
       "api_surface": [
@@ -11319,10 +11258,9 @@
       "flags": [
         {
           "name": "id",
-          "type": "string",
+          "type": "integer",
           "summary": "Path parameter id.",
-          "maps_to": "record.id",
-          "allow_empty": false
+          "maps_to": "record.id"
         },
         {
           "name": "name",

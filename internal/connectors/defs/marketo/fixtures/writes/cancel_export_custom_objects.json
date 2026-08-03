@@ -1,0 +1,21 @@
+{
+  "record": {
+    "api_name": "api_name-fixture",
+    "export_id": "export_id-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bulk/v1/customobjects/api_name-fixture/export/export_id-fixture/cancel.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

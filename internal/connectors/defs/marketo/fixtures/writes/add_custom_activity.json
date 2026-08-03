@@ -1,0 +1,49 @@
+{
+  "record": {
+    "input": [
+      {
+        "activityDate": "2026-01-01T00:00:00Z",
+        "activityTypeId": 123,
+        "attributes": [
+          {
+            "name": "name-fixture",
+            "value": "value-fixture"
+          }
+        ],
+        "leadId": 123,
+        "primaryAttributeValue": "primaryattributevalue-fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/activities/external.json",
+    "body": {
+      "input": [
+        {
+          "activityDate": "2026-01-01T00:00:00Z",
+          "activityTypeId": 123,
+          "attributes": [
+            {
+              "name": "name-fixture",
+              "value": "value-fixture"
+            }
+          ],
+          "leadId": 123,
+          "primaryAttributeValue": "primaryattributevalue-fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

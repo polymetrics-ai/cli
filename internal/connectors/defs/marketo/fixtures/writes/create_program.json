@@ -1,0 +1,26 @@
+{
+  "record": {
+    "folder": {
+      "id": 123,
+      "type": "Folder"
+    },
+    "name": "name-fixture",
+    "type": "type-fixture",
+    "channel": "channel-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/programs.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

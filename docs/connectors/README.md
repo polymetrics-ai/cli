@@ -280,7 +280,7 @@
 - [mailosaur](mailosaur/MANUAL.md): Reads Mailosaur virtual servers, message summaries, and account usage transactions through the Mailosaur REST API.
 - [mailtrap](mailtrap/MANUAL.md): Reads Mailtrap accounts, inboxes, projects, and sending domains through the Mailtrap account-management REST API.
 - [mantle](mantle/MANUAL.md): Reads and writes Mantle Core API resources through the heymantle.com REST API.
-- [marketo](marketo/MANUAL.md): Reads Marketo leads, programs, and activities through Marketo REST endpoints. Read-only; does not refresh OAuth tokens internally.
+- [marketo](marketo/MANUAL.md): Reads Marketo REST records, exposes bounded direct reads for lookup/content endpoints, and plans typed Marketo reverse-ETL mutations from the official AdobeDocs Swagger assets.
 - [marketstack](marketstack/MANUAL.md): Reads Marketstack exchanges, tickers, end-of-day prices, splits, and dividends through the Marketstack REST API.
 - [mendeley](mendeley/MANUAL.md): Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API.
 - [mention](mention/MANUAL.md): Reads Mention app metadata, accounts, alerts, mentions, alert tags, alert shares, alert preferences, and alert tasks from the Mention social listening REST API.

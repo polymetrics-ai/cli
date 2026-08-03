@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": 123,
+    "content_id": "content_id-fixture",
+    "type": "Text",
+    "value": "value-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/email/123/dynamicContent/content_id-fixture.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}
