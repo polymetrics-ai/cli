@@ -219532,7 +219532,8 @@
               "type": "string",
               "summary": "3-letter ISO 4217 currency code.",
               "values": [],
-              "maps_to": "body.currency"
+              "maps_to": "body.currency",
+              "required": true
             }
           ],
           "examples": [
@@ -219632,14 +219633,16 @@
               "type": "string",
               "summary": "3-letter ISO 4217 currency code.",
               "values": [],
-              "maps_to": "body.currency"
+              "maps_to": "body.currency",
+              "required": true
             },
             {
               "name": "account-code",
               "type": "string",
               "summary": "The unique identifier of the account. This cannot be changed once the account is created.",
               "values": [],
-              "maps_to": "body.account.code"
+              "maps_to": "body.account.code",
+              "required": true
             }
           ],
           "examples": [
@@ -219704,21 +219707,24 @@
               "type": "string",
               "summary": "The product code or SKU of the gift card product.",
               "values": [],
-              "maps_to": "body.product_code"
+              "maps_to": "body.product_code",
+              "required": true
             },
             {
               "name": "unit-amount",
               "type": "integer",
               "summary": "The whole-number gift card amount to preview; mapped to Recurly unit_amount.",
               "values": [],
-              "maps_to": "body.unit_amount"
+              "maps_to": "body.unit_amount",
+              "required": true
             },
             {
               "name": "currency",
               "type": "string",
               "summary": "3-letter ISO 4217 currency code.",
               "values": [],
-              "maps_to": "body.currency"
+              "maps_to": "body.currency",
+              "required": true
             }
           ],
           "examples": [
