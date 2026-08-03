@@ -219,7 +219,23 @@ func cloudTrailCanDeriveActionBody(action string) bool {
 	}
 }
 
+var cloudTrailTrailOrEventDataStoreActions = map[string][]string{
+	"GetEventConfiguration": nil,
+	"GetInsightSelectors":   {"insightnotenabledexception", "insight not enabled", "insights not enabled"},
+}
+
+var cloudTrailTrailOrEventDataStoreSkipMarkers = []string{
+	"trailnotfoundexception",
+	"eventdatastorenotfoundexception",
+	"inactiveeventdatastoreexception",
+	"invalideventdatastorecategoryexception",
+	"unsupportedoperationexception",
+}
+
 func (c Connector) derivedActionBodies(ctx context.Context, cfg connectors.RuntimeConfig, action string) ([]map[string]any, error) {
+	if _, ok := cloudTrailTrailOrEventDataStoreActions[action]; ok {
+		return c.derivedTrailOrEventDataStoreBodies(ctx, cfg, action)
+	}
 	switch action {
 	case "GetChannel":
 		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "ListChannels", "Channel", []string{"ChannelArn", "Channel", "Arn"})
@@ -231,8 +247,6 @@ func (c Connector) derivedActionBodies(ctx context.Context, cfg connectors.Runti
 		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "DescribeTrails", "TrailName", []string{"TrailARN", "TrailArn", "Name", "TrailName"})
 	case "GetImport", "ListImportFailures":
 		return c.derivedBodiesFromDiscovery(ctx, cfg, action, "ListImports", "ImportId", []string{"ImportId"})
-	case "GetEventConfiguration", "GetInsightSelectors":
-		return c.derivedTrailOrEventDataStoreBodies(ctx, cfg, action)
 	case "GetResourcePolicy":
 		values, err := c.discoveredResourceARNs(ctx, cfg)
 		if err != nil {
@@ -388,22 +402,18 @@ func shouldSkipDerivedActionError(action string, err error) bool {
 		return false
 	}
 	body := strings.ToLower(httpErr.Body)
-	switch action {
-	case "GetResourcePolicy":
-		return httpErr.Status == http.StatusNotFound || containsAny(body, "notfound", "not found")
-	case "GetInsightSelectors":
-		return httpErr.Status == http.StatusBadRequest && containsAny(body, "insightnotenabledexception", "insight not enabled", "insights not enabled")
-	case "GetEventConfiguration":
+	if actionMarkers, ok := cloudTrailTrailOrEventDataStoreActions[action]; ok {
 		if httpErr.Status == http.StatusNotFound {
 			return true
 		}
-		return httpErr.Status == http.StatusBadRequest && containsAny(body,
-			"trailnotfoundexception",
-			"eventdatastorenotfoundexception",
-			"inactiveeventdatastoreexception",
-			"invalideventdatastorecategoryexception",
-			"unsupportedoperationexception",
-		)
+		if httpErr.Status != http.StatusBadRequest {
+			return false
+		}
+		return containsAny(body, cloudTrailTrailOrEventDataStoreSkipMarkers...) || containsAny(body, actionMarkers...)
+	}
+	switch action {
+	case "GetResourcePolicy":
+		return httpErr.Status == http.StatusNotFound || containsAny(body, "notfound", "not found")
 	default:
 		return false
 	}
