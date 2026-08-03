@@ -28,7 +28,7 @@
 
 ## Scope boundaries
 
-### In scope
+### In scope — code
 
 1. `internal/coordination/issueguard/guard.go` — recognize the
    `## Unvalidated cloud checkpoint — do not merge yet` /
@@ -37,10 +37,20 @@
 2. `internal/coordination/issueguard/guard_test.go` — positive coverage (LF, CRLF, GitHub-indented
    bodies) plus negative coverage pinning both gates.
 
+Code scope is exactly these two files. No other production or behavior-carrying file changes.
+
+### In scope — GSD planning evidence
+
+3. `.planning/phases/issue-3674-issueguard-checkpoint-links/PLAN.md`, `TDD-LEDGER.md`,
+   `VERIFICATION.md`, and `RUN-STATE.json` — added alongside the code per repo convention because
+   `internal/**` changed. `scripts/verify-gsd-workflow` fails the `gsd-workflow-evidence` gate
+   without changed `.planning/**` evidence. These are documentation artifacts: they carry no
+   behavior and are not part of the code scope above.
+
 ### Out of scope
 
-- No other file changes. This foundation PR touches only `guard.go` and `guard_test.go` plus this
-  phase's planning evidence; nothing else changes.
+- No files change beyond the two code files and this phase's four planning-evidence files; the
+  shipped diff is exactly those six paths.
 - No loosening of the general require-linked-issue rule for non-checkpoint PR bodies.
 - No connector definition, CLI surface, docs, or website changes; issueguard is a shared PR-body
   validator consumed by `cmd/prissueguard` and `.github/workflows/pr-issue-guard.yml`, not a `pm`
