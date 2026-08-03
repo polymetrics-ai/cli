@@ -33,9 +33,12 @@ declared, never inferred, via `metadata.json`'s `mechanism` block (`engine.Mecha
 `[UNOFFICIAL]` marker and the mechanism block from that one field. `pm connectors enable <name>`
 implements the opt-in risk-acceptance gate for `web_session` connectors (print-then-reinvoke with
 `--accept-risk <sha256-of-the-warning-text>`, never a bare boolean flag). `internal/vault/` gained an
-OS-keychain key protector (fallback to the pre-existing plaintext file key, recorded via
-`Vault.UsingFallbackKeyProtection()`), a `connector/profile/kind` namespace for per-account isolation
-(`PutNamespaced`/`PutBlob`/`List`/`DeleteAll`), and `RotateKey`. No connector consumes any of this yet.
+OS-keychain key protector that is opt-in only — `vault.Init`/`Open` still default a new vault to the
+pre-existing plaintext file key, and `vault.KeychainProtector{}` is reached solely through an explicit
+`vault.InitWithProtector` (a follow-up hardening PR makes it the default once it fails closed instead
+of re-minting over existing ciphertext) — plus a `connector/profile/kind` namespace for per-account
+isolation (`PutNamespaced`/`PutBlob`/`List`/`DeleteAll`), and `RotateKey`. No connector consumes any
+of this yet.
 
 ## Project
 

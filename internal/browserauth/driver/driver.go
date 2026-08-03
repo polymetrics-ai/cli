@@ -25,15 +25,14 @@
 package driver
 
 import (
+	"bytes"
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"errors"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -56,10 +55,10 @@ type Resolution struct {
 	// Version identifies the exact browser build, and is never empty for a
 	// successful Resolve. For a pinned download it is the pinned revision.
 	// Otherwise it is the binary's own `--version` output when the binary
-	// reports one, and failing that a content fingerprint of the binary
-	// ("<abs path>@sha256:<digest>") — which still changes whenever the
-	// browser is upgraded in place, which is the coherence signal callers
-	// actually need.
+	// reports one, and failing that a stat fingerprint of the binary
+	// ("<abs path>@size:<n>,mtime:<unixnano>") — which still changes
+	// whenever the browser is upgraded in place, the coherence signal
+	// callers actually need.
 	Version string
 }
 
@@ -113,7 +112,12 @@ func (cfg Config) validate() error {
 var lookInstalledBrowser = launcher.LookPath
 
 // Resolve implements the three-step browser resolution order documented on
-// Config.AllowDownload, without launching anything.
+// Config.AllowDownload. It never starts a browser session, but it is not a
+// pure query: on the user_specified and installed branches it briefly
+// executes the resolved binary as `<path> --version` (bounded by
+// browserVersionProbeTimeout, with captured output capped) to fill
+// Resolution.Version. Callers that must not spawn a process from a
+// config-supplied path should not call Resolve.
 func Resolve(cfg Config) (Resolution, error) {
 	if cfg.BrowserPath != "" {
 		if _, err := os.Stat(cfg.BrowserPath); err != nil {
@@ -135,47 +139,85 @@ func Resolve(cfg Config) (Resolution, error) {
 	return Resolution{Source: "pinned_download", Path: path, Version: fmt.Sprintf("chromium-%d", b.Revision)}, nil
 }
 
-// browserVersionProbeTimeout bounds the `<binary> --version` probe so a
-// wedged or non-responsive binary cannot stall resolution.
-const browserVersionProbeTimeout = 5 * time.Second
+const (
+	// browserVersionProbeTimeout bounds the `<binary> --version` probe so a
+	// wedged or non-responsive binary cannot stall resolution.
+	browserVersionProbeTimeout = 5 * time.Second
+	// maxBrowserVersionOutput caps what the probe keeps of the child's
+	// stdout. A version line is tens of bytes; a binary that floods stdout
+	// must not make Resolve allocate without bound.
+	maxBrowserVersionOutput = 4096
+)
 
 // browserBuildID identifies the exact build at path. Chrome-family binaries
-// print a parseable version for `--version`; anything that does not (a
-// wrapper script, a stripped build, an unexpected platform) falls back to a
-// content fingerprint rather than leaving Resolution.Version empty.
+// print a parseable version for `--version` on Unix; where that is
+// unavailable or empty — Windows, plus wrapper scripts and stripped builds —
+// identity falls back to the binary's size and modification time, which
+// still change whenever the browser is upgraded in place.
 func browserBuildID(path string) string {
 	if v := probeBrowserVersion(path); v != "" {
 		return v
 	}
-	return binaryContentFingerprint(path)
+	return binaryStatFingerprint(path)
 }
 
+// probeBrowserVersion returns the binary's self-reported version, or "" when
+// it reports none. It is skipped outright on Windows, where Chrome-family
+// binaries are GUI-subsystem executables that answer --version with no
+// stdout at all, so every call would pay for a process spawn that cannot
+// succeed.
 func probeBrowserVersion(path string) string {
-	ctx, cancel := context.WithTimeout(context.Background(), browserVersionProbeTimeout)
-	defer cancel()
-	out, err := exec.CommandContext(ctx, path, "--version").Output()
-	if err != nil {
+	if runtime.GOOS == "windows" {
 		return ""
 	}
-	return strings.TrimSpace(string(out))
+	ctx, cancel := context.WithTimeout(context.Background(), browserVersionProbeTimeout)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, path, "--version")
+	out := &cappedBuffer{limit: maxBrowserVersionOutput}
+	cmd.Stdout = out
+	if err := cmd.Run(); err != nil {
+		return ""
+	}
+	return strings.TrimSpace(out.String())
 }
 
-func binaryContentFingerprint(path string) string {
+// binaryStatFingerprint identifies a binary by absolute path, size, and
+// modification time. It deliberately does not hash the file's contents:
+// Resolve runs on every session capture and a browser binary is large
+// enough that reading all of it merely to notice an upgrade is not worth
+// the cost.
+func binaryStatFingerprint(path string) string {
 	abs, err := filepath.Abs(path)
 	if err != nil {
 		abs = path
 	}
-	f, err := os.Open(path)
+	info, err := os.Stat(path)
 	if err != nil {
 		return abs
 	}
-	defer func() { _ = f.Close() }()
-	sum := sha256.New()
-	if _, err := io.Copy(sum, f); err != nil {
-		return abs
-	}
-	return abs + "@sha256:" + hex.EncodeToString(sum.Sum(nil))
+	return fmt.Sprintf("%s@size:%d,mtime:%d", abs, info.Size(), info.ModTime().UnixNano())
 }
+
+// cappedBuffer keeps at most limit bytes and silently discards the rest,
+// while still reporting every byte as written so the child process never
+// sees a short write.
+type cappedBuffer struct {
+	buf   bytes.Buffer
+	limit int
+}
+
+func (c *cappedBuffer) Write(p []byte) (int, error) {
+	n := len(p)
+	if room := c.limit - c.buf.Len(); room > 0 {
+		if len(p) > room {
+			p = p[:room]
+		}
+		c.buf.Write(p)
+	}
+	return n, nil
+}
+
+func (c *cappedBuffer) String() string { return c.buf.String() }
 
 // Snapshot is a point-in-time read of the driven page, passed to a WaitFor
 // readiness predicate. Cookies contains only Config.RequiredCookies —

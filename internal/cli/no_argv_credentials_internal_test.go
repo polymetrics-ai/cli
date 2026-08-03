@@ -62,8 +62,13 @@ func TestNoSecretShapedFlagIsEverRead(t *testing.T) {
 			return err
 		}
 		for _, line := range strings.Split(string(raw), "\n") {
-			code, _, _ := strings.Cut(line, "//")
-			if loc := forbidden.FindString(code); loc != "" {
+			// Skip only whole-line comments. Cutting at the first "//"
+			// anywhere would blind the scan to a read that follows a URL
+			// literal on a line of real code.
+			if strings.HasPrefix(strings.TrimSpace(line), "//") {
+				continue
+			}
+			if loc := forbidden.FindString(line); loc != "" {
 				t.Errorf("%s: reads a secret-shaped flag value %q — credentials must arrive via env var or stdin, never a CLI argument (AGENTS.md; the bcharleson/linkedincli --li-at defect)", path, loc)
 			}
 		}
