@@ -1,0 +1,18 @@
+{
+  "record": {
+    "channel_id": "fixture_channel_id",
+    "external_call_id": "fixture_call_1",
+    "call_status": "connected"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/channels/fixture_channel_id/calls/fixture_call_1",
+    "body": {
+      "call_status": "connected"
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": {}
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "record": {
+    "channel_id": "fixture_channel_id",
+    "external_call_id": "fixture_call_1",
+    "lines": [
+      {
+        "speaker_name": "Fixture Agent",
+        "content": "Hello.",
+        "start_time_seconds": 0,
+        "speaker_type": "internal"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/channels/fixture_channel_id/calls/fixture_call_1/transcript",
+    "body": {
+      "lines": [
+        {
+          "speaker_name": "Fixture Agent",
+          "content": "Hello.",
+          "start_time_seconds": 0,
+          "speaker_type": "internal"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": {}
+  }
+}
