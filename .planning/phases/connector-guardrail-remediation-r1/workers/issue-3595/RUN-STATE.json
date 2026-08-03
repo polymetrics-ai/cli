@@ -50,7 +50,8 @@
     "F15 (2026-08-03): pnpm run gen:website-data / lint / typecheck / test:unit / build with pnpm 11.7.0 (CI-matching) at pipeline head — zero diff, all green (Website checks root cause was a stale CI run against the pre-review-fix scaffold commit, not a defect)",
     "review-round-2 (2026-08-03): no-mistakes run 01KZ2661QR8MTV33B5WDB7S1HV fixed all 8 review findings + 1 follow-up CI path-filter finding; document gate approved as-is; PR #3596 reached 27 passed/0 failed/8 skipped, mergeable_state clean",
     "codeql (2026-08-03): node --test scripts/icon-registry.test.mjs (RED before fix: module not found; GREEN after: 8/8) for website/scripts/lib/simple-icons.mjs + rewired fetch-simple-icons.mjs",
-    "codeql (2026-08-03): pnpm run lint; pnpm run typecheck; pnpm run gen:website-data (zero diff) — all clean after the fix"
+    "codeql (2026-08-03): pnpm run lint; pnpm run typecheck; pnpm run gen:website-data (zero diff) — all clean after the fix",
+    "review-round-9 (2026-08-03): commit 4b182b1ba hardened the fetch boundary (in-tree non-icon and non-string paths now rejected), deduped assertInside into website/scripts/lib/connector-icons.mjs, and memoized Registry.MustValidateIconCoverage with invalidation on Register; focused gates listed under 'Review repair round 9' in VERIFICATION.md, results owned by the enclosing no-mistakes run for PR #3596"
   ],
   "safety": {
     "secrets": "not requested or used",

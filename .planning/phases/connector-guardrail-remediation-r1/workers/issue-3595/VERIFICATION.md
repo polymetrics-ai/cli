@@ -77,6 +77,17 @@ pnpm run typecheck
 pnpm run gen:website-data   # must diff clean
 ```
 
+Review repair round 9 (fetch-boundary shape guard, containment dedupe, icon-coverage memoization) focused gate:
+
+```bash
+gofmt -l internal/connectors
+go test ./internal/connectors -run 'TestMustValidateIconCoverageRevalidatesAfterRegistration|TestRegistryIconCoverage'
+node --test website/scripts/icon-registry.test.mjs
+node --check website/scripts/fetch-simple-icons.mjs
+node --check website/scripts/gen-connector-bundles.mjs
+node --check website/scripts/lib/simple-icons.mjs
+```
+
 ## Repository gates before integration
 
 ```bash
@@ -123,3 +134,4 @@ If a gate is not applicable or blocked by environment, record the exact reason a
 - RED `node --test scripts/icon-registry.test.mjs` (from `website/`): failed before the CodeQL input-validation fix — `website/scripts/lib/simple-icons.mjs` did not exist.
 - GREEN CodeQL fetch-simple-icons input validation gate: `node --test scripts/icon-registry.test.mjs` (8/8, equivalently `pnpm run test:scripts`) — `../`-traversal path rejected, nested `../` path rejected, absolute path rejected, slug containing `/` rejected before any fetch, slug containing a scheme rejected before any fetch, empty slug rejected, valid bare slug + in-tree path resolves unchanged.
 - GREEN `pnpm run lint`, `pnpm run typecheck`, `pnpm run gen:website-data` (zero diff): pass after the CodeQL fix, confirming no regression to generated website data.
+- Review round 9 (PR #3596 review commit `4b182b1ba`) hardened the round-8 fetch boundary so an in-tree non-icon or non-string registry path is rejected as well as an escaping one, deduped `assertInside` into `website/scripts/lib/connector-icons.mjs`, and memoized `Registry.MustValidateIconCoverage` with invalidation on `Register`. Its focused gate commands are listed above; the gate results are owned by the enclosing no-mistakes validation run for PR #3596 and are not restated here.
