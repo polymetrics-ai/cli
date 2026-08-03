@@ -56,6 +56,31 @@
         "skip_dynamic": { "type": "boolean" },
         "reason": { "type": "string" }
       }
+    },
+    "mechanism": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sanctioned_by_provider"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["official_api", "web_session"] },
+        "label": { "type": "string" },
+        "sanctioned_by_provider": { "type": "boolean" },
+        "provider_terms_url": { "type": "string" },
+        "auth_flow": { "type": "string" },
+        "opt_in_required": { "type": "boolean" },
+        "upstream_pin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repo", "sha"],
+          "properties": {
+            "repo": { "type": "string" },
+            "sha": { "type": "string" },
+            "verified_at": { "type": "string" }
+          }
+        },
+        "breakage_review_cadence_days": { "type": "integer" },
+        "disabled_reason": { "type": "string" }
+      }
     }
   }
 }
