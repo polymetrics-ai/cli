@@ -3305,6 +3305,12 @@
       "summary": "Member of List",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/v1/lists/{listId}/leads/ismember.json"
+        }
+      ],
       "operation": "marketo.get_are_leads_member_of_list",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
       "flags": [
@@ -3325,9 +3331,10 @@
       "output_policy": "json_redacted",
       "risk": "medium",
       "approval": "none",
-      "notes": "GET /rest/v1/lists/{listId}/leads/ismember.json; official_lane=direct_read_query_search; operation_id=areLeadsMemberOfListUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --list-id.",
+      "notes": "GET /rest/v1/lists/{listId}/leads/ismember.json; official_lane=direct_read_query_search; operation_id=areLeadsMemberOfListUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --list-id. Requires connector config override(s) for path parameter(s): list_id.",
       "examples": [
-        "pm marketo direct get-are-leads-member-of-list --json --list-id example"
+        "pm marketo direct get-are-leads-member-of-list --json --list-id example",
+        "pm marketo direct get-are-leads-member-of-list --json --config list_id=example"
       ]
     },
     {
@@ -3335,6 +3342,12 @@
       "summary": "Get Channel by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/channel/byName.json"
+        }
+      ],
       "operation": "marketo.get_channel_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3356,6 +3369,12 @@
       "summary": "Get Company Field by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/v1/companies/schema/fields/{fieldApiName}.json"
+        }
+      ],
       "operation": "marketo.get_company_field_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
       "flags": [
@@ -3370,9 +3389,10 @@
       "output_policy": "json_redacted",
       "risk": "medium",
       "approval": "none",
-      "notes": "GET /rest/v1/companies/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getCompanyFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name.",
+      "notes": "GET /rest/v1/companies/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getCompanyFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name. Requires connector config override(s) for path parameter(s): field_api_name.",
       "examples": [
-        "pm marketo direct get-company-field-by-name --json --field-api-name example"
+        "pm marketo direct get-company-field-by-name --json --field-api-name example",
+        "pm marketo direct get-company-field-by-name --json --config field_api_name=example"
       ]
     },
     {
@@ -3380,6 +3400,12 @@
       "summary": "Get Dynamic Content",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/snippet/{id}/dynamicContent.json"
+        }
+      ],
       "operation": "marketo.get_dynamic_content",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3406,7 +3432,8 @@
       "approval": "none",
       "notes": "GET /rest/asset/v1/snippet/{id}/dynamicContent.json; official_lane=direct_read_query_search; operation_id=getDynamicContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.",
       "examples": [
-        "pm marketo direct get-dynamic-content --json --id example"
+        "pm marketo direct get-dynamic-content --json --id example",
+        "pm marketo direct get-dynamic-content --json --config id=example"
       ]
     },
     {
@@ -3414,6 +3441,12 @@
       "summary": "Get Email by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/email/byName.json"
+        }
+      ],
       "operation": "marketo.get_email_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3452,6 +3485,12 @@
       "summary": "Get Email Content",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/email/{id}/content.json"
+        }
+      ],
       "operation": "marketo.get_email_content_by_id",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3478,7 +3517,8 @@
       "approval": "none",
       "notes": "GET /rest/asset/v1/email/{id}/content.json; official_lane=direct_read_query_search; operation_id=getEmailContentByIdUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.",
       "examples": [
-        "pm marketo direct get-email-content-by-id --json --id example"
+        "pm marketo direct get-email-content-by-id --json --id example",
+        "pm marketo direct get-email-content-by-id --json --config id=example"
       ]
     },
     {
@@ -3486,6 +3526,12 @@
       "summary": "Get Email Dynamic Content",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/email/{id}/dynamicContent/{contentId}.json"
+        }
+      ],
       "operation": "marketo.get_email_dynamic_content",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3517,9 +3563,10 @@
       "output_policy": "json_redacted",
       "risk": "medium",
       "approval": "none",
-      "notes": "GET /rest/asset/v1/email/{id}/dynamicContent/{contentId}.json; official_lane=direct_read_query_search; operation_id=getEmailDynamicContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id, --content-id.",
+      "notes": "GET /rest/asset/v1/email/{id}/dynamicContent/{contentId}.json; official_lane=direct_read_query_search; operation_id=getEmailDynamicContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id, --content-id. Requires connector config override(s) for path parameter(s): id, content_id.",
       "examples": [
-        "pm marketo direct get-email-dynamic-content --json --id example --content-id example"
+        "pm marketo direct get-email-dynamic-content --json --id example --content-id example",
+        "pm marketo direct get-email-dynamic-content --json --config id=example --config content_id=example"
       ]
     },
     {
@@ -3527,6 +3574,12 @@
       "summary": "Get Email Full Content",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/email/{id}/fullContent.json"
+        }
+      ],
       "operation": "marketo.get_email_full_content",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3569,7 +3622,8 @@
       "approval": "none",
       "notes": "GET /rest/asset/v1/email/{id}/fullContent.json; official_lane=direct_read_query_search; operation_id=getEmailFullContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.",
       "examples": [
-        "pm marketo direct get-email-full-content --json --id example"
+        "pm marketo direct get-email-full-content --json --id example",
+        "pm marketo direct get-email-full-content --json --config id=example"
       ]
     },
     {
@@ -3577,6 +3631,12 @@
       "summary": "Get File by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/file/byName.json"
+        }
+      ],
       "operation": "marketo.get_file_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3598,6 +3658,12 @@
       "summary": "Get Folder by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/folder/byName.json"
+        }
+      ],
       "operation": "marketo.get_folder_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3640,6 +3706,12 @@
       "summary": "Get Landing Page by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/landingPage/byName.json"
+        }
+      ],
       "operation": "marketo.get_landing_page_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3683,6 +3755,12 @@
       "summary": "Get Landing Page Content",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/landingPage/{id}/content.json"
+        }
+      ],
       "operation": "marketo.get_landing_page_content",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3709,7 +3787,8 @@
       "approval": "none",
       "notes": "GET /rest/asset/v1/landingPage/{id}/content.json; official_lane=direct_read_query_search; operation_id=getLandingPageContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.",
       "examples": [
-        "pm marketo direct get-landing-page-content --json --id example"
+        "pm marketo direct get-landing-page-content --json --id example",
+        "pm marketo direct get-landing-page-content --json --config id=example"
       ]
     },
     {
@@ -3717,6 +3796,12 @@
       "summary": "Get Landing Page Dynamic Content",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/landingPage/{id}/dynamicContent/{contentId}.json"
+        }
+      ],
       "operation": "marketo.get_landing_page_dynamic_contents",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3738,9 +3823,10 @@
       "output_policy": "json_redacted",
       "risk": "medium",
       "approval": "none",
-      "notes": "GET /rest/asset/v1/landingPage/{id}/dynamicContent/{contentId}.json; official_lane=direct_read_query_search; operation_id=getLandingPageDynamicContentsUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id, --content-id.",
+      "notes": "GET /rest/asset/v1/landingPage/{id}/dynamicContent/{contentId}.json; official_lane=direct_read_query_search; operation_id=getLandingPageDynamicContentsUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id, --content-id. Requires connector config override(s) for path parameter(s): id, content_id.",
       "examples": [
-        "pm marketo direct get-landing-page-dynamic-contents --json --id example --content-id example"
+        "pm marketo direct get-landing-page-dynamic-contents --json --id example --content-id example",
+        "pm marketo direct get-landing-page-dynamic-contents --json --config id=example --config content_id=example"
       ]
     },
     {
@@ -3748,6 +3834,12 @@
       "summary": "Get Landing Page Full Content",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/landingPage/{id}/fullContent.json"
+        }
+      ],
       "operation": "marketo.get_landing_page_full_content",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3777,7 +3869,8 @@
       "approval": "none",
       "notes": "GET /rest/asset/v1/landingPage/{id}/fullContent.json; official_lane=direct_read_query_search; operation_id=getLandingPageFullContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.",
       "examples": [
-        "pm marketo direct get-landing-page-full-content --json --id example"
+        "pm marketo direct get-landing-page-full-content --json --id example",
+        "pm marketo direct get-landing-page-full-content --json --config id=example"
       ]
     },
     {
@@ -3785,6 +3878,12 @@
       "summary": "Get Landing Page Template by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/landingPageTemplate/byName.json"
+        }
+      ],
       "operation": "marketo.get_landing_page_template_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3806,6 +3905,12 @@
       "summary": "Get Landing Page Template Content",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/landingPageTemplate/{id}/content.json"
+        }
+      ],
       "operation": "marketo.get_landing_page_template_content",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3832,7 +3937,8 @@
       "approval": "none",
       "notes": "GET /rest/asset/v1/landingPageTemplate/{id}/content.json; official_lane=direct_read_query_search; operation_id=getLandingPageTemplateContentUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.",
       "examples": [
-        "pm marketo direct get-landing-page-template-content --json --id example"
+        "pm marketo direct get-landing-page-template-content --json --id example",
+        "pm marketo direct get-landing-page-template-content --json --config id=example"
       ]
     },
     {
@@ -3840,6 +3946,12 @@
       "summary": "Get Lead Field by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/v1/leads/schema/fields/{fieldApiName}.json"
+        }
+      ],
       "operation": "marketo.get_lead_field_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
       "flags": [
@@ -3854,9 +3966,10 @@
       "output_policy": "json_redacted",
       "risk": "medium",
       "approval": "none",
-      "notes": "GET /rest/v1/leads/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getLeadFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name.",
+      "notes": "GET /rest/v1/leads/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getLeadFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name. Requires connector config override(s) for path parameter(s): field_api_name.",
       "examples": [
-        "pm marketo direct get-lead-field-by-name --json --field-api-name example"
+        "pm marketo direct get-lead-field-by-name --json --field-api-name example",
+        "pm marketo direct get-lead-field-by-name --json --config field_api_name=example"
       ]
     },
     {
@@ -3864,6 +3977,12 @@
       "summary": "Get Form by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/form/byName.json"
+        }
+      ],
       "operation": "marketo.get_lp_form_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3902,6 +4021,12 @@
       "summary": "Get Named Account Field by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/v1/namedaccounts/schema/fields/{fieldApiName}.json"
+        }
+      ],
       "operation": "marketo.get_named_account_field_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
       "flags": [
@@ -3916,9 +4041,10 @@
       "output_policy": "json_redacted",
       "risk": "medium",
       "approval": "none",
-      "notes": "GET /rest/v1/namedaccounts/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getNamedAccountFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name.",
+      "notes": "GET /rest/v1/namedaccounts/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getNamedAccountFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name. Requires connector config override(s) for path parameter(s): field_api_name.",
       "examples": [
-        "pm marketo direct get-named-account-field-by-name --json --field-api-name example"
+        "pm marketo direct get-named-account-field-by-name --json --field-api-name example",
+        "pm marketo direct get-named-account-field-by-name --json --config field_api_name=example"
       ]
     },
     {
@@ -3926,6 +4052,12 @@
       "summary": "Get Opportunity Field by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/v1/opportunities/schema/fields/{fieldApiName}.json"
+        }
+      ],
       "operation": "marketo.get_opportunity_field_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
       "flags": [
@@ -3940,9 +4072,10 @@
       "output_policy": "json_redacted",
       "risk": "medium",
       "approval": "none",
-      "notes": "GET /rest/v1/opportunities/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getOpportunityFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name.",
+      "notes": "GET /rest/v1/opportunities/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getOpportunityFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name. Requires connector config override(s) for path parameter(s): field_api_name.",
       "examples": [
-        "pm marketo direct get-opportunity-field-by-name --json --field-api-name example"
+        "pm marketo direct get-opportunity-field-by-name --json --field-api-name example",
+        "pm marketo direct get-opportunity-field-by-name --json --config field_api_name=example"
       ]
     },
     {
@@ -3950,6 +4083,12 @@
       "summary": "Get Program by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/program/byName.json"
+        }
+      ],
       "operation": "marketo.get_program_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -3983,6 +4122,12 @@
       "summary": "Get Program Member Field by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/v1/programs/members/schema/fields/{fieldApiName}.json"
+        }
+      ],
       "operation": "marketo.get_program_member_field_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-mapi.json",
       "flags": [
@@ -3997,9 +4142,10 @@
       "output_policy": "json_redacted",
       "risk": "medium",
       "approval": "none",
-      "notes": "GET /rest/v1/programs/members/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getProgramMemberFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name.",
+      "notes": "GET /rest/v1/programs/members/schema/fields/{fieldApiName}.json; official_lane=direct_read_query_search; operation_id=getProgramMemberFieldByNameUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --field-api-name. Requires connector config override(s) for path parameter(s): field_api_name.",
       "examples": [
-        "pm marketo direct get-program-member-field-by-name --json --field-api-name example"
+        "pm marketo direct get-program-member-field-by-name --json --field-api-name example",
+        "pm marketo direct get-program-member-field-by-name --json --config field_api_name=example"
       ]
     },
     {
@@ -4007,6 +4153,12 @@
       "summary": "Get Smart Campaign by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/smartCampaign/byName.json"
+        }
+      ],
       "operation": "marketo.get_smart_campaign_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -4028,6 +4180,12 @@
       "summary": "Get Smart List by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/smartList/byName.json"
+        }
+      ],
       "operation": "marketo.get_smart_list_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -4049,6 +4207,12 @@
       "summary": "Get Static List by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/staticList/byName.json"
+        }
+      ],
       "operation": "marketo.get_static_list_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -4070,6 +4234,12 @@
       "summary": "Get Tag By Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/tagType/byName.json"
+        }
+      ],
       "operation": "marketo.get_tag_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -4091,6 +4261,12 @@
       "summary": "Get Email Template by Name",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/emailTemplate/byName.json"
+        }
+      ],
       "operation": "marketo.get_template_by_name",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -4122,6 +4298,12 @@
       "summary": "Get Email Template Content by Id",
       "intent": "direct_read",
       "availability": "implemented",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/rest/asset/v1/emailTemplate/{id}/content"
+        }
+      ],
       "operation": "marketo.get_template_content_by_id",
       "source_url": "https://raw.githubusercontent.com/AdobeDocs/marketo-developer.en/main/help/rest-api/assets/swagger-asset.json",
       "flags": [
@@ -4148,7 +4330,8 @@
       "approval": "none",
       "notes": "GET /rest/asset/v1/emailTemplate/{id}/content; official_lane=direct_read_query_search; operation_id=getTemplateContentByIdUsingGET; fixed typed endpoint, not raw API.; Requires typed path flag(s): --id.",
       "examples": [
-        "pm marketo direct get-template-content-by-id --json --id example"
+        "pm marketo direct get-template-content-by-id --json --id example",
+        "pm marketo direct get-template-content-by-id --json --config id=example"
       ]
     },
     {
