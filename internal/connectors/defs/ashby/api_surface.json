@@ -1351,7 +1351,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/applicationsubmitwebhook",
         "notes": "applicationSubmit"
       }
     },
@@ -1364,7 +1364,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/applicationupdatewebhook",
         "notes": "applicationUpdate"
       }
     },
@@ -1377,7 +1377,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/candidatehirewebhook",
         "notes": "candidateHire"
       }
     },
@@ -1390,7 +1390,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/candidatestagechangewebhook",
         "notes": "candidateStageChange"
       }
     },
@@ -1403,7 +1403,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/candidatedeletewebhook",
         "notes": "candidateDelete"
       }
     },
@@ -1416,7 +1416,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/candidatemergewebhook",
         "notes": "candidateMerge"
       }
     },
@@ -1429,7 +1429,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/interviewplantransitionwebhook",
         "notes": "interviewPlanTransition"
       }
     },
@@ -1442,7 +1442,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/interviewschedulecreatewebhook",
         "notes": "interviewScheduleCreate"
       }
     },
@@ -1455,7 +1455,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/interviewscheduleupdatewebhook",
         "notes": "interviewScheduleUpdate"
       }
     },
@@ -1468,7 +1468,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/jobcreatewebhook",
         "notes": "jobCreate"
       }
     },
@@ -1481,7 +1481,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/jobupdatewebhook",
         "notes": "jobUpdate"
       }
     },
@@ -1494,7 +1494,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/jobpostingdeletewebhook",
         "notes": "jobPostingDelete"
       }
     },
@@ -1507,7 +1507,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/jobpostingupdatewebhook",
         "notes": "jobPostingUpdate"
       }
     },
@@ -1520,7 +1520,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/jobpostingpublishwebhook",
         "notes": "jobPostingPublish"
       }
     },
@@ -1533,7 +1533,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/jobpostingunpublishwebhook",
         "notes": "jobPostingUnpublish"
       }
     },
@@ -1546,7 +1546,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/offercreatewebhook",
         "notes": "offerCreate"
       }
     },
@@ -1559,7 +1559,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/offerdeletewebhook",
         "notes": "offerDelete"
       }
     },
@@ -1572,7 +1572,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/offerupdatewebhook",
         "notes": "offerUpdate"
       }
     },
@@ -1585,7 +1585,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/openingcreatewebhook",
         "notes": "openingCreate"
       }
     },
@@ -1598,7 +1598,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/pushtohriswebhook",
         "notes": "pushToHRIS"
       }
     },
@@ -1611,7 +1611,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/pingwebhook",
         "notes": "ping"
       }
     },
@@ -1624,7 +1624,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/signaturerequestupdatewebhook",
         "notes": "signatureRequestUpdate"
       }
     },
@@ -1637,7 +1637,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/surveysubmitwebhook",
         "notes": "surveySubmit"
       }
     },
@@ -1650,7 +1650,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/takehomeassignmentassignedwebhook",
         "notes": "takeHomeAssignmentAssigned"
       }
     },
@@ -1663,7 +1663,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/takehomeassignmentcancelledwebhook",
         "notes": "takeHomeAssignmentCancelled"
       }
     },
@@ -1676,7 +1676,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/takehomeassignmentcompletedwebhook",
         "notes": "takeHomeAssignmentCompleted"
       }
     },
@@ -1689,7 +1689,7 @@
         "risk": "medium",
         "blocked_by_default": true,
         "reason": "official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)",
-        "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
+        "source_url": "https://developers.ashbyhq.com/reference/takehomeassignmentsubmittedwebhook",
         "notes": "takeHomeAssignmentSubmitted"
       }
     }

@@ -634,7 +634,7 @@ def main():
         api_rows.append({"method":method,"path":path,"operation":{"model":model,"status":"blocked","risk":risk,"blocked_by_default":True,"reason":reason,"source_url":source_url(op),"notes":clean}})
     for webhook_name, webhook in schema.get("webhooks",{}).items():
         post=webhook.get("post",{}) if isinstance(webhook, dict) else {}
-        api_rows.append({"method":"WEBHOOK","path":f"webhook:{webhook_name}","operation":{"model":"disallowed","status":"blocked","risk":"medium","blocked_by_default":True,"reason":"official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)","source_url":DOC_URL,"notes":post.get("summary", webhook_name)}})
+        api_rows.append({"method":"WEBHOOK","path":f"webhook:{webhook_name}","operation":{"model":"disallowed","status":"blocked","risk":"medium","blocked_by_default":True,"reason":"official OpenAPI webhook object documents an inbound event callback; implementation requires shared webhook/CDC receiver and state foundations (#2986/#2988)","source_url":source_url(post),"notes":post.get("summary", webhook_name)}})
 
     for sub in (DEFS/"schemas",):
         if sub.exists():
