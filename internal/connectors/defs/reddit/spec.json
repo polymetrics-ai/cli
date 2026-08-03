@@ -2,16 +2,20 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Reddit Connection Specification",
   "type": "object",
-  "required": ["access_token", "subreddit"],
+  "required": ["access_token", "subreddit", "reddit_username"],
   "properties": {
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Reddit OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>). OAuth token acquisition/refresh is out of scope; the caller supplies a valid token. Never logged."
+      "description": "Reddit OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>). OAuth token acquisition/refresh is out of scope; the caller supplies a valid token. Reddit bearer tokens expire 1 hour after issuance and this connector does not refresh them, so any sync expected to run longer than an hour, or any recurring/scheduled sync, needs a freshly issued token supplied before each run. Never logged."
     },
     "subreddit": {
       "type": "string",
       "description": "Subreddit name to read posts/comments from (path-scoped as /r/{subreddit}/...)."
+    },
+    "reddit_username": {
+      "type": "string",
+      "description": "Reddit username of the account that authorized access_token, e.g. \"my_bot_account\" without the /u/ prefix. Sent as the required identity component of the User-Agent header Reddit's API rules mandate (<platform>:<app ID>:<version> (by /u/<reddit username>)); non-conforming User-Agents are drastically rate-limited. Not a secret; used for no other purpose."
     },
     "base_url": {
       "type": "string",

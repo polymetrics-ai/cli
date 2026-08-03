@@ -35,6 +35,7 @@ Reads subreddit posts and comments through the Reddit OAuth API listing endpoint
 ## Configuration
 
 - base_url
+- reddit_username
 - subreddit
 - access_token (secret)
 
