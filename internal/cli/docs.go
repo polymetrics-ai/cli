@@ -286,6 +286,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
+  pm connectors enable <name> [--profile <p>] [--accept-risk <sha256>] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -308,6 +309,24 @@ CATALOG
   local sample, file, warehouse, and outbox primitives. Use --all or the catalog
   subcommand when an agent needs to discover the complete connector universe.
   Use --capability read, write, cdc, or query to filter by executable surface.
+
+MECHANISM
+  Every connector declares metadata.mechanism.kind: official_api (an
+  approved provider API — the default when a connector declares no
+  mechanism block at all) or web_session (an unofficial, experimental
+  browser session captured by internal/browserauth, never an approved API).
+  This is declared metadata, never inferred at runtime: pm connectors list
+  prints an [UNOFFICIAL] marker beside a web_session connector's name, and
+  pm connectors inspect --json includes the full mechanism block.
+
+  web_session connectors ship present but disabled: pm connectors enable
+  <name> prints the connector's plain-language risk warning (what using it
+  risks for your account) and the warning's SHA-256 hash, then exits
+  without changing anything. Re-run with --accept-risk <hash> using the
+  hash it printed to actually enable it for a profile — a bare boolean
+  accept flag is deliberately not offered, so the hash proves you read the
+  current warning text rather than a stale or guessed one. Accepting a new
+  warning text (after a material risk update) requires accepting again.
 
 GITHUB AUTHENTICATION
   public

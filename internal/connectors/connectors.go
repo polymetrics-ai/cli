@@ -55,6 +55,34 @@ type Metadata struct {
 	Description     string         `json:"description"`
 	Capabilities    Capabilities   `json:"capabilities"`
 	Icon            *ConnectorIcon `json:"icon,omitempty"`
+	Mechanism       *MechanismSpec `json:"mechanism,omitempty"`
+}
+
+// Mechanism kind values — mirrors engine.MechanismOfficialAPI /
+// engine.MechanismWebSession. Duplicated here rather than imported: engine
+// imports this package (connector.go's synthesizeMetadata/synthesizeDefinition
+// build connectors.MechanismSpec from engine.Bundle), so this package
+// cannot import engine back without a cycle.
+const (
+	MechanismOfficialAPI = "official_api"
+	MechanismWebSession  = "web_session"
+)
+
+// MechanismSpec is the connector-facing (registry/CLI) view of a bundle's
+// declared access mechanism (engine.MechanismSpec is the authoring/loader
+// source of truth). It is what makes the official-vs-unofficial split
+// visible without reading source: `pm connectors list` renders an
+// [UNOFFICIAL] marker from SanctionedByProvider, `pm connectors inspect
+// --json` surfaces this block beside capabilities, and `pm <connector>
+// --help` reads it for the same line — five renderers, one field, never a
+// runtime inference (design report §5.2).
+type MechanismSpec struct {
+	Kind                 string `json:"kind"`
+	Label                string `json:"label,omitempty"`
+	SanctionedByProvider bool   `json:"sanctioned_by_provider"`
+	ProviderTermsURL     string `json:"provider_terms_url,omitempty"`
+	AuthFlow             string `json:"auth_flow,omitempty"`
+	OptInRequired        bool   `json:"opt_in_required,omitempty"`
 }
 
 type Field struct {

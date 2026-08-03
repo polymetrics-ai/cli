@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	browserauthstore "polymetrics.ai/internal/browserauth/store"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
@@ -120,6 +121,14 @@ func Open(root string) (*App, error) {
 		return nil, err
 	}
 	return a, nil
+}
+
+// BrowserAuthStore returns the browserauth credential/risk-acceptance store
+// backed by this App's vault — the enable-gate mechanism's storage half
+// (dual-mechanism connector foundations, P0). Individual -web connectors
+// consume this once they exist; this repo ships none yet.
+func (a *App) BrowserAuthStore() *browserauthstore.Store {
+	return browserauthstore.New(a.vault)
 }
 
 func (a *App) ProjectDir() string { return a.projectDir }

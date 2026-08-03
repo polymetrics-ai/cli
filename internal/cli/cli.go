@@ -9,9 +9,11 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"polymetrics.ai/internal/agentmode"
 	"polymetrics.ai/internal/app"
+	browserauthstore "polymetrics.ai/internal/browserauth/store"
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
@@ -206,7 +208,7 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 				return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "connectors": defs})
 			}
 			for _, item := range defs {
-				_, _ = fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
+				_, _ = fmt.Fprintf(stdout, "%s%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, mechanismMarker(item.Mechanism), item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
 			}
 			return nil
 		}
@@ -215,7 +217,7 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 			return writeJSON(stdout, envelope{"kind": "ConnectorList", "connectors": list})
 		}
 		for _, item := range list {
-			_, _ = fmt.Fprintf(stdout, "%s\t%s\t%+v\n", item.Name, item.IntegrationType, item.Capabilities)
+			_, _ = fmt.Fprintf(stdout, "%s%s\t%s\t%+v\n", item.Name, mechanismMarker(item.Mechanism), item.IntegrationType, item.Capabilities)
 		}
 		return nil
 	case "catalog":
@@ -228,7 +230,7 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 			return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "connectors": defs})
 		}
 		for _, item := range defs {
-			_, _ = fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
+			_, _ = fmt.Fprintf(stdout, "%s%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, mechanismMarker(item.Mechanism), item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
 		}
 		return nil
 	case "inspect", "help", "man", "docs":
@@ -249,9 +251,123 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 			return nil
 		}
 		return fmt.Errorf("connector %q not found", args[1])
+	case "enable":
+		return runConnectorEnable(ctx, root, registry, args[1:], stdout, jsonOut)
 	default:
 		return errUsage
 	}
+}
+
+// runConnectorEnable implements the -web connector enable-gate (design
+// report §5.1): a web_session mechanism ships present but disabled,
+// reachable only after this explicit step shows its plain-language risk
+// warning and records acceptance. It is print-then-reinvoke rather than an
+// interactive stdin prompt, matching this CLI's existing
+// `pm reverse run --confirm <challenge>` pattern: the warning's SHA-256 is
+// the "challenge" here, and re-supplying it via --accept-risk proves the
+// operator actually read the current text — a bare boolean flag could be
+// copy-pasted into CI by someone who never read anything.
+func runConnectorEnable(ctx context.Context, root string, registry *connectors.Registry, args []string, stdout io.Writer, jsonOut bool) error {
+	if len(args) < 1 {
+		return errUsage
+	}
+	name := args[0]
+	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
+		return validationErrorf("%v", err)
+	}
+	if err := connectors.RejectLegacyConnectorName(name); err != nil {
+		return err
+	}
+	c, ok := registry.Get(name)
+	if !ok {
+		return fmt.Errorf("connector %q not found", name)
+	}
+	def, hasDef := connectors.DefinitionOf(c)
+	if !hasDef {
+		def = connectors.Definition{DisplayName: c.Metadata().DisplayName, Mechanism: connectors.MetadataWithIcon(c.Metadata()).Mechanism}
+	}
+	if def.Mechanism == nil || def.Mechanism.Kind != connectors.MechanismWebSession {
+		kind := connectors.MechanismOfficialAPI
+		if def.Mechanism != nil {
+			kind = def.Mechanism.Kind
+		}
+		return validationErrorf("connector %q does not require enabling (mechanism is %q, not %q)", name, kind, connectors.MechanismWebSession)
+	}
+
+	flags := parseFlags(args[1:])
+	profile := flags.first("profile")
+	if profile == "" {
+		profile = "default"
+	}
+	warning := connectorRiskWarning(def)
+	hash := browserauthstore.HashWarning(warning)
+	accept := strings.TrimSpace(flags.first("accept-risk"))
+
+	if accept == "" {
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "ConnectorRiskWarning", "connector": name, "profile": profile, "warning": warning, "warning_sha256": hash})
+		}
+		_, _ = fmt.Fprint(stdout, warning)
+		_, _ = fmt.Fprintf(stdout, "\nTo enable %s for profile %q, re-run:\n  pm connectors enable %s --profile %s --accept-risk %s\n", name, profile, name, profile, hash)
+		return nil
+	}
+	if accept != hash {
+		return validationErrorf("--accept-risk %q does not match the current risk warning's hash; run `pm connectors enable %s` without --accept-risk to read it and get the current hash", accept, name)
+	}
+
+	return withApp(root, func(a *app.App) error {
+		store := a.BrowserAuthStore()
+		ra := browserauthstore.RiskAcceptance{
+			Connector:     name,
+			Profile:       profile,
+			MechanismKind: def.Mechanism.Kind,
+			WarningSHA256: hash,
+			CLIVersion:    version,
+			AcceptedAt:    time.Now(),
+		}
+		if err := store.SaveRiskAcceptance(ctx, ra); err != nil {
+			return err
+		}
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "ConnectorEnabled", "connector": name, "profile": profile, "mechanism_kind": def.Mechanism.Kind})
+		}
+		_, _ = fmt.Fprintf(stdout, "%s enabled for profile %q. This remains an unofficial, experimental connector.\n", name, profile)
+		return nil
+	})
+}
+
+// connectorRiskWarning builds the plain-language risk warning shown by
+// `pm connectors enable`, naming account-suspension consequences from the
+// connector's own risk.approval text (design report §5.1) — never a generic
+// boilerplate string duplicated per connector.
+func connectorRiskWarning(def connectors.Definition) string {
+	mech := def.Mechanism
+	label := mech.Label
+	if label == "" {
+		label = def.DisplayName
+	}
+	var b strings.Builder
+	_, _ = fmt.Fprintf(&b, "%s is UNOFFICIAL and EXPERIMENTAL.\n", label)
+	_, _ = fmt.Fprint(&b, "It drives a captured browser session, not an approved provider API, and is not sanctioned by the provider.\n")
+	if def.Risk.Approval != "" {
+		_, _ = fmt.Fprintf(&b, "\n%s\n", def.Risk.Approval)
+	}
+	if mech.ProviderTermsURL != "" {
+		_, _ = fmt.Fprintf(&b, "\nProvider terms: %s\n", mech.ProviderTermsURL)
+	}
+	return b.String()
+}
+
+// mechanismMarker renders the [UNOFFICIAL] label from metadata.mechanism —
+// never inferred, always this one field (design report §5.2) — for the text
+// (non-JSON) forms of `pm connectors list`/`catalog`. A nil Mechanism (every
+// bundle before this field existed, and any connector that never declares
+// one) or an explicitly sanctioned mechanism renders nothing.
+func mechanismMarker(mech *connectors.MechanismSpec) string {
+	if mech == nil || mech.SanctionedByProvider {
+		return ""
+	}
+	return " [UNOFFICIAL]"
 }
 
 func connectorCatalogEntries(registry *connectors.Registry, flags parsedFlags) ([]connectors.Definition, error) {
