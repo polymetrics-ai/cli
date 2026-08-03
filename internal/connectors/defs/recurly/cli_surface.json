@@ -3771,7 +3771,7 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "refund_invoice",
-      "risk": "medium \u2014 Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+      "risk": "critical \u2014 refund_invoice moves money by refunding an invoice; requires destructive confirmation and reverse ETL plan/preview/approval/execute. Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; do not reuse idempotency keys across different records.",
       "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
       "flags": [
         {

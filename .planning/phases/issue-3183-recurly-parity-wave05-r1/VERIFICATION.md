@@ -44,3 +44,17 @@
 ### Kept out of scope (unchanged)
 
 - No live/credentialed Recurly calls; no shared-runtime edits; no other connectors touched; no pushes/merges; PR stays draft for firstmate.
+
+## Captain review-fix session (authorized fixes for complete parity)
+
+- [x] Guarded custody recover attempted first: `no-mistakes axi sync --recover --keep-local` refused again (`blocked_recover_gate_diverged`: gate branch 459bf2781 != preserved head 3f8ce5a5, no files/refs changed). Per captain instruction, no unguarded reset was run; custody escalation recorded.
+- [x] Fix 1 — required-body writes now send real JSON bodies (body_type json): update_account (AccountUpdate), create_billing_info (BillingInfoCreate), create_usage/update_usage (UsageCreate), update_subscription (SubscriptionUpdate). Fixtures updated to prove request bodies serialize (expect.body).
+- [x] Fix 2 — create_account and update_account record_schemas now accept billing_info, address, custom_fields, company (full AccountUpdate body fields).
+- [x] Fix 3 — schemas/get_account_balance.json models the real AccountBalance shape (object/account/past_due/balances); removed the fabricated id primary key and fake code/state/created_at/updated_at fields; fixture rewritten to the real shape.
+- [x] Fix 4 — refund_invoice is confirm:"destructive" and its record_schema includes amount/percentage/line_items/refund_method/credit_customer_notes/external_refund.
+- [x] Regression: TestRecurlyReviewFixFindings added to recurly_full_surface_test.go locking all four fixes.
+- [x] Gates: connectorgen validate exit 0, 0 findings; recurly conformance PASS; engine/commandrunner/defs/bundleregistry/connectorgen PASS; `go test ./internal/cli` PASS (348s); docs/catalog/website regenerated (Recurly-only scope).
+
+### Blocked on custody (escalated)
+
+- /no-mistakes re-run is blocked on custody recovery that the guarded path refuses (`blocked_recover_gate_diverged`). This requires firstmate/captain resolution; no unguarded reset was run.

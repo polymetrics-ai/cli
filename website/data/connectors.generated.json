@@ -213206,9 +213206,7 @@
       },
       {
         "name": "get_account_balance",
-        "primary_key": [
-          "id"
-        ],
+        "primary_key": [],
         "cursor": "",
         "incremental": false
       },
@@ -218415,7 +218413,7 @@
             "pm recurly invoice refund --invoice-id \"value\" --type \"value\" --json"
           ],
           "output_policy": "",
-          "risk": "medium — Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; keep reverse ETL in plan/preview/approve/execute and do not reuse idempotency keys across different records.",
+          "risk": "critical — refund_invoice moves money by refunding an invoice; requires destructive confirmation and reverse ETL plan/preview/approval/execute. Recurly supports provider idempotency for POST/PUT/DELETE through the Idempotency-Key header; do not reuse idempotency keys across different records.",
           "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive lifecycle actions require destructive confirmation.",
           "notes": ""
         },

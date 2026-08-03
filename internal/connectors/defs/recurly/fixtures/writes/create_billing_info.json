@@ -1,10 +1,16 @@
 {
   "record": {
-    "account_id": "fixture_account_id"
+    "account_id": "fixture_account_id",
+    "currency": "USD",
+    "first_name": "fixture_first_name"
   },
   "expect": {
     "method": "POST",
-    "path": "/accounts/fixture_account_id/billing_infos"
+    "path": "/accounts/fixture_account_id/billing_infos",
+    "body": {
+      "currency": "USD",
+      "first_name": "fixture_first_name"
+    }
   },
   "response": {
     "status": 200,
