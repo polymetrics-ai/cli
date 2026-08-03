@@ -4880,7 +4880,8 @@
           "name": "currency",
           "type": "string",
           "summary": "3-letter ISO 4217 currency code.",
-          "maps_to": "body.currency"
+          "maps_to": "body.currency",
+          "required": true
         }
       ],
       "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_invoice",
@@ -4997,13 +4998,15 @@
           "name": "currency",
           "type": "string",
           "summary": "3-letter ISO 4217 currency code.",
-          "maps_to": "body.currency"
+          "maps_to": "body.currency",
+          "required": true
         },
         {
           "name": "account-code",
           "type": "string",
           "summary": "The unique identifier of the account. This cannot be changed once the account is created.",
-          "maps_to": "body.account.code"
+          "maps_to": "body.account.code",
+          "required": true
         }
       ],
       "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_purchase",
@@ -5072,19 +5075,22 @@
           "name": "product-code",
           "type": "string",
           "summary": "The product code or SKU of the gift card product.",
-          "maps_to": "body.product_code"
+          "maps_to": "body.product_code",
+          "required": true
         },
         {
           "name": "unit-amount",
           "type": "integer",
           "summary": "The whole-number gift card amount to preview; mapped to Recurly unit_amount.",
-          "maps_to": "body.unit_amount"
+          "maps_to": "body.unit_amount",
+          "required": true
         },
         {
           "name": "currency",
           "type": "string",
           "summary": "3-letter ISO 4217 currency code.",
-          "maps_to": "body.currency"
+          "maps_to": "body.currency",
+          "required": true
         }
       ],
       "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_gift_card",
