@@ -65,6 +65,26 @@ Code scope is exactly these two files. No other production or behavior-carrying 
   non-checkpoint PRs showed zero verdict changes under the current tight pattern, and that margin is
   what a broader pattern would spend.
 
+## Downstream impact
+
+Measured by building `cmd/prissueguard` at base `5d61794f7` and at this branch head, then running both
+binaries against every open PR body fetched live from GitHub. Of 99 open PRs, 36 flip
+`blocked` -> `ok` and 63 are unchanged.
+
+| PR | Base | Head | Note |
+|---|---|---|---|
+| #3540 airtable | blocked | ok (8 linked issues) | Unblocked by this change. |
+| #3543 aws-cloudtrail | blocked | ok (8 linked issues) | Unblocked by this change. |
+| #3544–#3577 (34 wave PRs) | blocked | ok | Same checkpoint pattern; contiguous `stage unvalidated parity checkpoint` range. |
+| #3541 amazon-sqs | ok | ok | Never blocked for this reason; body carries an explicit `Refs #3134`. Verdict unchanged by this patch. |
+| #3542 ashby | ok | ok | Never blocked for this reason; body carries an explicit `Refs #3207`. Verdict unchanged by this patch. |
+| #3578 marketo | blocked | blocked | Deliberately still blocked; see the wording variant recorded under "Out of scope". |
+| #3676 nativeset foundation | blocked | blocked | **Not fixed by this diff.** Its body carries no issue-reference keyword at all — no checkpoint headings, no `Closes`/`Refs`/parent wording — so it stays blocked at both base and head. It needs a separate PR-body fix. |
+
+Earlier planning wording claimed this PR unblocks four PRs (#3540, #3543, #3542, #3676). That was an
+unverified inference and is corrected above: only #3540 and #3543 of the named set flip, alongside the
+34 other wave PRs in the #3544–#3577 range.
+
 ## Implementation plan
 
 ### Slice 1 — Red tests for the checkpoint body pattern

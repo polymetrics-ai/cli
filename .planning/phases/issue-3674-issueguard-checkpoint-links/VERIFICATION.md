@@ -23,6 +23,19 @@
 Mutation runs were executed in throwaway copies of the package outside the worktree; the branch
 itself never carried a weakened gate.
 
+## Downstream-impact evidence
+
+`cmd/prissueguard` was built from base `5d61794f7` and from this branch head, then both binaries were
+run against every open PR body fetched live from GitHub via `gh api repos/polymetrics-ai/cli/pulls`.
+
+| Check | Result | Notes |
+|---|---|---|
+| Open-PR before/after sweep | 36 changed, 63 unchanged | All 36 verdict changes are `stage unvalidated parity checkpoint` bodies: #3540, #3543, and the contiguous #3544–#3577 wave range. Zero non-checkpoint PRs changed verdict, so the general require-linked-issue rule is not loosened. |
+| #3540 airtable, #3543 aws-cloudtrail | `blocked` -> `ok (8 linked issues)` | The two named PRs this change unblocks. |
+| #3541 amazon-sqs, #3542 ashby | `ok` -> `ok` | Not blocked for this reason at base; their bodies carry explicit `Refs #3134` / `Refs #3207`. Verdict unchanged by this patch. |
+| #3578 marketo | `blocked` -> `blocked` | Deliberately unrecognized wording variant; see the open item below. |
+| #3676 nativeset foundation | `blocked` -> `blocked` | Not fixed by this change; its body has no issue-reference keyword at all. |
+
 ## CLI/help/docs/website parity evidence
 
 | Check | Result | Notes |
@@ -40,6 +53,9 @@ itself never carried a weakened gate.
 - `completedTaskPattern` still requires the trailing noun `task`, so the marketo checkpoint body
   (PR #3578), whose sentence ends in `implementation`, stays unrecognized. Widening the trailing
   noun is deliberately deferred to firstmate.
+- PR #3676 (nativeset foundation) is **not** unblocked by this change. Its body carries no
+  issue-reference keyword at all, so it is blocked at both base and head and needs its own PR-body
+  fix, tracked separately from this slice.
 - PR stays draft; merge is human-gated.
 
 ## Safety notes
