@@ -37,3 +37,11 @@
 - [x] Update `.planning/phases/youtube-analytics-parity-3456/TDD-LEDGER.md` with green evidence.
 - [ ] Append final `done: {summary}` to `/Users/karthiksivadas/karthik-agent-workspace/state/cli-youtube-analytics-parity-wave03-r1.status`.
 - [x] Local commit created on `fm/cli-youtube-analytics-parity-wave03-r1`.
+
+## Follow-up (resumed session)
+
+- [x] `pnpm run gen:website-data` re-run against a clean install; found `website/data/connectors.generated.json`
+      and `website/lib/connectors.catalog.data.generated.json` still carried the pre-parity `docs_md` string for
+      `youtube-analytics` (stale relative to `docs.md`). Regenerated and committed
+      (`8caa330b8 fix(website): regenerate youtube-analytics catalog docs_md`); re-running the generator
+      afterward produces zero diff.
