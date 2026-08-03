@@ -49,14 +49,22 @@ Code scope is exactly these two files. No other production or behavior-carrying 
 
 ### Out of scope
 
-- No production or behavior-carrying file changes beyond the two code files; the rest of the shipped
-  diff is this phase's four planning-evidence files plus the agent-contract prose that records the
-  newly accepted PR-body route.
+- No files change beyond the two code files and this phase's four planning-evidence files; the
+  shipped diff is exactly those six paths.
 - No loosening of the general require-linked-issue rule for non-checkpoint PR bodies.
-- No connector definition, CLI surface, `docs/**`, or website changes; issueguard is a shared PR-body
+- No connector definition, CLI surface, docs, or website changes; issueguard is a shared PR-body
   validator consumed by `cmd/prissueguard` and `.github/workflows/pr-issue-guard.yml`, not a `pm`
-  user surface, so CLI/help/docs/website parity is not applicable. The accepted-route list itself is
-  owned by `.agents/agentic-delivery/contracts/issue-agent-contract.md` and is updated there.
+  user surface, so CLI/help/docs/website parity is not applicable.
+- No shared agent-contract prose changes.
+  `.agents/agentic-delivery/contracts/issue-agent-contract.md` owns the list of PR bodies that
+  satisfy the guard, and its required-workflow step 14 is knowingly left out of sync by this slice:
+  it still enumerates only the `Closes #N` / `Refs #N` route and the no-mistakes delivery-record
+  route, with no entry for the checkpoint route this change adds.
+  Updating it is a deliberate follow-up left to firstmate to file as a separate issue, per the
+  explicit decision that widening this PR into the shared contract would repeat the scope creep this
+  foundation PR was extracted to avoid. Precedent for that follow-up shape: commit `235c7b22f`
+  updated the same step 14 (and its `Output requirements` restatement) when the no-mistakes
+  delivery-record route was added.
 - No change to `completedTaskPattern`'s trailing-noun tightness. One known wording variant remains
   blocked by design: PR #3578 (marketo, wave05) carries the identical checkpoint headings but
   phrases its sentence as `...an unvalidated cloud checkpoint for the completed committed

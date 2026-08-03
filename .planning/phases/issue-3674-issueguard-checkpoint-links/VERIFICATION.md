@@ -41,7 +41,7 @@ run against every open PR body fetched live from GitHub via `gh api repos/polyme
 | Check | Result | Notes |
 |---|---|---|
 | `pm` help, manual, `docs/cli/**`, `website/**` | Not applicable | `internal/coordination/issueguard` backs the `pr-issue-guard` GitHub Actions check through `cmd/prissueguard`; no `pm` command, flag, output, help topic, or connector surface changes in this slice. |
-| Accepted PR-body routes | Updated | `.agents/agentic-delivery/contracts/issue-agent-contract.md` owns the list of bodies that satisfy the guard; required-workflow step 14 now records the checkpoint route and its two gates, and the `Output requirements` restatement points there instead of re-listing the routes. `AGENTS.md` keeps a pointer only. |
+| Accepted PR-body routes | Known out of sync, follow-up | `.agents/agentic-delivery/contracts/issue-agent-contract.md` owns the list of bodies that satisfy the guard, and this slice deliberately does not touch it. Its required-workflow step 14 still enumerates only the `Closes #N` / `Refs #N` route and the no-mistakes delivery-record route, so it does not yet describe the checkpoint route added here. Updating it is a deliberate follow-up left to firstmate to file as a separate issue; precedent is commit `235c7b22f`, which updated the same step 14 for the prior delivery-record route addition. |
 
 ## Repository gate evidence
 
@@ -57,6 +57,8 @@ run against every open PR body fetched live from GitHub via `gh api repos/polyme
 - PR #3676 (nativeset foundation) is **not** unblocked by this change. Its body carries no
   issue-reference keyword at all, so it is blocked at both base and head and needs its own PR-body
   fix, tracked separately from this slice.
+- Required-workflow step 14 of `.agents/agentic-delivery/contracts/issue-agent-contract.md` is left
+  out of sync on purpose; see the parity table above for the detail and the follow-up to file.
 - PR stays draft; merge is human-gated.
 
 ## Safety notes
