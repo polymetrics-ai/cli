@@ -2,12 +2,27 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Reddit Connection Specification",
   "type": "object",
-  "required": ["access_token", "subreddit", "reddit_username"],
+  "required": ["subreddit", "reddit_username"],
   "properties": {
     "access_token": {
       "type": "string",
       "x-secret": true,
-      "description": "Reddit OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>). OAuth token acquisition/refresh is out of scope; the caller supplies a valid token. Reddit bearer tokens expire 1 hour after issuance and this connector does not refresh them, so any sync expected to run longer than an hour, or any recurring/scheduled sync, needs a freshly issued token supplied before each run. Never logged."
+      "description": "Reddit OAuth access token, sent as a Bearer token (Authorization: Bearer <access_token>) ONLY as a fallback when refresh_token is not configured. Reddit bearer tokens expire 1 hour after issuance; a caller-supplied access_token with no refresh_token is not schedulable (any sync running longer than an hour, or any recurring sync, will fail once the token expires) -- configure client_id/client_secret/refresh_token instead so this connector mints a fresh token before every read/write/check. Never logged."
+    },
+    "refresh_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Reddit OAuth2 refresh_token obtained from a one-time authorization_code exchange with duration=permanent (see https://github.com/reddit-archive/reddit/wiki/OAuth2#refreshing-the-token). When set (with client_id/client_secret), this connector exchanges it for a fresh access_token before every read/write/check via POST https://www.reddit.com/api/v1/access_token, so scheduled/long-running syncs never hit the 1-hour access-token expiry. This grants USER-CONTEXT access (required for moderator actions, private messages, votes, saves, and any action performed as a specific Reddit account) -- Reddit's client_credentials grant is deliberately not used here because it mints an application-only token that Reddit's own docs state can never act on behalf of a user. Never logged."
+    },
+    "client_id": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Reddit OAuth2 app client ID (from https://www.reddit.com/prefs/apps), used only for the refresh_token token exchange alongside client_secret via HTTP Basic Auth. Required when refresh_token is set."
+    },
+    "client_secret": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Reddit OAuth2 app client secret, used only for the refresh_token token exchange via HTTP Basic Auth. Installed (non-confidential) app types have no secret; leave empty in that case, matching Reddit's own documented behavior of sending an empty string password."
     },
     "subreddit": {
       "type": "string",
@@ -15,13 +30,19 @@
     },
     "reddit_username": {
       "type": "string",
-      "description": "Reddit username of the account that authorized access_token, e.g. \"my_bot_account\" without the /u/ prefix. Sent as the required identity component of the User-Agent header Reddit's API rules mandate (<platform>:<app ID>:<version> (by /u/<reddit username>)); non-conforming User-Agents are drastically rate-limited. Not a secret; used for no other purpose."
+      "description": "Reddit username of the account that authorized the token, e.g. \"my_bot_account\" without the /u/ prefix. Sent as the required identity component of the User-Agent header Reddit's API rules mandate (<platform>:<app ID>:<version> (by /u/<reddit username>)); non-conforming User-Agents are drastically rate-limited. Also sent as the User-Agent on the refresh_token exchange request itself. Not a secret; used for no other purpose."
     },
     "base_url": {
       "type": "string",
       "format": "uri",
       "default": "https://oauth.reddit.com",
       "description": "Reddit OAuth API base URL override for tests or proxies."
+    },
+    "token_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://www.reddit.com/api/v1/access_token",
+      "description": "Reddit OAuth2 token endpoint override for tests or proxies. Real Reddit token requests always go to www.reddit.com, never oauth.reddit.com."
     }
   }
 }

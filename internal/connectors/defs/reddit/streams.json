@@ -5,7 +5,8 @@
       "User-Agent": "go:ai.polymetrics.cli:v1 (by /u/{{ config.reddit_username }})"
     },
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      { "mode": "custom", "hook": "reddit", "when": "{{ secrets.refresh_token }}" },
+      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" }
     ],
     "pagination": {
       "type": "cursor",

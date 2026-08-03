@@ -64,6 +64,7 @@ import (
 	_ "polymetrics.ai/internal/connectors/hooks/pocket"
 	_ "polymetrics.ai/internal/connectors/hooks/prestashop"
 	_ "polymetrics.ai/internal/connectors/hooks/quickbooks"
+	_ "polymetrics.ai/internal/connectors/hooks/reddit"
 	_ "polymetrics.ai/internal/connectors/hooks/rootly"
 	_ "polymetrics.ai/internal/connectors/hooks/rss"
 	_ "polymetrics.ai/internal/connectors/hooks/safetyculture"
