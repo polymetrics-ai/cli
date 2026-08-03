@@ -55,9 +55,15 @@ Code scope is exactly these two files. No other production or behavior-carrying 
 - No connector definition, CLI surface, docs, or website changes; issueguard is a shared PR-body
   validator consumed by `cmd/prissueguard` and `.github/workflows/pr-issue-guard.yml`, not a `pm`
   user surface, so CLI/help/docs/website parity is not applicable.
-- No change to `completedTaskPattern`'s trailing-noun tightness; the marketo checkpoint body
-  (PR #3578) that ends its sentence in `implementation` rather than `task` is deliberately left
-  unrecognized pending a separate decision.
+- No change to `completedTaskPattern`'s trailing-noun tightness. One known wording variant remains
+  blocked by design: PR #3578 (marketo, wave05) carries the identical checkpoint headings but
+  phrases its sentence as `...an unvalidated cloud checkpoint for the completed committed
+  cli-marketo-parity-wave05-r1 connector parity implementation`, ending in `implementation` rather
+  than `task`, so `completedTaskPattern`'s required `\btask\b` does not match. This is deliberately
+  recorded as a follow-up rather than broadened now, because loosening the shared
+  require-linked-issue gate needs separate, evidenced justification; the control sweep over 63
+  non-checkpoint PRs showed zero verdict changes under the current tight pattern, and that margin is
+  what a broader pattern would spend.
 
 ## Implementation plan
 

@@ -66,6 +66,6 @@
     }
   ],
   "openItems": [
-    "completedTaskPattern still requires the trailing noun 'task', so PR #3578 (marketo, wave05) remains unrecognized; widening is deferred to firstmate."
+    "Known wording variant left blocked by design: PR #3578 (marketo, wave05) uses the same checkpoint headings but phrases its sentence '...for the completed committed cli-marketo-parity-wave05-r1 connector parity implementation', ending in 'implementation' rather than 'task', so completedTaskPattern's required \\btask\\b does not match. Recorded as a follow-up rather than broadened now, to avoid loosening the shared require-linked-issue gate without separate, evidenced justification; the 63-PR non-checkpoint control sweep showed zero verdict changes under the current tight pattern. Widening is deferred to firstmate."
   ]
 }
