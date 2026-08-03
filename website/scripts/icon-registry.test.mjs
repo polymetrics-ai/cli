@@ -20,12 +20,15 @@ import {
   validConnectorIconPath,
 } from './lib/connector-icons.mjs';
 import {
+  assertLockfileCoversTargets,
+  collectSimpleIconTargets,
   readSimpleIconsLockfile,
   resolveSimpleIconRequest,
   sha256Hex,
   validSimpleIconSlug,
   verifyFetchedIconDigest,
   writeSimpleIconsLockfile,
+  writeVerifiedSimpleIcon,
 } from './lib/simple-icons.mjs';
 
 function digestOf(content) {
@@ -38,6 +41,7 @@ const iconDataPath = resolve(repoRoot, 'internal/connectors/icon_data.json');
 const overridesPath = resolve(repoRoot, 'website/data/icon_overrides.json');
 const docsRoot = resolve(repoRoot, 'docs/connectors');
 const websiteRoot = resolve(repoRoot, 'website/public/connectors');
+const lockfilePath = resolve(repoRoot, 'website/data/simple-icons.lock.json');
 
 function readJSON(path) {
   return JSON.parse(readFileSync(path, 'utf8'));
@@ -189,8 +193,18 @@ test('website scripts consume only the canonical registry', () => {
   );
   assert.match(
     fetchScript,
-    /verifyFetchedIconDigest/,
-    'Simple Icons fetcher must checksum-verify fetched content before any write',
+    /writeVerifiedSimpleIcon/,
+    'Simple Icons fetcher must write fetched content only through the digest-verified write helper',
+  );
+  assert.equal(
+    fetchScript.includes('writeFileSync'),
+    false,
+    'Simple Icons fetcher must not own an SVG write sink that can bypass digest verification',
+  );
+  assert.match(
+    fetchScript,
+    /assertLockfileCoversTargets/,
+    'Simple Icons fetcher must reject registry/lockfile drift before issuing any request',
   );
 });
 
@@ -240,6 +254,158 @@ test('Simple Icons digest verification checks connectors sharing one icon indepe
     () => verifyFetchedIconDigest(oneStaleLockfile, { connector: 'zoho-desk', slug: 'zoho' }, content),
     /zoho-desk/,
     'one connector failing must name that connector and not silently pass',
+  );
+});
+
+test('Simple Icons lockfile pins exactly the connectors the fetcher would fetch', () => {
+  const targets = collectSimpleIconTargets(readJSON(iconDataPath));
+  const lockfile = readSimpleIconsLockfile(lockfilePath);
+  assert.ok(targets.length > 0, 'canonical registry must declare Simple Icons fetch targets');
+
+  assert.deepEqual(
+    Object.keys(lockfile).sort(),
+    targets.map((target) => target.connector).sort(),
+    'website/data/simple-icons.lock.json must pin every Simple Icons connector in the canonical registry and nothing else',
+  );
+  assert.doesNotThrow(() => assertLockfileCoversTargets(lockfile, targets));
+
+  for (const target of targets) {
+    assert.equal(
+      lockfile[target.connector].slug,
+      target.slug,
+      `${target.connector} lockfile slug must match the canonical registry slug`,
+    );
+    assert.match(
+      lockfile[target.connector].sha256,
+      /^[0-9a-f]{64}$/,
+      `${target.connector} must pin a sha256 digest`,
+    );
+  }
+
+  const digests = new Map();
+  for (const [connector, entry] of Object.entries(lockfile)) {
+    digests.set(entry.sha256, [...(digests.get(entry.sha256) ?? []), connector]);
+  }
+  assert.ok(
+    [...digests.values()].some((connectors) => connectors.length > 1),
+    'connectors sharing one upstream icon keep their own duplicate-digest entries rather than being deduplicated',
+  );
+});
+
+test('Simple Icons lockfile coverage rejects registry drift in either direction', () => {
+  const targets = [
+    { connector: 'zoho-books', slug: 'zoho', path: 'icons/simple-icons/zoho.svg' },
+    { connector: 'zoho-desk', slug: 'zoho', path: 'icons/simple-icons/zohodesk.svg' },
+  ];
+  const pinned = {
+    'zoho-books': { slug: 'zoho', sha256: digestOf('<svg>zoho</svg>') },
+    'zoho-desk': { slug: 'zoho', sha256: digestOf('<svg>zoho</svg>') },
+  };
+  assert.doesNotThrow(() => assertLockfileCoversTargets(pinned, targets));
+
+  const missingOne = { ...pinned };
+  delete missingOne['zoho-desk'];
+  assert.throws(
+    () => assertLockfileCoversTargets(missingOne, targets),
+    /missing Simple Icons lockfile entries for connectors: zoho-desk/,
+    'a registry connector added without a recorded digest must fail offline, not at fetch time',
+  );
+
+  assert.throws(
+    () => assertLockfileCoversTargets({ ...pinned, 'zoho-crm': { slug: 'zoho', sha256: digestOf('x') } }, targets),
+    /stale Simple Icons lockfile entries for connectors no longer fetched: zoho-crm/,
+    'an entry left behind after its connector was removed must not be silently retained',
+  );
+
+  assert.throws(
+    () => assertLockfileCoversTargets({ ...pinned, 'zoho-desk': { slug: 'zohodesk', sha256: digestOf('x') } }, targets),
+    /slug mismatch for connector zoho-desk/,
+    'a repointed registry slug must invalidate its recorded entry',
+  );
+
+  assert.throws(
+    () => assertLockfileCoversTargets({ ...pinned, 'zoho-desk': { slug: 'zoho', sha256: 'not-a-digest' } }, targets),
+    /no valid sha256 digest/,
+    'a malformed digest must not count as a pin',
+  );
+});
+
+test('Simple Icons fetch targets cover slug-bearing and simple-icons-sourced registry rows only', () => {
+  assert.deepEqual(
+    collectSimpleIconTargets([
+      {
+        connector: 'github',
+        simple_icon_slug: 'github',
+        simple_icon_hex: '181717',
+        path: 'icons/simple-icons/github.svg',
+      },
+      { connector: 'apify-dataset', path: 'icons/apify.svg' },
+    ]),
+    [{ connector: 'github', slug: 'github', path: 'icons/simple-icons/github.svg', hex: '181717' }],
+  );
+
+  assert.throws(() => collectSimpleIconTargets({}), /must be an array/);
+  assert.throws(
+    () => collectSimpleIconTargets([
+      { connector: 'source-github', simple_icon_slug: 'github', path: 'icons/simple-icons/github.svg' },
+    ]),
+    /invalid connector key/,
+  );
+  assert.throws(
+    () => collectSimpleIconTargets([
+      { connector: 'github', simple_icon_slug: 'github', path: 'icons/simple-icons/github.svg' },
+      { connector: 'github', simple_icon_slug: 'github', path: 'icons/simple-icons/github.svg' },
+    ]),
+    /duplicate connector key/,
+  );
+  assert.throws(
+    () => collectSimpleIconTargets([
+      { connector: 'github', source: 'simple-icons', path: 'icons/simple-icons/github.svg' },
+    ]),
+    /invalid simple_icon_slug/,
+    'a simple-icons-sourced row with no slug must be rejected, not skipped',
+  );
+  assert.throws(
+    () => collectSimpleIconTargets([
+      { connector: 'github', simple_icon_slug: 'github', path: 'icons/github.svg' },
+    ]),
+    /invalid Simple Icons path/,
+  );
+  assert.throws(
+    () => collectSimpleIconTargets([
+      { connector: 'zoho-books', simple_icon_slug: 'zoho', path: 'icons/simple-icons/zoho.svg' },
+      { connector: 'zoho-desk', simple_icon_slug: 'zoho', path: 'icons/simple-icons/zoho.svg' },
+    ]),
+    /duplicate Simple Icons path/,
+  );
+});
+
+test('verified Simple Icons write is the only sink and never reaches disk on a digest failure', (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'polymetrics-icon-write-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+
+  const outputPath = join(dir, 'icons/simple-icons/github.svg');
+  const content = '<svg viewBox="0 0 24 24"><title>GitHub</title></svg>';
+  const icon = { connector: 'github', slug: 'github', hex: '181717' };
+  const lockfile = { github: { slug: 'github', sha256: digestOf(content) } };
+
+  assert.throws(
+    () => writeVerifiedSimpleIcon(lockfile, icon, '<svg>tampered</svg>', outputPath),
+    /content mismatch/,
+  );
+  assert.equal(existsSync(dirname(outputPath)), false, 'a rejected body must not even create its output directory');
+
+  assert.throws(
+    () => writeVerifiedSimpleIcon({}, icon, content, outputPath),
+    /missing Simple Icons lockfile entry/,
+  );
+  assert.equal(existsSync(outputPath), false, 'an unpinned connector must not produce output');
+
+  writeVerifiedSimpleIcon(lockfile, icon, content, outputPath);
+  assert.equal(
+    readFileSync(outputPath, 'utf8'),
+    '<svg fill="#181717" viewBox="0 0 24 24"></svg>',
+    'verified content is tinted and written unchanged otherwise',
   );
 });
 
