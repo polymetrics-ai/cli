@@ -729,7 +729,7 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 		return err
 	}
 	switch flag.Type {
-	case "", "string", "boolean", "integer", "string_array":
+	case "", "string", "boolean", "integer", "number", "string_array":
 		return nil
 	case "enum":
 		for _, allowed := range flag.Values {
@@ -1103,6 +1103,12 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 		parsed, err := strconv.Atoi(value)
 		if err != nil {
 			return nil, fmt.Errorf("invalid --%s %q, want integer", flag.Name, value)
+		}
+		return parsed, nil
+	case "number":
+		parsed, err := strconv.ParseFloat(value, 64)
+		if err != nil {
+			return nil, fmt.Errorf("invalid --%s %q, want number", flag.Name, value)
 		}
 		return parsed, nil
 	case "string_array":

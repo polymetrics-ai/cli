@@ -153,8 +153,10 @@ def required_paths(rs):
 def flag_type_for(types):
     if "boolean" in types:
         return "boolean"
-    if "integer" in types or "number" in types:
+    if "integer" in types:
         return "integer"
+    if "number" in types:
+        return "number"
     if "array" in types:
         return "string_array"
     return "string"

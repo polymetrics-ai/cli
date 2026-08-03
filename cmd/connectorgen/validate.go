@@ -1391,6 +1391,8 @@ func cliFlagTypeMatchesSchema(flagType string, node *cliRecordSchemaNode) bool {
 		return schemaTypes["string"] || schemaTypes["any"]
 	case "integer":
 		return schemaTypes["integer"] || schemaTypes["number"] || schemaTypes["any"]
+	case "number":
+		return schemaTypes["number"] || schemaTypes["any"]
 	case "boolean":
 		return schemaTypes["boolean"] || schemaTypes["any"]
 	case "string_array":

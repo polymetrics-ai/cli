@@ -217245,7 +217245,7 @@
             },
             {
               "name": "unit-amount",
-              "type": "integer",
+              "type": "number",
               "summary": "A positive or negative amount with `type=charge` will result in a positive `unit_amount`. A positive or negative amount with `type=credit` will result in a negative `unit_amount`. If `item_code`/`item_id` is present, `unit_amount` can be passed in, to override the `Item`'s `unit_amount`. If `item_code`/`item_id` is not present then `unit_amount` is required.",
               "values": [],
               "maps_to": "record.unit_amount"
@@ -218485,8 +218485,8 @@
             },
             {
               "name": "line-items-0-unit-amount",
-              "type": "integer",
-              "summary": "Type integer value mapped to Recurly `line_items.0.unit_amount`.",
+              "type": "number",
+              "summary": "Type number value mapped to Recurly `line_items.0.unit_amount`.",
               "values": [],
               "maps_to": "record.line_items.0.unit_amount"
             }
@@ -219462,7 +219462,7 @@
             },
             {
               "name": "unit-amount",
-              "type": "integer",
+              "type": "number",
               "summary": "The amount of the gift card, which is the amount of the charge to the gifter account and the amount of credit that is applied to the recipient account upon successful redemption.",
               "values": [],
               "maps_to": "record.unit_amount"
@@ -219516,6 +219516,7 @@
           "availability": "implemented",
           "stream": "",
           "write": "",
+          "operation": "preview_invoice",
           "source_cli_path": "",
           "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_invoice",
           "flags": [
@@ -219549,6 +219550,7 @@
           "availability": "planned",
           "stream": "",
           "write": "",
+          "operation": "get_invoice_pdf",
           "source_cli_path": "",
           "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_invoice_pdf",
           "flags": [],
@@ -219567,6 +219569,7 @@
           "availability": "implemented",
           "stream": "",
           "write": "",
+          "operation": "get_preview_renewal",
           "source_cli_path": "",
           "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_preview_renewal",
           "flags": [
@@ -219593,6 +219596,7 @@
           "availability": "implemented",
           "stream": "",
           "write": "",
+          "operation": "preview_subscription_change",
           "source_cli_path": "",
           "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_subscription_change",
           "flags": [
@@ -219619,6 +219623,7 @@
           "availability": "implemented",
           "stream": "",
           "write": "",
+          "operation": "preview_purchase",
           "source_cli_path": "",
           "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_purchase",
           "flags": [
@@ -219652,6 +219657,7 @@
           "availability": "planned",
           "stream": "",
           "write": "",
+          "operation": "get_export_dates",
           "source_cli_path": "",
           "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_dates",
           "flags": [],
@@ -219670,6 +219676,7 @@
           "availability": "planned",
           "stream": "",
           "write": "",
+          "operation": "get_export_files",
           "source_cli_path": "",
           "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_files",
           "flags": [],
@@ -219688,6 +219695,7 @@
           "availability": "implemented",
           "stream": "",
           "write": "",
+          "operation": "preview_gift_card",
           "source_cli_path": "",
           "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_gift_card",
           "flags": [
