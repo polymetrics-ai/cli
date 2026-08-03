@@ -277,7 +277,7 @@
 | `mailosaur` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mailosaur | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://mailosaur.com/docs/api/) | bundle definition |
 | `mailtrap` | [`icons/simple-icons/mailtrap.svg`](../icons/simple-icons/mailtrap.svg) | Mailtrap | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://api-docs.mailtrap.io/) | bundle definition |
 | `mantle` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mantle | `api` | ga | check, catalog, read, write | 133 | 148 | [Documentation](https://coreapi.heymantle.dev/) | bundle definition |
-| `marketo` | [`icons/marketo.svg`](../icons/marketo.svg) | Marketo | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developers.marketo.com/rest-api/) | bundle definition |
+| `marketo` | [`icons/marketo.svg`](../icons/marketo.svg) | Marketo | `api` | ga | check, catalog, read, write | 117 | 158 | [Documentation](https://developers.marketo.com/rest-api/) | bundle definition |
 | `marketstack` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Marketstack | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://marketstack.com/documentation) | bundle definition |
 | `mendeley` | [`icons/simple-icons/mendeley.svg`](../icons/simple-icons/mendeley.svg) | Mendeley | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://dev.mendeley.com/) | bundle definition |
 | `mention` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mention | `api` | ga | check, catalog, read | 9 | 0 | [Documentation](https://dev.mention.com/) | bundle definition |
