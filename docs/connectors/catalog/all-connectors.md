@@ -173,7 +173,7 @@
 | `freshdesk` | [`icons/freshdesk.svg`](../icons/freshdesk.svg) | Freshdesk | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developers.freshdesk.com/api/#change_log) | bundle definition |
 | `freshsales` | [`icons/freshsales.svg`](../icons/freshsales.svg) | Freshsales | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://freshsales.io/api-docs) | bundle definition |
 | `freshservice` | [`icons/freshservice.svg`](../icons/freshservice.svg) | Freshservice | `api` | ga | check, catalog, read, write | 197 | 263 | [Documentation](https://api.freshservice.com/) | bundle definition |
-| `front` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Front | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](https://dev.frontapp.com/reference/introduction) | bundle definition |
+| `front` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Front | `api` | ga | check, catalog, read, write | 115 | 129 | [Documentation](https://dev.frontapp.com/llms.txt) | bundle definition |
 | `fulcrum` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Fulcrum | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://docs.fulcrumapp.com/reference) | bundle definition |
 | `fullstory` | [`icons/fullstory.svg`](../icons/fullstory.svg) | Fullstory | `api` | ga | check, catalog, read, write | 4 | 3 | [Documentation](https://developer.fullstory.com/reference) | bundle definition |
 | `gainsight-px` | [`icons/gainsight-px.svg`](../icons/gainsight-px.svg) | Gainsight PX | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://support.gainsight.com/PX/API_for_Developers/02Usage_of_Different_APIs) | bundle definition |

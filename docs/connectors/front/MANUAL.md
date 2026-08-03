@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector front [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Front contacts, conversations, inboxes, tags, teammates, and channels through the Front Core REST API.
+  Reads Front Core REST API streams and exposes fixed, typed, approval-gated Front write/direct/binary operation metadata for documented API parity.
 
 ICON
   asset: icons/pm-sample.svg
@@ -18,46 +18,1066 @@ ICON
   review_status: polymetrics
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
+  account_id
+  article_id
   base_url
+  category_id
+  channel_id
+  comment_id
+  contact_group_id
+  contact_id
+  contact_list_id
+  conversation_id
+  event_id
+  inbox_id
+  knowledge_base_id
+  link_id
+  locale
+  message_id
+  message_template_folder_id
+  message_template_id
   page_limit
+  rule_id
+  shift_id
+  signature_id
+  status_id
+  tag_id
+  team_id
+  teammate_group_id
+  teammate_id
+  time_off_id
+  view_id
   api_key (secret)
 
 ETL STREAMS
   contacts:
-    primary key: id
-    cursor: updated_at
-    fields: created_at(), description(), id(), is_private(), is_spammer(), name(), updated_at()
+    fields: id()
   conversations:
-    primary key: id
-    cursor: last_message_at
-    fields: created_at(), id(), is_private(), last_message_at(), status(), subject(), waiting_since()
+    fields: id()
   inboxes:
-    primary key: id
-    fields: custom_fields(), id(), is_private(), is_public(), name()
+    fields: id()
   tags:
-    primary key: id
-    fields: created_at(), highlight(), id(), is_private(), is_visible_in_conversation_lists(), name(), updated_at()
+    fields: id()
   teammates:
-    primary key: id
-    fields: email(), first_name(), id(), is_admin(), is_available(), is_blocked(), last_name(), username()
+    fields: id()
   channels:
-    primary key: id
-    fields: address(), id(), is_private(), is_valid(), name(), send_as(), type()
+    fields: id()
+  account_contacts:
+    fields: id()
+  an_account:
+    fields: id()
+  account_custom_fields:
+    fields: id()
+  accounts:
+    fields: id()
+  channel:
+    fields: id()
+  comment_mentions:
+    fields: id()
+  comment:
+    fields: id()
+  all_company_rules:
+    fields: id()
+  ticket_status_by_id:
+    fields: id()
+  company_ticket_statuses:
+    fields: id()
+  company_tags:
+    fields: id()
+  contacts_in_group:
+    fields: id()
+  groups:
+    fields: id()
+  contacts_in_contact_list:
+    fields: id()
+  contact_lists:
+    fields: id()
+  contact_conversations:
+    fields: id()
+  notes:
+    fields: id()
+  contact:
+    fields: id()
+  contact_custom_fields:
+    fields: id()
+  conversation_comments:
+    fields: id()
+  conversation_drafts:
+    fields: id()
+  conversation_events:
+    fields: id()
+  conversation_followers:
+    fields: id()
+  conversation_inboxes:
+    fields: id()
+  conversation_messages:
+    fields: id()
+  conversation_by_id:
+    fields: id()
+  conversation_custom_fields:
+    fields: id()
+  custom_fields:
+    fields: id()
+  event:
+    fields: id()
+  events:
+    fields: id()
+  inbox_channels:
+    fields: id()
+  inbox_conversations:
+    fields: id()
+  inbox_access:
+    fields: id()
+  inbox:
+    fields: id()
+  inbox_custom_fields:
+    fields: id()
+  knowledge_base_article_with_content_in_default_locale:
+    fields: id()
+  knowledge_base_article_with_content_in_specified_locale:
+    fields: id()
+  a_knowledge_base_article:
+    fields: id()
+  articles_in_a_category:
+    fields: id()
+  knowledge_base_category_content_in_default_locale:
+    fields: id()
+  knowledge_base_category_with_content_in_specified_locale:
+    fields: id()
+  a_knowledge_base_category:
+    fields: id()
+  articles_in_a_knowledge_base:
+    fields: id()
+  categories_in_a_knowledge_base:
+    fields: id()
+  a_knowledge_base_with_content_in_default_locale:
+    fields: id()
+  a_knowledge_base_with_content_in_specified_locale:
+    fields: id()
+  a_knowledge_base:
+    fields: id()
+  knowledge_bases:
+    fields: id()
+  link_conversations:
+    fields: id()
+  link:
+    fields: id()
+  link_custom_fields:
+    fields: id()
+  links:
+    fields: id()
+  api_token_details:
+    fields: id()
+  child_folders:
+    fields: id()
+  child_templates:
+    fields: id()
+  folder:
+    fields: id()
+  folders:
+    fields: id()
+  message_template:
+    fields: id()
+  message_templates:
+    fields: id()
+  message_seen_status:
+    fields: id()
+  message:
+    fields: id()
+  rule:
+    fields: id()
+  rules:
+    fields: id()
+  shifts_teammates:
+    fields: id()
+  shift:
+    fields: id()
+  shifts:
+    fields: id()
+  signatures:
+    fields: id()
+  tag_children:
+    fields: id()
+  tagged_conversations:
+    fields: id()
+  tag:
+    fields: id()
+  company_teammate_group_team_inboxes:
+    fields: id()
+  company_teammate_group_teammates:
+    fields: id()
+  company_teammate_group_teams:
+    fields: id()
+  company_teammate_group:
+    fields: id()
+  company_teammate_groups:
+    fields: id()
+  teammate_channels:
+    fields: id()
+  teammate_groups:
+    fields: id()
+  teammate_contact_lists:
+    fields: id()
+  teammate_contacts:
+    fields: id()
+  assigned_conversations:
+    fields: id()
+  teammate_inboxes:
+    fields: id()
+  teammate_folders:
+    fields: id()
+  teammate_message_templates:
+    fields: id()
+  teammate_private_inboxes:
+    fields: id()
+  teammate_rules:
+    fields: id()
+  teammate_shifts:
+    fields: id()
+  teammate_signatures:
+    fields: id()
+  teammate_tags:
+    fields: id()
+  teammate_time_offs:
+    fields: id()
+  teammate:
+    fields: id()
+  teammate_custom_fields:
+    fields: id()
+  team_channels:
+    fields: id()
+  team_groups:
+    fields: id()
+  team_contact_lists:
+    fields: id()
+  team_contacts:
+    fields: id()
+  team_inboxes:
+    fields: id()
+  team_folders:
+    fields: id()
+  team_message_templates:
+    fields: id()
+  team_rules:
+    fields: id()
+  team_shifts:
+    fields: id()
+  team_signatures:
+    fields: id()
+  team_tags:
+    fields: id()
+  team_time_offs:
+    fields: id()
+  team_views:
+    fields: id()
+  team:
+    fields: id()
+  teams:
+    fields: id()
+  time_off:
+    fields: id()
+  view:
+    fields: id()
+  views:
+    fields: id()
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
+
+REVERSE ETL ACTIONS
+  remove_contact_from_account:
+    endpoint: DELETE /accounts/{{ record.account_id }}/contacts
+    required fields: account_id, contact_ids
+    risk: critical: fixed Front DELETE /accounts/{account_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_contact_to_account:
+    endpoint: POST /accounts/{{ record.account_id }}/contacts
+    required fields: account_id, contact_ids
+    risk: high: fixed Front POST /accounts/{account_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_an_account:
+    endpoint: DELETE /accounts/{{ record.account_id }}
+    required fields: account_id
+    risk: critical: fixed Front DELETE /accounts/{account_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  update_account:
+    endpoint: PATCH /accounts/{{ record.account_id }}
+    required fields: account_id
+    risk: high: fixed Front PATCH /accounts/{account_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_account:
+    endpoint: POST /accounts
+    risk: high: fixed Front POST /accounts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  trigger_app_event:
+    endpoint: POST /applications/{{ record.application_uid }}/events
+    required fields: application_uid, event_type
+    risk: critical: fixed Front POST /applications/{application_uid}/events mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_draft:
+    endpoint: POST /channels/{{ record.channel_id }}/drafts
+    required fields: channel_id, body
+    risk: high: fixed Front POST /channels/{channel_id}/drafts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  receive_custom_messages:
+    endpoint: POST /channels/{{ record.channel_id }}/incoming_messages
+    required fields: channel_id, sender, body
+    risk: high: fixed Front POST /channels/{channel_id}/incoming_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_message:
+    endpoint: POST /channels/{{ record.channel_id }}/messages
+    required fields: channel_id, to, body
+    risk: high: fixed Front POST /channels/{channel_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  validate_channel:
+    endpoint: POST /channels/{{ record.channel_id }}/validate
+    required fields: channel_id
+    risk: high: fixed Front POST /channels/{channel_id}/validate mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_channel:
+    endpoint: PATCH /channels/{{ record.channel_id }}
+    required fields: channel_id
+    risk: high: fixed Front PATCH /channels/{channel_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_comment:
+    endpoint: PATCH /comments/{{ record.comment_id }}/
+    required fields: comment_id
+    risk: high: fixed Front PATCH /comments/{comment_id}/ mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  add_comment_reply:
+    endpoint: POST /comments/{{ record.comment_id }}/replies
+    required fields: comment_id, body
+    risk: high: fixed Front POST /comments/{comment_id}/replies mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_company_tag:
+    endpoint: POST /company/tags
+    required fields: name
+    risk: high: fixed Front POST /company/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  remove_contacts_from_group:
+    endpoint: DELETE /contact_groups/{{ record.contact_group_id }}/contacts
+    required fields: contact_group_id, contact_ids
+    risk: critical: fixed Front DELETE /contact_groups/{contact_group_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_contacts_to_group:
+    endpoint: POST /contact_groups/{{ record.contact_group_id }}/contacts
+    required fields: contact_group_id, contact_ids
+    risk: high: fixed Front POST /contact_groups/{contact_group_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_group:
+    endpoint: DELETE /contact_groups/{{ record.contact_group_id }}
+    required fields: contact_group_id
+    risk: critical: fixed Front DELETE /contact_groups/{contact_group_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  create_group:
+    endpoint: POST /contact_groups
+    required fields: name
+    risk: high: fixed Front POST /contact_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  remove_contacts_from_contact_list:
+    endpoint: DELETE /contact_lists/{{ record.contact_list_id }}/contacts
+    required fields: contact_list_id, contact_ids
+    risk: critical: fixed Front DELETE /contact_lists/{contact_list_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_contacts_to_contact_list:
+    endpoint: POST /contact_lists/{{ record.contact_list_id }}/contacts
+    required fields: contact_list_id, contact_ids
+    risk: high: fixed Front POST /contact_lists/{contact_list_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_contact_list:
+    endpoint: DELETE /contact_lists/{{ record.contact_list_id }}
+    required fields: contact_list_id
+    risk: critical: fixed Front DELETE /contact_lists/{contact_list_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  create_contact_list:
+    endpoint: POST /contact_lists
+    required fields: name
+    risk: high: fixed Front POST /contact_lists mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_contact_handle:
+    endpoint: DELETE /contacts/{{ record.contact_id }}/handles
+    required fields: contact_id, handle, source
+    risk: critical: fixed Front DELETE /contacts/{contact_id}/handles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_contact_handle:
+    endpoint: POST /contacts/{{ record.contact_id }}/handles
+    required fields: contact_id, handle, source
+    risk: high: fixed Front POST /contacts/{contact_id}/handles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  add_note:
+    endpoint: POST /contacts/{{ record.contact_id }}/notes
+    required fields: contact_id, author_id, body
+    risk: high: fixed Front POST /contacts/{contact_id}/notes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_a_contact:
+    endpoint: DELETE /contacts/{{ record.contact_id }}
+    required fields: contact_id
+    risk: critical: fixed Front DELETE /contacts/{contact_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  update_a_contact:
+    endpoint: PATCH /contacts/{{ record.contact_id }}
+    required fields: contact_id
+    risk: high: fixed Front PATCH /contacts/{contact_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  merge_contacts:
+    endpoint: POST /contacts/merge
+    required fields: contact_ids
+    risk: high: fixed Front POST /contacts/merge mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_contact:
+    endpoint: POST /contacts
+    risk: high: fixed Front POST /contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_conversation_assignee:
+    endpoint: PUT /conversations/{{ record.conversation_id }}/assignee
+    required fields: conversation_id, assignee_id
+    risk: high: fixed Front PUT /conversations/{conversation_id}/assignee mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  add_comment:
+    endpoint: POST /conversations/{{ record.conversation_id }}/comments
+    required fields: conversation_id, body
+    risk: high: fixed Front POST /conversations/{conversation_id}/comments mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_draft_reply:
+    endpoint: POST /conversations/{{ record.conversation_id }}/drafts
+    required fields: conversation_id, body
+    risk: high: fixed Front POST /conversations/{conversation_id}/drafts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_conversation_followers:
+    endpoint: DELETE /conversations/{{ record.conversation_id }}/followers
+    required fields: conversation_id, teammate_ids
+    risk: critical: fixed Front DELETE /conversations/{conversation_id}/followers mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_conversation_followers:
+    endpoint: POST /conversations/{{ record.conversation_id }}/followers
+    required fields: conversation_id, teammate_ids
+    risk: high: fixed Front POST /conversations/{conversation_id}/followers mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  remove_conversation_links:
+    endpoint: DELETE /conversations/{{ record.conversation_id }}/links
+    required fields: conversation_id, link_ids
+    risk: critical: fixed Front DELETE /conversations/{conversation_id}/links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_conversation_link:
+    endpoint: POST /conversations/{{ record.conversation_id }}/links
+    required fields: conversation_id
+    risk: high: fixed Front POST /conversations/{conversation_id}/links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_message_reply:
+    endpoint: POST /conversations/{{ record.conversation_id }}/messages
+    required fields: conversation_id, body
+    risk: high: fixed Front POST /conversations/{conversation_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_conversation_reminders:
+    endpoint: PATCH /conversations/{{ record.conversation_id }}/reminders
+    required fields: conversation_id, teammate_id, scheduled_at
+    risk: high: fixed Front PATCH /conversations/{conversation_id}/reminders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  remove_conversation_tag:
+    endpoint: DELETE /conversations/{{ record.conversation_id }}/tags
+    required fields: conversation_id, tag_ids
+    risk: critical: fixed Front DELETE /conversations/{conversation_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_conversation_tag:
+    endpoint: POST /conversations/{{ record.conversation_id }}/tags
+    required fields: conversation_id, tag_ids
+    risk: high: fixed Front POST /conversations/{conversation_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_conversation:
+    endpoint: DELETE /conversations/{{ record.conversation_id }}
+    required fields: conversation_id
+    risk: critical: fixed Front DELETE /conversations/{conversation_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  update_conversation:
+    endpoint: PATCH /conversations/{{ record.conversation_id }}
+    required fields: conversation_id
+    risk: high: fixed Front PATCH /conversations/{conversation_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_conversation:
+    endpoint: POST /conversations
+    required fields: type, subject
+    risk: high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_draft:
+    endpoint: DELETE /drafts/{{ record.draft_id }}
+    required fields: draft_id, version
+    risk: critical: fixed Front DELETE /drafts/{draft_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  edit_draft:
+    endpoint: PATCH /drafts/{{ record.message_id }}/
+    required fields: message_id, body
+    risk: high: fixed Front PATCH /drafts/{message_id}/ mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_a_channel:
+    endpoint: POST /inboxes/{{ record.inbox_id }}/channels
+    required fields: inbox_id, type
+    risk: high: fixed Front POST /inboxes/{inbox_id}/channels mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  import_inbox_message:
+    endpoint: POST /inboxes/{{ record.inbox_id }}/imported_messages
+    required fields: inbox_id, sender, to, body, external_id, created_at, metadata
+    risk: high: fixed Front POST /inboxes/{inbox_id}/imported_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  removes_inbox_access:
+    endpoint: DELETE /inboxes/{{ record.inbox_id }}/teammates
+    required fields: inbox_id, teammate_ids
+    risk: critical: fixed Front DELETE /inboxes/{inbox_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_inbox_access:
+    endpoint: POST /inboxes/{{ record.inbox_id }}/teammates
+    required fields: inbox_id, teammate_ids
+    risk: high: fixed Front POST /inboxes/{inbox_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_inbox:
+    endpoint: POST /inboxes
+    required fields: name
+    risk: high: fixed Front POST /inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_article_content_in_default_locale:
+    endpoint: PATCH /knowledge_base_articles/{{ record.article_id }}/content
+    required fields: article_id
+    risk: high: fixed Front PATCH /knowledge_base_articles/{article_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_article_content_in_specified_locale:
+    endpoint: PATCH /knowledge_base_articles/{{ record.article_id }}/locales/{{ record.locale }}/content
+    required fields: article_id, locale
+    risk: high: fixed Front PATCH /knowledge_base_articles/{article_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_an_article:
+    endpoint: DELETE /knowledge_base_articles/{{ record.article_id }}
+    required fields: article_id
+    risk: critical: fixed Front DELETE /knowledge_base_articles/{article_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  update_knowledge_base_category_in_default_locale:
+    endpoint: PATCH /knowledge_base_categories/{{ record.category_id }}/content
+    required fields: category_id
+    risk: high: fixed Front PATCH /knowledge_base_categories/{category_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_knowledge_base_category_in_specified_locale:
+    endpoint: PATCH /knowledge_base_categories/{{ record.category_id }}/locales/{{ record.locale }}/content
+    required fields: category_id, locale
+    risk: high: fixed Front PATCH /knowledge_base_categories/{category_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_a_knowledge_base_category:
+    endpoint: DELETE /knowledge_base_categories/{{ record.category_id }}
+    required fields: category_id
+    risk: critical: fixed Front DELETE /knowledge_base_categories/{category_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  create_article_in_a_knowledge_base_in_default_locale:
+    endpoint: POST /knowledge_bases/{{ record.knowledge_base_id }}/articles
+    required fields: knowledge_base_id
+    risk: high: fixed Front POST /knowledge_bases/{knowledge_base_id}/articles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_knowledge_base_category_in_default_locale:
+    endpoint: POST /knowledge_bases/{{ record.knowledge_base_id }}/categories
+    required fields: knowledge_base_id, name
+    risk: high: fixed Front POST /knowledge_bases/{knowledge_base_id}/categories mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_knowledge_base_in_default_locale:
+    endpoint: PATCH /knowledge_bases/{{ record.knowledge_base_id }}/content
+    required fields: knowledge_base_id
+    risk: high: fixed Front PATCH /knowledge_bases/{knowledge_base_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_article_in_a_knowledge_base_in_specified_locale:
+    endpoint: POST /knowledge_bases/{{ record.knowledge_base_id }}/locales/{{ record.locale }}/articles
+    required fields: knowledge_base_id, locale
+    risk: high: fixed Front POST /knowledge_bases/{knowledge_base_id}/locales/{locale}/articles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_knowledge_base_category_in_specified_locale:
+    endpoint: POST /knowledge_bases/{{ record.knowledge_base_id }}/locales/{{ record.locale }}/categories
+    required fields: knowledge_base_id, locale, name
+    risk: high: fixed Front POST /knowledge_bases/{knowledge_base_id}/locales/{locale}/categories mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_knowledge_base_in_specified_locale:
+    endpoint: PATCH /knowledge_bases/{{ record.knowledge_base_id }}/locales/{{ record.locale }}/content
+    required fields: knowledge_base_id, locale
+    risk: high: fixed Front PATCH /knowledge_bases/{knowledge_base_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_a_knowledge_base:
+    endpoint: POST /knowledge_bases
+    required fields: name
+    risk: high: fixed Front POST /knowledge_bases mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_a_link:
+    endpoint: PATCH /links/{{ record.link_id }}
+    required fields: link_id
+    risk: high: fixed Front PATCH /links/{link_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_link:
+    endpoint: POST /links
+    risk: high: fixed Front POST /links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_child_folder:
+    endpoint: POST /message_template_folders/{{ record.message_template_folder_id }}/message_template_folders
+    required fields: message_template_folder_id, name
+    risk: high: fixed Front POST /message_template_folders/{message_template_folder_id}/message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_child_template:
+    endpoint: POST /message_template_folders/{{ record.message_template_folder_id }}/message_templates
+    required fields: message_template_folder_id, name, body
+    risk: high: fixed Front POST /message_template_folders/{message_template_folder_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_folder:
+    endpoint: DELETE /message_template_folders/{{ record.message_template_folder_id }}
+    required fields: message_template_folder_id
+    risk: critical: fixed Front DELETE /message_template_folders/{message_template_folder_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  update_folder:
+    endpoint: PATCH /message_template_folders/{{ record.message_template_folder_id }}
+    required fields: message_template_folder_id
+    risk: high: fixed Front PATCH /message_template_folders/{message_template_folder_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_folder:
+    endpoint: POST /message_template_folders
+    required fields: name
+    risk: high: fixed Front POST /message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_message_template:
+    endpoint: DELETE /message_templates/{{ record.message_template_id }}
+    required fields: message_template_id
+    risk: critical: fixed Front DELETE /message_templates/{message_template_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  update_message_template:
+    endpoint: PATCH /message_templates/{{ record.message_template_id }}
+    required fields: message_template_id
+    risk: high: fixed Front PATCH /message_templates/{message_template_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_message_template:
+    endpoint: POST /message_templates
+    required fields: name, body
+    risk: high: fixed Front POST /message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  mark_message_seen:
+    endpoint: POST /messages/{{ record.message_id }}/seen
+    required fields: message_id
+    risk: high: fixed Front POST /messages/{message_id}/seen mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  remove_teammates_from_shift:
+    endpoint: DELETE /shifts/{{ record.shift_id }}/teammates
+    required fields: shift_id, teammate_ids
+    risk: critical: fixed Front DELETE /shifts/{shift_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_teammates_to_shift:
+    endpoint: POST /shifts/{{ record.shift_id }}/teammates
+    required fields: shift_id, teammate_ids
+    risk: high: fixed Front POST /shifts/{shift_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_shift:
+    endpoint: PATCH /shifts/{{ record.shift_id }}
+    required fields: shift_id
+    risk: high: fixed Front PATCH /shifts/{shift_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_shift:
+    endpoint: POST /shifts
+    required fields: name, color, timezone, teammate_ids
+    risk: high: fixed Front POST /shifts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_signature:
+    endpoint: DELETE /signatures/{{ record.signature_id }}
+    required fields: signature_id
+    risk: critical: fixed Front DELETE /signatures/{signature_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  update_signature:
+    endpoint: PATCH /signatures/{{ record.signature_id }}
+    required fields: signature_id
+    risk: high: fixed Front PATCH /signatures/{signature_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_child_tag:
+    endpoint: POST /tags/{{ record.tag_id }}/children
+    required fields: tag_id, name
+    risk: high: fixed Front POST /tags/{tag_id}/children mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_tag:
+    endpoint: DELETE /tags/{{ record.tag_id }}
+    required fields: tag_id
+    risk: critical: fixed Front DELETE /tags/{tag_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  update_a_tag:
+    endpoint: PATCH /tags/{{ record.tag_id }}
+    required fields: tag_id
+    risk: high: fixed Front PATCH /tags/{tag_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_tag:
+    endpoint: POST /tags
+    required fields: name
+    risk: high: fixed Front POST /tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  remove_company_teammate_group_team_inboxes:
+    endpoint: DELETE /teammate_groups/{{ record.teammate_group_id }}/inboxes
+    required fields: teammate_group_id, inbox_ids
+    risk: critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_company_teammate_group_team_inboxes:
+    endpoint: POST /teammate_groups/{{ record.teammate_group_id }}/inboxes
+    required fields: teammate_group_id, inbox_ids
+    risk: high: fixed Front POST /teammate_groups/{teammate_group_id}/inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  remove_company_teammate_group_teammates:
+    endpoint: DELETE /teammate_groups/{{ record.teammate_group_id }}/teammates
+    required fields: teammate_group_id, teammate_ids
+    risk: critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_company_teammate_group_teammates:
+    endpoint: POST /teammate_groups/{{ record.teammate_group_id }}/teammates
+    required fields: teammate_group_id, teammate_ids
+    risk: high: fixed Front POST /teammate_groups/{teammate_group_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  remove_company_teammate_group_teams:
+    endpoint: DELETE /teammate_groups/{{ record.teammate_group_id }}/teams
+    required fields: teammate_group_id, team_ids
+    risk: critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/teams mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_company_teammate_group_teams:
+    endpoint: POST /teammate_groups/{{ record.teammate_group_id }}/teams
+    required fields: teammate_group_id, team_ids
+    risk: high: fixed Front POST /teammate_groups/{teammate_group_id}/teams mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_company_teammate_group:
+    endpoint: DELETE /teammate_groups/{{ record.teammate_group_id }}
+    required fields: teammate_group_id
+    risk: critical: fixed Front DELETE /teammate_groups/{teammate_group_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  update_a_company_teammate_group:
+    endpoint: PATCH /teammate_groups/{{ record.teammate_group_id }}
+    required fields: teammate_group_id
+    risk: high: fixed Front PATCH /teammate_groups/{teammate_group_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_company_teammate_group:
+    endpoint: POST /teammate_groups
+    required fields: name
+    risk: high: fixed Front POST /teammate_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_teammate_group:
+    endpoint: POST /teammates/{{ record.teammate_id }}/contact_groups
+    required fields: teammate_id, name
+    risk: high: fixed Front POST /teammates/{teammate_id}/contact_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_teammate_contact_list:
+    endpoint: POST /teammates/{{ record.teammate_id }}/contact_lists
+    required fields: teammate_id, name
+    risk: high: fixed Front POST /teammates/{teammate_id}/contact_lists mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_teammate_contact:
+    endpoint: POST /teammates/{{ record.teammate_id }}/contacts
+    required fields: teammate_id
+    risk: high: fixed Front POST /teammates/{teammate_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_teammate_folder:
+    endpoint: POST /teammates/{{ record.teammate_id }}/message_template_folders
+    required fields: teammate_id, name
+    risk: high: fixed Front POST /teammates/{teammate_id}/message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_teammate_message_template:
+    endpoint: POST /teammates/{{ record.teammate_id }}/message_templates
+    required fields: teammate_id, name, body
+    risk: high: fixed Front POST /teammates/{teammate_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_teammate_private_inbox:
+    endpoint: POST /teammates/{{ record.teammate_id }}/private_inboxes
+    required fields: teammate_id, name
+    risk: high: fixed Front POST /teammates/{teammate_id}/private_inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_teammate_signature:
+    endpoint: POST /teammates/{{ record.teammate_id }}/signatures
+    required fields: teammate_id, name, body
+    risk: high: fixed Front POST /teammates/{teammate_id}/signatures mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_teammate_tag:
+    endpoint: POST /teammates/{{ record.teammate_id }}/tags
+    required fields: teammate_id, name
+    risk: high: fixed Front POST /teammates/{teammate_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_time_off:
+    endpoint: POST /teammates/{{ record.teammate_id }}/time_offs
+    required fields: teammate_id, name, start_at
+    risk: high: fixed Front POST /teammates/{teammate_id}/time_offs mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_teammate:
+    endpoint: PATCH /teammates/{{ record.teammate_id }}
+    required fields: teammate_id
+    risk: high: fixed Front PATCH /teammates/{teammate_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_team_group:
+    endpoint: POST /teams/{{ record.team_id }}/contact_groups
+    required fields: team_id, name
+    risk: high: fixed Front POST /teams/{team_id}/contact_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_team_contact_list:
+    endpoint: POST /teams/{{ record.team_id }}/contact_lists
+    required fields: team_id, name
+    risk: high: fixed Front POST /teams/{team_id}/contact_lists mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_team_contact:
+    endpoint: POST /teams/{{ record.team_id }}/contacts
+    required fields: team_id
+    risk: high: fixed Front POST /teams/{team_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_team_inbox:
+    endpoint: POST /teams/{{ record.team_id }}/inboxes
+    required fields: team_id, name
+    risk: high: fixed Front POST /teams/{team_id}/inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_team_folder:
+    endpoint: POST /teams/{{ record.team_id }}/message_template_folders
+    required fields: team_id, name
+    risk: high: fixed Front POST /teams/{team_id}/message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_team_message_template:
+    endpoint: POST /teams/{{ record.team_id }}/message_templates
+    required fields: team_id, name, body
+    risk: high: fixed Front POST /teams/{team_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_team_shift:
+    endpoint: POST /teams/{{ record.team_id }}/shifts
+    required fields: team_id, name, color, timezone, teammate_ids
+    risk: high: fixed Front POST /teams/{team_id}/shifts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_team_signature:
+    endpoint: POST /teams/{{ record.team_id }}/signatures
+    required fields: team_id, name, body
+    risk: high: fixed Front POST /teams/{team_id}/signatures mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_team_tag:
+    endpoint: POST /teams/{{ record.team_id }}/tags
+    required fields: team_id, name
+    risk: high: fixed Front POST /teams/{team_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  remove_teammates_from_team:
+    endpoint: DELETE /teams/{{ record.team_id }}/teammates
+    required fields: team_id, teammate_ids
+    risk: critical: fixed Front DELETE /teams/{team_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  add_teammates_to_team:
+    endpoint: POST /teams/{{ record.team_id }}/teammates
+    required fields: team_id, teammate_ids
+    risk: high: fixed Front POST /teams/{team_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_team_view:
+    endpoint: POST /teams/{{ record.team_id }}/views
+    required fields: team_id, name, inbox_ids
+    risk: high: fixed Front POST /teams/{team_id}/views mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  delete_time_off:
+    endpoint: DELETE /time_offs/{{ record.time_off_id }}
+    required fields: time_off_id
+    risk: critical: fixed Front DELETE /time_offs/{time_off_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss
+  update_time_off:
+    endpoint: PATCH /time_offs/{{ record.time_off_id }}
+    required fields: time_off_id
+    risk: high: fixed Front PATCH /time_offs/{time_off_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  add_view_teammates:
+    endpoint: POST /views/{{ record.view_id }}/teammates
+    required fields: view_id, teammate_ids
+    risk: high: fixed Front POST /views/{view_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_view:
+    endpoint: PATCH /views/{{ record.view_id }}
+    required fields: view_id
+    risk: high: fixed Front PATCH /views/{view_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  create_call:
+    endpoint: POST /channels/{{ record.channel_id }}/calls
+    required fields: channel_id
+    risk: high: fixed Front POST /channels/{channel_id}/calls mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_call:
+    endpoint: PATCH /channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}
+    required fields: channel_id, external_call_id
+    risk: high: fixed Front PATCH /channels/{channel_id}/calls/{external_call_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  add_call_recording:
+    endpoint: POST /channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}/recording
+    required fields: channel_id, external_call_id, recording_file_path, recording_type
+    risk: high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/recording mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  add_call_summary:
+    endpoint: POST /channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}/summary
+    required fields: channel_id, external_call_id
+    risk: high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/summary mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  add_call_transcript:
+    endpoint: POST /channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}/transcript
+    required fields: channel_id, external_call_id
+    risk: high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/transcript mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  sync_application_message_template:
+    endpoint: PUT /channels/{{ record.channel_id }}/application_message_templates
+    required fields: channel_id
+    risk: high: fixed Front PUT /channels/{channel_id}/application_message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_application_message_template:
+    endpoint: PATCH /channels/{{ record.channel_id }}/application_message_templates/{{ record.external_id }}
+    required fields: channel_id, external_id
+    risk: high: fixed Front PATCH /channels/{channel_id}/application_message_templates/{external_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  sync_inbound_message:
+    endpoint: POST /channels/{{ record.channel_id }}/inbound_messages
+    required fields: channel_id
+    risk: high: fixed Front POST /channels/{channel_id}/inbound_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  sync_outbound_message:
+    endpoint: POST /channels/{{ record.channel_id }}/outbound_messages
+    required fields: channel_id
+    risk: high: fixed Front POST /channels/{channel_id}/outbound_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
+  update_external_message_status:
+    endpoint: PUT /channels/{{ record.channel_id }}/conversations/{{ record.conv_ext_id }}/messages/{{ record.message_ext_id }}/status
+    required fields: channel_id, conv_ext_id, message_ext_id
+    risk: high: fixed Front PUT /channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status mutation; reverse ETL requires plan -> preview -> explicit approval -> execute
 
 SECURITY
-  read risk: external Front API read of contact, conversation, inbox, tag, teammate, and channel data
-  approval: none; read-only, no reverse-ETL writes
+  read risk: external Front API reads for contacts, conversations, inboxes, tags, teammates, channels, events, knowledge base, analytics metadata, accounts, and related resources
+  write risk: fixed Front API mutations declared as reverse ETL write actions with typed schemas and destructive confirmation
+  approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; every Front write action also declares destructive confirmation in this bundle
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Front connector commands are definition-owned fixed ETL, direct-read, binary, and reverse-ETL surfaces.
+  Usage: pm connectors inspect front --json; pm etl run --source front ...; pm reverse plan --connector front ...
+  Source CLI: Front API (https://dev.frontapp.com/reference/introduction)
+  ETL/read streams
+    contacts - Read Front contacts records. [intent=etl availability=implemented stream=contacts]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    conversations - Read Front conversations records. [intent=etl availability=implemented stream=conversations]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    conversations search - Search conversations with bounded JSON output. [intent=direct_read availability=implemented operation=front.search_conversations]; approval: none for read/query; no provider write execution is performed by these direct-read commands; risk: medium: provider search/query output is bounded and redacted; notes: Fixed provider search/query endpoint; distinct from warehouse pm query.; flags: --query
+    inboxes - Read Front inboxes records. [intent=etl availability=implemented stream=inboxes]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    tags - Read Front tags records. [intent=etl availability=implemented stream=tags]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    teammates - Read Front teammates records. [intent=etl availability=implemented stream=teammates]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    channels - Read Front channels records. [intent=etl availability=implemented stream=channels]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    account-contacts - Read Front account contacts records. [intent=etl availability=implemented stream=account_contacts]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --account-id
+    an-account - Read Front an account records. [intent=etl availability=implemented stream=an_account]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --account-id
+    account-custom-fields - Read Front account custom fields records. [intent=etl availability=implemented stream=account_custom_fields]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    accounts - Read Front accounts records. [intent=etl availability=implemented stream=accounts]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    channel - Read Front channel records. [intent=etl availability=implemented stream=channel]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --channel-id
+    comment-mentions - Read Front comment mentions records. [intent=etl availability=implemented stream=comment_mentions]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --comment-id
+    comment - Read Front comment records. [intent=etl availability=implemented stream=comment]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --comment-id
+    all-company-rules - Read Front all company rules records. [intent=etl availability=implemented stream=all_company_rules]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    ticket-status-by-id - Read Front ticket status by id records. [intent=etl availability=implemented stream=ticket_status_by_id]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --status-id
+    company-ticket-statuses - Read Front company ticket statuses records. [intent=etl availability=implemented stream=company_ticket_statuses]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    company-tags - Read Front company tags records. [intent=etl availability=implemented stream=company_tags]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    contacts-in-group - Read Front contacts in group records. [intent=etl availability=implemented stream=contacts_in_group]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --contact-group-id
+    groups - Read Front groups records. [intent=etl availability=implemented stream=groups]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    contacts-in-contact-list - Read Front contacts in contact list records. [intent=etl availability=implemented stream=contacts_in_contact_list]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --contact-list-id
+    contact-lists - Read Front contact lists records. [intent=etl availability=implemented stream=contact_lists]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    contact-conversations - Read Front contact conversations records. [intent=etl availability=implemented stream=contact_conversations]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --contact-id
+    notes - Read Front notes records. [intent=etl availability=implemented stream=notes]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --contact-id
+    contact - Read Front contact records. [intent=etl availability=implemented stream=contact]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --contact-id
+    contact-custom-fields - Read Front contact custom fields records. [intent=etl availability=implemented stream=contact_custom_fields]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    conversation-comments - Read Front conversation comments records. [intent=etl availability=implemented stream=conversation_comments]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --conversation-id
+    conversation-drafts - Read Front conversation drafts records. [intent=etl availability=implemented stream=conversation_drafts]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --conversation-id
+    conversation-events - Read Front conversation events records. [intent=etl availability=implemented stream=conversation_events]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --conversation-id
+    conversation-followers - Read Front conversation followers records. [intent=etl availability=implemented stream=conversation_followers]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --conversation-id
+    conversation-inboxes - Read Front conversation inboxes records. [intent=etl availability=implemented stream=conversation_inboxes]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --conversation-id
+    conversation-messages - Read Front conversation messages records. [intent=etl availability=implemented stream=conversation_messages]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --conversation-id
+    conversation-by-id - Read Front conversation by id records. [intent=etl availability=implemented stream=conversation_by_id]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --conversation-id
+    conversation-custom-fields - Read Front conversation custom fields records. [intent=etl availability=implemented stream=conversation_custom_fields]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    custom-fields - Read Front custom fields records. [intent=etl availability=implemented stream=custom_fields]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    event - Read Front event records. [intent=etl availability=implemented stream=event]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --event-id
+    events - Read Front events records. [intent=etl availability=implemented stream=events]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    inbox-channels - Read Front inbox channels records. [intent=etl availability=implemented stream=inbox_channels]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --inbox-id
+    inbox-conversations - Read Front inbox conversations records. [intent=etl availability=implemented stream=inbox_conversations]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --inbox-id
+    inbox-access - Read Front inbox access records. [intent=etl availability=implemented stream=inbox_access]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --inbox-id
+    inbox - Read Front inbox records. [intent=etl availability=implemented stream=inbox]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --inbox-id
+    inbox-custom-fields - Read Front inbox custom fields records. [intent=etl availability=implemented stream=inbox_custom_fields]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    knowledge-base-article-with-content-in-default-locale - Read Front knowledge base article with content in default locale records. [intent=etl availability=implemented stream=knowledge_base_article_with_content_in_default_locale]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --article-id
+    knowledge-base-article-with-content-in-specified-locale - Read Front knowledge base article with content in specified locale records. [intent=etl availability=implemented stream=knowledge_base_article_with_content_in_specified_locale]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --article-id, --locale
+    a-knowledge-base-article - Read Front a knowledge base article records. [intent=etl availability=implemented stream=a_knowledge_base_article]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --article-id
+    articles-in-a-category - Read Front articles in a category records. [intent=etl availability=implemented stream=articles_in_a_category]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --category-id
+    knowledge-base-category-content-in-default-locale - Read Front knowledge base category content in default locale records. [intent=etl availability=implemented stream=knowledge_base_category_content_in_default_locale]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --category-id
+    knowledge-base-category-with-content-in-specified-locale - Read Front knowledge base category with content in specified locale records. [intent=etl availability=implemented stream=knowledge_base_category_with_content_in_specified_locale]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --category-id, --locale
+    a-knowledge-base-category - Read Front a knowledge base category records. [intent=etl availability=implemented stream=a_knowledge_base_category]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --category-id
+    articles-in-a-knowledge-base - Read Front articles in a knowledge base records. [intent=etl availability=implemented stream=articles_in_a_knowledge_base]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --knowledge-base-id
+    categories-in-a-knowledge-base - Read Front categories in a knowledge base records. [intent=etl availability=implemented stream=categories_in_a_knowledge_base]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --knowledge-base-id
+    a-knowledge-base-with-content-in-default-locale - Read Front a knowledge base with content in default locale records. [intent=etl availability=implemented stream=a_knowledge_base_with_content_in_default_locale]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --knowledge-base-id
+    a-knowledge-base-with-content-in-specified-locale - Read Front a knowledge base with content in specified locale records. [intent=etl availability=implemented stream=a_knowledge_base_with_content_in_specified_locale]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --knowledge-base-id, --locale
+    a-knowledge-base - Read Front a knowledge base records. [intent=etl availability=implemented stream=a_knowledge_base]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --knowledge-base-id
+    knowledge-bases - Read Front knowledge bases records. [intent=etl availability=implemented stream=knowledge_bases]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    link-conversations - Read Front link conversations records. [intent=etl availability=implemented stream=link_conversations]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --link-id
+    link - Read Front link records. [intent=etl availability=implemented stream=link]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --link-id
+    link-custom-fields - Read Front link custom fields records. [intent=etl availability=implemented stream=link_custom_fields]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    links - Read Front links records. [intent=etl availability=implemented stream=links]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    api-token-details - Read Front api token details records. [intent=etl availability=implemented stream=api_token_details]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    child-folders - Read Front child folders records. [intent=etl availability=implemented stream=child_folders]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --message-template-folder-id
+    child-templates - Read Front child templates records. [intent=etl availability=implemented stream=child_templates]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --message-template-folder-id
+    folder - Read Front folder records. [intent=etl availability=implemented stream=folder]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --message-template-folder-id
+    folders - Read Front folders records. [intent=etl availability=implemented stream=folders]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    message-template - Read Front message template records. [intent=etl availability=implemented stream=message_template]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --message-template-id
+    message-templates - Read Front message templates records. [intent=etl availability=implemented stream=message_templates]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    message-seen-status - Read Front message seen status records. [intent=etl availability=implemented stream=message_seen_status]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --message-id
+    message - Read Front message records. [intent=etl availability=implemented stream=message]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --message-id
+    rule - Read Front rule records. [intent=etl availability=implemented stream=rule]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --rule-id
+    rules - Read Front rules records. [intent=etl availability=implemented stream=rules]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    shifts-teammates - Read Front shifts teammates records. [intent=etl availability=implemented stream=shifts_teammates]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --shift-id
+    shift - Read Front shift records. [intent=etl availability=implemented stream=shift]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --shift-id
+    shifts - Read Front shifts records. [intent=etl availability=implemented stream=shifts]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    signatures - Read Front signatures records. [intent=etl availability=implemented stream=signatures]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --signature-id
+    tag-children - Read Front tag children records. [intent=etl availability=implemented stream=tag_children]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --tag-id
+    tagged-conversations - Read Front tagged conversations records. [intent=etl availability=implemented stream=tagged_conversations]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --tag-id
+    tag - Read Front tag records. [intent=etl availability=implemented stream=tag]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --tag-id
+    company-teammate-group-team-inboxes - Read Front company teammate group team inboxes records. [intent=etl availability=implemented stream=company_teammate_group_team_inboxes]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-group-id
+    company-teammate-group-teammates - Read Front company teammate group teammates records. [intent=etl availability=implemented stream=company_teammate_group_teammates]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-group-id
+    company-teammate-group-teams - Read Front company teammate group teams records. [intent=etl availability=implemented stream=company_teammate_group_teams]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-group-id
+    company-teammate-group - Read Front company teammate group records. [intent=etl availability=implemented stream=company_teammate_group]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-group-id
+    company-teammate-groups - Read Front company teammate groups records. [intent=etl availability=implemented stream=company_teammate_groups]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    teammate-channels - Read Front teammate channels records. [intent=etl availability=implemented stream=teammate_channels]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-groups - Read Front teammate groups records. [intent=etl availability=implemented stream=teammate_groups]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-contact-lists - Read Front teammate contact lists records. [intent=etl availability=implemented stream=teammate_contact_lists]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-contacts - Read Front teammate contacts records. [intent=etl availability=implemented stream=teammate_contacts]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    assigned-conversations - Read Front assigned conversations records. [intent=etl availability=implemented stream=assigned_conversations]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-inboxes - Read Front teammate inboxes records. [intent=etl availability=implemented stream=teammate_inboxes]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-folders - Read Front teammate folders records. [intent=etl availability=implemented stream=teammate_folders]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-message-templates - Read Front teammate message templates records. [intent=etl availability=implemented stream=teammate_message_templates]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-private-inboxes - Read Front teammate private inboxes records. [intent=etl availability=implemented stream=teammate_private_inboxes]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-rules - Read Front teammate rules records. [intent=etl availability=implemented stream=teammate_rules]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-shifts - Read Front teammate shifts records. [intent=etl availability=implemented stream=teammate_shifts]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-signatures - Read Front teammate signatures records. [intent=etl availability=implemented stream=teammate_signatures]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-tags - Read Front teammate tags records. [intent=etl availability=implemented stream=teammate_tags]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-time-offs - Read Front teammate time offs records. [intent=etl availability=implemented stream=teammate_time_offs]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate - Read Front teammate records. [intent=etl availability=implemented stream=teammate]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --teammate-id
+    teammate-custom-fields - Read Front teammate custom fields records. [intent=etl availability=implemented stream=teammate_custom_fields]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    team-channels - Read Front team channels records. [intent=etl availability=implemented stream=team_channels]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-groups - Read Front team groups records. [intent=etl availability=implemented stream=team_groups]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-contact-lists - Read Front team contact lists records. [intent=etl availability=implemented stream=team_contact_lists]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-contacts - Read Front team contacts records. [intent=etl availability=implemented stream=team_contacts]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-inboxes - Read Front team inboxes records. [intent=etl availability=implemented stream=team_inboxes]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-folders - Read Front team folders records. [intent=etl availability=implemented stream=team_folders]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-message-templates - Read Front team message templates records. [intent=etl availability=implemented stream=team_message_templates]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-rules - Read Front team rules records. [intent=etl availability=implemented stream=team_rules]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-shifts - Read Front team shifts records. [intent=etl availability=implemented stream=team_shifts]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-signatures - Read Front team signatures records. [intent=etl availability=implemented stream=team_signatures]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-tags - Read Front team tags records. [intent=etl availability=implemented stream=team_tags]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-time-offs - Read Front team time offs records. [intent=etl availability=implemented stream=team_time_offs]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team-views - Read Front team views records. [intent=etl availability=implemented stream=team_views]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    team - Read Front team records. [intent=etl availability=implemented stream=team]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --team-id
+    teams - Read Front teams records. [intent=etl availability=implemented stream=teams]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+    time-off - Read Front time off records. [intent=etl availability=implemented stream=time_off]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --time-off-id
+    view - Read Front view records. [intent=etl availability=implemented stream=view]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.; flags: --view-id
+    views - Read Front views records. [intent=etl availability=implemented stream=views]; notes: Definition-owned ETL stream; parameterized streams require the named config/flag values when used.
+  Direct/provider search and binary surfaces
+  Reverse ETL writes
+    remove-contact-from-account - Remove contact from Account through Front reverse ETL. [intent=reverse_etl availability=implemented write=remove_contact_from_account]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /accounts/{account_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --account-id, --contact-ids
+    add-contact-to-account - Add contact to Account through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_contact_to_account]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /accounts/{account_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --account-id, --contact-ids
+    delete-an-account - Delete an account through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_an_account]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /accounts/{account_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --account-id
+    update-account - Update account through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_account]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /accounts/{account_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --account-id
+    create-account - Create account through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_account]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /accounts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.
+    trigger-app-event - Trigger application event through Front reverse ETL. [intent=reverse_etl availability=implemented write=trigger_app_event]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front POST /applications/{application_uid}/events mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --application-uid, --event-type
+    create-draft - Create draft through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_draft]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /channels/{channel_id}/drafts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --channel-id, --body
+    receive-custom-messages - Receive custom messages through Front reverse ETL. [intent=reverse_etl availability=implemented write=receive_custom_messages]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /channels/{channel_id}/incoming_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --channel-id, --sender-handle, --body
+    create-message - Create message through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_message]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /channels/{channel_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --channel-id, --to, --body
+    validate-channel - Validate channel through Front reverse ETL. [intent=reverse_etl availability=implemented write=validate_channel]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /channels/{channel_id}/validate mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --channel-id
+    update-channel - Update Channel through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_channel]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /channels/{channel_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --channel-id
+    update-comment - Update comment through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_comment]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /comments/{comment_id}/ mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --comment-id
+    add-comment-reply - Add comment reply through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_comment_reply]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /comments/{comment_id}/replies mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --comment-id, --body
+    create-company-tag - Create company tag through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_company_tag]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /company/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --name
+    remove-contacts-from-group - Remove contacts from group through Front reverse ETL. [intent=reverse_etl availability=implemented write=remove_contacts_from_group]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /contact_groups/{contact_group_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-group-id, --contact-ids
+    add-contacts-to-group - Add contacts to group through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_contacts_to_group]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /contact_groups/{contact_group_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-group-id, --contact-ids
+    delete-group - Delete group through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_group]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /contact_groups/{contact_group_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-group-id
+    create-group - Create group through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_group]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /contact_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --name
+    remove-contacts-from-contact-list - Remove contacts from contact list through Front reverse ETL. [intent=reverse_etl availability=implemented write=remove_contacts_from_contact_list]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /contact_lists/{contact_list_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-list-id, --contact-ids
+    add-contacts-to-contact-list - Add contacts to contact list through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_contacts_to_contact_list]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /contact_lists/{contact_list_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-list-id, --contact-ids
+    delete-contact-list - Delete contact list through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_contact_list]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /contact_lists/{contact_list_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-list-id
+    create-contact-list - Create contact list through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_contact_list]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /contact_lists mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --name
+    delete-contact-handle - Delete contact handle through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_contact_handle]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /contacts/{contact_id}/handles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-id, --handle, --source
+    add-contact-handle - Add contact handle through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_contact_handle]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /contacts/{contact_id}/handles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-id, --handle, --source
+    add-note - Add note through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_note]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /contacts/{contact_id}/notes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-id, --author-id, --body
+    delete-a-contact - Delete a contact through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_a_contact]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /contacts/{contact_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-id
+    update-a-contact - Update a contact through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_a_contact]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /contacts/{contact_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-id
+    merge-contacts - Merge contacts through Front reverse ETL. [intent=reverse_etl availability=implemented write=merge_contacts]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /contacts/merge mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --contact-ids
+    create-contact - Create contact through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_contact]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.
+    update-conversation-assignee - Update conversation assignee through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_conversation_assignee]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PUT /conversations/{conversation_id}/assignee mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id, --assignee-id
+    add-comment - Add comment through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_comment]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /conversations/{conversation_id}/comments mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id, --body
+    create-draft-reply - Create draft reply through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_draft_reply]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /conversations/{conversation_id}/drafts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id, --body
+    delete-conversation-followers - Delete conversation followers through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_conversation_followers]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /conversations/{conversation_id}/followers mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id, --teammate-ids
+    add-conversation-followers - Add conversation followers through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_conversation_followers]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /conversations/{conversation_id}/followers mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id, --teammate-ids
+    remove-conversation-links - Remove conversation links through Front reverse ETL. [intent=reverse_etl availability=implemented write=remove_conversation_links]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /conversations/{conversation_id}/links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id, --link-ids
+    add-conversation-link - Add conversation link through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_conversation_link]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /conversations/{conversation_id}/links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id
+    create-message-reply - Create message reply through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_message_reply]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /conversations/{conversation_id}/messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id, --body
+    update-conversation-reminders - Update conversation reminders through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_conversation_reminders]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /conversations/{conversation_id}/reminders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id, --teammate-id, --scheduled-at
+    remove-conversation-tag - Remove conversation tag through Front reverse ETL. [intent=reverse_etl availability=implemented write=remove_conversation_tag]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /conversations/{conversation_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id, --tag-ids
+    add-conversation-tag - Add conversation tag through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_conversation_tag]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /conversations/{conversation_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id, --tag-ids
+    delete-conversation - Delete conversation through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_conversation]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /conversations/{conversation_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id
+    update-conversation - Update conversation through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_conversation]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /conversations/{conversation_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --conversation-id
+    create-conversation - Create discussion/task conversation through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_conversation]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /conversations mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --type, --subject
+    delete-draft - Delete draft through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_draft]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /drafts/{draft_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --draft-id, --version
+    edit-draft - Edit draft through Front reverse ETL. [intent=reverse_etl availability=implemented write=edit_draft]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /drafts/{message_id}/ mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --message-id, --body
+    create-a-channel - Create a channel through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_a_channel]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /inboxes/{inbox_id}/channels mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --inbox-id, --type
+    import-inbox-message - Import message through Front reverse ETL. [intent=reverse_etl availability=implemented write=import_inbox_message]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /inboxes/{inbox_id}/imported_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --inbox-id, --sender-handle, --to, --body, --external-id, --created-at, --metadata-is-inbound
+    removes-inbox-access - Removes inbox access through Front reverse ETL. [intent=reverse_etl availability=implemented write=removes_inbox_access]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /inboxes/{inbox_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --inbox-id, --teammate-ids
+    add-inbox-access - Add inbox access through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_inbox_access]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /inboxes/{inbox_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --inbox-id, --teammate-ids
+    create-inbox - Create inbox through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_inbox]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --name
+    update-article-content-in-default-locale - Update article content in default locale. through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_article_content_in_default_locale]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /knowledge_base_articles/{article_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --article-id
+    update-article-content-in-specified-locale - Update article content in specified locale through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_article_content_in_specified_locale]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /knowledge_base_articles/{article_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --article-id, --locale
+    delete-an-article - Delete an article through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_an_article]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /knowledge_base_articles/{article_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --article-id
+    update-knowledge-base-category-in-default-locale - Update knowledge base category in default locale through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_knowledge_base_category_in_default_locale]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /knowledge_base_categories/{category_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --category-id
+    update-knowledge-base-category-in-specified-locale - Update knowledge base category in specified locale through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_knowledge_base_category_in_specified_locale]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /knowledge_base_categories/{category_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --category-id, --locale
+    delete-a-knowledge-base-category - Delete a knowledge base category through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_a_knowledge_base_category]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /knowledge_base_categories/{category_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --category-id
+    create-article-in-a-knowledge-base-in-default-locale - Create article in a knowledge base in default locale through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_article_in_a_knowledge_base_in_default_locale]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /knowledge_bases/{knowledge_base_id}/articles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --knowledge-base-id
+    create-knowledge-base-category-in-default-locale - Create knowledge base category in default locale through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_knowledge_base_category_in_default_locale]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /knowledge_bases/{knowledge_base_id}/categories mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --knowledge-base-id, --name
+    update-knowledge-base-in-default-locale - Update knowledge base in default locale through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_knowledge_base_in_default_locale]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /knowledge_bases/{knowledge_base_id}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --knowledge-base-id
+    create-article-in-a-knowledge-base-in-specified-locale - Create article in a knowledge base in specified locale through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_article_in_a_knowledge_base_in_specified_locale]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /knowledge_bases/{knowledge_base_id}/locales/{locale}/articles mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --knowledge-base-id, --locale
+    create-knowledge-base-category-in-specified-locale - Create knowledge base category in specified locale through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_knowledge_base_category_in_specified_locale]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /knowledge_bases/{knowledge_base_id}/locales/{locale}/categories mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --knowledge-base-id, --locale, --name
+    update-knowledge-base-in-specified-locale - Update knowledge base in specified locale through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_knowledge_base_in_specified_locale]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /knowledge_bases/{knowledge_base_id}/locales/{locale}/content mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --knowledge-base-id, --locale
+    create-a-knowledge-base - Create a knowledge base through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_a_knowledge_base]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /knowledge_bases mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --name
+    update-a-link - Update a link through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_a_link]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /links/{link_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --link-id
+    create-link - Create link through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_link]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /links mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.
+    create-child-folder - Create child folder through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_child_folder]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /message_template_folders/{message_template_folder_id}/message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --message-template-folder-id, --name
+    create-child-template - Create child template through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_child_template]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /message_template_folders/{message_template_folder_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --message-template-folder-id, --name, --body
+    delete-folder - Delete folder through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_folder]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /message_template_folders/{message_template_folder_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --message-template-folder-id
+    update-folder - Update folder through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_folder]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /message_template_folders/{message_template_folder_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --message-template-folder-id
+    create-folder - Create folder through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_folder]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --name
+    delete-message-template - Delete message template through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_message_template]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /message_templates/{message_template_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --message-template-id
+    update-message-template - Update message template through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_message_template]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /message_templates/{message_template_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --message-template-id
+    create-message-template - Create message template through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_message_template]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --name, --body
+    mark-message-seen - Mark message seen through Front reverse ETL. [intent=reverse_etl availability=implemented write=mark_message_seen]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /messages/{message_id}/seen mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --message-id
+    remove-teammates-from-shift - Remove teammates from shift through Front reverse ETL. [intent=reverse_etl availability=implemented write=remove_teammates_from_shift]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /shifts/{shift_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --shift-id, --teammate-ids
+    add-teammates-to-shift - Add teammates to shift through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_teammates_to_shift]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /shifts/{shift_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --shift-id, --teammate-ids
+    update-shift - Update shift through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_shift]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /shifts/{shift_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --shift-id
+    create-shift - Create shift through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_shift]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /shifts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --name, --color, --timezone, --teammate-ids
+    delete-signature - Delete signature through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_signature]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /signatures/{signature_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --signature-id
+    update-signature - Update signature through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_signature]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /signatures/{signature_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --signature-id
+    create-child-tag - Create child tag through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_child_tag]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /tags/{tag_id}/children mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --tag-id, --name
+    delete-tag - Delete tag through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_tag]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /tags/{tag_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --tag-id
+    update-a-tag - Update a tag through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_a_tag]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /tags/{tag_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --tag-id
+    create-tag - Create tag through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_tag]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --name
+    remove-company-teammate-group-team-inboxes - Remove teammate group team inboxes through Front reverse ETL. [intent=reverse_etl availability=implemented write=remove_company_teammate_group_team_inboxes]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-group-id, --inbox-ids
+    add-company-teammate-group-team-inboxes - Add teammate group team inboxes through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_company_teammate_group_team_inboxes]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammate_groups/{teammate_group_id}/inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-group-id, --inbox-ids
+    remove-company-teammate-group-teammates - Remove teammate group teammates through Front reverse ETL. [intent=reverse_etl availability=implemented write=remove_company_teammate_group_teammates]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-group-id, --teammate-ids
+    add-company-teammate-group-teammates - Add teammate group teammates through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_company_teammate_group_teammates]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammate_groups/{teammate_group_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-group-id, --teammate-ids
+    remove-company-teammate-group-teams - Remove teammate group teams through Front reverse ETL. [intent=reverse_etl availability=implemented write=remove_company_teammate_group_teams]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/teams mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-group-id, --team-ids
+    add-company-teammate-group-teams - Add teammate group teams through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_company_teammate_group_teams]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammate_groups/{teammate_group_id}/teams mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-group-id, --team-ids
+    delete-company-teammate-group - Delete teammate group through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_company_teammate_group]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /teammate_groups/{teammate_group_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-group-id
+    update-a-company-teammate-group - Update a teammate group through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_a_company_teammate_group]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /teammate_groups/{teammate_group_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-group-id
+    create-company-teammate-group - Create teammate group through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_company_teammate_group]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammate_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --name
+    create-teammate-group - Create teammate group through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_teammate_group]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammates/{teammate_id}/contact_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-id, --name
+    create-teammate-contact-list - Create teammate contact list through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_teammate_contact_list]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammates/{teammate_id}/contact_lists mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-id, --name
+    create-teammate-contact - Create teammate contact through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_teammate_contact]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammates/{teammate_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-id
+    create-teammate-folder - Create teammate folder through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_teammate_folder]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammates/{teammate_id}/message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-id, --name
+    create-teammate-message-template - Create teammate message template through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_teammate_message_template]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammates/{teammate_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-id, --name, --body
+    create-teammate-private-inbox - Create teammate private inbox through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_teammate_private_inbox]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammates/{teammate_id}/private_inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-id, --name
+    create-teammate-signature - Create teammate signature through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_teammate_signature]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammates/{teammate_id}/signatures mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-id, --name, --body
+    create-teammate-tag - Create teammate tag through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_teammate_tag]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammates/{teammate_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-id, --name
+    create-time-off - Create time off through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_time_off]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teammates/{teammate_id}/time_offs mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-id, --name, --start-at
+    update-teammate - Update teammate through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_teammate]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /teammates/{teammate_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --teammate-id
+    create-team-group - Create team group through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_team_group]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/contact_groups mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --name
+    create-team-contact-list - Create team contact list through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_team_contact_list]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/contact_lists mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --name
+    create-team-contact - Create team contact through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_team_contact]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id
+    create-team-inbox - Create team inbox through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_team_inbox]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/inboxes mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --name
+    create-team-folder - Create team folder through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_team_folder]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/message_template_folders mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --name
+    create-team-message-template - Create team message template through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_team_message_template]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --name, --body
+    create-team-shift - Create team shift through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_team_shift]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/shifts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --name, --color, --timezone, --teammate-ids
+    create-team-signature - Create team signature through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_team_signature]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/signatures mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --name, --body
+    create-team-tag - Create team tag through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_team_tag]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/tags mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --name
+    remove-teammates-from-team - Remove teammates from team through Front reverse ETL. [intent=reverse_etl availability=implemented write=remove_teammates_from_team]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /teams/{team_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --teammate-ids
+    add-teammates-to-team - Add teammates to team through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_teammates_to_team]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --teammate-ids
+    create-team-view - Create team view through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_team_view]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /teams/{team_id}/views mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --team-id, --name, --inbox-ids
+    delete-time-off - Delete time off through Front reverse ETL. [intent=reverse_etl availability=implemented write=delete_time_off]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: critical: fixed Front DELETE /time_offs/{time_off_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; 404 is treated as an idempotent delete miss; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --time-off-id
+    update-time-off - Update time off through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_time_off]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /time_offs/{time_off_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --time-off-id
+    add-view-teammates - Add view to teammate sidebars through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_view_teammates]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /views/{view_id}/teammates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --view-id, --teammate-ids
+    update-view - Update view through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_view]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /views/{view_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --view-id
+    add-call-recording - Add call recording through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_call_recording]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: uploads a call recording from a bounded project-local file path via multipart/form-data to Front; file path/content are redacted in plans and require reverse ETL approval; notes: Uses typed multipart write support; no generic upload command is exposed.; flags: --channel-id, --external-call-id, --recording-file-path, --recording-type
+    add-call-summary - Add call summary through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_call_summary]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/summary mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --channel-id, --external-call-id
+    add-call-transcript - Add call transcript through Front reverse ETL. [intent=reverse_etl availability=implemented write=add_call_transcript]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/transcript mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --channel-id, --external-call-id
+    create-call - Create a call through Front reverse ETL. [intent=reverse_etl availability=implemented write=create_call]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /channels/{channel_id}/calls mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --channel-id
+    sync-application-message-template - Sync application message template through Front reverse ETL. [intent=reverse_etl availability=implemented write=sync_application_message_template]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PUT /channels/{channel_id}/application_message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; requires an application-type channel per provider docs. No raw method/path/body passthrough.; flags: --channel-id
+    sync-inbound-message - Sync inbound message through Front reverse ETL. [intent=reverse_etl availability=implemented write=sync_inbound_message]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /channels/{channel_id}/inbound_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough. Binary attachments are not modeled (see docs.md Known limits).; flags: --channel-id
+    sync-outbound-message - Sync outbound message through Front reverse ETL. [intent=reverse_etl availability=implemented write=sync_outbound_message]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front POST /channels/{channel_id}/outbound_messages mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough. Binary attachments are not modeled (see docs.md Known limits).; flags: --channel-id
+    update-application-message-template - Update application message template through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_application_message_template]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /channels/{channel_id}/application_message_templates/{external_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; requires an application-type channel per provider docs. No raw method/path/body passthrough.; flags: --channel-id, --external-id
+    update-call - Update call status through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_call]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PATCH /channels/{channel_id}/calls/{external_call_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --channel-id, --external-call-id
+    update-external-message-status - Update external message status through Front reverse ETL. [intent=reverse_etl availability=implemented write=update_external_message_status]; approval: reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata; risk: high: fixed Front PUT /channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status mutation; reverse ETL requires plan -> preview -> explicit approval -> execute; notes: Fixed Front endpoint; no raw method/path/body passthrough.; flags: --channel-id, --conv-ext-id, --message-ext-id
+  Other Commands
+    analytics exports create - Create a new analytics export with bounded JSON output. [intent=direct_read availability=implemented operation=front.create_analytics_export]; approval: none for read/query; no provider write execution is performed by these direct-read commands; risk: high: analytics report/export metadata may expose operational content; output is bounded and redacted; notes: Fixed provider search/query endpoint; distinct from warehouse pm query.; flags: --columns (required)
+    analytics exports get - Fetch an analytics export with bounded JSON output. [intent=direct_read availability=implemented operation=front.get_analytics_export]; approval: none for read/query; no provider write execution is performed by these direct-read commands; risk: high: analytics report/export metadata may expose operational content; output is bounded and redacted; notes: Fixed provider search/query endpoint; distinct from warehouse pm query.; flags: --export-id
+    analytics reports create - Create a new analytics report with bounded JSON output. [intent=direct_read availability=implemented operation=front.create_analytics_report]; approval: none for read/query; no provider write execution is performed by these direct-read commands; risk: high: analytics report/export metadata may expose operational content; output is bounded and redacted; notes: Fixed provider search/query endpoint; distinct from warehouse pm query.; flags: --start (required), --end (required), --metrics (required)
+    analytics reports get - Fetch an analytics report with bounded JSON output. [intent=direct_read availability=implemented operation=front.get_analytics_report]; approval: none for read/query; no provider write execution is performed by these direct-read commands; risk: high: analytics report/export metadata may expose operational content; output is bounded and redacted; notes: Fixed provider search/query endpoint; distinct from warehouse pm query.; flags: --report-uid
+    binary download-attachment-for-a-comment - Download attachment for a comment binary download surface. [intent=direct_read availability=planned operation=front.download_attachment_for_a_comment]; approval: planned/blocked until shared binary-download execution contract is available; risk: high: binary attachment download requires bounded local file-output handling; notes: Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker.; flags: --comment-id, --attachment-link-id
+    binary download-attachment - Download attachment binary download surface. [intent=direct_read availability=planned operation=front.download_attachment]; approval: planned/blocked until shared binary-download execution contract is available; risk: high: binary attachment download requires bounded local file-output handling; notes: Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker.; flags: --attachment-link-id
+    binary download-attachment-from-an-article - Download attachment from an article binary download surface. [intent=direct_read availability=planned operation=front.download_attachment_from_an_article]; approval: planned/blocked until shared binary-download execution contract is available; risk: high: binary attachment download requires bounded local file-output handling; notes: Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker.; flags: --article-id, --attachment-id
+    binary download-attachment-for-a-message-template - Download attachment for a message template binary download surface. [intent=direct_read availability=planned operation=front.download_attachment_for_a_message_template]; approval: planned/blocked until shared binary-download execution contract is available; risk: high: binary attachment download requires bounded local file-output handling; notes: Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker.; flags: --message-template-id, --attachment-link-id
+    binary download-attachment-for-a-message - Download attachment for a message binary download surface. [intent=direct_read availability=planned operation=front.download_attachment_for_a_message]; approval: planned/blocked until shared binary-download execution contract is available; risk: high: binary attachment download requires bounded local file-output handling; notes: Typed fixed endpoint recorded in operations.json; execution is not claimed in this connector-local worker.; flags: --message-id, --attachment-link-id
+    excluded update-channel - Update Channel not-applicable surface. [intent=reverse_etl availability=excluded operation=front.update_channel]; approval: not applicable to this Core REST connector; no generic write or live execution is exposed; risk: critical: application-channel, voice-channel, or plugin-adjacent mutation is blocked by default; notes: Recorded to preserve official Front operation parity and counts without exposing an unsupported execution path.
+  Help topics:
+    front-auth - Use a Front API token in the api_key secret field; never put token values in prompts or fixtures.
+    front-safety - All Front write actions require reverse ETL plan, preview, approval, execute, and destructive confirmation.
 
 EXAMPLES
   # Inspect as a manual
@@ -70,6 +1090,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect front before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success

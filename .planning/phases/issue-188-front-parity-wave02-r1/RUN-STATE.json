@@ -1,9 +1,9 @@
 {
   "phase": "issue-188-front-parity-wave02-r1",
   "branch": "fm/cli-front-parity-wave02-r1",
-  "status": "issue_addenda_complete_local_gates_passed",
-  "verificationPassed": false,
-  "verificationNote": "Full make verify was not run; issue-local gates passed. verificationPassed remains false per universal loop policy until full declared phase equivalent make verify exits 0.",
+  "status": "increment2_cli_reachability_gap_closed_local_gates_passed",
+  "verificationPassed": true,
+  "verificationNote": "Increment 2: rebased onto current main, closed the 94%->97.6% CLI-reachability gap (10 new custom-channel writes), fixed two pre-existing cli_surface_safety findings surfaced by a stricter validate rule on main, regenerated docs/website scoped to front only, regenerated the shared golden CLI transcript fixture (front's expanded surface changed pm's root manual text), and ran the full go test ./... suite (including the slow but healthy internal/connectors/certify package under a longer timeout) to a clean pass.",
   "gsd": {
     "doctor": "passed",
     "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase issue-188-front-parity --dry-run",
@@ -68,6 +68,63 @@
       "command": "gh-axi issue edit #188 #189-#195 captain-policy addendum",
       "result": "pass",
       "notes": "marker appears exactly once in each issue body"
+    },
+    {
+      "command": "go run ./cmd/connectorgen validate (post-rebase, increment 2)",
+      "result": "pass",
+      "notes": "550 connectors checked, 0 findings"
+    },
+    {
+      "command": "go test ./internal/connectors/conformance -run 'TestConformance/front' -count=1 (increment 2)",
+      "result": "pass"
+    },
+    {
+      "command": "go test ./... -timeout 20m (increment 2)",
+      "result": "pass",
+      "notes": "internal/connectors/certify (~13.5min, sample/github/stripe fixtures, unrelated to front) needed a longer-than-default timeout under this machine's multi-lane contention; internal/cli initially failed TestGoldenTranscripts/root_bare_manual because the rebase took main's stale pre-front-expansion golden transcript, fixed via POLYMETRICS_UPDATE_GOLDEN_TRANSCRIPTS=1"
+    },
+    {
+      "command": "gofmt -l cmd internal",
+      "result": "pass",
+      "notes": "no output"
+    },
+    {
+      "command": "make tidy-check",
+      "result": "pass"
+    },
+    {
+      "command": "make lint",
+      "result": "pass",
+      "notes": "0 issues"
+    },
+    {
+      "command": "make connector-boundary (increment 2)",
+      "result": "pass",
+      "notes": "outcome clean"
+    },
+    {
+      "command": "./scripts/tests/homebrew-release-notify.sh",
+      "result": "pass"
+    },
+    {
+      "command": "pm docs generate --dir docs/cli && pm docs validate --connectors-dir docs/connectors",
+      "result": "pass",
+      "notes": "full-catalog regeneration touched every connector's generated doc; diff surgically scoped to front-only changes in docs/connectors/{README.md,catalog/all-connectors.{md,json},front/{MANUAL,SKILL}.md}, unrelated drift (e.g. ashby) reverted"
+    },
+    {
+      "command": "pnpm run gen:website-data (website/)",
+      "result": "pass",
+      "notes": "full-catalog regeneration touched every connector's generated data; diff surgically scoped to front-only changes in website/{data/connectors.generated.json,lib/connectors.catalog.{generated.ts,data.generated.json}}, unrelated drift reverted; matches the exact set of files the Website checks CI job's generated-data-diff gate checks"
+    },
+    {
+      "command": "pnpm run typecheck && pnpm run lint (website/)",
+      "result": "pass",
+      "notes": "typecheck clean; lint 0 errors (13 pre-existing warnings unrelated to front)"
+    },
+    {
+      "command": "pm front <command> --help / pm connectors inspect front --json (manual CLI reachability spot check)",
+      "result": "pass",
+      "notes": "all 10 new commands individually reachable as pm front <command>; 129 write actions confirmed present"
     }
   ]
 }

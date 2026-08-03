@@ -1,0 +1,40 @@
+{
+  "record": {
+    "channel_id": "fixture_channel_id",
+    "to": [
+      {
+        "handle": "+15550100",
+        "name": "Fixture Recipient"
+      }
+    ],
+    "body": "Fixture outbound message body.",
+    "metadata": {
+      "external_id": "fixture_msg_2",
+      "external_conversation_id": "fixture_conv_1"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/channels/fixture_channel_id/outbound_messages",
+    "body": {
+      "to": [
+        {
+          "handle": "+15550100",
+          "name": "Fixture Recipient"
+        }
+      ],
+      "body": "Fixture outbound message body.",
+      "metadata": {
+        "external_id": "fixture_msg_2",
+        "external_conversation_id": "fixture_conv_1"
+      }
+    }
+  },
+  "response": {
+    "status": 202,
+    "body": {
+      "status": "accepted",
+      "message_uid": "fixture_msg_uid_2"
+    }
+  }
+}

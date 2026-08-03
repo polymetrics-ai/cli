@@ -53333,15 +53333,15 @@
   {
     "name": "front",
     "display_name": "Front",
-    "description": "Reads Front contacts, conversations, inboxes, tags, teammates, and channels through the Front Core REST API.",
+    "description": "Reads Front Core REST API streams and exposes fixed, typed, approval-gated Front write/direct/binary operation metadata for documented API parity.",
     "integration_type": "api",
-    "docs_url": "https://dev.frontapp.com/reference/introduction",
+    "docs_url": "https://dev.frontapp.com/llms.txt",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -53366,83 +53366,1963 @@
         "page_limit": {
           "type": "string",
           "default": "50",
-          "description": "Records per page (1-100)."
+          "description": "Records per page for paginated Front list streams (1-100)."
+        },
+        "account_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): account_id."
+        },
+        "article_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): article_id."
+        },
+        "category_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): category_id."
+        },
+        "channel_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): channel_id."
+        },
+        "comment_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): comment_id."
+        },
+        "contact_group_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): contact_group_id."
+        },
+        "contact_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): contact_id."
+        },
+        "contact_list_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): contact_list_id."
+        },
+        "conversation_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): conversation_id."
+        },
+        "event_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): event_id."
+        },
+        "inbox_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): inbox_id."
+        },
+        "knowledge_base_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): knowledge_base_id."
+        },
+        "link_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): link_id."
+        },
+        "locale": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): locale."
+        },
+        "message_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): message_id."
+        },
+        "message_template_folder_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): message_template_folder_id."
+        },
+        "message_template_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): message_template_id."
+        },
+        "rule_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): rule_id."
+        },
+        "shift_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): shift_id."
+        },
+        "signature_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): signature_id."
+        },
+        "status_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): status_id."
+        },
+        "tag_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): tag_id."
+        },
+        "team_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): team_id."
+        },
+        "teammate_group_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): teammate_group_id."
+        },
+        "teammate_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): teammate_id."
+        },
+        "time_off_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): time_off_id."
+        },
+        "view_id": {
+          "type": "string",
+          "description": "Optional Front path parameter used by parameterized stream(s): view_id."
         }
       }
     },
     "streams": [
       {
         "name": "contacts",
-        "primary_key": [
-          "id"
-        ],
-        "cursor_field": "updated_at",
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "conversations",
-        "primary_key": [
-          "id"
-        ],
-        "cursor_field": "last_message_at",
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "inboxes",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "tags",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "teammates",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
         ]
       },
       {
         "name": "channels",
-        "primary_key": [
-          "id"
-        ],
         "sync_modes": [
           "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped"
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "account_contacts",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "an_account",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "account_custom_fields",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "accounts",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "channel",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "comment_mentions",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "comment",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "all_company_rules",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "ticket_status_by_id",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "company_ticket_statuses",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "company_tags",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "contacts_in_group",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "groups",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "contacts_in_contact_list",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "contact_lists",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "contact_conversations",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "notes",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "contact",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "contact_custom_fields",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_comments",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_drafts",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_events",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_followers",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_inboxes",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_messages",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_by_id",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "conversation_custom_fields",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "custom_fields",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "event",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "events",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "inbox_channels",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "inbox_conversations",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "inbox_access",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "inbox",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "inbox_custom_fields",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "knowledge_base_article_with_content_in_default_locale",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "knowledge_base_article_with_content_in_specified_locale",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "a_knowledge_base_article",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "articles_in_a_category",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "knowledge_base_category_content_in_default_locale",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "knowledge_base_category_with_content_in_specified_locale",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "a_knowledge_base_category",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "articles_in_a_knowledge_base",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "categories_in_a_knowledge_base",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "a_knowledge_base_with_content_in_default_locale",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "a_knowledge_base_with_content_in_specified_locale",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "a_knowledge_base",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "knowledge_bases",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "link_conversations",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "link",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "link_custom_fields",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "links",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "api_token_details",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "child_folders",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "child_templates",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "folder",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "folders",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "message_template",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "message_templates",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "message_seen_status",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "message",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "rule",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "rules",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "shifts_teammates",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "shift",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "shifts",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "signatures",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "tag_children",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "tagged_conversations",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "tag",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "company_teammate_group_team_inboxes",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "company_teammate_group_teammates",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "company_teammate_group_teams",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "company_teammate_group",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "company_teammate_groups",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_channels",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_groups",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_contact_lists",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_contacts",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "assigned_conversations",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_inboxes",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_folders",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_message_templates",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_private_inboxes",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_rules",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_shifts",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_signatures",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_tags",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_time_offs",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teammate_custom_fields",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_channels",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_groups",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_contact_lists",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_contacts",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_inboxes",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_folders",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_message_templates",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_rules",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_shifts",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_signatures",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_tags",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_time_offs",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team_views",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "team",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "teams",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "time_off",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "view",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "views",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "remove_contact_from_account",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}/contacts",
+        "risk": "critical: fixed Front DELETE /accounts/{account_id}/contacts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_contact_to_account",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts/{{ record.account_id }}/contacts",
+        "risk": "high: fixed Front POST /accounts/{account_id}/contacts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_an_account",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/accounts/{{ record.account_id }}",
+        "risk": "critical: fixed Front DELETE /accounts/{account_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_account",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/accounts/{{ record.account_id }}",
+        "risk": "high: fixed Front PATCH /accounts/{account_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_account",
+        "kind": "create",
+        "method": "POST",
+        "path": "/accounts",
+        "risk": "high: fixed Front POST /accounts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "trigger_app_event",
+        "kind": "create",
+        "method": "POST",
+        "path": "/applications/{{ record.application_uid }}/events",
+        "risk": "critical: fixed Front POST /applications/{application_uid}/events mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_draft",
+        "kind": "create",
+        "method": "POST",
+        "path": "/channels/{{ record.channel_id }}/drafts",
+        "risk": "high: fixed Front POST /channels/{channel_id}/drafts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "receive_custom_messages",
+        "kind": "create",
+        "method": "POST",
+        "path": "/channels/{{ record.channel_id }}/incoming_messages",
+        "risk": "high: fixed Front POST /channels/{channel_id}/incoming_messages mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/channels/{{ record.channel_id }}/messages",
+        "risk": "high: fixed Front POST /channels/{channel_id}/messages mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "validate_channel",
+        "kind": "create",
+        "method": "POST",
+        "path": "/channels/{{ record.channel_id }}/validate",
+        "risk": "high: fixed Front POST /channels/{channel_id}/validate mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_channel",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/channels/{{ record.channel_id }}",
+        "risk": "high: fixed Front PATCH /channels/{channel_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_comment",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/comments/{{ record.comment_id }}/",
+        "risk": "high: fixed Front PATCH /comments/{comment_id}/ mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_comment_reply",
+        "kind": "create",
+        "method": "POST",
+        "path": "/comments/{{ record.comment_id }}/replies",
+        "risk": "high: fixed Front POST /comments/{comment_id}/replies mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_company_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/company/tags",
+        "risk": "high: fixed Front POST /company/tags mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_contacts_from_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/contact_groups/{{ record.contact_group_id }}/contacts",
+        "risk": "critical: fixed Front DELETE /contact_groups/{contact_group_id}/contacts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_contacts_to_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contact_groups/{{ record.contact_group_id }}/contacts",
+        "risk": "high: fixed Front POST /contact_groups/{contact_group_id}/contacts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/contact_groups/{{ record.contact_group_id }}",
+        "risk": "critical: fixed Front DELETE /contact_groups/{contact_group_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contact_groups",
+        "risk": "high: fixed Front POST /contact_groups mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_contacts_from_contact_list",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/contact_lists/{{ record.contact_list_id }}/contacts",
+        "risk": "critical: fixed Front DELETE /contact_lists/{contact_list_id}/contacts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_contacts_to_contact_list",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contact_lists/{{ record.contact_list_id }}/contacts",
+        "risk": "high: fixed Front POST /contact_lists/{contact_list_id}/contacts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_contact_list",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/contact_lists/{{ record.contact_list_id }}",
+        "risk": "critical: fixed Front DELETE /contact_lists/{contact_list_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_contact_list",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contact_lists",
+        "risk": "high: fixed Front POST /contact_lists mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_contact_handle",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/contacts/{{ record.contact_id }}/handles",
+        "risk": "critical: fixed Front DELETE /contacts/{contact_id}/handles mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_contact_handle",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contacts/{{ record.contact_id }}/handles",
+        "risk": "high: fixed Front POST /contacts/{contact_id}/handles mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_note",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contacts/{{ record.contact_id }}/notes",
+        "risk": "high: fixed Front POST /contacts/{contact_id}/notes mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_a_contact",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/contacts/{{ record.contact_id }}",
+        "risk": "critical: fixed Front DELETE /contacts/{contact_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_a_contact",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/contacts/{{ record.contact_id }}",
+        "risk": "high: fixed Front PATCH /contacts/{contact_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "merge_contacts",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contacts/merge",
+        "risk": "high: fixed Front POST /contacts/merge mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_contact",
+        "kind": "create",
+        "method": "POST",
+        "path": "/contacts",
+        "risk": "high: fixed Front POST /contacts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_conversation_assignee",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/conversations/{{ record.conversation_id }}/assignee",
+        "risk": "high: fixed Front PUT /conversations/{conversation_id}/assignee mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_comment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/comments",
+        "risk": "high: fixed Front POST /conversations/{conversation_id}/comments mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_draft_reply",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/drafts",
+        "risk": "high: fixed Front POST /conversations/{conversation_id}/drafts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_conversation_followers",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/conversations/{{ record.conversation_id }}/followers",
+        "risk": "critical: fixed Front DELETE /conversations/{conversation_id}/followers mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_conversation_followers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/followers",
+        "risk": "high: fixed Front POST /conversations/{conversation_id}/followers mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_conversation_links",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/conversations/{{ record.conversation_id }}/links",
+        "risk": "critical: fixed Front DELETE /conversations/{conversation_id}/links mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_conversation_link",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/links",
+        "risk": "high: fixed Front POST /conversations/{conversation_id}/links mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_message_reply",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/messages",
+        "risk": "high: fixed Front POST /conversations/{conversation_id}/messages mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_conversation_reminders",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/conversations/{{ record.conversation_id }}/reminders",
+        "risk": "high: fixed Front PATCH /conversations/{conversation_id}/reminders mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_conversation_tag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/conversations/{{ record.conversation_id }}/tags",
+        "risk": "critical: fixed Front DELETE /conversations/{conversation_id}/tags mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_conversation_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations/{{ record.conversation_id }}/tags",
+        "risk": "high: fixed Front POST /conversations/{conversation_id}/tags mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_conversation",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/conversations/{{ record.conversation_id }}",
+        "risk": "critical: fixed Front DELETE /conversations/{conversation_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_conversation",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/conversations/{{ record.conversation_id }}",
+        "risk": "high: fixed Front PATCH /conversations/{conversation_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_conversation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/conversations",
+        "risk": "high: fixed Front POST /conversations mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_draft",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/drafts/{{ record.draft_id }}",
+        "risk": "critical: fixed Front DELETE /drafts/{draft_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "edit_draft",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/drafts/{{ record.message_id }}/",
+        "risk": "high: fixed Front PATCH /drafts/{message_id}/ mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_a_channel",
+        "kind": "create",
+        "method": "POST",
+        "path": "/inboxes/{{ record.inbox_id }}/channels",
+        "risk": "high: fixed Front POST /inboxes/{inbox_id}/channels mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "import_inbox_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/inboxes/{{ record.inbox_id }}/imported_messages",
+        "risk": "high: fixed Front POST /inboxes/{inbox_id}/imported_messages mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "removes_inbox_access",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/inboxes/{{ record.inbox_id }}/teammates",
+        "risk": "critical: fixed Front DELETE /inboxes/{inbox_id}/teammates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_inbox_access",
+        "kind": "create",
+        "method": "POST",
+        "path": "/inboxes/{{ record.inbox_id }}/teammates",
+        "risk": "high: fixed Front POST /inboxes/{inbox_id}/teammates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_inbox",
+        "kind": "create",
+        "method": "POST",
+        "path": "/inboxes",
+        "risk": "high: fixed Front POST /inboxes mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_article_content_in_default_locale",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/knowledge_base_articles/{{ record.article_id }}/content",
+        "risk": "high: fixed Front PATCH /knowledge_base_articles/{article_id}/content mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_article_content_in_specified_locale",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/knowledge_base_articles/{{ record.article_id }}/locales/{{ record.locale }}/content",
+        "risk": "high: fixed Front PATCH /knowledge_base_articles/{article_id}/locales/{locale}/content mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_an_article",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/knowledge_base_articles/{{ record.article_id }}",
+        "risk": "critical: fixed Front DELETE /knowledge_base_articles/{article_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_knowledge_base_category_in_default_locale",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/knowledge_base_categories/{{ record.category_id }}/content",
+        "risk": "high: fixed Front PATCH /knowledge_base_categories/{category_id}/content mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_knowledge_base_category_in_specified_locale",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/knowledge_base_categories/{{ record.category_id }}/locales/{{ record.locale }}/content",
+        "risk": "high: fixed Front PATCH /knowledge_base_categories/{category_id}/locales/{locale}/content mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_a_knowledge_base_category",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/knowledge_base_categories/{{ record.category_id }}",
+        "risk": "critical: fixed Front DELETE /knowledge_base_categories/{category_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_article_in_a_knowledge_base_in_default_locale",
+        "kind": "create",
+        "method": "POST",
+        "path": "/knowledge_bases/{{ record.knowledge_base_id }}/articles",
+        "risk": "high: fixed Front POST /knowledge_bases/{knowledge_base_id}/articles mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_knowledge_base_category_in_default_locale",
+        "kind": "create",
+        "method": "POST",
+        "path": "/knowledge_bases/{{ record.knowledge_base_id }}/categories",
+        "risk": "high: fixed Front POST /knowledge_bases/{knowledge_base_id}/categories mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_knowledge_base_in_default_locale",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/knowledge_bases/{{ record.knowledge_base_id }}/content",
+        "risk": "high: fixed Front PATCH /knowledge_bases/{knowledge_base_id}/content mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_article_in_a_knowledge_base_in_specified_locale",
+        "kind": "create",
+        "method": "POST",
+        "path": "/knowledge_bases/{{ record.knowledge_base_id }}/locales/{{ record.locale }}/articles",
+        "risk": "high: fixed Front POST /knowledge_bases/{knowledge_base_id}/locales/{locale}/articles mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_knowledge_base_category_in_specified_locale",
+        "kind": "create",
+        "method": "POST",
+        "path": "/knowledge_bases/{{ record.knowledge_base_id }}/locales/{{ record.locale }}/categories",
+        "risk": "high: fixed Front POST /knowledge_bases/{knowledge_base_id}/locales/{locale}/categories mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_knowledge_base_in_specified_locale",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/knowledge_bases/{{ record.knowledge_base_id }}/locales/{{ record.locale }}/content",
+        "risk": "high: fixed Front PATCH /knowledge_bases/{knowledge_base_id}/locales/{locale}/content mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_a_knowledge_base",
+        "kind": "create",
+        "method": "POST",
+        "path": "/knowledge_bases",
+        "risk": "high: fixed Front POST /knowledge_bases mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_a_link",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/links/{{ record.link_id }}",
+        "risk": "high: fixed Front PATCH /links/{link_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_link",
+        "kind": "create",
+        "method": "POST",
+        "path": "/links",
+        "risk": "high: fixed Front POST /links mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_child_folder",
+        "kind": "create",
+        "method": "POST",
+        "path": "/message_template_folders/{{ record.message_template_folder_id }}/message_template_folders",
+        "risk": "high: fixed Front POST /message_template_folders/{message_template_folder_id}/message_template_folders mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_child_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/message_template_folders/{{ record.message_template_folder_id }}/message_templates",
+        "risk": "high: fixed Front POST /message_template_folders/{message_template_folder_id}/message_templates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_folder",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/message_template_folders/{{ record.message_template_folder_id }}",
+        "risk": "critical: fixed Front DELETE /message_template_folders/{message_template_folder_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_folder",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/message_template_folders/{{ record.message_template_folder_id }}",
+        "risk": "high: fixed Front PATCH /message_template_folders/{message_template_folder_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_folder",
+        "kind": "create",
+        "method": "POST",
+        "path": "/message_template_folders",
+        "risk": "high: fixed Front POST /message_template_folders mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_message_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/message_templates/{{ record.message_template_id }}",
+        "risk": "critical: fixed Front DELETE /message_templates/{message_template_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_message_template",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/message_templates/{{ record.message_template_id }}",
+        "risk": "high: fixed Front PATCH /message_templates/{message_template_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_message_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/message_templates",
+        "risk": "high: fixed Front POST /message_templates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mark_message_seen",
+        "kind": "create",
+        "method": "POST",
+        "path": "/messages/{{ record.message_id }}/seen",
+        "risk": "high: fixed Front POST /messages/{message_id}/seen mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_teammates_from_shift",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/shifts/{{ record.shift_id }}/teammates",
+        "risk": "critical: fixed Front DELETE /shifts/{shift_id}/teammates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_teammates_to_shift",
+        "kind": "create",
+        "method": "POST",
+        "path": "/shifts/{{ record.shift_id }}/teammates",
+        "risk": "high: fixed Front POST /shifts/{shift_id}/teammates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_shift",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/shifts/{{ record.shift_id }}",
+        "risk": "high: fixed Front PATCH /shifts/{shift_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_shift",
+        "kind": "create",
+        "method": "POST",
+        "path": "/shifts",
+        "risk": "high: fixed Front POST /shifts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_signature",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/signatures/{{ record.signature_id }}",
+        "risk": "critical: fixed Front DELETE /signatures/{signature_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_signature",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/signatures/{{ record.signature_id }}",
+        "risk": "high: fixed Front PATCH /signatures/{signature_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_child_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tags/{{ record.tag_id }}/children",
+        "risk": "high: fixed Front POST /tags/{tag_id}/children mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_tag",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/tags/{{ record.tag_id }}",
+        "risk": "critical: fixed Front DELETE /tags/{tag_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_a_tag",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/tags/{{ record.tag_id }}",
+        "risk": "high: fixed Front PATCH /tags/{tag_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tags",
+        "risk": "high: fixed Front POST /tags mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_company_teammate_group_team_inboxes",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teammate_groups/{{ record.teammate_group_id }}/inboxes",
+        "risk": "critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/inboxes mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_company_teammate_group_team_inboxes",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammate_groups/{{ record.teammate_group_id }}/inboxes",
+        "risk": "high: fixed Front POST /teammate_groups/{teammate_group_id}/inboxes mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_company_teammate_group_teammates",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teammate_groups/{{ record.teammate_group_id }}/teammates",
+        "risk": "critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/teammates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_company_teammate_group_teammates",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammate_groups/{{ record.teammate_group_id }}/teammates",
+        "risk": "high: fixed Front POST /teammate_groups/{teammate_group_id}/teammates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_company_teammate_group_teams",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teammate_groups/{{ record.teammate_group_id }}/teams",
+        "risk": "critical: fixed Front DELETE /teammate_groups/{teammate_group_id}/teams mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_company_teammate_group_teams",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammate_groups/{{ record.teammate_group_id }}/teams",
+        "risk": "high: fixed Front POST /teammate_groups/{teammate_group_id}/teams mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_company_teammate_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teammate_groups/{{ record.teammate_group_id }}",
+        "risk": "critical: fixed Front DELETE /teammate_groups/{teammate_group_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_a_company_teammate_group",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/teammate_groups/{{ record.teammate_group_id }}",
+        "risk": "high: fixed Front PATCH /teammate_groups/{teammate_group_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_company_teammate_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammate_groups",
+        "risk": "high: fixed Front POST /teammate_groups mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_teammate_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammates/{{ record.teammate_id }}/contact_groups",
+        "risk": "high: fixed Front POST /teammates/{teammate_id}/contact_groups mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_teammate_contact_list",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammates/{{ record.teammate_id }}/contact_lists",
+        "risk": "high: fixed Front POST /teammates/{teammate_id}/contact_lists mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_teammate_contact",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammates/{{ record.teammate_id }}/contacts",
+        "risk": "high: fixed Front POST /teammates/{teammate_id}/contacts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_teammate_folder",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammates/{{ record.teammate_id }}/message_template_folders",
+        "risk": "high: fixed Front POST /teammates/{teammate_id}/message_template_folders mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_teammate_message_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammates/{{ record.teammate_id }}/message_templates",
+        "risk": "high: fixed Front POST /teammates/{teammate_id}/message_templates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_teammate_private_inbox",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammates/{{ record.teammate_id }}/private_inboxes",
+        "risk": "high: fixed Front POST /teammates/{teammate_id}/private_inboxes mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_teammate_signature",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammates/{{ record.teammate_id }}/signatures",
+        "risk": "high: fixed Front POST /teammates/{teammate_id}/signatures mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_teammate_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammates/{{ record.teammate_id }}/tags",
+        "risk": "high: fixed Front POST /teammates/{teammate_id}/tags mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_time_off",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teammates/{{ record.teammate_id }}/time_offs",
+        "risk": "high: fixed Front POST /teammates/{teammate_id}/time_offs mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_teammate",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/teammates/{{ record.teammate_id }}",
+        "risk": "high: fixed Front PATCH /teammates/{teammate_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_team_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/contact_groups",
+        "risk": "high: fixed Front POST /teams/{team_id}/contact_groups mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_team_contact_list",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/contact_lists",
+        "risk": "high: fixed Front POST /teams/{team_id}/contact_lists mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_team_contact",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/contacts",
+        "risk": "high: fixed Front POST /teams/{team_id}/contacts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_team_inbox",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/inboxes",
+        "risk": "high: fixed Front POST /teams/{team_id}/inboxes mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_team_folder",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/message_template_folders",
+        "risk": "high: fixed Front POST /teams/{team_id}/message_template_folders mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_team_message_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/message_templates",
+        "risk": "high: fixed Front POST /teams/{team_id}/message_templates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_team_shift",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/shifts",
+        "risk": "high: fixed Front POST /teams/{team_id}/shifts mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_team_signature",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/signatures",
+        "risk": "high: fixed Front POST /teams/{team_id}/signatures mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_team_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/tags",
+        "risk": "high: fixed Front POST /teams/{team_id}/tags mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_teammates_from_team",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/teams/{{ record.team_id }}/teammates",
+        "risk": "critical: fixed Front DELETE /teams/{team_id}/teammates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_teammates_to_team",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/teammates",
+        "risk": "high: fixed Front POST /teams/{team_id}/teammates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_team_view",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_id }}/views",
+        "risk": "high: fixed Front POST /teams/{team_id}/views mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_time_off",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/time_offs/{{ record.time_off_id }}",
+        "risk": "critical: fixed Front DELETE /time_offs/{time_off_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute; 404 is treated as an idempotent delete miss",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_time_off",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/time_offs/{{ record.time_off_id }}",
+        "risk": "high: fixed Front PATCH /time_offs/{time_off_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_view_teammates",
+        "kind": "create",
+        "method": "POST",
+        "path": "/views/{{ record.view_id }}/teammates",
+        "risk": "high: fixed Front POST /views/{view_id}/teammates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_view",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/views/{{ record.view_id }}",
+        "risk": "high: fixed Front PATCH /views/{view_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_call",
+        "kind": "create",
+        "method": "POST",
+        "path": "/channels/{{ record.channel_id }}/calls",
+        "risk": "high: fixed Front POST /channels/{channel_id}/calls mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_call",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}",
+        "risk": "high: fixed Front PATCH /channels/{channel_id}/calls/{external_call_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_call_recording",
+        "kind": "create",
+        "method": "POST",
+        "path": "/channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}/recording",
+        "risk": "high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/recording mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_call_summary",
+        "kind": "create",
+        "method": "POST",
+        "path": "/channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}/summary",
+        "risk": "high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/summary mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_call_transcript",
+        "kind": "create",
+        "method": "POST",
+        "path": "/channels/{{ record.channel_id }}/calls/{{ record.external_call_id }}/transcript",
+        "risk": "high: fixed Front POST /channels/{channel_id}/calls/{external_call_id}/transcript mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "sync_application_message_template",
+        "kind": "upsert",
+        "method": "PUT",
+        "path": "/channels/{{ record.channel_id }}/application_message_templates",
+        "risk": "high: fixed Front PUT /channels/{channel_id}/application_message_templates mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_application_message_template",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/channels/{{ record.channel_id }}/application_message_templates/{{ record.external_id }}",
+        "risk": "high: fixed Front PATCH /channels/{channel_id}/application_message_templates/{external_id} mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "sync_inbound_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/channels/{{ record.channel_id }}/inbound_messages",
+        "risk": "high: fixed Front POST /channels/{channel_id}/inbound_messages mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "sync_outbound_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/channels/{{ record.channel_id }}/outbound_messages",
+        "risk": "high: fixed Front POST /channels/{channel_id}/outbound_messages mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_external_message_status",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/channels/{{ record.channel_id }}/conversations/{{ record.conv_ext_id }}/messages/{{ record.message_ext_id }}/status",
+        "risk": "high: fixed Front PUT /channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status mutation; reverse ETL requires plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
-      "read": "external Front API read of contact, conversation, inbox, tag, teammate, and channel data",
-      "approval": "none; read-only, no reverse-ETL writes"
+      "read": "external Front API reads for contacts, conversations, inboxes, tags, teammates, channels, events, knowledge base, analytics metadata, accounts, and related resources",
+      "write": "fixed Front API mutations declared as reverse ETL write actions with typed schemas and destructive confirmation",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute; every Front write action also declares destructive confirmation in this bundle"
     },
     "icon": {
       "id": "pm-sample",
