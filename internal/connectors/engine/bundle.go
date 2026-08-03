@@ -1292,6 +1292,10 @@ func normalizeAndValidateMechanism(dirName string, m *Metadata) error {
 		return fmt.Errorf("metadata.json: mechanism.kind is %q but connector name %q does not end in \"-web\"", MechanismWebSession, dirName)
 	}
 
+	if mech.Kind == MechanismOfficialAPI && !mech.SanctionedByProvider {
+		return fmt.Errorf("metadata.json: mechanism.kind %q requires sanctioned_by_provider=true", MechanismOfficialAPI)
+	}
+
 	if mech.Kind == MechanismWebSession {
 		if mech.SanctionedByProvider {
 			return fmt.Errorf("metadata.json: mechanism.kind %q requires sanctioned_by_provider=false", MechanismWebSession)

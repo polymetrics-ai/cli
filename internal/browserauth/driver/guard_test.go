@@ -42,8 +42,14 @@ func TestNoTypingSurface(t *testing.T) {
 			return err
 		}
 		for _, line := range strings.Split(string(raw), "\n") {
-			code, _, _ := strings.Cut(line, "//") // ignore comments (this package's own doc comment names the forbidden symbols by design)
-			if loc := forbidden.FindString(code); loc != "" {
+			// Skip only whole-line comments — the shape this package's own doc
+			// comment uses when it names the forbidden symbols by design.
+			// Cutting at the first "//" anywhere would also blind the scan to
+			// anything following a URL literal on a line of real code.
+			if strings.HasPrefix(strings.TrimSpace(line), "//") {
+				continue
+			}
+			if loc := forbidden.FindString(line); loc != "" {
 				t.Errorf("%s: forbidden password-entry-shaped symbol %q — Session must expose only Navigate/WaitFor/GetCookies/Close", path, loc)
 			}
 		}

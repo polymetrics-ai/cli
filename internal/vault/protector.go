@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"testing"
 )
 
 // KeyProtector resolves the vault's 32-byte AES-256 data key and decides
@@ -120,6 +121,13 @@ func initNewVault(dir string) (*Vault, error) {
 	// created before v2 keep decrypting exactly as before.
 	if _, err := os.Stat(filekeyPath(dir)); err == nil {
 		return newVaultWithProtector(dir, filekeyProtector{}, false)
+	}
+
+	// Under `go test`, never reach the real OS keychain: auto-selection would
+	// otherwise mint a fresh, never-deleted secret in the developer's own
+	// login keychain for every t.TempDir() project root any test creates.
+	if testing.Testing() {
+		return initWithProtectorChain(dir, filekeyProtector{})
 	}
 
 	// Brand-new vault: try the OS keychain first, fall back to the file key.
