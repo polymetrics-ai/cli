@@ -1,7 +1,9 @@
 {
   "base": {
     "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "User-Agent": "go:ai.polymetrics.cli:v1 (by /u/{{ config.reddit_username }})"
+    },
     "auth": [
       { "mode": "bearer", "token": "{{ secrets.access_token }}" }
     ],
@@ -12,9 +14,9 @@
     },
     "check": { "method": "GET", "path": "/r/{{ config.subreddit }}/new", "query": { "limit": "1", "raw_json": "1" } },
     "error_map": [
-      { "status": 401, "hint": "reddit access_token is missing, invalid, or expired; re-run pm credentials add reddit" },
+      { "status": 401, "hint": "reddit access_token is missing, invalid, or expired (reddit bearer tokens expire 1 hour after issuance and this connector does not refresh them); re-run pm credentials add reddit with a freshly issued token" },
       { "status": 403, "hint": "reddit account lacks access for this subreddit" },
-      { "status": 429, "class": "rate_limited", "hint": "reddit rate limit exceeded; the connector will retry with backoff" }
+      { "status": 429, "class": "rate_limited", "hint": "reddit rate limit exceeded; check the X-Ratelimit-Used, X-Ratelimit-Remaining, and X-Ratelimit-Reset response headers for the current budget and reset time; the connector will retry with backoff" }
     ]
   },
   "streams": [
