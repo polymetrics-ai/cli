@@ -1,0 +1,175 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/job.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "jobs_id_fixture_2",
+          "title": "Title fixture 2",
+          "confidential": false,
+          "status": "Draft",
+          "employmentType": "FullTime",
+          "locationId": "jobs_locationid_fixture_2",
+          "departmentId": "jobs_departmentid_fixture_2",
+          "defaultInterviewPlanId": "jobs_defaultinterviewplanid_fixture_2",
+          "interviewPlanIds": [
+            "jobs_interviewplanid_fixture_2"
+          ],
+          "jobPostingIds": [
+            "jobs_jobpostingid_fixture_2"
+          ],
+          "customRequisitionId": "jobs_customrequisitionid_fixture_2",
+          "brandId": "jobs_brandid_fixture_2",
+          "hiringTeam": [
+            {
+              "userId": "jobs_userid_fixture_2",
+              "firstName": "Jobs Firstname Fixture 2",
+              "lastName": "Jobs Lastname Fixture 2",
+              "email": "jobs.email.2@example.invalid",
+              "role": "jobs_role_fixture_2"
+            }
+          ],
+          "openings": [
+            {
+              "id": "jobs_id_fixture_2",
+              "openedAt": "2026-01-02T02:00:00Z",
+              "closedAt": "2026-01-02T02:00:00Z",
+              "isArchived": false,
+              "closeReasonId": "jobs_closereasonid_fixture_2",
+              "archivedAt": "2026-01-02T02:00:00Z",
+              "openingState": "Draft",
+              "latestVersion": {
+                "id": "jobs_id_fixture_2",
+                "identifier": "jobs_identifier_fixture_2",
+                "description": "Description fixture 2",
+                "authorId": "jobs_authorid_fixture_2",
+                "createdAt": "2026-01-02T02:00:00Z",
+                "targetHireDate": "2026-01-02T02:00:00Z",
+                "targetStartDate": "2026-01-02T02:00:00Z",
+                "isBackfill": false,
+                "employmentType": "FullTime",
+                "teamId": "jobs_teamid_fixture_2",
+                "jobIds": [
+                  "jobs_jobid_fixture_2"
+                ],
+                "locationIds": [
+                  "jobs_locationid_fixture_2"
+                ],
+                "hiringTeam": [
+                  {
+                    "userId": "jobs_userid_fixture_2",
+                    "firstName": "Jobs Firstname Fixture 2",
+                    "lastName": "Jobs Lastname Fixture 2",
+                    "email": "jobs.email.2@example.invalid",
+                    "role": "jobs_role_fixture_2"
+                  }
+                ],
+                "customFields": [
+                  {
+                    "id": "jobs_id_fixture_2",
+                    "isPrivate": false,
+                    "title": "Title fixture 2",
+                    "valueLabel": "jobs_valuelabel_fixture_2",
+                    "value": {
+                      "value": 2.0,
+                      "currencyCode": "jobs_currencycode_fixture_2"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "location": {
+            "id": "jobs_id_fixture_2",
+            "name": "Jobs Name Fixture 2",
+            "externalName": "Jobs Externalname Fixture 2",
+            "isArchived": false,
+            "isRemote": false,
+            "address": {
+              "postalAddress": {
+                "addressCountry": "jobs_addresscountry_fixture_2",
+                "addressRegion": "jobs_addressregion_fixture_2",
+                "addressLocality": "jobs_addresslocality_fixture_2",
+                "postalCode": "jobs_postalcode_fixture_2",
+                "streetAddress": "jobs_streetaddress_fixture_2"
+              }
+            },
+            "parentLocationId": "jobs_parentlocationid_fixture_2",
+            "type": "Location",
+            "workplaceType": "OnSite",
+            "extraData": {
+              "id": "jobs_extradata_fixture_2"
+            }
+          },
+          "compensation": {
+            "compensationTiers": [
+              {
+                "id": "jobs_id_fixture_2",
+                "title": "Title fixture 2",
+                "additionalInformation": "jobs_additionalinformation_fixture_2",
+                "components": [
+                  {
+                    "id": "jobs_id_fixture_2",
+                    "summary": "jobs_summary_fixture_2",
+                    "compensationType": "Salary",
+                    "interval": "NONE",
+                    "label": "jobs_label_fixture_2",
+                    "currencyCode": "jobs_currencycode_fixture_2",
+                    "minValue": 2.0,
+                    "maxValue": 2.0
+                  }
+                ],
+                "tierSummary": "jobs_tiersummary_fixture_2"
+              }
+            ]
+          },
+          "customFields": [
+            {
+              "id": "jobs_id_fixture_2",
+              "isPrivate": false,
+              "title": "Title fixture 2",
+              "value": {
+                "value": 2.0,
+                "currencyCode": "jobs_currencycode_fixture_2"
+              },
+              "valueLabel": "jobs_valuelabel_fixture_2"
+            }
+          ],
+          "author": {
+            "id": "jobs_id_fixture_2",
+            "firstName": "Jobs Firstname Fixture 2",
+            "lastName": "Jobs Lastname Fixture 2",
+            "email": "jobs.email.2@example.invalid",
+            "globalRole": "Organization Admin",
+            "isEnabled": false,
+            "updatedAt": "2026-01-02T02:00:00Z",
+            "managerId": "jobs_managerid_fixture_2",
+            "customFields": [
+              {
+                "id": "jobs_id_fixture_2",
+                "isPrivate": false,
+                "title": "Title fixture 2",
+                "value": {
+                  "value": 2.0,
+                  "currencyCode": "jobs_currencycode_fixture_2"
+                },
+                "valueLabel": "jobs_valuelabel_fixture_2"
+              }
+            ]
+          },
+          "createdAt": "2026-01-02T02:00:00Z",
+          "updatedAt": "2026-02-02T02:00:00Z",
+          "openedAt": "2026-01-02T02:00:00Z",
+          "closedAt": "2026-01-02T02:00:00Z"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

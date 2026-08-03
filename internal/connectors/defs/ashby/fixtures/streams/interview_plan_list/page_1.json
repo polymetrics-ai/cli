@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/interviewPlan.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "interview_plan_list_id_fixture_31",
+          "title": "Title fixture 31",
+          "isArchived": true,
+          "createdAt": "2026-01-03T01:00:00Z",
+          "updatedAt": "2026-02-03T07:00:00Z"
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/jobBoard.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        {
+          "id": "job_board_list_id_fixture_24",
+          "title": "Title fixture 24",
+          "isInternal": false
+        }
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}

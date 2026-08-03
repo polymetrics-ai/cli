@@ -1,57 +1,31 @@
-# Overview
+# Ashby Connector
 
-Reads Ashby applicant-tracking data - candidates, jobs, applications, and users - through the Ashby
-REST API.
+## Overview
 
-Readable streams: `candidates`, `jobs`, `applications`, `users`.
+Ashby is an applicant-tracking connector generated from the public Ashby ReadMe OpenAPI reference (https://developers.ashbyhq.com/reference). The parity ledger was reviewed on 2026-08-01.
 
-This connector is read-only; no write actions are declared.
+Coverage summary:
 
-Service API documentation: https://developers.ashbyhq.com/.
+- REST operations in source: 185
+- OpenAPI webhook events in source: 27
+- Implemented ETL streams: 71
+- Implemented bounded direct reads/search/file metadata operations: 9
+- Implemented reverse-ETL write actions: 98
+- Reverse-ETL CLI commands with scalar flags: 89; partial nested-object flag surfaces: 9
+- Blocked/non-executable ledger rows: 34
 
 ## Auth setup
 
-Connection fields:
-
-- `api_key` (required, secret, string); The Ashby API Key, see <a
-  href=\"https://developers.ashbyhq.com/reference/authentication\">doc</a> here.
-- `base_url` (optional, string).
-- `mode` (optional, string).
-- `start_date` (required, string); UTC date and time in the format 2017-01-25T00:00:00Z. Any data
-  before this date will not be replicated.
-
-Secret fields are redacted in logs and write previews: `api_key`.
-
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks use a connector-managed request.
+Authentication uses Ashby's documented HTTP Basic API-key flow: the API key is the username and the password is blank. Provide keys via environment variables or stdin only; never paste secrets into prompts, docs, commits, or issue comments.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `candidates`: GET connector-managed request path - records path `data`; incremental cursor
-  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `jobs`: GET connector-managed request path - records path `data`; incremental cursor `updatedAt`;
-  formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
-- `applications`: GET connector-managed request path - records path `data`; incremental cursor
-  `updatedAt`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `users`: GET connector-managed request path - records path `data`; incremental cursor `updatedAt`;
-  formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
+Ashby list and info reads are fixed POST endpoints with documented body fields only. The native connector owns Ashby's cursor-in-body pagination and applies page-size, max-pages, and repeated-cursor bounds. Streams are full-refresh only until `ashby-sync-token-checkpoint-foundation` supplies an Ashby-owned persisted opaque-token state seam; timestamp fields are not used as lossy substitutes. Runtime help replaces provider incremental descriptions with full-refresh-only blocker text for every documented sync-token request. Repeatable array stream flags are withheld until `connector-stream-repeatable-array-foundation` preserves every supplied value.
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
+Reverse ETL writes are typed action names with recursively closed modeled JSON schemas and the normal plan → preview → explicit approval → execute gate. Explicitly documented map-valued fields retain their map schemas; all other modeled objects reject undeclared fields. No command exposes a raw HTTP method, raw path, arbitrary request body, raw query, shell, file, SQL, or passthrough escape hatch. The public Ashby OpenAPI did not document an Idempotency-Key or equivalent idempotency header for these actions, so no provider idempotency key is claimed.
 
 ## Known limits
 
-- API coverage includes 4 stream-backed endpoint group(s).
-- Client-side incremental filtering is used for: `candidates`, `jobs`, `applications`, `users`.
+Blocked rows are still documented in `api_surface.json`: inbound assessment-partner APIs and webhook events are not pull-executable by a CLI connector, and `file.createFileUploadHandle` remains blocked until a reviewed bounded binary/file workflow can safely return and consume presigned upload handles. `referralForm.info` is blocked pending `ashby-referral-form-info-side-effect-foundation` because it conditionally creates a default form. `applicationForm.submit` is blocked pending `ashby-application-form-typed-multipart-foundation` because the documented request requires multipart form data and typed file parts. Opaque incremental state is blocked pending `ashby-sync-token-checkpoint-foundation`, and repeatable array stream-command variants are blocked pending `connector-stream-repeatable-array-foundation`. `hiringTeamRole.list` defaults to `namesOnly=true`; the `namesOnly=false` object-result variant is blocked pending variant-schema foundation `ashby_hiring_team_role_list_names_only_false`. Fixture replay covers every implemented stream with synthetic values only; no live Ashby credentials or provider calls were used.

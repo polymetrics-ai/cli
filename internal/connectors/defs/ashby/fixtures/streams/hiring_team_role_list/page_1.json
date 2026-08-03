@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/hiringTeamRole.list",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": [
+        "Hiring Team Role fixture 46"
+      ],
+      "moreDataAvailable": false
+    }
+  }
+}
