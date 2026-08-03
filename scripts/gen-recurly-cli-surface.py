@@ -14,6 +14,7 @@ operations are preserved from the existing cli_surface.json.
 Usage: python3 scripts/gen-recurly-cli-surface.py
 """
 
+import copy
 import json
 import os
 import sys
@@ -357,8 +358,20 @@ def main():
     # 3. direct-read / export ops preserved from current surface (only the
     #    direct_read family survives regeneration; etl/reverse_etl are rebuilt)
     for c in cur["commands"]:
-        if c["intent"] == "direct_read":
-            commands.append(c)
+        if c["intent"] != "direct_read":
+            continue
+        c = copy.deepcopy(c)
+        if c.get("availability") == "implemented" and c.get("flags"):
+            # Executable examples must include declared required inputs so
+            # copying the help example does not fail validation.
+            ex = "pm recurly " + c["path"]
+            for f in c["flags"]:
+                ex += " --" + f["name"] + ' "<value>"'
+            ex += " --json"
+            c["examples"] = [ex]
+        else:
+            c["examples"] = ["pm recurly " + c["path"] + " --json"]
+        commands.append(c)
 
     # collision check across all commands
     for c in commands:
