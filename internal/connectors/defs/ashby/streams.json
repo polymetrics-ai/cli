@@ -600,11 +600,7 @@
         "path": "results"
       },
       "schema": "schemas/interview_briefing_info.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "candidate",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "interview_info",
@@ -664,11 +660,7 @@
         "path": "results"
       },
       "schema": "schemas/survey_request_list.json",
-      "projection": "passthrough",
-      "incremental": {
-        "cursor_field": "candidateId",
-        "client_filtered": true
-      }
+      "projection": "passthrough"
     },
     {
       "name": "survey_submission_list",

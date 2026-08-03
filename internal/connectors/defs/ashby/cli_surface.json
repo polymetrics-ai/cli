@@ -404,7 +404,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate to consider for a job.",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -1363,7 +1362,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -1400,7 +1398,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -1437,7 +1434,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The unique id of the candidate to update",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -1546,7 +1542,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -1660,7 +1655,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate to set the fraud status for",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -1726,7 +1720,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate to anonymize",
-          "format": "date-time",
           "allow_empty": false
         }
       ],
@@ -1756,7 +1749,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -1794,7 +1786,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -1832,7 +1823,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The candidate to attach this email to",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -1944,7 +1934,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The unique id of the candidate to add the tag to",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -1982,7 +1971,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate to remove the tag from",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -4902,7 +4890,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate to whom to add the completed assessment",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -4966,7 +4953,8 @@
         {
           "name": "assessment-result-value",
           "type": "boolean",
-          "maps_to": "record.assessment.result.value"
+          "maps_to": "record.assessment.result.value",
+          "summary": "The assessment data value, whose type depends on the type field"
         },
         {
           "name": "assessment-metadata-0-identifier",
@@ -5001,7 +4989,8 @@
         {
           "name": "assessment-metadata-0-value",
           "type": "boolean",
-          "maps_to": "record.assessment.metadata.0.value"
+          "maps_to": "record.assessment.metadata.0.value",
+          "summary": "The assessment data value, whose type depends on the type field"
         },
         {
           "name": "timestamp",
@@ -5545,7 +5534,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The candidate to enroll in the sequence",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -5682,7 +5670,6 @@
           "type": "string",
           "maps_to": "query.candidateId",
           "summary": "Only return sequence enrollments for this candidate",
-          "format": "date-time",
           "allow_empty": false
         }
       ],
@@ -5999,7 +5986,6 @@
           "name": "candidate-id",
           "type": "string",
           "maps_to": "query.candidateId",
-          "format": "date-time",
           "allow_empty": false
         }
       ],
@@ -6255,7 +6241,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The id of the candidate to create a survey request for.",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -6316,7 +6301,6 @@
           "name": "candidate-id",
           "type": "string",
           "maps_to": "query.candidateId",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -6353,7 +6337,6 @@
           "type": "string",
           "maps_to": "record.candidateId",
           "summary": "The unique identifier of the candidate submitting the survey",
-          "format": "date-time",
           "allow_empty": false
         },
         {
@@ -6477,7 +6460,8 @@
         }
       ],
       "redact_fields": [
-        "requestUrl"
+        "requestUrl",
+        "secretToken"
       ],
       "risk": "Executes Ashby webhook.create through the documented POST /webhook.create endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
@@ -6551,7 +6535,8 @@
       ],
       "redact_fields": [
         "webhookId",
-        "requestUrl"
+        "requestUrl",
+        "secretToken"
       ],
       "risk": "Executes Ashby webhook.update through the documented POST /webhook.update endpoint; reverse ETL plan, preview, approval, and execute are required.",
       "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
