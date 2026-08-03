@@ -1,0 +1,35 @@
+{
+  "record": {
+    "input": [
+      {
+        "displayName": "displayname-fixture",
+        "name": "name-fixture",
+        "dataType": "boolean"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/leads/schema/fields.json",
+    "body": {
+      "input": [
+        {
+          "displayName": "displayname-fixture",
+          "name": "name-fixture",
+          "dataType": "boolean"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

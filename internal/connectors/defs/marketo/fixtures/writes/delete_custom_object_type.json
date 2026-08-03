@@ -1,0 +1,20 @@
+{
+  "record": {
+    "api_name": "api_name-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/customobjects/schema/api_name-fixture/delete.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

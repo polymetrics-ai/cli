@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": 123,
+    "field_id": "field_id-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/form/123/field/field_id-fixture.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

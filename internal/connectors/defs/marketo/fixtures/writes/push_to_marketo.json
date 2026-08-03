@@ -1,0 +1,18 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/leads/push.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

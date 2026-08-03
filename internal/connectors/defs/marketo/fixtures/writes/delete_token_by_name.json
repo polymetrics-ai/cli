@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": 123,
+    "folderType": "Program",
+    "name": "name-fixture",
+    "type": "type-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/folder/123/tokens/delete.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

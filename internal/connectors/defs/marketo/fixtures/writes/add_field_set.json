@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": 123,
+    "label": "label-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/form/123/fieldSet.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

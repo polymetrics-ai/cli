@@ -1,0 +1,33 @@
+{
+  "record": {
+    "input": [
+      {
+        "marketoGUID": "marketoguid-fixture"
+      }
+    ],
+    "deleteBy": "deleteby-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/namedAccountLists/delete.json",
+    "body": {
+      "input": [
+        {
+          "marketoGUID": "marketoguid-fixture"
+        }
+      ],
+      "deleteBy": "deleteby-fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

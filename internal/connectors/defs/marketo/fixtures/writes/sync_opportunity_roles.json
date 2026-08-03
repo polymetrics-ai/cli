@@ -1,0 +1,31 @@
+{
+  "record": {
+    "input": [
+      {
+        "marketoGUID": "marketoguid-fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/opportunities/roles.json",
+    "body": {
+      "input": [
+        {
+          "marketoGUID": "marketoguid-fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

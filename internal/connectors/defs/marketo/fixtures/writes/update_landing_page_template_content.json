@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": 123,
+    "content": "dynamic.go"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/landingPageTemplate/123/content.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

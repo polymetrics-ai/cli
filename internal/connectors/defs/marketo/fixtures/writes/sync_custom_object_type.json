@@ -1,0 +1,25 @@
+{
+  "record": {
+    "apiName": "apiname-fixture",
+    "displayName": "displayname-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/customobjects/schema.json",
+    "body": {
+      "apiName": "apiname-fixture",
+      "displayName": "displayname-fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

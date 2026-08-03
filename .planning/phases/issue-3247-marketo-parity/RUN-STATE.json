@@ -1,6 +1,6 @@
 {
   "phase": "issue-3247-marketo-parity",
-  "status": "verified",
+  "status": "no-mistakes-fix-committed-pending-fresh-run",
   "branch": "fm/cli-marketo-parity-wave05-r1",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase issue-3247-marketo-parity --dry-run",
   "manualFallback": true,
@@ -24,7 +24,9 @@
     "goBuildPm": "passed",
     "connectorBoundary": "clean",
     "gitDiffCheck": "passed",
-    "makeVerify": "passed on rerun; first attempt hit unrelated flaky certify timing test that passed in isolation"
+    "makeVerify": "passed on rerun; first attempt hit unrelated flaky certify timing test that passed in isolation",
+    "noMistakesRun": "01KYXSJ0G64JJ9VV9RPN0YAR0Y failed during review fix due pi WebSocket error after surfacing 5 Marketo parity findings; manual follow-up fixes verified and committed on top per no-mistakes terminal-failure guidance",
+    "manualFixVerificationRerun": "gofmt/go vet/go build clean; connectorgen validate 0 findings across 550 connectors; TestMarketoFullSurfaceCommandAndOperationCoverage/TestMarketoWriteAndCLISafetyInvariants/TestMarketoMetadataEnablesReadWriteCapabilities passed; internal/connectors/conformance passed; full internal/connectors/... suite passed; pm docs generate + pnpm gen:website-data produced no additional diff beyond the marketo-scoped changes (448 unrelated connector doc files reverted); make verify passed clean including lint 0 issues and connector-boundary clean; git diff --check passed"
   },
   "orchestrationDecisions": [
     {

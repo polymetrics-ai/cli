@@ -95,6 +95,10 @@
     "userid": {
       "type": "string",
       "description": "Required path parameter userid for Marketo stream get_user_roles_and_workspaces."
+    },
+    "next_page_token": {
+      "type": "string",
+      "description": "Initial Marketo paging token for activity, lead-change, and deleted-lead streams. Obtain with get_activities_paging_token."
     }
   }
 }

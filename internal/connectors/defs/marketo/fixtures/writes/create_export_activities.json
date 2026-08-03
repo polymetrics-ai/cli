@@ -1,0 +1,39 @@
+{
+  "record": {
+    "fields": [
+      "field-fixture"
+    ],
+    "filter": {
+      "createdAt": {
+        "startAt": "startat-fixture",
+        "endAt": "endat-fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bulk/v1/activities/export/create.json",
+    "body": {
+      "fields": [
+        "field-fixture"
+      ],
+      "filter": {
+        "createdAt": {
+          "startAt": "startat-fixture",
+          "endAt": "endat-fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

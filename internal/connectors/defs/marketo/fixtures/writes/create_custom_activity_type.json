@@ -1,0 +1,37 @@
+{
+  "record": {
+    "apiName": "apiname-fixture",
+    "name": "name-fixture",
+    "triggerName": "triggername-fixture",
+    "filterName": "filtername-fixture",
+    "primaryAttribute": {
+      "apiName": "apiname-fixture",
+      "name": "name-fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/activities/external/type.json",
+    "body": {
+      "apiName": "apiname-fixture",
+      "name": "name-fixture",
+      "triggerName": "triggername-fixture",
+      "filterName": "filtername-fixture",
+      "primaryAttribute": {
+        "apiName": "apiname-fixture",
+        "name": "name-fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

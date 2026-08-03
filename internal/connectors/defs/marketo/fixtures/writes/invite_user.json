@@ -1,0 +1,39 @@
+{
+  "record": {
+    "emailAddress": "emailaddress-fixture",
+    "firstName": "firstname-fixture",
+    "lastName": "lastname-fixture",
+    "userRoleWorkspaces": [
+      {
+        "accessRoleId": 123,
+        "workspaceId": 123
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/userservice/management/v1/users/invite.json",
+    "body": {
+      "emailAddress": "emailaddress-fixture",
+      "firstName": "firstname-fixture",
+      "lastName": "lastname-fixture",
+      "userRoleWorkspaces": [
+        {
+          "accessRoleId": 123,
+          "workspaceId": 123
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": 123,
+    "field_set_id": "field_set_id-fixture",
+    "field_id": "field_id-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/form/123/fieldSet/field_set_id-fixture/field/field_id-fixture/delete.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

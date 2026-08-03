@@ -1,0 +1,32 @@
+{
+  "record": {
+    "id": "id-fixture",
+    "input": [
+      {
+        "marketoGUID": "marketoguid-fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/namedAccountList/id-fixture/namedAccounts/remove.json",
+    "body": {
+      "input": [
+        {
+          "marketoGUID": "marketoguid-fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

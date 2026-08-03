@@ -214,7 +214,10 @@
       "name": "get_folder_by_id",
       "path": "/rest/asset/v1/folder/{{ config.id }}.json",
       "query": {
-        "type": "{{ config.type }}"
+        "type": {
+          "template": "{{ config.type }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -232,7 +235,10 @@
       "name": "get_folder_content",
       "path": "/rest/asset/v1/folder/{{ config.id }}/content.json",
       "query": {
-        "type": "{{ config.type }}"
+        "type": {
+          "template": "{{ config.type }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -374,7 +380,10 @@
       "name": "get_browse_forms2",
       "path": "/rest/asset/v1/forms.json",
       "query": {
-        "folder": "{{ config.folder }}"
+        "folder": {
+          "template": "{{ config.folder }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -554,8 +563,14 @@
       "name": "get_program_list_by_tag",
       "path": "/rest/asset/v1/program/byTag.json",
       "query": {
-        "tagType": "{{ config.tag_type }}",
-        "tagValue": "{{ config.tag_value }}"
+        "tagType": {
+          "template": "{{ config.tag_type }}",
+          "omit_when_absent": true
+        },
+        "tagValue": {
+          "template": "{{ config.tag_value }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1054,7 +1069,14 @@
       "path": "/rest/v1/activities.json",
       "query": {
         "batchSize": "300",
-        "activityTypeIds": "{{ config.activity_type_ids }}"
+        "activityTypeIds": {
+          "template": "{{ config.activity_type_ids }}",
+          "omit_when_absent": true
+        },
+        "nextPageToken": {
+          "template": "{{ config.next_page_token }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1076,7 +1098,11 @@
       "name": "get_deleted_leads",
       "path": "/rest/v1/activities/deletedleads.json",
       "query": {
-        "batchSize": "300"
+        "batchSize": "300",
+        "nextPageToken": {
+          "template": "{{ config.next_page_token }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1131,7 +1157,14 @@
       "path": "/rest/v1/activities/leadchanges.json",
       "query": {
         "batchSize": "300",
-        "fields": "{{ config.fields }}"
+        "fields": {
+          "template": "{{ config.fields }}",
+          "omit_when_absent": true
+        },
+        "nextPageToken": {
+          "template": "{{ config.next_page_token }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1153,7 +1186,10 @@
       "name": "get_activities_paging_token",
       "path": "/rest/v1/activities/pagingtoken.json",
       "query": {
-        "sinceDatetime": "{{ config.since_datetime }}"
+        "sinceDatetime": {
+          "template": "{{ config.since_datetime }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1226,8 +1262,14 @@
       "path": "/rest/v1/companies.json",
       "query": {
         "batchSize": "300",
-        "filterType": "{{ config.filter_type }}",
-        "filterValues": "{{ config.filter_values }}"
+        "filterType": {
+          "template": "{{ config.filter_type }}",
+          "omit_when_absent": true
+        },
+        "filterValues": {
+          "template": "{{ config.filter_values }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1282,8 +1324,14 @@
       "path": "/rest/v1/customobjects/{{ config.custom_object_name }}.json",
       "query": {
         "batchSize": "300",
-        "filterType": "{{ config.filter_type }}",
-        "filterValues": "{{ config.filter_values }}"
+        "filterType": {
+          "template": "{{ config.filter_type }}",
+          "omit_when_absent": true
+        },
+        "filterValues": {
+          "template": "{{ config.filter_values }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1418,8 +1466,14 @@
       "path": "/rest/v1/leads.json",
       "query": {
         "batchSize": "300",
-        "filterType": "{{ config.filter_type }}",
-        "filterValues": "{{ config.filter_values }}"
+        "filterType": {
+          "template": "{{ config.filter_type }}",
+          "omit_when_absent": true
+        },
+        "filterValues": {
+          "template": "{{ config.filter_values }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1600,8 +1654,14 @@
       "path": "/rest/v1/programs/{{ config.program_id }}/members.json",
       "query": {
         "batchSize": "300",
-        "filterType": "{{ config.filter_type }}",
-        "filterValues": "{{ config.filter_values }}"
+        "filterType": {
+          "template": "{{ config.filter_type }}",
+          "omit_when_absent": true
+        },
+        "filterValues": {
+          "template": "{{ config.filter_values }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1848,8 +1908,14 @@
       "path": "/rest/v1/namedAccountLists.json",
       "query": {
         "batchSize": "300",
-        "filterType": "{{ config.filter_type }}",
-        "filterValues": "{{ config.filter_values }}"
+        "filterType": {
+          "template": "{{ config.filter_type }}",
+          "omit_when_absent": true
+        },
+        "filterValues": {
+          "template": "{{ config.filter_values }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1872,8 +1938,14 @@
       "path": "/rest/v1/namedaccounts.json",
       "query": {
         "batchSize": "300",
-        "filterType": "{{ config.filter_type }}",
-        "filterValues": "{{ config.filter_values }}"
+        "filterType": {
+          "template": "{{ config.filter_type }}",
+          "omit_when_absent": true
+        },
+        "filterValues": {
+          "template": "{{ config.filter_values }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1912,8 +1984,14 @@
       "path": "/rest/v1/opportunities.json",
       "query": {
         "batchSize": "300",
-        "filterType": "{{ config.filter_type }}",
-        "filterValues": "{{ config.filter_values }}"
+        "filterType": {
+          "template": "{{ config.filter_type }}",
+          "omit_when_absent": true
+        },
+        "filterValues": {
+          "template": "{{ config.filter_values }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1952,8 +2030,14 @@
       "path": "/rest/v1/opportunities/roles.json",
       "query": {
         "batchSize": "300",
-        "filterType": "{{ config.filter_type }}",
-        "filterValues": "{{ config.filter_values }}"
+        "filterType": {
+          "template": "{{ config.filter_type }}",
+          "omit_when_absent": true
+        },
+        "filterValues": {
+          "template": "{{ config.filter_values }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"
@@ -1992,8 +2076,14 @@
       "path": "/rest/v1/salespersons.json",
       "query": {
         "batchSize": "300",
-        "filterType": "{{ config.filter_type }}",
-        "filterValues": "{{ config.filter_values }}"
+        "filterType": {
+          "template": "{{ config.filter_type }}",
+          "omit_when_absent": true
+        },
+        "filterValues": {
+          "template": "{{ config.filter_values }}",
+          "omit_when_absent": true
+        }
       },
       "records": {
         "path": "result"

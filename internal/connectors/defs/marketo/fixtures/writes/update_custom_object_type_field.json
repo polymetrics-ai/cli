@@ -1,0 +1,21 @@
+{
+  "record": {
+    "api_name": "api_name-fixture",
+    "field_api_name": "field_api_name-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/v1/customobjects/schema/api_name-fixture/field_api_name-fixture/updateField.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": 123,
+    "contentId": "contentid-fixture",
+    "type": "Image"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/landingPage/123/content.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "record": {
+    "fields": [
+      "field-fixture"
+    ],
+    "filter": {
+      "createdAt": {
+        "startAt": "startat-fixture",
+        "endAt": "endat-fixture"
+      },
+      "smartListId": 123,
+      "smartListName": "smartlistname-fixture",
+      "staticListId": 123,
+      "staticListName": "staticlistname-fixture",
+      "updatedAt": {
+        "startAt": "startat-fixture",
+        "endAt": "endat-fixture"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/bulk/v1/leads/export/create.json",
+    "body": {
+      "fields": [
+        "field-fixture"
+      ],
+      "filter": {
+        "createdAt": {
+          "startAt": "startat-fixture",
+          "endAt": "endat-fixture"
+        },
+        "smartListId": 123,
+        "smartListName": "smartlistname-fixture",
+        "staticListId": 123,
+        "staticListName": "staticlistname-fixture",
+        "updatedAt": {
+          "startAt": "startat-fixture",
+          "endAt": "endat-fixture"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}

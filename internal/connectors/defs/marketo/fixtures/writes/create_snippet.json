@@ -1,0 +1,24 @@
+{
+  "record": {
+    "folder": {
+      "id": 123,
+      "type": "Folder"
+    },
+    "name": "name-fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/asset/v1/snippets.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "result": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  }
+}
