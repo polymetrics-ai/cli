@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/outbound-messages",
+    "query": {
+      "page": "1",
+      "items_per_page": "50"
+    }
+  },
+  "read_query": {
+    "outbound_request_id": "synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "outbound_messages": [
+        {
+          "id": "outbound_fixture_1",
+          "request_id": "request_fixture_1",
+          "status": "sent",
+          "provider": "whatsapp",
+          "from": {},
+          "to": {},
+          "template": {},
+          "created_time": "2026-01-01T00:00:00.000Z",
+          "updated_time": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

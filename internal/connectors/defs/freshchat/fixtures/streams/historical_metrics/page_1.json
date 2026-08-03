@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/metrics/historical",
+    "query": {}
+  },
+  "read_query": {
+    "metrics_metric": "synthetic-conformance-value",
+    "metrics_start": "synthetic-conformance-value",
+    "metrics_end": "synthetic-conformance-value",
+    "metrics_group_by": "synthetic-conformance-value",
+    "metrics_filter_by": "synthetic-conformance-value",
+    "metrics_aggregator": "synthetic-conformance-value",
+    "metrics_interval": "synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "metrics": [
+        "conversations_created"
+      ],
+      "start": "2026-01-01T00:00:00.000Z",
+      "end": "2026-01-02T00:00:00.000Z",
+      "filters": {},
+      "aggregator": "sum",
+      "interval": "day",
+      "data": []
+    }
+  }
+}

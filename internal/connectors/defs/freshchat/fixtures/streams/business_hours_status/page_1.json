@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/business-hours/within-bh",
+    "query": {}
+  },
+  "read_query": {
+    "business_hours_group_id": "synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "within_business_hours": true,
+      "business_hours_id": "business_hours_fixture_1",
+      "timezone": "UTC"
+    }
+  }
+}
