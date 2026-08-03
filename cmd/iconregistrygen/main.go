@@ -113,7 +113,8 @@ func loadRegistry(source string) (registryFile, error) {
 	var err error
 	if strings.HasPrefix(source, "http://") || strings.HasPrefix(source, "https://") {
 		client := http.Client{Timeout: 30 * time.Second}
-		resp, err := client.Get(source)
+		var resp *http.Response
+		resp, err = client.Get(source)
 		if err != nil {
 			return registryFile{}, fmt.Errorf("fetch registry: %w", err)
 		}
