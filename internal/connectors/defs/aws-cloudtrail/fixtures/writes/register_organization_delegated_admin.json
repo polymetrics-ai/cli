@@ -1,0 +1,12 @@
+{
+  "record": {
+    "MemberAccountId": "123456789012"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "MemberAccountId": "123456789012"
+    }
+  }
+}

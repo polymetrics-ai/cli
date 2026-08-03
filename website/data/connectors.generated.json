@@ -22727,14 +22727,14 @@
   {
     "slug": "aws-cloudtrail",
     "name": "AWS CloudTrail",
-    "description": "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; CloudTrail event and Insights record reads are blocked/planned. See the connector docs migration note.",
+    "description": "Reads and safely operates AWS CloudTrail trails, event data stores, channels, dashboards, and Lake queries through fixed AWS JSON-RPC streams, typed direct-read commands, and typed reverse-ETL write/admin actions. Only StartQuery, CreateDashboard, and UpdateDashboard stay blocked: each requires an unrestricted CloudTrail Lake SQL QueryStatement, which this project disables for every connector by policy. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; use the events lookup direct-read command for CloudTrail event lookups instead. See the connector docs migration note.",
     "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
     "integration_type": "api",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": false
@@ -22893,9 +22893,2317 @@
         "incremental": false
       }
     ],
-    "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nAWS CloudTrail connector parity was audited from the official AWS CloudTrail API Reference Actions page. The bundle enumerates all 60 official CloudTrail API actions exactly once, and 19 ETL/read stream actions are implemented and runtime-reachable in the connector-local surface. Streams whose AWS read action requires an identifier use connector-local discovery/fan-out from the fixed list/describe streams rather than caller-supplied raw action/path/header/body input. The 10 provider query/direct-read actions and 31 write/admin actions are recorded as blocked/planned in `api_surface.json` because they require typed operation/write metadata plus shared promoted-native command-surface, write-validation, dry-run, and operation-direct-read forwarding outside this connector-local implementation. The official CloudTrail event-record contents page documents event record version 1.11 and 31 top-level event fields; those fields are schema payload fields for LookupEvents, not CDC/changefeed operations.\n\nImplemented readable streams: `describe_trails`, `get_channel`, `get_dashboard`, `get_event_configuration`, `get_event_data_store`, `get_event_selectors`, `get_import`, `get_insight_selectors`, `get_resource_policy`, `get_trail`, `get_trail_status`, `list_channels`, `list_dashboards`, `list_event_data_stores`, `list_import_failures`, `list_imports`, `list_public_keys`, `list_tags`, `list_trails`.\n\nBlocked/planned provider query operations: `CancelQuery`, `DescribeQuery`, `GenerateQuery`, `GetQueryResults`, `ListInsightsData`, `ListInsightsMetricData`, `ListQueries`, `LookupEvents`, `SearchSampleQueries`, `StartQuery`.\n\nBlocked/planned write/admin operations: `AddTags`, `CreateChannel`, `CreateDashboard`, `CreateEventDataStore`, `CreateTrail`, `DeleteChannel`, `DeleteDashboard`, `DeleteEventDataStore`, `DeleteResourcePolicy`, `DeleteTrail`, `DeregisterOrganizationDelegatedAdmin`, `DisableFederation`, `EnableFederation`, `PutEventConfiguration`, `PutEventSelectors`, `PutInsightSelectors`, `PutResourcePolicy`, `RegisterOrganizationDelegatedAdmin`, `RemoveTags`, `RestoreEventDataStore`, `StartDashboardRefresh`, `StartEventDataStoreIngestion`, `StartImport`, `StartLogging`, `StopEventDataStoreIngestion`, `StopImport`, `StopLogging`, `UpdateChannel`, `UpdateDashboard`, `UpdateEventDataStore`, `UpdateTrail`.\n\n## Breaking change and migration\n\nThe earlier CloudTrail connector exposed four `LookupEvents`-backed event streams: `management_events`, `read_only_events`, `write_only_events`, and `console_logins`. None of them is an executable read stream in this native implementation, and their schemas are removed. Existing ETL connections that name one of them now fail with `aws-cloudtrail stream <name> not found`, and the incremental `EventTime` cursor those streams provided is gone; all 19 current streams are full-refresh.\n\n`LookupEvents` is now classified in the blocked/planned provider query/direct-read lane in `api_surface.json`, together with `ListInsightsData` and `ListInsightsMetricData`, so CloudTrail event and Insights record reads are not available from this connector at all until that lane is enabled.\n\nThere is no drop-in replacement for event-record ETL. The typed CloudTrail operations this connector does implement read configuration and resource metadata, not event records:\n\n- Trail inventory and delivery state: `describe_trails`, `list_trails`, `get_trail`, `get_trail_status`.\n- What a trail or event data store is configured to capture: `get_event_selectors`, `get_insight_selectors`, `get_event_configuration`.\n- Lake and delivery resources: `list_event_data_stores`, `get_event_data_store`, `list_channels`, `get_channel`, `list_imports`, `get_import`, `list_import_failures`.\n\nUntil the query/direct-read lane lands, read CloudTrail event records through an AWS-native path (CloudTrail Lake queries, an S3 log-delivery bucket, or CloudWatch Logs) rather than through this connector.\n\n## Auth setup\n\nUse `pm credentials add <name> --connector aws-cloudtrail` and provide secrets only from environment variables or stdin:\n\n- `aws_key_id` (required secret)\n- `aws_secret_key` (required secret)\n- `aws_region_name` (required config, for example `us-east-1`)\n\nOptional config fields are `base_url` for local fixture endpoints, `page_size`, `max_pages`, and `mode=fixture` for credential-free tests. Do not place AWS secret values in chat, command history, docs, fixtures, or issue comments.\n\n## Streams notes\n\nEvery implemented stream uses a fixed AWS CloudTrail JSON-RPC action with SigV4 authentication and no raw action/path/header/body escape hatch. Paginated actions pass bounded `MaxResults` and follow `NextToken` until it is absent or `max_pages` is reached. Streams for resource-detail actions derive required identifiers through connector-local discovery/fan-out from `DescribeTrails`, `ListChannels`, `ListDashboards`, `ListEventDataStores`, and `ListImports`. The connector keeps `query=false` at the metadata layer; CloudTrail provider query operations are blocked/planned until shared runtime forwarding makes operation-direct reads visible safely.\n\n## Write actions & risks\n\nNo CloudTrail reverse-ETL write actions are exposed by the current runtime surface. The audited write/admin API actions remain blocked/planned in `api_surface.json`; they must not be documented as executable until typed write definitions and shared promoted-native command surfaces, write validation, and dry-run previews are available. Any future write slice must preserve the standard plan -> preview -> explicit approval -> execute flow, destructive confirmation metadata, fixed CloudTrail `X-Amz-Target` mapping, and no raw AWS action or request-body escape hatch.\n\n## Generated manual fidelity\n\n`docs/connectors/aws-cloudtrail/MANUAL.md` and `SKILL.md` are written by `pm docs generate` from the same manifest that `pm connectors inspect aws-cloudtrail` renders, so the generated files and that live command (including `pm connectors inspect aws-cloudtrail --json`) are all intentionally sparse right now: no ETL STREAMS section, no SYNC MODES section, `No connector-specific config fields.` under CONFIGURATION, generic `connector-specific` read/write risk instead of the authored risk text in `metadata.json`, and — misleadingly — `No secret authentication is required for this connector.` under AUTHENTICATION. This connector does require the `aws_key_id` and `aws_secret_key` secrets plus the `aws_region_name` config field; the authoritative list is the Auth setup section above and `spec.json`.\n\nThat is not a gap in this connector. Those sections are built from `connectors.ManifestOf`, and the shared `definitionConnector` wrapper in `internal/connectors/native/nativeset/promoted.go` currently implements only `Definition()`, so `ManifestOf` falls back to a metadata-only manifest for every bundle-backed promoted native (~30 connectors today). The fix is foundation PR #3676, `fix(connectors): derive nativeset manifest from bundle definition`, which is deliberately owned outside this connector-local branch. Once #3676 merges and this branch rebases onto it, re-running `pm docs generate` fills in the full ETL STREAMS, CONFIGURATION, SYNC MODES, and authored SECURITY sections from this bundle with no change to the connector itself.\n\nUntil then, `pm connectors catalog --json`, `pm etl catalog --connector aws-cloudtrail`, the generated connector catalog under `docs/connectors/catalog/`, and the website data read the bundle directly and already report the complete 19-stream, 0-write surface. Use those for CloudTrail stream, config, and risk facts instead of `pm connectors inspect`.\n\n## Known limits\n\n- This work is fixture-only and local-test verified; it does not certify live AWS provider behavior.\n- CloudTrail event record fields are parsed as payload/schema fields where CloudTrail returns them, but they are not counted as CDC because AWS does not document a CloudTrail changefeed/subscription API in the audited sources.\n- Provider query direct reads are blocked/planned. They do not expose a generic CloudTrail Lake SQL runner.\n- Resource-detail streams depend on the corresponding list/describe action returning identifiers; when no resources are discovered they emit no records.\n- Write/admin actions are blocked/planned. No CloudTrail write action is listed as executable in generated catalog/docs/help for the current connector surface.\n",
+    "write_actions": [
+      {
+        "name": "add_tags",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_channel",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_event_data_store",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_trail",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_channel",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_dashboard",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_event_data_store",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_resource_policy",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_trail",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "deregister_organization_delegated_admin",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "disable_federation",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "enable_federation",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "put_event_configuration",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "put_event_selectors",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "put_insight_selectors",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "put_resource_policy",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "register_organization_delegated_admin",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "remove_tags",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "restore_event_data_store",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "start_dashboard_refresh",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "start_event_data_store_ingestion",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "start_import",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "start_logging",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "stop_event_data_store_ingestion",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "stop_import",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "stop_logging",
+        "method": "POST",
+        "kind": "custom"
+      },
+      {
+        "name": "update_channel",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_event_data_store",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "update_trail",
+        "method": "POST",
+        "kind": "update"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Inspect and safely operate AWS CloudTrail trails, event data stores, channels, dashboards, and Lake queries through fixed typed commands.",
+      "usage": "pm aws-cloudtrail <command> [options]",
+      "source_cli": {
+        "name": "AWS CLI cloudtrail",
+        "docs": "https://docs.aws.amazon.com/cli/latest/reference/cloudtrail/",
+        "reference": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
+        "source": "aws cloudtrail"
+      },
+      "groups": [
+        {
+          "id": "read",
+          "title": "Read",
+          "commands": [
+            "trails describe",
+            "channel get",
+            "dashboard get",
+            "event-configuration get",
+            "event-data-store get",
+            "event-selectors get",
+            "import get",
+            "insight-selectors get",
+            "resource-policy get",
+            "trail get",
+            "trail status",
+            "channel list",
+            "dashboard list",
+            "event-data-store list",
+            "import failures list",
+            "import list",
+            "public-keys list",
+            "tags list",
+            "trail list",
+            "query cancel",
+            "query describe",
+            "query generate",
+            "query results",
+            "insights data list",
+            "insights metric-data list",
+            "query list",
+            "events lookup",
+            "query sample-search"
+          ]
+        },
+        {
+          "id": "write",
+          "title": "Typed write/admin actions",
+          "commands": [
+            "tags add",
+            "channel create",
+            "event-data-store create",
+            "trail create",
+            "channel delete",
+            "dashboard delete",
+            "event-data-store delete",
+            "resource-policy delete",
+            "trail delete",
+            "org delegated-admin deregister",
+            "federation disable",
+            "federation enable",
+            "event-configuration set",
+            "event-selectors set",
+            "insight-selectors set",
+            "resource-policy set",
+            "org delegated-admin register",
+            "tags remove",
+            "event-data-store restore",
+            "dashboard refresh",
+            "event-data-store ingestion start",
+            "import start",
+            "trail logging start",
+            "event-data-store ingestion stop",
+            "import stop",
+            "trail logging stop",
+            "channel update",
+            "event-data-store update",
+            "trail update"
+          ]
+        }
+      ],
+      "global_flags": [],
+      "commands": [
+        {
+          "path": "trails describe",
+          "summary": "Read the describe_trails stream (AWS CloudTrail DescribeTrails).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "describe_trails",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail trails describe --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "channel get",
+          "summary": "Read the get_channel stream (AWS CloudTrail GetChannel).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_channel",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail channel get --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "dashboard get",
+          "summary": "Read the get_dashboard stream (AWS CloudTrail GetDashboard).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_dashboard",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail dashboard get --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "event-configuration get",
+          "summary": "Read the get_event_configuration stream (AWS CloudTrail GetEventConfiguration).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_event_configuration",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail event-configuration get --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "event-data-store get",
+          "summary": "Read the get_event_data_store stream (AWS CloudTrail GetEventDataStore).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_event_data_store",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail event-data-store get --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "event-selectors get",
+          "summary": "Read the get_event_selectors stream (AWS CloudTrail GetEventSelectors).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_event_selectors",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail event-selectors get --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "import get",
+          "summary": "Read the get_import stream (AWS CloudTrail GetImport).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_import",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail import get --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "insight-selectors get",
+          "summary": "Read the get_insight_selectors stream (AWS CloudTrail GetInsightSelectors).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_insight_selectors",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail insight-selectors get --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "resource-policy get",
+          "summary": "Read the get_resource_policy stream (AWS CloudTrail GetResourcePolicy).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_resource_policy",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail resource-policy get --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "trail get",
+          "summary": "Read the get_trail stream (AWS CloudTrail GetTrail).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_trail",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail trail get --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "trail status",
+          "summary": "Read the get_trail_status stream (AWS CloudTrail GetTrailStatus).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "get_trail_status",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail trail status --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "channel list",
+          "summary": "Read the list_channels stream (AWS CloudTrail ListChannels).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_channels",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail channel list --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "dashboard list",
+          "summary": "Read the list_dashboards stream (AWS CloudTrail ListDashboards).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_dashboards",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail dashboard list --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "event-data-store list",
+          "summary": "Read the list_event_data_stores stream (AWS CloudTrail ListEventDataStores).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_event_data_stores",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail event-data-store list --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "import failures list",
+          "summary": "Read the list_import_failures stream (AWS CloudTrail ListImportFailures).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_import_failures",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail import failures list --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "import list",
+          "summary": "Read the list_imports stream (AWS CloudTrail ListImports).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_imports",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail import list --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "public-keys list",
+          "summary": "Read the list_public_keys stream (AWS CloudTrail ListPublicKeys).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_public_keys",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail public-keys list --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "tags list",
+          "summary": "Read the list_tags stream (AWS CloudTrail ListTags).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_tags",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail tags list --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "trail list",
+          "summary": "Read the list_trails stream (AWS CloudTrail ListTrails).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "list_trails",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm aws-cloudtrail trail list --credential ct-prod --limit 10"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "query cancel",
+          "summary": "Cancel a running CloudTrail Lake query by query id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "cancel_query",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "body.EventDataStore"
+            },
+            {
+              "name": "event-data-store-owner-account-id",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+              "values": [],
+              "maps_to": "body.EventDataStoreOwnerAccountId"
+            },
+            {
+              "name": "query-id",
+              "type": "string",
+              "summary": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+              "values": [],
+              "maps_to": "body.QueryId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail query cancel --credential ct-prod --query-id value"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "query describe",
+          "summary": "Describe a CloudTrail Lake query's status and metadata by query id or alias.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "describe_query",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "body.EventDataStore"
+            },
+            {
+              "name": "event-data-store-owner-account-id",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+              "values": [],
+              "maps_to": "body.EventDataStoreOwnerAccountId"
+            },
+            {
+              "name": "query-alias",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: ^[a-zA-Z][a-zA-Z0-9._\\-]*$",
+              "values": [],
+              "maps_to": "body.QueryAlias"
+            },
+            {
+              "name": "query-id",
+              "type": "string",
+              "summary": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+              "values": [],
+              "maps_to": "body.QueryId"
+            },
+            {
+              "name": "refresh-id",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 10. Maximum length of 20. Pattern: \\d+",
+              "values": [],
+              "maps_to": "body.RefreshId"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail query describe --credential ct-prod"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "query generate",
+          "summary": "Generate a candidate CloudTrail Lake SQL query from a natural-language prompt; does not execute the query.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "generate_query",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-stores",
+              "type": "string_array",
+              "summary": "Array of strings Array Members: Fixed number of 1 item. Length Constraints: Minimum length of 3. Maximum length of 25...",
+              "values": [],
+              "maps_to": "body.EventDataStores",
+              "required": true
+            },
+            {
+              "name": "prompt",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 500. Pattern: ^[ -~\\n]*$",
+              "values": [],
+              "maps_to": "body.Prompt",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail query generate --credential ct-prod --event-data-stores value --prompt value"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "query results",
+          "summary": "Fetch bounded result rows for a previously completed CloudTrail Lake query by query id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "get_query_results",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "body.EventDataStore"
+            },
+            {
+              "name": "event-data-store-owner-account-id",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+              "values": [],
+              "maps_to": "body.EventDataStoreOwnerAccountId"
+            },
+            {
+              "name": "max-query-results",
+              "type": "integer",
+              "summary": "Integer Valid Range: Minimum value of 1. Maximum value of 1000.",
+              "values": [],
+              "maps_to": "body.MaxQueryResults"
+            },
+            {
+              "name": "next-token",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+              "values": [],
+              "maps_to": "body.NextToken"
+            },
+            {
+              "name": "query-id",
+              "type": "string",
+              "summary": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+              "values": [],
+              "maps_to": "body.QueryId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail query results --credential ct-prod --query-id value"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "insights data list",
+          "summary": "List CloudTrail Insights event records for a configured insight source.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "list_insights_data",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "data-type",
+              "type": "string",
+              "summary": "String Valid Values: InsightsEvents",
+              "values": [],
+              "maps_to": "body.DataType",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "end-time",
+              "type": "string",
+              "summary": "Timestamp",
+              "values": [],
+              "maps_to": "body.EndTime"
+            },
+            {
+              "name": "insight-source",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "body.InsightSource",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "max-results",
+              "type": "integer",
+              "summary": "Integer Valid Range: Minimum value of 1. Maximum value of 50.",
+              "values": [],
+              "maps_to": "body.MaxResults"
+            },
+            {
+              "name": "next-token",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+              "values": [],
+              "maps_to": "body.NextToken"
+            },
+            {
+              "name": "start-time",
+              "type": "string",
+              "summary": "Timestamp",
+              "values": [],
+              "maps_to": "body.StartTime"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail insights data list --credential ct-prod --data-type value --insight-source value"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "insights metric-data list",
+          "summary": "List CloudTrail Insights metric data points for an event name/source/insight type.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "list_insights_metric_data",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "data-type",
+              "type": "string",
+              "summary": "String Valid Values: FillWithZeros | NonZeroData",
+              "values": [],
+              "maps_to": "body.DataType"
+            },
+            {
+              "name": "end-time",
+              "type": "string",
+              "summary": "Timestamp",
+              "values": [],
+              "maps_to": "body.EndTime"
+            },
+            {
+              "name": "error-code",
+              "type": "string",
+              "summary": "String Length Constraints: Maximum length of 128. Pattern: ^[\\w\\d\\s_.,\\-:\\[\\]]+$",
+              "values": [],
+              "maps_to": "body.ErrorCode"
+            },
+            {
+              "name": "event-name",
+              "type": "string",
+              "summary": "String Length Constraints: Maximum length of 128. Pattern: ^[A-Za-z0-9_]+$",
+              "values": [],
+              "maps_to": "body.EventName",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "event-source",
+              "type": "string",
+              "summary": "String Length Constraints: Maximum length of 256. Pattern: ^[a-z0-9_-]+\\.amazonaws\\.com$",
+              "values": [],
+              "maps_to": "body.EventSource",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "insight-type",
+              "type": "string",
+              "summary": "String Valid Values: ApiCallRateInsight | ApiErrorRateInsight",
+              "values": [],
+              "maps_to": "body.InsightType",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "max-results",
+              "type": "integer",
+              "summary": "Integer Valid Range: Minimum value of 1. Maximum value of 21600.",
+              "values": [],
+              "maps_to": "body.MaxResults"
+            },
+            {
+              "name": "next-token",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 1. Maximum length of 5000.",
+              "values": [],
+              "maps_to": "body.NextToken"
+            },
+            {
+              "name": "period",
+              "type": "integer",
+              "summary": "Integer Valid Range: Minimum value of 60. Maximum value of 3600.",
+              "values": [],
+              "maps_to": "body.Period"
+            },
+            {
+              "name": "start-time",
+              "type": "string",
+              "summary": "Timestamp",
+              "values": [],
+              "maps_to": "body.StartTime"
+            },
+            {
+              "name": "trail-name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "body.TrailName"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail insights metric-data list --credential ct-prod --event-name value --event-source value --insight-type value"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "query list",
+          "summary": "List CloudTrail Lake queries run against an event data store.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "list_queries",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "end-time",
+              "type": "string",
+              "summary": "Timestamp",
+              "values": [],
+              "maps_to": "body.EndTime"
+            },
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "body.EventDataStore",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "max-results",
+              "type": "integer",
+              "summary": "Integer Valid Range: Minimum value of 1. Maximum value of 1000.",
+              "values": [],
+              "maps_to": "body.MaxResults"
+            },
+            {
+              "name": "next-token",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+              "values": [],
+              "maps_to": "body.NextToken"
+            },
+            {
+              "name": "query-status",
+              "type": "string",
+              "summary": "String Valid Values: QUEUED | RUNNING | FINISHED | FAILED | CANCELLED | TIMED_OUT",
+              "values": [],
+              "maps_to": "body.QueryStatus"
+            },
+            {
+              "name": "start-time",
+              "type": "string",
+              "summary": "Timestamp",
+              "values": [],
+              "maps_to": "body.StartTime"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail query list --credential ct-prod --event-data-store value"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "events lookup",
+          "summary": "Look up CloudTrail management/data events using typed attribute filters and a time range.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "lookup_events",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "end-time",
+              "type": "string",
+              "summary": "Timestamp",
+              "values": [],
+              "maps_to": "body.EndTime"
+            },
+            {
+              "name": "event-category",
+              "type": "string",
+              "summary": "String Valid Values: insight",
+              "values": [],
+              "maps_to": "body.EventCategory"
+            },
+            {
+              "name": "max-results",
+              "type": "integer",
+              "summary": "Integer Valid Range: Minimum value of 1. Maximum value of 50.",
+              "values": [],
+              "maps_to": "body.MaxResults"
+            },
+            {
+              "name": "next-token",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "body.NextToken"
+            },
+            {
+              "name": "start-time",
+              "type": "string",
+              "summary": "Timestamp",
+              "values": [],
+              "maps_to": "body.StartTime"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail events lookup --credential ct-prod"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "query sample-search",
+          "summary": "Search AWS-provided sample CloudTrail Lake queries by keyword phrase.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "search_sample_queries",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "max-results",
+              "type": "integer",
+              "summary": "Integer Valid Range: Minimum value of 1. Maximum value of 50.",
+              "values": [],
+              "maps_to": "body.MaxResults"
+            },
+            {
+              "name": "next-token",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 4. Maximum length of 1000. Pattern: .*",
+              "values": [],
+              "maps_to": "body.NextToken"
+            },
+            {
+              "name": "search-phrase",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 2. Maximum length of 1000. Pattern: ^[ -~\\n]*$",
+              "values": [],
+              "maps_to": "body.SearchPhrase",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail query sample-search --credential ct-prod --search-phrase value"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "tags add",
+          "summary": "Plan a typed AWS CloudTrail AddTags operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "add_tags",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "resource-id",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.ResourceId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "tags-list",
+              "type": "string",
+              "summary": "Array of Tag objects Array Members: Maximum number of 200 items.",
+              "values": [],
+              "maps_to": "record.TagsList",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail tags add --credential ct-prod --resource-id value --tags-list value --preview"
+          ],
+          "output_policy": "",
+          "risk": "adds tags to a CloudTrail trail, event data store, channel, or dashboard",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "channel create",
+          "summary": "Plan a typed AWS CloudTrail CreateChannel operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_channel",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "destinations",
+              "type": "string",
+              "summary": "Array of Destination objects Array Members: Minimum number of 1 item. Maximum number of 200 items.",
+              "values": [],
+              "maps_to": "record.Destinations",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$",
+              "values": [],
+              "maps_to": "record.Name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "source",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 1. Maximum length of 256. Pattern: .*",
+              "values": [],
+              "maps_to": "record.Source",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail channel create --credential ct-prod --destinations value --name value --source value --preview"
+          ],
+          "output_policy": "",
+          "risk": "creates a CloudTrail organization/service event channel",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "event-data-store create",
+          "summary": "Plan a typed AWS CloudTrail CreateEventDataStore operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_event_data_store",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "billing-mode",
+              "type": "string",
+              "summary": "String Valid Values: EXTENDABLE_RETENTION_PRICING | FIXED_RETENTION_PRICING",
+              "values": [],
+              "maps_to": "record.BillingMode"
+            },
+            {
+              "name": "kms-key-id",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 1. Maximum length of 350. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.KmsKeyId"
+            },
+            {
+              "name": "multi-region-enabled",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.MultiRegionEnabled"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$",
+              "values": [],
+              "maps_to": "record.Name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "organization-enabled",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.OrganizationEnabled"
+            },
+            {
+              "name": "retention-period",
+              "type": "integer",
+              "summary": "Integer Valid Range: Minimum value of 7. Maximum value of 3653.",
+              "values": [],
+              "maps_to": "record.RetentionPeriod"
+            },
+            {
+              "name": "start-ingestion",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.StartIngestion"
+            },
+            {
+              "name": "termination-protection-enabled",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.TerminationProtectionEnabled"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail event-data-store create --credential ct-prod --name value --preview"
+          ],
+          "output_policy": "",
+          "risk": "creates a CloudTrail Lake event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "trail create",
+          "summary": "Plan a typed AWS CloudTrail CreateTrail operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "create_trail",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "cloud-watch-logs-log-group-arn",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.CloudWatchLogsLogGroupArn"
+            },
+            {
+              "name": "cloud-watch-logs-role-arn",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.CloudWatchLogsRoleArn"
+            },
+            {
+              "name": "enable-log-file-validation",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.EnableLogFileValidation"
+            },
+            {
+              "name": "include-global-service-events",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.IncludeGlobalServiceEvents"
+            },
+            {
+              "name": "is-multi-region-trail",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.IsMultiRegionTrail"
+            },
+            {
+              "name": "is-organization-trail",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.IsOrganizationTrail"
+            },
+            {
+              "name": "kms-key-id",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.KmsKeyId"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.Name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "s3-bucket-name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.S3BucketName",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "s3-key-prefix",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.S3KeyPrefix"
+            },
+            {
+              "name": "sns-topic-name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.SnsTopicName"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail trail create --credential ct-prod --name value --s3-bucket-name value --preview"
+          ],
+          "output_policy": "",
+          "risk": "creates a CloudTrail trail that delivers log files to an S3 bucket",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "channel delete",
+          "summary": "Plan a typed AWS CloudTrail DeleteChannel operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_channel",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "channel",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.Channel",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail channel delete --credential ct-prod --channel value --preview"
+          ],
+          "output_policy": "",
+          "risk": "deletes a CloudTrail event channel",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
+          "notes": ""
+        },
+        {
+          "path": "dashboard delete",
+          "summary": "Plan a typed AWS CloudTrail DeleteDashboard operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_dashboard",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "dashboard-id",
+              "type": "string",
+              "summary": "String Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.DashboardId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail dashboard delete --credential ct-prod --dashboard-id value --preview"
+          ],
+          "output_policy": "",
+          "risk": "deletes a CloudTrail Lake dashboard",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
+          "notes": ""
+        },
+        {
+          "path": "event-data-store delete",
+          "summary": "Plan a typed AWS CloudTrail DeleteEventDataStore operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_event_data_store",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.EventDataStore",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail event-data-store delete --credential ct-prod --event-data-store value --preview"
+          ],
+          "output_policy": "",
+          "risk": "deletes a CloudTrail Lake event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
+          "notes": ""
+        },
+        {
+          "path": "resource-policy delete",
+          "summary": "Plan a typed AWS CloudTrail DeleteResourcePolicy operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_resource_policy",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "resource-arn",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.ResourceArn",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail resource-policy delete --credential ct-prod --resource-arn value --preview"
+          ],
+          "output_policy": "",
+          "risk": "deletes the resource-based policy attached to a CloudTrail channel or event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
+          "notes": ""
+        },
+        {
+          "path": "trail delete",
+          "summary": "Plan a typed AWS CloudTrail DeleteTrail operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "delete_trail",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.Name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail trail delete --credential ct-prod --name value --preview"
+          ],
+          "output_policy": "",
+          "risk": "deletes a CloudTrail trail",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
+          "notes": ""
+        },
+        {
+          "path": "org delegated-admin deregister",
+          "summary": "Plan a typed AWS CloudTrail DeregisterOrganizationDelegatedAdmin operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "deregister_organization_delegated_admin",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "delegated-admin-account-id",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+              "values": [],
+              "maps_to": "record.DelegatedAdminAccountId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail org delegated-admin deregister --credential ct-prod --delegated-admin-account-id value --preview"
+          ],
+          "output_policy": "",
+          "risk": "removes an AWS account's CloudTrail delegated administrator status for the organization",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "federation disable",
+          "summary": "Plan a typed AWS CloudTrail DisableFederation operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "disable_federation",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.EventDataStore",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail federation disable --credential ct-prod --event-data-store value --preview"
+          ],
+          "output_policy": "",
+          "risk": "disables Lake query federation for a CloudTrail event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
+          "notes": ""
+        },
+        {
+          "path": "federation enable",
+          "summary": "Plan a typed AWS CloudTrail EnableFederation operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "enable_federation",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.EventDataStore",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "federation-role-arn",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 125. Pattern: ^[a-zA-Z0-9._/\\-:@=\\+,\\.]+$",
+              "values": [],
+              "maps_to": "record.FederationRoleArn",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail federation enable --credential ct-prod --event-data-store value --federation-role-arn value --preview"
+          ],
+          "output_policy": "",
+          "risk": "enables Lake query federation for a CloudTrail event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "event-configuration set",
+          "summary": "Plan a typed AWS CloudTrail PutEventConfiguration operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "put_event_configuration",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.EventDataStore"
+            },
+            {
+              "name": "max-event-size",
+              "type": "string",
+              "summary": "String Valid Values: Standard | Large",
+              "values": [],
+              "maps_to": "record.MaxEventSize"
+            },
+            {
+              "name": "trail-name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.TrailName"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail event-configuration set --credential ct-prod --preview"
+          ],
+          "output_policy": "",
+          "risk": "sets the maximum event size and context key selectors for a trail or event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "event-selectors set",
+          "summary": "Plan a typed AWS CloudTrail PutEventSelectors operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "put_event_selectors",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "trail-name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.TrailName",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail event-selectors set --credential ct-prod --trail-name value --preview"
+          ],
+          "output_policy": "",
+          "risk": "sets basic or advanced event selectors on a CloudTrail trail",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "insight-selectors set",
+          "summary": "Plan a typed AWS CloudTrail PutInsightSelectors operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "put_insight_selectors",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.EventDataStore"
+            },
+            {
+              "name": "insights-destination",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.InsightsDestination"
+            },
+            {
+              "name": "insight-selectors",
+              "type": "string",
+              "summary": "Array of InsightSelector objects",
+              "values": [],
+              "maps_to": "record.InsightSelectors",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "trail-name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.TrailName"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail insight-selectors set --credential ct-prod --insight-selectors value --preview"
+          ],
+          "output_policy": "",
+          "risk": "enables CloudTrail Insights event types on a trail or event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "resource-policy set",
+          "summary": "Plan a typed AWS CloudTrail PutResourcePolicy operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "put_resource_policy",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "resource-arn",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.ResourceArn",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "resource-policy",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 1. Maximum length of 8192.",
+              "values": [],
+              "maps_to": "record.ResourcePolicy",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail resource-policy set --credential ct-prod --resource-arn value --resource-policy value --preview"
+          ],
+          "output_policy": "",
+          "risk": "attaches a resource-based IAM policy document to a CloudTrail channel or event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "org delegated-admin register",
+          "summary": "Plan a typed AWS CloudTrail RegisterOrganizationDelegatedAdmin operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "register_organization_delegated_admin",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "member-account-id",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 12. Maximum length of 16. Pattern: \\d+",
+              "values": [],
+              "maps_to": "record.MemberAccountId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail org delegated-admin register --credential ct-prod --member-account-id value --preview"
+          ],
+          "output_policy": "",
+          "risk": "grants an AWS account CloudTrail delegated administrator status for the organization",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "tags remove",
+          "summary": "Plan a typed AWS CloudTrail RemoveTags operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "remove_tags",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "resource-id",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.ResourceId",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "tags-list",
+              "type": "string",
+              "summary": "Array of Tag objects Array Members: Maximum number of 200 items.",
+              "values": [],
+              "maps_to": "record.TagsList",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail tags remove --credential ct-prod --resource-id value --tags-list value --preview"
+          ],
+          "output_policy": "",
+          "risk": "removes tags from a CloudTrail trail, event data store, channel, or dashboard",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
+          "notes": ""
+        },
+        {
+          "path": "event-data-store restore",
+          "summary": "Plan a typed AWS CloudTrail RestoreEventDataStore operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "restore_event_data_store",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.EventDataStore",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail event-data-store restore --credential ct-prod --event-data-store value --preview"
+          ],
+          "output_policy": "",
+          "risk": "restores a soft-deleted CloudTrail Lake event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "dashboard refresh",
+          "summary": "Plan a typed AWS CloudTrail StartDashboardRefresh operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "start_dashboard_refresh",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "dashboard-id",
+              "type": "string",
+              "summary": "String Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.DashboardId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail dashboard refresh --credential ct-prod --dashboard-id value --preview"
+          ],
+          "output_policy": "",
+          "risk": "starts an on-demand refresh of a CloudTrail Lake dashboard",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "event-data-store ingestion start",
+          "summary": "Plan a typed AWS CloudTrail StartEventDataStoreIngestion operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "start_event_data_store_ingestion",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.EventDataStore",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail event-data-store ingestion start --credential ct-prod --event-data-store value --preview"
+          ],
+          "output_policy": "",
+          "risk": "resumes event ingestion into a stopped CloudTrail Lake event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "import start",
+          "summary": "Plan a typed AWS CloudTrail StartImport operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "start_import",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "destinations",
+              "type": "string_array",
+              "summary": "Array of strings Array Members: Fixed number of 1 item. Length Constraints: Minimum length of 3. Maximum length of 25...",
+              "values": [],
+              "maps_to": "record.Destinations"
+            },
+            {
+              "name": "end-event-time",
+              "type": "string",
+              "summary": "Timestamp",
+              "values": [],
+              "maps_to": "record.EndEventTime"
+            },
+            {
+              "name": "import-id",
+              "type": "string",
+              "summary": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+              "values": [],
+              "maps_to": "record.ImportId"
+            },
+            {
+              "name": "start-event-time",
+              "type": "string",
+              "summary": "Timestamp",
+              "values": [],
+              "maps_to": "record.StartEventTime"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail import start --credential ct-prod --preview"
+          ],
+          "output_policy": "",
+          "risk": "starts or resumes a CloudTrail Lake import job from an S3 source",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "trail logging start",
+          "summary": "Plan a typed AWS CloudTrail StartLogging operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "start_logging",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.Name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail trail logging start --credential ct-prod --name value --preview"
+          ],
+          "output_policy": "",
+          "risk": "starts CloudTrail log delivery for a trail",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "event-data-store ingestion stop",
+          "summary": "Plan a typed AWS CloudTrail StopEventDataStoreIngestion operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "stop_event_data_store_ingestion",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.EventDataStore",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail event-data-store ingestion stop --credential ct-prod --event-data-store value --preview"
+          ],
+          "output_policy": "",
+          "risk": "stops event ingestion into a CloudTrail Lake event data store",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
+          "notes": ""
+        },
+        {
+          "path": "import stop",
+          "summary": "Plan a typed AWS CloudTrail StopImport operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "stop_import",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "import-id",
+              "type": "string",
+              "summary": "String Length Constraints: Fixed length of 36. Pattern: ^[a-f0-9\\-]+$",
+              "values": [],
+              "maps_to": "record.ImportId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail import stop --credential ct-prod --import-id value --preview"
+          ],
+          "output_policy": "",
+          "risk": "stops an in-progress CloudTrail Lake import job",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
+          "notes": ""
+        },
+        {
+          "path": "trail logging stop",
+          "summary": "Plan a typed AWS CloudTrail StopLogging operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "stop_logging",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.Name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail trail logging stop --credential ct-prod --name value --preview"
+          ],
+          "output_policy": "",
+          "risk": "stops CloudTrail log delivery for a trail",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive",
+          "notes": ""
+        },
+        {
+          "path": "channel update",
+          "summary": "Plan a typed AWS CloudTrail UpdateChannel operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_channel",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "channel",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.Channel",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$",
+              "values": [],
+              "maps_to": "record.Name"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail channel update --credential ct-prod --channel value --preview"
+          ],
+          "output_policy": "",
+          "risk": "updates a CloudTrail event channel's name or destinations",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "event-data-store update",
+          "summary": "Plan a typed AWS CloudTrail UpdateEventDataStore operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_event_data_store",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "billing-mode",
+              "type": "string",
+              "summary": "String Valid Values: EXTENDABLE_RETENTION_PRICING | FIXED_RETENTION_PRICING",
+              "values": [],
+              "maps_to": "record.BillingMode"
+            },
+            {
+              "name": "event-data-store",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 256. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.EventDataStore",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "kms-key-id",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 1. Maximum length of 350. Pattern: ^[a-zA-Z0-9._/\\-:]+$",
+              "values": [],
+              "maps_to": "record.KmsKeyId"
+            },
+            {
+              "name": "multi-region-enabled",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.MultiRegionEnabled"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "String Length Constraints: Minimum length of 3. Maximum length of 128. Pattern: ^[a-zA-Z0-9._\\-]+$",
+              "values": [],
+              "maps_to": "record.Name"
+            },
+            {
+              "name": "organization-enabled",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.OrganizationEnabled"
+            },
+            {
+              "name": "retention-period",
+              "type": "integer",
+              "summary": "Integer Valid Range: Minimum value of 7. Maximum value of 3653.",
+              "values": [],
+              "maps_to": "record.RetentionPeriod"
+            },
+            {
+              "name": "termination-protection-enabled",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.TerminationProtectionEnabled"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail event-data-store update --credential ct-prod --event-data-store value --preview"
+          ],
+          "output_policy": "",
+          "risk": "updates a CloudTrail Lake event data store's configuration",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "trail update",
+          "summary": "Plan a typed AWS CloudTrail UpdateTrail operation.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_trail",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "cloud-watch-logs-log-group-arn",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.CloudWatchLogsLogGroupArn"
+            },
+            {
+              "name": "cloud-watch-logs-role-arn",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.CloudWatchLogsRoleArn"
+            },
+            {
+              "name": "enable-log-file-validation",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.EnableLogFileValidation"
+            },
+            {
+              "name": "include-global-service-events",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.IncludeGlobalServiceEvents"
+            },
+            {
+              "name": "is-multi-region-trail",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.IsMultiRegionTrail"
+            },
+            {
+              "name": "is-organization-trail",
+              "type": "boolean",
+              "summary": "Boolean",
+              "values": [],
+              "maps_to": "record.IsOrganizationTrail"
+            },
+            {
+              "name": "kms-key-id",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.KmsKeyId"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.Name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "s3-bucket-name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.S3BucketName"
+            },
+            {
+              "name": "s3-key-prefix",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.S3KeyPrefix"
+            },
+            {
+              "name": "sns-topic-name",
+              "type": "string",
+              "summary": "String",
+              "values": [],
+              "maps_to": "record.SnsTopicName"
+            }
+          ],
+          "examples": [
+            "pm aws-cloudtrail trail update --credential ct-prod --name value --preview"
+          ],
+          "output_policy": "",
+          "risk": "updates a CloudTrail trail's configuration",
+          "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute",
+          "notes": ""
+        },
+        {
+          "path": "query start",
+          "summary": "AWS CloudTrail StartQuery (not exposed).",
+          "intent": "direct_read",
+          "availability": "unsafe_or_disallowed",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartQuery.html",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "StartQuery accepts an unrestricted CloudTrail Lake SQL QueryStatement as input. This project disables generic/unrestricted query-text execution for every connector (capabilities.query is always false) and never exposes a raw SQL passthrough; see AGENTS.md. StartQuery therefore stays unavailable regardless of shared-runtime state."
+        },
+        {
+          "path": "dashboard create",
+          "summary": "AWS CloudTrail CreateDashboard (not exposed).",
+          "intent": "reverse_etl",
+          "availability": "unsafe_or_disallowed",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateDashboard.html",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "CreateDashboard requires a Widgets array where each RequestWidget embeds an unrestricted CloudTrail Lake SQL QueryStatement. This project disables generic/unrestricted query-text execution for every connector (capabilities.query is always false) and never exposes a raw SQL passthrough; see AGENTS.md. CreateDashboard therefore stays unavailable regardless of shared-runtime state."
+        },
+        {
+          "path": "dashboard update",
+          "summary": "AWS CloudTrail UpdateDashboard (not exposed).",
+          "intent": "reverse_etl",
+          "availability": "unsafe_or_disallowed",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateDashboard.html",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "UpdateDashboard requires a Widgets array where each RequestWidget embeds an unrestricted CloudTrail Lake SQL QueryStatement. This project disables generic/unrestricted query-text execution for every connector (capabilities.query is always false) and never exposes a raw SQL passthrough; see AGENTS.md. UpdateDashboard therefore stays unavailable regardless of shared-runtime state."
+        }
+      ],
+      "help_topics": []
+    },
+    "docs_md": "# Overview\n\nAWS CloudTrail connector parity was audited from the official AWS CloudTrail API Reference Actions page. The bundle enumerates all 60 official CloudTrail API actions exactly once. 19 ETL/read stream actions, 9 typed direct-read commands, and 29 typed reverse-ETL write/admin actions are implemented and runtime-reachable through the connector-local native surface. Streams and direct reads whose AWS action requires an identifier use connector-local discovery/fan-out from the fixed list/describe streams rather than caller-supplied raw action/path/header/body input. The official CloudTrail event-record contents page documents event record version 1.11 and 31 top-level event fields; those fields are schema payload fields for the `events lookup` direct-read command, not CDC/changefeed operations.\n\nImplemented readable streams: `describe_trails`, `get_channel`, `get_dashboard`, `get_event_configuration`, `get_event_data_store`, `get_event_selectors`, `get_import`, `get_insight_selectors`, `get_resource_policy`, `get_trail`, `get_trail_status`, `list_channels`, `list_dashboards`, `list_event_data_stores`, `list_import_failures`, `list_imports`, `list_public_keys`, `list_tags`, `list_trails`.\n\nImplemented direct-read operations: `cancel_query`, `describe_query`, `generate_query`, `get_query_results`, `list_insights_data`, `list_insights_metric_data`, `list_queries`, `lookup_events`, `search_sample_queries`.\n\nImplemented write/admin actions: `add_tags`, `create_channel`, `create_event_data_store`, `create_trail`, `delete_channel`, `delete_dashboard`, `delete_event_data_store`, `delete_resource_policy`, `delete_trail`, `deregister_organization_delegated_admin`, `disable_federation`, `enable_federation`, `put_event_configuration`, `put_event_selectors`, `put_insight_selectors`, `put_resource_policy`, `register_organization_delegated_admin`, `remove_tags`, `restore_event_data_store`, `start_dashboard_refresh`, `start_event_data_store_ingestion`, `start_import`, `start_logging`, `stop_event_data_store_ingestion`, `stop_import`, `stop_logging`, `update_channel`, `update_event_data_store`, `update_trail`.\n\nBlocked operations (3 of 60): `StartQuery`, `CreateDashboard`, `UpdateDashboard`. Each is blocked for a genuine, specific reason, not a missing-infrastructure placeholder: their request body requires an unrestricted CloudTrail Lake SQL `QueryStatement` (`StartQuery` directly; `CreateDashboard`/`UpdateDashboard` inside each `Widgets[].QueryStatement`). This project disables generic/unrestricted query-text execution for every connector — `capabilities.query` is fixed `false` repo-wide, and no connector ever exposes a raw SQL passthrough tool (see `AGENTS.md`). This is a standing project policy, not a per-connector gap, so these three stay blocked regardless of future shared-runtime work. `api_surface.json` records each with `operation.model: \"disallowed\"` and a `source_url` citation.\n\nNote on the other 9 CloudTrail Lake/query-family actions (`CancelQuery`, `DescribeQuery`, `GenerateQuery`, `GetQueryResults`, `ListQueries`, `SearchSampleQueries`, plus the Insights actions and `LookupEvents`): none of their request fields accept raw SQL text — they take typed identifiers (`QueryId`, `EventDataStore`, bounded enums, a natural-language `Prompt` for `GenerateQuery`) — so they are genuinely safe to implement and are executable direct-read commands.\n\n## Breaking change and migration\n\nThe earlier CloudTrail connector exposed four `LookupEvents`-backed event streams: `management_events`, `read_only_events`, `write_only_events`, and `console_logins`. None of them is an executable read stream in this native implementation, and their schemas are removed. Existing ETL connections that name one of them now fail with `aws-cloudtrail stream <name> not found`, and the incremental `EventTime` cursor those streams provided is gone; all 19 current streams are full-refresh.\n\n`LookupEvents` is now available as the `events lookup` direct-read command (`pm aws-cloudtrail events lookup`), using typed `LookupAttributes`/time-range/event-category filters — this is the replacement path for CloudTrail event-record lookups, though it is a bounded direct read rather than an incremental ETL stream (no cursor/pagination-state persistence across runs).\n\nThe typed CloudTrail operations this connector implements read configuration, resource metadata, and (via direct reads) event/Insights records:\n\n- Trail inventory and delivery state: `describe_trails`, `list_trails`, `get_trail`, `get_trail_status`.\n- What a trail or event data store is configured to capture: `get_event_selectors`, `get_insight_selectors`, `get_event_configuration`.\n- Lake and delivery resources: `list_event_data_stores`, `get_event_data_store`, `list_channels`, `get_channel`, `list_imports`, `get_import`, `list_import_failures`.\n- Event and Insights records: `events lookup`, `insights data list`, `insights metric-data list`.\n- CloudTrail Lake query lifecycle (typed, no raw SQL execution): `query list`, `query describe`, `query cancel`, `query results`, `query generate`, `query sample-search`.\n\n## Auth setup\n\nUse `pm credentials add <name> --connector aws-cloudtrail` and provide secrets only from environment variables or stdin:\n\n- `aws_key_id` (required secret)\n- `aws_secret_key` (required secret)\n- `aws_region_name` (required config, for example `us-east-1`)\n\nOptional config fields are `base_url` for local fixture endpoints, `page_size`, `max_pages`, and `mode=fixture` for credential-free tests. Do not place AWS secret values in chat, command history, docs, fixtures, or issue comments.\n\n## Streams notes\n\nEvery implemented stream, direct read, and write uses a fixed AWS CloudTrail JSON-RPC action name with SigV4 authentication and no raw action/path/header/body escape hatch: `internal/connectors/native/aws-cloudtrail/api_contract.go` declares a closed, typed field schema per official action, and `body.go`'s `buildActionBody` rejects any field not in that schema. Paginated actions pass bounded `MaxResults` and follow `NextToken` until it is absent or `max_pages` is reached. Streams and direct reads for resource-detail actions derive required identifiers through connector-local discovery/fan-out from `DescribeTrails`, `ListChannels`, `ListDashboards`, `ListEventDataStores`, and `ListImports`. The connector keeps `query=false` at the metadata layer; CloudTrail Lake's generic SQL query capability (`StartQuery`) is never exposed, by design.\n\n## Write actions & risks\n\n29 CloudTrail reverse-ETL write/admin actions are exposed by the runtime surface, dispatched through the same signed JSON-RPC requester as reads via `internal/connectors/hooks/aws-cloudtrail`'s `ExecuteWrite` hook. Every write follows the standard plan -> preview -> explicit approval -> execute flow; destructive actions (`delete_channel`, `delete_dashboard`, `delete_event_data_store`, `delete_resource_policy`, `delete_trail`, `disable_federation`, `remove_tags`, `stop_event_data_store_ingestion`, `stop_import`, `stop_logging`) additionally require `confirm: destructive` and use provider-supported idempotency (missing-resource 404s on a delete are treated as already-written, not failed). No raw AWS action, path, header, or request-body escape hatch is exposed — `writes.json`'s `record_schema` for every action is `additionalProperties: false` with an explicit field list, and the same closed schema is enforced again at the native Go layer via `cloudTrailActionFields`.\n\n`create_dashboard` and `update_dashboard` are not exposed: see the query-text policy note in Overview.\n\n## Known limits\n\n- This work is fixture-only and local-test verified; it does not certify live AWS provider behavior.\n- CloudTrail event record fields are parsed as payload/schema fields where CloudTrail returns them (via `events lookup`), but they are not counted as CDC because AWS does not document a CloudTrail changefeed/subscription API in the audited sources.\n- `StartQuery`, `CreateDashboard`, and `UpdateDashboard` are blocked by design; this connector never exposes a generic CloudTrail Lake SQL runner or a widget query builder.\n- Resource-detail streams and direct reads depend on the corresponding list/describe action returning identifiers; when no resources are discovered they emit no records.\n- Complex request fields (tag lists, event/insight selectors, channel destinations, import sources) are accepted as JSON-encoded values through both the CLI surface and `pm etl write`; each still validates against the action's closed field schema, so no field outside the official AWS request shape is ever accepted.\n\n## Generated manual fidelity\n\n`docs/connectors/aws-cloudtrail/MANUAL.md` and `SKILL.md` are written by `pm docs generate` from the same manifest that `pm connectors inspect aws-cloudtrail` renders, so the generated files and that live command (including `pm connectors inspect aws-cloudtrail --json`) are still intentionally sparse: no ETL STREAMS section, no SYNC MODES section, `No connector-specific config fields.` under CONFIGURATION, generic `connector-specific` read/write risk instead of the authored risk text in `metadata.json`, and — misleadingly — `No secret authentication is required for this connector.` under AUTHENTICATION. This connector does require the `aws_key_id` and `aws_secret_key` secrets plus the `aws_region_name` config field; the authoritative list is the Auth setup section above and `spec.json`.\n\nThat is not a gap in this connector. Those sections are built from `connectors.ManifestOf`, and the shared `definitionConnector` wrapper in `internal/connectors/native/nativeset/promoted.go` currently implements only `Definition()`, so `ManifestOf` falls back to a metadata-only manifest for every bundle-backed promoted native (~30 connectors today). The fix is foundation PR #3676, `fix(connectors): derive nativeset manifest from bundle definition`, which is deliberately owned outside this connector-local branch and is still open/unmerged as of this writing. Once #3676 merges and this branch rebases onto it, re-running `pm docs generate` fills in the full ETL STREAMS, CONFIGURATION, SYNC MODES, and authored SECURITY sections from this bundle with no change to the connector itself.\n\nUntil then, `pm connectors catalog --json`, `pm etl catalog --connector aws-cloudtrail`, `pm aws-cloudtrail --help` (via `cli_surface.json`), the generated connector catalog under `docs/connectors/catalog/`, and the website data read the bundle directly and already report the complete 19-stream/9-direct-read/29-write surface. Use those for CloudTrail stream, command, config, and risk facts instead of `pm connectors inspect`.\n",
     "icon": {
       "id": "aws-cloudtrail",
       "path": "icons/aws-cloudtrail.svg",

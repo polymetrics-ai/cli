@@ -1,0 +1,26 @@
+{
+  "record": {
+    "Destinations": [
+      {
+        "Type": "AWS::SNS::Topic",
+        "Location": "arn:aws:sns:us-east-1:123456789012:fixture-topic"
+      }
+    ],
+    "Name": "fixture-trail",
+    "Source": "fixture.source.service"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "Destinations": [
+        {
+          "Type": "AWS::SNS::Topic",
+          "Location": "arn:aws:sns:us-east-1:123456789012:fixture-topic"
+        }
+      ],
+      "Name": "fixture-trail",
+      "Source": "fixture.source.service"
+    }
+  }
+}

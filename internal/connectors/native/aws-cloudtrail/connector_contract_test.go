@@ -62,11 +62,11 @@ func assertConnectorContract(t *testing.T, c connectors.Connector, wantName stri
 		t.Fatalf("Metadata().Name = %q, want %q", meta.Name, wantName)
 	}
 	caps := meta.Capabilities
-	if !caps.Check || !caps.Catalog || !caps.Read {
-		t.Fatalf("capabilities = %+v, want Check, Catalog, and Read", caps)
+	if !caps.Check || !caps.Catalog || !caps.Read || !caps.Write {
+		t.Fatalf("capabilities = %+v, want Check, Catalog, Read, and Write", caps)
 	}
-	if caps.Write {
-		t.Fatalf("%s scope-corrected connector must not expose write capability until shared promoted-native forwarding is available", wantName)
+	if caps.Query {
+		t.Fatalf("%s must not expose raw query capability: this project disables unrestricted query-text execution for every connector", wantName)
 	}
 	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
 	if err := c.Check(context.Background(), cfg); err != nil {

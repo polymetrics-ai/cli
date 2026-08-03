@@ -1,0 +1,7 @@
+{
+  "status": 200,
+  "body": {
+    "pm_record_id": "search_sample_queries_fixture",
+    "operation": "SearchSampleQueries"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "record": {
+    "DashboardId": "fixture-dashboard"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "DashboardId": "fixture-dashboard"
+    }
+  }
+}

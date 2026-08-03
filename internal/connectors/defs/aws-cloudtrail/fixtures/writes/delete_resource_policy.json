@@ -1,0 +1,12 @@
+{
+  "record": {
+    "ResourceArn": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "ResourceArn": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail"
+    }
+  }
+}

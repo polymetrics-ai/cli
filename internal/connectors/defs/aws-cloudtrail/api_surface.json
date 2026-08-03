@@ -1,58 +1,40 @@
 {
   "api": "AWS CloudTrail API Reference actions",
   "docs": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
-  "reviewed_at": "2026-07-31",
+  "reviewed_at": "2026-08-04",
   "operation_ledger_version": 1,
-  "scope": "Complete AWS CloudTrail API action inventory from the official Actions page. Scope-corrected surface implements 19 ETL/read streams through the connector-local runtime using fixed action mappings and resource discovery/fan-out where an AWS read action requires identifiers. The 10 provider query/direct-read actions and 31 write/admin actions are blocked/planned because their safe exposure requires shared promoted-native forwarding outside this connector-local slice. Event record fields remain payload schema evidence, not CDC operations.",
+  "scope": "Complete AWS CloudTrail API action inventory from the official Actions page. 19 ETL/read streams, 9 typed direct-read commands, and 29 typed reverse-ETL write/admin actions are executable through the connector-local native runtime using fixed action mappings, closed per-operation request schemas, resource discovery/fan-out for stream identifiers, and provider-supported idempotency for destructive writes. Only 3 actions remain blocked: StartQuery, CreateDashboard, and UpdateDashboard, each because their request body requires an unrestricted CloudTrail Lake SQL QueryStatement, which this repository disables for every connector by policy (capabilities.query is fixed false repo-wide; no raw SQL passthrough is ever exposed). Event record fields remain payload schema evidence, not CDC operations.",
   "endpoints": [
     {
       "method": "POST",
       "path": "cloudtrail_api_action:AddTags",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_AddTags.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "add_tags"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:CancelQuery",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CancelQuery.html",
-        "notes": "Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors."
+      "covered_by": {
+        "direct_read": "query cancel"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:CreateChannel",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateChannel.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "create_channel"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:CreateDashboard",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "disallowed",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
+        "reason": "Genuinely blocked by project policy, not by missing infrastructure: this action's Widgets array requires each RequestWidget to embed an unrestricted CloudTrail Lake SQL QueryStatement. This repository disables generic/unrestricted query-text execution for every connector (capabilities.query is fixed false repo-wide) and never exposes a raw SQL passthrough tool per AGENTS.md. This action stays unavailable regardless of shared-runtime state.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateDashboard.html",
         "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
@@ -60,118 +42,64 @@
     {
       "method": "POST",
       "path": "cloudtrail_api_action:CreateEventDataStore",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateEventDataStore.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "create_event_data_store"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:CreateTrail",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateTrail.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "create_trail"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:DeleteChannel",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeleteChannel.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "delete_channel"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:DeleteDashboard",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeleteDashboard.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "delete_dashboard"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:DeleteEventDataStore",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeleteEventDataStore.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "delete_event_data_store"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:DeleteResourcePolicy",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeleteResourcePolicy.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "delete_resource_policy"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:DeleteTrail",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeleteTrail.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "delete_trail"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:DeregisterOrganizationDelegatedAdmin",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DeregisterOrganizationDelegatedAdmin.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "deregister_organization_delegated_admin"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:DescribeQuery",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DescribeQuery.html",
-        "notes": "Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors."
+      "covered_by": {
+        "direct_read": "query describe"
       }
     },
     {
@@ -184,40 +112,22 @@
     {
       "method": "POST",
       "path": "cloudtrail_api_action:DisableFederation",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DisableFederation.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "disable_federation"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:EnableFederation",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_EnableFederation.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "enable_federation"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:GenerateQuery",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GenerateQuery.html",
-        "notes": "Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors."
+      "covered_by": {
+        "direct_read": "query generate"
       }
     },
     {
@@ -272,14 +182,8 @@
     {
       "method": "POST",
       "path": "cloudtrail_api_action:GetQueryResults",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetQueryResults.html",
-        "notes": "Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors."
+      "covered_by": {
+        "direct_read": "query results"
       }
     },
     {
@@ -341,27 +245,15 @@
     {
       "method": "POST",
       "path": "cloudtrail_api_action:ListInsightsData",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListInsightsData.html",
-        "notes": "Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors."
+      "covered_by": {
+        "direct_read": "insights data list"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:ListInsightsMetricData",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListInsightsMetricData.html",
-        "notes": "Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors."
+      "covered_by": {
+        "direct_read": "insights metric-data list"
       }
     },
     {
@@ -374,14 +266,8 @@
     {
       "method": "POST",
       "path": "cloudtrail_api_action:ListQueries",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListQueries.html",
-        "notes": "Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors."
+      "covered_by": {
+        "direct_read": "query list"
       }
     },
     {
@@ -401,181 +287,103 @@
     {
       "method": "POST",
       "path": "cloudtrail_api_action:LookupEvents",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html",
-        "notes": "Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors."
+      "covered_by": {
+        "direct_read": "events lookup"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:PutEventConfiguration",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_PutEventConfiguration.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "put_event_configuration"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:PutEventSelectors",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_PutEventSelectors.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "put_event_selectors"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:PutInsightSelectors",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_PutInsightSelectors.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "put_insight_selectors"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:PutResourcePolicy",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_PutResourcePolicy.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "put_resource_policy"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:RegisterOrganizationDelegatedAdmin",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_RegisterOrganizationDelegatedAdmin.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "register_organization_delegated_admin"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:RemoveTags",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_RemoveTags.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "remove_tags"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:RestoreEventDataStore",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_RestoreEventDataStore.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "restore_event_data_store"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:SearchSampleQueries",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_SearchSampleQueries.html",
-        "notes": "Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors."
+      "covered_by": {
+        "direct_read": "query sample-search"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:StartDashboardRefresh",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartDashboardRefresh.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "start_dashboard_refresh"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:StartEventDataStoreIngestion",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartEventDataStoreIngestion.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "start_event_data_store_ingestion"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:StartImport",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartImport.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "start_import"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:StartLogging",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartLogging.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "start_logging"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:StartQuery",
       "operation": {
-        "model": "direct_read",
+        "model": "disallowed",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail provider query command requires shared promoted-native CommandSurface/OperationDirectReader forwarding that was reverted; it is not executable through the default pm aws-cloudtrail command surface.",
+        "reason": "Genuinely blocked by project policy, not by missing infrastructure: this action's request body accepts an unrestricted CloudTrail Lake SQL QueryStatement. This repository disables generic/unrestricted query-text execution for every connector (capabilities.query is fixed false repo-wide) and never exposes a raw SQL passthrough tool per AGENTS.md. This action stays unavailable regardless of shared-runtime state.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartQuery.html",
         "notes": "Re-enable only with a shared-runtime slice that forwards operation direct reads from promoted native connectors."
       }
@@ -583,64 +391,40 @@
     {
       "method": "POST",
       "path": "cloudtrail_api_action:StopEventDataStoreIngestion",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StopEventDataStoreIngestion.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "stop_event_data_store_ingestion"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:StopImport",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StopImport.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "stop_import"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:StopLogging",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "critical",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StopLogging.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "stop_logging"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:UpdateChannel",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateChannel.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "update_channel"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:UpdateDashboard",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "disallowed",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
+        "reason": "Genuinely blocked by project policy, not by missing infrastructure: this action's Widgets array requires each RequestWidget to embed an unrestricted CloudTrail Lake SQL QueryStatement. This repository disables generic/unrestricted query-text execution for every connector (capabilities.query is fixed false repo-wide) and never exposes a raw SQL passthrough tool per AGENTS.md. This action stays unavailable regardless of shared-runtime state.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateDashboard.html",
         "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
       }
@@ -648,27 +432,15 @@
     {
       "method": "POST",
       "path": "cloudtrail_api_action:UpdateEventDataStore",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateEventDataStore.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "update_event_data_store"
       }
     },
     {
       "method": "POST",
       "path": "cloudtrail_api_action:UpdateTrail",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Planned/blocked after scope correction: this CloudTrail write/admin command requires typed write metadata plus shared promoted-native CommandSurface/WriteValidator/DryRunWriter forwarding for typed plan-preview-approval execution; that shared command/write runtime support remains outside this connector-local branch, so the action is not exposed as an executable write.",
-        "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateTrail.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+      "covered_by": {
+        "write": "update_trail"
       }
     }
   ]

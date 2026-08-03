@@ -1,0 +1,12 @@
+{
+  "record": {
+    "Channel": "arn:aws:cloudtrail:us-east-1:123456789012:channel/fixture-channel"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "Channel": "arn:aws:cloudtrail:us-east-1:123456789012:channel/fixture-channel"
+    }
+  }
+}

@@ -11380,7 +11380,7 @@
   {
     "name": "aws-cloudtrail",
     "display_name": "AWS CloudTrail",
-    "description": "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; CloudTrail event and Insights record reads are blocked/planned. See the connector docs migration note.",
+    "description": "Reads and safely operates AWS CloudTrail trails, event data stores, channels, dashboards, and Lake queries through fixed AWS JSON-RPC streams, typed direct-read commands, and typed reverse-ETL write/admin actions. Only StartQuery, CreateDashboard, and UpdateDashboard stay blocked: each requires an unrestricted CloudTrail Lake SQL QueryStatement, which this project disables for every connector by policy. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; use the events lookup direct-read command for CloudTrail event lookups instead. See the connector docs migration note.",
     "integration_type": "api",
     "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
     "release_stage": "alpha",
@@ -11388,7 +11388,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -11644,10 +11644,225 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "add_tags",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.AddTags",
+        "risk": "adds tags to a CloudTrail trail, event data store, channel, or dashboard"
+      },
+      {
+        "name": "create_channel",
+        "kind": "create",
+        "method": "POST",
+        "path": "CloudTrail_20131101.CreateChannel",
+        "risk": "creates a CloudTrail organization/service event channel"
+      },
+      {
+        "name": "create_event_data_store",
+        "kind": "create",
+        "method": "POST",
+        "path": "CloudTrail_20131101.CreateEventDataStore",
+        "risk": "creates a CloudTrail Lake event data store"
+      },
+      {
+        "name": "create_trail",
+        "kind": "create",
+        "method": "POST",
+        "path": "CloudTrail_20131101.CreateTrail",
+        "risk": "creates a CloudTrail trail that delivers log files to an S3 bucket"
+      },
+      {
+        "name": "delete_channel",
+        "kind": "delete",
+        "method": "POST",
+        "path": "CloudTrail_20131101.DeleteChannel",
+        "risk": "deletes a CloudTrail event channel",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_dashboard",
+        "kind": "delete",
+        "method": "POST",
+        "path": "CloudTrail_20131101.DeleteDashboard",
+        "risk": "deletes a CloudTrail Lake dashboard",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_event_data_store",
+        "kind": "delete",
+        "method": "POST",
+        "path": "CloudTrail_20131101.DeleteEventDataStore",
+        "risk": "deletes a CloudTrail Lake event data store",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_resource_policy",
+        "kind": "delete",
+        "method": "POST",
+        "path": "CloudTrail_20131101.DeleteResourcePolicy",
+        "risk": "deletes the resource-based policy attached to a CloudTrail channel or event data store",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_trail",
+        "kind": "delete",
+        "method": "POST",
+        "path": "CloudTrail_20131101.DeleteTrail",
+        "risk": "deletes a CloudTrail trail",
+        "confirm": "destructive"
+      },
+      {
+        "name": "deregister_organization_delegated_admin",
+        "kind": "custom",
+        "method": "POST",
+        "path": "CloudTrail_20131101.DeregisterOrganizationDelegatedAdmin",
+        "risk": "removes an AWS account's CloudTrail delegated administrator status for the organization"
+      },
+      {
+        "name": "disable_federation",
+        "kind": "custom",
+        "method": "POST",
+        "path": "CloudTrail_20131101.DisableFederation",
+        "risk": "disables Lake query federation for a CloudTrail event data store",
+        "confirm": "destructive"
+      },
+      {
+        "name": "enable_federation",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.EnableFederation",
+        "risk": "enables Lake query federation for a CloudTrail event data store"
+      },
+      {
+        "name": "put_event_configuration",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.PutEventConfiguration",
+        "risk": "sets the maximum event size and context key selectors for a trail or event data store"
+      },
+      {
+        "name": "put_event_selectors",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.PutEventSelectors",
+        "risk": "sets basic or advanced event selectors on a CloudTrail trail"
+      },
+      {
+        "name": "put_insight_selectors",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.PutInsightSelectors",
+        "risk": "enables CloudTrail Insights event types on a trail or event data store"
+      },
+      {
+        "name": "put_resource_policy",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.PutResourcePolicy",
+        "risk": "attaches a resource-based IAM policy document to a CloudTrail channel or event data store"
+      },
+      {
+        "name": "register_organization_delegated_admin",
+        "kind": "custom",
+        "method": "POST",
+        "path": "CloudTrail_20131101.RegisterOrganizationDelegatedAdmin",
+        "risk": "grants an AWS account CloudTrail delegated administrator status for the organization"
+      },
+      {
+        "name": "remove_tags",
+        "kind": "delete",
+        "method": "POST",
+        "path": "CloudTrail_20131101.RemoveTags",
+        "risk": "removes tags from a CloudTrail trail, event data store, channel, or dashboard",
+        "confirm": "destructive"
+      },
+      {
+        "name": "restore_event_data_store",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.RestoreEventDataStore",
+        "risk": "restores a soft-deleted CloudTrail Lake event data store"
+      },
+      {
+        "name": "start_dashboard_refresh",
+        "kind": "custom",
+        "method": "POST",
+        "path": "CloudTrail_20131101.StartDashboardRefresh",
+        "risk": "starts an on-demand refresh of a CloudTrail Lake dashboard"
+      },
+      {
+        "name": "start_event_data_store_ingestion",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.StartEventDataStoreIngestion",
+        "risk": "resumes event ingestion into a stopped CloudTrail Lake event data store"
+      },
+      {
+        "name": "start_import",
+        "kind": "create",
+        "method": "POST",
+        "path": "CloudTrail_20131101.StartImport",
+        "risk": "starts or resumes a CloudTrail Lake import job from an S3 source"
+      },
+      {
+        "name": "start_logging",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.StartLogging",
+        "risk": "starts CloudTrail log delivery for a trail"
+      },
+      {
+        "name": "stop_event_data_store_ingestion",
+        "kind": "custom",
+        "method": "POST",
+        "path": "CloudTrail_20131101.StopEventDataStoreIngestion",
+        "risk": "stops event ingestion into a CloudTrail Lake event data store",
+        "confirm": "destructive"
+      },
+      {
+        "name": "stop_import",
+        "kind": "custom",
+        "method": "POST",
+        "path": "CloudTrail_20131101.StopImport",
+        "risk": "stops an in-progress CloudTrail Lake import job",
+        "confirm": "destructive"
+      },
+      {
+        "name": "stop_logging",
+        "kind": "custom",
+        "method": "POST",
+        "path": "CloudTrail_20131101.StopLogging",
+        "risk": "stops CloudTrail log delivery for a trail",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_channel",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.UpdateChannel",
+        "risk": "updates a CloudTrail event channel's name or destinations"
+      },
+      {
+        "name": "update_event_data_store",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.UpdateEventDataStore",
+        "risk": "updates a CloudTrail Lake event data store's configuration"
+      },
+      {
+        "name": "update_trail",
+        "kind": "update",
+        "method": "POST",
+        "path": "CloudTrail_20131101.UpdateTrail",
+        "risk": "updates a CloudTrail trail's configuration"
+      }
+    ],
     "risk": {
       "read": "bounded AWS CloudTrail JSON-RPC reads using fixed action names, SigV4 authentication, and connector-local resource discovery for parameterized streams",
-      "write": "blocked/planned: CloudTrail write/admin actions require typed write metadata plus shared promoted-native command-surface, validation, and dry-run forwarding before they can be safely exposed.",
-      "approval": "No CloudTrail writes are exposed in the current connector surface; future writes must preserve plan -\u003e preview -\u003e approval -\u003e execute."
+      "write": "typed AWS CloudTrail JSON-RPC write/admin actions using fixed action names, closed per-action request schemas, SigV4 authentication, and provider-supported idempotency for destructive actions; StartQuery, CreateDashboard, and UpdateDashboard stay blocked because their request body requires an unrestricted CloudTrail Lake SQL QueryStatement, which this project disables for every connector by policy.",
+      "approval": "All CloudTrail writes require plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive writes also require confirm: destructive."
     },
     "icon": {
       "id": "aws-cloudtrail",

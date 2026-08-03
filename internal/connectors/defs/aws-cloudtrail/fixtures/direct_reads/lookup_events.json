@@ -1,0 +1,7 @@
+{
+  "status": 200,
+  "body": {
+    "pm_record_id": "lookup_events_fixture",
+    "operation": "LookupEvents"
+  }
+}

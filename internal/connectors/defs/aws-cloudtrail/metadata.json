@@ -1,13 +1,13 @@
 {
   "name": "aws-cloudtrail",
   "display_name": "AWS CloudTrail",
-  "description": "Reads AWS CloudTrail configuration and resource metadata through fixed AWS JSON-RPC streams. Provider query/direct-read and write/admin actions remain planned until shared promoted-native forwarding exposes them safely at runtime. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; CloudTrail event and Insights record reads are blocked/planned. See the connector docs migration note.",
+  "description": "Reads and safely operates AWS CloudTrail trails, event data stores, channels, dashboards, and Lake queries through fixed AWS JSON-RPC streams, typed direct-read commands, and typed reverse-ETL write/admin actions. Only StartQuery, CreateDashboard, and UpdateDashboard stay blocked: each requires an unrestricted CloudTrail Lake SQL QueryStatement, which this project disables for every connector by policy. Breaking change: the earlier LookupEvents-backed management_events, read_only_events, write_only_events, and console_logins streams are removed and have no replacement here; use the events lookup direct-read command for CloudTrail event lookups instead. See the connector docs migration note.",
   "integration_type": "api",
   "release_stage": "alpha",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -18,8 +18,8 @@
   },
   "risk": {
     "read": "bounded AWS CloudTrail JSON-RPC reads using fixed action names, SigV4 authentication, and connector-local resource discovery for parameterized streams",
-    "write": "blocked/planned: CloudTrail write/admin actions require typed write metadata plus shared promoted-native command-surface, validation, and dry-run forwarding before they can be safely exposed.",
-    "approval": "No CloudTrail writes are exposed in the current connector surface; future writes must preserve plan -> preview -> approval -> execute."
+    "write": "typed AWS CloudTrail JSON-RPC write/admin actions using fixed action names, closed per-action request schemas, SigV4 authentication, and provider-supported idempotency for destructive actions; StartQuery, CreateDashboard, and UpdateDashboard stay blocked because their request body requires an unrestricted CloudTrail Lake SQL QueryStatement, which this project disables for every connector by policy.",
+    "approval": "All CloudTrail writes require plan -> preview -> explicit approval -> execute; destructive writes also require confirm: destructive."
   },
   "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html"
 }

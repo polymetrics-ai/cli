@@ -1,0 +1,7 @@
+{
+  "status": 200,
+  "body": {
+    "pm_record_id": "describe_query_fixture",
+    "operation": "DescribeQuery"
+  }
+}

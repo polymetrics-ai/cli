@@ -1,0 +1,7 @@
+{
+  "status": 200,
+  "body": {
+    "pm_record_id": "list_insights_data_fixture",
+    "operation": "ListInsightsData"
+  }
+}

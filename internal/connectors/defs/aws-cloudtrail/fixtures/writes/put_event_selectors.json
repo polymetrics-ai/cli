@@ -1,0 +1,12 @@
+{
+  "record": {
+    "TrailName": "fixture-trail"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "TrailName": "fixture-trail"
+    }
+  }
+}

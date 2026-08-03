@@ -1,5 +1,13 @@
 # AWS CloudTrail parity wave04 TDD ledger
 
+> **2026-08-04 correction**: the 19/0/0/41 counts and "shared promoted-native forwarding" blocker
+> reasoning throughout this file are superseded. See VERIFICATION.md's "Wave04-r1 correction
+> 2026-08-04" section for the corrected 19/9/29/3 surface, the re-audited genuine blockers
+> (query-text policy, not missing infrastructure), and updated red/green targets
+> (`TestNativeCloudTrailDirectReadDispatchesOperationTarget`,
+> `TestNativeCloudTrailWriteDispatchesActionTarget`,
+> `TestNativeCloudTrailQueryTextOperationsStayBlocked`, `write_request_shape:*` conformance checks).
+
 ## Red targets before production edits
 
 - `go test ./internal/connectors/native/aws-cloudtrail -run 'TestOperationLedger|TestNativeCloudTrailJSONRPC|TestConnectorContract' -count=1`

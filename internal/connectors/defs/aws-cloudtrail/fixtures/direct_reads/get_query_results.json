@@ -1,0 +1,7 @@
+{
+  "status": 200,
+  "body": {
+    "pm_record_id": "get_query_results_fixture",
+    "operation": "GetQueryResults"
+  }
+}

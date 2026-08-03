@@ -1,3 +1,842 @@
 {
-  "actions": []
+  "actions": [
+    {
+      "name": "add_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.AddTags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ResourceId",
+          "TagsList"
+        ],
+        "properties": {
+          "ResourceId": {
+            "type": "string"
+          },
+          "TagsList": {
+            "type": [
+              "string",
+              "array"
+            ]
+          }
+        }
+      },
+      "risk": "adds tags to a CloudTrail trail, event data store, channel, or dashboard",
+      "redact_fields": [
+        "TagsList"
+      ]
+    },
+    {
+      "name": "create_channel",
+      "kind": "create",
+      "method": "POST",
+      "path": "CloudTrail_20131101.CreateChannel",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Destinations",
+          "Name",
+          "Source"
+        ],
+        "properties": {
+          "Destinations": {
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "Name": {
+            "type": "string"
+          },
+          "Source": {
+            "type": "string"
+          },
+          "Tags": {
+            "type": [
+              "string",
+              "array"
+            ]
+          }
+        }
+      },
+      "risk": "creates a CloudTrail organization/service event channel",
+      "redact_fields": [
+        "Destinations",
+        "Tags"
+      ]
+    },
+    {
+      "name": "create_event_data_store",
+      "kind": "create",
+      "method": "POST",
+      "path": "CloudTrail_20131101.CreateEventDataStore",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Name"
+        ],
+        "properties": {
+          "AdvancedEventSelectors": {
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "BillingMode": {
+            "type": "string"
+          },
+          "KmsKeyId": {
+            "type": "string"
+          },
+          "MultiRegionEnabled": {
+            "type": "boolean"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "OrganizationEnabled": {
+            "type": "boolean"
+          },
+          "RetentionPeriod": {
+            "type": "integer"
+          },
+          "StartIngestion": {
+            "type": "boolean"
+          },
+          "TagsList": {
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "TerminationProtectionEnabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "creates a CloudTrail Lake event data store",
+      "redact_fields": [
+        "AdvancedEventSelectors",
+        "TagsList"
+      ]
+    },
+    {
+      "name": "create_trail",
+      "kind": "create",
+      "method": "POST",
+      "path": "CloudTrail_20131101.CreateTrail",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Name",
+          "S3BucketName"
+        ],
+        "properties": {
+          "CloudWatchLogsLogGroupArn": {
+            "type": "string"
+          },
+          "CloudWatchLogsRoleArn": {
+            "type": "string"
+          },
+          "EnableLogFileValidation": {
+            "type": "boolean"
+          },
+          "IncludeGlobalServiceEvents": {
+            "type": "boolean"
+          },
+          "IsMultiRegionTrail": {
+            "type": "boolean"
+          },
+          "IsOrganizationTrail": {
+            "type": "boolean"
+          },
+          "KmsKeyId": {
+            "type": "string"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "S3BucketName": {
+            "type": "string"
+          },
+          "S3KeyPrefix": {
+            "type": "string"
+          },
+          "SnsTopicName": {
+            "type": "string"
+          },
+          "TagsList": {
+            "type": [
+              "string",
+              "array"
+            ]
+          }
+        }
+      },
+      "risk": "creates a CloudTrail trail that delivers log files to an S3 bucket",
+      "redact_fields": [
+        "TagsList"
+      ]
+    },
+    {
+      "name": "delete_channel",
+      "kind": "delete",
+      "method": "POST",
+      "path": "CloudTrail_20131101.DeleteChannel",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Channel"
+        ],
+        "properties": {
+          "Channel": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes a CloudTrail event channel",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_dashboard",
+      "kind": "delete",
+      "method": "POST",
+      "path": "CloudTrail_20131101.DeleteDashboard",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "DashboardId"
+        ],
+        "properties": {
+          "DashboardId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes a CloudTrail Lake dashboard",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_event_data_store",
+      "kind": "delete",
+      "method": "POST",
+      "path": "CloudTrail_20131101.DeleteEventDataStore",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "EventDataStore"
+        ],
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes a CloudTrail Lake event data store",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_resource_policy",
+      "kind": "delete",
+      "method": "POST",
+      "path": "CloudTrail_20131101.DeleteResourcePolicy",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ResourceArn"
+        ],
+        "properties": {
+          "ResourceArn": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes the resource-based policy attached to a CloudTrail channel or event data store",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_trail",
+      "kind": "delete",
+      "method": "POST",
+      "path": "CloudTrail_20131101.DeleteTrail",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Name"
+        ],
+        "properties": {
+          "Name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "deletes a CloudTrail trail",
+      "confirm": "destructive"
+    },
+    {
+      "name": "deregister_organization_delegated_admin",
+      "kind": "custom",
+      "method": "POST",
+      "path": "CloudTrail_20131101.DeregisterOrganizationDelegatedAdmin",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "DelegatedAdminAccountId"
+        ],
+        "properties": {
+          "DelegatedAdminAccountId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "removes an AWS account's CloudTrail delegated administrator status for the organization"
+    },
+    {
+      "name": "disable_federation",
+      "kind": "custom",
+      "method": "POST",
+      "path": "CloudTrail_20131101.DisableFederation",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "EventDataStore"
+        ],
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "disables Lake query federation for a CloudTrail event data store",
+      "confirm": "destructive"
+    },
+    {
+      "name": "enable_federation",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.EnableFederation",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "EventDataStore",
+          "FederationRoleArn"
+        ],
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          },
+          "FederationRoleArn": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "enables Lake query federation for a CloudTrail event data store"
+    },
+    {
+      "name": "put_event_configuration",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.PutEventConfiguration",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "AggregationConfigurations": {
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "ContextKeySelectors": {
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "EventDataStore": {
+            "type": "string"
+          },
+          "MaxEventSize": {
+            "type": "string"
+          },
+          "TrailName": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "sets the maximum event size and context key selectors for a trail or event data store",
+      "redact_fields": [
+        "AggregationConfigurations",
+        "ContextKeySelectors"
+      ]
+    },
+    {
+      "name": "put_event_selectors",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.PutEventSelectors",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "TrailName"
+        ],
+        "properties": {
+          "AdvancedEventSelectors": {
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "EventSelectors": {
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "TrailName": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "sets basic or advanced event selectors on a CloudTrail trail",
+      "redact_fields": [
+        "AdvancedEventSelectors",
+        "EventSelectors"
+      ]
+    },
+    {
+      "name": "put_insight_selectors",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.PutInsightSelectors",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "InsightSelectors"
+        ],
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          },
+          "InsightsDestination": {
+            "type": "string"
+          },
+          "InsightSelectors": {
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "TrailName": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "enables CloudTrail Insights event types on a trail or event data store",
+      "redact_fields": [
+        "InsightSelectors"
+      ]
+    },
+    {
+      "name": "put_resource_policy",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.PutResourcePolicy",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ResourceArn",
+          "ResourcePolicy"
+        ],
+        "properties": {
+          "ResourceArn": {
+            "type": "string"
+          },
+          "ResourcePolicy": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "attaches a resource-based IAM policy document to a CloudTrail channel or event data store",
+      "redact_fields": [
+        "ResourcePolicy"
+      ]
+    },
+    {
+      "name": "register_organization_delegated_admin",
+      "kind": "custom",
+      "method": "POST",
+      "path": "CloudTrail_20131101.RegisterOrganizationDelegatedAdmin",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "MemberAccountId"
+        ],
+        "properties": {
+          "MemberAccountId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "grants an AWS account CloudTrail delegated administrator status for the organization"
+    },
+    {
+      "name": "remove_tags",
+      "kind": "delete",
+      "method": "POST",
+      "path": "CloudTrail_20131101.RemoveTags",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ResourceId",
+          "TagsList"
+        ],
+        "properties": {
+          "ResourceId": {
+            "type": "string"
+          },
+          "TagsList": {
+            "type": [
+              "string",
+              "array"
+            ]
+          }
+        }
+      },
+      "risk": "removes tags from a CloudTrail trail, event data store, channel, or dashboard",
+      "confirm": "destructive",
+      "redact_fields": [
+        "TagsList"
+      ]
+    },
+    {
+      "name": "restore_event_data_store",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.RestoreEventDataStore",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "EventDataStore"
+        ],
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "restores a soft-deleted CloudTrail Lake event data store"
+    },
+    {
+      "name": "start_dashboard_refresh",
+      "kind": "custom",
+      "method": "POST",
+      "path": "CloudTrail_20131101.StartDashboardRefresh",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "DashboardId"
+        ],
+        "properties": {
+          "DashboardId": {
+            "type": "string"
+          },
+          "QueryParameterValues": {
+            "type": [
+              "string",
+              "object"
+            ]
+          }
+        }
+      },
+      "risk": "starts an on-demand refresh of a CloudTrail Lake dashboard",
+      "redact_fields": [
+        "QueryParameterValues"
+      ]
+    },
+    {
+      "name": "start_event_data_store_ingestion",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.StartEventDataStoreIngestion",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "EventDataStore"
+        ],
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "resumes event ingestion into a stopped CloudTrail Lake event data store"
+    },
+    {
+      "name": "start_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "CloudTrail_20131101.StartImport",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "Destinations": {
+            "type": "array"
+          },
+          "EndEventTime": {
+            "type": "string"
+          },
+          "ImportId": {
+            "type": "string"
+          },
+          "ImportSource": {
+            "type": [
+              "string",
+              "object"
+            ]
+          },
+          "StartEventTime": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "starts or resumes a CloudTrail Lake import job from an S3 source",
+      "redact_fields": [
+        "ImportSource"
+      ]
+    },
+    {
+      "name": "start_logging",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.StartLogging",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Name"
+        ],
+        "properties": {
+          "Name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "starts CloudTrail log delivery for a trail"
+    },
+    {
+      "name": "stop_event_data_store_ingestion",
+      "kind": "custom",
+      "method": "POST",
+      "path": "CloudTrail_20131101.StopEventDataStoreIngestion",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "EventDataStore"
+        ],
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "stops event ingestion into a CloudTrail Lake event data store",
+      "confirm": "destructive"
+    },
+    {
+      "name": "stop_import",
+      "kind": "custom",
+      "method": "POST",
+      "path": "CloudTrail_20131101.StopImport",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ImportId"
+        ],
+        "properties": {
+          "ImportId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "stops an in-progress CloudTrail Lake import job",
+      "confirm": "destructive"
+    },
+    {
+      "name": "stop_logging",
+      "kind": "custom",
+      "method": "POST",
+      "path": "CloudTrail_20131101.StopLogging",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Name"
+        ],
+        "properties": {
+          "Name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "stops CloudTrail log delivery for a trail",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_channel",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.UpdateChannel",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Channel"
+        ],
+        "properties": {
+          "Channel": {
+            "type": "string"
+          },
+          "Destinations": {
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "Name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "updates a CloudTrail event channel's name or destinations",
+      "redact_fields": [
+        "Destinations"
+      ]
+    },
+    {
+      "name": "update_event_data_store",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.UpdateEventDataStore",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "EventDataStore"
+        ],
+        "properties": {
+          "AdvancedEventSelectors": {
+            "type": [
+              "string",
+              "array"
+            ]
+          },
+          "BillingMode": {
+            "type": "string"
+          },
+          "EventDataStore": {
+            "type": "string"
+          },
+          "KmsKeyId": {
+            "type": "string"
+          },
+          "MultiRegionEnabled": {
+            "type": "boolean"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "OrganizationEnabled": {
+            "type": "boolean"
+          },
+          "RetentionPeriod": {
+            "type": "integer"
+          },
+          "TerminationProtectionEnabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "updates a CloudTrail Lake event data store's configuration",
+      "redact_fields": [
+        "AdvancedEventSelectors"
+      ]
+    },
+    {
+      "name": "update_trail",
+      "kind": "update",
+      "method": "POST",
+      "path": "CloudTrail_20131101.UpdateTrail",
+      "record_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "Name"
+        ],
+        "properties": {
+          "CloudWatchLogsLogGroupArn": {
+            "type": "string"
+          },
+          "CloudWatchLogsRoleArn": {
+            "type": "string"
+          },
+          "EnableLogFileValidation": {
+            "type": "boolean"
+          },
+          "IncludeGlobalServiceEvents": {
+            "type": "boolean"
+          },
+          "IsMultiRegionTrail": {
+            "type": "boolean"
+          },
+          "IsOrganizationTrail": {
+            "type": "boolean"
+          },
+          "KmsKeyId": {
+            "type": "string"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "S3BucketName": {
+            "type": "string"
+          },
+          "S3KeyPrefix": {
+            "type": "string"
+          },
+          "SnsTopicName": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "updates a CloudTrail trail's configuration"
+    }
+  ]
 }

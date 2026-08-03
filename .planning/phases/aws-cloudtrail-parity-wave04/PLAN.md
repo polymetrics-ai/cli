@@ -1,5 +1,12 @@
 # AWS CloudTrail parity wave04 plan
 
+> **2026-08-04 correction**: the "final scope-corrected lane allocation" and blocked/planned counts
+> below are superseded. See VERIFICATION.md's "Wave04-r1 correction 2026-08-04" section — captain
+> review found 0-of-60 operations reachable as `pm aws-cloudtrail <command>` does not meet the
+> parity bar, and the "requires shared promoted-native forwarding" reasoning was inaccurate: the
+> native dispatch and `ExecuteWrite` hook already existed. Corrected surface is 19 streams / 9
+> direct reads / 29 writes / 3 genuinely policy-blocked (query-text, not infrastructure).
+
 ## Scope
 
 Parent issue #3142 with subissues #3143-#3149. Branch `fm/cli-aws-cloudtrail-parity-wave04-r1` in isolated worktree `/Users/karthiksivadas/.treehouse/cli-83d592/43/cli`.

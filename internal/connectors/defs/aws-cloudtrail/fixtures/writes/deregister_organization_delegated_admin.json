@@ -1,0 +1,12 @@
+{
+  "record": {
+    "DelegatedAdminAccountId": "123456789012"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "DelegatedAdminAccountId": "123456789012"
+    }
+  }
+}

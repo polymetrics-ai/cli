@@ -26,17 +26,25 @@ func TestOperationLedgerCounts(t *testing.T) {
 	if got, want := len(bundle.Streams), 19; got != want {
 		t.Fatalf("streams = %d, want %d", got, want)
 	}
-	if got, want := len(bundle.Operations), 0; got != want {
+	if got, want := len(bundle.Operations), 9; got != want {
 		t.Fatalf("implemented direct operations = %d, want %d", got, want)
 	}
-	if got, want := len(bundle.Writes), 0; got != want {
+	if got, want := len(bundle.Writes), 29; got != want {
 		t.Fatalf("implemented write actions = %d, want %d", got, want)
 	}
 	blocked := 0
 	coveredStreams := 0
+	coveredDirectReads := 0
+	coveredWrites := 0
 	for _, endpoint := range bundle.Surface.Endpoints {
 		if endpoint.CoveredBy != nil && endpoint.CoveredBy.Stream != "" {
 			coveredStreams++
+		}
+		if endpoint.CoveredBy != nil && endpoint.CoveredBy.DirectRead != "" {
+			coveredDirectReads++
+		}
+		if endpoint.CoveredBy != nil && endpoint.CoveredBy.Write != "" {
+			coveredWrites++
 		}
 		if endpoint.Operation != nil && endpoint.Operation.Status == "blocked" {
 			blocked++
@@ -45,7 +53,13 @@ func TestOperationLedgerCounts(t *testing.T) {
 	if got, want := coveredStreams, 19; got != want {
 		t.Fatalf("stream-covered operations = %d, want %d", got, want)
 	}
-	if got, want := blocked, 41; got != want {
+	if got, want := coveredDirectReads, 9; got != want {
+		t.Fatalf("direct-read-covered operations = %d, want %d", got, want)
+	}
+	if got, want := coveredWrites, 29; got != want {
+		t.Fatalf("write-covered operations = %d, want %d", got, want)
+	}
+	if got, want := blocked, 3; got != want {
 		t.Fatalf("blocked/planned operations = %d, want %d", got, want)
 	}
 }
@@ -759,19 +773,89 @@ func TestNativeCloudTrailRejectsBlockedReadStreams(t *testing.T) {
 	}
 }
 
-func TestNativeCloudTrailDirectAndWritesAreBlockedInScopeCorrectedSurface(t *testing.T) {
+// TestNativeCloudTrailDirectReadDispatchesOperationTarget verifies a
+// representative direct-read operation (lookup_events) dispatches through
+// the real signed JSON-RPC requester, closing the gap flagged in captain
+// review: 60 dispositioned operations are useless if none are reachable.
+func TestNativeCloudTrailDirectReadDispatchesOperationTarget(t *testing.T) {
+	var gotTarget string
+	var gotBody map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotTarget = r.Header.Get("X-Amz-Target")
+		if err := json.NewDecoder(r.Body).Decode(&gotBody); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"Events":[{"EventId":"fixture-event"}]}`))
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	result, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "lookup_events",
+		Config:    fixtureRuntimeConfig(srv.URL),
+	})
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if want := cloudTrailTarget("LookupEvents"); gotTarget != want {
+		t.Fatalf("X-Amz-Target = %q, want %q", gotTarget, want)
+	}
+	if result.Status != http.StatusOK {
+		t.Fatalf("Status = %d, want 200", result.Status)
+	}
+}
+
+// TestNativeCloudTrailWriteDispatchesActionTarget verifies a representative
+// write action (start_logging) dispatches through the real signed JSON-RPC
+// requester.
+func TestNativeCloudTrailWriteDispatchesActionTarget(t *testing.T) {
+	var gotTarget string
+	var gotBody map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gotTarget = r.Header.Get("X-Amz-Target")
+		if err := json.NewDecoder(r.Body).Decode(&gotBody); err != nil {
+			t.Fatalf("decode body: %v", err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{}`))
+	}))
+	defer srv.Close()
+
+	c := Connector{Client: srv.Client()}
+	rec := connectors.Record{"Name": "trail-fixture"}
+	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "start_logging"}, []connectors.Record{rec}); err != nil {
+		t.Fatalf("ValidateWrite: %v", err)
+	}
+	if _, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "start_logging"}, []connectors.Record{rec}); err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	got, err := c.Write(context.Background(), connectors.WriteRequest{Action: "start_logging", Config: fixtureRuntimeConfig(srv.URL)}, []connectors.Record{rec})
+	if err != nil || got.RecordsWritten != 1 {
+		t.Fatalf("Write result = %+v err = %v, want 1 record written", got, err)
+	}
+	if want := cloudTrailTarget("StartLogging"); gotTarget != want {
+		t.Fatalf("X-Amz-Target = %q, want %q", gotTarget, want)
+	}
+	if got := gotBody["Name"]; got != "trail-fixture" {
+		t.Fatalf("body[Name] = %v, want trail-fixture", got)
+	}
+}
+
+// TestNativeCloudTrailQueryTextOperationsStayBlocked verifies StartQuery,
+// CreateDashboard, and UpdateDashboard remain unreachable: each requires an
+// unrestricted CloudTrail Lake SQL QueryStatement in its request body, which
+// this project disables for every connector by policy (AGENTS.md; no raw
+// query-text passthrough).
+func TestNativeCloudTrailQueryTextOperationsStayBlocked(t *testing.T) {
 	c := Connector{}
-	if _, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "aws-cloudtrail.lookup_events"}); err == nil {
-		t.Fatal("OperationDirectRead unexpectedly succeeded for blocked direct operation")
+	if _, err := c.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{Operation: "start_query"}); err == nil {
+		t.Fatal("OperationDirectRead unexpectedly succeeded for blocked start_query operation")
 	}
-	if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: "start_logging"}, []connectors.Record{{"Name": "trail-fixture"}}); err == nil {
-		t.Fatal("ValidateWrite unexpectedly accepted blocked write action")
-	}
-	if _, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "start_logging"}, []connectors.Record{{"Name": "trail-fixture"}}); err == nil {
-		t.Fatal("DryRunWrite unexpectedly accepted blocked write action")
-	}
-	if got, err := c.Write(context.Background(), connectors.WriteRequest{Action: "start_logging"}, []connectors.Record{{"Name": "trail-fixture"}}); err == nil || got.RecordsFailed != 1 {
-		t.Fatalf("Write result = %+v err = %v, want blocked failure", got, err)
+	for _, action := range []string{"create_dashboard", "update_dashboard"} {
+		if err := c.ValidateWrite(context.Background(), connectors.WriteRequest{Action: action}, []connectors.Record{{"Name": "fixture-dashboard"}}); err == nil {
+			t.Fatalf("ValidateWrite unexpectedly accepted blocked write action %s", action)
+		}
 	}
 }
 
