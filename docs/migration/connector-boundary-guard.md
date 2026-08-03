@@ -38,8 +38,10 @@ The `connectors` array must contain exactly one connector slug. The validator al
 connector docs/icons/manual outputs, connector-owned test files that follow the
 `<slug>_..._test.go` naming convention inside `cmd/connectorgen/` or `internal/connectors/engine/`,
 the lane's own `.planning/phases/**` GSD plan/TDD/verification artifacts, and a narrow set of shared
-generated indexes/goldens (including `docs/cli/**`, `docs/connectors/catalog/all-connectors.{json,md}`,
-and `website/lib/docs.generated.ts`). It rejects shared runtime/tooling, unrelated connectors,
+generated indexes/goldens (including `docs/cli/connectors.md`, `docs/cli/reverse.md`,
+`docs/connectors/catalog/all-connectors.{json,md}`, and `website/lib/docs.generated.ts`; the
+allowlist is literal paths only, so other `docs/cli/` pages stay rejected as shared docs). It
+rejects shared runtime/tooling, unrelated connectors,
 unrelated generated docs/website churn, and guardrail exception/config edits (the guard's own files
 under `internal/connectors/boundary/`, `cmd/connectorgen/ownership.go`,
 `cmd/connectorgen/ownership_test.go`, `cmd/connectorgen/boundary.go`, this doc, and required-check

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -236,46 +235,15 @@ func ownershipChangedPaths(root string, opts OwnershipOptions) ([]string, error)
 	if len(opts.ChangedPaths) > 0 {
 		return normalizeChangedPaths(root, opts.ChangedPaths)
 	}
-	if opts.BaseRef != "" {
-		limit, err := diffLimit(root, opts.BaseRef)
-		if err != nil {
-			return nil, &ConfigError{Err: err}
-		}
-		paths := sortedKeys(limit)
-		return normalizeChangedPaths(root, paths)
+	baseRef := opts.BaseRef
+	if baseRef == "" {
+		baseRef = "HEAD"
 	}
-	paths, err := worktreeChangedPaths(root)
+	limit, err := diffLimit(root, baseRef)
 	if err != nil {
 		return nil, &ConfigError{Err: err}
 	}
-	return normalizeChangedPaths(root, paths)
-}
-
-func worktreeChangedPaths(root string) ([]string, error) {
-	changed := map[string]bool{}
-	cmd := exec.Command("git", "-C", root, "diff", "--name-only", "--diff-filter=ACMRT", "HEAD", "--")
-	out, err := cmd.Output()
-	if err != nil {
-		return nil, fmt.Errorf("git diff --name-only HEAD: %w", err)
-	}
-	for _, line := range strings.Split(string(out), "\n") {
-		line = strings.TrimSpace(line)
-		if line != "" {
-			changed[line] = true
-		}
-	}
-	untrackedCmd := exec.Command("git", "-C", root, "ls-files", "--others", "--exclude-standard")
-	untrackedOut, err := untrackedCmd.Output()
-	if err != nil {
-		return nil, fmt.Errorf("git ls-files --others: %w", err)
-	}
-	for _, line := range strings.Split(string(untrackedOut), "\n") {
-		line = strings.TrimSpace(line)
-		if line != "" {
-			changed[line] = true
-		}
-	}
-	return sortedKeys(changed), nil
+	return normalizeChangedPaths(root, sortedKeys(limit))
 }
 
 func normalizeChangedPaths(root string, paths []string) ([]string, error) {
@@ -578,15 +546,21 @@ func dotGHPathPrefix() string {
 	return "." + "git" + "hub/"
 }
 
+// isNarrowSharedOwnershipOutput lists the shared generated indexes and goldens
+// a connector lane legitimately regenerates. Every entry is a literal path with
+// observed evidence in the audited connector merge-commit corpus; no directory
+// prefix is allowed, so unrelated generated surfaces under the same directory
+// (for example the per-namespace pages of docs/cli/ that pm docs emits for
+// agent, rlm, runtime, credentials, query, or schedule) still fail closed as
+// shared docs.
 func isNarrowSharedOwnershipOutput(rel string) bool {
-	if strings.HasPrefix(rel, "docs/cli/") {
-		return true
-	}
 	switch rel {
 	case "internal/connectors/defs/defs.go",
 		"internal/connectors/hooks/hookset/hookset_gen.go",
 		"internal/connectors/native/nativeset/nativeset_gen.go",
 		"internal/connectors/icons.go",
+		"docs/cli/connectors.md",
+		"docs/cli/reverse.md",
 		"docs/connectors/README.md",
 		"docs/connectors/UNPORTED.md",
 		"docs/connectors/catalog/all-connectors.json",

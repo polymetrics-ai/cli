@@ -175,6 +175,37 @@ func TestOwnershipAllowsAnyPlanningPhaseArtifactRegardlessOfWorkerSubpath(t *tes
 	}
 }
 
+func TestOwnershipRejectsNonConnectorCLIDocsPages(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"connector-scope.json": `{"api_version":"polymetrics.ai/v1","kind":"ConnectorImplementationScope","connectors":["github"]}`,
+	})
+
+	report, err := ValidateOwnership(root, OwnershipOptions{
+		ScopeFile: "connector-scope.json",
+		ChangedPaths: []string{
+			"internal/connectors/defs/github/metadata.json",
+			"docs/cli/connectors.md",
+			"docs/cli/reverse.md",
+			"docs/cli/runtime.md",
+			"docs/cli/rlm.md",
+		},
+		Now: fixedNow,
+	})
+	if err != nil {
+		t.Fatalf("ValidateOwnership: %v", err)
+	}
+	for _, p := range report.ChangedPaths {
+		switch p.Path {
+		case "docs/cli/connectors.md", "docs/cli/reverse.md":
+			if p.Decision != ownershipDecisionAllowed {
+				t.Fatalf("connector-affected generated CLI docs page was not allowed: %+v", p)
+			}
+		}
+	}
+	requireOwnershipFinding(t, report, RuleOwnershipSharedPath, "github", "docs/cli/runtime.md")
+	requireOwnershipFinding(t, report, RuleOwnershipSharedPath, "github", "docs/cli/rlm.md")
+}
+
 func TestOwnershipNarrowsGateConfigToGuardOwnFiles(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
 		"connector-scope.json": `{"api_version":"polymetrics.ai/v1","kind":"ConnectorImplementationScope","connectors":["github"]}`,
