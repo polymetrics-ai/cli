@@ -216,7 +216,7 @@
 | `hibob` | [`icons/hibob.svg`](../icons/hibob.svg) | HiBob | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://apidocs.hibob.com/) | bundle definition |
 | `high-level` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | High Level | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://highlevel.stoplight.io/) | bundle definition |
 | `hoorayhr` | [`icons/hoorayhr.svg`](../icons/hoorayhr.svg) | HoorayHR | `api` | beta | check, catalog, read | 4 | 0 | [Documentation](https://hoorayhr.io) | bundle definition |
-| `hubplanner` | [`icons/hubplanner.svg`](../icons/hubplanner.svg) | Hubplanner | `api` | ga | check, catalog, read | 7 | 0 | [Documentation](https://github.com/hubplanner/API) | bundle definition |
+| `hubplanner` | [`icons/hubplanner.svg`](../icons/hubplanner.svg) | Hubplanner | `api` | ga | check, catalog, read, write | 20 | 61 | [Documentation](https://github.com/hubplanner/API) | bundle definition |
 | `hubspot` | [`icons/hubspot.svg`](../icons/hubspot.svg) | HubSpot | `api` | planned | catalog | 0 | 0 | [Documentation](https://developers.hubspot.com/docs/api/overview) | bundle definition |
 | `hugging-face-datasets` | [`icons/simple-icons/huggingface.svg`](../icons/simple-icons/huggingface.svg) | Hugging Face - Datasets | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://huggingface.co/docs/datasets/) | bundle definition |
 | `humanitix` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Humanitix | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.humanitix.com/) | bundle definition |

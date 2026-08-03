@@ -1,0 +1,2167 @@
+{
+  "actions": [
+    {
+      "name": "create_billing_rate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/billingRate",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "label",
+          "currency",
+          "rate"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "number"
+          },
+          "metadata": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner billing rate"
+    },
+    {
+      "name": "update_billing_rate",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/billingRate/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "currency",
+          "rate"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "label": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "number"
+          },
+          "metadata": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 4
+      },
+      "risk": "updates a Hubplanner billing rate",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_billing_rate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/billingRate/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner billing rate",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_booking_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/categories",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "gridColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner booking category"
+    },
+    {
+      "name": "update_booking_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/categories/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "gridColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "group": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner booking category",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "create_booking",
+      "kind": "create",
+      "method": "POST",
+      "path": "/booking",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "resource",
+          "project",
+          "start",
+          "end"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "project": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "category": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner booking"
+    },
+    {
+      "name": "update_booking",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/booking/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "resource",
+          "project",
+          "start",
+          "end"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "project": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "category": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner booking",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "patch_booking",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/booking/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "project": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "category": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "patches selected Hubplanner booking fields",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_booking",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/booking/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner booking",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_bookings",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/booking?ids={{ record.ids }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ids"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+(,[A-Za-z0-9._:-]+)*$",
+            "description": "Comma-separated Hubplanner ids; fixed typed bulk-delete target, not a raw query string."
+          }
+        }
+      },
+      "risk": "deletes multiple Hubplanner bookings by ids",
+      "path_fields": [
+        "ids"
+      ],
+      "body_type": "none",
+      "confirm": "destructive",
+      "redact_fields": [
+        "ids"
+      ]
+    },
+    {
+      "name": "create_client",
+      "kind": "create",
+      "method": "POST",
+      "path": "/client",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner client"
+    },
+    {
+      "name": "update_client",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/client/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner client",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_client",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/client/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner client",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_resource_custom_field_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/resource/customField/template",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "label",
+          "type"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "TEXTAREA",
+              "EMAIL",
+              "DATE",
+              "COLOR",
+              "NUMBER",
+              "CHECKBOX",
+              "SELECT",
+              "RADIO"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instructions": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "creates a Hubplanner resource custom field template"
+    },
+    {
+      "name": "update_resource_custom_field_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/resource/customField/template/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "type"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "TEXTAREA",
+              "EMAIL",
+              "DATE",
+              "COLOR",
+              "NUMBER",
+              "CHECKBOX",
+              "SELECT",
+              "RADIO"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instructions": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner resource custom field template",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_resource_custom_field_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/resource/customField/template/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner resource custom field template",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_project_custom_field_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/project/customField/template",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "label",
+          "type"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "TEXTAREA",
+              "EMAIL",
+              "DATE",
+              "COLOR",
+              "NUMBER",
+              "CHECKBOX",
+              "SELECT",
+              "RADIO"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instructions": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "creates a Hubplanner project custom field template"
+    },
+    {
+      "name": "update_project_custom_field_template",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/project/customField/template/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "type"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "TEXTAREA",
+              "EMAIL",
+              "DATE",
+              "COLOR",
+              "NUMBER",
+              "CHECKBOX",
+              "SELECT",
+              "RADIO"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instructions": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner project custom field template",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_project_custom_field_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project/customField/template/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner project custom field template",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_event",
+      "kind": "create",
+      "method": "POST",
+      "path": "/event",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "eventCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "backgroundColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner event"
+    },
+    {
+      "name": "update_event",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/event/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "eventCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "backgroundColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metadata": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner event",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_event",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/event/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner event",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_project_group",
+      "kind": "create",
+      "method": "POST",
+      "path": "/projectgroup",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "parentGroupId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "projects": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "risk": "creates a Hubplanner project group"
+    },
+    {
+      "name": "update_project_group",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/projectgroup/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parentGroupId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "projects": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner project group",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_project_group",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/projectgroup/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner project group",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_holiday",
+      "kind": "create",
+      "method": "POST",
+      "path": "/holiday",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "date"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "start": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "end": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "holidayGroup": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner holiday"
+    },
+    {
+      "name": "update_holiday",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/holiday/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "date"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "start": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "end": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "holidayGroup": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner holiday",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_holiday",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/holiday/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner holiday",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_milestone",
+      "kind": "create",
+      "method": "POST",
+      "path": "/milestone",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name",
+          "date",
+          "project"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "project": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Hubplanner milestone"
+    },
+    {
+      "name": "update_milestone",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/milestone/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "date",
+          "project"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "project": {
+            "type": "string"
+          }
+        },
+        "minProperties": 4
+      },
+      "risk": "updates a Hubplanner milestone",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_milestone",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/milestone/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner milestone",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_cost_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/costCategories",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Hubplanner project cost category"
+    },
+    {
+      "name": "update_cost_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/costCategories/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner project cost category",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_cost_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/costCategories/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner project cost category",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_project_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/project-tag",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Hubplanner project tag"
+    },
+    {
+      "name": "update_project_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/project-tag/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner project tag",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_project_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project-tag/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner project tag",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_resource_tag",
+      "kind": "create",
+      "method": "POST",
+      "path": "/resource-tag",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates a Hubplanner resource tag"
+    },
+    {
+      "name": "update_resource_tag",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/resource-tag/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner resource tag",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_resource_tag",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/resource-tag/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner resource tag",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_project",
+      "kind": "create",
+      "method": "POST",
+      "path": "/project",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "projectCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner project"
+    },
+    {
+      "name": "patch_project",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/project",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "projectCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "patches a Hubplanner project by _id in the typed body"
+    },
+    {
+      "name": "delete_project",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner project",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_projects",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ids"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9._:-]+$"
+            }
+          }
+        }
+      },
+      "risk": "deletes multiple Hubplanner projects by ids",
+      "body_type": "json_array",
+      "confirm": "destructive",
+      "redact_fields": [
+        "ids"
+      ],
+      "body_field": "ids",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        }
+      }
+    },
+    {
+      "name": "create_resource",
+      "kind": "create",
+      "method": "POST",
+      "path": "/resource",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner resource"
+    },
+    {
+      "name": "patch_resource",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/resource",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "patches a Hubplanner resource by _id in the typed body"
+    },
+    {
+      "name": "delete_resource",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/resource/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner resource",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_resources",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/resource",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ids"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9._:-]+$"
+            }
+          }
+        }
+      },
+      "risk": "deletes multiple Hubplanner resources by ids",
+      "body_type": "json_array",
+      "confirm": "destructive",
+      "redact_fields": [
+        "ids"
+      ],
+      "body_field": "ids",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        }
+      }
+    },
+    {
+      "name": "create_time_entry",
+      "kind": "create",
+      "method": "POST",
+      "path": "/timeentry",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "resource",
+          "project",
+          "date",
+          "minutes"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "resource": {
+            "type": "string"
+          },
+          "project": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "minutes": {
+            "type": "integer"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "categoryTemplateId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner time entry"
+    },
+    {
+      "name": "update_time_entry",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/timeentry/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "resource",
+          "project",
+          "date",
+          "minutes"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "project": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "minutes": {
+            "type": "integer"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "categoryTemplateId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 5
+      },
+      "risk": "updates a Hubplanner time entry",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_time_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/timeentry/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner time entry",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_time_entries",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/timeentry",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ids"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9._:-]+$"
+            }
+          }
+        }
+      },
+      "risk": "deletes multiple Hubplanner time entries by ids",
+      "body_type": "json_array",
+      "confirm": "destructive",
+      "redact_fields": [
+        "ids"
+      ],
+      "body_field": "ids",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        }
+      }
+    },
+    {
+      "name": "create_unassigned_work",
+      "kind": "create",
+      "method": "POST",
+      "path": "/unassigned-work",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates Hubplanner unassigned work"
+    },
+    {
+      "name": "update_unassigned_work",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/unassigned-work/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "value"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates Hubplanner unassigned work",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_unassigned_work",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/unassigned-work/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes Hubplanner unassigned work",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_vacation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/vacation",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "resource",
+          "start",
+          "end"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner vacation"
+    },
+    {
+      "name": "update_vacation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/vacation/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id",
+          "resource",
+          "start",
+          "end"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "updates a Hubplanner vacation",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "patch_vacation",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/vacation/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "minProperties": 2
+      },
+      "risk": "patches selected Hubplanner vacation fields",
+      "path_fields": [
+        "id"
+      ]
+    },
+    {
+      "name": "delete_vacation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/vacation/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner vacation",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_webhook_subscription",
+      "kind": "create",
+      "method": "POST",
+      "path": "/subscription",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "target_url",
+          "event"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "target_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://[^\\s]+$",
+            "description": "HTTPS webhook target URL; redacted from previews and errors."
+          },
+          "event": {
+            "type": "string",
+            "enum": [
+              "project.update",
+              "resource.update",
+              "booking.create",
+              "timeEntry.create",
+              "timeEntry.update",
+              "timeEntry.create.update",
+              "timeEntry.delete",
+              "booking.update",
+              "booking.delete",
+              "booking.delete.multiple"
+            ]
+          }
+        }
+      },
+      "risk": "creates a Hubplanner webhook subscription that can deliver future event payloads to the approved HTTPS target URL",
+      "redact_fields": [
+        "target_url"
+      ],
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_webhook_subscription",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/subscription/{{ record.id }}",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          }
+        }
+      },
+      "risk": "deletes a Hubplanner webhook subscription",
+      "path_fields": [
+        "id"
+      ],
+      "body_type": "none",
+      "confirm": "destructive"
+    }
+  ]
+}

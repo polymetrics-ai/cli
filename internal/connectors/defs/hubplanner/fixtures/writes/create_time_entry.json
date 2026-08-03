@@ -1,0 +1,26 @@
+{
+  "record": {
+    "resource": "resource_fixture_1",
+    "project": "project_fixture_1",
+    "date": "2026-01-12",
+    "minutes": 240,
+    "note": "fixture time"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/timeentry",
+    "body": {
+      "resource": "resource_fixture_1",
+      "project": "project_fixture_1",
+      "date": "2026-01-12",
+      "minutes": 240,
+      "note": "fixture time"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "_id": "create_time_entry_fixture"
+    }
+  }
+}

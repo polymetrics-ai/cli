@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/vacation",
+    "query": {
+      "page": "0",
+      "limit": "200"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "_id": "vacation_fixture_1",
+        "title": "Fixture Vacation",
+        "start": "2026-01-20",
+        "end": "2026-01-21",
+        "minutesPerDay": 480,
+        "resource": "resource_fixture_1",
+        "state": "PERCENTAGE",
+        "approvalInfo": {
+          "status": "WAITING_FOR_APPROVAL"
+        },
+        "type": "WAITING_FOR_APPROVAL",
+        "resourceType": "REGULAR",
+        "metadata": "",
+        "percentAllocation": "100",
+        "creatorId": "resource_fixture_1"
+      }
+    ]
+  }
+}
