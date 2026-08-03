@@ -23,8 +23,8 @@
     },
     "max_pages": {
       "type": "string",
-      "default": "1",
-      "description": "Maximum pages to read per stream. Use 0, all, or unlimited for an exhaustive read."
+      "default": "0",
+      "description": "Maximum pages to read per stream. Defaults to 0 for an exhaustive read; 0, all, and unlimited are equivalent."
     },
     "mode": {
       "type": "string",

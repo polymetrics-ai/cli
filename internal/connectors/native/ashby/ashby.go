@@ -20,21 +20,19 @@ import (
 	"io/fs"
 	"net/http"
 	"net/url"
-	"os"
 	"path"
-	"path/filepath"
-	"runtime"
 	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	ashbydefs "polymetrics.ai/internal/connectors/defs/ashby"
 )
 
 const (
 	ashbyDefaultBaseURL  = "https://api.ashbyhq.com"
 	ashbyDefaultPageSize = 100
-	ashbyDefaultMaxPages = 1
+	ashbyDefaultMaxPages = 0
 	ashbyMaxPageSize     = 100
 	ashbyUserAgent       = "polymetrics-go-cli"
 	// ashbyAccept is sent per Ashby's documented API version header
@@ -228,16 +226,7 @@ type ashbyFixturePage struct {
 }
 
 func ashbyFixtureFS() (fs.FS, error) {
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		return nil, errors.New("locate ashby fixture source")
-	}
-	root := filepath.Clean(filepath.Join(filepath.Dir(filename), "../../../.."))
-	fixtureDir := filepath.Join(root, "internal", "connectors", "defs", "ashby", "fixtures")
-	if _, err := os.Stat(fixtureDir); err != nil {
-		return nil, fmt.Errorf("locate ashby fixtures: %w", err)
-	}
-	return os.DirFS(fixtureDir), nil
+	return ashbydefs.Fixtures()
 }
 
 func ashbyFixtureBodies(fixtures fs.FS, stream string) ([][]byte, error) {
@@ -299,7 +288,10 @@ func ashbyStreamBody(endpoint streamEndpoint, cfg connectors.RuntimeConfig, quer
 		}
 		if fixed := strings.TrimSpace(endpoint.fixedRequestFields[field]); fixed != "" {
 			if raw != "" && !strings.EqualFold(raw, fixed) {
-				return nil, fmt.Errorf("ashby stream %s supports only %s=%s; non-default values are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false", endpoint.path, field, fixed)
+				if gap := strings.TrimSpace(endpoint.fixedRequestFieldGaps[field]); gap != "" {
+					return nil, fmt.Errorf("ashby stream %s supports only %s=%s; non-default values are blocked pending variant-schema foundation %s", endpoint.path, field, fixed, gap)
+				}
+				return nil, fmt.Errorf("ashby stream %s supports only %s=%s; non-default values are blocked pending variant-schema foundation", endpoint.path, field, fixed)
 			}
 			raw = fixed
 		}

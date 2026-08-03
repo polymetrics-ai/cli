@@ -56,6 +56,7 @@ BLOCKED_OPERATION_RULES = {
     },
 }
 FIXED_STREAM_REQUEST_FIELDS = {"hiringTeamRole.list": {"namesOnly": "true"}}
+FIXED_STREAM_REQUEST_FIELD_GAPS = {"hiringTeamRole.list": {"namesOnly": "ashby_hiring_team_role_list_names_only_false"}}
 FIXED_STREAM_REQUEST_FIELD_NOTES = {"hiringTeamRole.list": "Defaults to namesOnly=true role-title results. namesOnly=false object results are blocked pending variant-schema foundation ashby_hiring_team_role_list_names_only_false."}
 SCALAR_RESULT_STREAMS = {"hiring_team_role_list"}
 
@@ -550,6 +551,7 @@ def main():
         summary=op.get("summary",""); clean=clean_summary(summary); method=op["method"]; path=op["path"]
         req_props=request_properties(schema, op); req_required=required_fields(schema, op); req_sch=request_schema(schema, op)
         fixed_request_fields = FIXED_STREAM_REQUEST_FIELDS.get(clean, {})
+        fixed_request_field_gaps = FIXED_STREAM_REQUEST_FIELD_GAPS.get(clean, {})
         req_required = [field for field in req_required if field not in fixed_request_fields]
         req_types={n:(json_type(schema, req_sch.get("properties",{}).get(n,{})) or ["string"])[0] if isinstance(req_sch,dict) else "string" for n in req_props}
         if clean in BLOCKED_OPERATION_RULES:
@@ -576,7 +578,7 @@ def main():
                     typ="string"
                 catalog_fields.append({"name":fname,"type":typ})
             required_any = REQUIRED_ANY_FIELDS.get(clean, [])
-            stream_entries.append(se); stream_go.append({"name":sname,"path":path,"required":req_required,"required_any":required_any,"fixed":fixed_request_fields,"fields":list(req_props.keys()),"field_types":req_types,"cursor":stream_cursor or "","synthetic":synthetic,"catalog_fields":catalog_fields,"primary_key":rec_schema.get("x-primary-key", [])})
+            stream_entries.append(se); stream_go.append({"name":sname,"path":path,"required":req_required,"required_any":required_any,"fixed":fixed_request_fields,"fixed_gaps":fixed_request_field_gaps,"fields":list(req_props.keys()),"field_types":req_types,"cursor":stream_cursor or "","synthetic":synthetic,"catalog_fields":catalog_fields,"primary_key":rec_schema.get("x-primary-key", [])})
             flags=flags_for_props(req_props, "query", set(PAGINATION_FIELDS) | set(fixed_request_fields), set(req_required))
             cpath=command_path(clean, used_commands)
             notes=f"Fixed Ashby stream for {clean}; flags map only to documented request body fields."
@@ -638,7 +640,7 @@ def main():
         if sub.exists():
             for f in sub.glob("*.json"): f.unlink()
     write_json(DEFS/"metadata.json", {"name":"ashby","display_name":"Ashby","description":"Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.","integration_type":"api","release_stage":"alpha","capabilities":{"check":True,"read":True,"write":True,"query":False,"cdc":False,"dynamic_schema":False},"batch":{"read_page_size":100,"write_batch_size":1},"risk":{"read":"bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and sanitized replay fixtures","write":"named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation","approval":"reverse ETL writes require plan -> preview -> explicit approval -> execute"},"docs_url":"https://developers.ashbyhq.com/"})
-    write_json(DEFS/"spec.json", {"$schema":"http://json-schema.org/draft-07/schema#","title":"Ashby Connection Specification","type":"object","required":["api_key"],"properties":{"api_key":{"type":"string","x-secret":True,"description":"Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."},"base_url":{"type":"string","default":"https://api.ashbyhq.com","description":"Ashby API base URL; override only for local tests."},"page_size":{"type":"string","default":"100","description":"Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector."},"max_pages":{"type":"string","default":"1","description":"Maximum pages to read per stream. Use 0, all, or unlimited for an exhaustive read."},"mode":{"type":"string","description":"Set to fixture for credential-free native tests."}}})
+    write_json(DEFS/"spec.json", {"$schema":"http://json-schema.org/draft-07/schema#","title":"Ashby Connection Specification","type":"object","required":["api_key"],"properties":{"api_key":{"type":"string","x-secret":True,"description":"Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."},"base_url":{"type":"string","default":"https://api.ashbyhq.com","description":"Ashby API base URL; override only for local tests."},"page_size":{"type":"string","default":"100","description":"Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector."},"max_pages":{"type":"string","default":"0","description":"Maximum pages to read per stream. Defaults to 0 for an exhaustive read; 0, all, and unlimited are equivalent."},"mode":{"type":"string","description":"Set to fixture for credential-free native tests."}}})
     write_json(DEFS/"streams.json", {"base":{"url":"{{ config.base_url }}","user_agent":"polymetrics-go-cli","headers":{"Accept":"application/json; version=1","Content-Type":"application/json"},"auth":[{"mode":"basic","username":"{{ secrets.api_key }}","password":""}],"check":{"method":"POST","path":"/apiKey.info"},"pagination":{"type":"none"}},"streams":stream_entries})
     for name, sch in stream_schemas.items(): write_json(DEFS/"schemas"/f"{name}.json", sch)
     write_json(DEFS/"writes.json", {"actions":write_actions})
@@ -686,6 +688,8 @@ def main():
         catalog="[]connectors.Field{" + ", ".join("{Name: "+go_quote(f["name"])+", Type: "+go_quote(f["type"])+"}" for f in e["catalog_fields"]) + "}"
         required_any = f", requiredAnyFields: {go_string_slice(e['required_any'])}" if e.get("required_any") else ""
         fixed_fields = f", fixedRequestFields: {go_map_string(e['fixed'])}" if e.get("fixed") else ""
+        if e.get("fixed_gaps"):
+            fixed_fields += f", fixedRequestFieldGaps: {go_map_string(e['fixed_gaps'])}"
         go_lines.append(f"\t{go_quote(e['name'])}: {{path: {go_quote(e['path'].lstrip('/'))}, requestFields: {go_map_string(ft)}{fixed_fields}, requiredFields: {go_string_slice(e['required'])}{required_any}, cursorField: {go_quote(e['cursor'])}, syntheticFields: {go_string_slice(e['synthetic'])}, primaryKey: {go_string_slice(e['primary_key'])}, fields: {catalog}}},\n")
     go_lines.append("}\n")
     (NATIVE/"streams_gen.go").write_text("".join(go_lines))

@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -616,18 +618,28 @@ func TestHiringTeamRoleListBlocksNamesOnlyFalseVariant(t *testing.T) {
 	}
 }
 
-func TestReadDefaultsToOnePage(t *testing.T) {
+// TestReadDefaultsToExhaustivePagination pins the unbounded default: an unset
+// max_pages must keep following nextCursor while the provider still reports
+// moreDataAvailable, rather than silently truncating an ETL read.
+func TestReadDefaultsToExhaustivePagination(t *testing.T) {
 	requestCount := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/candidate.list" {
 			t.Errorf("path = %q, want /candidate.list", r.URL.Path)
 		}
 		requestCount++
-		if requestCount > 1 {
-			t.Errorf("unexpected request %d with default max_pages", requestCount)
-		}
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"first","updatedAt":"2026-01-03T00:00:00Z"}],"moreDataAvailable":true,"nextCursor":"opaque-page-2"}`))
+		switch requestCount {
+		case 1:
+			_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"first","updatedAt":"2026-01-03T00:00:00Z"}],"moreDataAvailable":true,"nextCursor":"opaque-page-2"}`))
+		case 2:
+			_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"second","updatedAt":"2026-01-04T00:00:00Z"}],"moreDataAvailable":true,"nextCursor":"opaque-page-3"}`))
+		case 3:
+			_, _ = w.Write([]byte(`{"success":true,"results":[{"id":"third","updatedAt":"2026-01-05T00:00:00Z"}],"moreDataAvailable":false}`))
+		default:
+			t.Errorf("unexpected request %d after the provider stopped advertising more data", requestCount)
+			_, _ = w.Write([]byte(`{"success":true,"results":[],"moreDataAvailable":false}`))
+		}
 	}))
 	defer server.Close()
 
@@ -645,11 +657,49 @@ func TestReadDefaultsToOnePage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Read: %v", err)
 	}
-	if requestCount != 1 {
-		t.Fatalf("request count = %d, want 1", requestCount)
+	if requestCount != 3 {
+		t.Fatalf("request count = %d, want 3", requestCount)
 	}
-	if len(records) != 1 {
-		t.Fatalf("emitted %d records = %+v, want 1", len(records), records)
+	if len(records) != 3 {
+		t.Fatalf("emitted %d records = %+v, want 3", len(records), records)
+	}
+	for i, want := range []string{"first", "second", "third"} {
+		if records[i]["id"] != want {
+			t.Errorf("records[%d][id] = %v, want %s", i, records[i]["id"], want)
+		}
+	}
+}
+
+// TestDefaultMaxPagesMatchesSpecDefault guards the pair that together decide
+// the effective default: the engine materializes spec.json's declared default
+// into RuntimeConfig.Config, so a spec default that disagrees with
+// ashbyDefaultMaxPages would silently win on the declarative read path.
+func TestDefaultMaxPagesMatchesSpecDefault(t *testing.T) {
+	raw, err := os.ReadFile(filepath.Join("..", "..", "defs", "ashby", "spec.json"))
+	if err != nil {
+		t.Fatalf("read spec.json: %v", err)
+	}
+	var spec struct {
+		Properties map[string]struct {
+			Default string `json:"default"`
+		} `json:"properties"`
+	}
+	if err := json.Unmarshal(raw, &spec); err != nil {
+		t.Fatalf("decode spec.json: %v", err)
+	}
+	declared := spec.Properties["max_pages"].Default
+	if declared == "" {
+		t.Fatal("spec.json max_pages declares no default")
+	}
+	resolved, err := ashbyMaxPages(connectors.RuntimeConfig{Config: map[string]string{"max_pages": declared}})
+	if err != nil {
+		t.Fatalf("ashbyMaxPages(%q): %v", declared, err)
+	}
+	if resolved != ashbyDefaultMaxPages {
+		t.Fatalf("spec default %q resolves to %d pages, want ashbyDefaultMaxPages %d", declared, resolved, ashbyDefaultMaxPages)
+	}
+	if resolved != 0 {
+		t.Fatalf("default max pages = %d, want 0 (unbounded)", resolved)
 	}
 }
 
@@ -821,6 +871,56 @@ func TestFixtureModeReadsEveryDeclaredAshbyStream(t *testing.T) {
 				t.Fatalf("Read(fixture %s) emitted zero records", stream)
 			}
 		})
+	}
+}
+
+// TestFixtureModeReadsFromEmbeddedFixtures pins mode=fixture to the embedded
+// fixture tree rather than the source checkout: a shipped pm binary runs with
+// no repository on disk and from an arbitrary working directory, so reading a
+// stream must still succeed after chdir'ing away from the package source.
+func TestFixtureModeReadsFromEmbeddedFixtures(t *testing.T) {
+	t.Chdir(t.TempDir())
+
+	fixtures, err := ashbyFixtureFS()
+	if err != nil {
+		t.Fatalf("ashbyFixtureFS: %v", err)
+	}
+	if _, err := fs.Stat(fixtures, "streams/candidates"); err != nil {
+		t.Fatalf("fs.Stat(streams/candidates): %v", err)
+	}
+
+	count := 0
+	err = New().Read(context.Background(), connectors.ReadRequest{
+		Stream: "candidates",
+		Config: connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}},
+	}, func(connectors.Record) error {
+		count++
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read(fixture candidates) outside the source tree: %v", err)
+	}
+	if count == 0 {
+		t.Fatal("Read(fixture candidates) emitted zero records outside the source tree")
+	}
+}
+
+// TestEmbeddedFixturesCoverEveryDeclaredStream keeps the connector-local embed
+// in step with the stream table, so a newly generated stream cannot ship with
+// fixtures that never made it into the binary.
+func TestEmbeddedFixturesCoverEveryDeclaredStream(t *testing.T) {
+	fixtures, err := ashbyFixtureFS()
+	if err != nil {
+		t.Fatalf("ashbyFixtureFS: %v", err)
+	}
+	for _, stream := range ashbyStreamOrder() {
+		bodies, err := ashbyFixtureBodies(fixtures, stream)
+		if err != nil {
+			t.Fatalf("ashbyFixtureBodies(%s): %v", stream, err)
+		}
+		if len(bodies) == 0 {
+			t.Errorf("stream %s has no embedded replay fixtures", stream)
+		}
 	}
 }
 

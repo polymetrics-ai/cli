@@ -14,12 +14,16 @@ type streamEndpoint struct {
 	path               string
 	requestFields      map[string]string
 	fixedRequestFields map[string]string
-	requiredFields     []string
-	requiredAnyFields  []string
-	cursorField        string
-	syntheticFields    []string
-	primaryKey         []string
-	fields             []connectors.Field
+	// fixedRequestFieldGaps names the foundation gap that blocks each pinned
+	// field's non-default values, keyed by the same field name as
+	// fixedRequestFields.
+	fixedRequestFieldGaps map[string]string
+	requiredFields        []string
+	requiredAnyFields     []string
+	cursorField           string
+	syntheticFields       []string
+	primaryKey            []string
+	fields                []connectors.Field
 }
 
 // ashbyStreams returns the connector's published stream catalog. The field
