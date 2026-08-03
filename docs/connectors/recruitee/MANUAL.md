@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Recruitee offers, candidates, departments, sources, and tags through the Recruitee REST API.
 
 ICON
+  id: recruitee
   asset: icons/recruitee.svg
   source: upstream_registry
   review_status: upstream_seeded

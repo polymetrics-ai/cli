@@ -11,6 +11,7 @@ Reads Sendinblue/Brevo contacts, campaigns, lists, and senders through the Brevo
 
 ## Icon
 
+- id: sendinblue
 - asset: icons/sendinblue.svg
 - source: upstream_registry
 - review_status: upstream_seeded

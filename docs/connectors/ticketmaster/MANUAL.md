@@ -13,6 +13,7 @@ DESCRIPTION
   Reads events, venues, attractions, and classifications from the Ticketmaster Discovery API.
 
 ICON
+  id: ticketmaster
   asset: icons/ticketmaster.svg
   source: official
   review_status: official_verified

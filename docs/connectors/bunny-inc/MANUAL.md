@@ -10,56 +10,29 @@ SYNOPSIS
   pm credentials add <name> --connector bunny-inc [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, subscriptions) from the per-tenant Bunny GraphQL API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, subscriptions) from the per-tenant Bunny GraphQL API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
-  Use pm credentials add with --from-env or --value-stdin for secret fields.
+  No secret authentication is required for this connector.
 
 CONFIGURATION
-  base_url
-  mode
-  start_date
-  subdomain
-  apikey (secret)
-
-ETL STREAMS
-  accounts:
-    primary key: id
-    cursor: updatedAt
-    fields: accountTypeId(), annualRevenue(), billingCountry(), code(), createdAt(), currencyId(), employees(), entityId(), id(), name(), netPaymentDays(), ownerUserId(), payingStatus(), phone(), updatedAt(), website()
-  contacts:
-    primary key: id
-    cursor: updatedAt
-    fields: accountId(), code(), createdAt(), email(), entityId(), firstName(), fullName(), id(), lastName(), mobile(), phone(), portalAccess(), title(), updatedAt()
-  invoices:
-    primary key: id
-    cursor: updatedAt
-    fields: accountId(), amount(), amountDue(), amountPaid(), createdAt(), credits(), currencyId(), dueAt(), id(), netPaymentDays(), number(), paidAt(), quoteId(), subtotal(), taxAmount(), updatedAt(), url(), uuid()
-  payments:
-    primary key: id
-    cursor: updatedAt
-    fields: accountId(), amount(), amountUnapplied(), baseCurrencyCash(), baseCurrencyId(), createdAt(), currencyId(), description(), id(), isLegacy(), memo(), receivedAt(), updatedAt()
-  subscriptions:
-    primary key: id
-    cursor: updatedAt
-    fields: accountId(), cancelationDate(), createdAt(), currencyId(), endDate(), id(), name(), period(), priceListId(), rampIntervalMonths(), startDate(), trialEndDate(), trialPeriod(), trialStartDate(), updatedAt()
-
-SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+  No connector-specific config fields.
 
 SECURITY
-  read risk: external Bunny, Inc. API reads performed by the legacy connector via a Tier-2 hook
-  write risk: unsupported
-  approval: none; read-only
+  read risk: connector-specific
+  write risk: connector-specific
+  approval: external mutations require preview and approval
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

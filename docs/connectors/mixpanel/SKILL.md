@@ -11,6 +11,7 @@ Reads Mixpanel legacy Query API cohorts, annotations, engage profiles, and selec
 
 ## Icon
 
+- id: mixpanel
 - asset: icons/mixpanel.svg
 - source: upstream_registry
 - review_status: upstream_seeded

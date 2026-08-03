@@ -11,6 +11,7 @@ Reads local JSONL or CSV files as source streams.
 
 ## Icon
 
+- id: pm-file
 - asset: icons/pm-file.svg
 - source: polymetrics
 - review_status: polymetrics

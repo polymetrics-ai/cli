@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Salesflare accounts, contacts, opportunities, users, tags, tasks, workflows, groups, stages, pipelines, persons, currencies, custom-field types, and email data sources, and writes CRM lifecycle mutations, through the Salesflare REST API.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -79,6 +81,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_account:
     endpoint: POST /accounts
+    required fields: name
     risk: creates a new CRM account; low-risk external mutation, no approval required
   update_account:
     endpoint: PUT /accounts/{{ record.id }}
@@ -90,6 +93,7 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM account; approval required
   create_contact:
     endpoint: POST /contacts
+    required fields: name
     risk: creates a new CRM contact; low-risk external mutation, no approval required
   update_contact:
     endpoint: PUT /contacts/{{ record.id }}
@@ -101,6 +105,7 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM contact; approval required
   create_opportunity:
     endpoint: POST /opportunities
+    required fields: name
     risk: creates a new CRM opportunity/deal; low-risk external mutation, no approval required
   update_opportunity:
     endpoint: PUT /opportunities/{{ record.id }}
@@ -112,6 +117,7 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM opportunity/deal; approval required
   create_tag:
     endpoint: POST /tags
+    required fields: name
     risk: creates a new CRM tag; low-risk external mutation, no approval required
   update_tag:
     endpoint: PUT /tags/{{ record.id }}
@@ -123,6 +129,7 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM tag from every record it's applied to; approval required
   create_task:
     endpoint: POST /tasks
+    required fields: name
     risk: creates a new CRM task; low-risk external mutation, no approval required
   update_task:
     endpoint: PUT /tasks/{{ record.id }}
@@ -134,6 +141,7 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM task; approval required
   create_meeting:
     endpoint: POST /meetings
+    required fields: title, start_date, end_date
     risk: creates a new CRM meeting/calendar entry; low-risk external mutation, no approval required
   update_meeting:
     endpoint: PUT /meetings/{{ record.meeting_id }}
@@ -145,9 +153,11 @@ REVERSE ETL ACTIONS
     risk: destructive/irreversible: permanently deletes a CRM meeting/calendar entry; approval required
   create_call:
     endpoint: POST /calls
+    required fields: account_id
     risk: logs a new call activity against a CRM account; low-risk external mutation, no approval required
   create_internal_note:
     endpoint: POST /messages
+    required fields: content
     risk: creates a new internal note on a CRM record; low-risk external mutation, no approval required
   update_internal_note:
     endpoint: PUT /messages/{{ record.message_id }}

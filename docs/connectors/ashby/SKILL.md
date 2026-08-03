@@ -11,6 +11,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
 
 ## Icon
 
+- id: ashby
 - asset: icons/ashby.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -208,6 +209,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - fields: createdAt(), endTime(), extraData(), feedbackLink(), hasSubmittedFeedback(), id(), interview(), interviewId(), interviewScheduleId(), interviewerCalendarEventId(), interviewerUserIds(), interviewers(), location(), meetingLink(), notetakerTranscriptId(), startTime(), updatedAt()
 - interview_briefing_info:
   - primary key: id
+  - cursor: candidate
   - fields: application(), applicationId(), candidate(), feedbackFormDefinition(), feedbackFormDefinitionId(), hasSubmittedFeedback(), id(), interview(), interviewId(), interviewStageId(), interviewers(), job()
 - interview_info:
   - primary key: id
@@ -226,6 +228,7 @@ Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/d
   - fields: formDefinition(), id(), isArchived(), surveyType(), title()
 - survey_request_list:
   - primary key: id
+  - cursor: candidateId
   - fields: applicationId(), candidateId(), id(), surveyFormDefinitionId(), surveyUrl()
 - survey_submission_list:
   - primary key: id

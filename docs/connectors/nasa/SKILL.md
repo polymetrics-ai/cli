@@ -11,6 +11,7 @@ Reads NASA Open API data: Astronomy Picture of the Day, Near-Earth Objects (NeoW
 
 ## Icon
 
+- id: nasa
 - asset: icons/nasa.svg
 - source: upstream_registry
 - review_status: upstream_seeded

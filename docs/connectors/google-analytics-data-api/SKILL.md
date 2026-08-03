@@ -7,10 +7,11 @@ description: Google Analytics 4 (GA4) connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only.
 
 ## Icon
 
+- id: google-analytics
 - asset: icons/google-analytics.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -27,51 +28,13 @@ Reads Google Analytics 4 reports (active users, traffic sources, devices, pages)
 
 ## Configuration
 
-- base_url
-- convert_conversions_event
-- credentials
-- custom_reports_array
-- date_ranges_end_date
-- date_ranges_start_date
-- keep_empty_rows
-- lookback_window
-- mode
-- property_ids
-- subscription_tier
-- window_in_days
-
-## ETL Streams
-
-- daily_active_users:
-  - primary key: property_id, date
-  - cursor: date
-  - fields: activeUsers(), date(), newUsers(), property_id(), sessions()
-- website_overview:
-  - primary key: property_id, date
-  - cursor: date
-  - fields: activeUsers(), averageSessionDuration(), bounceRate(), date(), newUsers(), property_id(), screenPageViews(), sessions()
-- traffic_sources:
-  - primary key: property_id, date, sessionSource, sessionMedium
-  - cursor: date
-  - fields: activeUsers(), date(), engagedSessions(), newUsers(), property_id(), sessionMedium(), sessionSource(), sessions()
-- devices:
-  - primary key: property_id, date, deviceCategory, operatingSystem, browser
-  - cursor: date
-  - fields: activeUsers(), browser(), date(), deviceCategory(), operatingSystem(), property_id(), screenPageViews(), sessions()
-- pages:
-  - primary key: property_id, date, pagePath, pageTitle
-  - cursor: date
-  - fields: activeUsers(), averageSessionDuration(), date(), pagePath(), pageTitle(), property_id(), screenPageViews()
-
-## Sync Modes
-
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+- No connector-specific config fields.
 
 ## Security
 
-- read risk: external Google Analytics 4 (GA4) API reads performed by the legacy connector via a Tier-2 hook
-- write risk: unsupported
-- approval: none; read-only
+- read risk: connector-specific
+- write risk: connector-specific
+- approval: external mutations require preview and approval
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

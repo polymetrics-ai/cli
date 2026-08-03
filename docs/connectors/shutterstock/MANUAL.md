@@ -13,9 +13,11 @@ DESCRIPTION
   Reads Shutterstock media, collection, license, editorial, catalog, contributor, and subscription metadata; writes collection/lightbox metadata through safe collection endpoints.
 
 ICON
+  id: pm-sample
   asset: icons/pm-sample.svg
   source: polymetrics
   review_status: polymetrics
+  review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -233,10 +235,11 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_image_collection:
     endpoint: POST /v2/images/collections
+    required fields: name
     risk: external Shutterstock POST /v2/images/collections; approval required
   rename_image_collection:
     endpoint: POST /v2/images/collections/{{ record.image_collection_id }}
-    required fields: image_collection_id
+    required fields: image_collection_id, name
     risk: external Shutterstock POST /v2/images/collections/{{ record.image_collection_id }}; approval required
   delete_image_collection:
     endpoint: DELETE /v2/images/collections/{{ record.image_collection_id }}
@@ -244,14 +247,15 @@ REVERSE ETL ACTIONS
     risk: destructive external Shutterstock DELETE /v2/images/collections/{{ record.image_collection_id }}; approval required
   add_image_collection_items:
     endpoint: POST /v2/images/collections/{{ record.image_collection_id }}/items
-    required fields: image_collection_id
+    required fields: image_collection_id, items
     risk: external Shutterstock POST /v2/images/collections/{{ record.image_collection_id }}/items; approval required
   create_video_collection:
     endpoint: POST /v2/videos/collections
+    required fields: name
     risk: external Shutterstock POST /v2/videos/collections; approval required
   rename_video_collection:
     endpoint: POST /v2/videos/collections/{{ record.video_collection_id }}
-    required fields: video_collection_id
+    required fields: video_collection_id, name
     risk: external Shutterstock POST /v2/videos/collections/{{ record.video_collection_id }}; approval required
   delete_video_collection:
     endpoint: DELETE /v2/videos/collections/{{ record.video_collection_id }}
@@ -259,14 +263,15 @@ REVERSE ETL ACTIONS
     risk: destructive external Shutterstock DELETE /v2/videos/collections/{{ record.video_collection_id }}; approval required
   add_video_collection_items:
     endpoint: POST /v2/videos/collections/{{ record.video_collection_id }}/items
-    required fields: video_collection_id
+    required fields: video_collection_id, items
     risk: external Shutterstock POST /v2/videos/collections/{{ record.video_collection_id }}/items; approval required
   create_audio_collection:
     endpoint: POST /v2/audio/collections
+    required fields: name
     risk: external Shutterstock POST /v2/audio/collections; approval required
   rename_audio_collection:
     endpoint: POST /v2/audio/collections/{{ record.audio_collection_id }}
-    required fields: audio_collection_id
+    required fields: audio_collection_id, name
     risk: external Shutterstock POST /v2/audio/collections/{{ record.audio_collection_id }}; approval required
   delete_audio_collection:
     endpoint: DELETE /v2/audio/collections/{{ record.audio_collection_id }}
@@ -274,10 +279,11 @@ REVERSE ETL ACTIONS
     risk: destructive external Shutterstock DELETE /v2/audio/collections/{{ record.audio_collection_id }}; approval required
   add_audio_collection_items:
     endpoint: POST /v2/audio/collections/{{ record.audio_collection_id }}/items
-    required fields: audio_collection_id
+    required fields: audio_collection_id, items
     risk: external Shutterstock POST /v2/audio/collections/{{ record.audio_collection_id }}/items; approval required
   create_catalog_collection:
     endpoint: POST /v2/catalog/collections
+    required fields: name
     risk: external Shutterstock POST /v2/catalog/collections; approval required
   update_catalog_collection:
     endpoint: PATCH /v2/catalog/collections/{{ record.catalog_collection_id }}
@@ -289,7 +295,7 @@ REVERSE ETL ACTIONS
     risk: destructive external Shutterstock DELETE /v2/catalog/collections/{{ record.catalog_collection_id }}; approval required
   add_catalog_collection_items:
     endpoint: POST /v2/catalog/collections/{{ record.catalog_collection_id }}/items
-    required fields: catalog_collection_id
+    required fields: catalog_collection_id, items
     risk: external Shutterstock POST /v2/catalog/collections/{{ record.catalog_collection_id }}/items; approval required
 
 SECURITY

@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Plausible Analytics sites and stats reports through the Stats API.
 
 ICON
+  id: plausible
   asset: icons/plausible.svg
   source: upstream_registry
   review_status: upstream_seeded

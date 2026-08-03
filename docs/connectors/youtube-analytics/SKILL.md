@@ -11,6 +11,7 @@ Reads YouTube Reporting API jobs, report types, and generated reports via the Go
 
 ## Icon
 
+- id: youtube-analytics
 - asset: icons/youtube-analytics.svg
 - source: upstream_registry
 - review_status: upstream_seeded

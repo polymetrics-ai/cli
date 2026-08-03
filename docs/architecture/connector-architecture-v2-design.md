@@ -579,7 +579,9 @@ process-global `RegisterFactory` path is gone.
     for `hooks/*`, ~15 lines) and `native/nativeset/nativeset_gen.go` (~10 lines).
   - `new <name>` — scaffolds a defs bundle from templates.
 - `cmd/pm-cataloggen` (Airbyte importer) — **deleted**.
-- `cmd/iconregistrygen` — unchanged; keys become bare names.
+- `cmd/iconregistrygen` — emits bare connector keys, scopes rows to implemented defs plus runtime
+  builtins, and treats the existing registry as curated authored state. See
+  `docs/migration/icon-registry-single-source.md` for the registry contract.
 
 ### C.4 Catalog: generated from connectors, and the 646 vs 556 divergence
 

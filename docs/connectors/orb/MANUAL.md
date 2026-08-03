@@ -13,6 +13,7 @@ DESCRIPTION
   Reads Orb customers, subscriptions, plans, and invoices.
 
 ICON
+  id: orb
   asset: icons/orb.svg
   source: upstream_registry
   review_status: upstream_seeded

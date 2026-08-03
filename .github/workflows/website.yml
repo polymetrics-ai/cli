@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "website/**"
+      - "internal/connectors/icon_data.json"
+      - "docs/connectors/icons/**"
       - ".github/workflows/website.yml"
       - ".gitlab-ci.yml"
   push:
@@ -11,6 +13,8 @@ on:
       - main
     paths:
       - "website/**"
+      - "internal/connectors/icon_data.json"
+      - "docs/connectors/icons/**"
       - ".github/workflows/website.yml"
       - ".gitlab-ci.yml"
   workflow_dispatch:
@@ -94,6 +98,9 @@ jobs:
 
       - name: Unit tests
         run: pnpm run test:unit
+
+      - name: Script tests
+        run: pnpm run test:scripts
 
       - name: Install Playwright browser
         run: pnpm exec playwright install --with-deps chromium

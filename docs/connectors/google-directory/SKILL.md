@@ -11,6 +11,7 @@ Reads Google Admin SDK Directory users, groups, organizational units, and Chrome
 
 ## Icon
 
+- id: googledirectory
 - asset: icons/googledirectory.svg
 - source: upstream_registry
 - review_status: upstream_seeded

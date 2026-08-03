@@ -13,9 +13,17 @@ DESCRIPTION
   Reads Clarifai applications, datasets, models, model versions, and workflows, and writes application/dataset lifecycle mutations, through the Clarifai v2 REST API.
 
 ICON
-  asset: icons/pm-sample.svg
-  source: polymetrics
-  review_status: polymetrics
+  id: simple-icons-clarifai
+  asset: icons/simple-icons/clarifai.svg
+  title: Clarifai
+  simple_icon_slug: clarifai
+  simple_icon_hex: 1955FF
+  source: simple-icons
+  license: CC0-1.0
+  review_status: cc0_with_trademark_caveat
+  review_url: https://simpleicons.org/?q=Clarifai
+  match: curated-alias
+  matched_by: clarifai
 
 CAPABILITIES
   check=true catalog=true read=true write=true query=false
@@ -54,19 +62,19 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_application:
     endpoint: POST /users/{{ config.user_id }}/apps
-    optional fields: apps
+    required fields: apps
     risk: creates a new Clarifai application (workspace for datasets/models/workflows); low-risk (additive, no data loss)
   update_application:
     endpoint: PATCH /users/{{ config.user_id }}/apps
-    optional fields: action, apps
+    required fields: action, apps
     risk: updates an existing Clarifai application's settings (description, default workflow, notes); action=overwrite fully replaces the named fields rather than merging, so review the action value before use; approval required
   create_dataset:
     endpoint: POST /users/{{ config.user_id }}/apps/{{ config.app_id }}/datasets
-    optional fields: datasets
+    required fields: datasets
     risk: creates a new Clarifai dataset within the configured app; low-risk (additive, no data loss)
   delete_dataset:
     endpoint: DELETE /users/{{ config.user_id }}/apps/{{ config.app_id }}/datasets
-    optional fields: dataset_ids
+    required fields: dataset_ids
     risk: permanently deletes one or more Clarifai datasets and their inputs/annotations within the configured app; irreversible; approval required
 
 SECURITY

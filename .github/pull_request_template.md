@@ -28,6 +28,19 @@ sub-PRs into parent branches. Parent PRs into main remain human-gated. -->
 - Merge owner:
 - Integration state:
 
+## Connector Implementation Scope
+
+<!-- Fill this for connector implementation lanes. Connector PRs must declare exactly one target connector and must not absorb generic shared runtime/tooling or unrelated connector changes. Use a separate foundation issue/PR for legitimate shared work. -->
+
+- Applies:
+- Target connector scope:
+- Connector-owned paths:
+- Ownership guard evidence:
+- Changed-path compliance:
+- Foundation issue/PR path:
+- Shared runtime/tooling or unrelated connector changes:
+- no-mistakes foundation split status:
+
 <!-- Title this PR with Conventional Commits, for example:
 feat(connector): add linear
 fix(github): repair pagination
@@ -36,7 +49,7 @@ docs: update install guide
 
 ## Verification
 
-<!-- Include commands run, screenshots for UI changes, or why verification was not possible. -->
+<!-- Include commands run, screenshots for UI changes, or why verification was not possible. For connector implementation lanes, include the ownership guard evidence command/result and changed-path compliance. If no-mistakes finds generic shared runtime/tooling or unrelated connector changes in a connector PR, stop/ask for a foundation split instead of auto-absorbing them. -->
 
 ## Automated Review
 
@@ -63,6 +76,8 @@ reason and evidence. Copilot review is not approval. -->
 ## Checklist
 
 - [ ] Tests or docs updated for behavior changes
+- [ ] Connector implementation scope is declared when applicable: exactly one target connector, ownership guard evidence, changed-path compliance, and foundation PR path or not applicable
+- [ ] no-mistakes connector-lane finding, if any, stopped/asked for foundation split instead of absorbing shared runtime/tooling or unrelated connector changes
 - [ ] `make verify` passes locally, or the skipped checks are explained
 - [ ] Claude automatic review completed, Copilot fallback was justified, or review blocker was recorded
 - [ ] Every actionable automated review finding has a reasoned disposition reply

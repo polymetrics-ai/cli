@@ -7,10 +7,11 @@ description: My Hours connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours REST API.
 
 ## Icon
 
+- id: my-hours
 - asset: icons/my-hours.svg
 - source: upstream_registry
 - review_status: upstream_seeded
@@ -23,45 +24,17 @@ Reads My Hours clients, projects, team members, tags, and time log activity thro
 
 ## Authentication
 
-- Use pm credentials add with --from-env or --value-stdin for secret fields.
+- No secret authentication is required for this connector.
 
 ## Configuration
 
-- base_url
-- email
-- logs_batch_size
-- mode
-- start_date
-- password (secret)
-
-## ETL Streams
-
-- clients:
-  - primary key: id
-  - fields: archived(), custom_id(), date_archived(), id(), name()
-- projects:
-  - primary key: id
-  - fields: archived(), billable(), client_id(), client_name(), date_archived(), date_created(), id(), name()
-- users:
-  - primary key: id
-  - fields: account_owner(), active(), admin(), archived(), billable_rate(), email(), id(), name(), rate()
-- tags:
-  - primary key: id
-  - fields: archived(), date_archived(), id(), name()
-- time_logs:
-  - primary key: logId
-  - cursor: date
-  - fields: amount(), billable(), billable_amount(), billable_hours(), client_id(), client_name(), date(), invoiced(), labor_hours(), logId(), log_duration(), note(), project_id(), project_name(), rate(), tags(), task_id(), task_name(), user_id(), user_name()
-
-## Sync Modes
-
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+- No connector-specific config fields.
 
 ## Security
 
-- read risk: external My Hours API reads performed by the legacy connector via a Tier-2 hook
-- write risk: unsupported
-- approval: none; read-only
+- read risk: connector-specific
+- write risk: connector-specific
+- approval: external mutations require preview and approval
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands
