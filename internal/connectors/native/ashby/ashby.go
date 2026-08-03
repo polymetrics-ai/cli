@@ -32,6 +32,10 @@ import (
 const (
 	ashbyDefaultBaseURL  = "https://api.ashbyhq.com"
 	ashbyDefaultPageSize = 100
+	// ashbyDefaultMaxPages is 0, meaning unbounded: the read follows Ashby's
+	// nextCursor until the provider stops reporting more data. It must stay
+	// equal to spec.json's max_pages default, which callers see as the
+	// documented read bound.
 	ashbyDefaultMaxPages = 0
 	ashbyMaxPageSize     = 100
 	ashbyUserAgent       = "polymetrics-go-cli"
