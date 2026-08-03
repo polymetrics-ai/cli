@@ -140,7 +140,19 @@ func (f *Flow) Login(ctx context.Context) (browserauth.Credential, error) {
 	server := &http.Server{Handler: f.callbackHandler(f.cfg.RedirectPath, state, resultCh)}
 	serveErrCh := make(chan error, 1)
 	go func() { serveErrCh <- server.Serve(listener) }()
-	defer func() { _ = server.Close() }()
+	// Shut the listener down gracefully rather than Close()ing it. The
+	// handler hands its result to resultCh and returns; the server only
+	// flushes the callback page ("Signed in. You can close this tab...")
+	// onto the socket afterwards, while Login has already resumed. Close()
+	// tears down that connection mid-flush, so the user's browser races
+	// between the confirmation page and a bare connection error on every
+	// login. Shutdown waits for the response to land first, bounded so a
+	// wedged browser connection can never hang the CLI.
+	defer func() {
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancel()
+		_ = server.Shutdown(shutdownCtx)
+	}()
 
 	if f.cfg.OnAuthorizationURL != nil {
 		f.cfg.OnAuthorizationURL(authURL)

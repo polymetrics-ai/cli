@@ -3,6 +3,8 @@ package loopback_test
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -13,24 +15,40 @@ import (
 	"polymetrics.ai/internal/browserauth/loopback"
 )
 
+// browserResult is what the simulated browser actually got back from the
+// loopback listener. Tests assert on it rather than having the goroutine
+// call t.Errorf directly: the goroutine outlives Login, so logging from it
+// races with test completion and panics the whole test binary
+// ("Log in goroutine after Test... has completed") instead of failing one
+// test cleanly.
+type browserResult struct {
+	body string
+	err  error
+}
+
 // fakeBrowser simulates the user completing the login in a real browser: it
 // GETs the authorization URL against a fake provider auth endpoint, which
 // redirects back to the loopback listener exactly like a browser would —
-// no real browser or network access involved.
-func fakeBrowserHittingRedirect(t *testing.T, wantError string) func(string) error {
+// no real browser or network access involved. It reads the callback
+// response to completion, because the page the listener serves ("Signed
+// in. You can close this tab") is the only thing the user ever sees; a
+// listener that reports success to the CLI but drops the connection before
+// that page lands leaves them staring at a browser error.
+func fakeBrowserHittingRedirect(t *testing.T, wantError string) (func(string) error, <-chan browserResult) {
 	t.Helper()
-	return func(rawURL string) error {
+	results := make(chan browserResult, 1)
+	open := func(rawURL string) error {
 		go func() {
 			u, err := url.Parse(rawURL)
 			if err != nil {
-				t.Errorf("parse authorization URL: %v", err)
+				results <- browserResult{err: fmt.Errorf("parse authorization URL: %w", err)}
 				return
 			}
 			redirectURI := u.Query().Get("redirect_uri")
 			state := u.Query().Get("state")
 			cb, err := url.Parse(redirectURI)
 			if err != nil {
-				t.Errorf("parse redirect_uri: %v", err)
+				results <- browserResult{err: fmt.Errorf("parse redirect_uri: %w", err)}
 				return
 			}
 			q := cb.Query()
@@ -44,12 +62,28 @@ func fakeBrowserHittingRedirect(t *testing.T, wantError string) func(string) err
 			cb.RawQuery = q.Encode()
 			resp, err := http.Get(cb.String())
 			if err != nil {
-				t.Errorf("simulate browser redirect: %v", err)
+				results <- browserResult{err: fmt.Errorf("simulate browser redirect: %w", err)}
 				return
 			}
-			_ = resp.Body.Close()
+			defer func() { _ = resp.Body.Close() }()
+			body, err := io.ReadAll(resp.Body)
+			results <- browserResult{body: string(body), err: err}
 		}()
 		return nil
+	}
+	return open, results
+}
+
+// awaitCallbackPage returns what the simulated browser received, failing
+// rather than hanging if the redirect never completed.
+func awaitCallbackPage(t *testing.T, results <-chan browserResult) browserResult {
+	t.Helper()
+	select {
+	case got := <-results:
+		return got
+	case <-time.After(10 * time.Second):
+		t.Fatalf("simulated browser never finished reading the callback page")
+		return browserResult{}
 	}
 }
 
@@ -87,12 +121,13 @@ func TestLoopbackFlowSuccess(t *testing.T) {
 	tokenServer := fakeTokenServer(t, "test-auth-code")
 	defer tokenServer.Close()
 
+	openBrowser, browserResults := fakeBrowserHittingRedirect(t, "")
 	flow, err := loopback.New(loopback.Config{
 		AuthURL:     authServer.URL + "/authorize",
 		TokenURL:    tokenServer.URL + "/token",
 		ClientID:    "client-123",
 		Scopes:      []string{"read", "write"},
-		OpenBrowser: fakeBrowserHittingRedirect(t, ""),
+		OpenBrowser: openBrowser,
 		Timeout:     5 * time.Second,
 	})
 	if err != nil {
@@ -121,14 +156,27 @@ func TestLoopbackFlowSuccess(t *testing.T) {
 	if cred.Session != nil {
 		t.Fatalf("loopback flow must never set Session, got %+v", cred.Session)
 	}
+
+	// The user's browser must actually receive the confirmation page. Login
+	// returns as soon as the handler hands it the code, so tearing the
+	// listener down at that moment would leave the tab on a connection
+	// error even though the CLI succeeded.
+	page := awaitCallbackPage(t, browserResults)
+	if page.err != nil {
+		t.Fatalf("browser never received the callback page: %v", page.err)
+	}
+	if !strings.Contains(page.body, "Signed in") {
+		t.Fatalf("callback page = %q, want the signed-in confirmation", page.body)
+	}
 }
 
 func TestLoopbackFlowProviderDeniesAuthorization(t *testing.T) {
+	openBrowser, browserResults := fakeBrowserHittingRedirect(t, "access_denied")
 	flow, err := loopback.New(loopback.Config{
 		AuthURL:     "https://example.invalid/authorize",
 		TokenURL:    "https://example.invalid/token",
 		ClientID:    "client-123",
-		OpenBrowser: fakeBrowserHittingRedirect(t, "access_denied"),
+		OpenBrowser: openBrowser,
 		Timeout:     5 * time.Second,
 	})
 	if err != nil {
@@ -137,6 +185,18 @@ func TestLoopbackFlowProviderDeniesAuthorization(t *testing.T) {
 	_, err = flow.Login(context.Background())
 	if err == nil || !strings.Contains(err.Error(), "access_denied") {
 		t.Fatalf("Login() error = %v, want access_denied", err)
+	}
+
+	// The denial path returns from Login immediately — no token exchange to
+	// hold the listener open — so it is where a Close()d listener most
+	// reliably beats the response out the door. The user must still get the
+	// failure page, not a bare connection error.
+	page := awaitCallbackPage(t, browserResults)
+	if page.err != nil {
+		t.Fatalf("browser never received the callback page: %v", page.err)
+	}
+	if !strings.Contains(page.body, "Sign-in failed") {
+		t.Fatalf("callback page = %q, want the sign-in-failed page", page.body)
 	}
 }
 
