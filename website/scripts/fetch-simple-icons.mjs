@@ -1,9 +1,14 @@
 // Fetches vetted Simple Icons SVGs listed in the canonical connector icon registry.
-// Run: node scripts/fetch-simple-icons.mjs
+// Run: node scripts/fetch-simple-icons.mjs               fetch and write checksum-verified SVGs
+//      node scripts/fetch-simple-icons.mjs --update-lockfile   re-pin digests, write no SVGs
 //
 // The Simple Icons list is intentionally curated in internal/connectors/icon_data.json.
 // Do not infer icons from arbitrary docs hosts such as GitHub, ReadMe, or Apiary:
 // that produces false brand matches.
+//
+// Fetched content is checksum-pinned per connector by website/data/simple-icons.lock.json;
+// see docs/migration/icon-registry-single-source.md for the lockfile contract and the
+// CodeQL alert #93 disposition.
 
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
