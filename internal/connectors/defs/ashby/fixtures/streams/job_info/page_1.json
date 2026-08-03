@@ -1,0 +1,175 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/job.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "job_info_id_fixture_23",
+        "title": "Title fixture 23",
+        "confidential": true,
+        "status": "Draft",
+        "employmentType": "FullTime",
+        "locationId": "job_info_locationid_fixture_23",
+        "departmentId": "job_info_departmentid_fixture_23",
+        "defaultInterviewPlanId": "job_info_defaultinterviewplanid_fixture_23",
+        "interviewPlanIds": [
+          "job_info_interviewplanid_fixture_23"
+        ],
+        "jobPostingIds": [
+          "job_info_jobpostingid_fixture_23"
+        ],
+        "customRequisitionId": "job_info_customrequisitionid_fixture_23",
+        "brandId": "job_info_brandid_fixture_23",
+        "hiringTeam": [
+          {
+            "userId": "job_info_userid_fixture_23",
+            "firstName": "Job Info Firstname Fixture 23",
+            "lastName": "Job Info Lastname Fixture 23",
+            "email": "job_info.email.23@example.invalid",
+            "role": "job_info_role_fixture_23"
+          }
+        ],
+        "openings": [
+          {
+            "id": "job_info_id_fixture_23",
+            "openedAt": "2026-01-23T03:00:00Z",
+            "closedAt": "2026-01-23T03:00:00Z",
+            "isArchived": true,
+            "closeReasonId": "job_info_closereasonid_fixture_23",
+            "archivedAt": "2026-01-23T03:00:00Z",
+            "openingState": "Draft",
+            "latestVersion": {
+              "id": "job_info_id_fixture_23",
+              "identifier": "job_info_identifier_fixture_23",
+              "description": "Description fixture 23",
+              "authorId": "job_info_authorid_fixture_23",
+              "createdAt": "2026-01-23T03:00:00Z",
+              "targetHireDate": "2026-01-23T03:00:00Z",
+              "targetStartDate": "2026-01-23T03:00:00Z",
+              "isBackfill": true,
+              "employmentType": "FullTime",
+              "teamId": "job_info_teamid_fixture_23",
+              "jobIds": [
+                "job_info_jobid_fixture_23"
+              ],
+              "locationIds": [
+                "job_info_locationid_fixture_23"
+              ],
+              "hiringTeam": [
+                {
+                  "userId": "job_info_userid_fixture_23",
+                  "firstName": "Job Info Firstname Fixture 23",
+                  "lastName": "Job Info Lastname Fixture 23",
+                  "email": "job_info.email.23@example.invalid",
+                  "role": "job_info_role_fixture_23"
+                }
+              ],
+              "customFields": [
+                {
+                  "id": "job_info_id_fixture_23",
+                  "isPrivate": true,
+                  "title": "Title fixture 23",
+                  "valueLabel": "job_info_valuelabel_fixture_23",
+                  "value": {
+                    "value": 23.0,
+                    "currencyCode": "job_info_currencycode_fixture_23"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "location": {
+          "id": "job_info_id_fixture_23",
+          "name": "Job Info Name Fixture 23",
+          "externalName": "Job Info Externalname Fixture 23",
+          "isArchived": true,
+          "isRemote": true,
+          "address": {
+            "postalAddress": {
+              "addressCountry": "job_info_addresscountry_fixture_23",
+              "addressRegion": "job_info_addressregion_fixture_23",
+              "addressLocality": "job_info_addresslocality_fixture_23",
+              "postalCode": "job_info_postalcode_fixture_23",
+              "streetAddress": "job_info_streetaddress_fixture_23"
+            }
+          },
+          "parentLocationId": "job_info_parentlocationid_fixture_23",
+          "type": "Location",
+          "workplaceType": "OnSite",
+          "extraData": {
+            "id": "job_info_extradata_fixture_23"
+          }
+        },
+        "compensation": {
+          "compensationTiers": [
+            {
+              "id": "job_info_id_fixture_23",
+              "title": "Title fixture 23",
+              "additionalInformation": "job_info_additionalinformation_fixture_23",
+              "components": [
+                {
+                  "id": "job_info_id_fixture_23",
+                  "summary": "job_info_summary_fixture_23",
+                  "compensationType": "Salary",
+                  "interval": "NONE",
+                  "label": "job_info_label_fixture_23",
+                  "currencyCode": "job_info_currencycode_fixture_23",
+                  "minValue": 23.0,
+                  "maxValue": 23.0
+                }
+              ],
+              "tierSummary": "job_info_tiersummary_fixture_23"
+            }
+          ]
+        },
+        "customFields": [
+          {
+            "id": "job_info_id_fixture_23",
+            "isPrivate": true,
+            "title": "Title fixture 23",
+            "value": {
+              "value": 23.0,
+              "currencyCode": "job_info_currencycode_fixture_23"
+            },
+            "valueLabel": "job_info_valuelabel_fixture_23"
+          }
+        ],
+        "author": {
+          "id": "job_info_id_fixture_23",
+          "firstName": "Job Info Firstname Fixture 23",
+          "lastName": "Job Info Lastname Fixture 23",
+          "email": "job_info.email.23@example.invalid",
+          "globalRole": "Organization Admin",
+          "isEnabled": true,
+          "updatedAt": "2026-01-23T03:00:00Z",
+          "managerId": "job_info_managerid_fixture_23",
+          "customFields": [
+            {
+              "id": "job_info_id_fixture_23",
+              "isPrivate": true,
+              "title": "Title fixture 23",
+              "value": {
+                "value": 23.0,
+                "currencyCode": "job_info_currencycode_fixture_23"
+              },
+              "valueLabel": "job_info_valuelabel_fixture_23"
+            }
+          ]
+        },
+        "createdAt": "2026-01-23T03:00:00Z",
+        "updatedAt": "2026-02-23T23:00:00Z",
+        "openedAt": "2026-01-23T03:00:00Z",
+        "closedAt": "2026-01-23T03:00:00Z"
+      }
+    }
+  },
+  "read_query": {
+    "id": "id_fixture"
+  }
+}

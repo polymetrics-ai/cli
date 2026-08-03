@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/customField.info",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "results": {
+        "id": "custom_field_info_id_fixture_45",
+        "title": "Title fixture 45",
+        "description": "Description fixture 45",
+        "objectType": "fixture",
+        "isArchived": true,
+        "isPrivate": true,
+        "fieldType": "fixture",
+        "isRequired": true,
+        "selectableValues": [
+          {
+            "label": "custom_field_info_label_fixture_45",
+            "value": "custom_field_info_value_fixture_45",
+            "isArchived": true
+          }
+        ]
+      }
+    }
+  },
+  "read_query": {
+    "customFieldId": "customfieldid_fixture"
+  }
+}

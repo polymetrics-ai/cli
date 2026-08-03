@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "candidates",
+    "live_unavailable": [
+      {
+        "kind": "no_credentials_requested",
+        "contains": [
+          "No live Ashby credentials or provider calls were requested for issue #3207 wave05-r1."
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [
+    {
+      "stage_name": "file_info_fixture_shape",
+      "command": "file info",
+      "args": [
+        {
+          "literal": "--file-handle"
+        },
+        {
+          "literal": "file_handle_fixture"
+        }
+      ]
+    }
+  ],
+  "write_pairings": []
+}

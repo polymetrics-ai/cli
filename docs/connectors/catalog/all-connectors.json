@@ -9030,7 +9030,7 @@
   {
     "name": "ashby",
     "display_name": "Ashby",
-    "description": "Reads Ashby applicant-tracking data — candidates, jobs, applications, and users — through the Ashby REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.",
     "integration_type": "api",
     "docs_url": "https://developers.ashbyhq.com/",
     "release_stage": "alpha",
@@ -9038,7 +9038,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -9046,27 +9046,32 @@
       "title": "Ashby Connection Specification",
       "type": "object",
       "required": [
-        "api_key",
-        "start_date"
+        "api_key"
       ],
       "properties": {
         "api_key": {
           "type": "string",
           "x-secret": true,
-          "description": "The Ashby API Key, see \u003ca href=\\\"https://developers.ashbyhq.com/reference/authentication\\\"\u003edoc\u003c/a\u003e here."
-        },
-        "start_date": {
-          "type": "string",
-          "description": "UTC date and time in the format 2017-01-25T00:00:00Z. Any data before this date will not be replicated."
+          "description": "Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."
         },
         "base_url": {
           "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+          "default": "https://api.ashbyhq.com",
+          "description": "Ashby API base URL; override only for local tests."
+        },
+        "page_size": {
+          "type": "string",
+          "default": "100",
+          "description": "Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector."
+        },
+        "max_pages": {
+          "type": "string",
+          "default": "0",
+          "description": "Maximum pages to read per stream. Defaults to 0 for an exhaustive read; 0, all, and unlimited are equivalent."
         },
         "mode": {
           "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "description": "Set to fixture for credential-free native tests."
         }
       }
     },
@@ -9076,13 +9081,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9090,13 +9092,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9104,13 +9103,10 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -9118,20 +9114,1475 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "api_key_info",
+        "primary_key": [
+          "title"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "audit_log_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "application_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "application_hiring_team_role_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "application_list_history",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "application_list_criteria_evaluations",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "application_feedback_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "candidate_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "candidate_list_client_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "candidate_list_fraud_checks",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "candidate_list_notes",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "candidate_list_projects",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "candidate_tag_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "communication_template_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "feedback_form_definition_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "feedback_form_definition_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "job_posting_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "job_posting_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "job_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "job_board_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "job_interview_plan_info",
+        "primary_key": [
+          "jobId"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "job_template_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "department_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "department_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "location_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "location_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interview_plan_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interview_stage_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interview_stage_group_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "offer_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "offer_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opening_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "opening_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "source_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "source_tracking_link_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "archive_reason_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "brand_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "custom_field_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "custom_field_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "hiring_team_role_list",
+        "primary_key": [
+          "value"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_list_interviewer_pauses",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "email_sender_list",
+        "primary_key": [
+          "email"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "sequence_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "sequence_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "sequence_template_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "sequence_template_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interview_schedule_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "take_home_assignment_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "take_home_assignment_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interview_event_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interview_briefing_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interview_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interview_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interview_stage_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "survey_form_definition_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "survey_form_definition_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "survey_request_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "survey_submission_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "webhook_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interviewer_pool_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "interviewer_pool_info",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "close_reason_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "report_synchronous",
+        "primary_key": [
+          "requestId"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "approval_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "create_application",
+        "kind": "create",
+        "method": "POST",
+        "path": "/application.create",
+        "risk": "Executes Ashby application.create through the documented POST /application.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_application",
+        "kind": "update",
+        "method": "POST",
+        "path": "/application.update",
+        "risk": "Executes Ashby application.update through the documented POST /application.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "delete_application",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/application.delete",
+        "risk": "Executes Ashby application.delete through the documented POST /application.delete endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_application_hiring_team_member",
+        "kind": "create",
+        "method": "POST",
+        "path": "/application.addHiringTeamMember",
+        "risk": "Executes Ashby application.addHiringTeamMember through the documented POST /application.addHiringTeamMember endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "remove_application_hiring_team_member",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/application.removeHiringTeamMember",
+        "risk": "Executes Ashby application.removeHiringTeamMember through the documented POST /application.removeHiringTeamMember endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "change_application_stage",
+        "kind": "update",
+        "method": "POST",
+        "path": "/application.change_stage",
+        "risk": "Executes Ashby application.change_stage through the documented POST /application.change_stage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "change_application_stage_2",
+        "kind": "update",
+        "method": "POST",
+        "path": "/application.changeStage",
+        "risk": "Executes Ashby application.changeStage through the documented POST /application.changeStage endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "change_application_source",
+        "kind": "update",
+        "method": "POST",
+        "path": "/application.change_source",
+        "risk": "Executes Ashby application.change_source through the documented POST /application.change_source endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "change_application_source_2",
+        "kind": "update",
+        "method": "POST",
+        "path": "/application.changeSource",
+        "risk": "Executes Ashby application.changeSource through the documented POST /application.changeSource endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "transfer_application",
+        "kind": "update",
+        "method": "POST",
+        "path": "/application.transfer",
+        "risk": "Executes Ashby application.transfer through the documented POST /application.transfer endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_application_history",
+        "kind": "update",
+        "method": "POST",
+        "path": "/application.updateHistory",
+        "risk": "Executes Ashby application.updateHistory through the documented POST /application.updateHistory endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "submit_application_feedback",
+        "kind": "create",
+        "method": "POST",
+        "path": "/applicationFeedback.submit",
+        "risk": "Executes Ashby applicationFeedback.submit through the documented POST /applicationFeedback.submit endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_application_feedback_request",
+        "kind": "create",
+        "method": "POST",
+        "path": "/applicationFeedbackRequest.create",
+        "risk": "Executes Ashby applicationFeedbackRequest.create through the documented POST /applicationFeedbackRequest.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_approval_definition",
+        "kind": "update",
+        "method": "POST",
+        "path": "/approvalDefinition.update",
+        "risk": "Executes Ashby approvalDefinition.update through the documented POST /approvalDefinition.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_candidate",
+        "kind": "create",
+        "method": "POST",
+        "path": "/candidate.create",
+        "risk": "Executes Ashby candidate.create through the documented POST /candidate.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "upload_candidate_resume",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/candidate.uploadResume",
+        "risk": "Executes Ashby candidate.uploadResume through the documented POST /candidate.uploadResume endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "upload_candidate_file",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/candidate.uploadFile",
+        "risk": "Executes Ashby candidate.uploadFile through the documented POST /candidate.uploadFile endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_candidate",
+        "kind": "update",
+        "method": "POST",
+        "path": "/candidate.update",
+        "risk": "Executes Ashby candidate.update through the documented POST /candidate.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_candidate_note",
+        "kind": "create",
+        "method": "POST",
+        "path": "/candidate.createNote",
+        "risk": "Executes Ashby candidate.createNote through the documented POST /candidate.createNote endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "set_candidate_fraud_status",
+        "kind": "update",
+        "method": "POST",
+        "path": "/candidate.setFraudStatus",
+        "risk": "Executes Ashby candidate.setFraudStatus through the documented POST /candidate.setFraudStatus endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "anonymize_candidate",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/candidate.anonymize",
+        "risk": "Executes Ashby candidate.anonymize through the documented POST /candidate.anonymize endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_candidate_project",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/candidate.removeProject",
+        "risk": "Executes Ashby candidate.removeProject through the documented POST /candidate.removeProject endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_candidate_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/candidate.addProject",
+        "risk": "Executes Ashby candidate.addProject through the documented POST /candidate.addProject endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "add_candidate_email_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/candidate.addEmailMessage",
+        "risk": "Executes Ashby candidate.addEmailMessage through the documented POST /candidate.addEmailMessage endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "add_candidate_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/candidate.addTag",
+        "risk": "Executes Ashby candidate.addTag through the documented POST /candidate.addTag endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "remove_candidate_tag",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/candidate.removeTag",
+        "risk": "Executes Ashby candidate.removeTag through the documented POST /candidate.removeTag endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "push_candidate_to_hris",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/candidate.pushToHris",
+        "risk": "Executes Ashby candidate.pushToHris through the documented POST /candidate.pushToHris endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_candidate_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "/candidateTag.create",
+        "risk": "Executes Ashby candidateTag.create through the documented POST /candidateTag.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "archive_candidate_tag",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/candidateTag.archive",
+        "risk": "Executes Ashby candidateTag.archive through the documented POST /candidateTag.archive endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_job_posting_compensation",
+        "kind": "update",
+        "method": "POST",
+        "path": "/jobPosting.updateCompensation",
+        "risk": "Executes Ashby jobPosting.updateCompensation through the documented POST /jobPosting.updateCompensation endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_job_posting",
+        "kind": "update",
+        "method": "POST",
+        "path": "/jobPosting.update",
+        "risk": "Executes Ashby jobPosting.update through the documented POST /jobPosting.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "set_job_posting_status",
+        "kind": "update",
+        "method": "POST",
+        "path": "/jobPosting.setStatus",
+        "risk": "Executes Ashby jobPosting.setStatus through the documented POST /jobPosting.setStatus endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_job",
+        "kind": "create",
+        "method": "POST",
+        "path": "/job.create",
+        "risk": "Executes Ashby job.create through the documented POST /job.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_job",
+        "kind": "update",
+        "method": "POST",
+        "path": "/job.update",
+        "risk": "Executes Ashby job.update through the documented POST /job.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_job_compensation",
+        "kind": "update",
+        "method": "POST",
+        "path": "/job.updateCompensation",
+        "risk": "Executes Ashby job.updateCompensation through the documented POST /job.updateCompensation endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "set_job_status",
+        "kind": "update",
+        "method": "POST",
+        "path": "/job.setStatus",
+        "risk": "Executes Ashby job.setStatus through the documented POST /job.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "archive_department",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/department.archive",
+        "risk": "Executes Ashby department.archive through the documented POST /department.archive endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "restore_department",
+        "kind": "update",
+        "method": "POST",
+        "path": "/department.restore",
+        "risk": "Executes Ashby department.restore through the documented POST /department.restore endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_department",
+        "kind": "create",
+        "method": "POST",
+        "path": "/department.create",
+        "risk": "Executes Ashby department.create through the documented POST /department.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "move_department",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/department.move",
+        "risk": "Executes Ashby department.move through the documented POST /department.move endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_department",
+        "kind": "update",
+        "method": "POST",
+        "path": "/department.update",
+        "risk": "Executes Ashby department.update through the documented POST /department.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "archive_location",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/location.archive",
+        "risk": "Executes Ashby location.archive through the documented POST /location.archive endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_location",
+        "kind": "create",
+        "method": "POST",
+        "path": "/location.create",
+        "risk": "Executes Ashby location.create through the documented POST /location.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "restore_location",
+        "kind": "update",
+        "method": "POST",
+        "path": "/location.restore",
+        "risk": "Executes Ashby location.restore through the documented POST /location.restore endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "move_location",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/location.move",
+        "risk": "Executes Ashby location.move through the documented POST /location.move endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_location_address",
+        "kind": "update",
+        "method": "POST",
+        "path": "/location.updateAddress",
+        "risk": "Executes Ashby location.updateAddress through the documented POST /location.updateAddress endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_location_name",
+        "kind": "update",
+        "method": "POST",
+        "path": "/location.updateName",
+        "risk": "Executes Ashby location.updateName through the documented POST /location.updateName endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_location_workplace_type",
+        "kind": "update",
+        "method": "POST",
+        "path": "/location.updateWorkplaceType",
+        "risk": "Executes Ashby location.updateWorkplaceType through the documented POST /location.updateWorkplaceType endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_location_external_name",
+        "kind": "update",
+        "method": "POST",
+        "path": "/location.updateExternalName",
+        "risk": "Executes Ashby location.updateExternalName through the documented POST /location.updateExternalName endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "approve_offer",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/offer.approve",
+        "risk": "Executes Ashby offer.approve through the documented POST /offer.approve endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_offer",
+        "kind": "create",
+        "method": "POST",
+        "path": "/offer.create",
+        "risk": "Executes Ashby offer.create through the documented POST /offer.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "start_offer",
+        "kind": "create",
+        "method": "POST",
+        "path": "/offer.start",
+        "risk": "Executes Ashby offer.start through the documented POST /offer.start endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "start_offer_approval_process",
+        "kind": "create",
+        "method": "POST",
+        "path": "/offer.startApprovalProcess",
+        "risk": "Executes Ashby offer.startApprovalProcess through the documented POST /offer.startApprovalProcess endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_offer",
+        "kind": "update",
+        "method": "POST",
+        "path": "/offer.update",
+        "risk": "Executes Ashby offer.update through the documented POST /offer.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "set_offer_status",
+        "kind": "update",
+        "method": "POST",
+        "path": "/offer.setStatus",
+        "risk": "Executes Ashby offer.setStatus through the documented POST /offer.setStatus endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_offer_decided_at",
+        "kind": "update",
+        "method": "POST",
+        "path": "/offer.setDecidedAt",
+        "risk": "Executes Ashby offer.setDecidedAt through the documented POST /offer.setDecidedAt endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "start_offer_process",
+        "kind": "create",
+        "method": "POST",
+        "path": "/offerProcess.start",
+        "risk": "Executes Ashby offerProcess.start through the documented POST /offerProcess.start endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_opening",
+        "kind": "create",
+        "method": "POST",
+        "path": "/opening.create",
+        "risk": "Executes Ashby opening.create through the documented POST /opening.create endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_opening",
+        "kind": "update",
+        "method": "POST",
+        "path": "/opening.update",
+        "risk": "Executes Ashby opening.update through the documented POST /opening.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "set_opening_archived",
+        "kind": "update",
+        "method": "POST",
+        "path": "/opening.setArchived",
+        "risk": "Executes Ashby opening.setArchived through the documented POST /opening.setArchived endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_opening_opening_state",
+        "kind": "update",
+        "method": "POST",
+        "path": "/opening.setOpeningState",
+        "risk": "Executes Ashby opening.setOpeningState through the documented POST /opening.setOpeningState endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_opening_job",
+        "kind": "create",
+        "method": "POST",
+        "path": "/opening.addJob",
+        "risk": "Executes Ashby opening.addJob through the documented POST /opening.addJob endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "remove_opening_job",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/opening.removeJob",
+        "risk": "Executes Ashby opening.removeJob through the documented POST /opening.removeJob endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_opening_location",
+        "kind": "create",
+        "method": "POST",
+        "path": "/opening.addLocation",
+        "risk": "Executes Ashby opening.addLocation through the documented POST /opening.addLocation endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "remove_opening_location",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/opening.removeLocation",
+        "risk": "Executes Ashby opening.removeLocation through the documented POST /opening.removeLocation endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_custom_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/customField.create",
+        "risk": "Executes Ashby customField.create through the documented POST /customField.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "set_custom_field_value",
+        "kind": "update",
+        "method": "POST",
+        "path": "/customField.setValue",
+        "risk": "Executes Ashby customField.setValue through the documented POST /customField.setValue endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "set_custom_field_values",
+        "kind": "update",
+        "method": "POST",
+        "path": "/customField.setValues",
+        "risk": "Executes Ashby customField.setValues through the documented POST /customField.setValues endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_custom_field_selectable_values",
+        "kind": "update",
+        "method": "POST",
+        "path": "/customField.updateSelectableValues",
+        "risk": "Executes Ashby customField.updateSelectableValues through the documented POST /customField.updateSelectableValues endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_assessment",
+        "kind": "update",
+        "method": "POST",
+        "path": "/assessment.update",
+        "risk": "Executes Ashby assessment.update through the documented POST /assessment.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_assessment_completed_to_candidate",
+        "kind": "create",
+        "method": "POST",
+        "path": "/assessment.addCompletedToCandidate",
+        "risk": "Executes Ashby assessment.addCompletedToCandidate through the documented POST /assessment.addCompletedToCandidate endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "add_hiring_team_member",
+        "kind": "create",
+        "method": "POST",
+        "path": "/hiringTeam.addMember",
+        "risk": "Executes Ashby hiringTeam.addMember through the documented POST /hiringTeam.addMember endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "remove_hiring_team_member",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/hiringTeam.removeMember",
+        "risk": "Executes Ashby hiringTeam.removeMember through the documented POST /hiringTeam.removeMember endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_user_interviewer_settings",
+        "kind": "update",
+        "method": "POST",
+        "path": "/user.updateInterviewerSettings",
+        "risk": "Executes Ashby user.updateInterviewerSettings through the documented POST /user.updateInterviewerSettings endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_user_interviewer_pause",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user.createInterviewerPause",
+        "risk": "Executes Ashby user.createInterviewerPause through the documented POST /user.createInterviewerPause endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "delete_user_interviewer_pause",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/user.deleteInterviewerPause",
+        "risk": "Executes Ashby user.deleteInterviewerPause through the documented POST /user.deleteInterviewerPause endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_user_custom_field_value",
+        "kind": "update",
+        "method": "POST",
+        "path": "/user.setCustomFieldValue",
+        "risk": "Executes Ashby user.setCustomFieldValue through the documented POST /user.setCustomFieldValue endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "set_user_custom_field_values",
+        "kind": "update",
+        "method": "POST",
+        "path": "/user.setCustomFieldValues",
+        "risk": "Executes Ashby user.setCustomFieldValues through the documented POST /user.setCustomFieldValues endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_referral",
+        "kind": "create",
+        "method": "POST",
+        "path": "/referral.create",
+        "risk": "Executes Ashby referral.create through the documented POST /referral.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "add_sequence",
+        "kind": "create",
+        "method": "POST",
+        "path": "/sequence.add",
+        "risk": "Executes Ashby sequence.add through the documented POST /sequence.add endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "cancel_sequence",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/sequence.cancel",
+        "risk": "Executes Ashby sequence.cancel through the documented POST /sequence.cancel endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "discard_sequence",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/sequence.discard",
+        "risk": "Executes Ashby sequence.discard through the documented POST /sequence.discard endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_sequence_stage",
+        "kind": "update",
+        "method": "POST",
+        "path": "/sequence.updateStage",
+        "risk": "Executes Ashby sequence.updateStage through the documented POST /sequence.updateStage endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "start_sequence",
+        "kind": "create",
+        "method": "POST",
+        "path": "/sequence.start",
+        "risk": "Executes Ashby sequence.start through the documented POST /sequence.start endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_interview_schedule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/interviewSchedule.create",
+        "risk": "Executes Ashby interviewSchedule.create through the documented POST /interviewSchedule.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_interview_schedule",
+        "kind": "update",
+        "method": "POST",
+        "path": "/interviewSchedule.update",
+        "risk": "Executes Ashby interviewSchedule.update through the documented POST /interviewSchedule.update endpoint; reverse ETL plan, preview, explicit approval, typed destructive confirmation, and execute are required for archive/close/cancel-capable request values.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "cancel_interview_schedule",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/interviewSchedule.cancel",
+        "risk": "Executes Ashby interviewSchedule.cancel through the documented POST /interviewSchedule.cancel endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_survey_request",
+        "kind": "create",
+        "method": "POST",
+        "path": "/surveyRequest.create",
+        "risk": "Executes Ashby surveyRequest.create through the documented POST /surveyRequest.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_survey_submission",
+        "kind": "create",
+        "method": "POST",
+        "path": "/surveySubmission.create",
+        "risk": "Executes Ashby surveySubmission.create through the documented POST /surveySubmission.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "create_webhook",
+        "kind": "create",
+        "method": "POST",
+        "path": "/webhook.create",
+        "risk": "Executes Ashby webhook.create through the documented POST /webhook.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_webhook",
+        "kind": "update",
+        "method": "POST",
+        "path": "/webhook.update",
+        "risk": "Executes Ashby webhook.update through the documented POST /webhook.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "delete_webhook",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/webhook.delete",
+        "risk": "Executes Ashby webhook.delete through the documented POST /webhook.delete endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "archive_interviewer_pool",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/interviewerPool.archive",
+        "risk": "Executes Ashby interviewerPool.archive through the documented POST /interviewerPool.archive endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "restore_interviewer_pool",
+        "kind": "update",
+        "method": "POST",
+        "path": "/interviewerPool.restore",
+        "risk": "Executes Ashby interviewerPool.restore through the documented POST /interviewerPool.restore endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_interviewer_pool",
+        "kind": "create",
+        "method": "POST",
+        "path": "/interviewerPool.create",
+        "risk": "Executes Ashby interviewerPool.create through the documented POST /interviewerPool.create endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "update_interviewer_pool",
+        "kind": "update",
+        "method": "POST",
+        "path": "/interviewerPool.update",
+        "risk": "Executes Ashby interviewerPool.update through the documented POST /interviewerPool.update endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "add_interviewer_pool_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/interviewerPool.addUser",
+        "risk": "Executes Ashby interviewerPool.addUser through the documented POST /interviewerPool.addUser endpoint; reverse ETL plan, preview, approval, and execute are required."
+      },
+      {
+        "name": "remove_interviewer_pool_user",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/interviewerPool.removeUser",
+        "risk": "Executes Ashby interviewerPool.removeUser through the documented POST /interviewerPool.removeUser endpoint; reverse ETL plan, preview, approval, and execute are required.",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
-      "read": "external Ashby API reads performed by the legacy connector via a Tier-2 hook",
-      "write": "unsupported",
-      "approval": "none; read-only"
+      "read": "bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and sanitized replay fixtures",
+      "write": "named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute"
     },
     "icon": {
       "id": "ashby",

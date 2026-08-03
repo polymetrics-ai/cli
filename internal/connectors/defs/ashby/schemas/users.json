@@ -4,29 +4,92 @@
   "type": "object",
   "properties": {
     "id": {
-      "type": "string"
+      "type": "string",
+      "description": "The unique identifier for the user"
     },
     "firstName": {
-      "type": "string"
+      "type": "string",
+      "description": "The user's first name"
     },
     "lastName": {
-      "type": "string"
+      "type": "string",
+      "description": "The user's last name"
     },
     "email": {
-      "type": "string"
+      "type": "string",
+      "format": "email"
     },
     "globalRole": {
-      "type": "string"
+      "type": "string",
+      "description": "The user's global role in the organization",
+      "enum": [
+        "Organization Admin",
+        "Elevated Access",
+        "Limited Access",
+        "External Recruiter"
+      ]
     },
     "isEnabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Whether the user is enabled (not deactivated)"
     },
     "updatedAt": {
-      "type": "string"
+      "type": "string",
+      "description": "The timestamp when the user was last updated (ISO 8601 format)"
+    },
+    "managerId": {
+      "type": "string",
+      "description": "The unique identifier for the user's manager"
+    },
+    "customFields": {
+      "type": "array",
+      "description": "Custom fields associated with the user (only included when requested)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the custom field definition"
+          },
+          "isPrivate": {
+            "type": "boolean",
+            "description": "Whether the custom field is private"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the custom field"
+          },
+          "value": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number",
+                "description": "The currency amount"
+              },
+              "currencyCode": {
+                "type": "string",
+                "description": "The currency code"
+              }
+            },
+            "required": [
+              "value",
+              "currencyCode"
+            ]
+          },
+          "valueLabel": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "isPrivate",
+          "title",
+          "value"
+        ]
+      }
     }
   },
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "updatedAt"
+  ]
 }
