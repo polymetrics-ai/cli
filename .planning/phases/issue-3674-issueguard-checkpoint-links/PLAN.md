@@ -49,12 +49,14 @@ Code scope is exactly these two files. No other production or behavior-carrying 
 
 ### Out of scope
 
-- No files change beyond the two code files and this phase's four planning-evidence files; the
-  shipped diff is exactly those six paths.
+- No production or behavior-carrying file changes beyond the two code files; the rest of the shipped
+  diff is this phase's four planning-evidence files plus the agent-contract prose that records the
+  newly accepted PR-body route.
 - No loosening of the general require-linked-issue rule for non-checkpoint PR bodies.
-- No connector definition, CLI surface, docs, or website changes; issueguard is a shared PR-body
+- No connector definition, CLI surface, `docs/**`, or website changes; issueguard is a shared PR-body
   validator consumed by `cmd/prissueguard` and `.github/workflows/pr-issue-guard.yml`, not a `pm`
-  user surface, so CLI/help/docs/website parity is not applicable.
+  user surface, so CLI/help/docs/website parity is not applicable. The accepted-route list itself is
+  owned by `.agents/agentic-delivery/contracts/issue-agent-contract.md` and is updated there.
 - No change to `completedTaskPattern`'s trailing-noun tightness. One known wording variant remains
   blocked by design: PR #3578 (marketo, wave05) carries the identical checkpoint headings but
   phrases its sentence as `...an unvalidated cloud checkpoint for the completed committed

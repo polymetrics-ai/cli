@@ -41,6 +41,7 @@ run against every open PR body fetched live from GitHub via `gh api repos/polyme
 | Check | Result | Notes |
 |---|---|---|
 | `pm` help, manual, `docs/cli/**`, `website/**` | Not applicable | `internal/coordination/issueguard` backs the `pr-issue-guard` GitHub Actions check through `cmd/prissueguard`; no `pm` command, flag, output, help topic, or connector surface changes in this slice. |
+| Accepted PR-body routes | Updated | `.agents/agentic-delivery/contracts/issue-agent-contract.md` owns the list of bodies that satisfy the guard; required-workflow step 14 now records the checkpoint route and its two gates, and the `Output requirements` restatement points there instead of re-listing the routes. `AGENTS.md` keeps a pointer only. |
 
 ## Repository gate evidence
 

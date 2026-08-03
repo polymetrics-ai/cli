@@ -72,6 +72,13 @@ before implementation.
     - A no-mistakes-generated PR may satisfy the guard with its complete delivery record instead of
       a manual issue link only when the body has `## Intent`, `## What Changed`, `## Testing`, and
       `## Pipeline` sections plus the generated `git push no-mistakes` marker.
+    - A checkpoint-publishing PR may satisfy the guard with the canonical issue links carried over
+      from its task record only when the body has a
+      `## Unvalidated cloud checkpoint — do not merge yet` heading, says between that heading and
+      the links section that it is an unvalidated cloud checkpoint for the completed task, and
+      lists the `https://github.com/<owner>/<repo>/issues/<n>` links under a later
+      `## Canonical issue links preserved from the task record` heading. Only links inside that
+      section count; a bare issue URL anywhere else still does not satisfy the guard.
 15. After implementation and local verification, choose the automated review route using
     `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`, then run the Claude
     review loop in
@@ -125,7 +132,8 @@ The parent PR into `main` always requires human approval.
 
 Every implementation PR must include:
 
-- issue link, or the complete generated no-mistakes delivery record when the PR is not issue-backed
+- issue link, or one of the non-issue-link body routes accepted in required-workflow step 14, when
+  the PR is not issue-backed
 - summary of changes
 - red/green/refactor evidence when behavior changed
 - GSD programming-loop evidence, including the `/gsd...` or `scripts/gsd prompt ...` command used,
