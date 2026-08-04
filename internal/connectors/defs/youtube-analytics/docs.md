@@ -19,8 +19,6 @@ Service API documentation:
 
 Connection fields:
 
-- `analytics_base_url` (optional, string); default `https://youtubeanalytics.googleapis.com/v2`;
-  format `uri`; YouTube Analytics API base URL override for tests or proxies.
 - `base_url` (optional, string); default `https://youtubereporting.googleapis.com/v1`; format
   `uri`; YouTube Reporting API base URL override for tests or proxies.
 - `client_id` (required, secret, string); Google OAuth 2.0 client ID for the refresh-token grant.
@@ -31,14 +29,10 @@ Connection fields:
   content-owner-scoped read streams. Declarative write actions currently omit this optional query
   parameter until write-action query templates are supported.
 - `created_after` (optional, string); Reporting `reports.list` `createdAfter` filter.
-- `group_id` (optional, string); group ID used by the `group_items` stream when not supplied as a
-  command query flag.
-- `group_ids` (optional, string); comma-separated group IDs for the `groups` stream `id` query.
 - `include_system_managed` (optional, string); `true`/`false` for Reporting jobs and report types.
 - `job_id` (optional, string); required for `job`, `reports`, and `report` streams.
 - `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
   paginated streams.
-- `mine` (optional, string); `true`/`false` groups-list ownership selector.
 - `mode` (optional, string).
 - `page_size` (optional, string); default `100`; Records per page for Reporting list operations.
 - `refresh_token` (required, secret, string); Long-lived Google OAuth 2.0 refresh token. Exchanged
@@ -82,31 +76,35 @@ Default pagination: cursor pagination; cursor parameter `pageToken`; next token 
   `job_expire_time`, `download_url`.
 - `report`: GET `/jobs/{{ config.job_id }}/reports/{{ config.report_id }}`; single object;
   optional `onBehalfOfContentOwner`; computed fields match `reports`.
-- `groups`: GET `{{ config.analytics_base_url }}/groups`; records path `items`; optional `id`,
-  `mine`, and `onBehalfOfContentOwner`; computed fields `title`, `published_at`, `item_count`,
-  `item_type`.
-- `group_items`: GET `{{ config.analytics_base_url }}/groupItems`; records path `items`; optional
-  `groupId` and `onBehalfOfContentOwner`; computed fields `group_id`, `resource_kind`,
-  `resource_id`.
+- `groups`: GET `https://youtubeanalytics.googleapis.com/v2/groups`; records path `items`; requires
+  the closed command selector `mine=true` before request execution and optionally sends
+  `onBehalfOfContentOwner`; computed fields `title`, `published_at`, `item_count`, `item_type`.
+- `group_items`: GET `https://youtubeanalytics.googleapis.com/v2/groupItems`; records path `items`;
+  requires command query `groupId` before request execution and optionally sends
+  `onBehalfOfContentOwner`; computed fields `group_id`, `resource_kind`, `resource_id`.
 
 ## Write actions & risks
 
 Write actions are available only through reverse ETL plan → preview → explicit approval → execute.
 Destructive delete actions also require typed `--confirm destructive` at execution time.
 
-- `create_job`: POST `/jobs`; required `reportTypeId`; optional `name`.
+- `create_job`: POST `/jobs`; required `reportTypeId` and `name`.
 - `delete_job`: DELETE `/jobs/{{ record.job_id }}`; required `job_id`; redacted preview/error
   field `job_id`; destructive confirmation required.
-- `create_group`: POST `{{ config.analytics_base_url }}/groups`; required `snippet.title`.
-- `update_group`: PUT `{{ config.analytics_base_url }}/groups`; required `id` and
+- `create_group`: POST `https://youtubeanalytics.googleapis.com/v2/groups`; required
+  `snippet.title`.
+- `update_group`: PUT `https://youtubeanalytics.googleapis.com/v2/groups`; required `id` and
   `snippet.title`; group ID redacted in write errors.
-- `delete_group`: DELETE `{{ config.analytics_base_url }}/groups?id={{ record.id | urlencode }}`;
-  required `id`; redacted preview/error field `id`; destructive confirmation required.
-- `create_group_item`: POST `{{ config.analytics_base_url }}/groupItems`; required `groupId`,
-  `resource.kind`, and `resource.id`; group/resource IDs redacted in write errors.
+- `delete_group`: DELETE
+  `https://youtubeanalytics.googleapis.com/v2/groups?id={{ record.id | urlencode }}`; required
+  `id`; redacted preview/error field `id`; destructive confirmation required.
+- `create_group_item`: POST `https://youtubeanalytics.googleapis.com/v2/groupItems`; required
+  `groupId` and `resource.id`; optional `resource.kind` accepts `youtube#channel`,
+  `youtube#playlist`, `youtube#video`, or `youtubePartner#asset`; group/resource IDs are redacted in
+  write errors.
 - `delete_group_item`: DELETE
-  `{{ config.analytics_base_url }}/groupItems?id={{ record.id | urlencode }}`; required `id`;
-  redacted preview/error field `id`; destructive confirmation required.
+  `https://youtubeanalytics.googleapis.com/v2/groupItems?id={{ record.id | urlencode }}`; required
+  `id`; redacted preview/error field `id`; destructive confirmation required.
 
 The official APIs document optional `onBehalfOfContentOwner` for several writes. The declarative
 write dialect does not yet support optional action-level query parameters, so these write actions
@@ -115,10 +113,12 @@ omit that optional query rather than hard-coding an empty or required content-ow
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage accounts for 16 official operations: 14 executable connector surfaces and 2 blocked
-  operation metadata rows.
-- YouTube Analytics `reports.query` is blocked pending a bounded provider-query/direct-read
-  foundation for the separate Analytics API host.
+- API coverage accounts for 16 official operations: 15 executable connector surfaces and 1 planned
+  operation metadata row.
+- YouTube Analytics `reports.query` remains planned solely for the bounded provider-query/direct-read
+  foundation tracked by issue #2985.
+- Executable YouTube Analytics routes use fixed provider-owned absolute URLs. They do not interpolate
+  a caller-controlled host into an authenticated request.
 - YouTube Reporting `media.download` is reachable as `pm youtube-analytics reports download`.
   It requires the provider `resourceName` plus an explicit `--dest-root`, may use `--file-name`,
   streams at most 100 MiB, refuses path traversal/overwrite/archive extraction, and records file

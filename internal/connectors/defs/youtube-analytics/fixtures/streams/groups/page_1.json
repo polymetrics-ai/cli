@@ -1,7 +1,13 @@
 {
   "request": {
     "method": "GET",
-    "path": "/groups"
+    "path": "/v2/groups",
+    "query": {
+      "mine": "true"
+    }
+  },
+  "read_query": {
+    "mine": "true"
   },
   "response": {
     "status": 200,

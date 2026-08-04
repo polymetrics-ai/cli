@@ -42,7 +42,7 @@
       "name": "create_group",
       "kind": "create",
       "method": "POST",
-      "path": "{{ config.analytics_base_url }}/groups",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groups",
       "body_type": "json",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -66,7 +66,7 @@
       "name": "update_group",
       "kind": "update",
       "method": "PUT",
-      "path": "{{ config.analytics_base_url }}/groups",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groups",
       "redact_fields": ["id"],
       "body_type": "json",
       "record_schema": {
@@ -92,7 +92,7 @@
       "name": "delete_group",
       "kind": "delete",
       "method": "DELETE",
-      "path": "{{ config.analytics_base_url }}/groups?id={{ record.id | urlencode }}",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groups?id={{ record.id | urlencode }}",
       "path_fields": ["id"],
       "redact_fields": ["id"],
       "body_type": "none",
@@ -112,7 +112,7 @@
       "name": "create_group_item",
       "kind": "create",
       "method": "POST",
-      "path": "{{ config.analytics_base_url }}/groupItems",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groupItems",
       "redact_fields": ["groupId", "resource.id"],
       "body_type": "json",
       "record_schema": {
@@ -124,10 +124,10 @@
           "groupId": { "type": "string" },
           "resource": {
             "type": "object",
-            "required": ["kind", "id"],
+            "required": ["id"],
             "additionalProperties": false,
             "properties": {
-              "kind": { "type": "string", "enum": ["youtube#channel", "youtube#playlist", "youtube#video", "youtube#asset"] },
+              "kind": { "type": "string", "enum": ["youtube#channel", "youtube#playlist", "youtube#video", "youtubePartner#asset"] },
               "id": { "type": "string" }
             }
           }
@@ -139,7 +139,7 @@
       "name": "delete_group_item",
       "kind": "delete",
       "method": "DELETE",
-      "path": "{{ config.analytics_base_url }}/groupItems?id={{ record.id | urlencode }}",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groupItems?id={{ record.id | urlencode }}",
       "path_fields": ["id"],
       "redact_fields": ["id"],
       "body_type": "none",

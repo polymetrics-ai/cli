@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/groupItems?id=group_item_fixture_delete"
+    "path": "/v2/groupItems?id=group_item_fixture_delete"
   },
   "response": {
     "status": 200,

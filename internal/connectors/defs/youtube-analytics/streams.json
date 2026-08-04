@@ -115,10 +115,9 @@
     },
     {
       "name": "groups",
-      "path": "{{ config.analytics_base_url }}/groups",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groups",
       "query": {
-        "id": { "template": "{{ config.group_ids }}", "omit_when_absent": true },
-        "mine": { "template": "{{ config.mine }}", "omit_when_absent": true },
+        "mine": "{{ query.mine }}",
         "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
       },
       "records": { "path": "items" },
@@ -132,9 +131,9 @@
     },
     {
       "name": "group_items",
-      "path": "{{ config.analytics_base_url }}/groupItems",
+      "path": "https://youtubeanalytics.googleapis.com/v2/groupItems",
       "query": {
-        "groupId": { "template": "{{ config.group_id }}", "omit_when_absent": true },
+        "groupId": "{{ query.groupId }}",
         "onBehalfOfContentOwner": { "template": "{{ config.content_owner_id }}", "omit_when_absent": true }
       },
       "records": { "path": "items" },

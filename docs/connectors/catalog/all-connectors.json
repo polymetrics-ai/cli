@@ -160349,12 +160349,6 @@
           "default": "https://youtubereporting.googleapis.com/v1",
           "description": "YouTube Reporting API base URL override for tests or proxies. Reporting streams and job write actions use this host."
         },
-        "analytics_base_url": {
-          "type": "string",
-          "format": "uri",
-          "default": "https://youtubeanalytics.googleapis.com/v2",
-          "description": "YouTube Analytics API base URL override for tests or proxies. Groups, group items, and the blocked reports.query operation use this host."
-        },
         "token_url": {
           "type": "string",
           "format": "uri",
@@ -160377,22 +160371,6 @@
         "report_id": {
           "type": "string",
           "description": "Reporting report ID. Required when reading the single report stream."
-        },
-        "group_id": {
-          "type": "string",
-          "description": "YouTube Analytics group ID. Required when reading the group_items stream."
-        },
-        "group_ids": {
-          "type": "string",
-          "description": "Optional comma-separated group IDs for the groups stream's documented id query parameter."
-        },
-        "mine": {
-          "type": "string",
-          "enum": [
-            "true",
-            "false"
-          ],
-          "description": "Optional groups.list mine query value. Use true to retrieve groups owned by the authenticated user."
         },
         "include_system_managed": {
           "type": "string",
@@ -160529,21 +160507,21 @@
         "name": "create_group",
         "kind": "create",
         "method": "POST",
-        "path": "{{ config.analytics_base_url }}/groups",
+        "path": "https://youtubeanalytics.googleapis.com/v2/groups",
         "risk": "creates a YouTube Analytics group; requires reverse ETL plan, preview, and explicit approval"
       },
       {
         "name": "update_group",
         "kind": "update",
         "method": "PUT",
-        "path": "{{ config.analytics_base_url }}/groups",
+        "path": "https://youtubeanalytics.googleapis.com/v2/groups",
         "risk": "updates a YouTube Analytics group's metadata (for example title); redacts group id in write errors and requires reverse ETL plan, preview, and explicit approval"
       },
       {
         "name": "delete_group",
         "kind": "delete",
         "method": "DELETE",
-        "path": "{{ config.analytics_base_url }}/groups?id={{ record.id | urlencode }}",
+        "path": "https://youtubeanalytics.googleapis.com/v2/groups?id={{ record.id | urlencode }}",
         "risk": "deletes a YouTube Analytics group; destructive, redacts group id in previews/errors, and requires reverse ETL plan, preview, explicit approval, and typed confirmation",
         "confirm": "destructive"
       },
@@ -160551,14 +160529,14 @@
         "name": "create_group_item",
         "kind": "create",
         "method": "POST",
-        "path": "{{ config.analytics_base_url }}/groupItems",
+        "path": "https://youtubeanalytics.googleapis.com/v2/groupItems",
         "risk": "adds a channel, playlist, video, or asset to a YouTube Analytics group; redacts group/resource identifiers in write errors and requires reverse ETL plan, preview, and explicit approval"
       },
       {
         "name": "delete_group_item",
         "kind": "delete",
         "method": "DELETE",
-        "path": "{{ config.analytics_base_url }}/groupItems?id={{ record.id | urlencode }}",
+        "path": "https://youtubeanalytics.googleapis.com/v2/groupItems?id={{ record.id | urlencode }}",
         "risk": "removes an item from a YouTube Analytics group; destructive, redacts group-item id in previews/errors, and requires reverse ETL plan, preview, explicit approval, and typed confirmation",
         "confirm": "destructive"
       }

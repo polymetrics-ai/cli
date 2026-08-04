@@ -2,18 +2,18 @@
   "record": {
     "groupId": "group_fixture_1",
     "resource": {
-      "kind": "youtube#video",
-      "id": "video_fixture_1"
+      "kind": "youtubePartner#asset",
+      "id": "asset_fixture_1"
     }
   },
   "expect": {
     "method": "POST",
-    "path": "/groupItems",
+    "path": "/v2/groupItems",
     "body": {
       "groupId": "group_fixture_1",
       "resource": {
-        "kind": "youtube#video",
-        "id": "video_fixture_1"
+        "kind": "youtubePartner#asset",
+        "id": "asset_fixture_1"
       }
     }
   },
@@ -24,8 +24,8 @@
       "id": "group_item_fixture_created",
       "groupId": "group_fixture_1",
       "resource": {
-        "kind": "youtube#video",
-        "id": "video_fixture_1"
+        "kind": "youtubePartner#asset",
+        "id": "asset_fixture_1"
       }
     }
   }

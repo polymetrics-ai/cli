@@ -4,10 +4,10 @@
       "id": "reports_query",
       "kind": "rest_read",
       "summary": "Query ad-hoc YouTube Analytics metrics and dimensions.",
-      "description": "Official youtubeAnalytics.reports.query (GET /v2/reports). Kept blocked because the connector direct-read executor cannot yet provide a bounded, typed provider-query surface across the separate Analytics API host without broad raw-query escape hatches.",
+      "description": "Official youtubeAnalytics.reports.query (GET /v2/reports). Kept planned solely until typed provider-query foundation issue #2985 can provide bounded query fields without a raw-query escape hatch.",
       "source_url": "https://developers.google.com/youtube/analytics/reference/reports/query",
       "risk": "low",
-      "approval": "blocked by default; no live provider call is made by this connector operation definition",
+      "approval": "planned on issue #2985; no live provider call is made by this connector operation definition",
       "output_policy": "json_redacted",
       "auth_scopes": [
         "https://www.googleapis.com/auth/youtube",
@@ -19,7 +19,7 @@
       "mutation_class": "none",
       "rest": {
         "method": "GET",
-        "path": "{{ config.analytics_base_url }}/reports",
+        "path": "https://youtubeanalytics.googleapis.com/v2/reports",
         "max_bytes": 1048576,
         "query": {
           "ids": "channel==MINE|contentOwner==OWNER_NAME",

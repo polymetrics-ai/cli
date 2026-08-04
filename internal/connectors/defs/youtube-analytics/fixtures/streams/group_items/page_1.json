@@ -1,10 +1,13 @@
 {
   "request": {
     "method": "GET",
-    "path": "/groupItems",
+    "path": "/v2/groupItems",
     "query": {
-      "groupId": "synthetic-conformance-value"
+      "groupId": "group_fixture_1"
     }
+  },
+  "read_query": {
+    "groupId": "group_fixture_1"
   },
   "response": {
     "status": 200,

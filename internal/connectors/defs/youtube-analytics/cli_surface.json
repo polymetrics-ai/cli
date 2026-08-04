@@ -128,7 +128,8 @@
           "type": "string",
           "summary": "ReportType id the job should generate.",
           "maps_to": "record.reportTypeId",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "name",
@@ -165,7 +166,8 @@
           "type": "string",
           "summary": "Reporting job ID to delete.",
           "maps_to": "record.job_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "redact_fields": [
@@ -275,7 +277,7 @@
     },
     {
       "path": "reports query",
-      "summary": "Documented YouTube Analytics reports.query provider query operation (blocked by default).",
+      "summary": "Documented YouTube Analytics reports.query provider query operation planned for issue #2985.",
       "intent": "direct_read",
       "availability": "planned",
       "operation": "reports_query",
@@ -287,7 +289,7 @@
           "path": "/v2/reports"
         }
       ],
-      "notes": "Blocked until provider-query/direct-read foundation supports bounded typed cross-host query execution without raw query escape hatches."
+      "notes": "Planned solely until typed provider-query foundation issue #2985 supports bounded provider-owned query fields without raw query escape hatches."
     },
     {
       "path": "reports download",
@@ -326,16 +328,13 @@
       "flags": [
         {
           "name": "mine",
-          "type": "boolean",
-          "summary": "Set the groups.list mine query value.",
-          "maps_to": "query.mine"
-        },
-        {
-          "name": "group-ids",
-          "type": "string",
-          "summary": "Comma-separated group ids for the groups.list id query value.",
-          "maps_to": "query.id",
-          "allow_empty": false
+          "type": "enum",
+          "values": [
+            "true"
+          ],
+          "summary": "Required closed groups.list selector; only the provider-valid mine=true mode is supported.",
+          "maps_to": "query.mine",
+          "required": true
         }
       ],
       "api_surface": [
@@ -362,7 +361,8 @@
           "type": "string",
           "summary": "Group title.",
           "maps_to": "record.snippet.title",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -391,14 +391,16 @@
           "type": "string",
           "summary": "YouTube Analytics group id to update.",
           "maps_to": "record.id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "title",
           "type": "string",
           "summary": "Replacement group title.",
           "maps_to": "record.snippet.title",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "redact_fields": [
@@ -430,7 +432,8 @@
           "type": "string",
           "summary": "YouTube Analytics group id to delete.",
           "maps_to": "record.id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "redact_fields": [
@@ -462,7 +465,8 @@
           "type": "string",
           "summary": "Group ID for the required groupItems.list groupId query value.",
           "maps_to": "query.groupId",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -489,7 +493,8 @@
           "type": "string",
           "summary": "Group ID to add the resource to.",
           "maps_to": "record.groupId",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "resource-kind",
@@ -498,9 +503,9 @@
             "youtube#channel",
             "youtube#playlist",
             "youtube#video",
-            "youtube#asset"
+            "youtubePartner#asset"
           ],
-          "summary": "Resource kind being added.",
+          "summary": "Optional provider resource kind being added.",
           "maps_to": "record.resource.kind"
         },
         {
@@ -508,7 +513,8 @@
           "type": "string",
           "summary": "Resource ID being added.",
           "maps_to": "record.resource.id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "redact_fields": [
@@ -541,7 +547,8 @@
           "type": "string",
           "summary": "Group item id to remove.",
           "maps_to": "record.id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "redact_fields": [

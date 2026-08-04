@@ -13,7 +13,7 @@
 1. Recover the preserved `fc727ac88` delta onto current main, inspect every changed path, and remove stale assertions about runtime foundations that have landed.
 2. Build an official-provider operation and request-field evidence matrix for YouTube Analytics and Reporting APIs. Reconcile it with `operations.json`, `api_surface.json`, and `cli_surface.json`; use the landing shared citation format rather than modifying shared schemas or conventions.
 3. Red-test the newly executable `media.download` command and its binary-download metadata; implement only the minimum bundle changes and fixtures to make it executable, then record green evidence.
-4. Keep `reports.query` blocked on issue #2985's typed provider-query foundation; verify it is not exposed as `provider_search` or `rest_write`.
+4. Keep `reports.query` planned solely for issue #2985's typed provider-query foundation; verify it is not exposed as `provider_search` or `rest_write`.
 5. Synchronize generated surface/manual/website output late, only for YouTube Analytics, then run the focused connector, commandrunner, CLI, vet, build, help, and website-data gates.
 6. Update the phase summary, verification record, and explicit operation/citation accounting; commit the coherent slice and drive `$no-mistakes` from the committed branch.
 

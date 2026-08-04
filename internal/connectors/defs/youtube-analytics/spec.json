@@ -25,12 +25,6 @@
       "default": "https://youtubereporting.googleapis.com/v1",
       "description": "YouTube Reporting API base URL override for tests or proxies. Reporting streams and job write actions use this host."
     },
-    "analytics_base_url": {
-      "type": "string",
-      "format": "uri",
-      "default": "https://youtubeanalytics.googleapis.com/v2",
-      "description": "YouTube Analytics API base URL override for tests or proxies. Groups, group items, and the blocked reports.query operation use this host."
-    },
     "token_url": {
       "type": "string",
       "format": "uri",
@@ -53,19 +47,6 @@
     "report_id": {
       "type": "string",
       "description": "Reporting report ID. Required when reading the single report stream."
-    },
-    "group_id": {
-      "type": "string",
-      "description": "YouTube Analytics group ID. Required when reading the group_items stream."
-    },
-    "group_ids": {
-      "type": "string",
-      "description": "Optional comma-separated group IDs for the groups stream's documented id query parameter."
-    },
-    "mine": {
-      "type": "string",
-      "enum": ["true", "false"],
-      "description": "Optional groups.list mine query value. Use true to retrieve groups owned by the authenticated user."
     },
     "include_system_managed": {
       "type": "string",

@@ -6,7 +6,7 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/groups",
+    "path": "/v2/groups",
     "body": {
       "snippet": {
         "title": "Owned fixture group"

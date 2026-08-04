@@ -9,7 +9,7 @@ Rehydrate the preserved YouTube Analytics bundle delta onto current `origin/main
 - Target ownership is limited to `internal/connectors/defs/youtube-analytics/` plus generated connector/manual/website artifacts and this phase record.
 - Rebase/recovery must start from preserved commit `fc727ac88`; current main is the runtime authority.
 - Every request field needs provider-owned citation evidence using the convention that lands before final validation; do not invent a competing shared schema.
-- `media.download` must use the now-wired `binary_download` executor; `reports.query` remains blocked on typed provider-query foundation issue #2985, not `provider_search`.
+- `media.download` must use the now-wired `binary_download` executor; `reports.query` remains planned solely for typed provider-query foundation issue #2985, not `provider_search`.
 - Do not represent a mutation with `rest_write`; this connector's Reporting API management mutations remain unavailable until a supported runtime contract exists.
 - No credentialed calls, no reverse-ETL execution, no new dependency, no shared engine/schema/conventions edits.
 

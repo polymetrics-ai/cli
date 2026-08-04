@@ -7,7 +7,7 @@
   },
   "expect": {
     "method": "PUT",
-    "path": "/groups",
+    "path": "/v2/groups",
     "body": {
       "id": "group_fixture_1",
       "snippet": {
