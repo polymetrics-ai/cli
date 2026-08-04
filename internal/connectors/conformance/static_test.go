@@ -263,12 +263,40 @@ func TestCheckSurfaceComplete_V2ProvenanceSuppliesBlockedOperationCitation(t *te
 					BlockedByDefault: true,
 					Reason:           "requires sensitive-data safeguards",
 				},
+            }},
+        },
+    }
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete: v2 endpoint provenance should supply the blocked-operation citation: %v", err)
+	}
+}
+
+func TestCheckSurfaceComplete_POSTDirectReadDoesNotRequireWriteCapability(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true, Write: false},
+		},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "POST",
+				Path:      "/freeBusy",
+				CoveredBy: &engine.SurfaceCoverage{DirectRead: "freebusy query"},
+			}},
+		},
+		CLISurface: &engine.CLISurface{
+			Commands: []engine.CLICommand{{
+				Path:         "freebusy query",
+				Intent:       "direct_read",
+				Availability: "implemented",
 			}},
 		},
 	}
 
 	if err := checkSurfaceComplete(b); err != nil {
-		t.Fatalf("checkSurfaceComplete: v2 endpoint provenance should supply the blocked-operation citation: %v", err)
+		t.Fatalf("checkSurfaceComplete rejected POST direct read with write disabled: %v", err)
 	}
 }
 
