@@ -13,8 +13,8 @@ import (
 )
 
 // surfaceSync derives the command-surface metadata that operation-backed
-// direct_read commands need in order to actually execute, from the bundle's
-// own operations.json.
+// direct_read and binary_download commands need in order to actually execute,
+// from the bundle's own operations.json.
 //
 // It exists because the same facts previously had to be hand-copied into
 // cli_surface.json, and hand-copying is what let 174 commands claim

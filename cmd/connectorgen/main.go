@@ -12,9 +12,10 @@
 //	gen                        regenerates hooks/hookset/hookset_gen.go and
 //	                           native/nativeset/nativeset_gen.go
 //	surface-sync [dir] [--check]
-//	                           derives operation-backed direct_read command
-//	                           metadata (api_surface, output_policy, flag
-//	                           maps_to, rest.max_bytes) from operations.json
+//	                           derives operation-backed direct_read and
+//	                           binary_download command metadata (api_surface,
+//	                           output_policy, flag maps_to, rest.max_bytes)
+//	                           from operations.json
 //	new <name>                 scaffolds internal/connectors/defs/<name>/
 //
 // It owns bundle validation plus generated hook/native import sets for the
