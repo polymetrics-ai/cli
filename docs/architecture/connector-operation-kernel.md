@@ -30,6 +30,7 @@ operations.
 - `stream_etl`
 - `rest_read`
 - `rest_write`
+- `provider_search`
 - `graphql_query`
 - `graphql_mutation`
 - `xml_export`
@@ -43,6 +44,12 @@ operations.
 
 Unknown kinds are rejected at load time. There is intentionally no generic
 shell, unrestricted HTTP write, generic SQL write, or arbitrary GraphQL kind.
+
+`provider_search` is a read that carries a fixed POST body containing bounded
+lists; every array must declare `maxItems`, the body schema must be closed
+(`additionalProperties: false`), and the method/path are fixed by the bundle.
+It is a distinct kind rather than a convention over `rest_read` so its bound
+rules are enforceable at load time.
 
 ## Safety Contract
 

@@ -443,7 +443,7 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		if err != nil {
 			return fmt.Errorf("engine: write action %q: %w", action.Name, err)
 		}
-		defer root.Close()
+		defer func() { _ = root.Close() }()
 		form, err := buildMultipartPayload(action, rec, recordIndex, cfg, root)
 		if err != nil {
 			return err
@@ -846,17 +846,6 @@ func multipartRootRelativePath(projectDir, raw string) (string, error) {
 
 func safetyRejectLocalFilePath(projectDir, raw string) error {
 	return safety.ValidateLocalWritePath(projectDir, raw, "multipart file path", false)
-}
-
-func requireInsideRoot(rootAbs, pathAbs string) error {
-	rel, err := filepath.Rel(rootAbs, pathAbs)
-	if err != nil {
-		return fmt.Errorf("compare multipart file path to project root: %w", err)
-	}
-	if rel == "." || (rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)) && !filepath.IsAbs(rel)) {
-		return nil
-	}
-	return fmt.Errorf("multipart file path outside the project root is not allowed")
 }
 
 // buildForm builds a url.Values form body from every record field not
