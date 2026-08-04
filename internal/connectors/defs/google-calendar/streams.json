@@ -60,7 +60,7 @@
         "cursor_param": "pageToken",
         "token_path": "nextPageToken"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/calendar_list.json"
     },
     {
@@ -116,7 +116,7 @@
         "cursor_param": "pageToken",
         "token_path": "nextPageToken"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "incremental": {
         "cursor_field": "updated",
         "request_param": "updatedMin",
@@ -158,13 +158,18 @@
     {
       "name": "settings",
       "path": "/users/me/settings",
+      "query": {
+        "maxResults": "250"
+      },
       "records": {
         "path": "items"
       },
       "pagination": {
-        "type": "none"
+        "type": "cursor",
+        "cursor_param": "pageToken",
+        "token_path": "nextPageToken"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/settings.json"
     },
     {
@@ -194,7 +199,7 @@
         "cursor_param": "pageToken",
         "token_path": "nextPageToken"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/acl.json"
     },
     {

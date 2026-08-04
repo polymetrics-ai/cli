@@ -195,3 +195,191 @@ func TestFreeBusyOperationDirectReadFixtureOnly(t *testing.T) {
 		t.Fatalf("body = %s", body)
 	}
 }
+
+func TestBundleMetadataMatchesExecutableSurface(t *testing.T) {
+	b, err := engine.Load(defs.FS, "google-calendar")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Metadata.ReleaseStage != "alpha" {
+		t.Fatalf("release stage = %q, want alpha", b.Metadata.ReleaseStage)
+	}
+	if b.Metadata.Capabilities.Write {
+		t.Fatal("write capability = true without executable writes")
+	}
+	if len(b.Writes) != 0 {
+		t.Fatalf("writes = %d, want 0", len(b.Writes))
+	}
+}
+
+func TestEventsInitialReadDoesNotApplyImplicitCutoff(t *testing.T) {
+	tests := []struct {
+		name           string
+		startDate      string
+		wantUpdatedMin string
+	}{
+		{name: "unfiltered fresh read"},
+		{name: "explicit lower bound", startDate: "2020-01-01T00:00:00Z", wantUpdatedMin: "2020-01-01T00:00:00Z"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var gotUpdatedMin string
+			conn, closeServer := newFixtureConnector(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != "/calendar/v3/calendars/primary/events" {
+					t.Errorf("path = %q", r.URL.Path)
+				}
+				gotUpdatedMin = r.URL.Query().Get("updatedMin")
+				_ = json.NewEncoder(w).Encode(map[string]any{"items": []any{map[string]any{"id": "event-1", "updated": "2026-01-01T00:00:00Z"}}})
+			}))
+			defer closeServer()
+
+			config := map[string]string{}
+			if tt.startDate != "" {
+				config["start_date"] = tt.startDate
+			}
+			records := 0
+			err := conn.Read(context.Background(), connectors.ReadRequest{
+				Stream: "events",
+				Config: connectors.RuntimeConfig{
+					ProjectDir: "__polymetrics_conformance_fixture__",
+					Config:     config,
+				},
+			}, func(connectors.Record) error {
+				records++
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Read: %v", err)
+			}
+			if records != 1 {
+				t.Fatalf("records = %d, want 1", records)
+			}
+			if gotUpdatedMin != tt.wantUpdatedMin {
+				t.Fatalf("updatedMin = %q, want %q", gotUpdatedMin, tt.wantUpdatedMin)
+			}
+		})
+	}
+}
+
+func TestLegacyStreamsProjectDeclaredSchemas(t *testing.T) {
+	tests := []struct {
+		name          string
+		path          string
+		record        map[string]any
+		excludedField string
+	}{
+		{
+			name:          "calendar_list",
+			path:          "/calendar/v3/users/me/calendarList",
+			record:        map[string]any{"id": "calendar-1", "summary": "Calendar", "backgroundColor": "#ffffff"},
+			excludedField: "backgroundColor",
+		},
+		{
+			name:          "events",
+			path:          "/calendar/v3/calendars/primary/events",
+			record:        map[string]any{"id": "event-1", "updated": "2026-01-01T00:00:00Z", "conferenceData": map[string]any{}},
+			excludedField: "conferenceData",
+		},
+		{
+			name:          "settings",
+			path:          "/calendar/v3/users/me/settings",
+			record:        map[string]any{"id": "timezone", "value": "UTC", "providerOnly": true},
+			excludedField: "providerOnly",
+		},
+		{
+			name:          "acl",
+			path:          "/calendar/v3/calendars/primary/acl",
+			record:        map[string]any{"id": "rule-1", "role": "reader", "scope": map[string]any{"type": "default"}, "providerOnly": true},
+			excludedField: "providerOnly",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			conn, closeServer := newFixtureConnector(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != tt.path {
+					t.Errorf("path = %q, want %q", r.URL.Path, tt.path)
+				}
+				_ = json.NewEncoder(w).Encode(map[string]any{"items": []any{tt.record}})
+			}))
+			defer closeServer()
+
+			var got connectors.Record
+			err := conn.Read(context.Background(), connectors.ReadRequest{
+				Stream: tt.name,
+				Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+			}, func(record connectors.Record) error {
+				got = record
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Read: %v", err)
+			}
+			if got == nil {
+				t.Fatal("no record emitted")
+			}
+			if _, ok := got[tt.excludedField]; ok {
+				t.Fatalf("record retained undeclared field %q: %#v", tt.excludedField, got)
+			}
+		})
+	}
+}
+
+func TestSettingsReadFollowsNextPageToken(t *testing.T) {
+	requests := 0
+	conn, closeServer := newFixtureConnector(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if r.URL.Path != "/calendar/v3/users/me/settings" {
+			t.Errorf("path = %q", r.URL.Path)
+		}
+		if got := r.URL.Query().Get("maxResults"); got != "250" {
+			t.Errorf("maxResults = %q, want 250", got)
+		}
+		switch token := r.URL.Query().Get("pageToken"); token {
+		case "":
+			_ = json.NewEncoder(w).Encode(map[string]any{
+				"nextPageToken": "settings-page-2",
+				"items":         []any{map[string]any{"id": "timezone", "value": "UTC"}},
+			})
+		case "settings-page-2":
+			_ = json.NewEncoder(w).Encode(map[string]any{
+				"items": []any{map[string]any{"id": "weekStart", "value": "1"}},
+			})
+		default:
+			t.Errorf("pageToken = %q", token)
+			_ = json.NewEncoder(w).Encode(map[string]any{"items": []any{}})
+		}
+	}))
+	defer closeServer()
+
+	var records []connectors.Record
+	err := conn.Read(context.Background(), connectors.ReadRequest{
+		Stream: "settings",
+		Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+	}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if requests != 2 {
+		t.Fatalf("requests = %d, want 2", requests)
+	}
+	if len(records) != 2 {
+		t.Fatalf("records = %d, want 2", len(records))
+	}
+}
+
+func newFixtureConnector(t *testing.T, handler http.Handler) (*engine.Connector, func()) {
+	t.Helper()
+	srv := httptest.NewServer(handler)
+	b, err := engine.Load(defs.FS, "google-calendar")
+	if err != nil {
+		srv.Close()
+		t.Fatalf("Load: %v", err)
+	}
+	b.HTTP.URL = srv.URL + "/calendar/v3"
+	return engine.New(b, Hooks{}), srv.Close
+}

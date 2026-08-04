@@ -28,8 +28,7 @@
     "start_date": {
       "type": "string",
       "format": "date-time",
-      "default": "2020-01-01T00:00:00Z",
-      "description": "Lower bound for events.updated incremental reads."
+      "description": "Optional lower bound for events.updated incremental reads; fresh reads are unfiltered when omitted."
     },
     "client_id": {
       "type": "string",

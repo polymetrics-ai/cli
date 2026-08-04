@@ -4,11 +4,11 @@
   "description": "Reads Google Calendar calendars, calendar-list entries, events, recurring-event instances, colors, settings, and ACL rules, plus a bounded typed free/busy query, through the Calendar API v3 using an OAuth2 refresh token.",
   "integration_type": "api",
   "docs_url": "https://developers.google.com/workspace/calendar/api/v3/reference",
-  "release_stage": "ga",
+  "release_stage": "alpha",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": true,
+    "write": false,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
