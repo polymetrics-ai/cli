@@ -3,7 +3,7 @@
 ## Scope and ownership
 
 - Branch: `fm/cli-google-calendar-parity-resume-r1`, rebased from PR #3554 onto `origin/main` at `36b431cf1`.
-- Own `internal/connectors/defs/google-calendar/**`, `internal/connectors/hooks/google-calendar/**`, this phase's artifacts, and generated Google Calendar catalogs/manuals/website data. The recovered PR's minimal `native/nativeset` promotion wiring and its regression test are included because the legacy native registration otherwise shadows the bundle at runtime.
+- Own `internal/connectors/defs/google-calendar/**`, `internal/connectors/hooks/google-calendar/**`, this phase's artifacts, and generated Google Calendar catalogs/manuals/website data. The recovered PR's minimal `native/nativeset` promotion wiring plus the conformance fixture sentinel are included because the legacy native registration otherwise shadows the bundle and fixture replay would otherwise attempt a token exchange.
 - Do not change the engine, schema, validator, hook generator, or any other connector. Those paths are owned by parallel foundation lanes.
 
 ## GSD and skills
