@@ -13,25 +13,32 @@ import (
 )
 
 // uploadEcho starts a server that captures the bytes of the "mediaFile" part.
+//
+// A refused upload aborts the request mid-stream, so the handler legitimately
+// sees a half-written body and a closed connection. That is the behaviour under
+// test, not a server error: the assertions below are on what did or did not
+// reach *got, so an incomplete request must leave it empty and return quietly
+// rather than failing the test. Treating the abort as an error made this a flake
+// — whether the handler got as far as ParseMultipartForm depended on timing.
 func uploadEcho(t *testing.T, got *string) *httptest.Server {
 	t.Helper()
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseMultipartForm(1 << 20); err != nil {
-			t.Errorf("ParseMultipartForm: %v", err)
 			return
 		}
 		parts := r.MultipartForm.File["mediaFile"]
 		if len(parts) == 0 {
-			t.Error("no mediaFile part")
 			return
 		}
 		f, err := parts[0].Open()
 		if err != nil {
-			t.Errorf("open part: %v", err)
 			return
 		}
 		defer f.Close()
-		raw, _ := io.ReadAll(f)
+		raw, err := io.ReadAll(f)
+		if err != nil {
+			return
+		}
 		*got = string(raw)
 		_, _ = w.Write([]byte(`{"ok":true}`))
 	}))
