@@ -118,11 +118,35 @@ func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, rec
 		warnings = append(warnings, fmt.Sprintf("resolved request: %s %s", method, path))
 	}
 
-	return connectors.WritePreview{
+	preview := connectors.WritePreview{
 		RecordsStaged: len(records),
 		Action:        action.Name,
 		Warnings:      warnings,
-	}, nil
+	}
+	digestPayload := struct {
+		Connector string                  `json:"connector"`
+		Action    string                  `json:"action"`
+		Method    string                  `json:"method"`
+		Path      string                  `json:"path"`
+		Config    map[string]string       `json:"config,omitempty"`
+		Records   []connectors.Record     `json:"records"`
+		Preview   connectors.WritePreview `json:"preview"`
+	}{
+		Connector: b.Name,
+		Action:    action.Name,
+		Method:    methodOrDefault(action.Method),
+		Path:      action.Path,
+		Config:    cfg.Config,
+		Records:   records,
+		Preview:   preview,
+	}
+	rawDigest, err := json.Marshal(digestPayload)
+	if err != nil {
+		return connectors.WritePreview{}, fmt.Errorf("engine: hash write preview: %w", err)
+	}
+	digest := sha256.Sum256(rawDigest)
+	preview.Digest = hex.EncodeToString(digest[:])
+	return preview, nil
 }
 
 // resolveWriteRequestLine interpolates the action's base URL and path
@@ -343,7 +367,8 @@ func joinURL(base, path string) string {
 // RecordsWritten; the loop stops immediately rather than continuing best-
 // effort.
 func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WriteResult, error) {
-	if err := ValidateWrite(ctx, b, req, records); err != nil {
+	preview, err := DryRunWrite(ctx, b, req, records, h)
+	if err != nil {
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
 	action, err := findWriteAction(b, req.Action)
@@ -351,6 +376,19 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
 
+	var result connectors.WriteResult
+	err = GateDestructiveExecution(ctx, DestructiveTargetForWrite(b.Name, action), req.Approval, preview.Digest, func(executeCtx context.Context) error {
+		var executeErr error
+		result, executeErr = executeApprovedWrite(executeCtx, b, action, req, records, h)
+		return executeErr
+	})
+	if err != nil && result.RecordsWritten == 0 && result.RecordsFailed == 0 {
+		result.RecordsFailed = len(records)
+	}
+	return result, err
+}
+
+func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WriteResult, error) {
 	cfg := materializeConfigDefaults(b, req.Config)
 
 	rt, err := newRuntime(ctx, b, cfg, h)

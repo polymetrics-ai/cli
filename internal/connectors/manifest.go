@@ -1,6 +1,9 @@
 package connectors
 
-import "context"
+import (
+	"context"
+	"strings"
+)
 
 type ConfigField struct {
 	Name        string `json:"name"`
@@ -44,6 +47,20 @@ type WriteActionSpec struct {
 	// why this is a pointer rather than a bool.
 	Batchable *bool  `json:"batchable,omitempty"`
 	Confirm   string `json:"confirm,omitempty"`
+}
+
+// ConfirmationForWriteAction normalizes manifest metadata into the closed
+// runtime policy. DELETE is destructive by construction, so omission cannot
+// downgrade it. An unknown non-empty legacy declaration also fails closed.
+func ConfirmationForWriteAction(action WriteActionSpec) WriteConfirmation {
+	if strings.EqualFold(strings.TrimSpace(action.Method), "DELETE") {
+		return WriteConfirmation{Kind: ConfirmationKindDestructive}
+	}
+	confirmation, err := ParseWriteConfirmation(action.Confirm)
+	if err != nil && strings.TrimSpace(action.Confirm) != "" {
+		return WriteConfirmation{Kind: ConfirmationKindDestructive}
+	}
+	return confirmation
 }
 
 // IsBatchable reports whether the action may run from a bulk reverse ETL plan.

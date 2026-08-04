@@ -6,6 +6,7 @@ package asana
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -17,6 +18,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
@@ -76,6 +78,38 @@ func runtimeConfig(baseURL string) connectors.RuntimeConfig {
 	}
 }
 
+func approvedFixtureWriteRequest(t *testing.T, b engine.Bundle, action engine.WriteAction, cfg connectors.RuntimeConfig, records []connectors.Record, hooks engine.Hooks) connectors.WriteRequest {
+	t.Helper()
+	req := connectors.WriteRequest{Action: action.Name, Config: cfg}
+	if !engine.DestructiveTargetForWrite(b.Name, action).RequiresApproval() {
+		return req
+	}
+	preview, err := engine.DryRunWrite(context.Background(), b, req, records, hooks)
+	if err != nil {
+		t.Fatalf("engine.DryRunWrite(%q) = %v, want a no-network preview", action.Name, err)
+	}
+	if preview.Digest == "" {
+		t.Fatalf("engine.DryRunWrite(%q) returned no preview digest", action.Name)
+	}
+	planPayload, err := json.Marshal(struct {
+		Connector string              `json:"connector"`
+		Action    string              `json:"action"`
+		Records   []connectors.Record `json:"records"`
+	}{Connector: b.Name, Action: action.Name, Records: records})
+	if err != nil {
+		t.Fatalf("marshal fixture plan for %q: %v", action.Name, err)
+	}
+	planHash := sha256.Sum256(planPayload)
+	req.Approval = &connectors.WriteApprovalEvidence{
+		PlanID:        "rplan_asana_fixture_" + action.Name,
+		PlanHash:      fmt.Sprintf("%x", planHash),
+		PreviewDigest: preview.Digest,
+		ApprovedAt:    time.Now().UTC(),
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}
+	return req
+}
+
 // TestReverseETLLedgerReconciles accounts for every ledger row that originally
 // carried the typed reverse-ETL blocked reason. A promoted row is bound to a
 // write action; a row that could not be promoted must carry one of the two
@@ -129,8 +163,8 @@ func TestReverseETLLedgerReconciles(t *testing.T) {
 }
 
 // TestDestructiveOperationsStayBlocked pins the destructive rows that must NOT
-// be promoted before the destructive-write confirm gate exists, and requires
-// every bound DELETE to carry a typed confirmation challenge.
+// be promoted by this foundation PR, and requires every already-bound DELETE
+// to carry a typed confirmation challenge through the shared gate.
 func TestDestructiveOperationsStayBlocked(t *testing.T) {
 	b := loadBundle(t)
 	actions := map[string]engine.WriteAction{}
@@ -160,7 +194,7 @@ func TestDestructiveOperationsStayBlocked(t *testing.T) {
 		}
 	}
 	if unbound != blockedDestructiveOperations {
-		t.Fatalf("destructive_action rows still blocked = %d, want %d (promoting a destructive operation needs the destructive-write confirm gate)",
+		t.Fatalf("destructive_action rows still unbound = %d, want %d (connector binding is outside this foundation PR)",
 			unbound, blockedDestructiveOperations)
 	}
 }
@@ -233,10 +267,13 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 
 			// execute: the real engine issues the request.
 			capture.Reset()
+			records := []connectors.Record{connectors.Record(fixture.Record)}
+			hooks := engine.HooksFor(b.Name)
+			writeReq := approvedFixtureWriteRequest(t, replay, action, cfg, records, hooks)
 			result, err := engine.Write(context.Background(), replay,
-				connectors.WriteRequest{Action: action.Name, Config: cfg},
-				[]connectors.Record{connectors.Record(fixture.Record)},
-				engine.HooksFor(b.Name))
+				writeReq,
+				records,
+				hooks)
 			if err != nil {
 				t.Fatalf("engine.Write(%q) = %v, want nil", action.Name, err)
 			}

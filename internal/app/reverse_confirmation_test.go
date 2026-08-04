@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/connectors"
 )
 
 func TestRunReverseETLRejectsDestructiveConnectorCommandWithoutConfirmation(t *testing.T) {
@@ -22,8 +23,12 @@ func TestRunReverseETLRejectsDestructiveConnectorCommandWithoutConfirmation(t *t
 	defer server.Close()
 
 	a, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
+	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
+	}
 
-	_, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+	_, err = a.RunReverseETL(ctx, app.RunReverseETLRequest{
 		PlanID:        plan.ID,
 		ApprovalToken: plan.ApprovalToken,
 	})
@@ -35,6 +40,108 @@ func TestRunReverseETLRejectsDestructiveConnectorCommandWithoutConfirmation(t *t
 	}
 	if calls != 0 {
 		t.Fatalf("destructive write dispatched before confirmation gate; calls=%d", calls)
+	}
+}
+
+func TestRunReverseETLRejectsDestructiveConnectorCommandWithoutPreview(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	a, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
+	_, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err == nil {
+		t.Fatal("RunReverseETL() executed a destructive command that was never previewed")
+	}
+	if !strings.Contains(strings.ToLower(err.Error()), "preview") {
+		t.Fatalf("RunReverseETL() error = %v, want preview rejection", err)
+	}
+	if calls != 0 {
+		t.Fatalf("destructive write dispatched without preview; calls=%d", calls)
+	}
+}
+
+func TestDestructiveConnectorCommandMintsApprovalOnlyAfterPreview(t *testing.T) {
+	ctx := context.Background()
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	a, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
+	if plan.ApprovalToken != "" {
+		t.Fatal("destructive plan minted approval before preview")
+	}
+	previewed, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
+	}
+	if previewed.Status != "previewed" {
+		t.Fatalf("previewed status = %q, want previewed", previewed.Status)
+	}
+	if previewed.ApprovalToken == "" {
+		t.Fatal("preview did not mint a bounded approval token")
+	}
+}
+
+func TestDestructiveCanonicalCommandPreviewProducesApprovablePlan(t *testing.T) {
+	ctx := context.Background()
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+	a, _ := setupGitHubApp(t, ctx, server.URL)
+
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Name:       "delete_deploy_key",
+		Connector:  "github",
+		Credential: "github-local",
+		Path:       []string{"repo", "deploy-key", "delete"},
+		Flags:      map[string][]string{"key-id": {"42"}},
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand(--preview) error = %v", err)
+	}
+	if preview == nil {
+		t.Fatal("canonical destructive command returned no preview")
+	}
+	if plan.Status != "previewed" || plan.ApprovalToken == "" || plan.PreviewDigest == "" {
+		t.Fatalf("previewed canonical plan = %+v, want persisted digest and approval token", plan)
+	}
+}
+
+func TestGenericDestructivePlanMintsApprovalOnlyAfterPreview(t *testing.T) {
+	ctx := context.Background()
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	a, plan := setupGitHubGenericDestructivePlan(t, ctx, server.URL)
+	if plan.ApprovalToken != "" {
+		t.Fatal("generic destructive plan minted approval before preview")
+	}
+	previewed, preview, err := a.PreviewReversePlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewReversePlan() error = %v", err)
+	}
+	if previewed.Status != "previewed" || previewed.PreviewDigest == "" || previewed.PreviewedAt.IsZero() {
+		t.Fatalf("previewed plan = %+v, want persisted preview identity", previewed)
+	}
+	if previewed.ApprovalToken == "" {
+		t.Fatal("generic preview did not mint a bounded approval token")
+	}
+	if preview.RecordsStaged != plan.RecordCount || preview.Action != plan.Action {
+		t.Fatalf("preview = %+v, want action %q and %d staged records", preview, plan.Action, plan.RecordCount)
 	}
 }
 
@@ -54,11 +161,15 @@ func TestRunReverseETLAcceptsDestructiveConnectorCommandWithMatchingConfirmation
 	if plan.ConfirmationChallenge != "destructive" {
 		t.Fatalf("ConfirmationChallenge = %q, want destructive", plan.ConfirmationChallenge)
 	}
+	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
+	}
 
 	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
 		PlanID:        plan.ID,
 		ApprovalToken: plan.ApprovalToken,
-		Confirmation:  "destructive",
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
 	})
 	if err != nil {
 		t.Fatalf("RunReverseETL() with matching confirmation error = %v", err)
@@ -84,8 +195,12 @@ func TestRunReverseETLRejectsGenericDestructiveActionWithoutConfirmation(t *test
 	if plan.ConfirmationChallenge != "destructive" {
 		t.Fatalf("ConfirmationChallenge = %q, want destructive", plan.ConfirmationChallenge)
 	}
+	plan, _, err := a.PreviewReversePlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewReversePlan() error = %v", err)
+	}
 
-	_, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+	_, err = a.RunReverseETL(ctx, app.RunReverseETLRequest{
 		PlanID:        plan.ID,
 		ApprovalToken: plan.ApprovalToken,
 	})
@@ -100,17 +215,147 @@ func TestRunReverseETLRejectsGenericDestructiveActionWithoutConfirmation(t *test
 	}
 }
 
+func TestRunReverseETLRejectsPreviewDigestDriftBeforeNativeWrite(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	destination := &driftingDestructiveConnector{digest: strings.Repeat("a", 64)}
+	a.Registry().Register(destination)
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{Name: "drifting-local", Connector: destination.Name()}); err != nil {
+		t.Fatalf("AddCredential() error = %v", err)
+	}
+	warehouseDir := filepath.Join(root, ".polymetrics", "warehouse")
+	if err := os.MkdirAll(warehouseDir, 0o700); err != nil {
+		t.Fatalf("mkdir warehouse: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(warehouseDir, "deletes.jsonl"), []byte("{\"id\":\"42\"}\n"), 0o600); err != nil {
+		t.Fatalf("write warehouse row: %v", err)
+	}
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "delete_widget",
+		SourceTable:           "deletes",
+		DestinationConnector:  destination.Name(),
+		DestinationCredential: "drifting-local",
+		Action:                "delete_widget",
+		Mappings:              map[string]string{"id": "id"},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL() error = %v", err)
+	}
+	plan, _, err = a.PreviewReversePlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewReversePlan() error = %v", err)
+	}
+	destination.digest = strings.Repeat("b", 64)
+
+	_, err = a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err == nil {
+		t.Fatal("RunReverseETL() executed after the preview digest drifted")
+	}
+	if !strings.Contains(strings.ToLower(err.Error()), "preview") {
+		t.Fatalf("RunReverseETL() error = %v, want preview mismatch", err)
+	}
+	if destination.writes != 0 {
+		t.Fatalf("native write dispatched after preview drift; writes=%d", destination.writes)
+	}
+}
+
+func TestExecutedDestructivePlanCannotBeRepreviewedForReplay(t *testing.T) {
+	ctx := context.Background()
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	a, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
+	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
+	}
+	if _, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}); err != nil {
+		t.Fatalf("RunReverseETL() error = %v", err)
+	}
+	if _, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID); err == nil {
+		t.Fatal("executed destructive plan was re-previewed into an approvable state")
+	}
+	if calls != 1 {
+		t.Fatalf("destructive request calls=%d, want exactly one", calls)
+	}
+}
+
+type driftingDestructiveConnector struct {
+	digest string
+	writes int
+}
+
+func (c *driftingDestructiveConnector) Name() string { return "drifting-destructive" }
+
+func (c *driftingDestructiveConnector) Metadata() connectors.Metadata {
+	return connectors.Metadata{
+		Name:         c.Name(),
+		DisplayName:  "Drifting destructive fixture",
+		Capabilities: connectors.Capabilities{Write: true},
+	}
+}
+
+func (c *driftingDestructiveConnector) Manifest() connectors.Manifest {
+	return connectors.Manifest{
+		Metadata: c.Metadata(),
+		WriteActions: []connectors.WriteActionSpec{{
+			Name: "delete_widget", Method: http.MethodDelete, Path: "/widgets/{id}",
+		}},
+	}
+}
+
+func (c *driftingDestructiveConnector) Check(ctx context.Context, _ connectors.RuntimeConfig) error {
+	return ctx.Err()
+}
+
+func (c *driftingDestructiveConnector) Catalog(context.Context, connectors.RuntimeConfig) (connectors.Catalog, error) {
+	return connectors.Catalog{}, connectors.ErrUnsupportedOperation
+}
+
+func (c *driftingDestructiveConnector) Read(context.Context, connectors.ReadRequest, func(connectors.Record) error) error {
+	return connectors.ErrUnsupportedOperation
+}
+
+func (c *driftingDestructiveConnector) DryRunWrite(_ context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
+	return connectors.WritePreview{RecordsStaged: len(records), Action: req.Action, Digest: c.digest}, nil
+}
+
+func (c *driftingDestructiveConnector) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
+	c.writes++
+	return connectors.WriteResult{RecordsWritten: 1}, nil
+}
+
 func setupGitHubDestructiveCommandPlan(t *testing.T, ctx context.Context, baseURL string) (*app.App, app.ReversePlan) {
 	t.Helper()
 	a, _ := setupGitHubApp(t, ctx, baseURL)
 	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
-		Name:       "delete_repo",
+		Name:       "delete_deploy_key",
 		Connector:  "github",
 		Credential: "github-local",
-		Path:       []string{"repo", "delete-2"},
+		Path:       []string{"repo", "deploy-key", "delete"},
+		Flags:      map[string][]string{"key-id": {"42"}},
 	})
 	if err != nil {
-		t.Fatalf("PlanConnectorCommand(repo delete-2) error = %v", err)
+		t.Fatalf("PlanConnectorCommand(repo deploy-key delete) error = %v", err)
 	}
 	return a, plan
 }

@@ -16,6 +16,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -84,6 +85,109 @@ type capturedRequest struct {
 	contentType string
 }
 
+func TestWriteRejectsDestructiveActionWithoutTypedApprovalEvidence(t *testing.T) {
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer srv.Close()
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "remove_widget",
+		Kind:       "custom",
+		Method:     http.MethodDelete,
+		Path:       "/widgets/{{ record.id }}",
+		PathFields: []string{"id"},
+		BodyType:   "none",
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "remove_widget"}, []connectors.Record{{"id": "42"}}, nil)
+	if err == nil {
+		t.Fatal("Write() dispatched DELETE without typed approval evidence")
+	}
+	if !strings.Contains(strings.ToLower(err.Error()), "approval") {
+		t.Fatalf("Write() error = %v, want approval rejection", err)
+	}
+	if calls != 0 {
+		t.Fatalf("DELETE dispatched before approval gate; calls=%d", calls)
+	}
+}
+
+func TestWriteFailsClosedForUnknownConfirmationDeclaration(t *testing.T) {
+	calls := 0
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer srv.Close()
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:     "dangerous_widget_action",
+		Kind:     "custom",
+		Method:   http.MethodPost,
+		Path:     "/widgets",
+		BodyType: "json",
+		Confirm:  "type-anything",
+	})
+
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{Action: "dangerous_widget_action"}, []connectors.Record{{"id": "42"}}, nil); err == nil {
+		t.Fatal("Write() accepted an unknown non-empty confirmation declaration")
+	}
+	if calls != 0 {
+		t.Fatalf("write dispatched after unknown confirmation declaration; calls=%d", calls)
+	}
+}
+
+func TestRestWriteOperationUsesSharedDestructiveExecutionGate(t *testing.T) {
+	executed := false
+	operation := OperationSpec{
+		ID:            "acme.widgets.delete",
+		Kind:          "rest_write",
+		MutationClass: "delete",
+		REST:          &RESTOperationSpec{Method: http.MethodDelete, Path: "/widgets/{id}"},
+		Confirmation:  &ConfirmationSpec{Kind: "destructive"},
+	}
+	evidence := &connectors.WriteApprovalEvidence{
+		PlanID:        "rplan_fixture",
+		PlanHash:      strings.Repeat("a", 64),
+		PreviewDigest: strings.Repeat("b", 64),
+		ApprovedAt:    time.Now().UTC(),
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}
+	if err := GateDestructiveExecution(context.Background(), DestructiveTargetForOperation("acme", operation), nil, evidence.PreviewDigest, func(context.Context) error {
+		executed = true
+		return nil
+	}); err == nil {
+		t.Fatal("unapproved rest_write closure executed without approval evidence")
+	}
+	if executed {
+		t.Fatal("unapproved rest_write closure was invoked")
+	}
+
+	err := GateDestructiveExecution(context.Background(), DestructiveTargetForOperation("acme", operation), evidence, evidence.PreviewDigest, func(context.Context) error {
+		executed = true
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("GateDestructiveExecution(rest_write): %v", err)
+	}
+	if !executed {
+		t.Fatal("approved rest_write closure was not executed")
+	}
+}
+
+func TestRestWriteDestructiveFlagCannotBeOverriddenByMutationClass(t *testing.T) {
+	target := DestructiveTargetForOperation("acme", OperationSpec{
+		ID:            "acme.widgets.admin_delete",
+		Kind:          "rest_write",
+		MutationClass: "admin",
+		Destructive:   true,
+		REST:          &RESTOperationSpec{Method: http.MethodPost, Path: "/widgets/delete"},
+	})
+	if !target.RequiresApproval() {
+		t.Fatal("destructive operation flag was downgraded by a non-empty mutation class")
+	}
+}
+
 func (c *capturedRequest) form() url.Values {
 	v, _ := url.ParseQuery(string(c.body))
 	return v
@@ -93,6 +197,23 @@ func (c *capturedRequest) json() map[string]any {
 	var m map[string]any
 	_ = json.Unmarshal(c.body, &m)
 	return m
+}
+
+func approvedWriteRequest(t *testing.T, b Bundle, action string, records []connectors.Record, h Hooks) connectors.WriteRequest {
+	t.Helper()
+	req := connectors.WriteRequest{Action: action}
+	preview, err := DryRunWrite(context.Background(), b, req, records, h)
+	if err != nil {
+		t.Fatalf("DryRunWrite(%s): %v", action, err)
+	}
+	req.Approval = &connectors.WriteApprovalEvidence{
+		PlanID:        "rplan_fixture",
+		PlanHash:      strings.Repeat("a", 64),
+		PreviewDigest: preview.Digest,
+		ApprovedAt:    time.Now().UTC(),
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}
+	return req
 }
 
 func TestDryRunWriteMaterializesSpecDefaultBaseURL(t *testing.T) {
@@ -256,9 +377,8 @@ func TestWriteNoneBodyTypeSendsNoBody(t *testing.T) {
 		BodyType:   "none",
 	})
 
-	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_widget"}, []connectors.Record{
-		{"id": "42"},
-	}, nil)
+	records := []connectors.Record{{"id": "42"}}
+	_, err := Write(context.Background(), b, approvedWriteRequest(t, b, "update_widget", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v", err)
 	}
@@ -278,9 +398,8 @@ func TestWriteBodyFieldsAllowListForDeleteWithBody(t *testing.T) {
 		BodyFields: []string{"message", "sha", "branch"},
 	})
 
-	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_file"}, []connectors.Record{
-		{"path": "a.txt", "message": "remove file", "sha": "abc123", "branch": "main", "extra_untouched": "x"},
-	}, nil)
+	records := []connectors.Record{{"path": "a.txt", "message": "remove file", "sha": "abc123", "branch": "main", "extra_untouched": "x"}}
+	_, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_file", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v", err)
 	}
@@ -320,9 +439,8 @@ func TestWriteGraphQLBodyUsesFixedDocumentAndDeclaredVariables(t *testing.T) {
 		}`),
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_issue"}, []connectors.Record{
-		{"issue_id": "I_kwDO123"},
-	}, nil)
+	records := []connectors.Record{{"issue_id": "I_kwDO123"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_issue", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v", err)
 	}
@@ -396,9 +514,8 @@ func TestWriteGraphQLErrorsFailClosed(t *testing.T) {
 		RecordSchema: json.RawMessage(`{"type":"object","required":["issue_id"],"properties":{"issue_id":{"type":"string"}}}`),
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_issue"}, []connectors.Record{
-		{"issue_id": "I_kwDO123"},
-	}, nil)
+	records := []connectors.Record{{"issue_id": "I_kwDO123"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_issue", records, nil), records, nil)
 	if err == nil {
 		t.Fatalf("Write: want GraphQL errors[] to fail closed")
 	}
@@ -577,9 +694,8 @@ func TestWriteDeleteMissingOkStatusCountsAsWritten(t *testing.T) {
 		Delete:     &DeleteSpec{Idempotent: true, MissingOkStatus: []int{404}},
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_label"}, []connectors.Record{
-		{"name": "bug"},
-	}, nil)
+	records := []connectors.Record{{"name": "bug"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
 	if err != nil {
 		t.Fatalf("Write: %v (404 on idempotent delete should count as written, not error)", err)
 	}
@@ -602,9 +718,8 @@ func TestWriteDeleteNonListed404Fails(t *testing.T) {
 		Delete:     &DeleteSpec{Idempotent: false},
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_label"}, []connectors.Record{
-		{"name": "bug"},
-	}, nil)
+	records := []connectors.Record{{"name": "bug"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
 	if err == nil {
 		t.Fatalf("Write: want error for 404 not in missing_ok_status")
 	}
@@ -629,9 +744,8 @@ func TestWriteNonListedStatusFails(t *testing.T) {
 		Delete:     &DeleteSpec{Idempotent: true, MissingOkStatus: []int{404}},
 	})
 
-	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_label"}, []connectors.Record{
-		{"name": "bug"},
-	}, nil)
+	records := []connectors.Record{{"name": "bug"}}
+	result, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_label", records, nil), records, nil)
 	if err == nil {
 		t.Fatalf("Write: want error for 400 (not a missing_ok_status match)")
 	}
@@ -1125,8 +1239,8 @@ func TestWriteRecordSchemaMinItemsRejectsEmptyArray(t *testing.T) {
 		t.Fatalf("request must not be issued for an invalid record, got %s %s", cap.method, cap.path)
 	}
 
-	if _, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_records"},
-		[]connectors.Record{{"records": []any{"rec1"}}}, nil); err != nil {
+	validRecords := []connectors.Record{{"records": []any{"rec1"}}}
+	if _, err := Write(context.Background(), b, approvedWriteRequest(t, b, "delete_records", validRecords, nil), validRecords, nil); err != nil {
 		t.Fatalf("non-empty array: unexpected error: %v", err)
 	}
 }

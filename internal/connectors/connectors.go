@@ -246,6 +246,43 @@ type WriteRequest struct {
 	Overwrite  bool
 	Config     RuntimeConfig
 	PrimaryKey []string
+	Approval   *WriteApprovalEvidence
+}
+
+// ConfirmationKind is the closed runtime vocabulary for an explicit write
+// confirmation. It is deliberately not a caller-defined prompt.
+type ConfirmationKind string
+
+const ConfirmationKindDestructive ConfirmationKind = "destructive"
+
+// WriteConfirmation is the typed, closed confirmation attached to an
+// explicitly approved write request.
+type WriteConfirmation struct {
+	Kind ConfirmationKind `json:"kind"`
+}
+
+// ParseWriteConfirmation maps CLI and persisted values into the closed
+// confirmation vocabulary.
+func ParseWriteConfirmation(raw string) (WriteConfirmation, error) {
+	switch ConfirmationKind(strings.TrimSpace(raw)) {
+	case "":
+		return WriteConfirmation{}, nil
+	case ConfirmationKindDestructive:
+		return WriteConfirmation{Kind: ConfirmationKindDestructive}, nil
+	default:
+		return WriteConfirmation{}, fmt.Errorf("unsupported confirmation kind %q", strings.TrimSpace(raw))
+	}
+}
+
+// WriteApprovalEvidence is minted by the plan/preview/approval flow and
+// carried to the executor. Tokens are intentionally absent: the app consumes
+// those before producing this non-secret, execution-scoped evidence.
+type WriteApprovalEvidence struct {
+	PlanID        string            `json:"plan_id"`
+	PlanHash      string            `json:"plan_hash"`
+	PreviewDigest string            `json:"preview_digest"`
+	ApprovedAt    time.Time         `json:"approved_at"`
+	Confirmation  WriteConfirmation `json:"confirmation"`
 }
 
 type WriteResult struct {
@@ -268,6 +305,7 @@ type WritePreview struct {
 	RecordsStaged int      `json:"records_staged"`
 	Action        string   `json:"action"`
 	Warnings      []string `json:"warnings,omitempty"`
+	Digest        string   `json:"digest,omitempty"`
 }
 
 type CDCReadRequest struct {
