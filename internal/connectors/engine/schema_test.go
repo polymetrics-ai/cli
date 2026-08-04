@@ -2,6 +2,8 @@ package engine
 
 import (
 	"encoding/json"
+	"fmt"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -199,6 +201,51 @@ func TestSchemaValidateInstances(t *testing.T) {
 			}
 			if tt.wantErr && tt.errSubstr != "" && !strings.Contains(verr.Error(), tt.errSubstr) {
 				t.Fatalf("error %q does not contain %q", verr.Error(), tt.errSubstr)
+			}
+		})
+	}
+}
+
+func TestSchemaMappingRequirementsUseCompiledComposition(t *testing.T) {
+	t.Run("allOf required fields", func(t *testing.T) {
+		schema, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"additionalProperties":false,
+			"properties":{"name":{"type":"string"}},
+			"allOf":[{"required":["name"]}]
+		}`))
+		if err != nil {
+			t.Fatalf("CompileSchema: %v", err)
+		}
+		paths, err := schema.RequiredMappingPaths()
+		if err != nil {
+			t.Fatalf("RequiredMappingPaths: %v", err)
+		}
+		if !reflect.DeepEqual(paths, []string{"name"}) {
+			t.Fatalf("RequiredMappingPaths = %v, want [name]", paths)
+		}
+		info, err := schema.MappingPath("name")
+		if err != nil {
+			t.Fatalf("MappingPath(name): %v", err)
+		}
+		if !reflect.DeepEqual(info.Types, []string{"string"}) {
+			t.Fatalf("MappingPath(name).Types = %v, want [string]", info.Types)
+		}
+	})
+
+	for _, keyword := range []string{"anyOf", "oneOf"} {
+		t.Run(keyword+" is explicit", func(t *testing.T) {
+			schema, err := CompileSchema(json.RawMessage(fmt.Sprintf(`{
+				"type":"object",
+				"additionalProperties":false,
+				"properties":{"name":{"type":"string"},"id":{"type":"string"}},
+				%q:[{"required":["name"]},{"required":["id"]}]
+			}`, keyword)))
+			if err != nil {
+				t.Fatalf("CompileSchema: %v", err)
+			}
+			if _, err := schema.RequiredMappingPaths(); err == nil || !strings.Contains(err.Error(), keyword) {
+				t.Fatalf("RequiredMappingPaths error = %v, want %s alternative error", err, keyword)
 			}
 		})
 	}

@@ -119,6 +119,263 @@ func CompileSchema(raw json.RawMessage) (*Schema, error) {
 	return &Schema{node: node}, nil
 }
 
+type SchemaPathInfo struct {
+	Types    []string
+	IsObject bool
+	IsArray  bool
+}
+
+func (s *Schema) RequiredMappingPaths() ([]string, error) {
+	if s == nil || s.node == nil {
+		return nil, fmt.Errorf("schema is nil")
+	}
+	if err := s.node.rejectAlternativeMappings(""); err != nil {
+		return nil, err
+	}
+	paths := map[string]bool{}
+	if err := s.node.collectRequiredMappingPaths("", paths); err != nil {
+		return nil, err
+	}
+	out := make([]string, 0, len(paths))
+	for path := range paths {
+		out = append(out, path)
+	}
+	sort.Strings(out)
+	return out, nil
+}
+
+func (s *Schema) MappingPath(path string) (SchemaPathInfo, error) {
+	if s == nil || s.node == nil {
+		return SchemaPathInfo{}, fmt.Errorf("schema is nil")
+	}
+	if strings.TrimSpace(path) == "" {
+		return s.node.mappingPathInfo(), nil
+	}
+	current := s.node
+	for _, part := range strings.Split(path, ".") {
+		if part == "" {
+			return SchemaPathInfo{}, fmt.Errorf("empty path segment")
+		}
+		if current.mappingIsArray() {
+			if err := validateMappingArrayIndex(part); err != nil {
+				return SchemaPathInfo{}, err
+			}
+			if current.items == nil {
+				return SchemaPathInfo{}, fmt.Errorf("array segment %q has no item schema", part)
+			}
+			current = current.items
+			continue
+		}
+		child, ok := current.mappingProperty(part)
+		if !ok {
+			return SchemaPathInfo{}, fmt.Errorf("record field %q is not declared", part)
+		}
+		current = child
+	}
+	return current.mappingPathInfo(), nil
+}
+
+func (n *schemaNode) rejectAlternativeMappings(path string) error {
+	if len(n.anyOf) > 0 {
+		return fmt.Errorf("schema %s uses anyOf alternatives that required CLI flags cannot express", displayMappingPath(path))
+	}
+	if len(n.oneOf) > 0 {
+		return fmt.Errorf("schema %s uses oneOf alternatives that required CLI flags cannot express", displayMappingPath(path))
+	}
+	names := make([]string, 0, len(n.properties))
+	for name := range n.properties {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		if err := n.properties[name].rejectAlternativeMappings(joinMappingPath(path, name)); err != nil {
+			return err
+		}
+	}
+	if n.items != nil {
+		if err := n.items.rejectAlternativeMappings(joinMappingPath(path, "0")); err != nil {
+			return err
+		}
+	}
+	for _, branch := range n.allOf {
+		if err := branch.rejectAlternativeMappings(path); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (n *schemaNode) collectRequiredMappingPaths(prefix string, paths map[string]bool) error {
+	return n.collectRequiredMappingPathsWithScope(prefix, paths, n)
+}
+
+func (n *schemaNode) collectRequiredMappingPathsWithScope(prefix string, paths map[string]bool, scope *schemaNode) error {
+	for _, name := range n.required {
+		path := joinMappingPath(prefix, name)
+		child, ok := scope.mappingProperty(name)
+		if !ok {
+			return fmt.Errorf("schema required property %q is not declared", path)
+		}
+		nested := map[string]bool{}
+		if err := child.collectRequiredNodeMappingPaths(path, nested); err != nil {
+			return err
+		}
+		if len(nested) == 0 {
+			paths[path] = true
+			continue
+		}
+		for nestedPath := range nested {
+			paths[nestedPath] = true
+		}
+	}
+	for _, branch := range n.allOf {
+		if err := branch.collectRequiredMappingPathsWithScope(prefix, paths, scope); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (n *schemaNode) collectRequiredNodeMappingPaths(prefix string, paths map[string]bool) error {
+	if n.mappingIsArray() {
+		if n.items == nil {
+			return nil
+		}
+		return n.items.collectRequiredNodeMappingPaths(joinMappingPath(prefix, "0"), paths)
+	}
+	if !n.mappingIsObject() {
+		return nil
+	}
+	return n.collectRequiredMappingPaths(prefix, paths)
+}
+
+func (n *schemaNode) mappingProperty(name string) (*schemaNode, bool) {
+	var matches []*schemaNode
+	if child := n.properties[name]; child != nil {
+		matches = append(matches, child)
+	}
+	for _, branch := range n.allOf {
+		if child, ok := branch.mappingProperty(name); ok {
+			matches = append(matches, child)
+		}
+	}
+	if len(matches) == 0 {
+		return nil, false
+	}
+	if len(matches) == 1 {
+		return matches[0], true
+	}
+	return &schemaNode{allOf: matches, additionalProperties: true}, true
+}
+
+func (n *schemaNode) mappingPathInfo() SchemaPathInfo {
+	types := n.mappingTypes()
+	if len(types) == 0 {
+		switch {
+		case n.mappingIsArray():
+			types = []string{"array"}
+		case n.mappingIsObject():
+			types = []string{"object"}
+		default:
+			types = []string{"any"}
+		}
+	}
+	return SchemaPathInfo{Types: types, IsObject: containsSchemaType(types, "object") || n.mappingHasProperties(), IsArray: containsSchemaType(types, "array") || n.items != nil}
+}
+
+func (n *schemaNode) mappingTypes() []string {
+	var constrained map[string]bool
+	apply := func(types []string) {
+		if len(types) == 0 {
+			return
+		}
+		candidate := make(map[string]bool, len(types))
+		for _, typ := range types {
+			candidate[typ] = true
+		}
+		if constrained == nil {
+			constrained = candidate
+			return
+		}
+		for typ := range constrained {
+			if !candidate[typ] {
+				delete(constrained, typ)
+			}
+		}
+	}
+	apply(n.types)
+	for _, branch := range n.allOf {
+		apply(branch.mappingTypes())
+	}
+	out := make([]string, 0, len(constrained))
+	for typ := range constrained {
+		out = append(out, typ)
+	}
+	sort.Strings(out)
+	return out
+}
+
+func (n *schemaNode) mappingHasProperties() bool {
+	if len(n.properties) > 0 {
+		return true
+	}
+	for _, branch := range n.allOf {
+		if branch.mappingHasProperties() {
+			return true
+		}
+	}
+	return false
+}
+
+func (n *schemaNode) mappingIsObject() bool {
+	return containsSchemaType(n.mappingTypes(), "object") || n.mappingHasProperties()
+}
+
+func (n *schemaNode) mappingIsArray() bool {
+	return containsSchemaType(n.mappingTypes(), "array") || n.items != nil
+}
+
+func containsSchemaType(types []string, target string) bool {
+	for _, typ := range types {
+		if typ == target {
+			return true
+		}
+	}
+	return false
+}
+
+func validateMappingArrayIndex(part string) error {
+	if part == "" {
+		return fmt.Errorf("array segment %q is not a numeric index", part)
+	}
+	for _, r := range part {
+		if r < '0' || r > '9' {
+			return fmt.Errorf("array segment %q is not a numeric index", part)
+		}
+	}
+	if len(part) > 1 && strings.HasPrefix(part, "0") {
+		return fmt.Errorf("array index %q must not have leading zeroes", part)
+	}
+	if len(part) > 3 || len(part) == 3 && part > "128" {
+		return fmt.Errorf("array index %q exceeds max %d", part, 128)
+	}
+	return nil
+}
+
+func joinMappingPath(prefix, part string) string {
+	if prefix == "" {
+		return part
+	}
+	return prefix + "." + part
+}
+
+func displayMappingPath(path string) string {
+	if path == "" {
+		return "/"
+	}
+	return path
+}
+
 func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 	for k := range m {
 		if annotationKeywords[k] || structuralKeywords[k] {

@@ -151,7 +151,14 @@ func collectRequestSchemaFields(raw json.RawMessage, prefix string, fields map[s
 }
 
 func (c requestSchemaCollector) collect(schema map[string]any, prefix string, fields map[string]bool, root bool) (bool, error) {
+	_ = root
 	found := false
+	if requestSchemaIsObject(schema) {
+		closed, ok := schema["additionalProperties"].(bool)
+		if !ok || closed {
+			return false, fmt.Errorf("body_schema object at %q must declare additionalProperties false", prefix)
+		}
+	}
 	if rawRef, ok := schema["$ref"]; ok {
 		ref, ok := rawRef.(string)
 		if !ok || strings.TrimSpace(ref) == "" {
@@ -224,20 +231,37 @@ func (c requestSchemaCollector) collect(schema map[string]any, prefix string, fi
 	}
 
 	if rawItems, ok := schema["items"]; ok {
-		if root {
-			return false, fmt.Errorf("body_schema root arrays cannot be represented as cited request fields")
-		}
 		items, ok := rawItems.(map[string]any)
 		if !ok {
 			return false, fmt.Errorf("body_schema items must be an object schema")
 		}
-		itemFound, err := c.collect(items, prefix+"[]", fields, false)
+		itemPrefix := prefix + "[]"
+		fields[itemPrefix] = true
+		found = true
+		itemFound, err := c.collect(items, itemPrefix, fields, false)
 		if err != nil {
 			return false, err
 		}
 		found = found || itemFound
 	}
 	return found, nil
+}
+
+func requestSchemaIsObject(schema map[string]any) bool {
+	if _, ok := schema["properties"]; ok {
+		return true
+	}
+	switch rawType := schema["type"].(type) {
+	case string:
+		return rawType == "object"
+	case []any:
+		for _, value := range rawType {
+			if value == "object" {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func (c requestSchemaCollector) resolve(ref string) (any, error) {
@@ -294,6 +318,12 @@ func decodeJSONPointerToken(token string) (string, error) {
 }
 
 func declaredWriteRequestFields(action WriteAction) ([]string, error) {
+	if action.DynamicFields != nil {
+		return nil, fmt.Errorf("dynamic_fields request keys cannot be enumerated for request-contract citations")
+	}
+	if bodyTypeOf(action) == "base64_upload" && len(action.Query) > 0 {
+		return nil, fmt.Errorf("base64_upload query parameters are not transmitted by the runtime")
+	}
 	fields := map[string]bool{}
 	pathFields, err := declaredWritePathFields(action)
 	if err != nil {
@@ -312,14 +342,19 @@ func declaredWriteRequestFields(action WriteAction) ([]string, error) {
 
 	switch bodyTypeOf(action) {
 	case "none":
-		addWriteBodyFields(fields, action.BodyFields)
+		if err := addSelectedWriteBodyFields(fields, action, action.BodyFields); err != nil {
+			return nil, err
+		}
 	case "graphql":
 		if action.GraphQL != nil {
-			collectRequestValueFields(action.GraphQL.Variables, "body", fields)
+			collectRequestValueFields(action.GraphQL.Variables, "body.variables", fields)
 		}
 	case "json_array":
-		if name := strings.TrimSpace(action.BodyField); name != "" {
-			fields["body."+name] = true
+		if len(action.BodySchema) == 0 {
+			return nil, fmt.Errorf("json_array body_schema is required")
+		}
+		if err := collectRequestSchemaFields(action.BodySchema, "body", fields); err != nil {
+			return nil, fmt.Errorf("body_schema: %w", err)
 		}
 	case "multipart":
 		if action.Multipart != nil {
@@ -332,18 +367,23 @@ func declaredWriteRequestFields(action WriteAction) ([]string, error) {
 			return nil, err
 		}
 		if action.Base64Upload != nil {
-			delete(fields, "body."+action.Base64Upload.SourceField)
+			deleteRequestFieldPrefix(fields, "body."+action.Base64Upload.SourceField)
 			fields["body."+action.Base64Upload.ContentField] = true
+		}
+	case "form":
+		formAction := action
+		formAction.BodyFields = nil
+		if err := addWriteJSONBodyFields(fields, formAction); err != nil {
+			return nil, err
 		}
 	default:
 		if len(action.BodyFields) > 0 {
-			addWriteBodyFields(fields, action.BodyFields)
+			if err := addSelectedWriteBodyFields(fields, action, action.BodyFields); err != nil {
+				return nil, err
+			}
 		} else if err := addWriteJSONBodyFields(fields, action); err != nil {
 			return nil, err
 		}
-	}
-	if action.DynamicFields != nil {
-		fields["body."+strings.TrimSpace(action.DynamicFields.Field)] = true
 	}
 
 	paths := make([]string, 0, len(fields))
@@ -407,19 +447,37 @@ func declaredWritePathFields(action WriteAction) ([]string, error) {
 	return paths, nil
 }
 
-func addWriteBodyFields(fields map[string]bool, names []string) {
-	for _, name := range names {
-		name = strings.TrimSpace(name)
-		if name != "" {
-			fields["body."+name] = true
+func addSelectedWriteBodyFields(fields map[string]bool, action WriteAction, names []string) error {
+	if len(names) == 0 {
+		return nil
+	}
+	declared := map[string]bool{}
+	if err := collectRequestSchemaFields(action.RecordSchema, "body", declared); err != nil {
+		return fmt.Errorf("record_schema: %w", err)
+	}
+	for _, rawName := range names {
+		name := strings.TrimSpace(rawName)
+		if name == "" {
+			continue
+		}
+		prefix := "body." + name
+		matched := false
+		for path := range declared {
+			if path == prefix || strings.HasPrefix(path, prefix+".") || strings.HasPrefix(path, prefix+"[]") {
+				fields[path] = true
+				matched = true
+			}
+		}
+		if !matched {
+			return fmt.Errorf("body_fields entry %q is not declared by record_schema", name)
 		}
 	}
+	return nil
 }
 
 func addWriteJSONBodyFields(fields map[string]bool, action WriteAction) error {
 	if len(action.BodyFields) > 0 {
-		addWriteBodyFields(fields, action.BodyFields)
-		return nil
+		return addSelectedWriteBodyFields(fields, action, action.BodyFields)
 	}
 	bodyFields := map[string]bool{}
 	if err := collectRequestSchemaFields(action.RecordSchema, "body", bodyFields); err != nil {
@@ -444,4 +502,12 @@ func addWriteJSONBodyFields(fields map[string]bool, action WriteAction) error {
 		}
 	}
 	return nil
+}
+
+func deleteRequestFieldPrefix(fields map[string]bool, prefix string) {
+	for path := range fields {
+		if path == prefix || strings.HasPrefix(path, prefix+".") || strings.HasPrefix(path, prefix+"[]") {
+			delete(fields, path)
+		}
+	}
 }

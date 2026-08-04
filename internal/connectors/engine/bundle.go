@@ -1949,6 +1949,9 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if method == "POST" && len(op.REST.BodySchema) == 0 && (op.REST.Body == nil || !op.REST.Body.None) {
 			return fmt.Errorf("operation %d (%q) rest_read POST must declare body_schema", i, op.ID)
 		}
+		if method == "GET" && (len(op.REST.BodySchema) > 0 || op.REST.Body != nil && !op.REST.Body.None) {
+			return fmt.Errorf("operation %d (%q) rest_read GET must declare body %q", i, op.ID, "none")
+		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
 			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
 		}
@@ -2066,11 +2069,11 @@ func validateRequestContract(i int, op OperationSpec) error {
 		if strings.TrimSpace(field.SourceLocation) == "" {
 			return fmt.Errorf("operation %d (%q) request_contract field %q source_location is required", i, op.ID, path)
 		}
-		if strings.HasPrefix(path, "body.") && op.REST.Body != nil && op.REST.Body.None {
+		if requestContractFieldNamespace(path) == "body" && op.REST.Body != nil && op.REST.Body.None {
 			return fmt.Errorf("operation %d (%q) request_contract field %q conflicts with rest body none", i, op.ID, path)
 		}
-		if strings.HasPrefix(path, "path.") && !declaredFieldSet[path] {
-			return fmt.Errorf("operation %d (%q) request_contract field %q does not match a rest.path variable", i, op.ID, path)
+		if !declaredFieldSet[path] {
+			return fmt.Errorf("operation %d (%q) request_contract field %q does not match a declared REST request field", i, op.ID, path)
 		}
 		citations[path] = true
 	}
@@ -2079,6 +2082,9 @@ func validateRequestContract(i int, op OperationSpec) error {
 		if !citations[path] {
 			return fmt.Errorf("operation %d (%q) request_contract is missing citation for %q", i, op.ID, path)
 		}
+	}
+	if len(op.REST.BodySchema) == 0 && (op.REST.Body == nil || !op.REST.Body.None && len(op.REST.Body.Fields) == 0) {
+		return fmt.Errorf("operation %d (%q) request with no declared body fields must declare body %q", i, op.ID, "none")
 	}
 	if contract.WriteAction == "" && len(contract.WriteFieldMap) > 0 {
 		return fmt.Errorf("operation %d (%q) request_contract write_field_map requires write_action", i, op.ID)
@@ -2090,16 +2096,15 @@ func validRequestContractFieldPath(path string) bool {
 	if path == "" || strings.ContainsAny(path, "\r\n\t") {
 		return false
 	}
-	namespace, name, ok := strings.Cut(path, ".")
-	if !ok || strings.TrimSpace(name) == "" {
-		return false
-	}
-	switch namespace {
-	case "body", "path", "query":
+	if path == "body[]" {
 		return true
-	default:
-		return false
 	}
+	for _, prefix := range []string{"body.", "body[].", "path.", "query."} {
+		if name, ok := strings.CutPrefix(path, prefix); ok {
+			return strings.TrimSpace(name) != "" && !strings.HasPrefix(name, ".")
+		}
+	}
+	return false
 }
 
 func declaredRequestContractFields(rest *RESTOperationSpec) ([]string, error) {
@@ -2164,6 +2169,9 @@ func validateWriteRequestContractLinks(writes []WriteAction, operations []Operat
 		if previous, ok := claims[action]; ok {
 			return fmt.Errorf("operations.json operations %q and %q both claim writes.json action %q", previous, op.ID, action)
 		}
+		if strings.TrimSpace(writes[writeIndex].Hook) != "" {
+			return fmt.Errorf("writes.json action %q uses write hook %q and cannot be claimed until its effective requests are modeled", action, writes[writeIndex].Hook)
+		}
 		writeFields, err := declaredWriteRequestFields(writes[writeIndex])
 		if err != nil {
 			return fmt.Errorf("writes.json action %q request inputs: %w", action, err)
@@ -2183,8 +2191,8 @@ func validateWriteRequestContractLinks(writes []WriteAction, operations []Operat
 			if !validRequestContractFieldPath(requestField) {
 				return fmt.Errorf("operations.json operation %q request_contract write_field_map maps %q to invalid request field %q", op.ID, writeField, requestField)
 			}
-			writeNamespace, _, _ := strings.Cut(writeField, ".")
-			requestNamespace, _, _ := strings.Cut(requestField, ".")
+			writeNamespace := requestContractFieldNamespace(writeField)
+			requestNamespace := requestContractFieldNamespace(requestField)
 			if writeNamespace != requestNamespace {
 				return fmt.Errorf("operations.json operation %q request_contract write_field_map maps %q across namespaces to %q", op.ID, writeField, requestField)
 			}
@@ -2208,6 +2216,15 @@ func validateWriteRequestContractLinks(writes []WriteAction, operations []Operat
 	return nil
 }
 
+func requestContractFieldNamespace(path string) string {
+	for _, namespace := range []string{"body", "path", "query"} {
+		if path == namespace+"[]" || strings.HasPrefix(path, namespace+".") || strings.HasPrefix(path, namespace+"[].") {
+			return namespace
+		}
+	}
+	return ""
+}
+
 func collectRequestValueFields(values map[string]any, prefix string, fields map[string]bool) {
 	names := make([]string, 0, len(values))
 	for name := range values {
@@ -2226,6 +2243,7 @@ func collectRequestValueField(value any, path string, fields map[string]bool) {
 	case map[string]any:
 		collectRequestValueFields(nested, path, fields)
 	case []any:
+		fields[path+"[]"] = true
 		for _, item := range nested {
 			collectRequestValueField(item, path+"[]", fields)
 		}

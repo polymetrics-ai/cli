@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"reflect"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -782,11 +783,34 @@ func TestBundleLoadRequiresRequestContractForRESTOperations(t *testing.T) {
 			"risk": "low",
 			"approval": "none",
 			"output_policy": "json_redacted",
-			"rest": {"method": "GET", "path": "/widgets", "max_bytes": 1024}
+			"rest": {"method": "GET", "path": "/widgets", "max_bytes": 1024, "body": "none"}
 		}]
 	}`), "acme")
 	if err == nil || !strings.Contains(err.Error(), "REST operation must declare request_contract evidence") {
 		t.Fatalf("Load error = %v, want mandatory request_contract error", err)
+	}
+}
+
+func TestBundleLoadRequiresExplicitNoBodyDeclaration(t *testing.T) {
+	for _, body := range []string{"", `,"body":{}`} {
+		t.Run(fmt.Sprintf("body=%q", body), func(t *testing.T) {
+			operations := fmt.Sprintf(`{
+				"operations": [{
+					"id":"acme.widgets.get",
+					"kind":"rest_read",
+					"summary":"Get widget",
+					"risk":"low",
+					"approval":"none",
+					"output_policy":"json_redacted",
+					"request_contract":{"source_tier":3,"source_url":"https://example.invalid/widgets#get","source_location":"Get widget","fields":[]},
+					"rest":{"method":"GET","path":"/widgets","max_bytes":1024%s}
+				}]
+			}`, body)
+			_, err := Load(operationsBundleFS(t, operations), "acme")
+			if err == nil || !strings.Contains(err.Error(), `must declare body "none"`) {
+				t.Fatalf("Load error = %v, want explicit body none error", err)
+			}
+		})
 	}
 }
 
@@ -809,6 +833,7 @@ func TestBundleLoadRequiresRequiredQueryCitations(t *testing.T) {
 				"method": "GET",
 				"path": "/widgets",
 				"max_bytes": 1024,
+				"body": "none",
 				"required_query": [{"any_of": ["email", "id"]}]
 			}
 		}]
@@ -845,7 +870,7 @@ func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
 				"method": "POST",
 				"path": "/widgets/{widget-id}",
 				"query": {"notify":"true"},
-				"body_schema": {"type":"object","properties":{"name":{"type":"string"}}}
+				"body_schema": {"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}
 			}
 		}`, id, writeAction, fieldMap)
 	}
@@ -881,7 +906,7 @@ func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
 					"path_fields": %s,
 					"query": {"notify":"{{ record.notify }}"},
 					"body_fields": ["name"],
-					"record_schema": {"type":"object","required":["id","notify","name"],"properties":{"id":{"type":"string"},"notify":{"type":"string"},"name":{"type":"string"}}},
+					"record_schema": {"type":"object","required":["id","notify","name"],"additionalProperties":false,"properties":{"id":{"type":"string"},"notify":{"type":"string"},"name":{"type":"string"}}},
 					"risk": "creates a widget"
 				}]
 			}`, pathFields))}
@@ -933,11 +958,13 @@ func TestBundleLoadResolvesRequestBodySchemaReferencesAndComposition(t *testing.
 				"path": "/widgets",
 				"body_schema": {
 					"$defs": {
-						"Widget": {"allOf":[
-							{"type":"object","properties":{"name":{"type":"string"}}},
-							{"type":"object","properties":{"metadata":{"$ref":"#/$defs/Metadata"}}}
-						]},
-						"Metadata": {"type":"object","properties":{"label":{"type":"string"}}}
+						"Widget": {
+							"type":"object",
+							"additionalProperties":false,
+							"properties":{"name":{"type":"string"},"metadata":{"$ref":"#/$defs/Metadata"}},
+							"allOf":[{"required":["name"]}]
+						},
+						"Metadata": {"type":"object","additionalProperties":false,"properties":{"label":{"type":"string"}}}
 					},
 					"$ref": "#/$defs/Widget"
 				}
@@ -971,7 +998,8 @@ func TestBundleLoadRejectsUnresolvedOrUnenumerableRequestBodySchema(t *testing.T
 	}{
 		{name: "unresolved local reference", schema: `{"$ref":"#/components/schemas/Missing"}`, want: `cannot resolve local reference`},
 		{name: "external reference", schema: `{"$ref":"https://example.invalid/openapi.json#/components/schemas/Widget"}`, want: `external reference`},
-		{name: "root array", schema: `{"type":"array","items":{"type":"string"}}`, want: `root arrays cannot be represented`},
+		{name: "open root object", schema: `{"type":"object","properties":{"name":{"type":"string"}}}`, want: `must declare additionalProperties false`},
+		{name: "open nested object", schema: `{"type":"object","additionalProperties":false,"properties":{"metadata":{"type":"object","properties":{"label":{"type":"string"}}}}}`, want: `must declare additionalProperties false`},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -1011,7 +1039,7 @@ func TestBundleLoadValidatesFullRESTPathParameterGrammar(t *testing.T) {
 				"source_location":"Get subscription",
 				"fields":[{"path":"path.subscription-id","source_url":"https://example.invalid/subscriptions#get","source_location":"subscription-id path parameter"}]
 			},
-			"rest":{"method":"GET","path":"/subscriptions/{subscription-id}","max_bytes":1024}
+			"rest":{"method":"GET","path":"/subscriptions/{subscription-id}","max_bytes":1024,"body":"none"}
 		}]
 	}`
 	if _, err := Load(operationsBundleFS(t, valid), "acme"); err != nil {
@@ -1022,6 +1050,131 @@ func TestBundleLoadValidatesFullRESTPathParameterGrammar(t *testing.T) {
 	_, err := Load(operationsBundleFS(t, invalid), "acme")
 	if err == nil || !strings.Contains(err.Error(), "invalid path variable") {
 		t.Fatalf("Load malformed path variable error = %v, want invalid path variable", err)
+	}
+}
+
+func TestRequestContractFieldsModelRootArrays(t *testing.T) {
+	fields := map[string]bool{}
+	err := collectRequestSchemaFields(json.RawMessage(`{
+		"type":"array",
+		"items":{
+			"type":"object",
+			"additionalProperties":false,
+			"properties":{"name":{"type":"string"}}
+		}
+	}`), "body", fields)
+	if err != nil {
+		t.Fatalf("collectRequestSchemaFields: %v", err)
+	}
+	want := map[string]bool{"body[]": true, "body[].name": true}
+	if !reflect.DeepEqual(fields, want) {
+		t.Fatalf("fields = %v, want %v", fields, want)
+	}
+
+	writeFields, err := declaredWriteRequestFields(WriteAction{
+		BodyType:   "json_array",
+		BodyField:  "items",
+		BodySchema: json.RawMessage(`{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}`),
+	})
+	if err != nil {
+		t.Fatalf("declaredWriteRequestFields: %v", err)
+	}
+	if !reflect.DeepEqual(writeFields, []string{"body[]", "body[].name"}) {
+		t.Fatalf("write fields = %v, want root array fields", writeFields)
+	}
+}
+
+func TestDeclaredWriteRequestFieldsCoverWireMechanisms(t *testing.T) {
+	tests := []struct {
+		name    string
+		action  WriteAction
+		want    []string
+		wantErr string
+	}{
+		{
+			name:   "graphql variables",
+			action: WriteAction{BodyType: "graphql", GraphQL: &GraphQLRequestSpec{Variables: map[string]any{"widget": map[string]any{"name": "{{ record.name }}"}}}},
+			want:   []string{"body.variables.widget", "body.variables.widget.name"},
+		},
+		{
+			name:   "multipart parts",
+			action: WriteAction{BodyType: "multipart", Multipart: &MultipartSpec{Parts: []MultipartPartSpec{{Name: "metadata", Field: "metadata", Type: "field"}, {Name: "file", Field: "path", Type: "file"}}}},
+			want:   []string{"body.file", "body.metadata"},
+		},
+		{
+			name: "base64 upload omits source",
+			action: WriteAction{
+				BodyType:     "base64_upload",
+				RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"path":{"type":"string"},"label":{"type":"string"}}}`),
+				Base64Upload: &Base64UploadSpec{SourceField: "path", ContentField: "content"},
+			},
+			want: []string{"body.content", "body.label"},
+		},
+		{
+			name: "dynamic fields rejected",
+			action: WriteAction{
+				DynamicFields: &DynamicFieldsSpec{Field: "custom_fields"},
+			},
+			wantErr: "cannot be enumerated",
+		},
+		{
+			name: "base64 query rejected",
+			action: WriteAction{
+				BodyType: "base64_upload",
+				Query:    map[string]QueryParam{"notify": {Template: "true"}},
+			},
+			wantErr: "not transmitted",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := declaredWriteRequestFields(tt.action)
+			if tt.wantErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+					t.Fatalf("declaredWriteRequestFields error = %v, want %q", err, tt.wantErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("declaredWriteRequestFields: %v", err)
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Fatalf("fields = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestBundleLoadRejectsWriteHookRequestContractClaims(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions":[{
+			"name":"create_widget",
+			"kind":"create",
+			"method":"POST",
+			"path":"/widgets",
+			"body_type":"none",
+			"record_schema":{"type":"object","additionalProperties":false,"properties":{}},
+			"risk":"creates a widget",
+			"hook":"acme"
+		}]
+	}`)}
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations":[{
+			"id":"acme.widgets.create",
+			"kind":"rest_write",
+			"summary":"Create widget",
+			"risk":"medium",
+			"approval":"required",
+			"output_policy":"json_redacted",
+			"mutation_class":"create",
+			"request_contract":{"source_tier":3,"source_url":"https://example.invalid/widgets#create","source_location":"Create widget","write_action":"create_widget","fields":[]},
+			"rest":{"method":"POST","path":"/widgets","body":"none"}
+		}]
+	}`)}
+	_, err := Load(fsys, "acme")
+	if err == nil || !strings.Contains(err.Error(), "uses write hook") {
+		t.Fatalf("Load error = %v, want write hook claim rejection", err)
 	}
 }
 
@@ -1043,7 +1196,7 @@ func TestBundleLoadRejectsInvalidRequestContracts(t *testing.T) {
 		},
 		{
 			name:       "uncited schema field",
-			operations: `{"operations":[{"id":"acme.widgets.update","kind":"rest_write","summary":"Update","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":2,"source_url":"https://example.invalid/openapi.json","source_location":"update description","fields":[]},"rest":{"method":"PATCH","path":"/widgets","body_schema":{"type":"object","properties":{"name":{"type":"string"}}}}}]}`,
+			operations: `{"operations":[{"id":"acme.widgets.update","kind":"rest_write","summary":"Update","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":2,"source_url":"https://example.invalid/openapi.json","source_location":"update description","fields":[]},"rest":{"method":"PATCH","path":"/widgets","body_schema":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}}]}`,
 			want:       `missing citation for "body.name"`,
 		},
 		{

@@ -630,6 +630,7 @@ func TestValidate_CLISurfaceNoBodyRequestContractRequiresFlags(t *testing.T) {
 					"method": "POST",
 					"path": "/widgets/{id}:refresh",
 					"max_bytes": 1024,
+					"query": {"force": "{{.force}}"},
 					"body": "none"
 				}
 			},
@@ -646,9 +647,10 @@ func TestValidate_CLISurfaceNoBodyRequestContractRequiresFlags(t *testing.T) {
 					"source_url": "https://example.invalid/widgets#create",
 					"source_location": "Create widget request",
 					"write_action": "create_widget",
-					"fields": []
+					"write_field_map": {"body.name":"body.name"},
+					"fields": [{"path":"body.name","source_url":"https://example.invalid/widgets#create","source_location":"name request property"}]
 				},
-				"rest": {"method":"POST","path":"/widgets","body":"none"}
+				"rest": {"method":"POST","path":"/widgets","body_schema":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}
 			}
 		]
 	}`
@@ -732,7 +734,7 @@ func TestValidate_CLISurfaceRequestContractFlagsApplyToAllOperations(t *testing.
 				"source_location": "List widgets request",
 				"fields": []
 			},
-			"rest": {"method":"GET","path":"/widgets","max_bytes":1024}
+			"rest": {"method":"GET","path":"/widgets","max_bytes":1024,"body":"none"}
 		}]
 	}`
 	fsys := cliSurfaceBundleFS(cliSurface)
@@ -792,10 +794,10 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T
 					"body_schema": {
 						"type": "object",
 						"additionalProperties": false,
-						"required": ["payload"],
 						"properties": {
 							"payload": { "type": "string" }
-						}
+						},
+						"allOf": [{"required": ["payload"]}]
 					},
 					"body": {}
 				}
@@ -866,10 +868,10 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 					"body_schema": {
 						"type": "object",
 						"additionalProperties": false,
-						"required": ["payload"],
 						"properties": {
 							"payload": { "type": "string" }
-						}
+						},
+						"allOf": [{"required": ["payload"]}]
 					},
 					"body": {}
 				}
@@ -905,6 +907,16 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for required body flag, got %+v", report.Findings)
 	}
+
+	alternative := strings.Replace(operations, `"allOf": [{"required": ["payload"]}]`, `"anyOf": [{"required": ["payload"]}, {"required": []}]`, 1)
+	fsys = cliSurfaceBundleFS(fixed)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(withWriteEvidenceOperation(alternative))}
+	report, err = validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir alternative: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
 func TestValidate_CLISurfaceOperationRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
@@ -1781,7 +1793,7 @@ func cliSurfaceBundleFS(cliSurface string) fstest.MapFS {
 					"kind": "create",
 					"method": "POST",
 					"path": "/widgets",
-					"record_schema": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" } } },
+					"record_schema": { "type": "object", "required": ["name"], "additionalProperties": false, "properties": { "name": { "type": "string" } } },
 					"risk": "creates a widget"
 				}
 			]
@@ -1861,7 +1873,8 @@ func validOperationsJSON() string {
 				"rest": {
 					"method": "GET",
 					"path": "/widgets/{id}",
-					"max_bytes": 1024
+					"max_bytes": 1024,
+					"body": "none"
 				}
 			},
 			` + validWriteEvidenceOperationJSON() + `
@@ -1883,9 +1896,10 @@ func validWriteEvidenceOperationJSON() string {
 			"source_url": "https://example.invalid/widgets#create",
 			"source_location": "Create widget request",
 			"write_action": "create_widget",
-			"fields": []
+			"write_field_map": {"body.name":"body.name"},
+			"fields": [{"path":"body.name","source_url":"https://example.invalid/widgets#create","source_location":"name request property"}]
 		},
-		"rest": {"method":"POST","path":"/widgets","body":"none"}
+		"rest": {"method":"POST","path":"/widgets","body_schema":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}
 	}`
 }
 
@@ -1920,6 +1934,7 @@ func validOperationCLISurfaceJSON() string {
 				],
 				"output_policy": "json_redacted",
 				"source_cli_path": "clis widget view",
+				"flags": [{"name":"id","type":"string","maps_to":"path.id","required":true}],
 				"examples": ["pm cli-surface widget view --id w_1 --json"]
 			}
 		]

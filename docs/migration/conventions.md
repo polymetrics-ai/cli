@@ -221,8 +221,9 @@ not a full override by default.
 
   `operations.json` records that evidence in the supported `request_contract` block. Field paths
   use `body.<field>`, `path.<parameter>`, or `query.<parameter>`; nested body properties use dotted
-  segments and array item properties use `[]` after the array segment. Each entry carries its own
-  citation even when several fields share a source:
+  segments and array item properties use `[]` after the array segment. A root array is `body[]`
+  and its object element fields are `body[].<field>`. Each entry carries its own citation even when
+  several fields share a source:
 
   ```json
   {
@@ -273,12 +274,29 @@ not a full override by default.
   For `rest.body_schema`, the loader resolves and inlines connector-local JSON Pointer `$ref`
   values, preserves executable `allOf`, `anyOf`, and `oneOf` validation, and unions fields exposed
   by those branches before checking citations. External, dangling, cyclic, or non-object
-  references fail loading. A root schema that still exposes no named request fields also fails
-  instead of being treated as an empty contract; use `body: "none"` only when the documentation
-  truly declares no body.
+  references fail loading. Every object node must declare `additionalProperties: false`; an open
+  object cannot prove that every transmitted field has a citation. Root arrays use the explicit
+  `body[]` spelling. A schema that still exposes no request fields fails instead of being treated
+  as an empty contract. An operation with neither a non-empty static body nor a body schema must
+  use `body: "none"`; omission and `{}` are invalid empty-body spellings.
+
+  Required CLI body mappings are derived from the engine's compiled schema semantics. `allOf`
+  requirements are combined. An operation-backed command using `anyOf` or `oneOf` is deferred
+  because current CLI metadata cannot express alternative or exclusive required-flag groups; the
+  validator rejects it rather than silently ignoring an arm. Every cited path and query parameter
+  must map to a command flag for body-bearing and empty-body operations alike.
+
+  Write actions using `json_array` map the outgoing root array and element fields, not the source
+  record's `body_field`. GraphQL variables map below `body.variables`. Multipart part names and the
+  transmitted base64 content property are explicit body fields; the base64 source path/value is
+  not transmitted. A write action declaring `dynamic_fields` or `hook` cannot be linked until its
+  effective dynamic or hook-generated request has an operation-side representation with complete
+  citations.
 
   `docs/migration/request-contract-coverage.json` is the machine-readable rollout inventory, sorted
-  by each connector's remaining citation/link gap count and then connector slug. Its
+  by each connector's remaining citation/link gap count and then connector slug. The accompanying
+  `docs/migration/request-contract-outbound-coverage.md` records each outbound-value mechanism,
+  enforcement mode, corpus counts, and focused evidence. The manifest's
   `source_of_truth_api_docs_reference` is normally a URL string. When repository research finds no
   authoritative public reference, it is an object with
   `state: "no_discoverable_public_docs"` and a required `research_note`; free-form placeholder text

@@ -1,0 +1,24 @@
+# Request-contract outbound-value coverage
+
+Measured on 2026-08-05 against the connector definitions in this worktree. Enforcement is intentionally fail-closed while the coverage manifest remains incomplete.
+
+| Outbound mechanism | Citation coverage | Enforcement and focused evidence |
+| --- | --- | --- |
+| REST path variables | Covered | The shared path-template parser derives every `path.*` field; the loader requires a citation and every operation-backed command requires a flag. `TestBundleLoadValidatesFullRESTPathParameterGrammar` covers the four HubSpot `{subscription-id}` shapes recorded in the manifest. |
+| REST query | Covered | `rest.query`, every `required_query.any_of` name, and write-action query keys derive `query.*` fields. Citations and operation-backed command flags are mandatory. |
+| REST required query | Covered | Every alternative name is included in the derived field set before citation and flag validation. `TestBundleLoadRequiresRequiredQueryCitations` covers the fail-closed path. |
+| Static REST body | Covered | Every nested static value derives a `body.*` path. Arrays retain their `[]` item path. |
+| Body-schema properties | Covered when closed | Every property and array item is derived recursively. An object node must declare `additionalProperties: false`; 125 existing REST operations contain a directly discoverable open object and are rejected. |
+| `allOf` composition | Covered | Loader citation derivation unions the branches. CLI required mappings come from the engine's compiled schema through `Schema.RequiredMappingPaths`; `TestSchemaMappingRequirementsUseCompiledComposition` and the direct-read body-mapping tests cover it. |
+| `anyOf` / `oneOf` composition | Rejected for operation-backed CLI commands | Runtime can validate alternatives, but current CLI metadata cannot express alternative or exclusive required-flag groups. The shared compiled-schema helper returns an explicit error instead of omitting branch requirements. This subsumes the safety scope of queued `cli-schema-deriver-union-arms-r1`; supporting those commands still needs a new CLI constraint representation. |
+| `additionalProperties` | Rejected unless closed | Missing, `true`, and typed open-object forms are rejected recursively at request-field enumeration. Typed write `dynamic_fields` is separately rejected from request-contract claims until the operation-side contract has an equivalent typed wildcard representation. |
+| `body_field` extraction | Covered as wire shape | `json_array` cites the outgoing root array as `body[]` and its element fields as `body[].*`; the source record's `body_field` name is not falsely treated as a wire property. `TestRequestContractFieldsModelRootArrays` covers this mapping. |
+| Root arrays | Covered for write promotion; rejected for operation-backed direct reads | Root arrays use `body[]`; object element properties use `body[].<field>`. Primitive elements still require the root-array citation. Direct-read CLI assembly is map-shaped, so those commands are rejected rather than accepted with an unusable body. |
+| Multipart parts | Covered | Every outgoing part name derives a `body.<part-name>` input independent of its record source field. `TestDeclaredWriteRequestFieldsCoverWireMechanisms` covers field and file parts. |
+| Base64 upload fields | Covered with one fail-closed restriction | The local/source field is excluded, the encoded content field and ordinary JSON fields require citations, and linked actions with query parameters are rejected because the current runtime does not transmit that query. |
+| `dynamic_fields` | Rejected | Dynamic keys are typed and bounded in writes metadata but cannot yet carry operation-side per-key citations. A request-contract claim therefore fails instead of treating the container citation as evidence for arbitrary child keys. |
+| GraphQL variables | Covered | Fixed variable names and nested values derive `body.variables.*` paths. Fixed document and operation name remain definition metadata rather than caller-derived fields. |
+| Write hooks | Rejected | All 8 write actions carrying hook metadata are rejected from request-contract claims until their effective single- or multi-request wire shapes are modeled. `TestBundleLoadRejectsWriteHookRequestContractClaims` covers this boundary. |
+| Explicit empty body | Covered | A REST operation with neither a non-empty static body nor a body schema must declare `body: "none"`; `{}` and omission fail loading. Path and query citations still require command flags. |
+
+The coverage counts above measure only shapes discoverable from checked-in definitions. The manifest separately records 1,552 HubSpot reference-only schemas that cannot resolve because their local component targets are absent; those fail before field enumeration and are not included in the 125 open-object count.

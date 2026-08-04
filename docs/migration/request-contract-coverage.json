@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "sort": "coverage_gap_count_ascending_then_connector",
   "totals": {
     "connector_count": 550,
@@ -43,6 +43,32 @@
       }
     ]
   },
+  "closed_object_enumeration": {
+    "rest_operations_with_directly_discoverable_open_body_schema_count": 125,
+    "measurement_scope": "Every operations.json REST body_schema recursively inspected through properties, items, allOf, anyOf, and oneOf before local reference resolution.",
+    "enforcement": "rejected_until_every_object_node_declares_additionalProperties_false"
+  },
+  "write_hook_coverage": {
+    "hook_handled_write_action_count": 8,
+    "enforcement": "request_contract_claims_rejected_until_effective_requests_are_modeled",
+    "actions": [
+      "github/close_issue",
+      "github/reopen_issue",
+      "github/create_pull_request",
+      "github/update_pull_request",
+      "github/close_pull_request",
+      "github/reopen_pull_request",
+      "github/codespaces_secrets_secret_name",
+      "github/codespaces_secrets_secret_name3"
+    ]
+  },
+  "cli_schema_composition": {
+    "allOf": "required paths derived from the compiled engine schema",
+    "anyOf": "operation-backed commands rejected because CLI metadata cannot express alternative required branches",
+    "oneOf": "operation-backed commands rejected because CLI metadata cannot express exclusive required branches",
+    "subsumes_cli_schema_deriver_union_arms_r1_safety_scope": true
+  },
+  "outbound_mechanism_report": "docs/migration/request-contract-outbound-coverage.md",
   "connectors": [
     {
       "connector": "activecampaign",

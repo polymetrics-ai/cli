@@ -116,8 +116,6 @@ var surfaceOperationRisks = map[string]bool{
 	"critical": true,
 }
 
-const maxCLIRecordPathArrayIndex = 128
-
 var directReadOutputPolicies = map[string]bool{
 	"repository_contents_file_metadata": true,
 	"repository_contents_directory":     true,
@@ -927,11 +925,21 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 	if op.REST == nil || len(op.REST.BodySchema) == 0 {
 		return nil
 	}
-	schema, err := parseCLIRecordSchema(op.REST.BodySchema)
+	schema, err := engine.CompileSchema(op.REST.BodySchema)
 	if err != nil {
 		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q has invalid body_schema for CLI validation: %v", op.ID, err)}}
 	}
-	requiredPaths := schema.requiredMappingPaths("")
+	root, err := schema.MappingPath("")
+	if err != nil {
+		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q body_schema cannot be inspected for CLI validation: %v", op.ID, err)}}
+	}
+	if root.IsArray {
+		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q root-array body_schema cannot be assembled by operation-backed CLI flags", op.ID)}}
+	}
+	requiredPaths, err := schema.RequiredMappingPaths()
+	if err != nil {
+		return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q body_schema cannot be expressed by CLI flags: %v", op.ID, err)}}
+	}
 	if len(requiredPaths) == 0 {
 		return nil
 	}
@@ -968,11 +976,11 @@ func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLIC
 	for _, field := range op.RequestContract.Fields {
 		citations[strings.TrimSpace(field.Path)] = true
 	}
-	mappings := make(map[string]bool, len(cmd.Flags))
+	mappings := make(map[string]engine.CLIFlag, len(cmd.Flags))
 	var findings []Finding
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
-		mappings[mapsTo] = true
+		mappings[mapsTo] = flag
 		if noBody && strings.HasPrefix(mapsTo, "body.") {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented no-body command %d (%q) flag --%s maps to body despite rest.body none", i, cmd.Path, flag.Name)})
 			continue
@@ -981,16 +989,18 @@ func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLIC
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) flag --%s maps to uncited request field %q", i, cmd.Path, flag.Name, mapsTo)})
 		}
 	}
-	if !noBody {
-		return findings
-	}
 	for _, field := range op.RequestContract.Fields {
 		path := strings.TrimSpace(field.Path)
 		if !strings.HasPrefix(path, "path.") && !strings.HasPrefix(path, "query.") {
 			continue
 		}
-		if !mappings[path] {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented no-body command %d (%q) request field %q must map to a command flag", i, cmd.Path, path)})
+		flag, mapped := mappings[path]
+		if !mapped {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) request field %q must map to a command flag", i, cmd.Path, path)})
+			continue
+		}
+		if strings.HasPrefix(path, "path.") && !flag.Required {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) path field %q maps to flag --%s that is not required", i, cmd.Path, path, flag.Name)})
 		}
 	}
 	return findings
@@ -1020,13 +1030,13 @@ func operationStaticBodyProvidesPath(body map[string]any, path string) bool {
 	return true
 }
 
-func commandBodyFlagCoveringRequiredPath(schema *cliRecordSchemaNode, mappedTargets []cliBodyFlagMapping, requiredPath string) (cliBodyFlagMapping, bool) {
-	requiredNode, err := schema.recordPath(requiredPath)
+func commandBodyFlagCoveringRequiredPath(schema *engine.Schema, mappedTargets []cliBodyFlagMapping, requiredPath string) (cliBodyFlagMapping, bool) {
+	requiredNode, err := schema.MappingPath(requiredPath)
 	var optional cliBodyFlagMapping
 	optionalFound := false
 	for _, mapping := range mappedTargets {
 		covers := mapping.target == requiredPath
-		if !covers && err == nil && requiredNode != nil && (requiredNode.isObject() || requiredNode.isArray()) && dottedPathPrefix(requiredPath, mapping.target) {
+		if !covers && err == nil && (requiredNode.IsObject || requiredNode.IsArray) && dottedPathPrefix(requiredPath, mapping.target) {
 			covers = true
 		}
 		if !covers {
@@ -1170,12 +1180,17 @@ func checkCLISurfaceWriteFlags(
 		return nil
 	}
 
-	var schema *cliRecordSchemaNode
+	var schema *engine.Schema
+	var requiredPaths []string
 	if len(action.RecordSchema) > 0 {
 		var err error
-		schema, err = parseCLIRecordSchema(action.RecordSchema)
+		schema, err = engine.CompileSchema(action.RecordSchema)
 		if err != nil {
 			return []Finding{{Connector: b.Name, File: "writes.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("write %q has invalid record_schema for CLI validation: %v", action.Name, err)}}
+		}
+		requiredPaths, err = schema.RequiredMappingPaths()
+		if err != nil {
+			return []Finding{{Connector: b.Name, File: "writes.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("write %q record_schema cannot be expressed by CLI flags: %v", action.Name, err)}}
 		}
 	}
 
@@ -1202,21 +1217,19 @@ func checkCLISurfaceWriteFlags(
 		if schema == nil {
 			continue
 		}
-		leaf, err := schema.recordPath(target)
+		leaf, err := schema.MappingPath(target)
 		if err != nil {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s maps outside write %q schema: %v", i, cmd.Path, flag.Name, cmd.Write, err)})
 			continue
 		}
 		if !cliFlagTypeMatchesSchema(flag.Type, leaf) {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s type %q is incompatible with record.%s schema type %s", i, cmd.Path, flag.Name, flag.Type, target, strings.Join(leaf.effectiveTypes(), ","))})
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s type %q is incompatible with record.%s schema type %s", i, cmd.Path, flag.Name, flag.Type, target, strings.Join(leaf.Types, ","))})
 		}
 	}
 
 	required := map[string]bool{}
-	if schema != nil {
-		for _, field := range schema.requiredMappingPaths("") {
-			required[field] = true
-		}
+	for _, field := range requiredPaths {
+		required[field] = true
 	}
 	for _, field := range action.PathFields {
 		required[field] = true
@@ -1251,199 +1264,9 @@ func dottedPathPrefix(parent, child string) bool {
 	return strings.HasPrefix(child, parent+".")
 }
 
-type cliRecordSchemaNode struct {
-	types                []string
-	required             []string
-	properties           map[string]*cliRecordSchemaNode
-	items                *cliRecordSchemaNode
-	additionalProperties bool
-	hasAdditionalProps   bool
-}
-
-func parseCLIRecordSchema(raw json.RawMessage) (*cliRecordSchemaNode, error) {
-	var m map[string]json.RawMessage
-	if err := json.Unmarshal(raw, &m); err != nil {
-		return nil, err
-	}
-	return parseCLIRecordSchemaNode(m)
-}
-
-func parseCLIRecordSchemaNode(m map[string]json.RawMessage) (*cliRecordSchemaNode, error) {
-	n := &cliRecordSchemaNode{additionalProperties: true}
-	if raw, ok := m["type"]; ok {
-		var single string
-		if err := json.Unmarshal(raw, &single); err == nil {
-			n.types = []string{single}
-		} else if err := json.Unmarshal(raw, &n.types); err != nil {
-			return nil, err
-		}
-	}
-	if raw, ok := m["required"]; ok {
-		if err := json.Unmarshal(raw, &n.required); err != nil {
-			return nil, err
-		}
-	}
-	if raw, ok := m["additionalProperties"]; ok {
-		if err := json.Unmarshal(raw, &n.additionalProperties); err != nil {
-			return nil, err
-		}
-		n.hasAdditionalProps = true
-	}
-	if raw, ok := m["properties"]; ok {
-		var props map[string]map[string]json.RawMessage
-		if err := json.Unmarshal(raw, &props); err != nil {
-			return nil, err
-		}
-		n.properties = make(map[string]*cliRecordSchemaNode, len(props))
-		for name, prop := range props {
-			child, err := parseCLIRecordSchemaNode(prop)
-			if err != nil {
-				return nil, err
-			}
-			n.properties[name] = child
-		}
-	}
-	if raw, ok := m["items"]; ok {
-		var item map[string]json.RawMessage
-		if err := json.Unmarshal(raw, &item); err != nil {
-			return nil, err
-		}
-		child, err := parseCLIRecordSchemaNode(item)
-		if err != nil {
-			return nil, err
-		}
-		n.items = child
-	}
-	return n, nil
-}
-
-func (n *cliRecordSchemaNode) recordPath(path string) (*cliRecordSchemaNode, error) {
-	parts := strings.Split(path, ".")
-	cur := n
-	for _, part := range parts {
-		if part == "" {
-			return nil, fmt.Errorf("empty path segment")
-		}
-		if cur.isArray() {
-			if err := validateCLIRecordArrayIndex(part); err != nil {
-				return nil, err
-			}
-			if cur.items == nil {
-				return nil, fmt.Errorf("array segment %q has no item schema", part)
-			}
-			cur = cur.items
-			continue
-		}
-		if !cur.isObject() {
-			return nil, fmt.Errorf("%q descends into non-object schema", part)
-		}
-		child := cur.properties[part]
-		if child == nil {
-			return nil, fmt.Errorf("record field %q is not declared", part)
-		}
-		cur = child
-	}
-	return cur, nil
-}
-
-func validateCLIRecordArrayIndex(part string) error {
-	for _, r := range part {
-		if r < '0' || r > '9' {
-			return fmt.Errorf("array segment %q is not a numeric index", part)
-		}
-	}
-	if len(part) > 1 && strings.HasPrefix(part, "0") {
-		return fmt.Errorf("array index %q must not have leading zeroes", part)
-	}
-	if len(part) > 3 || (len(part) == 3 && part > "128") {
-		return fmt.Errorf("array index %q exceeds max %d", part, maxCLIRecordPathArrayIndex)
-	}
-	return nil
-}
-
-func (n *cliRecordSchemaNode) requiredMappingPaths(prefix string) []string {
-	if n == nil {
-		return nil
-	}
-	var out []string
-	for _, req := range n.required {
-		child := n.properties[req]
-		path := joinSchemaPath(prefix, req)
-		childPaths := child.requiredNodeMappingPaths(path)
-		if len(childPaths) == 0 {
-			out = append(out, path)
-			continue
-		}
-		out = append(out, childPaths...)
-	}
-	return out
-}
-
-func (n *cliRecordSchemaNode) requiredNodeMappingPaths(prefix string) []string {
-	if n == nil {
-		return nil
-	}
-	if n.isArray() {
-		if n.items == nil {
-			return nil
-		}
-		itemPrefix := joinSchemaPath(prefix, "0")
-		paths := n.items.requiredNodeMappingPaths(itemPrefix)
-		if len(paths) == 0 {
-			return []string{prefix}
-		}
-		return paths
-	}
-	if n.isObject() {
-		return n.requiredMappingPaths(prefix)
-	}
-	return nil
-}
-
-func joinSchemaPath(prefix, part string) string {
-	if prefix == "" {
-		return part
-	}
-	return prefix + "." + part
-}
-
-func (n *cliRecordSchemaNode) isArray() bool {
-	for _, typ := range n.types {
-		if typ == "array" {
-			return true
-		}
-	}
-	return false
-}
-
-func (n *cliRecordSchemaNode) isObject() bool {
-	if len(n.properties) > 0 {
-		return true
-	}
-	for _, typ := range n.types {
-		if typ == "object" {
-			return true
-		}
-	}
-	return len(n.types) == 0
-}
-
-func (n *cliRecordSchemaNode) effectiveTypes() []string {
-	if len(n.types) > 0 {
-		return n.types
-	}
-	if n.isArray() {
-		return []string{"array"}
-	}
-	if n.isObject() {
-		return []string{"object"}
-	}
-	return []string{"any"}
-}
-
-func cliFlagTypeMatchesSchema(flagType string, node *cliRecordSchemaNode) bool {
+func cliFlagTypeMatchesSchema(flagType string, node engine.SchemaPathInfo) bool {
 	schemaTypes := map[string]bool{}
-	for _, typ := range node.effectiveTypes() {
+	for _, typ := range node.Types {
 		schemaTypes[typ] = true
 	}
 	switch flagType {
