@@ -5,7 +5,7 @@
   "runtime": "claude-code",
   "runtime_fallback": "manual-GSD inline execution; Pi runtime subagents unavailable in this session",
   "trace": ".planning/traces/gsd-plan-phase-engine-request-shaping-foundations-r1-prompt.md",
-  "status": "planned",
+  "status": "implemented-verified",
   "branch": "fm/cli-airtable-request-foundations-r1",
   "owned_paths": [
     "internal/connectors/engine/**",
@@ -25,7 +25,7 @@
       "name": "array-cardinality-min-max-items",
       "unblocks_operations": 25,
       "connector": "airtable",
-      "state": "planned",
+      "state": "done",
       "issue": 3690
     },
     {
@@ -33,7 +33,7 @@
       "name": "start-index-pagination",
       "unblocks_operations": 2,
       "connector": "airtable",
-      "state": "planned",
+      "state": "done",
       "issue": 3691
     },
     {
@@ -41,7 +41,7 @@
       "name": "required-query-any-of",
       "unblocks_operations": 1,
       "connector": "airtable",
-      "state": "planned",
+      "state": "done",
       "issue": 3692
     },
     {
@@ -49,7 +49,7 @@
       "name": "bounded-base64-upload",
       "unblocks_operations": 1,
       "connector": "airtable",
-      "state": "planned",
+      "state": "done",
       "issue": 3693
     }
   ],
@@ -69,5 +69,13 @@
       "internal/connectors/engine/schema/writes.schema.json"
     ],
     "note": "disjoint concerns inside shared files; upload bounds/safety rules deliberately mirror that lane's download design"
+  },
+  "verification": {
+    "local_gates": "green",
+    "connectorgen_validate": "550 connectors, 0 findings",
+    "connector_boundary": "clean",
+    "website_data_drift": "none",
+    "runtime_checks": "12/12 passed against live HTTP servers",
+    "artifact": ".planning/phases/engine-request-shaping-foundations-r1/VERIFICATION.md"
   }
 }
