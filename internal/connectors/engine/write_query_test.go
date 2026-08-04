@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -282,4 +283,89 @@ func writesSchemaBytes(t *testing.T) json.RawMessage {
 		t.Fatalf("writes.schema.json does not declare a query property")
 	}
 	return json.RawMessage(writesSchemaJSON)
+}
+
+// TestBundleLoadWiresWriteQueryAndDynamicFields proves both new write-side
+// capabilities survive the REAL bundle loader — meta-schema validation,
+// decoding, and semantic validation — rather than only being reachable by
+// constructing a WriteAction in Go. A schema field that the loader rejects, or
+// silently drops, would be worse than no field at all.
+func TestBundleLoadWiresWriteQueryAndDynamicFields(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [{
+			"name": "sync_member",
+			"kind": "upsert",
+			"method": "POST",
+			"path": "/members",
+			"risk": "low",
+			"record_schema": {
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"id": {"type": "string"},
+					"custom_fields": {"type": "object"}
+				}
+			},
+			"query": {
+				"plain": "{{ config.tenant }}",
+				"obj": {"template": "{{ config.missing }}", "omit_when_absent": true}
+			},
+			"dynamic_fields": {
+				"field": "custom_fields",
+				"key_pattern": "^[A-Za-z][A-Za-z0-9_]*$",
+				"max_keys": 25,
+				"value_types": ["string", "number"],
+				"max_value_bytes": 256,
+				"target": "inline"
+			}
+		}]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load with query + dynamic_fields must succeed: %v", err)
+	}
+	if len(b.Writes) != 1 {
+		t.Fatalf("Writes = %+v", b.Writes)
+	}
+	action := b.Writes[0]
+
+	if got := action.Query["plain"]; got.Template != "{{ config.tenant }}" || got.OmitWhenAbsent {
+		t.Fatalf("plain query entry lost in load: %+v", got)
+	}
+	if got := action.Query["obj"]; !got.OmitWhenAbsent {
+		t.Fatalf("object query entry lost in load: %+v", got)
+	}
+	if action.DynamicFields == nil {
+		t.Fatal("dynamic_fields dropped by the loader")
+	}
+	if action.DynamicFields.Field != "custom_fields" ||
+		action.DynamicFields.MaxKeys != 25 ||
+		action.DynamicFields.MaxValueBytes != 256 ||
+		action.DynamicFields.Target != "inline" ||
+		len(action.DynamicFields.ValueTypes) != 2 {
+		t.Fatalf("dynamic_fields not fully decoded: %+v", action.DynamicFields)
+	}
+}
+
+// TestBundleLoadRejectsInvalidDynamicFields proves the loader ENFORCES the
+// declaration-time contract rather than merely accepting the field.
+func TestBundleLoadRejectsInvalidDynamicFields(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [{
+			"name": "sync_member",
+			"kind": "upsert",
+			"method": "POST",
+			"path": "/members",
+			"risk": "low",
+			"record_schema": {"type": "object"},
+			"body_type": "form",
+			"dynamic_fields": {"field": "custom_fields", "key_pattern": "^[A-Za-z]+$"}
+		}]
+	}`)}
+	if _, err := Load(fsys, "acme"); err == nil {
+		t.Fatal("dynamic_fields on an unsupported body_type must be rejected at load")
+	}
 }

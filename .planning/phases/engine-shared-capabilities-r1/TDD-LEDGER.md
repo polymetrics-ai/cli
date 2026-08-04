@@ -96,6 +96,8 @@ BinaryDownloadRequest`.
 | 3.7 | `TestWriteActionQueryFromRecordField` | query templates see the same `Vars` the path does | GREEN |
 | 3.8 | `TestWriteActionQueryParsesBothDialects` | both dialects parse via the existing `QueryParam.UnmarshalJSON`, no second parser | GREEN |
 | 3.9 | `TestWritesSchemaAcceptsQuery` | `writes.schema.json` accepts the optional `query` object | GREEN |
+| 3.10 | `TestBundleLoadWiresWriteQueryAndDynamicFields` | both write capabilities survive the REAL loader — meta-schema validation, decode, semantic validation — not just a Go-constructed action | GREEN |
+| 3.11 | `TestBundleLoadRejectsInvalidDynamicFields` | the loader ENFORCES the declaration contract (`dynamic_fields` on an unsupported `body_type` is rejected at load) | GREEN |
 
 **Red evidence (task 3):** before implementation the package did not compile —
 `unknown field Query in struct literal of type WriteAction` at write_query_test.go lines
