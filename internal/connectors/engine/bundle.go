@@ -377,23 +377,85 @@ type IncrementalSpec struct {
 
 // WriteAction is one entry in writes.json's "actions" array.
 type WriteAction struct {
-	Name         string              `json:"name"`
-	Kind         string              `json:"kind"` // create|update|upsert|delete|custom
-	Method       string              `json:"method"`
-	Path         string              `json:"path"`
-	PathFields   []string            `json:"path_fields,omitempty"`
-	RedactFields []string            `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
-	BodyType     string              `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart
-	BodyFields   []string            `json:"body_fields,omitempty"`
-	BodyField    string              `json:"body_field,omitempty"`
-	BodySchema   json.RawMessage     `json:"body_schema,omitempty"`
-	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
-	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
-	RecordSchema json.RawMessage     `json:"record_schema"`
-	Delete       *DeleteSpec         `json:"delete,omitempty"`
-	Risk         string              `json:"risk"`
-	Confirm      string              `json:"confirm,omitempty"` // "" | "destructive"
-	Hook         string              `json:"hook,omitempty"`
+	Name       string   `json:"name"`
+	Kind       string   `json:"kind"` // create|update|upsert|delete|custom
+	Method     string   `json:"method"`
+	Path       string   `json:"path"`
+	PathFields []string `json:"path_fields,omitempty"`
+	// Query is the OPTIONAL write-action query-parameter map. It is the
+	// SAME construct (and the same QueryParam type, so the same
+	// bare-string-or-object dialect) that streams.json's stream.Query has
+	// always used — see QueryParam's doc comment — resolved through the
+	// same resolveQueryParams helper read.go already shares between stream
+	// reads and check reads, so all three surfaces resolve query templates
+	// identically by construction rather than by convention.
+	//
+	// Absent/empty means the request carries no query string at all, which
+	// is exactly the behavior every write action had before this field
+	// existed (executeWriteRecord passed a nil url.Values in all six
+	// body_type branches). The field is strictly additive and opt-in: no
+	// existing bundle changes behavior by its introduction.
+	Query        map[string]QueryParam `json:"query,omitempty"`
+	RedactFields []string              `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
+	BodyType     string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart
+	BodyFields   []string              `json:"body_fields,omitempty"`
+	BodyField    string                `json:"body_field,omitempty"`
+	BodySchema   json.RawMessage       `json:"body_schema,omitempty"`
+	GraphQL      *GraphQLRequestSpec   `json:"graphql,omitempty"`
+	Multipart    *MultipartSpec        `json:"multipart,omitempty"`
+	RecordSchema json.RawMessage       `json:"record_schema"`
+	// DynamicFields optionally declares ONE record field as a typed
+	// dynamic-key region. Absent means today's exact behavior.
+	DynamicFields *DynamicFieldsSpec `json:"dynamic_fields,omitempty"`
+	Delete        *DeleteSpec        `json:"delete,omitempty"`
+	Risk          string             `json:"risk"`
+	Confirm       string             `json:"confirm,omitempty"` // "" | "destructive"
+	Hook          string             `json:"hook,omitempty"`
+}
+
+// DynamicFieldsSpec declares ONE record field as a typed dynamic-key region,
+// for providers that accept tenant-defined custom fields with no fixed,
+// enumerable official set.
+//
+// It is deliberately NOT a raw-body escape hatch, and every field below exists
+// to hold that line. Everything about the region is bundle metadata; only the
+// keys and the SCALAR values inside it come from the caller:
+//
+//   - Values must be scalars drawn from ValueTypes, so no caller input can ever
+//     become request STRUCTURE. This is the load-bearing invariant: an object
+//     or array value is a hard error, never a coercion.
+//   - Keys must match KeyPattern, which is declared in the bundle and is never
+//     caller input.
+//   - Keys may not collide with path_fields, body_fields, body_field, or any
+//     key the body already carries, so a dynamic key can never shadow a
+//     structural one.
+//   - The region is merged into the JSON body only, AFTER path interpolation.
+//     It reaches no other part of the request — not the URL, not the method,
+//     not headers.
+//   - MaxKeys and MaxValueBytes bound growth.
+//
+// record_schema stays CLOSED. The bundle declares the container field in it as
+// an object; this spec validates the interior separately. That is what lets
+// tenant-defined keys become expressible without opening additionalProperties.
+type DynamicFieldsSpec struct {
+	// Field is the record field holding the dynamic-key map.
+	Field string `json:"field"`
+	// KeyPattern is the regexp every caller-supplied key must match. It is
+	// anchored at both ends when compiled, so a partial match cannot pass.
+	KeyPattern string `json:"key_pattern"`
+	// MaxKeys bounds how many dynamic keys one record may carry. 0 means the
+	// built-in default.
+	MaxKeys int `json:"max_keys,omitempty"`
+	// ValueTypes is the allow-list of permitted JSON scalar types:
+	// string, number, boolean, null. Empty means all four.
+	ValueTypes []string `json:"value_types,omitempty"`
+	// MaxValueBytes bounds the encoded length of a single dynamic value. 0
+	// means the built-in default.
+	MaxValueBytes int `json:"max_value_bytes,omitempty"`
+	// Target selects where the region lands: "inline" (default) merges it at
+	// the body root; "nested" keeps it under Field. Providers differ; both are
+	// declarative and neither is caller-controlled.
+	Target string `json:"target,omitempty"`
 }
 
 // GraphQLRequestSpec describes a fixed GraphQL document whose variables are
@@ -541,11 +603,32 @@ type XMLOperationSpec struct {
 }
 
 type BinaryOperationSpec struct {
-	Method          string `json:"method"`
-	Path            string `json:"path"`
-	MaxBytes        int    `json:"max_bytes,omitempty"`
-	AllowOverwrite  bool   `json:"allow_overwrite,omitempty"`
-	ExtractArchives bool   `json:"extract_archives,omitempty"`
+	Method   string `json:"method"`
+	Path     string `json:"path"`
+	MaxBytes int    `json:"max_bytes,omitempty"`
+	// AllowOverwrite permits replacing an existing destination file.
+	AllowOverwrite bool `json:"allow_overwrite,omitempty"`
+	// ExtractArchives is DECLARED by two existing github operations but is
+	// refused at execution time: archive extraction is zip-slip and
+	// decompression-bomb territory and is a separate capability, never a
+	// flag. The field is retained so those bundles keep validating.
+	ExtractArchives bool `json:"extract_archives,omitempty"`
+	// AllowCrossHost permits redirects to ANY other origin. Credentials are
+	// stripped on such a hop regardless. Off by default: download endpoints
+	// redirect to CDNs constantly and 71 connectors authenticate with a
+	// custom header that Go does NOT strip across domains.
+	AllowCrossHost bool `json:"allow_cross_host,omitempty"`
+	// AllowedHosts permits redirects to exactly these hosts. Credentials are
+	// stripped on such a hop regardless.
+	AllowedHosts []string `json:"allowed_hosts,omitempty"`
+	// ContentTypes records the content types this operation is documented to
+	// return. It is metadata for authors and is deliberately NOT enforced:
+	// providers mislabel binary payloads routinely.
+	ContentTypes []string `json:"content_types,omitempty"`
+	// StallTimeoutSeconds bounds how long the download may make NO progress.
+	// It is not a wall-clock deadline, which would turn the byte cap into a
+	// bandwidth requirement.
+	StallTimeoutSeconds int `json:"stall_timeout_seconds,omitempty"`
 }
 
 type FileOperationSpec struct {
@@ -1061,8 +1144,83 @@ func validateStreamGraphQL(streams []StreamSpec) error {
 	return nil
 }
 
+// dynamicFieldsValueTypes is the closed set of JSON SCALAR types a dynamic
+// value may take. "object" and "array" are deliberately absent and must never
+// be added: admitting them would let caller input become request structure,
+// which is exactly the escape hatch this primitive exists to avoid.
+var dynamicFieldsValueTypes = map[string]bool{
+	"string": true, "number": true, "boolean": true, "null": true,
+}
+
+// validateDynamicFields enforces the declaration-time half of the dynamic-key
+// contract. The execution-time half lives in write.go's applyDynamicFields.
+func validateDynamicFields(i int, action WriteAction) error {
+	spec := action.DynamicFields
+	if spec == nil {
+		return nil
+	}
+	if bodyType := bodyTypeOf(action); bodyType != "json" {
+		return fmt.Errorf("action %d (%q) dynamic_fields requires body_type json, got %q", i, action.Name, bodyType)
+	}
+	field := strings.TrimSpace(spec.Field)
+	if field == "" {
+		return fmt.Errorf("action %d (%q) dynamic_fields requires field", i, action.Name)
+	}
+	if strings.TrimSpace(spec.KeyPattern) == "" {
+		return fmt.Errorf("action %d (%q) dynamic_fields requires key_pattern", i, action.Name)
+	}
+	if _, err := compileDynamicKeyPattern(spec.KeyPattern); err != nil {
+		return fmt.Errorf("action %d (%q) dynamic_fields key_pattern: %w", i, action.Name, err)
+	}
+	for _, vt := range spec.ValueTypes {
+		if !dynamicFieldsValueTypes[vt] {
+			return fmt.Errorf("action %d (%q) dynamic_fields value_types contains unsupported type %q (scalars only)", i, action.Name, vt)
+		}
+	}
+	switch strings.TrimSpace(spec.Target) {
+	case "", "inline", "nested":
+	default:
+		return fmt.Errorf("action %d (%q) dynamic_fields target must be inline or nested, got %q", i, action.Name, spec.Target)
+	}
+	if spec.MaxKeys < 0 || spec.MaxValueBytes < 0 {
+		return fmt.Errorf("action %d (%q) dynamic_fields bounds must be non-negative", i, action.Name)
+	}
+	// The container field is consumed by the region itself, so it must not
+	// also be claimed as a path or body field.
+	for _, pf := range action.PathFields {
+		if pf == field {
+			return fmt.Errorf("action %d (%q) dynamic_fields field %q also declared in path_fields", i, action.Name, field)
+		}
+	}
+	for _, bf := range action.BodyFields {
+		if bf == field {
+			return fmt.Errorf("action %d (%q) dynamic_fields field %q also declared in body_fields", i, action.Name, field)
+		}
+	}
+	if action.BodyField == field {
+		return fmt.Errorf("action %d (%q) dynamic_fields field %q also declared as body_field", i, action.Name, field)
+	}
+	return nil
+}
+
+// compileDynamicKeyPattern anchors the declared pattern at both ends so a
+// partial match can never admit a key the bundle did not intend.
+func compileDynamicKeyPattern(pattern string) (*regexp.Regexp, error) {
+	p := pattern
+	if !strings.HasPrefix(p, "^") {
+		p = "^" + p
+	}
+	if !strings.HasSuffix(p, "$") {
+		p += "$"
+	}
+	return regexp.Compile(p)
+}
+
 func validateWriteBodies(actions []WriteAction) error {
 	for i, action := range actions {
+		if err := validateDynamicFields(i, action); err != nil {
+			return err
+		}
 		bodyType := bodyTypeOf(action)
 		if action.GraphQL != nil && bodyType != "graphql" {
 			return fmt.Errorf("action %d (%q) declares graphql but body_type is %q", i, action.Name, bodyType)

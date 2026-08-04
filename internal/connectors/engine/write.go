@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -397,17 +398,27 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	}
 	method := methodOrDefault(action.Method)
 
+	// Resolved ONCE here and threaded through every body_type branch, so a
+	// declared query can never silently apply to some body types and not
+	// others. buildWriteQuery returns a nil url.Values when the action
+	// declares no query, which is byte-identical to the literal nil every
+	// branch passed before write-action query support existed.
+	query, err := buildWriteQuery(action, vars)
+	if err != nil {
+		return err
+	}
+
 	switch bodyTypeOf(action) {
 	case "form":
 		form := buildForm(rec, action.PathFields)
-		_, err := rt.Requester.DoForm(ctx, method, path, nil, form)
+		_, err := rt.Requester.DoForm(ctx, method, path, query, form)
 		return err
 	case "graphql":
 		payload, err := buildGraphQLPayload(action.GraphQL, vars)
 		if err != nil {
 			return err
 		}
-		resp, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		resp, err := rt.Requester.Do(ctx, method, path, query, payload)
 		if err != nil {
 			return err
 		}
@@ -415,24 +426,24 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	case "none":
 		body := buildBodyFieldsPayload(rec, action.BodyFields)
 		if len(body) == 0 {
-			_, err := rt.Requester.Do(ctx, method, path, nil, nil)
+			_, err := rt.Requester.Do(ctx, method, path, query, nil)
 			return err
 		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, body)
+		_, err := rt.Requester.Do(ctx, method, path, query, body)
 		return err
 	case "json_array":
 		payload, err := buildJSONArrayPayload(action, rec)
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err = rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	case "multipart":
 		form, err := buildMultipartPayload(action, rec, recordIndex, cfg)
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.DoMultipart(ctx, method, path, nil, form)
+		_, err = rt.Requester.DoMultipart(ctx, method, path, query, form)
 		return err
 	default: // "json" (default)
 		var body map[string]any
@@ -441,13 +452,198 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		} else {
 			body = buildJSONBody(rec, action.PathFields)
 		}
+		body, err = applyDynamicFields(action, rec, body)
+		if err != nil {
+			return err
+		}
 		var payload any
 		if len(body) > 0 {
 			payload = body
 		}
-		_, err := rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err := rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	}
+}
+
+const (
+	defaultDynamicFieldsMaxKeys       = 100
+	defaultDynamicFieldsMaxValueBytes = 4096
+)
+
+// applyDynamicFields is the execution-time half of the typed dynamic-key
+// contract (the declaration-time half is bundle.go's validateDynamicFields).
+// It is the ONLY path by which a caller-supplied key reaches a request body,
+// and it is deliberately narrow:
+//
+//   - the region must be a JSON object under the declared field;
+//   - every key must match the bundle-declared, both-ends-anchored pattern;
+//   - every value must be a SCALAR of a declared type — an object or array is
+//     rejected outright, which is what stops caller input from ever becoming
+//     request structure;
+//   - no key may shadow a structural key already present in the body.
+//
+// A nil spec returns body untouched, so actions without dynamic_fields behave
+// exactly as they did before this capability existed.
+func applyDynamicFields(action WriteAction, rec connectors.Record, body map[string]any) (map[string]any, error) {
+	spec := action.DynamicFields
+	if spec == nil {
+		return body, nil
+	}
+	fail := func(format string, args ...any) error {
+		return fmt.Errorf("engine: write action %q: dynamic_fields: "+format, append([]any{action.Name}, args...)...)
+	}
+
+	raw, present := rec[spec.Field]
+	// The container is always consumed, so it never also serializes as a
+	// nested object when the target is inline.
+	delete(body, spec.Field)
+	if !present || raw == nil {
+		return body, nil
+	}
+	region, ok := raw.(map[string]any)
+	if !ok {
+		return nil, fail("field %q must be an object, got %T", spec.Field, raw)
+	}
+	if len(region) == 0 {
+		return body, nil
+	}
+
+	maxKeys := spec.MaxKeys
+	if maxKeys <= 0 {
+		maxKeys = defaultDynamicFieldsMaxKeys
+	}
+	if len(region) > maxKeys {
+		return nil, fail("%d keys exceeds max_keys %d", len(region), maxKeys)
+	}
+	maxValueBytes := spec.MaxValueBytes
+	if maxValueBytes <= 0 {
+		maxValueBytes = defaultDynamicFieldsMaxValueBytes
+	}
+	pattern, err := compileDynamicKeyPattern(spec.KeyPattern)
+	if err != nil {
+		return nil, fail("key_pattern: %w", err)
+	}
+	allowed := map[string]bool{}
+	for _, vt := range spec.ValueTypes {
+		allowed[vt] = true
+	}
+	if len(allowed) == 0 {
+		allowed = dynamicFieldsValueTypes
+	}
+
+	// Structural keys a dynamic key must never shadow.
+	reserved := toSet(action.PathFields)
+	for _, bf := range action.BodyFields {
+		reserved[bf] = true
+	}
+	if action.BodyField != "" {
+		reserved[action.BodyField] = true
+	}
+	reserved[spec.Field] = true
+
+	// Sorted for deterministic error messages across runs.
+	keys := make([]string, 0, len(region))
+	for k := range region {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	out := make(map[string]any, len(region))
+	for _, key := range keys {
+		if !pattern.MatchString(key) {
+			return nil, fail("key %q does not match key_pattern %q", key, spec.KeyPattern)
+		}
+		if reserved[key] {
+			return nil, fail("key %q collides with a declared path/body field", key)
+		}
+		typeName, err := dynamicScalarType(region[key])
+		if err != nil {
+			return nil, fail("key %q: %w", key, err)
+		}
+		if !allowed[typeName] {
+			return nil, fail("key %q has value type %q which is not in value_types", key, typeName)
+		}
+		if n := dynamicValueEncodedLen(region[key]); n > maxValueBytes {
+			return nil, fail("key %q value is %d bytes, exceeds max_value_bytes %d", key, n, maxValueBytes)
+		}
+		out[key] = region[key]
+	}
+
+	if strings.TrimSpace(spec.Target) == "nested" {
+		if body == nil {
+			body = map[string]any{}
+		}
+		body[spec.Field] = out
+		return body, nil
+	}
+	if body == nil {
+		body = make(map[string]any, len(out))
+	}
+	for key, value := range out {
+		// Guards against a dynamic key shadowing a body key that came from
+		// the record itself rather than from a declared field list.
+		if _, exists := body[key]; exists {
+			return nil, fail("key %q collides with an existing body key", key)
+		}
+		body[key] = value
+	}
+	return body, nil
+}
+
+// dynamicScalarType names the JSON scalar type of v, or errors when v is a
+// composite. Rejecting composites here is the load-bearing anti-escape-hatch
+// invariant, so this deliberately has no "flatten" or "coerce" branch.
+func dynamicScalarType(v any) (string, error) {
+	switch v.(type) {
+	case nil:
+		return "null", nil
+	case string:
+		return "string", nil
+	case bool:
+		return "boolean", nil
+	case json.Number, float64, float32,
+		int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64:
+		return "number", nil
+	case map[string]any, []any:
+		return "", fmt.Errorf("value must be a scalar (string, number, boolean, null), got %T", v)
+	default:
+		return "", fmt.Errorf("value must be a scalar (string, number, boolean, null), got %T", v)
+	}
+}
+
+func dynamicValueEncodedLen(v any) int {
+	if s, ok := v.(string); ok {
+		return len(s)
+	}
+	raw, err := json.Marshal(v)
+	if err != nil {
+		// Unmarshalable values are already rejected by dynamicScalarType;
+		// treat an encoding failure as maximally large rather than as zero.
+		return math.MaxInt
+	}
+	return len(raw)
+}
+
+// buildWriteQuery resolves action.Query against vars using the IDENTICAL
+// resolveQueryParams semantics stream.Query and check.query use — see that
+// function's doc comment in read.go. vars is the same Vars the path was just
+// interpolated from, so a query template may reference record fields exactly
+// as a path template can.
+//
+// A nil/empty Query returns a nil url.Values rather than an empty one: an
+// empty url.Values would still take resolveURL's "len(query) > 0" branch as
+// false, but returning nil keeps the pre-existing call shape literally
+// unchanged for every action that declares no query.
+func buildWriteQuery(action WriteAction, vars Vars) (url.Values, error) {
+	if len(action.Query) == 0 {
+		return nil, nil
+	}
+	q, err := resolveQueryParams(action.Query, vars)
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: %w", action.Name, err)
+	}
+	return q, nil
 }
 
 func bodyTypeOf(action WriteAction) string {
