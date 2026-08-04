@@ -33,6 +33,15 @@ type schemaNode struct {
 	additionalProperties bool // true unless explicitly set to false
 	hasAdditionalProps   bool
 
+	// maxItems/minItems bound array length. They exist because a bounded
+	// provider-search list has to be declarable in the bundle and enforceable at
+	// load time; without them an "ids[] bounded to 100" contract cannot be
+	// stated at all, since unknown keywords are a compile error.
+	maxItems    int
+	hasMaxItems bool
+	minItems    int
+	hasMinItems bool
+
 	// extensions
 	secret      bool     // x-secret
 	primaryKey  []string // x-primary-key (only meaningful at the root)
@@ -67,6 +76,8 @@ var structuralKeywords = map[string]bool{
 	"enum":                 true,
 	"pattern":              true,
 	"minProperties":        true,
+	"maxItems":             true,
+	"minItems":             true,
 	"additionalProperties": true,
 	"x-secret":             true,
 	"x-primary-key":        true,
@@ -181,6 +192,34 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		n.hasMinProperties = true
 	}
 
+	if raw, ok := m["maxItems"]; ok {
+		var mi int
+		if err := json.Unmarshal(raw, &mi); err != nil {
+			return nil, fmt.Errorf("compile schema: maxItems: %w", err)
+		}
+		if mi < 0 {
+			return nil, fmt.Errorf("compile schema: maxItems must not be negative, got %d", mi)
+		}
+		n.maxItems = mi
+		n.hasMaxItems = true
+	}
+
+	if raw, ok := m["minItems"]; ok {
+		var mi int
+		if err := json.Unmarshal(raw, &mi); err != nil {
+			return nil, fmt.Errorf("compile schema: minItems: %w", err)
+		}
+		if mi < 0 {
+			return nil, fmt.Errorf("compile schema: minItems must not be negative, got %d", mi)
+		}
+		n.minItems = mi
+		n.hasMinItems = true
+	}
+
+	if n.hasMaxItems && n.hasMinItems && n.minItems > n.maxItems {
+		return nil, fmt.Errorf("compile schema: minItems %d exceeds maxItems %d", n.minItems, n.maxItems)
+	}
+
 	if raw, ok := m["default"]; ok {
 		var def any
 		dec := json.NewDecoder(strings.NewReader(string(raw)))
@@ -283,10 +322,18 @@ func (n *schemaNode) validate(v any, path string) error {
 			return err
 		}
 	}
-	if elems, ok := arrayElements(v); ok && n.items != nil {
-		for i, elem := range elems {
-			if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
-				return err
+	if elems, ok := arrayElements(v); ok {
+		if n.hasMaxItems && len(elems) > n.maxItems {
+			return fmt.Errorf("%s: array has %d items, which exceeds the declared maximum of %d", displayPath(path), len(elems), n.maxItems)
+		}
+		if n.hasMinItems && len(elems) < n.minItems {
+			return fmt.Errorf("%s: array has %d items, which is below the declared minimum of %d", displayPath(path), len(elems), n.minItems)
+		}
+		if n.items != nil {
+			for i, elem := range elems {
+				if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
+					return err
+				}
 			}
 		}
 	}

@@ -56,7 +56,9 @@
             "enum": ["date-time"]
           },
           "allow_empty": { "type": "boolean" },
-          "required": { "type": "boolean" }
+          "required": { "type": "boolean" },
+          "max_items": { "type": "integer" },
+          "min_items": { "type": "integer" }
         }
       }
     },
@@ -124,7 +126,9 @@
                   "enum": ["date-time"]
                 },
                 "allow_empty": { "type": "boolean" },
-                "required": { "type": "boolean" }
+                "required": { "type": "boolean" },
+                "max_items": { "type": "integer" },
+                "min_items": { "type": "integer" }
               }
             }
           },
