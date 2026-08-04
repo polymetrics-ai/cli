@@ -10,6 +10,13 @@ Issue: #3718. Parent: #3714. Branch: `fm/cli-agents-wave1-canonical-contract-r1`
 - `scripts/gsd sources programming-loop`: failed with `unknown GSD command or prompt`, as expected.
 - Discuss prompt: `scripts/gsd prompt discuss-phase issue-3718-canonical-delivery-contract --auto`.
 - Plan prompt: `scripts/gsd prompt plan-phase issue-3718-canonical-delivery-contract --tdd --skip-research`.
+- Execute prompt: `scripts/gsd prompt execute-phase issue-3718-canonical-delivery-contract`;
+  executed inline through the committed RED/GREEN/REFACTOR slices.
+- Verify prompt: `scripts/gsd prompt verify-work issue-3718-canonical-delivery-contract`;
+  automated coverage and command evidence are recorded in `SUMMARY.md`, `UAT.md`, and
+  `VERIFICATION.md`.
+- Review prompt: `scripts/gsd prompt code-review issue-3718-canonical-delivery-contract --files
+  ...`; executed inline with dispositions in `REVIEW.md`.
 - Inline execution fallback: required because this issue prohibits spawned roles. No GSD or
   specialist role will be spawned.
 
