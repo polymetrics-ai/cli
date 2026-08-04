@@ -1,25 +1,25 @@
 {
   "phase": "google-calendar-parity-wave03",
-  "branch": "fm/cli-google-calendar-parity-wave03-r1",
-  "status": "verified",
-  "verificationPassed": true,
-  "verificationNotes": "Manual GSD fallback active because scripts/gsd prompt programming-loop is unavailable. All required local gates passed; no live Google Calendar calls or provider writes were performed.",
+  "branch": "fm/cli-google-calendar-parity-resume-r1",
+  "status": "in_progress",
+  "verificationPassed": false,
+  "verificationNotes": "PR #3554 was rebased onto current main. Its old green evidence is superseded; current connector validation reproduces three expected required-body-flag findings.",
   "orchestrationDecisions": [
     {
-      "cycle": "plan",
+      "cycle": "recovery_and_plan",
       "decision": "local_critical_path",
-      "reason": "Single connector worker in an isolated firstmate-launched worktree; no additional mutating subworker is needed."
+      "reason": "Single connector scope in an isolated worktree; no subagent was requested and active runtime policy disallows proactive delegation."
+    },
+    {
+      "cycle": "tdd_gate",
+      "decision": "local_critical_path",
+      "reason": "The three current connector validation findings provide red evidence before connector-definition edits."
     }
   ],
   "counts": {
     "officialTotal": 38,
-    "implemented": 38,
-    "fixtureTested": 38,
-    "blockedPlanned": 0,
-    "excludedNotApplicable": 0,
-    "certified": 0,
-    "streams": 11,
-    "writeActions": 26,
-    "directReadOperations": 1
+    "reachable": 12,
+    "blockedRestWrite": 26,
+    "certified": 0
   }
 }

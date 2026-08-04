@@ -67,6 +67,26 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	if _, ok := akeneo.(*engine.Connector); !ok {
 		t.Fatalf("akeneo registry type = %T, want engine-backed connector", akeneo)
 	}
+	googleCalendar, ok := registry.Get("google-calendar")
+	if !ok {
+		t.Fatal("registry missing google-calendar")
+	}
+	if _, ok := googleCalendar.(*engine.Connector); !ok {
+		t.Fatalf("google-calendar registry type = %T, want engine-backed connector", googleCalendar)
+	}
+	googleCalendarSurface, ok := googleCalendar.(connectors.CommandSurfaceProvider)
+	if !ok || googleCalendarSurface.CommandSurface() == nil {
+		t.Fatalf("google-calendar has no command surface: %T", googleCalendar)
+	}
+	foundFreeBusy := false
+	for _, command := range googleCalendarSurface.CommandSurface().Commands {
+		if command.Path == "freebusy query" && command.Availability == "implemented" {
+			foundFreeBusy = true
+		}
+	}
+	if !foundFreeBusy {
+		t.Fatal("google-calendar command surface is missing implemented freebusy query")
+	}
 	if engine.HooksFor("github") == nil {
 		t.Fatal("hookset side effects were not loaded; github hook is missing")
 	}

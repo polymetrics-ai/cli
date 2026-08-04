@@ -1,5 +1,5 @@
 {
-  "tagline": "Work with Google Calendar data and typed Calendar API operations.",
+  "tagline": "Read Google Calendar data and run a bounded typed free/busy query.",
   "usage": "pm google-calendar <command> [flags]",
   "source_cli": {
     "name": "Google Calendar API v3",
@@ -25,38 +25,6 @@
       "title": "Typed direct reads",
       "commands": [
         "freebusy"
-      ]
-    },
-    {
-      "id": "write",
-      "title": "Reverse ETL writes",
-      "commands": [
-        "delete-acl-rule",
-        "create-acl-rule",
-        "patch-acl-rule",
-        "update-acl-rule",
-        "watch-acl",
-        "delete-calendar-list-entry",
-        "create-calendar-list-entry",
-        "patch-calendar-list-entry",
-        "update-calendar-list-entry",
-        "watch-calendar-list",
-        "clear-calendar",
-        "delete-calendar",
-        "create-calendar",
-        "patch-calendar",
-        "transfer-calendar-ownership",
-        "update-calendar",
-        "stop-channel",
-        "delete-event",
-        "import-event",
-        "create-event",
-        "move-event",
-        "patch-event",
-        "quick-add-event",
-        "update-event",
-        "watch-events",
-        "watch-settings"
       ]
     }
   ],
@@ -95,36 +63,6 @@
       "type": "integer",
       "summary": "Maximum direct-read response bytes.",
       "maps_to": "max_bytes"
-    },
-    {
-      "name": "plan",
-      "type": "boolean",
-      "summary": "Build a reverse-ETL write plan without executing.",
-      "maps_to": "plan"
-    },
-    {
-      "name": "preview",
-      "type": "boolean",
-      "summary": "Preview a reverse-ETL write request before approval/execution.",
-      "maps_to": "preview"
-    },
-    {
-      "name": "approve",
-      "type": "string",
-      "summary": "Explicit approval token for reverse-ETL execution.",
-      "maps_to": "approval"
-    },
-    {
-      "name": "confirm",
-      "type": "string",
-      "summary": "Typed destructive confirmation challenge.",
-      "maps_to": "confirm"
-    },
-    {
-      "name": "plan-name",
-      "type": "string",
-      "summary": "Stable name for a generated reverse-ETL plan.",
-      "maps_to": "plan_name"
     }
   ],
   "commands": [
@@ -134,9 +72,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "calendar_list",
-      "examples": [
-        "pm google-calendar calendar-list list --json"
-      ]
+      "examples": ["pm google-calendar calendar-list list --json"]
     },
     {
       "path": "calendar-list get",
@@ -144,9 +80,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "calendar_list_entry",
-      "examples": [
-        "pm google-calendar calendar-list get --json"
-      ]
+      "examples": ["pm google-calendar calendar-list get --json"]
     },
     {
       "path": "calendars get",
@@ -154,9 +88,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "calendar",
-      "examples": [
-        "pm google-calendar calendars get --json"
-      ]
+      "examples": ["pm google-calendar calendars get --json"]
     },
     {
       "path": "colors get",
@@ -164,9 +96,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "colors",
-      "examples": [
-        "pm google-calendar colors get --json"
-      ]
+      "examples": ["pm google-calendar colors get --json"]
     },
     {
       "path": "events list",
@@ -174,9 +104,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "events",
-      "examples": [
-        "pm google-calendar events list --json"
-      ]
+      "examples": ["pm google-calendar events list --json"]
     },
     {
       "path": "events get",
@@ -184,9 +112,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "event",
-      "examples": [
-        "pm google-calendar events get --json"
-      ]
+      "examples": ["pm google-calendar events get --json"]
     },
     {
       "path": "events instances",
@@ -194,9 +120,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "event_instances",
-      "examples": [
-        "pm google-calendar events instances --json"
-      ]
+      "examples": ["pm google-calendar events instances --json"]
     },
     {
       "path": "settings list",
@@ -204,9 +128,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "settings",
-      "examples": [
-        "pm google-calendar settings list --json"
-      ]
+      "examples": ["pm google-calendar settings list --json"]
     },
     {
       "path": "settings get",
@@ -214,9 +136,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "setting",
-      "examples": [
-        "pm google-calendar settings get --json"
-      ]
+      "examples": ["pm google-calendar settings get --json"]
     },
     {
       "path": "acl list",
@@ -224,9 +144,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "acl",
-      "examples": [
-        "pm google-calendar acl list --json"
-      ]
+      "examples": ["pm google-calendar acl list --json"]
     },
     {
       "path": "acl get",
@@ -234,9 +152,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "acl_rule",
-      "examples": [
-        "pm google-calendar acl get --json"
-      ]
+      "examples": ["pm google-calendar acl get --json"]
     },
     {
       "path": "freebusy query",
@@ -250,6 +166,7 @@
           "type": "string",
           "summary": "Calendar ID to query.",
           "maps_to": "body.items.0.id",
+          "required": true,
           "allow_empty": false
         },
         {
@@ -258,6 +175,7 @@
           "summary": "RFC3339 lower time bound.",
           "maps_to": "body.timeMin",
           "format": "date-time",
+          "required": true,
           "allow_empty": false
         },
         {
@@ -266,6 +184,7 @@
           "summary": "RFC3339 upper time bound.",
           "maps_to": "body.timeMax",
           "format": "date-time",
+          "required": true,
           "allow_empty": false
         },
         {
@@ -287,906 +206,15 @@
         }
       ],
       "api_surface": [
-        {
-          "method": "POST",
-          "path": "/calendar/v3/freeBusy"
-        }
+        {"method": "POST", "path": "/calendar/v3/freeBusy"}
       ],
       "output_policy": "json_redacted",
-      "redact_fields": [
-        "items.0.id"
-      ],
+      "redact_fields": ["items.0.id"],
       "risk": "medium",
       "approval": "No write approval required; bounded direct read validates typed inputs.",
       "examples": [
         "pm google-calendar freebusy query --calendar primary --time-min 2020-01-01T00:00:00Z --time-max 2020-01-02T00:00:00Z --json"
       ]
-    },
-    {
-      "path": "delete-acl-rule",
-      "summary": "permanently removes a Google Calendar ACL rule from the target calendar",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_acl_rule",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "rule-id",
-          "type": "string",
-          "summary": "Record field `rule_id`.",
-          "maps_to": "record.rule_id",
-          "allow_empty": false
-        }
-      ],
-      "risk": "permanently removes a Google Calendar ACL rule from the target calendar",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute. Destructive confirmation is required.",
-      "examples": [
-        "pm google-calendar delete-acl-rule --help"
-      ]
-    },
-    {
-      "path": "create-acl-rule",
-      "summary": "creates a visible calendar sharing ACL rule",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_acl_rule",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "role",
-          "type": "enum",
-          "summary": "Record field `role`.",
-          "maps_to": "record.role",
-          "values": [
-            "none",
-            "freeBusyReader",
-            "reader",
-            "writer",
-            "owner"
-          ]
-        },
-        {
-          "name": "scope-type",
-          "type": "string",
-          "summary": "Record field `scope.type`.",
-          "maps_to": "record.scope.type",
-          "allow_empty": false
-        },
-        {
-          "name": "scope-value",
-          "type": "string",
-          "summary": "Record field `scope.value`.",
-          "maps_to": "record.scope.value",
-          "allow_empty": false
-        }
-      ],
-      "risk": "creates a visible calendar sharing ACL rule",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar create-acl-rule --help"
-      ]
-    },
-    {
-      "path": "patch-acl-rule",
-      "summary": "patches an existing calendar sharing ACL rule",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "patch_acl_rule",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "rule-id",
-          "type": "string",
-          "summary": "Record field `rule_id`.",
-          "maps_to": "record.rule_id",
-          "allow_empty": false
-        },
-        {
-          "name": "role",
-          "type": "enum",
-          "summary": "Record field `role`.",
-          "maps_to": "record.role",
-          "values": [
-            "none",
-            "freeBusyReader",
-            "reader",
-            "writer",
-            "owner"
-          ]
-        }
-      ],
-      "risk": "patches an existing calendar sharing ACL rule",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar patch-acl-rule --help"
-      ]
-    },
-    {
-      "path": "update-acl-rule",
-      "summary": "replaces an existing calendar sharing ACL rule",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_acl_rule",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "rule-id",
-          "type": "string",
-          "summary": "Record field `rule_id`.",
-          "maps_to": "record.rule_id",
-          "allow_empty": false
-        },
-        {
-          "name": "role",
-          "type": "enum",
-          "summary": "Record field `role`.",
-          "maps_to": "record.role",
-          "values": [
-            "none",
-            "freeBusyReader",
-            "reader",
-            "writer",
-            "owner"
-          ]
-        },
-        {
-          "name": "scope-type",
-          "type": "string",
-          "summary": "Record field `scope.type`.",
-          "maps_to": "record.scope.type",
-          "allow_empty": false
-        },
-        {
-          "name": "scope-value",
-          "type": "string",
-          "summary": "Record field `scope.value`.",
-          "maps_to": "record.scope.value",
-          "allow_empty": false
-        }
-      ],
-      "risk": "replaces an existing calendar sharing ACL rule",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar update-acl-rule --help"
-      ]
-    },
-    {
-      "path": "watch-acl",
-      "summary": "creates a notification channel for ACL changes; webhook delivery consumption is outside this connector slice",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "watch_acl",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Record field `id`.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
-          "name": "type",
-          "type": "enum",
-          "summary": "Record field `type`.",
-          "maps_to": "record.type",
-          "values": [
-            "web_hook",
-            "webhook"
-          ]
-        },
-        {
-          "name": "address",
-          "type": "string",
-          "summary": "Record field `address`.",
-          "maps_to": "record.address",
-          "allow_empty": false
-        }
-      ],
-      "risk": "creates a notification channel for ACL changes; webhook delivery consumption is outside this connector slice",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar watch-acl --help"
-      ]
-    },
-    {
-      "path": "delete-calendar-list-entry",
-      "summary": "removes a calendar from the authenticated user calendar list",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_calendar_list_entry",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        }
-      ],
-      "risk": "removes a calendar from the authenticated user calendar list",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute. Destructive confirmation is required.",
-      "examples": [
-        "pm google-calendar delete-calendar-list-entry --help"
-      ]
-    },
-    {
-      "path": "create-calendar-list-entry",
-      "summary": "adds an existing calendar to the authenticated user calendar list",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_calendar_list_entry",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Record field `id`.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        }
-      ],
-      "risk": "adds an existing calendar to the authenticated user calendar list",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar create-calendar-list-entry --help"
-      ]
-    },
-    {
-      "path": "patch-calendar-list-entry",
-      "summary": "patches an authenticated-user calendar-list entry",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "patch_calendar_list_entry",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "summaryOverride",
-          "type": "string",
-          "summary": "Record field `summaryOverride`.",
-          "maps_to": "record.summaryOverride",
-          "allow_empty": false
-        }
-      ],
-      "risk": "patches an authenticated-user calendar-list entry",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar patch-calendar-list-entry --help"
-      ]
-    },
-    {
-      "path": "update-calendar-list-entry",
-      "summary": "replaces an authenticated-user calendar-list entry",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_calendar_list_entry",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "summaryOverride",
-          "type": "string",
-          "summary": "Record field `summaryOverride`.",
-          "maps_to": "record.summaryOverride",
-          "allow_empty": false
-        }
-      ],
-      "risk": "replaces an authenticated-user calendar-list entry",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar update-calendar-list-entry --help"
-      ]
-    },
-    {
-      "path": "watch-calendar-list",
-      "summary": "creates a notification channel for calendar-list changes; webhook delivery consumption is outside this connector slice",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "watch_calendar_list",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Record field `id`.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
-          "name": "type",
-          "type": "enum",
-          "summary": "Record field `type`.",
-          "maps_to": "record.type",
-          "values": [
-            "web_hook",
-            "webhook"
-          ]
-        },
-        {
-          "name": "address",
-          "type": "string",
-          "summary": "Record field `address`.",
-          "maps_to": "record.address",
-          "allow_empty": false
-        }
-      ],
-      "risk": "creates a notification channel for calendar-list changes; webhook delivery consumption is outside this connector slice",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar watch-calendar-list --help"
-      ]
-    },
-    {
-      "path": "clear-calendar",
-      "summary": "removes all events from the target primary calendar while preserving the calendar",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "clear_calendar",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        }
-      ],
-      "risk": "removes all events from the target primary calendar while preserving the calendar",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute. Destructive confirmation is required.",
-      "examples": [
-        "pm google-calendar clear-calendar --help"
-      ]
-    },
-    {
-      "path": "delete-calendar",
-      "summary": "permanently deletes the target secondary calendar",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_calendar",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        }
-      ],
-      "risk": "permanently deletes the target secondary calendar",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute. Destructive confirmation is required.",
-      "examples": [
-        "pm google-calendar delete-calendar --help"
-      ]
-    },
-    {
-      "path": "create-calendar",
-      "summary": "creates a secondary Google Calendar",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_calendar",
-      "flags": [
-        {
-          "name": "summary",
-          "type": "string",
-          "summary": "Record field `summary`.",
-          "maps_to": "record.summary",
-          "allow_empty": false
-        }
-      ],
-      "risk": "creates a secondary Google Calendar",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar create-calendar --help"
-      ]
-    },
-    {
-      "path": "patch-calendar",
-      "summary": "patches calendar metadata",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "patch_calendar",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "summary",
-          "type": "string",
-          "summary": "Record field `summary`.",
-          "maps_to": "record.summary",
-          "allow_empty": false
-        }
-      ],
-      "risk": "patches calendar metadata",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar patch-calendar --help"
-      ]
-    },
-    {
-      "path": "transfer-calendar-ownership",
-      "summary": "transfers secondary-calendar ownership to another data owner via Calendar API transferOwnership",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "transfer_calendar_ownership",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "newDataOwner",
-          "type": "string",
-          "summary": "Record field `newDataOwner`.",
-          "maps_to": "record.newDataOwner",
-          "allow_empty": false
-        }
-      ],
-      "risk": "transfers secondary-calendar ownership to another data owner via Calendar API transferOwnership",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute. Destructive confirmation is required.",
-      "examples": [
-        "pm google-calendar transfer-calendar-ownership --help"
-      ]
-    },
-    {
-      "path": "update-calendar",
-      "summary": "replaces calendar metadata",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_calendar",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "summary",
-          "type": "string",
-          "summary": "Record field `summary`.",
-          "maps_to": "record.summary",
-          "allow_empty": false
-        }
-      ],
-      "risk": "replaces calendar metadata",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar update-calendar --help"
-      ]
-    },
-    {
-      "path": "stop-channel",
-      "summary": "stops a Google Calendar notification channel for a known channel id/resource id pair",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "stop_channel",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Record field `id`.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
-          "name": "resourceId",
-          "type": "string",
-          "summary": "Record field `resourceId`.",
-          "maps_to": "record.resourceId",
-          "allow_empty": false
-        }
-      ],
-      "risk": "stops a Google Calendar notification channel for a known channel id/resource id pair",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute. Destructive confirmation is required.",
-      "examples": [
-        "pm google-calendar stop-channel --help"
-      ]
-    },
-    {
-      "path": "delete-event",
-      "summary": "deletes or cancels a Google Calendar event",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_event",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "event-id",
-          "type": "string",
-          "summary": "Record field `event_id`.",
-          "maps_to": "record.event_id",
-          "allow_empty": false
-        }
-      ],
-      "risk": "deletes or cancels a Google Calendar event",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute. Destructive confirmation is required.",
-      "examples": [
-        "pm google-calendar delete-event --help"
-      ]
-    },
-    {
-      "path": "import-event",
-      "summary": "imports a private copy of an event into the target calendar",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "import_event",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "summary",
-          "type": "string",
-          "summary": "Record field `summary`.",
-          "maps_to": "record.summary",
-          "allow_empty": false
-        },
-        {
-          "name": "start-dateTime",
-          "type": "string",
-          "summary": "Record field `start.dateTime`.",
-          "maps_to": "record.start.dateTime",
-          "format": "date-time",
-          "allow_empty": false
-        },
-        {
-          "name": "end-dateTime",
-          "type": "string",
-          "summary": "Record field `end.dateTime`.",
-          "maps_to": "record.end.dateTime",
-          "format": "date-time",
-          "allow_empty": false
-        }
-      ],
-      "risk": "imports a private copy of an event into the target calendar",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar import-event --help"
-      ]
-    },
-    {
-      "path": "create-event",
-      "summary": "creates a Google Calendar event",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_event",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "summary",
-          "type": "string",
-          "summary": "Record field `summary`.",
-          "maps_to": "record.summary",
-          "allow_empty": false
-        },
-        {
-          "name": "start-dateTime",
-          "type": "string",
-          "summary": "Record field `start.dateTime`.",
-          "maps_to": "record.start.dateTime",
-          "format": "date-time",
-          "allow_empty": false
-        },
-        {
-          "name": "end-dateTime",
-          "type": "string",
-          "summary": "Record field `end.dateTime`.",
-          "maps_to": "record.end.dateTime",
-          "format": "date-time",
-          "allow_empty": false
-        }
-      ],
-      "risk": "creates a Google Calendar event",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar create-event --help"
-      ]
-    },
-    {
-      "path": "move-event",
-      "summary": "moves an event to another calendar",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "move_event",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "event-id",
-          "type": "string",
-          "summary": "Record field `event_id`.",
-          "maps_to": "record.event_id",
-          "allow_empty": false
-        },
-        {
-          "name": "destination-calendar-id",
-          "type": "string",
-          "summary": "Record field `destination_calendar_id`.",
-          "maps_to": "record.destination_calendar_id",
-          "allow_empty": false
-        }
-      ],
-      "risk": "moves an event to another calendar",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute. Destructive confirmation is required.",
-      "examples": [
-        "pm google-calendar move-event --help"
-      ]
-    },
-    {
-      "path": "patch-event",
-      "summary": "patches a Google Calendar event",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "patch_event",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "event-id",
-          "type": "string",
-          "summary": "Record field `event_id`.",
-          "maps_to": "record.event_id",
-          "allow_empty": false
-        },
-        {
-          "name": "summary",
-          "type": "string",
-          "summary": "Record field `summary`.",
-          "maps_to": "record.summary",
-          "allow_empty": false
-        }
-      ],
-      "risk": "patches a Google Calendar event",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar patch-event --help"
-      ]
-    },
-    {
-      "path": "quick-add-event",
-      "summary": "creates an event from natural-language text using Google Calendar quickAdd",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "quick_add_event",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "summary": "Record field `text`.",
-          "maps_to": "record.text",
-          "allow_empty": false
-        }
-      ],
-      "risk": "creates an event from natural-language text using Google Calendar quickAdd",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar quick-add-event --help"
-      ]
-    },
-    {
-      "path": "update-event",
-      "summary": "replaces a Google Calendar event",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_event",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "event-id",
-          "type": "string",
-          "summary": "Record field `event_id`.",
-          "maps_to": "record.event_id",
-          "allow_empty": false
-        },
-        {
-          "name": "summary",
-          "type": "string",
-          "summary": "Record field `summary`.",
-          "maps_to": "record.summary",
-          "allow_empty": false
-        },
-        {
-          "name": "start-dateTime",
-          "type": "string",
-          "summary": "Record field `start.dateTime`.",
-          "maps_to": "record.start.dateTime",
-          "format": "date-time",
-          "allow_empty": false
-        },
-        {
-          "name": "end-dateTime",
-          "type": "string",
-          "summary": "Record field `end.dateTime`.",
-          "maps_to": "record.end.dateTime",
-          "format": "date-time",
-          "allow_empty": false
-        }
-      ],
-      "risk": "replaces a Google Calendar event",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar update-event --help"
-      ]
-    },
-    {
-      "path": "watch-events",
-      "summary": "creates a notification channel for event changes; webhook delivery consumption is outside this connector slice",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "watch_events",
-      "flags": [
-        {
-          "name": "calendar-id",
-          "type": "string",
-          "summary": "Record field `calendar_id`.",
-          "maps_to": "record.calendar_id",
-          "allow_empty": false
-        },
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Record field `id`.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
-          "name": "type",
-          "type": "enum",
-          "summary": "Record field `type`.",
-          "maps_to": "record.type",
-          "values": [
-            "web_hook",
-            "webhook"
-          ]
-        },
-        {
-          "name": "address",
-          "type": "string",
-          "summary": "Record field `address`.",
-          "maps_to": "record.address",
-          "allow_empty": false
-        }
-      ],
-      "risk": "creates a notification channel for event changes; webhook delivery consumption is outside this connector slice",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar watch-events --help"
-      ]
-    },
-    {
-      "path": "watch-settings",
-      "summary": "creates a notification channel for Calendar settings changes; webhook delivery consumption is outside this connector slice",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "watch_settings",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "Record field `id`.",
-          "maps_to": "record.id",
-          "allow_empty": false
-        },
-        {
-          "name": "type",
-          "type": "enum",
-          "summary": "Record field `type`.",
-          "maps_to": "record.type",
-          "values": [
-            "web_hook",
-            "webhook"
-          ]
-        },
-        {
-          "name": "address",
-          "type": "string",
-          "summary": "Record field `address`.",
-          "maps_to": "record.address",
-          "allow_empty": false
-        }
-      ],
-      "risk": "creates a notification channel for Calendar settings changes; webhook delivery consumption is outside this connector slice",
-      "approval": "Requires reverse ETL plan, preview, explicit approval, and execute.",
-      "examples": [
-        "pm google-calendar watch-settings --help"
-      ]
-    }
-  ],
-  "help_topics": [
-    {
-      "name": "google-calendar-auth",
-      "summary": "Configure OAuth2 refresh-token credentials without printing secrets."
-    },
-    {
-      "name": "google-calendar-safety",
-      "summary": "Reverse ETL writes require plan, preview, approval, and execute."
     }
   ]
 }

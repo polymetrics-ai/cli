@@ -1,275 +1,199 @@
 {
   "api": "Google Calendar API v3",
   "docs": "https://developers.google.com/workspace/calendar/api/v3/reference",
-  "reviewed_at": "2026-07-31",
+  "reviewed_at": "2026-08-05",
   "operation_ledger_version": 1,
-  "scope": "official discovery document https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+  "scope": "All 38 operations in the official Google Discovery document (revision 20260731): https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
   "endpoints": [
     {
       "method": "DELETE",
       "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
-      "covered_by": {
-        "write": "delete_acl_rule"
-      }
+      "operation": {"model": "destructive_action", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/acl/delete", "notes": "calendar.acl.delete"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
-      "covered_by": {
-        "stream": "acl_rule"
-      }
+      "covered_by": {"stream": "acl_rule"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/calendars/{calendarId}/acl",
-      "covered_by": {
-        "write": "create_acl_rule"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/acl/insert", "notes": "calendar.acl.insert"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/calendars/{calendarId}/acl",
-      "covered_by": {
-        "stream": "acl"
-      }
+      "covered_by": {"stream": "acl"}
     },
     {
       "method": "PATCH",
       "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
-      "covered_by": {
-        "write": "patch_acl_rule"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/acl/patch", "notes": "calendar.acl.patch"}
     },
     {
       "method": "PUT",
       "path": "/calendar/v3/calendars/{calendarId}/acl/{ruleId}",
-      "covered_by": {
-        "write": "update_acl_rule"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/acl/update", "notes": "calendar.acl.update"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/calendars/{calendarId}/acl/watch",
-      "covered_by": {
-        "write": "watch_acl"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "medium", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/acl/watch", "notes": "calendar.acl.watch"}
     },
     {
       "method": "DELETE",
       "path": "/calendar/v3/users/me/calendarList/{calendarId}",
-      "covered_by": {
-        "write": "delete_calendar_list_entry"
-      }
+      "operation": {"model": "destructive_action", "status": "blocked", "risk": "medium", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/delete", "notes": "calendar.calendarList.delete"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/users/me/calendarList/{calendarId}",
-      "covered_by": {
-        "stream": "calendar_list_entry"
-      }
+      "covered_by": {"stream": "calendar_list_entry"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/users/me/calendarList",
-      "covered_by": {
-        "write": "create_calendar_list_entry"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "medium", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/insert", "notes": "calendar.calendarList.insert"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/users/me/calendarList",
-      "covered_by": {
-        "stream": "calendar_list"
-      }
+      "covered_by": {"stream": "calendar_list"}
     },
     {
       "method": "PATCH",
       "path": "/calendar/v3/users/me/calendarList/{calendarId}",
-      "covered_by": {
-        "write": "patch_calendar_list_entry"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "medium", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/patch", "notes": "calendar.calendarList.patch"}
     },
     {
       "method": "PUT",
       "path": "/calendar/v3/users/me/calendarList/{calendarId}",
-      "covered_by": {
-        "write": "update_calendar_list_entry"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "medium", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/update", "notes": "calendar.calendarList.update"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/users/me/calendarList/watch",
-      "covered_by": {
-        "write": "watch_calendar_list"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "medium", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/watch", "notes": "calendar.calendarList.watch"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/calendars/{calendarId}/clear",
-      "covered_by": {
-        "write": "clear_calendar"
-      }
+      "operation": {"model": "destructive_action", "status": "blocked", "risk": "critical", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/clear", "notes": "calendar.calendars.clear"}
     },
     {
       "method": "DELETE",
       "path": "/calendar/v3/calendars/{calendarId}",
-      "covered_by": {
-        "write": "delete_calendar"
-      }
+      "operation": {"model": "destructive_action", "status": "blocked", "risk": "critical", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/delete", "notes": "calendar.calendars.delete"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/calendars/{calendarId}",
-      "covered_by": {
-        "stream": "calendar"
-      }
+      "covered_by": {"stream": "calendar"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/calendars",
-      "covered_by": {
-        "write": "create_calendar"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/insert", "notes": "calendar.calendars.insert"}
     },
     {
       "method": "PATCH",
       "path": "/calendar/v3/calendars/{calendarId}",
-      "covered_by": {
-        "write": "patch_calendar"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/patch", "notes": "calendar.calendars.patch"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/calendars/{calendarId}/transferOwnership",
-      "covered_by": {
-        "write": "transfer_calendar_ownership"
-      }
+      "operation": {"model": "admin_reverse_etl", "status": "blocked", "risk": "critical", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/transferOwnership", "notes": "calendar.calendars.transferOwnership"}
     },
     {
       "method": "PUT",
       "path": "/calendar/v3/calendars/{calendarId}",
-      "covered_by": {
-        "write": "update_calendar"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/calendars/update", "notes": "calendar.calendars.update"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/channels/stop",
-      "covered_by": {
-        "write": "stop_channel"
-      }
+      "operation": {"model": "destructive_action", "status": "blocked", "risk": "medium", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/channels/stop", "notes": "calendar.channels.stop"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/colors",
-      "covered_by": {
-        "stream": "colors"
-      }
+      "covered_by": {"stream": "colors"}
     },
     {
       "method": "DELETE",
       "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
-      "covered_by": {
-        "write": "delete_event"
-      }
+      "operation": {"model": "destructive_action", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/delete", "notes": "calendar.events.delete"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
-      "covered_by": {
-        "stream": "event"
-      }
+      "covered_by": {"stream": "event"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/calendars/{calendarId}/events/import",
-      "covered_by": {
-        "write": "import_event"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/import", "notes": "calendar.events.import"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/calendars/{calendarId}/events",
-      "covered_by": {
-        "write": "create_event"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/insert", "notes": "calendar.events.insert"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/instances",
-      "covered_by": {
-        "stream": "event_instances"
-      }
+      "covered_by": {"stream": "event_instances"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/calendars/{calendarId}/events",
-      "covered_by": {
-        "stream": "events"
-      }
+      "covered_by": {"stream": "events"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}/move",
-      "covered_by": {
-        "write": "move_event"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/move", "notes": "calendar.events.move"}
     },
     {
       "method": "PATCH",
       "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
-      "covered_by": {
-        "write": "patch_event"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/patch", "notes": "calendar.events.patch"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/calendars/{calendarId}/events/quickAdd",
-      "covered_by": {
-        "write": "quick_add_event"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "medium", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/quickAdd", "notes": "calendar.events.quickAdd"}
     },
     {
       "method": "PUT",
       "path": "/calendar/v3/calendars/{calendarId}/events/{eventId}",
-      "covered_by": {
-        "write": "update_event"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/update", "notes": "calendar.events.update"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/calendars/{calendarId}/events/watch",
-      "covered_by": {
-        "write": "watch_events"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "medium", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/events/watch", "notes": "calendar.events.watch"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/freeBusy",
-      "covered_by": {
-        "direct_read": "freebusy query"
-      }
+      "covered_by": {"direct_read": "freebusy query"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/users/me/settings/{setting}",
-      "covered_by": {
-        "stream": "setting"
-      }
+      "covered_by": {"stream": "setting"}
     },
     {
       "method": "GET",
       "path": "/calendar/v3/users/me/settings",
-      "covered_by": {
-        "stream": "settings"
-      }
+      "covered_by": {"stream": "settings"}
     },
     {
       "method": "POST",
       "path": "/calendar/v3/users/me/settings/watch",
-      "covered_by": {
-        "write": "watch_settings"
-      }
+      "operation": {"model": "sensitive_reverse_etl", "status": "blocked", "risk": "medium", "blocked_by_default": true, "reason": "Requires the missing rest_write executor: the schema accepts rest_write but commandrunner has no execution dispatch.", "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/settings/watch", "notes": "calendar.settings.watch"}
     }
   ]
 }

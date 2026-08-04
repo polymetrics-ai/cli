@@ -17,7 +17,6 @@ import (
 	freeagentconnector "polymetrics.ai/internal/connectors/native/free-agent-connector"
 	"polymetrics.ai/internal/connectors/native/freightview"
 	googleanalyticsdataapi "polymetrics.ai/internal/connectors/native/google-analytics-data-api"
-	googlecalendar "polymetrics.ai/internal/connectors/native/google-calendar"
 	googleclassroom "polymetrics.ai/internal/connectors/native/google-classroom"
 	googlepagespeedinsights "polymetrics.ai/internal/connectors/native/google-pagespeed-insights"
 	lessannoyingcrm "polymetrics.ai/internal/connectors/native/less-annoying-crm"
@@ -60,12 +59,22 @@ func (c definitionConnector) ValidateConfiguration(config map[string]string) err
 	return c.base.ValidateConfiguration(config)
 }
 
-func withBundleDefinition(name string, c connectors.Connector) connectors.Connector {
+func loadPromotedBundle(name string) engine.Bundle {
 	bundle, err := engine.Load(defs.FS, name)
 	if err != nil {
 		panic("native/" + name + ": failed to load defs/" + name + " bundle: " + err.Error())
 	}
+	return bundle
+}
+
+func withBundleDefinition(name string, c connectors.Connector) connectors.Connector {
+	bundle := loadPromotedBundle(name)
 	return definitionConnector{Connector: c, base: engine.NewBase(bundle)}
+}
+
+func withEngineBundle(name string) connectors.Connector {
+	bundle := loadPromotedBundle(name)
+	return engine.New(bundle, engine.HooksFor(name))
 }
 
 func promotedFactories() []Factory {
@@ -89,7 +98,7 @@ func promotedFactories() []Factory {
 		{Name: "google-analytics-data-api", New: func() connectors.Connector {
 			return withBundleDefinition("google-analytics-data-api", googleanalyticsdataapi.New())
 		}},
-		{Name: "google-calendar", New: func() connectors.Connector { return withBundleDefinition("google-calendar", googlecalendar.New()) }},
+		{Name: "google-calendar", New: func() connectors.Connector { return withEngineBundle("google-calendar") }},
 		{Name: "google-classroom", New: func() connectors.Connector { return withBundleDefinition("google-classroom", googleclassroom.New()) }},
 		{Name: "google-pagespeed-insights", New: func() connectors.Connector {
 			return withBundleDefinition("google-pagespeed-insights", googlepagespeedinsights.New())
