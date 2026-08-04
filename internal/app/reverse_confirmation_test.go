@@ -2,12 +2,18 @@ package app_test
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
@@ -270,6 +276,194 @@ func TestRunReverseETLRejectsPreviewDigestDriftBeforeNativeWrite(t *testing.T) {
 	}
 }
 
+func TestRunReverseETLRejectsApprovalHashStateTamper(t *testing.T) {
+	ctx := context.Background()
+	var calls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls.Add(1)
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	a, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
+	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
+	}
+	attackerToken := "attacker-chosen-token"
+	sum := sha256.Sum256([]byte(attackerToken))
+	mutateStoredReversePlan(t, a.ProjectDir(), plan.ID, func(stored map[string]any) {
+		stored["approval_token_hash"] = hex.EncodeToString(sum[:])
+	})
+	tampered, err := app.Open(filepath.Dir(a.ProjectDir()))
+	if err != nil {
+		t.Fatalf("Open(tampered state) error = %v", err)
+	}
+
+	_, err = tampered.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: attackerToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err == nil {
+		t.Fatal("RunReverseETL() accepted an attacker-replaced approval token hash")
+	}
+	if calls.Load() != 0 {
+		t.Fatalf("destructive write dispatched after state tamper; calls=%d", calls.Load())
+	}
+}
+
+func TestRunReverseETLConsumesApprovalAtomicallyAcrossProcesses(t *testing.T) {
+	ctx := context.Background()
+	var calls atomic.Int32
+	firstDispatched := make(chan struct{})
+	secondDispatched := make(chan struct{})
+	release := make(chan struct{})
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		switch calls.Add(1) {
+		case 1:
+			close(firstDispatched)
+		case 2:
+			close(secondDispatched)
+		}
+		<-release
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	first, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
+	plan, _, err := first.PreviewConnectorCommandPlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
+	}
+	second, err := app.Open(filepath.Dir(first.ProjectDir()))
+	if err != nil {
+		t.Fatalf("Open(second process) error = %v", err)
+	}
+
+	errs := make(chan error, 2)
+	var wg sync.WaitGroup
+	run := func(instance *app.App) {
+		wg.Add(1)
+		go func(instance *app.App) {
+			defer wg.Done()
+			_, runErr := instance.RunReverseETL(ctx, app.RunReverseETLRequest{
+				PlanID:        plan.ID,
+				ApprovalToken: plan.ApprovalToken,
+				Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+			})
+			errs <- runErr
+		}(instance)
+	}
+	run(first)
+	<-firstDispatched
+	run(second)
+	select {
+	case <-secondDispatched:
+	case <-time.After(500 * time.Millisecond):
+	}
+	close(release)
+	wg.Wait()
+	close(errs)
+
+	var successes int
+	for runErr := range errs {
+		if runErr == nil {
+			successes++
+		}
+	}
+	if successes != 1 {
+		t.Fatalf("successful executions = %d, want exactly one", successes)
+	}
+	if calls.Load() != 1 {
+		t.Fatalf("destructive request calls = %d, want exactly one", calls.Load())
+	}
+}
+
+func TestRunReverseETLConsumesBulkApprovalAtomicallyAcrossProcesses(t *testing.T) {
+	ctx := context.Background()
+	var calls atomic.Int32
+	firstDispatched := make(chan struct{})
+	secondDispatched := make(chan struct{})
+	release := make(chan struct{})
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		switch calls.Add(1) {
+		case 1:
+			close(firstDispatched)
+		case 2:
+			close(secondDispatched)
+		}
+		<-release
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	first, plan := setupGitHubGenericDestructivePlan(t, ctx, server.URL)
+	plan, _, err := first.PreviewReversePlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewReversePlan() error = %v", err)
+	}
+	second, err := app.Open(filepath.Dir(first.ProjectDir()))
+	if err != nil {
+		t.Fatalf("Open(second process) error = %v", err)
+	}
+
+	errs := make(chan error, 2)
+	var wg sync.WaitGroup
+	run := func(instance *app.App) {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			_, runErr := instance.RunReverseETL(ctx, app.RunReverseETLRequest{
+				PlanID: plan.ID, ApprovalToken: plan.ApprovalToken,
+				Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+			})
+			errs <- runErr
+		}()
+	}
+	run(first)
+	<-firstDispatched
+	run(second)
+	select {
+	case <-secondDispatched:
+	case <-time.After(500 * time.Millisecond):
+	}
+	close(release)
+	wg.Wait()
+	close(errs)
+
+	var successes int
+	for runErr := range errs {
+		if runErr == nil {
+			successes++
+		}
+	}
+	if successes != 1 || calls.Load() != 1 {
+		t.Fatalf("bulk executions = %d successes, %d requests; want exactly one", successes, calls.Load())
+	}
+}
+
+func TestPreviewReversePlanRejectsExpiredGenericPlan(t *testing.T) {
+	ctx := context.Background()
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	a, plan := setupGitHubGenericDestructivePlan(t, ctx, server.URL)
+	mutateStoredReversePlan(t, a.ProjectDir(), plan.ID, func(stored map[string]any) {
+		stored["expires_at"] = time.Now().UTC().Add(-time.Minute).Format(time.RFC3339Nano)
+	})
+	expired, err := app.Open(filepath.Dir(a.ProjectDir()))
+	if err != nil {
+		t.Fatalf("Open(expired state) error = %v", err)
+	}
+
+	if _, _, err := expired.PreviewReversePlan(ctx, plan.ID); err == nil {
+		t.Fatal("PreviewReversePlan() minted approval for an expired generic plan")
+	}
+}
+
 func TestExecutedDestructivePlanCannotBeRepreviewedForReplay(t *testing.T) {
 	ctx := context.Background()
 	calls := 0
@@ -336,7 +530,13 @@ func (c *driftingDestructiveConnector) Read(context.Context, connectors.ReadRequ
 }
 
 func (c *driftingDestructiveConnector) DryRunWrite(_ context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
-	return connectors.WritePreview{RecordsStaged: len(records), Action: req.Action, Digest: c.digest}, nil
+	return connectors.WritePreview{
+		RecordsStaged: len(records), Action: req.Action, Digest: c.digest,
+		ApprovalTarget: connectors.WriteApprovalTarget{
+			Connector: c.Name(), Operation: req.Action, Method: http.MethodDelete, MutationClass: "delete",
+			TargetDigest: strings.Repeat("c", 64), CredentialRevision: req.Config.CredentialRevision,
+		},
+	}, nil
 }
 
 func (c *driftingDestructiveConnector) Write(context.Context, connectors.WriteRequest, []connectors.Record) (connectors.WriteResult, error) {
@@ -408,4 +608,38 @@ func setupGitHubApp(t *testing.T, ctx context.Context, baseURL string) (*app.App
 		t.Fatalf("AddCredential(github) error = %v", err)
 	}
 	return a, root
+}
+
+func mutateStoredReversePlan(t *testing.T, projectDir, planID string, mutate func(map[string]any)) {
+	t.Helper()
+	path := filepath.Join(projectDir, "state", "state.json")
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("ReadFile(state) error = %v", err)
+	}
+	var stored map[string]any
+	if err := json.Unmarshal(raw, &stored); err != nil {
+		t.Fatalf("Unmarshal(state) error = %v", err)
+	}
+	plans, ok := stored["reverse_plans"].([]any)
+	if !ok {
+		t.Fatalf("state reverse_plans has type %T", stored["reverse_plans"])
+	}
+	for _, item := range plans {
+		plan, ok := item.(map[string]any)
+		if !ok || plan["id"] != planID {
+			continue
+		}
+		mutate(plan)
+		encoded, err := json.MarshalIndent(stored, "", "  ")
+		if err != nil {
+			t.Fatalf("Marshal(state) error = %v", err)
+		}
+		encoded = append(encoded, '\n')
+		if err := os.WriteFile(path, encoded, 0o600); err != nil {
+			t.Fatalf("WriteFile(state) error = %v", err)
+		}
+		return
+	}
+	t.Fatalf("reverse plan %q not found in state", planID)
 }

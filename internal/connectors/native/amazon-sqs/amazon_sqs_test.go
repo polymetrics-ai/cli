@@ -2,6 +2,7 @@ package amazonsqs_test
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -12,6 +13,7 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	native "polymetrics.ai/internal/connectors/native/amazon-sqs"
@@ -680,7 +682,9 @@ func TestWriteExecutesPreviouslyUncoveredTypedActions(t *testing.T) {
 			}))
 			defer srv.Close()
 
-			res, err := native.New().Write(context.Background(), connectors.WriteRequest{Action: tc.action, Config: testRuntimeConfig(srv.URL)}, []connectors.Record{tc.record})
+			connector := native.New()
+			records := []connectors.Record{tc.record}
+			res, err := connector.Write(context.Background(), approvedSQSWriteRequest(t, connector, tc.action, testRuntimeConfig(srv.URL), records), records)
 			if err != nil {
 				t.Fatalf("Write %s: %v", tc.action, err)
 			}
@@ -748,7 +752,7 @@ func TestWriteSendMessageAndDeleteBatchChunking(t *testing.T) {
 	for i := range records {
 		records[i] = connectors.Record{"receipt_handle": "rh"}
 	}
-	res, err = c.Write(context.Background(), connectors.WriteRequest{Action: "delete_message_batch", Config: cfg}, records)
+	res, err = c.Write(context.Background(), approvedSQSWriteRequest(t, c, "delete_message_batch", cfg, records), records)
 	if err != nil {
 		t.Fatalf("Write delete_message_batch: %v", err)
 	}
@@ -887,12 +891,39 @@ func TestWriteWithNoSourceRowsDoesNotExecuteDestructiveZeroFieldAction(t *testin
 	if preview.RecordsStaged != 0 {
 		t.Fatalf("preview.RecordsStaged = %d, want 0", preview.RecordsStaged)
 	}
-	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: "purge_queue", Config: cfg}, nil)
+	res, err := c.Write(context.Background(), approvedSQSWriteRequest(t, c, "purge_queue", cfg, nil), nil)
 	if err != nil {
 		t.Fatalf("Write purge_queue empty rows: %v", err)
 	}
 	if res.RecordsWritten != 0 || res.RecordsFailed != 0 || calls != 0 {
 		t.Fatalf("result=%+v calls=%d, want no-op", res, calls)
+	}
+}
+
+func TestDestructiveWriteUsesPreparedPreviewAndSharedGate(t *testing.T) {
+	var calls int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		_, _ = w.Write([]byte(`<DeleteMessageResponse/>`))
+	}))
+	defer srv.Close()
+
+	c := native.New()
+	cfg := testRuntimeConfig(srv.URL)
+	records := []connectors.Record{{"receipt_handle": "receipt-handle-placeholder"}}
+	preview, err := c.DryRunWrite(context.Background(), connectors.WriteRequest{Action: "delete_message", Config: cfg}, records)
+	if err != nil {
+		t.Fatalf("DryRunWrite(delete_message) error = %v", err)
+	}
+	if preview.Digest == "" {
+		t.Error("destructive SQS preview returned no digest")
+	}
+
+	if _, err := c.Write(context.Background(), connectors.WriteRequest{Action: "delete_message", Config: cfg}, records); err == nil {
+		t.Error("destructive SQS write bypassed shared approval gate")
+	}
+	if calls != 0 {
+		t.Fatalf("destructive SQS request dispatched without approval; calls=%d", calls)
 	}
 }
 
@@ -921,14 +952,15 @@ func TestWriteNormalizesActionAndSendsQueueURL(t *testing.T) {
 	if preview.Action != "purge_queue" || preview.RecordsStaged != 0 || !strings.Contains(strings.Join(preview.Warnings, " "), "destructive") {
 		t.Fatalf("preview = %+v, want normalized zero-staged destructive action", preview)
 	}
-	res, err := c.Write(context.Background(), connectors.WriteRequest{Action: " purge_queue ", Config: cfg}, nil)
+	res, err := c.Write(context.Background(), approvedSQSWriteRequest(t, c, " purge_queue ", cfg, nil), nil)
 	if err != nil {
 		t.Fatalf("Write purge_queue empty: %v", err)
 	}
 	if res.RecordsWritten != 0 || res.RecordsFailed != 0 || calls != 0 {
 		t.Fatalf("empty write result=%+v calls=%d, want no execution", res, calls)
 	}
-	res, err = c.Write(context.Background(), connectors.WriteRequest{Action: " purge_queue ", Config: cfg}, []connectors.Record{{}})
+	records := []connectors.Record{{}}
+	res, err = c.Write(context.Background(), approvedSQSWriteRequest(t, c, " purge_queue ", cfg, records), records)
 	if err != nil {
 		t.Fatalf("Write purge_queue explicit record: %v", err)
 	}
@@ -1377,8 +1409,62 @@ func testRuntimeConfig(endpoint string) connectors.RuntimeConfig {
 			"endpoint_url": endpoint,
 			"region":       "us-east-1",
 		},
-		Secrets: map[string]string{"access_key": "AKIATEST", "secret_key": "synthetic-signing-key"},
+		Secrets:            map[string]string{"access_key": "AKIATEST", "secret_key": "synthetic-signing-key"},
+		CredentialRevision: "amazon-sqs-fixture-credential-revision",
 	}
+}
+
+func approvedSQSWriteRequest(t *testing.T, connector native.Connector, action string, cfg connectors.RuntimeConfig, records []connectors.Record) connectors.WriteRequest {
+	t.Helper()
+	req := connectors.WriteRequest{Action: action, Config: cfg}
+	var destructive bool
+	for _, declared := range connector.Manifest().WriteActions {
+		if declared.Name == strings.TrimSpace(action) {
+			destructive = connectors.ConfirmationForWriteAction(declared).Kind == connectors.ConfirmationKindDestructive
+			break
+		}
+	}
+	if !destructive {
+		return req
+	}
+	preview, err := connector.DryRunWrite(context.Background(), req, records)
+	if err != nil {
+		t.Fatalf("DryRunWrite(%s) error = %v", action, err)
+	}
+	key := sha256.Sum256([]byte("amazon-sqs-test-write-approval-v1"))
+	authority, err := connectors.NewWriteApprovalAuthority(key[:])
+	if err != nil {
+		t.Fatalf("NewWriteApprovalAuthority() error = %v", err)
+	}
+	now := time.Now().UTC()
+	token := "amazon-sqs-fixture-approval"
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
+		PlanID:        "rplan_amazon_sqs_fixture",
+		PlanHash:      strings.Repeat("a", 64),
+		PreviewDigest: preview.Digest,
+		ApprovalToken: token,
+		Target:        preview.ApprovalTarget,
+		IssuedAt:      now,
+		ExpiresAt:     now.Add(time.Hour),
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		t.Fatalf("IssueWriteGrant(%s) error = %v", action, err)
+	}
+	req.Approval, err = authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID:        grant.PlanID,
+		PlanHash:      grant.PlanHash,
+		PreviewDigest: grant.PreviewDigest,
+		ApprovalToken: token,
+		Target:        grant.Target,
+		ExpiresAt:     grant.ExpiresAt,
+		Confirmation:  grant.Confirmation,
+		Now:           now,
+	})
+	if err != nil {
+		t.Fatalf("VerifyWriteGrant(%s) error = %v", action, err)
+	}
+	return req
 }
 
 func countAction(actions []string, want string) int {

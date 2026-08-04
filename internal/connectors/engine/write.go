@@ -99,54 +99,11 @@ func validateWriteBody(action WriteAction, rec connectors.Record) error {
 // secret value is redacted (never interpolated in cleartext into the
 // preview) — DryRunWrite performs no network call.
 func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WritePreview, error) {
-	if err := ValidateWrite(ctx, b, req, records); err != nil {
-		return connectors.WritePreview{}, err
-	}
-	action, err := findWriteAction(b, req.Action)
+	prepared, err := prepareDeclarativeWrite(ctx, b, req, records, h)
 	if err != nil {
 		return connectors.WritePreview{}, err
 	}
-
-	cfg := materializeConfigDefaults(b, req.Config)
-
-	warnings := []string{fmt.Sprintf("%s executes a live mutation only after approval; dry run performs no external call", action.Name)}
-	if len(records) > 0 {
-		method, path, err := resolveWriteRequestLine(b, action, records[0], cfg)
-		if err != nil {
-			return connectors.WritePreview{}, err
-		}
-		warnings = append(warnings, fmt.Sprintf("resolved request: %s %s", method, path))
-	}
-
-	preview := connectors.WritePreview{
-		RecordsStaged: len(records),
-		Action:        action.Name,
-		Warnings:      warnings,
-	}
-	digestPayload := struct {
-		Connector string                  `json:"connector"`
-		Action    string                  `json:"action"`
-		Method    string                  `json:"method"`
-		Path      string                  `json:"path"`
-		Config    map[string]string       `json:"config,omitempty"`
-		Records   []connectors.Record     `json:"records"`
-		Preview   connectors.WritePreview `json:"preview"`
-	}{
-		Connector: b.Name,
-		Action:    action.Name,
-		Method:    methodOrDefault(action.Method),
-		Path:      action.Path,
-		Config:    cfg.Config,
-		Records:   records,
-		Preview:   preview,
-	}
-	rawDigest, err := json.Marshal(digestPayload)
-	if err != nil {
-		return connectors.WritePreview{}, fmt.Errorf("engine: hash write preview: %w", err)
-	}
-	digest := sha256.Sum256(rawDigest)
-	preview.Digest = hex.EncodeToString(digest[:])
-	return preview, nil
+	return PreviewPreparedWrite(prepared)
 }
 
 // resolveWriteRequestLine interpolates the action's base URL and path
@@ -367,7 +324,11 @@ func joinURL(base, path string) string {
 // RecordsWritten; the loop stops immediately rather than continuing best-
 // effort.
 func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (connectors.WriteResult, error) {
-	preview, err := DryRunWrite(ctx, b, req, records, h)
+	prepared, err := prepareDeclarativeWrite(ctx, b, req, records, h)
+	if err != nil {
+		return connectors.WriteResult{RecordsFailed: len(records)}, err
+	}
+	preview, err := PreviewPreparedWrite(prepared)
 	if err != nil {
 		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
@@ -377,7 +338,7 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 	}
 
 	var result connectors.WriteResult
-	err = GateDestructiveExecution(ctx, DestructiveTargetForWrite(b.Name, action), req.Approval, preview.Digest, func(executeCtx context.Context) error {
+	err = ExecutePreparedWrite(ctx, prepared, req.Approval, preview.Digest, func(executeCtx context.Context) error {
 		var executeErr error
 		result, executeErr = executeApprovedWrite(executeCtx, b, action, req, records, h)
 		return executeErr
@@ -497,7 +458,7 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		if err != nil {
 			return err
 		}
-		_, err = rt.Requester.Do(ctx, method, path, nil, payload)
+		_, err = rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	default: // "json" (default)
 		var body map[string]any

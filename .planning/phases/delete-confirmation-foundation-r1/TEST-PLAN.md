@@ -10,17 +10,21 @@ provider calls or credential values are permitted.
    target policy.
 2. **Preview** — red proves a destructive stored plan can execute without a prior preview; green
    persists the engine preview digest and refuses execution before preview.
-3. **Explicit approval** — red proves direct destructive engine execution accepts no typed approval
-   evidence; green requires plan/hash/approval timestamp and typed confirmation.
+3. **Explicit approval** — red proves caller-minted evidence and copied evidence can execute and
+   replay; green requires an external-key authenticated, target-bound, expiring one-shot grant.
 4. **Execute seam** — red proves no generic pre-dispatch wrapper exists for a future `rest_write`
    executor; green demonstrates the same wrapper blocks the callback until evidence is complete and
    then invokes it exactly once.
 5. **Bypass resistance** — red proves the generic reverse path/direct engine path can bypass the
    full lifecycle; green covers connector-command, bulk reverse ETL, state tampering, digest
    mismatch, and `batchable: false` preservation.
+6. **Hardening review** — red proves token-hash state tamper, stale-reader double dispatch, expired
+   generic re-preview, incomplete request digests, and native SQS bypass. Green shares atomic grant
+   consumption and canonical prepared-write execution across command, bulk, declarative, and SQS
+   paths; Asana and Zendesk fixtures use real app preview/approval without provider calls.
 
 ## Verification
 
-Focused packages: `internal/connectors/engine`, `internal/connectors/commandrunner`, `internal/app`,
-`internal/cli`, and `internal/connectors/conformance`. Then run the repository's separated local
-gates from `AGENTS.md`; CI carries the full 550+ connector suite.
+The review fix round executes one focused command across the changed connectors, vault, engine,
+hook, conformance, native SQS, app, Asana fixture, and Zendesk Support fixture packages. The outer
+pipeline owns subsequent test, lint, and CI phases, including the full 550+ connector suite.

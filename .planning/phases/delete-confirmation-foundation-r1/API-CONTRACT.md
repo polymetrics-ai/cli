@@ -22,23 +22,28 @@ runtime refuses unsafe execution.
 
 ## Runtime evidence
 
-The shared approval evidence contains:
+The persisted authenticated grant contains:
 
 - plan ID;
 - immutable plan hash;
-- engine-produced preview digest;
-- approval timestamp;
-- typed confirmation kind.
+- engine-produced canonical prepared-request digest;
+- concrete target digest and secret-safe credential revision;
+- issue and expiry timestamps plus a one-shot nonce;
+- approval-token hash and typed confirmation kind;
+- HMAC-SHA256 authentication from a vault-derived key outside state JSON.
 
-The approval token is validated and consumed by `internal/app` and is never copied into engine
-evidence, JSON output, logs, fixtures, or errors.
+`internal/app` authenticates and atomically consumes the grant and approval token through
+`JSONStore.Update`. It then creates opaque, execution-scoped evidence whose shared one-shot state
+cannot be copied into a replay. The raw token is never copied into engine evidence, persisted JSON,
+logs, fixtures, or errors.
 
 ## Gate seam
 
-The engine exposes a target/policy constructor and an execute wrapper. The wrapper validates all
-evidence before invoking the supplied executor callback. Declarative `writes.json` execution uses
-the wrapper. The future `rest_write` executor supplies its operation target, preview digest,
-approval evidence, and HTTP executor closure without changing the gate.
+The engine exposes `PreparedWrite`: normalized target policy, exact canonical outbound requests,
+complete definition/hook identity, and credential revision. Preview and execution use the same
+prepared-write digest, and the wrapper consumes authenticated evidence before invoking the supplied
+executor callback. Declarative `writes.json` and native Amazon SQS use the wrapper. The future
+`rest_write` executor supplies its prepared requests and executor closure without changing the gate.
 
 ## Compatibility
 

@@ -16,23 +16,28 @@ does not add connector aliases, synthetic duplicate commands, or a generic HTTP 
 2. The JSON bundle dialect accepts a closed confirmation object whose only supported kind is
    `destructive`; unknown keys and values are rejected. The existing closed string declaration is
    normalized for compatibility with already shipped bundles.
-3. A destructive plan does not become executable merely because it exists. A real dry-run preview
-   must produce a digest bound to the action and records before approval can authorize execution.
-4. Execution evidence is typed and carries plan identity, plan hash, preview digest, approval time,
-   and confirmation kind. It never carries the approval token or a secret value.
-5. The shared engine gate validates evidence before invoking an executor callback. The declarative
-   write executor uses this seam, and a future `rest_write` executor can use the same seam unchanged.
-6. Generic reverse ETL and canonical connector-command execution both supply evidence only after
+3. A destructive plan does not become executable merely because it exists. A real no-network
+   preview must materialize every canonical request and bind all records, query/body construction,
+   definition/hook identity, concrete target, and secret-safe credential revision.
+4. The persisted grant is authenticated with a vault-derived key outside state and binds plan,
+   preview, target, token hash, typed confirmation, nonce, and expiry without carrying secrets.
+5. App execution atomically reloads and consumes the grant before dispatch. The opaque engine
+   evidence is independently one-shot even when copied.
+6. The shared prepared-write gate validates evidence before invoking an executor callback.
+   Declarative writes and native Amazon SQS use this seam, and a future `rest_write` executor can use
+   it unchanged.
+7. Generic reverse ETL and canonical connector-command execution both supply evidence only after
    the stored plan, preview, approval token, typed confirmation, and current plan hash pass.
-7. Direct destructive engine writes without evidence fail before HTTP dispatch.
-8. `batchable: false` remains authoritative at both plan and execute time; confirmation never
+8. Direct destructive engine writes without evidence fail before HTTP dispatch.
+9. `batchable: false` remains authoritative at both plan and execute time; confirmation never
    converts a non-batchable action into a bulk action.
 
 ## Scope
 
 - `internal/connectors/engine/` write gate, bundle types, schemas, and tests.
 - Connector write request/preview types needed by the shared engine/app seam.
-- `internal/app/` reverse-plan preview and execution evidence.
+- `internal/app/` reverse-plan preview, authenticated grant, and atomic execution transition.
+- Native Amazon SQS adoption of the provider-neutral prepared-write seam.
 - Connector command runner/CLI lifecycle plumbing and focused help/docs only when behavior changes.
 - GSD phase artifacts and fixture-only tests.
 

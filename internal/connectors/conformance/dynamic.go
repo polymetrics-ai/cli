@@ -199,6 +199,15 @@ func writeRequestFor(actionName string, cfg connectors.RuntimeConfig) connectors
 // engine's real no-network preview so fixture execution exercises the same
 // gate as production without granting a bypass to arbitrary callers.
 func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionName string, cfg connectors.RuntimeConfig, records []connectors.Record, hooks engine.Hooks) (connectors.WriteRequest, error) {
+	authorityKey := sha256.Sum256([]byte("polymetrics-conformance-write-approval-v1"))
+	authority, err := connectors.NewWriteApprovalAuthority(authorityKey[:])
+	if err != nil {
+		return connectors.WriteRequest{}, err
+	}
+	cfg.CredentialRevision, err = authority.CredentialRevision("conformance:"+b.Name, cfg.Secrets)
+	if err != nil {
+		return connectors.WriteRequest{}, err
+	}
 	req := writeRequestFor(actionName, cfg)
 	preview, err := engine.DryRunWrite(ctx, b, req, records, hooks)
 	if err != nil {
@@ -214,12 +223,33 @@ func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionNam
 		return connectors.WriteRequest{}, fmt.Errorf("marshal conformance fixture plan: %w", err)
 	}
 	planHash := sha256.Sum256(planPayload)
-	req.Approval = &connectors.WriteApprovalEvidence{
+	now := time.Now().UTC()
+	token := "conformance-fixture-approval"
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
 		PlanID:        "rplan_conformance_fixture",
 		PlanHash:      fmt.Sprintf("%x", planHash),
 		PreviewDigest: preview.Digest,
-		ApprovedAt:    time.Now().UTC(),
+		ApprovalToken: token,
+		Target:        preview.ApprovalTarget,
+		IssuedAt:      now,
+		ExpiresAt:     now.Add(time.Hour),
 		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if err != nil {
+		return connectors.WriteRequest{}, err
+	}
+	req.Approval, err = authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID:        grant.PlanID,
+		PlanHash:      grant.PlanHash,
+		PreviewDigest: grant.PreviewDigest,
+		ApprovalToken: token,
+		Target:        grant.Target,
+		ExpiresAt:     grant.ExpiresAt,
+		Confirmation:  grant.Confirmation,
+		Now:           now,
+	})
+	if err != nil {
+		return connectors.WriteRequest{}, err
 	}
 	return req, nil
 }

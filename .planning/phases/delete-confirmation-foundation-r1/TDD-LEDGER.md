@@ -88,11 +88,23 @@ Status: green-verified
 - GREEN: app replays the no-network dry run immediately before dispatch, compares the digest, then
   the engine independently compares it again; the canonical public `github repo deploy-key delete`
   plan/preview/confirm/run fixture passes without provider calls.
-- GREEN: the Asana and Zendesk Support fixtures derive plan hashes and preview digests from their
-  actual fixture records, attach typed confirmation plus approval time, and preserve every HTTP
-  request assertion.
+- GREEN: the Asana and Zendesk Support fixtures obtain authenticated grants through the real app
+  plan, preview, confirmation, and execution lifecycle while preserving every HTTP request
+  assertion.
 - EXISTING GUARD: `batchable:false` remains checked at bulk plan time, persisted-plan execution
   time, and is intentionally allowed only for the single-record canonical command path.
 - EXECUTED VERIFICATION: `go test ./internal/app`, `go test ./internal/connectors/conformance`,
   `go test ./internal/connectors/defs/asana ./internal/connectors/defs/zendesk-support`, and the
   focused canonical CLI test all passed.
+
+## task:tdd-authenticated-grant-hardening
+
+Status: green-verified
+
+- MANUAL-GSD FALLBACK: `scripts/gsd prompt programming-loop init --phase delete-confirmation-foundation-r1 --dry-run` exited 1 with `unknown GSD command: programming-loop`; the repository-approved manual universal loop remains active.
+- RED: `go test ./internal/app ./internal/connectors/engine ./internal/connectors/native/amazon-sqs -run 'Test(GateRejectsForgedAndReplayedDestructiveEvidence|DryRunWriteDigestBindsCanonicalRequestAndCredentialRevision|DestructiveWriteUsesPreparedPreviewAndSharedGate|RunReverseETLRejectsApprovalHashStateTamper|RunReverseETLConsumesApprovalAtomicallyAcrossProcesses|PreviewReversePlanRejectsExpiredGenericPlan)$' -count=1` exited 1: forged evidence executed, copied evidence replayed twice, token-hash tamper executed, secret-derived target digest stayed unchanged, expired generic preview minted approval, and SQS returned no digest then dispatched without approval.
+- RED: `go test ./internal/app -run TestRunReverseETLConsumesApprovalAtomicallyAcrossProcesses -count=1` exited 1 with two destructive requests after the deterministic stale second process began only after the first process had consumed its stale state and entered provider dispatch.
+- GREEN: one external-key authenticated grant and one exact prepared-write seam are shared by
+  declarative and native executors; command and bulk paths atomically reload and consume the grant
+  before dispatch, and copied engine evidence remains one-shot.
+- EXECUTED VERIFICATION: `go test ./internal/connectors ./internal/vault ./internal/connectors/engine ./internal/connectors/hooks/github ./internal/connectors/conformance ./internal/connectors/native/amazon-sqs ./internal/app ./internal/connectors/defs/asana ./internal/connectors/defs/zendesk-support -count=1` passed.

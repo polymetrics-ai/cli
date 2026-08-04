@@ -100,6 +100,7 @@ type RuntimeConfig struct {
 	ProjectDir            string            `json:"-"`
 	Config                map[string]string `json:"config"`
 	Secrets               map[string]string `json:"-"`
+	CredentialRevision    string            `json:"-"`
 	ApprovedPayloadSHA256 map[string]string `json:"-"`
 	// SecretStore, when set, persists a provider-rotated secret back to the
 	// caller's encrypted credential store. Optional; see SecretStore.
@@ -274,17 +275,6 @@ func ParseWriteConfirmation(raw string) (WriteConfirmation, error) {
 	}
 }
 
-// WriteApprovalEvidence is minted by the plan/preview/approval flow and
-// carried to the executor. Tokens are intentionally absent: the app consumes
-// those before producing this non-secret, execution-scoped evidence.
-type WriteApprovalEvidence struct {
-	PlanID        string            `json:"plan_id"`
-	PlanHash      string            `json:"plan_hash"`
-	PreviewDigest string            `json:"preview_digest"`
-	ApprovedAt    time.Time         `json:"approved_at"`
-	Confirmation  WriteConfirmation `json:"confirmation"`
-}
-
 type WriteResult struct {
 	RecordsWritten int `json:"records_written"`
 	RecordsFailed  int `json:"records_failed"`
@@ -302,10 +292,11 @@ type QueryResult struct {
 }
 
 type WritePreview struct {
-	RecordsStaged int      `json:"records_staged"`
-	Action        string   `json:"action"`
-	Warnings      []string `json:"warnings,omitempty"`
-	Digest        string   `json:"digest,omitempty"`
+	RecordsStaged  int                 `json:"records_staged"`
+	Action         string              `json:"action"`
+	Warnings       []string            `json:"warnings,omitempty"`
+	Digest         string              `json:"digest,omitempty"`
+	ApprovalTarget WriteApprovalTarget `json:"approval_target,omitempty"`
 }
 
 type CDCReadRequest struct {

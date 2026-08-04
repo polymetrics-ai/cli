@@ -58,6 +58,10 @@ type WriteHook interface {
 	ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (handled bool, err error)
 }
 
+type WriteHookClassifier interface {
+	HandlesWriteAction(action WriteAction) bool
+}
+
 // CheckHook overrides the connector's Check(). handled=false tells the
 // engine to fall back to the declarative check request.
 type CheckHook interface {

@@ -4,7 +4,9 @@ import (
 	"context"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/hmac"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -45,6 +47,12 @@ func Init(projectDir string) (*Vault, error) {
 
 func Open(projectDir string) (*Vault, error) {
 	return Init(projectDir)
+}
+
+func (v *Vault) WriteApprovalKey() []byte {
+	mac := hmac.New(sha256.New, v.key)
+	_, _ = mac.Write([]byte("polymetrics/write-approval-key/v1"))
+	return mac.Sum(nil)
 }
 
 func (v *Vault) Put(ctx context.Context, id string, secret map[string]string) error {

@@ -6,7 +6,6 @@ package asana
 import (
 	"bytes"
 	"context"
-	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -18,8 +17,8 @@ import (
 	"strings"
 	"sync"
 	"testing"
-	"time"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
@@ -73,41 +72,10 @@ func loadBundle(t *testing.T) engine.Bundle {
 
 func runtimeConfig(baseURL string) connectors.RuntimeConfig {
 	return connectors.RuntimeConfig{
-		Config:  map[string]string{"base_url": baseURL},
-		Secrets: map[string]string{"access_token": "synthetic-test-token"},
+		Config:             map[string]string{"base_url": baseURL},
+		Secrets:            map[string]string{"access_token": "synthetic-test-token"},
+		CredentialRevision: "asana-fixture-credential-revision",
 	}
-}
-
-func approvedFixtureWriteRequest(t *testing.T, b engine.Bundle, action engine.WriteAction, cfg connectors.RuntimeConfig, records []connectors.Record, hooks engine.Hooks) connectors.WriteRequest {
-	t.Helper()
-	req := connectors.WriteRequest{Action: action.Name, Config: cfg}
-	if !engine.DestructiveTargetForWrite(b.Name, action).RequiresApproval() {
-		return req
-	}
-	preview, err := engine.DryRunWrite(context.Background(), b, req, records, hooks)
-	if err != nil {
-		t.Fatalf("engine.DryRunWrite(%q) = %v, want a no-network preview", action.Name, err)
-	}
-	if preview.Digest == "" {
-		t.Fatalf("engine.DryRunWrite(%q) returned no preview digest", action.Name)
-	}
-	planPayload, err := json.Marshal(struct {
-		Connector string              `json:"connector"`
-		Action    string              `json:"action"`
-		Records   []connectors.Record `json:"records"`
-	}{Connector: b.Name, Action: action.Name, Records: records})
-	if err != nil {
-		t.Fatalf("marshal fixture plan for %q: %v", action.Name, err)
-	}
-	planHash := sha256.Sum256(planPayload)
-	req.Approval = &connectors.WriteApprovalEvidence{
-		PlanID:        "rplan_asana_fixture_" + action.Name,
-		PlanHash:      fmt.Sprintf("%x", planHash),
-		PreviewDigest: preview.Digest,
-		ApprovedAt:    time.Now().UTC(),
-		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
-	}
-	return req
 }
 
 // TestReverseETLLedgerReconciles accounts for every ledger row that originally
@@ -216,6 +184,20 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 	cfg := runtimeConfig(capture.URL)
 	replay := b
 	conn := engine.New(replay, engine.HooksFor(b.Name))
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() = %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() = %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name: b.Name + "-fixture", Connector: b.Name,
+		Config: map[string]string{"base_url": capture.URL}, Secrets: map[string]string{"access_token": "synthetic-test-token"},
+	}); err != nil {
+		t.Fatalf("AddCredential(%s) = %v", b.Name, err)
+	}
 
 	commandsByWrite := map[string]connectors.CommandSurfaceCommand{}
 	for _, cmd := range conn.CommandSurface().Commands {
@@ -269,16 +251,35 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 			capture.Reset()
 			records := []connectors.Record{connectors.Record(fixture.Record)}
 			hooks := engine.HooksFor(b.Name)
-			writeReq := approvedFixtureWriteRequest(t, replay, action, cfg, records, hooks)
-			result, err := engine.Write(context.Background(), replay,
-				writeReq,
-				records,
-				hooks)
-			if err != nil {
-				t.Fatalf("engine.Write(%q) = %v, want nil", action.Name, err)
+			written, failed := 0, 0
+			if engine.DestructiveTargetForWrite(b.Name, action).RequiresApproval() {
+				plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+					Name: action.Name, Connector: b.Name, Credential: b.Name + "-fixture", Path: path,
+					Flags: flagsFromRecord(cmd, fixture.Record), Preview: true,
+				})
+				if err != nil {
+					t.Fatalf("PlanConnectorCommand(%q) = %v", action.Name, err)
+				}
+				if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+					t.Fatalf("PlanConnectorCommand(%q) did not produce genuine preview approval", action.Name)
+				}
+				run, err := application.RunReverseETL(context.Background(), app.RunReverseETLRequest{
+					PlanID: plan.ID, ApprovalToken: plan.ApprovalToken,
+					Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+				})
+				if err != nil {
+					t.Fatalf("RunReverseETL(%q) = %v", action.Name, err)
+				}
+				written, failed = run.RecordsSucceeded, run.RecordsFailed
+			} else {
+				result, err := engine.Write(context.Background(), replay, connectors.WriteRequest{Action: action.Name, Config: cfg}, records, hooks)
+				if err != nil {
+					t.Fatalf("engine.Write(%q) = %v, want nil", action.Name, err)
+				}
+				written, failed = result.RecordsWritten, result.RecordsFailed
 			}
-			if result.RecordsWritten != 1 || result.RecordsFailed != 0 {
-				t.Fatalf("engine.Write(%q) result = %+v, want 1 written 0 failed", action.Name, result)
+			if written != 1 || failed != 0 {
+				t.Fatalf("write(%q) result = %d written %d failed, want 1 written 0 failed", action.Name, written, failed)
 			}
 			got := capture.Last()
 			if got == nil {

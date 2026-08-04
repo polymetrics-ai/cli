@@ -18,6 +18,7 @@
 - [x] task:tdd-approval type:tdd — RED then GREEN typed approval evidence and closed confirmation parsing at the engine/app boundary.
 - [x] task:tdd-execute-seam type:tdd — RED then GREEN the generic pre-dispatch wrapper and demonstrate a future `rest_write` executor closure can use it unchanged.
 - [x] task:tdd-bypass type:tdd — RED then GREEN direct-engine, connector-command, generic reverse-ETL, state-tamper, digest-mismatch, and bulk bypass resistance while preserving `batchable:false`.
+- [x] task:tdd-authenticated-grant-hardening type:tdd — RED then GREEN an external-key authenticated, target-bound, expiring, atomically consumed execution grant; canonical prepared-request digests; native SQS gate adoption; shared previewability; and real app approval fixtures.
 - [x] task:docs-verification type:docs — update lifecycle help/docs only where observable behavior changes, complete phase evidence, run separated local gates, and record 623/171/452 coverage.
 
 ## Path guard
