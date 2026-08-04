@@ -32,6 +32,8 @@
               "client_secret": { "type": "string" },
               "scopes": { "type": "string" },
               "extra_params": { "type": "object" },
+              "refresh_token": { "type": "string" },
+              "refresh_token_store_key": { "type": "string" },
               "hook": { "type": "string" },
               "when": { "type": "string" }
             }

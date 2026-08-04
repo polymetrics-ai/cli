@@ -1120,7 +1120,15 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 	for k, v := range overlay {
 		config[k] = v
 	}
-	return cred, connectors.RuntimeConfig{ProjectDir: a.projectDir, Config: config, Secrets: secrets}, nil
+	return cred, connectors.RuntimeConfig{
+		ProjectDir: a.projectDir,
+		Config:     config,
+		Secrets:    secrets,
+		// Scoped to this credential, so a provider-rotated secret (an OAuth2
+		// refresh token) is written back to the same encrypted vault entry it
+		// was read from, and to no other.
+		SecretStore: a.credentialSecretStore(cred.ID),
+	}, nil
 }
 
 func (a *App) findCredential(name string) (CredentialMeta, bool) {

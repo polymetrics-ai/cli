@@ -127,7 +127,7 @@ type RequestSpec struct {
 // AuthSpec describes one candidate authenticator, selected by "when" (first
 // match wins).
 type AuthSpec struct {
-	Mode  string `json:"mode"` // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|custom
+	Mode  string `json:"mode"` // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|oauth2_refresh_token|custom
 	Token string `json:"token,omitempty"`
 
 	Username string `json:"username,omitempty"`
@@ -153,6 +153,35 @@ type AuthSpec struct {
 	// ExtraParams url.Values field; this is the engine-side dialect that
 	// populates it (connsdk itself needed no change).
 	ExtraParams map[string]string `json:"extra_params,omitempty"`
+
+	// RefreshToken is the templated initial refresh token for the
+	// oauth2_refresh_token mode (normally "{{ secrets.refresh_token }}"). It is
+	// resolved through Interpolate like every other AuthSpec field, so an
+	// unresolved config/secrets key is a hard error rather than a silently
+	// unauthenticated request.
+	//
+	// The mode reuses token_url/client_id/client_secret/scopes/extra_params
+	// verbatim from oauth2_client_credentials rather than introducing a
+	// parallel vocabulary for the same four fields; only the grant differs.
+	RefreshToken string `json:"refresh_token,omitempty"`
+
+	// RefreshTokenStoreKey names the secret key under which a PROVIDER-ROTATED
+	// refresh token is persisted back to the caller's encrypted local
+	// credential store — normally the same key RefreshToken reads from, e.g.
+	// "refresh_token".
+	//
+	// It is declared rather than inferred on purpose. Interpolate resolves a
+	// template to its VALUE, so the engine cannot recover a key name from
+	// RefreshToken, and pattern-matching "{{ secrets.X }}" back to X would
+	// silently overwrite a caller's secret whenever the guess happened to be
+	// right and silently do nothing whenever it was not.
+	//
+	// Omitted means "this provider does not rotate": nothing is ever written,
+	// and a rotated value (if one arrives anyway) is held in memory for the
+	// process lifetime only. A connector whose provider DOES rotate must
+	// declare this key, or it will present an invalidated grant on its next
+	// run.
+	RefreshTokenStoreKey string `json:"refresh_token_store_key,omitempty"`
 
 	Hook string `json:"hook,omitempty"` // custom: hook name resolved via hooks registry
 	When string `json:"when,omitempty"` // condition over config values
