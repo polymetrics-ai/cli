@@ -1856,3 +1856,25 @@ func TestRunDirectReadRequiresOutputPolicy(t *testing.T) {
 		t.Fatalf("Run error = %q, want output_policy", err.Error())
 	}
 }
+
+// TestCoerceFlagValueBoundsStringArrayItems pins the flag-level list bound. It
+// is deliberately independent of the body schema's maxItems: the schema fires on
+// the assembled body, this fires on the flag the user typed, so the error can
+// name it.
+func TestCoerceFlagValueBoundsStringArrayItems(t *testing.T) {
+	flag := connectors.CommandSurfaceFlag{Name: "ids", Type: "string_array", MaxItems: 3, MinItems: 1}
+
+	if _, err := coerceFlagValue(flag, []string{"a,b,c"}); err != nil {
+		t.Fatalf("coerceFlagValue at the bound = %v, want accepted", err)
+	}
+	_, err := coerceFlagValue(flag, []string{"a,b,c,d"})
+	if err == nil {
+		t.Fatal("coerceFlagValue over the bound = nil, want rejection")
+	}
+	if !strings.Contains(err.Error(), "--ids") || !strings.Contains(err.Error(), "maximum of 3") {
+		t.Fatalf("error = %q, want it to name the flag and the bound", err.Error())
+	}
+	if _, err := coerceFlagValue(flag, []string{","}); err == nil {
+		t.Fatal("coerceFlagValue under the minimum = nil, want rejection")
+	}
+}

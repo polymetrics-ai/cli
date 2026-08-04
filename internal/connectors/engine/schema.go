@@ -38,6 +38,10 @@ type schemaNode struct {
 	// "minItems": 0 (a documented "may be empty") must stay distinguishable
 	// from an absent keyword — the same distinction PaginationSpec.StartPage
 	// solves one layer up with a pointer.
+	//
+	// Bounded provider search depends on the same pair: an "ids[] bounded to
+	// 100" contract has to be declarable in the bundle and enforceable at load
+	// time, and unknown keywords are a compile error in this dialect.
 	minItems    int
 	hasMinItems bool
 	maxItems    int

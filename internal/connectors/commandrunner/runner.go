@@ -1115,6 +1115,15 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 				}
 			}
 		}
+		// Bounded here as well as in the body schema: the schema fires on the
+		// assembled body, this fires on the flag the user typed, so the error can
+		// name it.
+		if flag.MaxItems > 0 && len(out) > flag.MaxItems {
+			return nil, fmt.Errorf("invalid --%s: %d values exceeds the maximum of %d", flag.Name, len(out), flag.MaxItems)
+		}
+		if flag.MinItems > 0 && len(out) < flag.MinItems {
+			return nil, fmt.Errorf("invalid --%s: %d values is below the minimum of %d", flag.Name, len(out), flag.MinItems)
+		}
 		return out, nil
 	default:
 		return nil, &BlockedCommandError{
