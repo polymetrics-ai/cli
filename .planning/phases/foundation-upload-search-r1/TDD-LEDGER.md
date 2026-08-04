@@ -68,6 +68,19 @@ $ go vet ./internal/connectors/... ./cmd/connectorgen/
 # exit 0
 ```
 
+## Review-gate round (run 01KZ5G009DG5DXZH0QAF4FTG70)
+
+| Slice | Red evidence | Green evidence | Status |
+|---|---|---|---|
+| `provider_search` boundedness bypass via multi-form array types | Red: review finding F1 — `requireBoundedArrays` matched only the single string `"type": "array"`, but `compileTypes` (`schema.go:270-288`) also accepts `["array","null"]`, and an items-bearing node with no string type was skipped entirely. An unbounded list could therefore be declared, load, and reach a provider — contradicting this phase's own hard constraint. Confirmed independently by reading `compileTypes` before escalating. | Captain decided FIX. Pipeline commit `55891bed0` adds `isArrayType`, matching the single string form, any type list containing `"array"`, and items-bearing nodes with no string type. Four new `TestProviderSearchLoadContract` cases: multi-form list, items-bearing node, nested multi-form, and deterministic ordering with several unbounded lists. Re-review returned `findings: []` and lowered risk from medium to low. | Green |
+| Upload-refusal test was timing-flaky | Red: `TestRequesterDoMultipartRefusesEscapingSymlinkSwappedAfterValidation` failed with `ParseMultipartForm: read tcp ...: use of closed network connection`. A refused upload aborts mid-stream, so the handler legitimately sees a half-written body; the helper called `t.Errorf` on that, turning the behaviour under test into a failure. Whether the handler reached `ParseMultipartForm` was timing-dependent. | `uploadEcho` now returns quietly on an incomplete request and leaves the captured body empty, which is what the assertions check. `-count=30` passes. Verified the relaxation did **not** neuter the test: the wire-write mutant still fails it with `DoMultipart error = nil, want refusal of the escaping symlink`. | Green |
+
+F2 (`http.DetectContentType` recognises only a fixed signature set, so an
+unrecognised-but-genuine format sniffs as `application/octet-stream` and is
+rejected fail-closed) was classified `no-op`. The captain directed no action: it
+is the deliberate tradeoff, and bundle authors must account for Go's sniff table
+when declaring `allowed_media_types`.
+
 ## Mutant that survived, and why
 
 Reverting `file.stat()` to `os.Stat(file.Path)` in `validateMultipartForm` alone does **not** fail the
