@@ -7,7 +7,7 @@ description: Asana connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads implemented Asana project-management streams and safely plans implemented task/project/section/tag reverse-ETL actions. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.
+Reads implemented Asana project-management streams and executes typed, approval-gated reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, and workspaces. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.
 
 ## Icon
 

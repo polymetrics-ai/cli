@@ -1,6 +1,6 @@
 # Overview
 
-Asana reads implemented project-management streams through the Asana v1 REST API and safely plans the currently implemented task/project/section/tag reverse-ETL actions. This bundle also carries the complete pinned official Asana OpenAPI operation ledger so every documented operation is represented exactly once as executable `covered_by` metadata or as a blocked/planned fixed-target operation row.
+Asana reads implemented project-management streams through the Asana v1 REST API and executes typed reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, workspaces, custom fields, exports, templates, OOO entries, and time-tracking entries. This bundle also carries the complete pinned official Asana OpenAPI operation ledger so every documented operation is represented exactly once as executable `covered_by` metadata or as a blocked/planned fixed-target operation row.
 
 Official source inventory:
 
@@ -12,7 +12,7 @@ Official source inventory:
 
 Readable streams currently executable by the declarative engine: `custom_fields`, `project_statuses`, `projects`, `sections`, `stories`, `tags`, `tasks`, `team_memberships`, `teams`, `users`, `workspace_memberships`, `workspaces`.
 
-Write actions currently executable by the declarative engine: `add_comment`, `create_project`, `create_section`, `create_tag`, `create_task`, `delete_project`, `delete_section`, `delete_tag`, `delete_task`, `update_project`, `update_section`, `update_tag`, `update_task`.
+Write actions currently executable by the declarative engine: 73 (51 `create`, 18 `update`, 4 `delete`), bound to 73 of the 130 official POST/PUT/DELETE rows. `writes.json` is the authoritative per-action contract; `pm connectors inspect asana` and the generated `docs/connectors/asana/SKILL.md` render every action's endpoint, required record fields, and risk note.
 
 Service API documentation: https://developers.asana.com/reference/rest-api-reference.
 
@@ -61,21 +61,11 @@ All other official read-like operations are represented in `api_surface.json`, `
 
 Overall write risk: every external mutation must be run through reverse ETL plan -> preview -> explicit approval -> execute. Destructive/admin/delete operations also require typed confirmation (`confirm: "destructive"` / `--confirm destructive`) before execution.
 
-Implemented write actions:
+Implemented write actions: 73 named actions in `writes.json`, which is their authoritative contract (endpoint, bounded record schema, required/accepted fields, redacted path fields, idempotency and confirmation notes). Read them with `pm connectors inspect asana` or in the generated `docs/connectors/asana/SKILL.md`; this file does not restate per-action fields.
 
-- `create_task`: POST `/tasks`; requires `data.name` and `data.workspace`; requires plan -> preview -> explicit approval -> execute.
-- `update_task`: PUT `/tasks/{{ record.gid }}`; redacts `gid`; requires plan -> preview -> explicit approval -> execute.
-- `delete_task`: DELETE `/tasks/{{ record.gid }}`; redacts `gid`; idempotent 404; `confirm: "destructive"`; requires plan -> preview -> explicit approval -> execute.
-- `create_project`: POST `/projects`; requires `data.name` and `data.workspace`; requires plan -> preview -> explicit approval -> execute.
-- `update_project`: PUT `/projects/{{ record.gid }}`; redacts `gid`; requires plan -> preview -> explicit approval -> execute.
-- `delete_project`: DELETE `/projects/{{ record.gid }}`; redacts `gid`; idempotent 404; `confirm: "destructive"`; requires plan -> preview -> explicit approval -> execute.
-- `create_section`: POST `/projects/{{ record.project_gid }}/sections`; redacts `project_gid`; requires plan -> preview -> explicit approval -> execute.
-- `update_section`: PUT `/sections/{{ record.gid }}`; redacts `gid`; requires plan -> preview -> explicit approval -> execute.
-- `delete_section`: DELETE `/sections/{{ record.gid }}`; redacts `gid`; idempotent 404; `confirm: "destructive"`; requires plan -> preview -> explicit approval -> execute.
-- `create_tag`: POST `/tags`; requires `data.name` and `data.workspace`; requires plan -> preview -> explicit approval -> execute.
-- `update_tag`: PUT `/tags/{{ record.gid }}`; redacts `gid`; requires plan -> preview -> explicit approval -> execute.
-- `delete_tag`: DELETE `/tags/{{ record.gid }}`; redacts `gid`; idempotent 404; `confirm: "destructive"`; requires plan -> preview -> explicit approval -> execute.
-- `add_comment`: POST `/tasks/{{ record.task_gid }}/stories`; redacts `task_gid`; requires plan -> preview -> explicit approval -> execute.
+By resource family: tasks and subtasks (create/update/delete, duplicate, instantiate from template, set parent, add dependencies/dependents/project/tag/followers), projects (create for team/workspace, update, delete, duplicate, save as template, briefs, statuses, custom-field settings, members, followers, portfolio settings), sections (create, insert, update, delete, add task), tags (create, create for workspace, update, delete), stories (`add_comment`, goal stories, update), goals and goal relationships (create/update, metrics, supporting relationships, followers, custom-field settings), portfolios (create/update, add item/members/custom-field setting, duplicate), custom fields and enum options, teams and team membership, users and workspace membership, workspaces, status updates, rule triggers, exports, OOO entries, and time-tracking entries.
+
+Every action routes through reverse ETL plan -> preview -> explicit approval -> execute. Exactly four are destructive (`delete_task`, `delete_project`, `delete_section`, `delete_tag`): they carry `confirm: "destructive"`, treat 404 as success, and redact their path fields. No other DELETE or admin/elevated operation is bound to an action; the 36 `destructive_action` rows stay unbound until `cli-delete-confirmation-foundation-r1` ships the destructive-write confirm gate, and `reverse_etl_execute_test.go`'s `TestDestructiveOperationsStayBlocked` fails if that count moves.
 
 The remaining official POST/PUT/DELETE operations are not blanket-excluded. They are represented as blocked/planned operations with source evidence. They become executable only when a future connector-local action supplies a bounded record schema, path/body field redaction, sanitized write fixture, idempotency/destructive notes where applicable, and the existing reverse-ETL approval path.
 
@@ -84,6 +74,7 @@ The remaining official POST/PUT/DELETE operations are not blanket-excluded. They
 - Fixture-only status: this connector is not live-certified. `certification.json` declares fixture defaults only; no live Asana credentials or provider calls were requested.
 - `api_surface.json` uses `operation_ledger_version: 1`: legacy `excluded` classifiers are intentionally not used. Blocked/planned operation rows are the source of truth for unimplemented operations.
 - `/batch` is the only not-applicable official lane row. It is disallowed because it is a generic batch subrequest wrapper and would recreate raw method/path/body passthrough; each underlying Asana operation is represented individually instead.
-- Existing executable count remains the current 12 streams + 13 writes. The 224 remaining official rows are planned/blocked metadata, not executable runtime claims.
+- Executable surfaces are 12 streams + 73 writes (85 `covered_by` rows). The 164 remaining official rows are planned/blocked metadata, not executable runtime claims.
+- Every promoted write's record schema is derived from the pinned OpenAPI source above, never inferred from response shapes. Envelope and resource levels are closed with `additionalProperties: false`; deeply nested provider-defined regions (for example `custom_fields` on `create_task`) stay `type: object` with `additionalProperties: true`, which is the bundle's bounded-but-not-exhaustive convention.
 - Provider search/typeahead execution depends on #2985. CDC/changefeed/audit/webhook truthfulness depends on #2986/#2988. Attachment metadata read/upload/delete execution needs connector-local JSON/file-upload contracts and fixtures.
 - No generic shell, generic HTTP request/write, raw SQL write, arbitrary GraphQL, unrestricted file, unrestricted binary, or raw passthrough tool is exposed by this connector.
