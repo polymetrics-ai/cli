@@ -1,0 +1,16 @@
+{
+  "record": {
+    "message": "fixture-message",
+    "subject": "fixture-subject",
+    "ticket_id": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/approval_requests",
+    "body": {
+      "message": "fixture-message",
+      "subject": "fixture-subject",
+      "ticket_id": 1
+    }
+  }
+}

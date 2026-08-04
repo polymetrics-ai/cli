@@ -1,0 +1,21 @@
+{
+  "record": {
+    "project_gid": "fixture-project-gid",
+    "data": {
+      "text": "fixture-text",
+      "color": "fixture-color",
+      "html_text": "fixture-html-text"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/fixture-project-gid/project_statuses",
+    "body": {
+      "data": {
+        "text": "fixture-text",
+        "color": "fixture-color",
+        "html_text": "fixture-html-text"
+      }
+    }
+  }
+}

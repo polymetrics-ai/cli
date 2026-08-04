@@ -1,0 +1,21 @@
+{
+  "record": {
+    "goal_gid": "fixture-goal-gid",
+    "data": {
+      "supporting_resource": "fixture-supporting-resource",
+      "contribution_weight": 1,
+      "insert_after": "fixture-insert-after"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/goals/fixture-goal-gid/addSupportingRelationship",
+    "body": {
+      "data": {
+        "supporting_resource": "fixture-supporting-resource",
+        "contribution_weight": 1,
+        "insert_after": "fixture-insert-after"
+      }
+    }
+  }
+}

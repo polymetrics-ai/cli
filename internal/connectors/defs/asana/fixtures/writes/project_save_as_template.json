@@ -1,0 +1,21 @@
+{
+  "record": {
+    "project_gid": "fixture-project-gid",
+    "data": {
+      "name": "fixture-name",
+      "public": true,
+      "team": "fixture-team"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/projects/fixture-project-gid/saveAsTemplate",
+    "body": {
+      "data": {
+        "name": "fixture-name",
+        "public": true,
+        "team": "fixture-team"
+      }
+    }
+  }
+}

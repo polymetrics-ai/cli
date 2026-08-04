@@ -1,0 +1,32 @@
+{
+  "record": {
+    "settings": {
+      "shared_views_order": [
+        1
+      ],
+      "admin_center": {
+        "has_admin_center_side_nav_open": true
+      },
+      "agent_home_pinned_views": [
+        1
+      ]
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/users/me/settings",
+    "body": {
+      "settings": {
+        "shared_views_order": [
+          1
+        ],
+        "admin_center": {
+          "has_admin_center_side_nav_open": true
+        },
+        "agent_home_pinned_views": [
+          1
+        ]
+      }
+    }
+  }
+}

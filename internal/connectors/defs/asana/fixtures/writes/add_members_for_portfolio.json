@@ -1,0 +1,17 @@
+{
+  "record": {
+    "portfolio_gid": "fixture-portfolio-gid",
+    "data": {
+      "members": "fixture-members"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/portfolios/fixture-portfolio-gid/addMembers",
+    "body": {
+      "data": {
+        "members": "fixture-members"
+      }
+    }
+  }
+}

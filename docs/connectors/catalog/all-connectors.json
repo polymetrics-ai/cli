@@ -8755,7 +8755,7 @@
   {
     "name": "asana",
     "display_name": "Asana",
-    "description": "Reads implemented Asana project-management streams and safely plans implemented task/project/section/tag reverse-ETL actions. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.",
+    "description": "Reads implemented Asana project-management streams and executes typed, approval-gated reverse-ETL write actions across tasks, projects, sections, tags, stories, goals, portfolios, teams, users, and workspaces. Tracks every official Asana API operation from the pinned OpenAPI source as covered or blocked/planned fixed-target metadata.",
     "integration_type": "api",
     "docs_url": "https://developers.asana.com/reference/rest-api-reference",
     "release_stage": "ga",
@@ -9036,6 +9036,426 @@
         "method": "POST",
         "path": "/tasks/{{ record.task_gid }}/stories",
         "risk": "external mutation; posts a task story/comment visible to task collaborators; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_custom_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/custom_fields",
+        "risk": "external mutation; medium-risk create against POST /custom_fields; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_custom_field",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/custom_fields/{{ record.custom_field_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /custom_fields/{custom_field_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_enum_option_for_custom_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/custom_fields/{{ record.custom_field_gid }}/enum_options",
+        "risk": "external mutation; medium-risk create against POST /custom_fields/{custom_field_gid}/enum_options; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "insert_enum_option_for_custom_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/custom_fields/{{ record.custom_field_gid }}/enum_options/insert",
+        "risk": "external mutation; medium-risk create against POST /custom_fields/{custom_field_gid}/enum_options/insert; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_enum_option",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/enum_options/{{ record.enum_option_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /enum_options/{enum_option_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_graph_export",
+        "kind": "create",
+        "method": "POST",
+        "path": "/exports/graph",
+        "risk": "external mutation; medium-risk create against POST /exports/graph; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_resource_export",
+        "kind": "create",
+        "method": "POST",
+        "path": "/exports/resource",
+        "risk": "external mutation; medium-risk create against POST /exports/resource; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_goal_relationship",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/goal_relationships/{{ record.goal_relationship_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /goal_relationships/{goal_relationship_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_supporting_relationship",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/addSupportingRelationship",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/addSupportingRelationship; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_goal",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/goals/{{ record.goal_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /goals/{goal_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_goal",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals",
+        "risk": "external mutation; medium-risk create against POST /goals; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_goal_metric",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/setMetric",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/setMetric; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_goal_metric",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/setMetricCurrentValue",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/setMetricCurrentValue; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_followers",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/addFollowers",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/addFollowers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_custom_field_setting_for_goal",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/addCustomFieldSetting",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/addCustomFieldSetting; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_ooo_entry",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/ooo_entries/{{ record.ooo_entry_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /ooo_entries/{ooo_entry_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_ooo_entry",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ooo_entries",
+        "risk": "external mutation; medium-risk create against POST /ooo_entries; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "/portfolios",
+        "risk": "external mutation; medium-risk create against POST /portfolios; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_portfolio",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/portfolios/{{ record.portfolio_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /portfolios/{portfolio_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_item_for_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/addItem",
+        "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addItem; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_custom_field_setting_for_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/addCustomFieldSetting",
+        "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addCustomFieldSetting; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_members_for_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/addMembers",
+        "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addMembers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "duplicate_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "/portfolios/{{ record.portfolio_gid }}/duplicate",
+        "risk": "external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/duplicate; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_project_brief",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/project_briefs/{{ record.project_brief_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /project_briefs/{project_brief_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_project_brief",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/project_briefs",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/project_briefs; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_project_portfolio_setting",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/project_portfolio_settings/{{ record.project_portfolio_setting_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /project_portfolio_settings/{project_portfolio_setting_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_project_status_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/project_statuses",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/project_statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "instantiate_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/project_templates/{{ record.project_template_gid }}/instantiateProject",
+        "risk": "external mutation; medium-risk create against POST /project_templates/{project_template_gid}/instantiateProject; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "duplicate_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/duplicate",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/duplicate; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_project_for_team",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_gid }}/projects",
+        "risk": "external mutation; medium-risk create against POST /teams/{team_gid}/projects; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_project_for_workspace",
+        "kind": "create",
+        "method": "POST",
+        "path": "/workspaces/{{ record.workspace_gid }}/projects",
+        "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/projects; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_custom_field_setting_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/addCustomFieldSetting",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/addCustomFieldSetting; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_members_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/addMembers",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/addMembers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_followers_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/addFollowers",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/addFollowers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "project_save_as_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/saveAsTemplate",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/saveAsTemplate; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "trigger_rule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rule_triggers/{{ record.rule_trigger_gid }}/run",
+        "risk": "external mutation; medium-risk create against POST /rule_triggers/{rule_trigger_gid}/run; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_task_for_section",
+        "kind": "create",
+        "method": "POST",
+        "path": "/sections/{{ record.section_gid }}/addTask",
+        "risk": "external mutation; medium-risk create against POST /sections/{section_gid}/addTask; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "insert_section_for_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/projects/{{ record.project_gid }}/sections/insert",
+        "risk": "external mutation; medium-risk create against POST /projects/{project_gid}/sections/insert; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_status_for_object",
+        "kind": "create",
+        "method": "POST",
+        "path": "/status_updates",
+        "risk": "external mutation; medium-risk create against POST /status_updates; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_story",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/stories/{{ record.story_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /stories/{story_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_story_for_goal",
+        "kind": "create",
+        "method": "POST",
+        "path": "/goals/{{ record.goal_gid }}/stories",
+        "risk": "external mutation; medium-risk create against POST /goals/{goal_gid}/stories; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_tag_for_workspace",
+        "kind": "create",
+        "method": "POST",
+        "path": "/workspaces/{{ record.workspace_gid }}/tags",
+        "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/tags; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "instantiate_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/task_templates/{{ record.task_template_gid }}/instantiateTask",
+        "risk": "external mutation; medium-risk create against POST /task_templates/{task_template_gid}/instantiateTask; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "duplicate_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/duplicate",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/duplicate; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_subtask_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/subtasks",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/subtasks; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "set_parent_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/setParent",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/setParent; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_dependencies_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/addDependencies",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addDependencies; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_dependents_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/addDependents",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addDependents; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_project_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/addProject",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addProject; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_tag_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/addTag",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addTag; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_followers_for_task",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/addFollowers",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/addFollowers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_team",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams",
+        "risk": "external mutation; medium-risk create against POST /teams; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_team",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/teams/{{ record.team_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /teams/{team_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_user_for_team",
+        "kind": "create",
+        "method": "POST",
+        "path": "/teams/{{ record.team_gid }}/addUser",
+        "risk": "external mutation; medium-risk create against POST /teams/{team_gid}/addUser; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_time_tracking_entry",
+        "kind": "create",
+        "method": "POST",
+        "path": "/tasks/{{ record.task_gid }}/time_tracking_entries",
+        "risk": "external mutation; medium-risk create against POST /tasks/{task_gid}/time_tracking_entries; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_time_tracking_entry",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/time_tracking_entries/{{ record.time_tracking_entry_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /time_tracking_entries/{time_tracking_entry_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_user",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/users/{{ record.user_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /users/{user_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_user_for_workspace",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/workspaces/{{ record.workspace_gid }}/users/{{ record.user_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /workspaces/{workspace_gid}/users/{user_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_workspace",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/workspaces/{{ record.workspace_gid }}",
+        "risk": "external mutation; medium-risk update against PUT /workspaces/{workspace_gid}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "add_user_for_workspace",
+        "kind": "create",
+        "method": "POST",
+        "path": "/workspaces/{{ record.workspace_gid }}/addUser",
+        "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/addUser; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       }
     ],
     "risk": {
@@ -160918,6 +161338,405 @@
         "path": "/api/v2/ticket_fields/{{ record.id }}",
         "risk": "deletes a Zendesk ticket field record; destructive external mutation requiring approval",
         "confirm": "destructive"
+      },
+      {
+        "name": "update_account_email_settings",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/account/email_settings",
+        "risk": "external mutation; high-risk update against PUT /api/v2/account/email_settings; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_approval_request",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/approval_requests",
+        "risk": "external mutation; high-risk create against POST /api/v2/approval_requests; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_attachment",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/attachments/{{ record.attachment_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/attachments/{attachment_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_bookmark",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/bookmarks",
+        "risk": "external mutation; medium-risk create against POST /api/v2/bookmarks; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_brand",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/brands",
+        "risk": "external mutation; high-risk create against POST /api/v2/brands; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_brand",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/brands/{{ record.brand_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/brands/{brand_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_ticket_or_voicemail_ticket",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/channels/voice/tickets",
+        "risk": "external mutation; medium-risk create against POST /api/v2/channels/voice/tickets; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_custom_object",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_access_rule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/access_rules",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/access_rules; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_access_rule",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/access_rules/{{ record.id }}",
+        "risk": "external mutation; high-risk update against PATCH /api/v2/custom_objects/{custom_object_key}/access_rules/{id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_custom_object_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/fields",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/fields; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "custom_object_record_bulk_jobs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/jobs",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/jobs; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_custom_object_record",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/records; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "upsert_custom_object_record_by_external_id_or_name",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records",
+        "risk": "external mutation; high-risk update against PATCH /api/v2/custom_objects/{custom_object_key}/records; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_custom_object_record_attachment",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments/{{ record.id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_object_trigger",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/triggers; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_object_trigger",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/{{ record.trigger_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_many_object_triggers",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/triggers/update_many",
+        "risk": "external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/triggers/update_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "bulk_update_default_custom_status",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/custom_status/default",
+        "risk": "external mutation; high-risk update against PUT /api/v2/custom_status/default; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_custom_status",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_statuses",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_custom_status",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/custom_statuses/{{ record.custom_status_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/custom_statuses/{custom_status_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_ticket_form_statuses_for_custom_status",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/custom_statuses/{{ record.custom_status_id }}/ticket_form_statuses",
+        "risk": "external mutation; high-risk create against POST /api/v2/custom_statuses/{custom_status_id}/ticket_form_statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_deletion_schedule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/deletion_schedules",
+        "risk": "external mutation; high-risk create against POST /api/v2/deletion_schedules; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_deletion_schedule",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/deletion_schedules/{{ record.deletion_schedule_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/deletion_schedules/{deletion_schedule_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_group_membership",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/group_memberships",
+        "risk": "external mutation; high-risk create against POST /api/v2/group_memberships; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "group_membership_bulk_create",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/group_memberships/create_many",
+        "risk": "external mutation; high-risk create against POST /api/v2/group_memberships/create_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "ticket_import",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/imports/tickets",
+        "risk": "external mutation; high-risk create against POST /api/v2/imports/tickets; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "ticket_bulk_import",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/imports/tickets/create_many",
+        "risk": "external mutation; high-risk create against POST /api/v2/imports/tickets/create_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_itam_asset_type",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/asset_types",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/asset_types; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_itam_asset_type_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/asset_types/{asset_type_id}/fields; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_itam_asset",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/assets",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/assets; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "itam_asset_bulk_jobs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/assets/jobs",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/assets/jobs; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_itam_location",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/locations",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/locations; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_itam_status",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/it_asset_management/statuses",
+        "risk": "external mutation; high-risk create against POST /api/v2/it_asset_management/statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_itam_status",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v2/it_asset_management/statuses/{{ record.status_id }}",
+        "risk": "external mutation; high-risk update against PATCH /api/v2/it_asset_management/statuses/{status_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_many_macros",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/macros/update_many",
+        "risk": "external mutation; high-risk update against PUT /api/v2/macros/update_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_organization_subscription",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/organization_subscriptions",
+        "risk": "external mutation; high-risk create against POST /api/v2/organization_subscriptions; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_saved_search",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/saved_searches",
+        "risk": "external mutation; medium-risk create against POST /api/v2/saved_searches; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_saved_search",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/saved_searches/{{ record.id }}",
+        "risk": "external mutation; medium-risk update against PUT /api/v2/saved_searches/{id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "bulk_recover_suspended_tickets",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/suspended_tickets/bulk_recover",
+        "risk": "external mutation; high-risk update against PUT /api/v2/suspended_tickets/bulk_recover; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_task_list_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/task_list_templates",
+        "risk": "external mutation; high-risk create against POST /api/v2/task_list_templates; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_task_list_template",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/task_list_templates/{{ record.task_list_template_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/task_list_templates/{task_list_template_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_ticket_content_pin",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/ticket_content_pins",
+        "risk": "external mutation; high-risk create against POST /api/v2/ticket_content_pins; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_ticket_form_statuses",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses",
+        "risk": "external mutation; high-risk create against POST /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_ticket_form_statuses",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses",
+        "risk": "external mutation; high-risk update against PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_ticket_form_status_by_id",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses/{{ record.ticket_form_status_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_task_list",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/tickets/{{ record.ticket_id }}/task_lists",
+        "risk": "external mutation; medium-risk create against POST /api/v2/tickets/{ticket_id}/task_lists; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "tickets_create_many",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/tickets/create_many",
+        "risk": "external mutation; high-risk create against POST /api/v2/tickets/create_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_trigger_category",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/trigger_categories",
+        "risk": "external mutation; high-risk create against POST /api/v2/trigger_categories; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_trigger_category",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v2/trigger_categories/{{ record.trigger_category_id }}",
+        "risk": "external mutation; high-risk update against PATCH /api/v2/trigger_categories/{trigger_category_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "batch_operate_trigger_categories",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/trigger_categories/jobs",
+        "risk": "external mutation; high-risk create against POST /api/v2/trigger_categories/jobs; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_many_triggers",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/triggers/update_many",
+        "risk": "external mutation; high-risk update against PUT /api/v2/triggers/update_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_user_group_membership",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/users/{{ record.user_id }}/group_memberships",
+        "risk": "external mutation; high-risk create against POST /api/v2/users/{user_id}/group_memberships; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_current_user_settings",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/users/me/settings",
+        "risk": "external mutation; high-risk update against PUT /api/v2/users/me/settings; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "create_workspace",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/workspaces",
+        "risk": "external mutation; high-risk create against POST /api/v2/workspaces; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_workspace",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/workspaces/{{ record.workspace_id }}",
+        "risk": "external mutation; high-risk update against PUT /api/v2/workspaces/{workspace_id}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "reorder_workspaces",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v2/workspaces/reorder",
+        "risk": "external mutation; high-risk update against PUT /api/v2/workspaces/reorder; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       }
     ],
     "risk": {
