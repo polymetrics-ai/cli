@@ -174,6 +174,34 @@ func TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage(t *testi
 	}
 }
 
+func TestCheckSurfaceComplete_POSTDirectReadDoesNotRequireWriteCapability(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true, Write: false},
+		},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "POST",
+				Path:      "/freeBusy",
+				CoveredBy: &engine.SurfaceCoverage{DirectRead: "freebusy query"},
+			}},
+		},
+		CLISurface: &engine.CLISurface{
+			Commands: []engine.CLICommand{{
+				Path:         "freebusy query",
+				Intent:       "direct_read",
+				Availability: "implemented",
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete rejected POST direct read with write disabled: %v", err)
+	}
+}
+
 // sanity: confirm the invalid corpus directories actually exist on disk
 // under this package (own corpus, not shared with cmd/connectorgen).
 func TestInvalidCorpus_DirsExist(t *testing.T) {
