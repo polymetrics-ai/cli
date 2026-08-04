@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "sort": "coverage_gap_count_ascending_then_connector",
   "totals": {
     "connector_count": 550,
@@ -48,18 +48,43 @@
     "measurement_scope": "Every operations.json REST body_schema recursively inspected through properties, items, allOf, anyOf, and oneOf before local reference resolution.",
     "enforcement": "rejected_until_every_object_node_declares_additionalProperties_false"
   },
+  "request_field_path_format": {
+    "format": "escaped_json_pointer",
+    "namespaces": ["body", "path", "query"],
+    "array_element_token": "0",
+    "escaping": "RFC 6901 tokens: ~ is ~0 and / is ~1",
+    "collision_example": {
+      "literal_property_a_dot_b": "/body/a.b",
+      "nested_property_a_then_b": "/body/a/b"
+    }
+  },
   "write_hook_coverage": {
-    "hook_handled_write_action_count": 8,
+    "hook_handled_write_action_count": 106,
     "enforcement": "request_contract_claims_rejected_until_effective_requests_are_modeled",
-    "actions": [
-      "github/close_issue",
-      "github/reopen_issue",
-      "github/create_pull_request",
-      "github/update_pull_request",
-      "github/close_pull_request",
-      "github/reopen_pull_request",
-      "github/codespaces_secrets_secret_name",
-      "github/codespaces_secrets_secret_name3"
+    "ownership_source": "effective_runtime_dispatch",
+    "recurring_failure_pattern": "declarative_marker_execution_drift",
+    "previous_optional_hook_metadata_count": 8,
+    "dispatch_groups": [
+      {
+        "connector": "ashby",
+        "action_count": 98,
+        "ownership": "native_connector_all_write_actions"
+      },
+      {
+        "connector": "github",
+        "action_count": 8,
+        "ownership": "registered_hook_dispatch_selector",
+        "actions": [
+          "close_issue",
+          "close_pull_request",
+          "reopen_issue",
+          "reopen_pull_request",
+          "create_pull_request",
+          "update_pull_request",
+          "create_label",
+          "update_label"
+        ]
+      }
     ]
   },
   "cli_schema_composition": {

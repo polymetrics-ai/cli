@@ -682,11 +682,12 @@ func TestBundleLoadParsesOperations(t *testing.T) {
 					"source_tier": 3,
 					"source_url": "https://example.invalid/widgets#get",
 					"source_location": "Get widget request",
-					"fields": [{"path":"path.id","source_url":"https://example.invalid/widgets#get","source_location":"path parameter id"}]
+					"fields": [{"path":"/path/id","source_url":"https://example.invalid/widgets#get","source_location":"path parameter id"}]
 				},
 				"rest": {
 					"method": "GET",
-					"path": "/widgets/{id}"
+					"path": "/widgets/{id}",
+					"body": "none"
 				}
 			}
 		]
@@ -739,7 +740,7 @@ func TestBundleLoadParsesRequestContractAndNoBody(t *testing.T) {
 					"source_location": "Refresh widget request",
 					"fields": [
 						{
-							"path": "path.id",
+							"path": "/path/id",
 							"source_url": "https://example.invalid/widgets#refresh",
 							"source_location": "Refresh widget path parameter id"
 						}
@@ -838,13 +839,13 @@ func TestBundleLoadRequiresRequiredQueryCitations(t *testing.T) {
 			}
 		}]
 	}`), "acme")
-	if err == nil || !strings.Contains(err.Error(), `missing citation for "query.email"`) {
+	if err == nil || !strings.Contains(err.Error(), `missing citation for "/query/email"`) {
 		t.Fatalf("Load error = %v, want required_query citation error", err)
 	}
 }
 
 func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
-	const validFieldMap = `"path.id":"path.widget-id","query.notify":"query.notify","body.name":"body.name"`
+	const validFieldMap = `"/path/id":"/path/widget-id","/query/notify":"/query/notify","/body/name":"/body/name"`
 	contract := func(id, writeAction, fieldMap string) string {
 		return fmt.Sprintf(`{
 			"id": %q,
@@ -861,9 +862,9 @@ func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
 				"write_action": %q,
 				"write_field_map": {%s},
 				"fields": [
-					{"path":"path.widget-id","source_url":"https://example.invalid/widgets#create","source_location":"widget-id path parameter"},
-					{"path":"query.notify","source_url":"https://example.invalid/widgets#create","source_location":"notify query parameter"},
-					{"path":"body.name","source_url":"https://example.invalid/widgets#create","source_location":"name body property"}
+					{"path":"/path/widget-id","source_url":"https://example.invalid/widgets#create","source_location":"widget-id path parameter"},
+					{"path":"/query/notify","source_url":"https://example.invalid/widgets#create","source_location":"notify query parameter"},
+					{"path":"/body/name","source_url":"https://example.invalid/widgets#create","source_location":"name body property"}
 				]
 			},
 			"rest": {
@@ -884,10 +885,10 @@ func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
 		{name: "unclaimed", operations: "", want: `writes.json action "create_widget" must be claimed`},
 		{name: "dangling", operations: contract("acme.widgets.create", "missing_widget", validFieldMap), want: `does not name a writes.json action`},
 		{name: "duplicate", operations: contract("acme.widgets.create", "create_widget", validFieldMap) + "," + contract("acme.widgets.create_again", "create_widget", validFieldMap), want: `both claim writes.json action "create_widget"`},
-		{name: "missing path mapping", operations: contract("acme.widgets.create", "create_widget", `"query.notify":"query.notify","body.name":"body.name"`), want: `missing write_field_map entry for "path.id"`},
-		{name: "uncited mapping target", operations: contract("acme.widgets.create", "create_widget", `"path.id":"path.widget-id","query.notify":"query.notify","body.name":"body.unlisted"`), want: `maps "body.name" to uncited request field "body.unlisted"`},
-		{name: "cross namespace mapping", operations: contract("acme.widgets.create", "create_widget", `"path.id":"body.name","query.notify":"query.notify","body.name":"body.name"`), want: `maps "path.id" across namespaces to "body.name"`},
-		{name: "stale mapping", operations: contract("acme.widgets.create", "create_widget", validFieldMap+`,"body.extra":"body.name"`), want: `write_field_map entry "body.extra" does not match a write input`},
+		{name: "missing path mapping", operations: contract("acme.widgets.create", "create_widget", `"/query/notify":"/query/notify","/body/name":"/body/name"`), want: `missing write_field_map entry for "/path/id"`},
+		{name: "uncited mapping target", operations: contract("acme.widgets.create", "create_widget", `"/path/id":"/path/widget-id","/query/notify":"/query/notify","/body/name":"/body/unlisted"`), want: `maps "/body/name" to uncited request field "/body/unlisted"`},
+		{name: "cross namespace mapping", operations: contract("acme.widgets.create", "create_widget", `"/path/id":"/body/name","/query/notify":"/query/notify","/body/name":"/body/name"`), want: `maps "/path/id" across namespaces to "/body/name"`},
+		{name: "stale mapping", operations: contract("acme.widgets.create", "create_widget", validFieldMap+`,"/body/extra":"/body/name"`), want: `write_field_map entry "/body/extra" does not match a write input`},
 		{name: "undeclared path input", operations: contract("acme.widgets.create", "create_widget", validFieldMap), want: `path template record field "id" is missing from path_fields`, pathFields: `[]`},
 	}
 	for _, tt := range tests {
@@ -921,8 +922,8 @@ func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
 				if got := bundle.Operations[0].RequestContract.WriteAction; got != "create_widget" {
 					t.Fatalf("write_action = %q, want create_widget", got)
 				}
-				if got := bundle.Operations[0].RequestContract.WriteFieldMap["path.id"]; got != "path.widget-id" {
-					t.Fatalf("write_field_map[path.id] = %q, want path.widget-id", got)
+				if got := bundle.Operations[0].RequestContract.WriteFieldMap["/path/id"]; got != "/path/widget-id" {
+					t.Fatalf("write_field_map[/path/id] = %q, want /path/widget-id", got)
 				}
 				return
 			}
@@ -948,9 +949,9 @@ func TestBundleLoadResolvesRequestBodySchemaReferencesAndComposition(t *testing.
 				"source_url": "https://example.invalid/openapi.json",
 				"source_location": "paths./widgets.post.requestBody",
 				"fields": [
-					{"path":"body.name","source_url":"https://example.invalid/openapi.json","source_location":"Widget.properties.name"},
-					{"path":"body.metadata","source_url":"https://example.invalid/openapi.json","source_location":"Widget.properties.metadata"},
-					{"path":"body.metadata.label","source_url":"https://example.invalid/openapi.json","source_location":"Metadata.properties.label"}
+					{"path":"/body/name","source_url":"https://example.invalid/openapi.json","source_location":"Widget.properties.name"},
+					{"path":"/body/metadata","source_url":"https://example.invalid/openapi.json","source_location":"Widget.properties.metadata"},
+					{"path":"/body/metadata/label","source_url":"https://example.invalid/openapi.json","source_location":"Metadata.properties.label"}
 				]
 			},
 			"rest": {
@@ -1037,7 +1038,7 @@ func TestBundleLoadValidatesFullRESTPathParameterGrammar(t *testing.T) {
 				"source_tier":3,
 				"source_url":"https://example.invalid/subscriptions#get",
 				"source_location":"Get subscription",
-				"fields":[{"path":"path.subscription-id","source_url":"https://example.invalid/subscriptions#get","source_location":"subscription-id path parameter"}]
+				"fields":[{"path":"/path/subscription-id","source_url":"https://example.invalid/subscriptions#get","source_location":"subscription-id path parameter"}]
 			},
 			"rest":{"method":"GET","path":"/subscriptions/{subscription-id}","max_bytes":1024,"body":"none"}
 		}]
@@ -1062,11 +1063,11 @@ func TestRequestContractFieldsModelRootArrays(t *testing.T) {
 			"additionalProperties":false,
 			"properties":{"name":{"type":"string"}}
 		}
-	}`), "body", fields)
+	}`), "/body", fields)
 	if err != nil {
 		t.Fatalf("collectRequestSchemaFields: %v", err)
 	}
-	want := map[string]bool{"body[]": true, "body[].name": true}
+	want := map[string]bool{"/body/0": true, "/body/0/name": true}
 	if !reflect.DeepEqual(fields, want) {
 		t.Fatalf("fields = %v, want %v", fields, want)
 	}
@@ -1079,8 +1080,28 @@ func TestRequestContractFieldsModelRootArrays(t *testing.T) {
 	if err != nil {
 		t.Fatalf("declaredWriteRequestFields: %v", err)
 	}
-	if !reflect.DeepEqual(writeFields, []string{"body[]", "body[].name"}) {
+	if !reflect.DeepEqual(writeFields, []string{"/body/0", "/body/0/name"}) {
 		t.Fatalf("write fields = %v, want root array fields", writeFields)
+	}
+
+	collisionFields := map[string]bool{}
+	err = collectRequestSchemaFields(json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{
+			"a.b":{"type":"string"},
+			"a":{"type":"object","additionalProperties":false,"properties":{"b":{"type":"string"}}},
+			"x/y":{"type":"string"},
+			"x~y":{"type":"string"}
+		}
+	}`), "/body", collisionFields)
+	if err != nil {
+		t.Fatalf("collectRequestSchemaFields collision-safe paths: %v", err)
+	}
+	for _, path := range []string{"/body/a.b", "/body/a", "/body/a/b", "/body/x~1y", "/body/x~0y"} {
+		if !collisionFields[path] {
+			t.Errorf("collision-safe fields missing %q: %v", path, collisionFields)
+		}
 	}
 }
 
@@ -1094,12 +1115,17 @@ func TestDeclaredWriteRequestFieldsCoverWireMechanisms(t *testing.T) {
 		{
 			name:   "graphql variables",
 			action: WriteAction{BodyType: "graphql", GraphQL: &GraphQLRequestSpec{Variables: map[string]any{"widget": map[string]any{"name": "{{ record.name }}"}}}},
-			want:   []string{"body.variables.widget", "body.variables.widget.name"},
+			want:   []string{"/body/variables/widget", "/body/variables/widget/name"},
+		},
+		{
+			name:   "graphql template descriptor is a leaf",
+			action: WriteAction{BodyType: "graphql", GraphQL: &GraphQLRequestSpec{Variables: map[string]any{"id": map[string]any{"template": "{{ record.id }}", "type": "string", "omit_when_empty": true}}}},
+			want:   []string{"/body/variables/id"},
 		},
 		{
 			name:   "multipart parts",
 			action: WriteAction{BodyType: "multipart", Multipart: &MultipartSpec{Parts: []MultipartPartSpec{{Name: "metadata", Field: "metadata", Type: "field"}, {Name: "file", Field: "path", Type: "file"}}}},
-			want:   []string{"body.file", "body.metadata"},
+			want:   []string{"/body/file", "/body/metadata"},
 		},
 		{
 			name: "base64 upload omits source",
@@ -1108,7 +1134,7 @@ func TestDeclaredWriteRequestFieldsCoverWireMechanisms(t *testing.T) {
 				RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"path":{"type":"string"},"label":{"type":"string"}}}`),
 				Base64Upload: &Base64UploadSpec{SourceField: "path", ContentField: "content"},
 			},
-			want: []string{"body.content", "body.label"},
+			want: []string{"/body/content", "/body/label"},
 		},
 		{
 			name: "dynamic fields rejected",
@@ -1124,6 +1150,21 @@ func TestDeclaredWriteRequestFieldsCoverWireMechanisms(t *testing.T) {
 				Query:    map[string]QueryParam{"notify": {Template: "true"}},
 			},
 			wantErr: "not transmitted",
+		},
+		{
+			name:    "json array requires array schema",
+			action:  WriteAction{BodyType: "json_array", BodyField: "items", BodySchema: json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}`)},
+			wantErr: "root must be exclusively array",
+		},
+		{
+			name:    "query wire names preserve whitespace",
+			action:  WriteAction{BodyType: "none", Query: map[string]QueryParam{" notify ": {Template: "true"}}},
+			wantErr: "surrounding whitespace",
+		},
+		{
+			name:    "multipart wire names preserve whitespace",
+			action:  WriteAction{BodyType: "multipart", Multipart: &MultipartSpec{Parts: []MultipartPartSpec{{Name: " file ", Field: "path", Type: "file"}}}},
+			wantErr: "surrounding whitespace",
 		},
 	}
 	for _, tt := range tests {
@@ -1145,9 +1186,41 @@ func TestDeclaredWriteRequestFieldsCoverWireMechanisms(t *testing.T) {
 	}
 }
 
-func TestBundleLoadRejectsWriteHookRequestContractClaims(t *testing.T) {
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+func TestValidateWriteBodiesRejectsWhitespaceChangingWireNames(t *testing.T) {
+	tests := []struct {
+		name   string
+		action WriteAction
+	}{
+		{
+			name:   "query",
+			action: WriteAction{Name: "notify", Query: map[string]QueryParam{" notify ": {Template: "true"}}},
+		},
+		{
+			name: "multipart",
+			action: WriteAction{
+				Name:      "upload",
+				BodyType:  "multipart",
+				Multipart: &MultipartSpec{Parts: []MultipartPartSpec{{Name: " file ", Field: "path", Type: "file"}}},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := validateWriteBodies([]WriteAction{tt.action}); err == nil || !strings.Contains(err.Error(), "surrounding whitespace") {
+				t.Fatalf("validateWriteBodies error = %v, want surrounding whitespace rejection", err)
+			}
+		})
+	}
+}
+
+type testWriteDispatchOwner map[string]bool
+
+func (owner testWriteDispatchOwner) OwnsWriteAction(action string) bool { return owner[action] }
+
+func TestBundleLoadRejectsEffectiveWriteDispatchRequestContractClaims(t *testing.T) {
+	buildFS := func(hookMetadata string) fstest.MapFS {
+		fsys := fullValidBundleFS("acme")
+		fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
 		"actions":[{
 			"name":"create_widget",
 			"kind":"create",
@@ -1155,11 +1228,10 @@ func TestBundleLoadRejectsWriteHookRequestContractClaims(t *testing.T) {
 			"path":"/widgets",
 			"body_type":"none",
 			"record_schema":{"type":"object","additionalProperties":false,"properties":{}},
-			"risk":"creates a widget",
-			"hook":"acme"
+			"risk":"creates a widget"%s
 		}]
-	}`)}
-	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+	}`, hookMetadata))}
+		fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
 		"operations":[{
 			"id":"acme.widgets.create",
 			"kind":"rest_write",
@@ -1172,9 +1244,20 @@ func TestBundleLoadRejectsWriteHookRequestContractClaims(t *testing.T) {
 			"rest":{"method":"POST","path":"/widgets","body":"none"}
 		}]
 	}`)}
-	_, err := Load(fsys, "acme")
-	if err == nil || !strings.Contains(err.Error(), "uses write hook") {
-		t.Fatalf("Load error = %v, want write hook claim rejection", err)
+		return fsys
+	}
+
+	if _, err := Load(buildFS(`,"hook":"acme"`), "acme"); err != nil {
+		t.Fatalf("Load marker-only write action: %v", err)
+	}
+
+	RegisterWriteDispatchOwner("acme", func() WriteDispatchOwner {
+		return testWriteDispatchOwner{"create_widget": true}
+	})
+	t.Cleanup(func() { unregisterWriteDispatchOwner("acme") })
+	_, err := Load(buildFS(""), "acme")
+	if err == nil || !strings.Contains(err.Error(), "effective write dispatch") {
+		t.Fatalf("Load error = %v, want effective write-dispatch claim rejection", err)
 	}
 }
 
@@ -1191,17 +1274,17 @@ func TestBundleLoadRejectsInvalidRequestContracts(t *testing.T) {
 		},
 		{
 			name:       "field missing citation",
-			operations: `{"operations":[{"id":"acme.widgets.update","kind":"rest_write","summary":"Update","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":2,"source_url":"https://example.invalid/openapi.json","source_location":"update description","fields":[{"path":"body.name","source_url":"https://example.invalid/openapi.json","source_location":""}]},"rest":{"method":"PATCH","path":"/widgets"}}]}`,
+			operations: `{"operations":[{"id":"acme.widgets.update","kind":"rest_write","summary":"Update","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":2,"source_url":"https://example.invalid/openapi.json","source_location":"update description","fields":[{"path":"/body/name","source_url":"https://example.invalid/openapi.json","source_location":""}]},"rest":{"method":"PATCH","path":"/widgets"}}]}`,
 			want:       "source_location is required",
 		},
 		{
 			name:       "uncited schema field",
 			operations: `{"operations":[{"id":"acme.widgets.update","kind":"rest_write","summary":"Update","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":2,"source_url":"https://example.invalid/openapi.json","source_location":"update description","fields":[]},"rest":{"method":"PATCH","path":"/widgets","body_schema":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}}]}`,
-			want:       `missing citation for "body.name"`,
+			want:       `missing citation for "/body/name"`,
 		},
 		{
 			name:       "no body with body field",
-			operations: `{"operations":[{"id":"acme.widgets.refresh","kind":"rest_write","summary":"Refresh","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":3,"source_url":"https://example.invalid/widgets#refresh","source_location":"Refresh request","fields":[{"path":"body.payload","source_url":"https://example.invalid/widgets#refresh","source_location":"Refresh payload"}]},"rest":{"method":"POST","path":"/widgets:refresh","body":"none"}}]}`,
+			operations: `{"operations":[{"id":"acme.widgets.refresh","kind":"rest_write","summary":"Refresh","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":3,"source_url":"https://example.invalid/widgets#refresh","source_location":"Refresh request","fields":[{"path":"/body/payload","source_url":"https://example.invalid/widgets#refresh","source_location":"Refresh payload"}]},"rest":{"method":"POST","path":"/widgets:refresh","body":"none"}}]}`,
 			want:       "conflicts with rest body none",
 		},
 		{
@@ -2626,8 +2709,8 @@ func TestBundleLoadAcceptsRequiredQueryGroups(t *testing.T) {
 				"source_url": "https://example.invalid/users#list",
 				"source_location": "List users request",
 				"fields": [
-					{"path":"query.email","source_url":"https://example.invalid/users#list","source_location":"query parameter email"},
-					{"path":"query.id","source_url":"https://example.invalid/users#list","source_location":"query parameter id"}
+					{"path":"/query/email","source_url":"https://example.invalid/users#list","source_location":"query parameter email"},
+					{"path":"/query/id","source_url":"https://example.invalid/users#list","source_location":"query parameter id"}
 				]
 			},
 			"rest": {

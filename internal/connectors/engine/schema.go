@@ -149,12 +149,15 @@ func (s *Schema) MappingPath(path string) (SchemaPathInfo, error) {
 		return SchemaPathInfo{}, fmt.Errorf("schema is nil")
 	}
 	if strings.TrimSpace(path) == "" {
-		return s.node.mappingPathInfo(), nil
+		return s.node.mappingPathInfo()
 	}
 	current := s.node
 	for _, part := range strings.Split(path, ".") {
 		if part == "" {
 			return SchemaPathInfo{}, fmt.Errorf("empty path segment")
+		}
+		if err := current.mappingConstraintError(path); err != nil {
+			return SchemaPathInfo{}, err
 		}
 		if current.mappingIsArray() {
 			if err := validateMappingArrayIndex(part); err != nil {
@@ -172,10 +175,13 @@ func (s *Schema) MappingPath(path string) (SchemaPathInfo, error) {
 		}
 		current = child
 	}
-	return current.mappingPathInfo(), nil
+	return current.mappingPathInfo()
 }
 
 func (n *schemaNode) rejectAlternativeMappings(path string) error {
+	if err := n.mappingConstraintError(path); err != nil {
+		return err
+	}
 	if len(n.anyOf) > 0 {
 		return fmt.Errorf("schema %s uses anyOf alternatives that required CLI flags cannot express", displayMappingPath(path))
 	}
@@ -268,9 +274,13 @@ func (n *schemaNode) mappingProperty(name string) (*schemaNode, bool) {
 	return &schemaNode{allOf: matches, additionalProperties: true}, true
 }
 
-func (n *schemaNode) mappingPathInfo() SchemaPathInfo {
-	types := n.mappingTypes()
-	if len(types) == 0 {
+func (n *schemaNode) mappingPathInfo() (SchemaPathInfo, error) {
+	typeSet := n.mappingTypeSet()
+	if typeSet.unsatisfiable {
+		return SchemaPathInfo{}, fmt.Errorf("schema has unsatisfiable allOf type constraints")
+	}
+	types := typeSet.types
+	if !typeSet.constrained {
 		switch {
 		case n.mappingIsArray():
 			types = []string{"array"}
@@ -280,17 +290,28 @@ func (n *schemaNode) mappingPathInfo() SchemaPathInfo {
 			types = []string{"any"}
 		}
 	}
-	return SchemaPathInfo{Types: types, IsObject: containsSchemaType(types, "object") || n.mappingHasProperties(), IsArray: containsSchemaType(types, "array") || n.items != nil}
+	return SchemaPathInfo{Types: types, IsObject: containsSchemaType(types, "object") || n.mappingHasProperties(), IsArray: containsSchemaType(types, "array") || n.items != nil}, nil
 }
 
-func (n *schemaNode) mappingTypes() []string {
+type schemaMappingTypeSet struct {
+	types         []string
+	constrained   bool
+	unsatisfiable bool
+}
+
+func (n *schemaNode) mappingTypeSet() schemaMappingTypeSet {
 	var constrained map[string]bool
-	apply := func(types []string) {
-		if len(types) == 0 {
+	unsatisfiable := false
+	apply := func(typeSet schemaMappingTypeSet) {
+		if typeSet.unsatisfiable {
+			unsatisfiable = true
 			return
 		}
-		candidate := make(map[string]bool, len(types))
-		for _, typ := range types {
+		if !typeSet.constrained {
+			return
+		}
+		candidate := make(map[string]bool, len(typeSet.types))
+		for _, typ := range typeSet.types {
 			candidate[typ] = true
 		}
 		if constrained == nil {
@@ -302,17 +323,27 @@ func (n *schemaNode) mappingTypes() []string {
 				delete(constrained, typ)
 			}
 		}
+		if len(constrained) == 0 {
+			unsatisfiable = true
+		}
 	}
-	apply(n.types)
+	apply(schemaMappingTypeSet{types: n.types, constrained: len(n.types) > 0})
 	for _, branch := range n.allOf {
-		apply(branch.mappingTypes())
+		apply(branch.mappingTypeSet())
 	}
 	out := make([]string, 0, len(constrained))
 	for typ := range constrained {
 		out = append(out, typ)
 	}
 	sort.Strings(out)
-	return out
+	return schemaMappingTypeSet{types: out, constrained: constrained != nil, unsatisfiable: unsatisfiable}
+}
+
+func (n *schemaNode) mappingConstraintError(path string) error {
+	if !n.mappingTypeSet().unsatisfiable {
+		return nil
+	}
+	return fmt.Errorf("schema %s has unsatisfiable allOf type constraints", displayMappingPath(path))
 }
 
 func (n *schemaNode) mappingHasProperties() bool {
@@ -328,11 +359,48 @@ func (n *schemaNode) mappingHasProperties() bool {
 }
 
 func (n *schemaNode) mappingIsObject() bool {
-	return containsSchemaType(n.mappingTypes(), "object") || n.mappingHasProperties()
+	return containsSchemaType(n.mappingTypeSet().types, "object") || n.mappingHasProperties()
 }
 
 func (n *schemaNode) mappingIsArray() bool {
-	return containsSchemaType(n.mappingTypes(), "array") || n.items != nil
+	return containsSchemaType(n.mappingTypeSet().types, "array") || n.items != nil
+}
+
+func (s *Schema) canonicalMappingTokens(path string) ([]string, error) {
+	if s == nil || s.node == nil {
+		return nil, fmt.Errorf("schema is nil")
+	}
+	current := s.node
+	tokens := make([]string, 0, strings.Count(path, ".")+1)
+	for _, part := range strings.Split(path, ".") {
+		if part == "" {
+			return nil, fmt.Errorf("empty path segment")
+		}
+		if err := current.mappingConstraintError(path); err != nil {
+			return nil, err
+		}
+		if current.mappingIsArray() {
+			if err := validateMappingArrayIndex(part); err != nil {
+				return nil, err
+			}
+			if current.items == nil {
+				return nil, fmt.Errorf("array segment %q has no item schema", part)
+			}
+			tokens = append(tokens, "0")
+			current = current.items
+			continue
+		}
+		child, ok := current.mappingProperty(part)
+		if !ok {
+			return nil, fmt.Errorf("record field %q is not declared", part)
+		}
+		tokens = append(tokens, part)
+		current = child
+	}
+	if err := current.mappingConstraintError(path); err != nil {
+		return nil, err
+	}
+	return tokens, nil
 }
 
 func containsSchemaType(types []string, target string) bool {

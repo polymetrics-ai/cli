@@ -15,6 +15,7 @@ import (
 	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors/boundary"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // --- boundary: scans connector definition boundary --------------------------
@@ -622,8 +623,8 @@ func TestValidate_CLISurfaceNoBodyRequestContractRequiresFlags(t *testing.T) {
 					"source_url": "https://example.invalid/widgets#refresh",
 					"source_location": "Refresh widget request",
 					"fields": [
-						{"path":"path.id","source_url":"https://example.invalid/widgets#refresh","source_location":"path parameter id"},
-						{"path":"query.force","source_url":"https://example.invalid/widgets#refresh","source_location":"query parameter force"}
+						{"path":"/path/id","source_url":"https://example.invalid/widgets#refresh","source_location":"path parameter id"},
+						{"path":"/query/force","source_url":"https://example.invalid/widgets#refresh","source_location":"query parameter force"}
 					]
 				},
 				"rest": {
@@ -647,8 +648,8 @@ func TestValidate_CLISurfaceNoBodyRequestContractRequiresFlags(t *testing.T) {
 					"source_url": "https://example.invalid/widgets#create",
 					"source_location": "Create widget request",
 					"write_action": "create_widget",
-					"write_field_map": {"body.name":"body.name"},
-					"fields": [{"path":"body.name","source_url":"https://example.invalid/widgets#create","source_location":"name request property"}]
+					"write_field_map": {"/body/name":"/body/name"},
+					"fields": [{"path":"/body/name","source_url":"https://example.invalid/widgets#create","source_location":"name request property"}]
 				},
 				"rest": {"method":"POST","path":"/widgets","body_schema":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}
 			}
@@ -752,6 +753,41 @@ func TestValidate_CLISurfaceRequestContractFlagsApplyToAllOperations(t *testing.
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
+func TestCLISurfaceRequestContractCanonicalizesArrayIndices(t *testing.T) {
+	schema := json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["items"],
+		"properties":{
+			"items":{
+				"type":"array",
+				"items":{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}
+			}
+		}
+	}`)
+	op := engine.OperationSpec{
+		ID: "acme.widgets.preview",
+		RequestContract: &engine.RequestContractSpec{
+			Fields: []engine.RequestContractField{
+				{Path: "/body/items"},
+				{Path: "/body/items/0"},
+				{Path: "/body/items/0/name"},
+			},
+		},
+		REST: &engine.RESTOperationSpec{BodySchema: schema},
+	}
+	cmd := engine.CLICommand{Path: "widget preview", Flags: []engine.CLIFlag{{Name: "name", MapsTo: "body.items.0.name", Required: true}}}
+	if findings := checkCLISurfaceRequestContractFlags(engine.Bundle{Name: "acme"}, 0, cmd, op); len(findings) != 0 {
+		t.Fatalf("array-index citation findings = %+v, want none", findings)
+	}
+	if findings := checkCLISurfaceOperationBodyMappings(engine.Bundle{Name: "acme"}, 0, cmd, op); len(findings) != 0 {
+		t.Fatalf("array-index required-mapping findings = %+v, want none", findings)
+	}
+	if !operationStaticBodyProvidesPath(map[string]any{"items": []any{map[string]any{"name": "fixed"}}}, "items.0.name") {
+		t.Fatal("operationStaticBodyProvidesPath did not traverse a static array")
+	}
+}
+
 func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T) {
 	cliSurface := `{
 		"tagline": "Work with CLI Surface from the command line.",
@@ -784,7 +820,7 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T
 					"source_tier": 3,
 					"source_url": "https://example.invalid/widgets#preview",
 					"source_location": "Preview widget request",
-					"fields": [{"path":"body.payload","source_url":"https://example.invalid/widgets#preview","source_location":"request property payload"}]
+					"fields": [{"path":"/body/payload","source_url":"https://example.invalid/widgets#preview","source_location":"request property payload"}]
 				},
 				"rest": {
 					"method": "POST",
@@ -858,7 +894,7 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 					"source_tier": 3,
 					"source_url": "https://example.invalid/widgets#preview",
 					"source_location": "Preview widget request",
-					"fields": [{"path":"body.payload","source_url":"https://example.invalid/widgets#preview","source_location":"request property payload"}]
+					"fields": [{"path":"/body/payload","source_url":"https://example.invalid/widgets#preview","source_location":"request property payload"}]
 				},
 				"rest": {
 					"method": "POST",
@@ -1868,7 +1904,7 @@ func validOperationsJSON() string {
 					"source_tier": 3,
 					"source_url": "https://example.invalid/widgets#get",
 					"source_location": "Get widget request",
-					"fields": [{"path":"path.id","source_url":"https://example.invalid/widgets#get","source_location":"path parameter id"}]
+					"fields": [{"path":"/path/id","source_url":"https://example.invalid/widgets#get","source_location":"path parameter id"}]
 				},
 				"rest": {
 					"method": "GET",
@@ -1896,8 +1932,8 @@ func validWriteEvidenceOperationJSON() string {
 			"source_url": "https://example.invalid/widgets#create",
 			"source_location": "Create widget request",
 			"write_action": "create_widget",
-			"write_field_map": {"body.name":"body.name"},
-			"fields": [{"path":"body.name","source_url":"https://example.invalid/widgets#create","source_location":"name request property"}]
+			"write_field_map": {"/body/name":"/body/name"},
+			"fields": [{"path":"/body/name","source_url":"https://example.invalid/widgets#create","source_location":"name request property"}]
 		},
 		"rest": {"method":"POST","path":"/widgets","body_schema":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}
 	}`

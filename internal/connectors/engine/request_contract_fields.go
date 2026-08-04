@@ -217,7 +217,7 @@ func (c requestSchemaCollector) collect(schema map[string]any, prefix string, fi
 		}
 		sort.Strings(names)
 		for _, name := range names {
-			path := prefix + "." + name
+			path := appendRequestFieldPointer(prefix, name)
 			fields[path] = true
 			found = true
 			child, ok := properties[name].(map[string]any)
@@ -235,7 +235,7 @@ func (c requestSchemaCollector) collect(schema map[string]any, prefix string, fi
 		if !ok {
 			return false, fmt.Errorf("body_schema items must be an object schema")
 		}
-		itemPrefix := prefix + "[]"
+		itemPrefix := appendRequestFieldPointer(prefix, "0")
 		fields[itemPrefix] = true
 		found = true
 		itemFound, err := c.collect(items, itemPrefix, fields, false)
@@ -330,14 +330,16 @@ func declaredWriteRequestFields(action WriteAction) ([]string, error) {
 		return nil, err
 	}
 	for _, name := range pathFields {
-		fields["path."+name] = true
+		fields[requestFieldPointer("path", name)] = true
 	}
 	for name := range action.Query {
-		name = strings.TrimSpace(name)
-		if name == "" {
+		if strings.TrimSpace(name) == "" {
 			return nil, fmt.Errorf("query contains an empty parameter name")
 		}
-		fields["query."+name] = true
+		if name != strings.TrimSpace(name) {
+			return nil, fmt.Errorf("query parameter %q contains surrounding whitespace", name)
+		}
+		fields[requestFieldPointer("query", name)] = true
 	}
 
 	switch bodyTypeOf(action) {
@@ -347,19 +349,22 @@ func declaredWriteRequestFields(action WriteAction) ([]string, error) {
 		}
 	case "graphql":
 		if action.GraphQL != nil {
-			collectRequestValueFields(action.GraphQL.Variables, "body.variables", fields)
+			collectGraphQLRequestFields(action.GraphQL.Variables, requestFieldPointer("body", "variables"), fields)
 		}
 	case "json_array":
-		if len(action.BodySchema) == 0 {
-			return nil, fmt.Errorf("json_array body_schema is required")
+		if err := validateJSONArrayRequestSchema(action.BodySchema); err != nil {
+			return nil, err
 		}
-		if err := collectRequestSchemaFields(action.BodySchema, "body", fields); err != nil {
+		if err := collectRequestSchemaFields(action.BodySchema, "/body", fields); err != nil {
 			return nil, fmt.Errorf("body_schema: %w", err)
 		}
 	case "multipart":
 		if action.Multipart != nil {
 			for _, part := range action.Multipart.Parts {
-				fields["body."+strings.TrimSpace(part.Name)] = true
+				if part.Name != strings.TrimSpace(part.Name) {
+					return nil, fmt.Errorf("multipart part name %q contains surrounding whitespace", part.Name)
+				}
+				fields[requestFieldPointer("body", part.Name)] = true
 			}
 		}
 	case "base64_upload":
@@ -367,8 +372,8 @@ func declaredWriteRequestFields(action WriteAction) ([]string, error) {
 			return nil, err
 		}
 		if action.Base64Upload != nil {
-			deleteRequestFieldPrefix(fields, "body."+action.Base64Upload.SourceField)
-			fields["body."+action.Base64Upload.ContentField] = true
+			deleteRequestFieldPrefix(fields, requestFieldPointer("body", action.Base64Upload.SourceField))
+			fields[requestFieldPointer("body", action.Base64Upload.ContentField)] = true
 		}
 	case "form":
 		formAction := action
@@ -392,6 +397,28 @@ func declaredWriteRequestFields(action WriteAction) ([]string, error) {
 	}
 	sort.Strings(paths)
 	return paths, nil
+}
+
+func validateJSONArrayRequestSchema(raw json.RawMessage) error {
+	if len(raw) == 0 {
+		return fmt.Errorf("json_array body_schema is required")
+	}
+	schema, err := CompileSchema(raw)
+	if err != nil {
+		return fmt.Errorf("body_schema: %w", err)
+	}
+	rootTypes := schema.node.mappingTypeSet()
+	if rootTypes.unsatisfiable {
+		return fmt.Errorf("json_array body_schema root has unsatisfiable allOf type constraints")
+	}
+	if !rootTypes.constrained || len(rootTypes.types) != 1 || rootTypes.types[0] != "array" {
+		got := "unconstrained"
+		if rootTypes.constrained {
+			got = strings.Join(rootTypes.types, ",")
+		}
+		return fmt.Errorf("json_array body_schema root must be exclusively array, got %s", got)
+	}
+	return nil
 }
 
 func declaredWritePathFields(action WriteAction) ([]string, error) {
@@ -452,7 +479,7 @@ func addSelectedWriteBodyFields(fields map[string]bool, action WriteAction, name
 		return nil
 	}
 	declared := map[string]bool{}
-	if err := collectRequestSchemaFields(action.RecordSchema, "body", declared); err != nil {
+	if err := collectRequestSchemaFields(action.RecordSchema, "/body", declared); err != nil {
 		return fmt.Errorf("record_schema: %w", err)
 	}
 	for _, rawName := range names {
@@ -460,10 +487,10 @@ func addSelectedWriteBodyFields(fields map[string]bool, action WriteAction, name
 		if name == "" {
 			continue
 		}
-		prefix := "body." + name
+		prefix := requestFieldPointer("body", name)
 		matched := false
 		for path := range declared {
-			if path == prefix || strings.HasPrefix(path, prefix+".") || strings.HasPrefix(path, prefix+"[]") {
+			if requestFieldPointerWithin(path, prefix) {
 				fields[path] = true
 				matched = true
 			}
@@ -480,19 +507,19 @@ func addWriteJSONBodyFields(fields map[string]bool, action WriteAction) error {
 		return addSelectedWriteBodyFields(fields, action, action.BodyFields)
 	}
 	bodyFields := map[string]bool{}
-	if err := collectRequestSchemaFields(action.RecordSchema, "body", bodyFields); err != nil {
+	if err := collectRequestSchemaFields(action.RecordSchema, "/body", bodyFields); err != nil {
 		return fmt.Errorf("record_schema: %w", err)
 	}
 	excluded := map[string]bool{}
 	for _, field := range action.PathFields {
 		if !strings.Contains(field, ".") {
-			excluded["body."+field] = true
+			excluded[requestFieldPointer("body", field)] = true
 		}
 	}
 	for path := range bodyFields {
 		excludedPath := false
 		for prefix := range excluded {
-			if path == prefix || strings.HasPrefix(path, prefix+".") || strings.HasPrefix(path, prefix+"[]") {
+			if requestFieldPointerWithin(path, prefix) {
 				excludedPath = true
 				break
 			}
@@ -506,8 +533,41 @@ func addWriteJSONBodyFields(fields map[string]bool, action WriteAction) error {
 
 func deleteRequestFieldPrefix(fields map[string]bool, prefix string) {
 	for path := range fields {
-		if path == prefix || strings.HasPrefix(path, prefix+".") || strings.HasPrefix(path, prefix+"[]") {
+		if requestFieldPointerWithin(path, prefix) {
 			delete(fields, path)
+		}
+	}
+}
+
+func requestFieldPointerWithin(path, prefix string) bool {
+	return path == prefix || strings.HasPrefix(path, prefix+"/")
+}
+
+func collectGraphQLRequestFields(values map[string]any, prefix string, fields map[string]bool) {
+	names := make([]string, 0, len(values))
+	for name := range values {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		path := appendRequestFieldPointer(prefix, name)
+		fields[path] = true
+		collectGraphQLRequestField(values[name], path, fields)
+	}
+}
+
+func collectGraphQLRequestField(value any, path string, fields map[string]bool) {
+	switch nested := value.(type) {
+	case map[string]any:
+		if _, descriptor := nested["template"]; descriptor {
+			return
+		}
+		collectGraphQLRequestFields(nested, path, fields)
+	case []any:
+		elementPath := appendRequestFieldPointer(path, "0")
+		fields[elementPath] = true
+		for _, item := range nested {
+			collectGraphQLRequestField(item, elementPath, fields)
 		}
 	}
 }

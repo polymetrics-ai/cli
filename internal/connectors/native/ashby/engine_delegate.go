@@ -17,6 +17,10 @@ var (
 	ashbyBundleErr   error
 )
 
+func init() {
+	engine.RegisterWriteDispatchOwner("ashby", func() engine.WriteDispatchOwner { return ashbyEngineHooks{} })
+}
+
 func ashbyBundle() engine.Bundle {
 	ashbyBundleOnce.Do(func() {
 		ashbyBundleValue, ashbyBundleErr = engine.Load(defs.FS, "ashby")
@@ -57,6 +61,8 @@ func (c Connector) ValidateWrite(ctx context.Context, req connectors.WriteReques
 type ashbyEngineHooks struct{}
 
 func (ashbyEngineHooks) ConnectorName() string { return "ashby" }
+
+func (ashbyEngineHooks) OwnsWriteAction(string) bool { return true }
 
 func (ashbyEngineHooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec connectors.Record, rt *engine.Runtime) (bool, error) {
 	if rt == nil || rt.Requester == nil {

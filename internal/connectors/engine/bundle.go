@@ -1169,7 +1169,7 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	if err != nil {
 		return Bundle{}, err
 	}
-	if err := validateWriteRequestContractLinks(writes, operations); err != nil {
+	if err := validateWriteRequestContractLinks(dirName, writes, operations); err != nil {
 		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
 	}
 
@@ -1424,6 +1424,14 @@ func validateWriteBodies(actions []WriteAction) error {
 		if action.Base64Upload != nil && bodyType != "base64_upload" {
 			return fmt.Errorf("action %d (%q) declares base64_upload but body_type is %q", i, action.Name, bodyType)
 		}
+		for name := range action.Query {
+			if strings.TrimSpace(name) == "" {
+				return fmt.Errorf("action %d (%q) query contains an empty parameter name", i, action.Name)
+			}
+			if name != strings.TrimSpace(name) {
+				return fmt.Errorf("action %d (%q) query parameter %q contains surrounding whitespace", i, action.Name, name)
+			}
+		}
 		switch bodyType {
 		case "graphql":
 			if action.GraphQL == nil {
@@ -1442,8 +1450,8 @@ func validateWriteBodies(actions []WriteAction) error {
 			if strings.TrimSpace(action.BodyField) == "" {
 				return fmt.Errorf("action %d (%q) body_type json_array requires body_field", i, action.Name)
 			}
-			if len(action.BodySchema) == 0 {
-				return fmt.Errorf("action %d (%q) body_type json_array requires body_schema", i, action.Name)
+			if err := validateJSONArrayRequestSchema(action.BodySchema); err != nil {
+				return fmt.Errorf("action %d (%q): %w", i, action.Name, err)
 			}
 		case "base64_upload":
 			if err := validateBase64UploadSpec(i, action); err != nil {
@@ -1456,6 +1464,9 @@ func validateWriteBodies(actions []WriteAction) error {
 			for j, part := range action.Multipart.Parts {
 				if strings.TrimSpace(part.Name) == "" || strings.TrimSpace(part.Field) == "" {
 					return fmt.Errorf("action %d (%q) multipart part %d requires name and field", i, action.Name, j)
+				}
+				if part.Name != strings.TrimSpace(part.Name) {
+					return fmt.Errorf("action %d (%q) multipart part %d name %q contains surrounding whitespace", i, action.Name, j, part.Name)
 				}
 				switch part.Type {
 				case "field", "file":
@@ -2092,21 +2103,6 @@ func validateRequestContract(i int, op OperationSpec) error {
 	return nil
 }
 
-func validRequestContractFieldPath(path string) bool {
-	if path == "" || strings.ContainsAny(path, "\r\n\t") {
-		return false
-	}
-	if path == "body[]" {
-		return true
-	}
-	for _, prefix := range []string{"body.", "body[].", "path.", "query."} {
-		if name, ok := strings.CutPrefix(path, prefix); ok {
-			return strings.TrimSpace(name) != "" && !strings.HasPrefix(name, ".")
-		}
-	}
-	return false
-}
-
 func declaredRequestContractFields(rest *RESTOperationSpec) ([]string, error) {
 	fields := map[string]bool{}
 	variables, err := parsePathTemplate(rest.Path)
@@ -2114,21 +2110,21 @@ func declaredRequestContractFields(rest *RESTOperationSpec) ([]string, error) {
 		return nil, fmt.Errorf("invalid rest.path template %q: %w", rest.Path, err)
 	}
 	for _, variable := range variables {
-		fields["path."+variable.Name] = true
+		fields[requestFieldPointer("path", variable.Name)] = true
 	}
 	for name := range rest.Query {
-		fields["query."+name] = true
+		fields[requestFieldPointer("query", name)] = true
 	}
 	for _, group := range rest.RequiredQuery {
 		for _, name := range group.AnyOf {
-			fields["query."+strings.TrimSpace(name)] = true
+			fields[requestFieldPointer("query", strings.TrimSpace(name))] = true
 		}
 	}
 	if rest.Body != nil && !rest.Body.None {
-		collectRequestValueFields(rest.Body.Fields, "body", fields)
+		collectRequestValueFields(rest.Body.Fields, "/body", fields)
 	}
 	if len(rest.BodySchema) != 0 {
-		if err := collectRequestSchemaFields(rest.BodySchema, "body", fields); err != nil {
+		if err := collectRequestSchemaFields(rest.BodySchema, "/body", fields); err != nil {
 			return nil, err
 		}
 	}
@@ -2141,7 +2137,7 @@ func declaredRequestContractFields(rest *RESTOperationSpec) ([]string, error) {
 	return paths, nil
 }
 
-func validateWriteRequestContractLinks(writes []WriteAction, operations []OperationSpec) error {
+func validateWriteRequestContractLinks(connector string, writes []WriteAction, operations []OperationSpec) error {
 	writeIndexes := make(map[string]int, len(writes))
 	for i, action := range writes {
 		if previous, ok := writeIndexes[action.Name]; ok {
@@ -2169,8 +2165,8 @@ func validateWriteRequestContractLinks(writes []WriteAction, operations []Operat
 		if previous, ok := claims[action]; ok {
 			return fmt.Errorf("operations.json operations %q and %q both claim writes.json action %q", previous, op.ID, action)
 		}
-		if strings.TrimSpace(writes[writeIndex].Hook) != "" {
-			return fmt.Errorf("writes.json action %q uses write hook %q and cannot be claimed until its effective requests are modeled", action, writes[writeIndex].Hook)
+		if owner := writeDispatchOwnerFor(connector); owner != nil && owner.OwnsWriteAction(action) {
+			return fmt.Errorf("writes.json action %q is owned by the connector's effective write dispatch and cannot be claimed until its effective requests are modeled", action)
 		}
 		writeFields, err := declaredWriteRequestFields(writes[writeIndex])
 		if err != nil {
@@ -2216,15 +2212,6 @@ func validateWriteRequestContractLinks(writes []WriteAction, operations []Operat
 	return nil
 }
 
-func requestContractFieldNamespace(path string) string {
-	for _, namespace := range []string{"body", "path", "query"} {
-		if path == namespace+"[]" || strings.HasPrefix(path, namespace+".") || strings.HasPrefix(path, namespace+"[].") {
-			return namespace
-		}
-	}
-	return ""
-}
-
 func collectRequestValueFields(values map[string]any, prefix string, fields map[string]bool) {
 	names := make([]string, 0, len(values))
 	for name := range values {
@@ -2232,7 +2219,7 @@ func collectRequestValueFields(values map[string]any, prefix string, fields map[
 	}
 	sort.Strings(names)
 	for _, name := range names {
-		path := prefix + "." + name
+		path := appendRequestFieldPointer(prefix, name)
 		fields[path] = true
 		collectRequestValueField(values[name], path, fields)
 	}
@@ -2243,9 +2230,10 @@ func collectRequestValueField(value any, path string, fields map[string]bool) {
 	case map[string]any:
 		collectRequestValueFields(nested, path, fields)
 	case []any:
-		fields[path+"[]"] = true
+		itemPath := appendRequestFieldPointer(path, "0")
+		fields[itemPath] = true
 		for _, item := range nested {
-			collectRequestValueField(item, path+"[]", fields)
+			collectRequestValueField(item, itemPath, fields)
 		}
 	}
 }

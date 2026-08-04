@@ -220,10 +220,13 @@ not a full override by default.
   instead of mistaking it for first-party documentation of the target operation.
 
   `operations.json` records that evidence in the supported `request_contract` block. Field paths
-  use `body.<field>`, `path.<parameter>`, or `query.<parameter>`; nested body properties use dotted
-  segments and array item properties use `[]` after the array segment. A root array is `body[]`
-  and its object element fields are `body[].<field>`. Each entry carries its own citation even when
-  several fields share a source:
+  are escaped JSON Pointers rooted at `/body`, `/path`, or `/query`. Pointer tokens use the standard
+  `~0` escape for `~` and `~1` for `/`. Array elements use the canonical token `0`, independent of
+  the concrete index a CLI mapping validates. This representation is injective: a literal provider
+  property named `a.b` is `/body/a.b`, while nested properties `a` then `b` are `/body/a/b`.
+  Likewise, `x/y` is `/body/x~1y`. A root array element is `/body/0`, and an object field on that
+  element is `/body/0/<field>`. Each entry carries its own citation even when several fields share
+  a source:
 
   ```json
   {
@@ -233,11 +236,11 @@ not a full override by default.
       "source_location": "paths./widgets.post.description fenced request example",
       "write_action": "create_widget",
       "write_field_map": {
-        "body.name": "body.name"
+        "/body/name": "/body/name"
       },
       "fields": [
         {
-          "path": "body.name",
+          "path": "/body/name",
           "source_url": "https://example.invalid/openapi.json",
           "source_location": "paths./widgets.post.description request example property name"
         }
@@ -257,7 +260,7 @@ not a full override by default.
   claims are load errors. Method/path matching is not a substitute because templates can differ and
   multiple operations can share the same method and path. The same operation-side contract must set
   `write_field_map` for every effective write input. Keys use the linked write action's input name:
-  `path.<path_fields entry>`, `query.<outgoing query key>`, or `body.<outgoing body field>`; values
+  `/path/<path_fields entry>`, `/query/<outgoing query key>`, or `/body/<outgoing body field>`; values
   name the cited `request_contract.fields[].path` on the retained operation. The loader derives the
   complete input set for each supported body type and rejects missing or stale mappings, mappings
   across namespaces, and mappings to uncited request fields. This explicit map is required even
@@ -275,8 +278,8 @@ not a full override by default.
   values, preserves executable `allOf`, `anyOf`, and `oneOf` validation, and unions fields exposed
   by those branches before checking citations. External, dangling, cyclic, or non-object
   references fail loading. Every object node must declare `additionalProperties: false`; an open
-  object cannot prove that every transmitted field has a citation. Root arrays use the explicit
-  `body[]` spelling. A schema that still exposes no request fields fails instead of being treated
+  object cannot prove that every transmitted field has a citation. Root-array elements use the
+  explicit `/body/0` pointer. A schema that still exposes no request fields fails instead of being treated
   as an empty contract. An operation with neither a non-empty static body nor a body schema must
   use `body: "none"`; omission and `{}` are invalid empty-body spellings.
 
@@ -286,12 +289,16 @@ not a full override by default.
   validator rejects it rather than silently ignoring an arm. Every cited path and query parameter
   must map to a command flag for body-bearing and empty-body operations alike.
 
-  Write actions using `json_array` map the outgoing root array and element fields, not the source
-  record's `body_field`. GraphQL variables map below `body.variables`. Multipart part names and the
+  Write actions using `json_array` require an exclusively array-rooted schema and map the outgoing
+  root-array element and its fields, not the source record's `body_field`. GraphQL variables map
+  below `/body/variables`; a template descriptor is one variable leaf, not separate `template` and
+  `type` wire fields. Multipart part names and the
   transmitted base64 content property are explicit body fields; the base64 source path/value is
-  not transmitted. A write action declaring `dynamic_fields` or `hook` cannot be linked until its
-  effective dynamic or hook-generated request has an operation-side representation with complete
-  citations.
+  not transmitted. Query and multipart wire names with surrounding whitespace are rejected instead
+  of normalized away from what runtime would transmit. A write action declaring `dynamic_fields`,
+  or owned by effective connector write dispatch, cannot be linked until its effective dynamic or
+  hook-generated request has an operation-side representation with complete citations. This checks
+  actual execution ownership rather than optional `writes.json` marker fields.
 
   `docs/migration/request-contract-coverage.json` is the machine-readable rollout inventory, sorted
   by each connector's remaining citation/link gap count and then connector slug. The accompanying

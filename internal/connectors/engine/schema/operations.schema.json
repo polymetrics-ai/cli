@@ -62,7 +62,7 @@
                   "required": ["path", "source_url", "source_location"],
                   "additionalProperties": false,
                   "properties": {
-                    "path": { "type": "string" },
+                    "path": { "type": "string", "pattern": "^/(body|path|query)/" },
                     "source_url": { "type": "string" },
                     "source_location": { "type": "string" }
                   }

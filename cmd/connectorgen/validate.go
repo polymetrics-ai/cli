@@ -6,9 +6,12 @@ import (
 	"io/fs"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/connectors/engine"
+	_ "polymetrics.ai/internal/connectors/hooks/hookset"
+	_ "polymetrics.ai/internal/connectors/native/nativeset"
 )
 
 // Rule identifiers named by every validate Finding. Kept as exported-looking
@@ -972,6 +975,14 @@ func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLIC
 		return nil
 	}
 	noBody := op.REST.Body != nil && op.REST.Body.None
+	var bodySchema *engine.Schema
+	if len(op.REST.BodySchema) != 0 {
+		compiled, err := engine.CompileSchema(op.REST.BodySchema)
+		if err != nil {
+			return []Finding{{Connector: b.Name, File: "operations.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("operation %q has invalid body_schema for request-contract flag validation: %v", op.ID, err)}}
+		}
+		bodySchema = compiled
+	}
 	citations := make(map[string]bool, len(op.RequestContract.Fields))
 	for _, field := range op.RequestContract.Fields {
 		citations[strings.TrimSpace(field.Path)] = true
@@ -980,18 +991,26 @@ func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLIC
 	var findings []Finding
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
-		mappings[mapsTo] = flag
 		if noBody && strings.HasPrefix(mapsTo, "body.") {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented no-body command %d (%q) flag --%s maps to body despite rest.body none", i, cmd.Path, flag.Name)})
 			continue
 		}
-		if (strings.HasPrefix(mapsTo, "body.") || strings.HasPrefix(mapsTo, "path.") || strings.HasPrefix(mapsTo, "query.")) && !citations[mapsTo] {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) flag --%s maps to uncited request field %q", i, cmd.Path, flag.Name, mapsTo)})
+		if !strings.HasPrefix(mapsTo, "body.") && !strings.HasPrefix(mapsTo, "path.") && !strings.HasPrefix(mapsTo, "query.") {
+			continue
+		}
+		pointer, err := engine.CanonicalRequestFieldPointer(mapsTo, bodySchema)
+		if err != nil {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) flag --%s has request mapping %q that cannot be matched to request-contract evidence: %v", i, cmd.Path, flag.Name, mapsTo, err)})
+			continue
+		}
+		mappings[pointer] = flag
+		if !citations[pointer] {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) flag --%s maps to uncited request field %q", i, cmd.Path, flag.Name, pointer)})
 		}
 	}
 	for _, field := range op.RequestContract.Fields {
 		path := strings.TrimSpace(field.Path)
-		if !strings.HasPrefix(path, "path.") && !strings.HasPrefix(path, "query.") {
+		if !strings.HasPrefix(path, "/path/") && !strings.HasPrefix(path, "/query/") {
 			continue
 		}
 		flag, mapped := mappings[path]
@@ -999,7 +1018,7 @@ func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLIC
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) request field %q must map to a command flag", i, cmd.Path, path)})
 			continue
 		}
-		if strings.HasPrefix(path, "path.") && !flag.Required {
+		if strings.HasPrefix(path, "/path/") && !flag.Required {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) path field %q maps to flag --%s that is not required", i, cmd.Path, path, flag.Name)})
 		}
 	}
@@ -1018,12 +1037,20 @@ func operationStaticBodyProvidesPath(body map[string]any, path string) bool {
 	}
 	var current any = body
 	for _, part := range strings.Split(path, ".") {
-		object, ok := current.(map[string]any)
-		if !ok {
-			return false
-		}
-		current, ok = object[part]
-		if !ok {
+		switch value := current.(type) {
+		case map[string]any:
+			var ok bool
+			current, ok = value[part]
+			if !ok {
+				return false
+			}
+		case []any:
+			index, err := strconv.Atoi(part)
+			if err != nil || index < 0 || index >= len(value) {
+				return false
+			}
+			current = value[index]
+		default:
 			return false
 		}
 	}

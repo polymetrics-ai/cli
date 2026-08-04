@@ -233,6 +233,24 @@ func TestSchemaMappingRequirementsUseCompiledComposition(t *testing.T) {
 		}
 	})
 
+	t.Run("unsatisfiable allOf type intersection", func(t *testing.T) {
+		schema, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"additionalProperties":false,
+			"required":["value"],
+			"properties":{"value":{"allOf":[{"type":"string"},{"type":"integer"}]}}
+		}`))
+		if err != nil {
+			t.Fatalf("CompileSchema: %v", err)
+		}
+		if _, err := schema.RequiredMappingPaths(); err == nil || !strings.Contains(err.Error(), "unsatisfiable") {
+			t.Fatalf("RequiredMappingPaths error = %v, want unsatisfiable allOf error", err)
+		}
+		if _, err := schema.MappingPath("value"); err == nil || !strings.Contains(err.Error(), "unsatisfiable") {
+			t.Fatalf("MappingPath(value) error = %v, want unsatisfiable allOf error", err)
+		}
+	})
+
 	for _, keyword := range []string{"anyOf", "oneOf"} {
 		t.Run(keyword+" is explicit", func(t *testing.T) {
 			schema, err := CompileSchema(json.RawMessage(fmt.Sprintf(`{
