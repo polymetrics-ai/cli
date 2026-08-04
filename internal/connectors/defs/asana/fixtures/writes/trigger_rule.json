@@ -1,0 +1,9 @@
+{
+  "record": {
+    "rule_trigger_gid": "fixture-rule-trigger-gid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rule_triggers/fixture-rule-trigger-gid/run"
+  }
+}

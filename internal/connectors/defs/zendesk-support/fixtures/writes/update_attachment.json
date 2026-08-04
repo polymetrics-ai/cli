@@ -1,0 +1,9 @@
+{
+  "record": {
+    "attachment_id": "fixture-attachment-id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/attachments/fixture-attachment-id"
+  }
+}

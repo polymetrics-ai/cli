@@ -1,0 +1,9 @@
+{
+  "record": {
+    "team_gid": "fixture-team-gid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/teams/fixture-team-gid/addUser"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "asset_type_id": "fixture-asset-type-id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/it_asset_management/asset_types/fixture-asset-type-id/fields"
+  }
+}

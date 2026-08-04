@@ -1,0 +1,9 @@
+{
+  "record": {
+    "status_id": "fixture-status-id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v2/it_asset_management/statuses/fixture-status-id"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "goal_gid": "fixture-goal-gid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/goals/fixture-goal-gid/stories"
+  }
+}

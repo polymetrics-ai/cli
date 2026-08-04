@@ -1,0 +1,9 @@
+{
+  "record": {
+    "ticket_id": "fixture-ticket-id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/tickets/fixture-ticket-id/task_lists"
+  }
+}

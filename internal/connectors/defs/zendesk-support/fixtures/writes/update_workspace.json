@@ -1,0 +1,9 @@
+{
+  "record": {
+    "workspace_id": "fixture-workspace-id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/workspaces/fixture-workspace-id"
+  }
+}

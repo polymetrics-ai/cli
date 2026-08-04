@@ -1,0 +1,9 @@
+{
+  "record": {
+    "deletion_schedule_id": "fixture-deletion-schedule-id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/deletion_schedules/fixture-deletion-schedule-id"
+  }
+}

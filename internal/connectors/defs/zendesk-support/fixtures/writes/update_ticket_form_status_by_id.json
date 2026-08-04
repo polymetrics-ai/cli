@@ -1,0 +1,10 @@
+{
+  "record": {
+    "ticket_form_id": "fixture-ticket-form-id",
+    "ticket_form_status_id": "fixture-ticket-form-status-id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/ticket_forms/fixture-ticket-form-id/ticket_form_statuses/fixture-ticket-form-status-id"
+  }
+}

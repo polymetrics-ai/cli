@@ -1,0 +1,9 @@
+{
+  "record": {
+    "section_gid": "fixture-section-gid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/sections/fixture-section-gid/addTask"
+  }
+}

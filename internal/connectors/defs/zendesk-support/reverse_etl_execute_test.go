@@ -14,6 +14,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"sort"
+	"strconv"
 	"strings"
 	"sync"
 	"testing"
@@ -30,6 +31,23 @@ const (
 	// to retire. Every endpoint still carrying it is an operation the audit
 	// counted as supported-but-unreachable.
 	blockedReverseETLReason = "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
+
+	// noRequestContractReason and noBoundedShapeReason are where the rows this
+	// lane could NOT promote went. They are counted, not hand-waved: a bounded
+	// record schema has to come from the pinned OpenAPI source the bundle
+	// already cites, and inventing one would reproduce exactly the
+	// implemented-but-unreachable hole this repository is closing.
+	noRequestContractReason = "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape."
+
+	noBoundedShapeReason = "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
+
+	// promotedReverseETLOperations plus the two deferred counts must equal the
+	// ledger rows that originally carried blockedReverseETLReason, so the
+	// shortfall can never be hidden by rewording a reason string.
+	promotedReverseETLOperations = 59
+	deferredNoRequestContract    = 98
+	deferredNoBoundedShape       = 5
+	originalBlockedReverseETL    = 162
 
 	// blockedDestructiveOperations is the number of destructive_action rows
 	// that must remain unbound until cli-delete-confirmation-foundation-r1
@@ -53,22 +71,49 @@ func runtimeConfig(baseURL string) connectors.RuntimeConfig {
 	}
 }
 
-// TestNoReverseETLOperationRemainsBlocked fails while any endpoint still
-// carries the typed reverse-ETL blocked reason. This is the RED assertion the
-// authoring work turns green, and it stays as regression cover: re-blocking a
-// promoted operation puts the reason back and fails here.
-func TestNoReverseETLOperationRemainsBlocked(t *testing.T) {
+// TestReverseETLLedgerReconciles accounts for every ledger row that originally
+// carried the typed reverse-ETL blocked reason. A promoted row is bound to a
+// write action; a row that could not be promoted must carry one of the two
+// precise, cited reasons and be counted here. The arithmetic is the point:
+// rewording a blocked reason cannot quietly shrink the shortfall, because the
+// three buckets still have to add up to originalBlockedReverseETL.
+func TestReverseETLLedgerReconciles(t *testing.T) {
 	b := loadBundle(t)
-	var blocked []string
+
+	var stillGeneric []string
+	promoted, noContract, noShape := 0, 0, 0
 	for _, ep := range b.Surface.Endpoints {
-		if ep.Operation != nil && ep.Operation.Reason == blockedReverseETLReason {
-			blocked = append(blocked, fmt.Sprintf("%s %s", ep.Method, ep.Path))
+		if ep.CoveredBy != nil && ep.CoveredBy.Write != "" {
+			promoted++
+			continue
+		}
+		if ep.Operation == nil {
+			continue
+		}
+		switch ep.Operation.Reason {
+		case blockedReverseETLReason:
+			stillGeneric = append(stillGeneric, fmt.Sprintf("%s %s", ep.Method, ep.Path))
+		case noRequestContractReason:
+			noContract++
+		case noBoundedShapeReason:
+			noShape++
 		}
 	}
-	if len(blocked) > 0 {
-		sort.Strings(blocked)
-		t.Fatalf("%d reverse-ETL operations are still blocked by an unimplemented typed write action:\n  %s",
-			len(blocked), strings.Join(blocked, "\n  "))
+
+	if len(stillGeneric) > 0 {
+		sort.Strings(stillGeneric)
+		t.Fatalf("%d reverse-ETL operations still carry the generic blocked reason instead of being promoted or given a cited blocker:\n  %s",
+			len(stillGeneric), strings.Join(stillGeneric, "\n  "))
+	}
+	if noContract != deferredNoRequestContract {
+		t.Errorf("rows blocked on a missing request contract = %d, want %d", noContract, deferredNoRequestContract)
+	}
+	if noShape != deferredNoBoundedShape {
+		t.Errorf("rows blocked on an unbounded request shape = %d, want %d", noShape, deferredNoBoundedShape)
+	}
+	if got := promotedReverseETLOperations + noContract + noShape; got != originalBlockedReverseETL {
+		t.Fatalf("promoted(%d) + deferred(%d+%d) = %d, want %d ledger rows accounted for",
+			promotedReverseETLOperations, noContract, noShape, got, originalBlockedReverseETL)
 	}
 }
 
@@ -268,6 +313,10 @@ func flagsFromRecord(cmd connectors.CommandSurfaceCommand, record map[string]any
 		case []any:
 			var parts []string
 			for _, item := range typed {
+				if _, isObject := item.(map[string]any); isObject {
+					parts = nil
+					break
+				}
 				parts = append(parts, fmt.Sprint(item))
 			}
 			if len(parts) > 0 {
@@ -282,9 +331,20 @@ func flagsFromRecord(cmd connectors.CommandSurfaceCommand, record map[string]any
 	return flags
 }
 
+// lookupRecordPath walks a dotted record path, descending through array
+// indices the same way commandrunner's record-path builder does, so a flag
+// mapped to record.users.0.email resolves against the fixture.
 func lookupRecordPath(record map[string]any, parts []string) (any, bool) {
 	var current any = record
 	for _, part := range parts {
+		if index, err := strconv.Atoi(part); err == nil {
+			items, ok := current.([]any)
+			if !ok || index < 0 || index >= len(items) {
+				return nil, false
+			}
+			current = items[index]
+			continue
+		}
 		object, ok := current.(map[string]any)
 		if !ok {
 			return nil, false

@@ -372,14 +372,8 @@
     {
       "method": "POST",
       "path": "/custom_fields",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createcustomfield",
-        "notes": "official_operation_id=createCustomField; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_custom_field"
       }
     },
     {
@@ -398,14 +392,8 @@
     {
       "method": "PUT",
       "path": "/custom_fields/{custom_field_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updatecustomfield",
-        "notes": "official_operation_id=updateCustomField; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_custom_field"
       }
     },
     {
@@ -431,40 +419,22 @@
     {
       "method": "POST",
       "path": "/custom_fields/{custom_field_gid}/enum_options",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createenumoptionforcustomfield",
-        "notes": "official_operation_id=createEnumOptionForCustomField; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_enum_option_for_custom_field"
       }
     },
     {
       "method": "POST",
       "path": "/custom_fields/{custom_field_gid}/enum_options/insert",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/insertenumoptionforcustomfield",
-        "notes": "official_operation_id=insertEnumOptionForCustomField; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "insert_enum_option_for_custom_field"
       }
     },
     {
       "method": "PUT",
       "path": "/enum_options/{enum_option_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updateenumoption",
-        "notes": "official_operation_id=updateEnumOption; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_enum_option"
       }
     },
     {
@@ -509,27 +479,15 @@
     {
       "method": "POST",
       "path": "/exports/graph",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/creategraphexport",
-        "notes": "official_operation_id=createGraphExport; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_graph_export"
       }
     },
     {
       "method": "POST",
       "path": "/exports/resource",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createresourceexport",
-        "notes": "official_operation_id=createResourceExport; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_resource_export"
       }
     },
     {
@@ -548,14 +506,8 @@
     {
       "method": "PUT",
       "path": "/goal_relationships/{goal_relationship_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updategoalrelationship",
-        "notes": "official_operation_id=updateGoalRelationship; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_goal_relationship"
       }
     },
     {
@@ -574,14 +526,8 @@
     {
       "method": "POST",
       "path": "/goals/{goal_gid}/addSupportingRelationship",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addsupportingrelationship",
-        "notes": "official_operation_id=addSupportingRelationship; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_supporting_relationship"
       }
     },
     {
@@ -613,14 +559,8 @@
     {
       "method": "PUT",
       "path": "/goals/{goal_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updategoal",
-        "notes": "official_operation_id=updateGoal; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_goal"
       }
     },
     {
@@ -652,53 +592,29 @@
     {
       "method": "POST",
       "path": "/goals",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/creategoal",
-        "notes": "official_operation_id=createGoal; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_goal"
       }
     },
     {
       "method": "POST",
       "path": "/goals/{goal_gid}/setMetric",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/creategoalmetric",
-        "notes": "official_operation_id=createGoalMetric; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_goal_metric"
       }
     },
     {
       "method": "POST",
       "path": "/goals/{goal_gid}/setMetricCurrentValue",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updategoalmetric",
-        "notes": "official_operation_id=updateGoalMetric; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_goal_metric"
       }
     },
     {
       "method": "POST",
       "path": "/goals/{goal_gid}/addFollowers",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addfollowers",
-        "notes": "official_operation_id=addFollowers; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_followers"
       }
     },
     {
@@ -730,14 +646,8 @@
     {
       "method": "POST",
       "path": "/goals/{goal_gid}/addCustomFieldSetting",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addcustomfieldsettingforgoal",
-        "notes": "official_operation_id=addCustomFieldSettingForGoal; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_custom_field_setting_for_goal"
       }
     },
     {
@@ -847,14 +757,8 @@
     {
       "method": "PUT",
       "path": "/ooo_entries/{ooo_entry_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updateoooentry",
-        "notes": "official_operation_id=updateOooEntry; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_ooo_entry"
       }
     },
     {
@@ -886,14 +790,8 @@
     {
       "method": "POST",
       "path": "/ooo_entries",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createoooentry",
-        "notes": "official_operation_id=createOooEntry; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_ooo_entry"
       }
     },
     {
@@ -977,14 +875,8 @@
     {
       "method": "POST",
       "path": "/portfolios",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createportfolio",
-        "notes": "official_operation_id=createPortfolio; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_portfolio"
       }
     },
     {
@@ -1003,14 +895,8 @@
     {
       "method": "PUT",
       "path": "/portfolios/{portfolio_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updateportfolio",
-        "notes": "official_operation_id=updatePortfolio; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_portfolio"
       }
     },
     {
@@ -1042,14 +928,8 @@
     {
       "method": "POST",
       "path": "/portfolios/{portfolio_gid}/addItem",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/additemforportfolio",
-        "notes": "official_operation_id=addItemForPortfolio; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_item_for_portfolio"
       }
     },
     {
@@ -1068,14 +948,8 @@
     {
       "method": "POST",
       "path": "/portfolios/{portfolio_gid}/addCustomFieldSetting",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addcustomfieldsettingforportfolio",
-        "notes": "official_operation_id=addCustomFieldSettingForPortfolio; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_custom_field_setting_for_portfolio"
       }
     },
     {
@@ -1094,14 +968,8 @@
     {
       "method": "POST",
       "path": "/portfolios/{portfolio_gid}/addMembers",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addmembersforportfolio",
-        "notes": "official_operation_id=addMembersForPortfolio; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_members_for_portfolio"
       }
     },
     {
@@ -1120,14 +988,8 @@
     {
       "method": "POST",
       "path": "/portfolios/{portfolio_gid}/duplicate",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/duplicateportfolio",
-        "notes": "official_operation_id=duplicatePortfolio; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "duplicate_portfolio"
       }
     },
     {
@@ -1146,14 +1008,8 @@
     {
       "method": "PUT",
       "path": "/project_briefs/{project_brief_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updateprojectbrief",
-        "notes": "official_operation_id=updateProjectBrief; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_project_brief"
       }
     },
     {
@@ -1172,14 +1028,8 @@
     {
       "method": "POST",
       "path": "/projects/{project_gid}/project_briefs",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createprojectbrief",
-        "notes": "official_operation_id=createProjectBrief; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_project_brief"
       }
     },
     {
@@ -1224,14 +1074,8 @@
     {
       "method": "PUT",
       "path": "/project_portfolio_settings/{project_portfolio_setting_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updateprojectportfoliosetting",
-        "notes": "official_operation_id=updateProjectPortfolioSetting; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_project_portfolio_setting"
       }
     },
     {
@@ -1296,14 +1140,8 @@
     {
       "method": "POST",
       "path": "/projects/{project_gid}/project_statuses",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createprojectstatusforproject",
-        "notes": "official_operation_id=createProjectStatusForProject; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_project_status_for_project"
       }
     },
     {
@@ -1361,14 +1199,8 @@
     {
       "method": "POST",
       "path": "/project_templates/{project_template_gid}/instantiateProject",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/instantiateproject",
-        "notes": "official_operation_id=instantiateProject; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "instantiate_project"
       }
     },
     {
@@ -1415,14 +1247,8 @@
     {
       "method": "POST",
       "path": "/projects/{project_gid}/duplicate",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/duplicateproject",
-        "notes": "official_operation_id=duplicateProject; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "duplicate_project"
       }
     },
     {
@@ -1454,14 +1280,8 @@
     {
       "method": "POST",
       "path": "/teams/{team_gid}/projects",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createprojectforteam",
-        "notes": "official_operation_id=createProjectForTeam; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_project_for_team"
       }
     },
     {
@@ -1480,14 +1300,8 @@
     {
       "method": "POST",
       "path": "/workspaces/{workspace_gid}/projects",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createprojectforworkspace",
-        "notes": "official_operation_id=createProjectForWorkspace; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_project_for_workspace"
       }
     },
     {
@@ -1506,14 +1320,8 @@
     {
       "method": "POST",
       "path": "/projects/{project_gid}/addCustomFieldSetting",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addcustomfieldsettingforproject",
-        "notes": "official_operation_id=addCustomFieldSettingForProject; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_custom_field_setting_for_project"
       }
     },
     {
@@ -1545,14 +1353,8 @@
     {
       "method": "POST",
       "path": "/projects/{project_gid}/addMembers",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addmembersforproject",
-        "notes": "official_operation_id=addMembersForProject; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_members_for_project"
       }
     },
     {
@@ -1571,14 +1373,8 @@
     {
       "method": "POST",
       "path": "/projects/{project_gid}/addFollowers",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addfollowersforproject",
-        "notes": "official_operation_id=addFollowersForProject; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_followers_for_project"
       }
     },
     {
@@ -1597,14 +1393,8 @@
     {
       "method": "POST",
       "path": "/projects/{project_gid}/saveAsTemplate",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/projectsaveastemplate",
-        "notes": "official_operation_id=projectSaveAsTemplate; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "project_save_as_template"
       }
     },
     {
@@ -1753,14 +1543,8 @@
     {
       "method": "POST",
       "path": "/rule_triggers/{rule_trigger_gid}/run",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/triggerrule",
-        "notes": "official_operation_id=triggerRule; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "trigger_rule"
       }
     },
     {
@@ -1807,27 +1591,15 @@
     {
       "method": "POST",
       "path": "/sections/{section_gid}/addTask",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addtaskforsection",
-        "notes": "official_operation_id=addTaskForSection; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_task_for_section"
       }
     },
     {
       "method": "POST",
       "path": "/projects/{project_gid}/sections/insert",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/insertsectionforproject",
-        "notes": "official_operation_id=insertSectionForProject; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "insert_section_for_project"
       }
     },
     {
@@ -1872,14 +1644,8 @@
     {
       "method": "POST",
       "path": "/status_updates",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createstatusforobject",
-        "notes": "official_operation_id=createStatusForObject; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_status_for_object"
       }
     },
     {
@@ -1898,14 +1664,8 @@
     {
       "method": "PUT",
       "path": "/stories/{story_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updatestory",
-        "notes": "official_operation_id=updateStory; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_story"
       }
     },
     {
@@ -1951,14 +1711,8 @@
     {
       "method": "POST",
       "path": "/goals/{goal_gid}/stories",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createstoryforgoal",
-        "notes": "official_operation_id=createStoryForGoal; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_story_for_goal"
       }
     },
     {
@@ -2031,14 +1785,8 @@
     {
       "method": "POST",
       "path": "/workspaces/{workspace_gid}/tags",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createtagforworkspace",
-        "notes": "official_operation_id=createTagForWorkspace; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_tag_for_workspace"
       }
     },
     {
@@ -2083,14 +1831,8 @@
     {
       "method": "POST",
       "path": "/task_templates/{task_template_gid}/instantiateTask",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/instantiatetask",
-        "notes": "official_operation_id=instantiateTask; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "instantiate_task"
       }
     },
     {
@@ -2137,14 +1879,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/duplicate",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/duplicatetask",
-        "notes": "official_operation_id=duplicateTask; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "duplicate_task"
       }
     },
     {
@@ -2215,27 +1951,15 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/subtasks",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createsubtaskfortask",
-        "notes": "official_operation_id=createSubtaskForTask; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_subtask_for_task"
       }
     },
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/setParent",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/setparentfortask",
-        "notes": "official_operation_id=setParentForTask; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "set_parent_for_task"
       }
     },
     {
@@ -2254,14 +1978,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/addDependencies",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/adddependenciesfortask",
-        "notes": "official_operation_id=addDependenciesForTask; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_dependencies_for_task"
       }
     },
     {
@@ -2293,14 +2011,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/addDependents",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/adddependentsfortask",
-        "notes": "official_operation_id=addDependentsForTask; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_dependents_for_task"
       }
     },
     {
@@ -2319,14 +2031,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/addProject",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addprojectfortask",
-        "notes": "official_operation_id=addProjectForTask; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_project_for_task"
       }
     },
     {
@@ -2345,14 +2051,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/addTag",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addtagfortask",
-        "notes": "official_operation_id=addTagForTask; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_tag_for_task"
       }
     },
     {
@@ -2371,14 +2071,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/addFollowers",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/addfollowersfortask",
-        "notes": "official_operation_id=addFollowersForTask; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_followers_for_task"
       }
     },
     {
@@ -2469,14 +2163,8 @@
     {
       "method": "POST",
       "path": "/teams",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createteam",
-        "notes": "official_operation_id=createTeam; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_team"
       }
     },
     {
@@ -2495,14 +2183,8 @@
     {
       "method": "PUT",
       "path": "/teams/{team_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updateteam",
-        "notes": "official_operation_id=updateTeam; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_team"
       }
     },
     {
@@ -2528,14 +2210,8 @@
     {
       "method": "POST",
       "path": "/teams/{team_gid}/addUser",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/adduserforteam",
-        "notes": "official_operation_id=addUserForTeam; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_user_for_team"
       }
     },
     {
@@ -2671,14 +2347,8 @@
     {
       "method": "POST",
       "path": "/tasks/{task_gid}/time_tracking_entries",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/createtimetrackingentry",
-        "notes": "official_operation_id=createTimeTrackingEntry; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "create_time_tracking_entry"
       }
     },
     {
@@ -2697,14 +2367,8 @@
     {
       "method": "PUT",
       "path": "/time_tracking_entries/{time_tracking_entry_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updatetimetrackingentry",
-        "notes": "official_operation_id=updateTimeTrackingEntry; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_time_tracking_entry"
       }
     },
     {
@@ -2847,14 +2511,8 @@
     {
       "method": "PUT",
       "path": "/users/{user_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updateuser",
-        "notes": "official_operation_id=updateUser; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_user"
       }
     },
     {
@@ -2912,14 +2570,8 @@
     {
       "method": "PUT",
       "path": "/workspaces/{workspace_gid}/users/{user_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updateuserforworkspace",
-        "notes": "official_operation_id=updateUserForWorkspace; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_user_for_workspace"
       }
     },
     {
@@ -3043,27 +2695,15 @@
     {
       "method": "PUT",
       "path": "/workspaces/{workspace_gid}",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/updateworkspace",
-        "notes": "official_operation_id=updateWorkspace; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "update_workspace"
       }
     },
     {
       "method": "POST",
       "path": "/workspaces/{workspace_gid}/addUser",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "planned reverse-ETL write action; blocked until a named action has a bounded record schema, redaction, sanitized fixture, and plan -> preview -> explicit approval -> execute evidence.",
-        "source_url": "https://developers.asana.com/reference/adduserforworkspace",
-        "notes": "official_operation_id=addUserForWorkspace; lane=reverse_etl_write"
+      "covered_by": {
+        "write": "add_user_for_workspace"
       }
     },
     {

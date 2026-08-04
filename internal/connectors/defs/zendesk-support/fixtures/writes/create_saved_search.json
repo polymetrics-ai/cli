@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "fixture-name",
+    "query": "fixture-query",
+    "type": "fixture-type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/saved_searches",
+    "body": {
+      "name": "fixture-name",
+      "query": "fixture-query",
+      "type": "fixture-type"
+    }
+  }
+}

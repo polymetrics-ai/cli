@@ -1,0 +1,9 @@
+{
+  "record": {
+    "goal_gid": "fixture-goal-gid"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/goals/fixture-goal-gid"
+  }
+}

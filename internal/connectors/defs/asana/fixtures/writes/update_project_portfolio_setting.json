@@ -1,0 +1,9 @@
+{
+  "record": {
+    "project_portfolio_setting_gid": "fixture-project-portfolio-setting-gid"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/project_portfolio_settings/fixture-project-portfolio-setting-gid"
+  }
+}

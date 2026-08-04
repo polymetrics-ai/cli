@@ -1,0 +1,9 @@
+{
+  "record": {
+    "portfolio_gid": "fixture-portfolio-gid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/portfolios/fixture-portfolio-gid/addMembers"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "goal_relationship_gid": "fixture-goal-relationship-gid"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/goal_relationships/fixture-goal-relationship-gid"
+  }
+}

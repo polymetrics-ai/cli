@@ -1,0 +1,9 @@
+{
+  "record": {
+    "user_gid": "fixture-user-gid"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/users/fixture-user-gid"
+  }
+}

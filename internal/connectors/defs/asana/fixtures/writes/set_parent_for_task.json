@@ -1,0 +1,9 @@
+{
+  "record": {
+    "task_gid": "fixture-task-gid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/fixture-task-gid/setParent"
+  }
+}

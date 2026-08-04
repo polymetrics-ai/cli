@@ -1,0 +1,10 @@
+{
+  "record": {
+    "workspace_gid": "fixture-workspace-gid",
+    "user_gid": "fixture-user-gid"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/workspaces/fixture-workspace-gid/users/fixture-user-gid"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "brand_id": "fixture-brand-id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/brands/fixture-brand-id"
+  }
+}

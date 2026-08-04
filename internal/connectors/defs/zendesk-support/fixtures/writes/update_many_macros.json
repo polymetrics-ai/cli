@@ -1,0 +1,7 @@
+{
+  "record": {},
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/macros/update_many"
+  }
+}

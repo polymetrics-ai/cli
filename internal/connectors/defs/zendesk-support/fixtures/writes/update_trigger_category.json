@@ -1,0 +1,9 @@
+{
+  "record": {
+    "trigger_category_id": "fixture-trigger-category-id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/api/v2/trigger_categories/fixture-trigger-category-id"
+  }
+}

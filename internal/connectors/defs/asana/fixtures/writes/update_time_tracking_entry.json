@@ -1,0 +1,9 @@
+{
+  "record": {
+    "time_tracking_entry_gid": "fixture-time-tracking-entry-gid"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/time_tracking_entries/fixture-time-tracking-entry-gid"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "record": {
+    "task_template_gid": "fixture-task-template-gid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/task_templates/fixture-task-template-gid/instantiateTask"
+  }
+}

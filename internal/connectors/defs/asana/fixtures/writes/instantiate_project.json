@@ -1,0 +1,9 @@
+{
+  "record": {
+    "project_template_gid": "fixture-project-template-gid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/project_templates/fixture-project-template-gid/instantiateProject"
+  }
+}

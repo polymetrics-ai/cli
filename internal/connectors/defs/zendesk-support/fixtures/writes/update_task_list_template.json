@@ -1,0 +1,9 @@
+{
+  "record": {
+    "task_list_template_id": "fixture-task-list-template-id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/task_list_templates/fixture-task-list-template-id"
+  }
+}

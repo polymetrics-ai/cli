@@ -1,0 +1,9 @@
+{
+  "record": {
+    "custom_field_gid": "fixture-custom-field-gid"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/custom_fields/fixture-custom-field-gid"
+  }
+}

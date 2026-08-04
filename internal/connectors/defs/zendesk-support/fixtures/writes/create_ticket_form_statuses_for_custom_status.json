@@ -1,0 +1,9 @@
+{
+  "record": {
+    "custom_status_id": "fixture-custom-status-id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v2/custom_statuses/fixture-custom-status-id/ticket_form_statuses"
+  }
+}

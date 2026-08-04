@@ -1,0 +1,9 @@
+{
+  "record": {
+    "story_gid": "fixture-story-gid"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/stories/fixture-story-gid"
+  }
+}

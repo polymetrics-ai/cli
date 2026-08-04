@@ -34,14 +34,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/account/email_settings",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateAccountEmailSettings; summary=Update Email Settings; tags=Account Settings"
+      "covered_by": {
+        "write": "update_account_email_settings"
       }
     },
     {
@@ -65,7 +59,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateAccountSettings; summary=Update Account Settings; tags=Account Settings"
       }
@@ -78,7 +72,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateTrialAccount; summary=Create Trial Account; tags=Reseller"
       }
@@ -137,7 +131,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ReportChannelbackError; summary=Report Channelback Error to Zendesk; tags=Channel Framework"
       }
@@ -150,7 +144,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=PushContentToSupport; summary=Push Content to Support; tags=Channel Framework"
       }
@@ -184,14 +178,8 @@
     {
       "method": "POST",
       "path": "/api/v2/approval_requests",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateApprovalRequest; summary=Create Approval Request; tags=Approval Requests"
+      "covered_by": {
+        "write": "create_approval_request"
       }
     },
     {
@@ -210,14 +198,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/attachments/{attachment_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateAttachment; summary=Update Attachment for Malware; tags=Attachments"
+      "covered_by": {
+        "write": "update_attachment"
       }
     },
     {
@@ -386,7 +368,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateManyAutomations; summary=Update Many Automations; tags=Automations"
       }
@@ -407,14 +389,8 @@
     {
       "method": "POST",
       "path": "/api/v2/bookmarks",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateBookmark; summary=Create Bookmark; tags=Bookmarks"
+      "covered_by": {
+        "write": "create_bookmark"
       }
     },
     {
@@ -479,14 +455,8 @@
     {
       "method": "POST",
       "path": "/api/v2/brands",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateBrand; summary=Create Brand; tags=Brands"
+      "covered_by": {
+        "write": "create_brand"
       }
     },
     {
@@ -505,14 +475,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/brands/{brand_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateBrand; summary=Update a Brand; tags=Brands"
+      "covered_by": {
+        "write": "update_brand"
       }
     },
     {
@@ -627,7 +591,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateTicketFromTweet; summary=Create Ticket from Tweet; tags=X Channel"
       }
@@ -653,7 +617,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=OpenTicketInAgentBrowser; summary=Open Ticket in Agent's Browser; tags=Basics"
       }
@@ -666,7 +630,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=OpenUsersProfileInAgentBrowser; summary=Open a User's Profile in an Agent's Browser; tags=Basics"
       }
@@ -674,14 +638,8 @@
     {
       "method": "POST",
       "path": "/api/v2/channels/voice/tickets",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateTicketOrVoicemailTicket; summary=Create Ticket or Voicemail Ticket; tags=Basics"
+      "covered_by": {
+        "write": "create_ticket_or_voicemail_ticket"
       }
     },
     {
@@ -765,14 +723,8 @@
     {
       "method": "POST",
       "path": "/api/v2/custom_objects",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateCustomObject; summary=Create Custom Object; tags=Custom Objects"
+      "covered_by": {
+        "write": "create_custom_object"
       }
     },
     {
@@ -796,7 +748,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateCustomObject; summary=Update Custom Object; tags=Custom Objects"
       }
@@ -830,14 +782,8 @@
     {
       "method": "POST",
       "path": "/api/v2/custom_objects/{custom_object_key}/access_rules",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateAccessRule; summary=Create Access Rule; tags=Custom Object Permissions"
+      "covered_by": {
+        "write": "create_access_rule"
       }
     },
     {
@@ -856,14 +802,8 @@
     {
       "method": "PATCH",
       "path": "/api/v2/custom_objects/{custom_object_key}/access_rules/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateAccessRule; summary=Update Access Rule; tags=Custom Object Permissions"
+      "covered_by": {
+        "write": "update_access_rule"
       }
     },
     {
@@ -908,14 +848,8 @@
     {
       "method": "POST",
       "path": "/api/v2/custom_objects/{custom_object_key}/fields",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateCustomObjectField; summary=Create Custom Object Field; tags=Custom Object Fields"
+      "covered_by": {
+        "write": "create_custom_object_field"
       }
     },
     {
@@ -939,7 +873,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateCustomObjectField; summary=Update Custom Object Field; tags=Custom Object Fields"
       }
@@ -965,7 +899,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ReorderCustomObjectFields; summary=Reorder Custom Fields of an Object; tags=Custom Object Fields"
       }
@@ -973,14 +907,8 @@
     {
       "method": "POST",
       "path": "/api/v2/custom_objects/{custom_object_key}/jobs",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CustomObjectRecordBulkJobs; summary=Custom Object Record Bulk Jobs; tags=Custom Object Records"
+      "covered_by": {
+        "write": "custom_object_record_bulk_jobs"
       }
     },
     {
@@ -1030,7 +958,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdatePermissionPolicy; summary=Update Permission Policy; tags=Custom Object Permissions"
       }
@@ -1051,27 +979,15 @@
     {
       "method": "POST",
       "path": "/api/v2/custom_objects/{custom_object_key}/records",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateCustomObjectRecord; summary=Create Custom Object Record; tags=Custom Object Records"
+      "covered_by": {
+        "write": "create_custom_object_record"
       }
     },
     {
       "method": "PATCH",
       "path": "/api/v2/custom_objects/{custom_object_key}/records",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpsertCustomObjectRecordByExternalIdOrName; summary=Create or Update Custom Object Record; tags=Custom Object Records"
+      "covered_by": {
+        "write": "upsert_custom_object_record_by_external_id_or_name"
       }
     },
     {
@@ -1108,7 +1024,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateCustomObjectRecord; summary=Update Custom Object Record; tags=Custom Object Records"
       }
@@ -1155,14 +1071,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateCustomObjectRecordAttachment; summary=Update Custom Object Record Attachment for Malware; tags=Custom Object Record Attachments"
+      "covered_by": {
+        "write": "update_custom_object_record_attachment"
       }
     },
     {
@@ -1259,14 +1169,8 @@
     {
       "method": "POST",
       "path": "/api/v2/custom_objects/{custom_object_key}/triggers",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateObjectTrigger; summary=Create Object Trigger; tags=Object Triggers"
+      "covered_by": {
+        "write": "create_object_trigger"
       }
     },
     {
@@ -1285,14 +1189,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateObjectTrigger; summary=Update Object Trigger; tags=Object Triggers"
+      "covered_by": {
+        "write": "update_object_trigger"
       }
     },
     {
@@ -1363,14 +1261,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/custom_objects/{custom_object_key}/triggers/update_many",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateManyObjectTriggers; summary=Update Many Object Triggers; tags=Object Triggers"
+      "covered_by": {
+        "write": "update_many_object_triggers"
       }
     },
     {
@@ -1414,7 +1306,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateCustomRole; summary=Create Custom Role; tags=Custom Roles"
       }
@@ -1440,7 +1332,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateCustomRoleById; summary=Update Custom Role; tags=Custom Roles"
       }
@@ -1461,14 +1353,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/custom_status/default",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=BulkUpdateDefaultCustomStatus; summary=Bulk Update Default Custom Ticket Status; tags=Custom Ticket Statuses"
+      "covered_by": {
+        "write": "bulk_update_default_custom_status"
       }
     },
     {
@@ -1487,14 +1373,8 @@
     {
       "method": "POST",
       "path": "/api/v2/custom_statuses",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateCustomStatus; summary=Create Custom Ticket Status; tags=Custom Ticket Statuses"
+      "covered_by": {
+        "write": "create_custom_status"
       }
     },
     {
@@ -1513,14 +1393,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/custom_statuses/{custom_status_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateCustomStatus; summary=Update Custom Ticket Status; tags=Custom Ticket Statuses"
+      "covered_by": {
+        "write": "update_custom_status"
       }
     },
     {
@@ -1539,14 +1413,8 @@
     {
       "method": "POST",
       "path": "/api/v2/custom_statuses/{custom_status_id}/ticket_form_statuses",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateTicketFormStatusesForCustomStatus; summary=Create Ticket Form Statuses for a Custom Status; tags=Custom Ticket Statuses, Ticket Form Statuses"
+      "covered_by": {
+        "write": "create_ticket_form_statuses_for_custom_status"
       }
     },
     {
@@ -1577,7 +1445,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RestoreDeletedTicket; summary=Restore a Previously Deleted Ticket; tags=Tickets"
       }
@@ -1603,7 +1471,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=BulkRestoreDeletedTickets; summary=Restore Previously Deleted Tickets in Bulk; tags=Tickets"
       }
@@ -1676,14 +1544,8 @@
     {
       "method": "POST",
       "path": "/api/v2/deletion_schedules",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateDeletionSchedule; summary=Create Deletion Schedule; tags=Deletion Schedules"
+      "covered_by": {
+        "write": "create_deletion_schedule"
       }
     },
     {
@@ -1702,14 +1564,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/deletion_schedules/{deletion_schedule_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateDeletionSchedule; summary=Update Deletion Schedule; tags=Deletion Schedules"
+      "covered_by": {
+        "write": "update_deletion_schedule"
       }
     },
     {
@@ -1746,7 +1602,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateDynamicContent; summary=Create Item; tags=Dynamic Content"
       }
@@ -1772,7 +1628,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateDynamicContentItem; summary=Update Item; tags=Dynamic Content"
       }
@@ -1811,7 +1667,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateDynamicContentVariant; summary=Create Variant; tags=Dynamic Content Item Variants"
       }
@@ -1837,7 +1693,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateDynamicContentVariant; summary=Update Variant; tags=Dynamic Content Item Variants"
       }
@@ -1863,7 +1719,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateManyDynamicContentVariants; summary=Create Many Variants; tags=Dynamic Content Item Variants"
       }
@@ -1876,7 +1732,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateManyDynamicContentVariants; summary=Update Many Variants; tags=Dynamic Content Item Variants"
       }
@@ -1954,7 +1810,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateEndUserIdentity; summary=Create End User Identity; tags=User Identities"
       }
@@ -1993,7 +1849,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=MakeEndUserIdentityPrimary; summary=Make End User Identity Primary; tags=User Identities"
       }
@@ -2006,7 +1862,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RequestEndUserVerification; summary=Request End User Verification; tags=User Identities"
       }
@@ -2021,14 +1877,8 @@
     {
       "method": "POST",
       "path": "/api/v2/group_memberships",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateGroupMembership; summary=Create Membership; tags=Group Memberships"
+      "covered_by": {
+        "write": "create_group_membership"
       }
     },
     {
@@ -2073,14 +1923,8 @@
     {
       "method": "POST",
       "path": "/api/v2/group_memberships/create_many",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=GroupMembershipBulkCreate; summary=Bulk Create Memberships; tags=Group Memberships"
+      "covered_by": {
+        "write": "group_membership_bulk_create"
       }
     },
     {
@@ -2117,7 +1961,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateGroupSLAPolicy; summary=Create Group SLA Policy; tags=Group SLA Policies"
       }
@@ -2143,7 +1987,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateGroupSLAPolicy; summary=Update Group SLA Policy; tags=Group SLA Policies"
       }
@@ -2182,7 +2026,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ReorderGroupSLAPolicies; summary=Reorder Group SLA Policies; tags=Group SLA Policies"
       }
@@ -2348,27 +2192,15 @@
     {
       "method": "POST",
       "path": "/api/v2/imports/tickets",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=TicketImport; summary=Ticket Import; tags=Ticket Import"
+      "covered_by": {
+        "write": "ticket_import"
       }
     },
     {
       "method": "POST",
       "path": "/api/v2/imports/tickets/create_many",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=TicketBulkImport; summary=Ticket Bulk Import; tags=Ticket Import"
+      "covered_by": {
+        "write": "ticket_bulk_import"
       }
     },
     {
@@ -2531,14 +2363,8 @@
     {
       "method": "POST",
       "path": "/api/v2/it_asset_management/asset_types",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateItamAssetType; summary=Create Asset Type; tags=ITAM Asset Types"
+      "covered_by": {
+        "write": "create_itam_asset_type"
       }
     },
     {
@@ -2562,7 +2388,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateItamAssetType; summary=Update Asset Type; tags=ITAM Asset Types"
       }
@@ -2596,14 +2422,8 @@
     {
       "method": "POST",
       "path": "/api/v2/it_asset_management/asset_types/{asset_type_id}/fields",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateItamAssetTypeField; summary=Create Asset Field; tags=ITAM Asset Fields"
+      "covered_by": {
+        "write": "create_itam_asset_type_field"
       }
     },
     {
@@ -2627,7 +2447,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateItamAssetTypeField; summary=Update Asset Field; tags=ITAM Asset Fields"
       }
@@ -2661,14 +2481,8 @@
     {
       "method": "POST",
       "path": "/api/v2/it_asset_management/assets",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateItamAsset; summary=Create Asset; tags=ITAM Assets"
+      "covered_by": {
+        "write": "create_itam_asset"
       }
     },
     {
@@ -2692,7 +2506,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateItamAsset; summary=Update Asset; tags=ITAM Assets"
       }
@@ -2713,14 +2527,8 @@
     {
       "method": "POST",
       "path": "/api/v2/it_asset_management/assets/jobs",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ItamAssetBulkJobs; summary=Asset Bulk Jobs; tags=ITAM Assets"
+      "covered_by": {
+        "write": "itam_asset_bulk_jobs"
       }
     },
     {
@@ -2765,14 +2573,8 @@
     {
       "method": "POST",
       "path": "/api/v2/it_asset_management/locations",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateItamLocation; summary=Create Asset Location; tags=ITAM Asset Locations"
+      "covered_by": {
+        "write": "create_itam_location"
       }
     },
     {
@@ -2796,7 +2598,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateItamLocation; summary=Update Asset Location; tags=ITAM Asset Locations"
       }
@@ -2830,14 +2632,8 @@
     {
       "method": "POST",
       "path": "/api/v2/it_asset_management/statuses",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateItamStatus; summary=Create Asset Status; tags=ITAM Asset Statuses"
+      "covered_by": {
+        "write": "create_itam_status"
       }
     },
     {
@@ -2856,14 +2652,8 @@
     {
       "method": "PATCH",
       "path": "/api/v2/it_asset_management/statuses/{status_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateItamStatus; summary=Update Asset Status; tags=ITAM Asset Statuses"
+      "covered_by": {
+        "write": "update_itam_status"
       }
     },
     {
@@ -3196,14 +2986,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/macros/update_many",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateManyMacros; summary=Update Many Macros; tags=Macros"
+      "covered_by": {
+        "write": "update_many_macros"
       }
     },
     {
@@ -3416,7 +3200,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOrganizationField; summary=Create Organization Field; tags=Organization Fields"
       }
@@ -3442,7 +3226,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateOrganizationField; summary=Update Organization Field; tags=Organization Fields"
       }
@@ -3468,7 +3252,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ReorderOrganizationField; summary=Reorder Organization Field; tags=Organization Fields"
       }
@@ -3488,7 +3272,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOrganizationMembership; summary=Create Membership; tags=Organization Memberships"
       }
@@ -3527,7 +3311,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateManyOrganizationMemberships; summary=Create Many Memberships; tags=Organization Memberships"
       }
@@ -3574,14 +3358,8 @@
     {
       "method": "POST",
       "path": "/api/v2/organization_subscriptions",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateOrganizationSubscription; summary=Create Organization Subscription; tags=Organization Subscriptions"
+      "covered_by": {
+        "write": "create_organization_subscription"
       }
     },
     {
@@ -3750,7 +3528,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SetOrganizationTags; summary=Set Organization Tags; tags=Tags"
       }
@@ -3763,7 +3541,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=AddOrganizationTags; summary=Add Organization Tags; tags=Tags"
       }
@@ -3867,7 +3645,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateManyOrganizations; summary=Create Many Organizations; tags=Organizations"
       }
@@ -3880,7 +3658,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOrUpdateOrganization; summary=Create Or Update Organization; tags=Organizations"
       }
@@ -3932,7 +3710,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateManyOrganizations; summary=Update Many Organizations; tags=Organizations"
       }
@@ -3997,7 +3775,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateQueue; summary=Create Queue; tags=Omnichannel Routing Queues"
       }
@@ -4023,7 +3801,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateQueue; summary=Update Queue; tags=Omnichannel Routing Queues"
       }
@@ -4062,7 +3840,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ReorderQueues; summary=Reorder Queues; tags=Omnichannel Routing Queues"
       }
@@ -4088,7 +3866,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateSupportAddress; summary=Create Support Address; tags=Support Addresses"
       }
@@ -4114,7 +3892,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateSupportAddress; summary=Update Support Address; tags=Support Addresses"
       }
@@ -4140,7 +3918,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=VerifySupportAddressForwarding; summary=Verify Support Address Forwarding; tags=Support Addresses"
       }
@@ -4192,7 +3970,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateRequest; summary=Create Request; tags=Requests"
       }
@@ -4218,7 +3996,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateRequest; summary=Update Request; tags=Requests"
       }
@@ -4322,7 +4100,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateResourceCollection; summary=Create Resource Collection; tags=Resource Collections"
       }
@@ -4348,7 +4126,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateResourceCollection; summary=Update Resource Collection; tags=Resource Collections"
       }
@@ -4387,7 +4165,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SetAgentAttributeValues; summary=Set Agent Attribute Values; tags=Skill Based Routing"
       }
@@ -4413,7 +4191,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=BulkSetAgentAttributeValuesJob; summary=Bulk Set Agent Attribute Values Jobs; tags=Skill Based Routing, Job Statuses"
       }
@@ -4433,7 +4211,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateAttribute; summary=Create Attribute; tags=Skill Based Routing"
       }
@@ -4459,7 +4237,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateAttribute; summary=Update Attribute; tags=Skill Based Routing"
       }
@@ -4498,7 +4276,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateAttributeValue; summary=Create Attribute Value; tags=Skill Based Routing"
       }
@@ -4524,7 +4302,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateAttributeValue; summary=Update Attribute Value; tags=Skill Based Routing"
       }
@@ -4583,7 +4361,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SetTicketAttributeValues; summary=Set Ticket Attribute Values; tags=Skill Based Routing"
       }
@@ -4663,27 +4441,15 @@
     {
       "method": "POST",
       "path": "/api/v2/saved_searches",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateSavedSearch; summary=Create Saved Search; tags=Saved Searches"
+      "covered_by": {
+        "write": "create_saved_search"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v2/saved_searches/{id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateSavedSearch; summary=Update Saved Search; tags=Saved Searches"
+      "covered_by": {
+        "write": "update_saved_search"
       }
     },
     {
@@ -4785,7 +4551,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateSharingAgreement; summary=Create Sharing Agreement; tags=Sharing Agreements"
       }
@@ -4811,7 +4577,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateSharingAgreement; summary=Update a Sharing Agreement; tags=Sharing Agreements"
       }
@@ -4844,7 +4610,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RecordNewSkip; summary=Record a New Skip for the Current User; tags=Ticket Skips"
       }
@@ -4864,7 +4630,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateSLAPolicy; summary=Create SLA Policy; tags=SLA Policies"
       }
@@ -4890,7 +4656,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateSLAPolicy; summary=Update SLA Policy; tags=SLA Policies"
       }
@@ -4929,7 +4695,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ReorderSLAPolicies; summary=Reorder SLA Policies; tags=SLA Policies"
       }
@@ -4981,7 +4747,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RecoverSuspendedTicket; summary=Recover Suspended Ticket; tags=Suspended Tickets"
       }
@@ -4994,7 +4760,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SuspendedTicketsAttachments; summary=Suspended Ticket Attachments; tags=Suspended Tickets"
       }
@@ -5002,14 +4768,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/suspended_tickets/bulk_recover",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=BulkRecoverSuspendedTickets; summary=Bulk Recover Suspended Tickets; tags=Suspended Tickets"
+      "covered_by": {
+        "write": "bulk_recover_suspended_tickets"
       }
     },
     {
@@ -5046,7 +4806,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RecoverSuspendedTickets; summary=Recover Multiple Suspended Tickets; tags=Suspended Tickets"
       }
@@ -5118,7 +4878,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateTarget; summary=Create Target; tags=Targets"
       }
@@ -5144,7 +4904,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateTarget; summary=Update Target; tags=Targets"
       }
@@ -5178,14 +4938,8 @@
     {
       "method": "POST",
       "path": "/api/v2/task_list_templates",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateTaskListTemplate; summary=Create Task List Template; tags=Task List Templates"
+      "covered_by": {
+        "write": "create_task_list_template"
       }
     },
     {
@@ -5204,14 +4958,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/task_list_templates/{task_list_template_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateTaskListTemplate; summary=Update Task List Template; tags=Task List Templates"
+      "covered_by": {
+        "write": "update_task_list_template"
       }
     },
     {
@@ -5263,14 +5011,8 @@
     {
       "method": "POST",
       "path": "/api/v2/ticket_content_pins",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateTicketContentPin; summary=Create Ticket Content Pin; tags=Ticket Content Pins"
+      "covered_by": {
+        "write": "create_ticket_content_pin"
       }
     },
     {
@@ -5348,7 +5090,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOrUpdateTicketFieldOption; summary=Create or Update Ticket Field Option; tags=Ticket Fields"
       }
@@ -5400,7 +5142,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ReorderTicketFields; summary=Reorder Ticket Fields; tags=Ticket Fields"
       }
@@ -5459,7 +5201,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateTicketForm; summary=Create Ticket Form; tags=Ticket Forms"
       }
@@ -5485,7 +5227,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateTicketForm; summary=Update Ticket Form; tags=Ticket Forms"
       }
@@ -5511,7 +5253,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CloneTicketForm; summary=Clone an Already Existing Ticket Form; tags=Ticket Forms"
       }
@@ -5532,27 +5274,15 @@
     {
       "method": "POST",
       "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateTicketFormStatuses; summary=Create Ticket Form Statuses; tags=Ticket Forms, Ticket Form Statuses"
+      "covered_by": {
+        "write": "create_ticket_form_statuses"
       }
     },
     {
       "method": "PUT",
       "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateTicketFormStatuses; summary=Bulk Update Ticket Form Statuses of a Ticket Form; tags=Ticket Forms, Ticket Form Statuses"
+      "covered_by": {
+        "write": "update_ticket_form_statuses"
       }
     },
     {
@@ -5571,14 +5301,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateTicketFormStatusById; summary=Update Ticket Form Status By Id; tags=Ticket Forms, Ticket Form Statuses"
+      "covered_by": {
+        "write": "update_ticket_form_status_by_id"
       }
     },
     {
@@ -5602,7 +5326,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ReorderTicketForms; summary=Reorder Ticket Forms; tags=Ticket Forms"
       }
@@ -5721,7 +5445,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=MakeTicketCommentPrivateFromAudits; summary=Change a Comment From Public To Private; tags=Ticket Audits"
       }
@@ -5786,7 +5510,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=MakeTicketCommentPrivate; summary=Make Comment Private; tags=Ticket Comments"
       }
@@ -5942,7 +5666,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateTicketSatisfactionRating; summary=Create a Satisfaction Rating; tags=Satisfaction Ratings"
       }
@@ -5981,7 +5705,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SetTagsTicket; summary=Set Tags; tags=Tags"
       }
@@ -5994,7 +5718,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=PutTagsTicket; summary=Add Tags; tags=Tags"
       }
@@ -6028,14 +5752,8 @@
     {
       "method": "POST",
       "path": "/api/v2/tickets/{ticket_id}/task_lists",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateTaskList; summary=Create Task List; tags=Task Lists"
+      "covered_by": {
+        "write": "create_task_list"
       }
     },
     {
@@ -6054,14 +5772,8 @@
     {
       "method": "POST",
       "path": "/api/v2/tickets/create_many",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=TicketsCreateMany; summary=Create Many Tickets; tags=Tickets"
+      "covered_by": {
+        "write": "tickets_create_many"
       }
     },
     {
@@ -6132,14 +5844,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/tickets/update_many",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=TicketsUpdateMany; summary=Update Many Tickets; tags=Tickets"
+      "covered_by": {
+        "write": "tickets_update_many"
       }
     },
     {
@@ -6158,14 +5864,8 @@
     {
       "method": "POST",
       "path": "/api/v2/trigger_categories",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateTriggerCategory; summary=Create Ticket Trigger Category; tags=Trigger Categories"
+      "covered_by": {
+        "write": "create_trigger_category"
       }
     },
     {
@@ -6184,14 +5884,8 @@
     {
       "method": "PATCH",
       "path": "/api/v2/trigger_categories/{trigger_category_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateTriggerCategory; summary=Update Ticket Trigger Category; tags=Trigger Categories"
+      "covered_by": {
+        "write": "update_trigger_category"
       }
     },
     {
@@ -6210,14 +5904,8 @@
     {
       "method": "POST",
       "path": "/api/v2/trigger_categories/jobs",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=BatchOperateTriggerCategories; summary=Create Batch Job for Ticket Trigger Categories; tags=Trigger Categories"
+      "covered_by": {
+        "write": "batch_operate_trigger_categories"
       }
     },
     {
@@ -6334,7 +6022,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ReorderTriggers; summary=Reorder Ticket Triggers; tags=Triggers"
       }
@@ -6355,14 +6043,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/triggers/update_many",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateManyTriggers; summary=Update Many Ticket Triggers; tags=Triggers"
+      "covered_by": {
+        "write": "update_many_triggers"
       }
     },
     {
@@ -6406,7 +6088,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateUserField; summary=Create User Field; tags=User Fields"
       }
@@ -6432,7 +6114,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateUserField; summary=Update User Field; tags=User Fields"
       }
@@ -6471,7 +6153,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOrUpdateUserFieldOption; summary=Create or Update a User Field Option; tags=User Fields"
       }
@@ -6510,7 +6192,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ReorderUserField; summary=Reorder User Field; tags=User Fields"
       }
@@ -6637,14 +6319,8 @@
     {
       "method": "POST",
       "path": "/api/v2/users/{user_id}/group_memberships",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateUserGroupMembership; summary=Create Group Membership for User; tags=Group Memberships, Users"
+      "covered_by": {
+        "write": "create_user_group_membership"
       }
     },
     {
@@ -6681,7 +6357,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=GroupMembershipSetDefault; summary=Set Membership as Default; tags=Group Memberships"
       }
@@ -6733,7 +6409,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateUserIdentity; summary=Create Identity; tags=User Identities"
       }
@@ -6759,7 +6435,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateUserIdentity; summary=Update Identity; tags=User Identities"
       }
@@ -6785,7 +6461,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=MakeUserIdentityPrimary; summary=Make Identity Primary; tags=User Identities"
       }
@@ -6798,7 +6474,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RequestUserVerification; summary=Request User Verification; tags=User Identities"
       }
@@ -6811,7 +6487,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=VerifyUserIdentity; summary=Verify Identity; tags=User Identities"
       }
@@ -6850,7 +6526,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateUserOrganizationMembership; summary=Create Organization Membership for User; tags=Organization Memberships, Users"
       }
@@ -6889,7 +6565,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SetOrganizationMembershipAsDefault; summary=Set Membership as Default; tags=Organization Memberships"
       }
@@ -6941,7 +6617,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SetOrganizationAsDefault; summary=Set Organization as Default; tags=Organization Memberships"
       }
@@ -7110,7 +6786,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=SetUserTags; summary=Set User Tags; tags=Tags"
       }
@@ -7123,7 +6799,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=PutUserTags; summary=Add User Tags; tags=Tags"
       }
@@ -7266,7 +6942,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateManyUsers; summary=Create Many Users; tags=Users"
       }
@@ -7292,7 +6968,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=CreateOrUpdateManyUsers; summary=Create Or Update Many Users; tags=Users"
       }
@@ -7318,7 +6994,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=LogoutManyUsers; summary=Logout many users; tags=Users"
       }
@@ -7404,14 +7080,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/users/me/settings",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateCurrentUserSettings; summary=Update Current User Settings; tags=Users"
+      "covered_by": {
+        "write": "update_current_user_settings"
       }
     },
     {
@@ -7422,7 +7092,7 @@
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=RequestUserCreate; summary=Request User Create; tags=Users"
       }
@@ -7456,14 +7126,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/users/update_many",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateManyUsers; summary=Update Many Users; tags=Users"
+      "covered_by": {
+        "write": "update_many_users"
       }
     },
     {
@@ -7697,7 +7361,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=UpdateManyViews; summary=Update Many Views; tags=Views"
       }
@@ -7718,14 +7382,8 @@
     {
       "method": "POST",
       "path": "/api/v2/workspaces",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=CreateWorkspace; summary=Create Workspace; tags=Workspaces"
+      "covered_by": {
+        "write": "create_workspace"
       }
     },
     {
@@ -7744,14 +7402,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/workspaces/{workspace_id}",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=UpdateWorkspace; summary=Update Workspace; tags=Workspaces"
+      "covered_by": {
+        "write": "update_workspace"
       }
     },
     {
@@ -7783,14 +7435,8 @@
     {
       "method": "PUT",
       "path": "/api/v2/workspaces/reorder",
-      "operation": {
-        "model": "admin_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
-        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-        "notes": "operationId=ReorderWorkspaces; summary=Reorder Workspaces; tags=Workspaces"
+      "covered_by": {
+        "write": "reorder_workspaces"
       }
     },
     {

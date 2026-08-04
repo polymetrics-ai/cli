@@ -1,0 +1,9 @@
+{
+  "record": {
+    "custom_status_id": "fixture-custom-status-id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/api/v2/custom_statuses/fixture-custom-status-id"
+  }
+}

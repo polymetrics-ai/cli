@@ -1,0 +1,9 @@
+{
+  "record": {
+    "project_brief_gid": "fixture-project-brief-gid"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/project_briefs/fixture-project-brief-gid"
+  }
+}
