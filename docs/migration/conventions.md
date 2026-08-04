@@ -353,7 +353,7 @@ statically, exactly like `token_url`/`client_id`/`client_secret`/`scopes` — th
 `connectorgen validate` for free via the existing `engine.ResolveCheckAuthSpec(a, specKeys)` call in
 `checkInterpolations`, no `cmd/connectorgen/validate.go` change was needed.
 
-**Pagination — 6 types + none** (`bundle.go`'s `PaginationSpec`, `paginate.go`'s `newPaginator`):
+**Pagination — 7 types + none** (`bundle.go`'s `PaginationSpec`, `paginate.go`'s `newPaginator`):
 
 | `type` | Fields used | When to use |
 |---|---|---|
@@ -364,6 +364,9 @@ statically, exactly like `token_url`/`client_id`/`client_secret`/`scopes` — th
 | `cursor` (`token_path`) | `cursor_param`, `token_path`, optional `stop_path` | next-page token read from the response body; optional `stop_path` (gap-loop cycle-1 item 5) names a body path whose falsy value stops pagination REGARDLESS of whether the token itself is still non-empty (Zendesk's `meta.has_more`: its own docs warn the cursor properties may be populated even when `has_more` is false) — a spec that never sets `stop_path` keeps the exact prior stop-on-empty-token-only behavior; also loop-guards against the same token repeating twice in a row |
 | `cursor` (`last_record_field`+`stop_path`) | `cursor_param`, `last_record_field`, `stop_path` | Stripe-style `starting_after`/`has_more`: next cursor = a named field on the **last record** of the current page; `stop_path` names a body path whose falsy value stops (its absence, or an empty/malformed page, is defensive "never loop forever") |
 | `next_url` | `next_url_path`, `allow_cross_host` | absolute next-page URL read from the body (aircall-style); same-host SSRF guard by default (THREAT-MODEL §3) — set `allow_cross_host: true` to opt out; also loop-guards against requesting the same URL twice |
+| `start_index` | `start_index_param` (default `startIndex`), `count_param` (default `count`), `total_path` (default `totalResults`), `start_index_path` (default `startIndex`), `start_index_base` (pointer; default 1 — an explicit `0` is honored for a 0-based server), `page_size` | 1-based index-plus-total pagination — the SCIM 2.0 list shape, RFC 7644 §3.4.2.4: `?startIndex=1&count=N` → `{totalResults, itemsPerPage, startIndex, Resources}`. Named for the mechanism, not for SCIM: any API that pages by an index and reports a total is served by the same walk. Every field defaults to SCIM's name, so a SCIM stream declares only `{"type":"start_index","page_size":N}` |
+
+The `start_index` walk advances by the records the engine **actually extracted at the stream's records path** (`recordCount`), never by a server-claimed `itemsPerPage` — a server that claims 100 while returning 2 would otherwise make the walk skip 98 records silently. There is deliberately no declarable `items_per_page_path` field (the reason is recorded beside the type in `bundle.go`/`paginate.go`); a non-advancing index is a sticky `Err()` rather than a silent stop, mirroring the `tokenPathCursor`/`nextURL` loop guards, and `total_path` bounds the walk so an over-reported total can never make it loop.
 
 A `stop_path` body value (both cursor variants) is read via `connsdk.StringAt`; ANY value other than
 the literal string `"true"` (a JSON `false`, a missing path, or a read error) is falsy and stops
@@ -725,13 +728,9 @@ client-side" (see stripe's `docs.md`). Any key on `metadata.json.rate_limit` bey
 `requests_per_minute` (e.g. a `strategy` field) is not even a field on the Go type and is silently
 dropped — don't declare one.
 
-**Write body construction** (`write.go`): `body_type` is `"json"` (default), `"form"`, or
-`"none"`. Default body = every record field **except** those named in `path_fields` (the path
-already carries them, e.g. `{{ record.id }}` for an update). `body_fields` (if set) restricts the
-body to an explicit allow-list instead (used for delete-with-body actions). `"form"` builds a
-`url.Values` body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for
-deterministic encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body
-at all (pure path-parameterized mutation/delete).
+**Write body construction** (`write.go`): `body_type` is one of `"json"` (default), `"form"`, `"none"`, `"graphql"`, `"json_array"`, `"multipart"`, or `"base64_upload"` (the `body_type` enum in `internal/connectors/engine/schema/writes.schema.json` is the authority). Default body = every record field **except** those named in `path_fields` (the path already carries them, e.g. `{{ record.id }}` for an update). `body_fields` (if set) restricts the body to an explicit allow-list instead (used for delete-with-body actions). `"form"` builds a `url.Values` body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for deterministic encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body at all (pure path-parameterized mutation/delete).
+
+`"base64_upload"` is a **typed** JSON body, not a raw request escape hatch — method, path and body structure stay bundle metadata. It carries a base64-encoded payload in exactly one declared JSON property, everything else being an ordinary record field governed by the action's closed `record_schema`. Declare it via a `base64_upload` block with `source` (`"path"` default — read a local file — or `"base64"` — take an already-encoded string), `source_field`, `content_field`, `max_decoded_bytes` (required, positive, clamped to a 16 MiB engine ceiling — an unbounded inline upload is a memory-exhaustion vector), and optional `max_encoded_bytes` (defaults to the base64 length of the decoded bound). Two properties every author must know: the `source_field` is **removed from the body before transmission** — in `"path"` mode it holds a local filesystem path, and transmitting it would leak the operator's directory layout to the provider; and in path mode the file is read under `os.Root` containment (refuses traversal, symlink escape and the check-then-open TOCTOU race in one primitive, not a lexical prefix check), bounded (read one byte past the limit and REJECT rather than truncate — a truncated attachment is a silently corrupt upload), and verified against the approved-payload SHA-256 digest exactly as the `multipart` file part does, so plan/preview/approve/execute still binds the approved bytes.
 
 `redact_fields` is an action-local list of record paths whose values must be removed from
 operator-visible write surfaces. It is for non-secret identifiers or clinical values that can appear
