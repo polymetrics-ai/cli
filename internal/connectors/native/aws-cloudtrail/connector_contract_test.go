@@ -14,6 +14,47 @@ func TestConnectorContract(t *testing.T) {
 	assertConnectorContract(t, New(), "aws-cloudtrail")
 }
 
+func TestCommandSurfaceExposesDocumentedOperations(t *testing.T) {
+	provider, ok := New().(connectors.CommandSurfaceProvider)
+	if !ok {
+		t.Fatal("New() does not implement connectors.CommandSurfaceProvider")
+	}
+	surface := provider.CommandSurface()
+	if surface == nil {
+		t.Fatal("CommandSurface() = nil")
+	}
+	if got, want := len(surface.Commands), 60; got != want {
+		t.Fatalf("CommandSurface commands = %d, want %d documented CloudTrail operations", got, want)
+	}
+	availability := map[string]int{}
+	commands := map[string]connectors.CommandSurfaceCommand{}
+	for _, command := range surface.Commands {
+		availability[command.Availability]++
+		commands[command.Path] = command
+	}
+	if got, want := availability["implemented"], 57; got != want {
+		t.Fatalf("implemented command rows = %d, want %d", got, want)
+	}
+	if got, want := availability["unsafe_or_disallowed"], 3; got != want {
+		t.Fatalf("policy-disallowed command rows = %d, want %d", got, want)
+	}
+	for path, wantAvailability := range map[string]string{
+		"events lookup":    "implemented",
+		"query cancel":     "implemented",
+		"tags add":         "implemented",
+		"query start":      "unsafe_or_disallowed",
+		"dashboard create": "unsafe_or_disallowed",
+	} {
+		command, ok := commands[path]
+		if !ok {
+			t.Fatalf("CommandSurface missing %q", path)
+		}
+		if got := command.Availability; got != wantAvailability {
+			t.Fatalf("CommandSurface %q availability = %q, want %q", path, got, wantAvailability)
+		}
+	}
+}
+
 func TestCatalogStreamsMatchBundleSchemas(t *testing.T) {
 	bundle, err := engine.Load(os.DirFS("../../defs"), connectorName)
 	if err != nil {

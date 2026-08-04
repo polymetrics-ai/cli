@@ -60,7 +60,7 @@ func TestOperationLedgerCounts(t *testing.T) {
 		t.Fatalf("write-covered operations = %d, want %d", got, want)
 	}
 	if got, want := blocked, 3; got != want {
-		t.Fatalf("blocked/planned operations = %d, want %d", got, want)
+		t.Fatalf("policy-blocked operations = %d, want %d", got, want)
 	}
 }
 

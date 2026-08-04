@@ -428,8 +428,9 @@ func containsAny(value string, markers ...string) bool {
 	return false
 }
 
-// OperationDirectRead rejects provider query/lookup operations until shared
-// promoted-native forwarding exposes them safely.
+// OperationDirectRead executes only the declared, typed CloudTrail lookup
+// operations. The promoted-native wrapper forwards this optional capability
+// into the command runner.
 func (c Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
 		return connectors.DirectReadResult{}, err

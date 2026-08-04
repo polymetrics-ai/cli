@@ -14,7 +14,7 @@
     },
     {
       "method": "POST",
-      "path": "cloudtrail_api_action:CancelQuery",
+      "path": "CloudTrail_20131101.CancelQuery",
       "covered_by": {
         "direct_read": "query cancel"
       }
@@ -36,7 +36,7 @@
         "blocked_by_default": true,
         "reason": "Genuinely blocked by project policy, not by missing infrastructure: this action's Widgets array requires each RequestWidget to embed an unrestricted CloudTrail Lake SQL QueryStatement. This repository disables generic/unrestricted query-text execution for every connector (capabilities.query is fixed false repo-wide) and never exposes a raw SQL passthrough tool per AGENTS.md. This action stays unavailable regardless of shared-runtime state.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CreateDashboard.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+        "notes": "No raw AWS action/path/body escape hatch is provided. This action is permanently unavailable under the project policy because its Widgets request model admits unrestricted CloudTrail Lake SQL QueryStatement text."
       }
     },
     {
@@ -97,7 +97,7 @@
     },
     {
       "method": "POST",
-      "path": "cloudtrail_api_action:DescribeQuery",
+      "path": "CloudTrail_20131101.DescribeQuery",
       "covered_by": {
         "direct_read": "query describe"
       }
@@ -125,7 +125,7 @@
     },
     {
       "method": "POST",
-      "path": "cloudtrail_api_action:GenerateQuery",
+      "path": "CloudTrail_20131101.GenerateQuery",
       "covered_by": {
         "direct_read": "query generate"
       }
@@ -181,7 +181,7 @@
     },
     {
       "method": "POST",
-      "path": "cloudtrail_api_action:GetQueryResults",
+      "path": "CloudTrail_20131101.GetQueryResults",
       "covered_by": {
         "direct_read": "query results"
       }
@@ -244,14 +244,14 @@
     },
     {
       "method": "POST",
-      "path": "cloudtrail_api_action:ListInsightsData",
+      "path": "CloudTrail_20131101.ListInsightsData",
       "covered_by": {
         "direct_read": "insights data list"
       }
     },
     {
       "method": "POST",
-      "path": "cloudtrail_api_action:ListInsightsMetricData",
+      "path": "CloudTrail_20131101.ListInsightsMetricData",
       "covered_by": {
         "direct_read": "insights metric-data list"
       }
@@ -265,7 +265,7 @@
     },
     {
       "method": "POST",
-      "path": "cloudtrail_api_action:ListQueries",
+      "path": "CloudTrail_20131101.ListQueries",
       "covered_by": {
         "direct_read": "query list"
       }
@@ -286,7 +286,7 @@
     },
     {
       "method": "POST",
-      "path": "cloudtrail_api_action:LookupEvents",
+      "path": "CloudTrail_20131101.LookupEvents",
       "covered_by": {
         "direct_read": "events lookup"
       }
@@ -342,7 +342,7 @@
     },
     {
       "method": "POST",
-      "path": "cloudtrail_api_action:SearchSampleQueries",
+      "path": "CloudTrail_20131101.SearchSampleQueries",
       "covered_by": {
         "direct_read": "query sample-search"
       }
@@ -426,7 +426,7 @@
         "blocked_by_default": true,
         "reason": "Genuinely blocked by project policy, not by missing infrastructure: this action's Widgets array requires each RequestWidget to embed an unrestricted CloudTrail Lake SQL QueryStatement. This repository disables generic/unrestricted query-text execution for every connector (capabilities.query is fixed false repo-wide) and never exposes a raw SQL passthrough tool per AGENTS.md. This action stays unavailable regardless of shared-runtime state.",
         "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_UpdateDashboard.html",
-        "notes": "No raw AWS action/path/body escape hatch is provided; this remains planned until typed write metadata and the shared command/write runtime path are both available."
+        "notes": "No raw AWS action/path/body escape hatch is provided. This action is permanently unavailable under the project policy because its Widgets request model admits unrestricted CloudTrail Lake SQL QueryStatement text."
       }
     },
     {

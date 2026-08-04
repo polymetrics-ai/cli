@@ -1,9 +1,9 @@
 {
   "phase": "aws-cloudtrail-parity-resume-r1",
-  "state": "planned",
+  "state": "validated",
   "branch": "fm/cli-aws-cloudtrail-parity-resume-r1",
   "gsd": "manual fallback: scripts/gsd prompt programming-loop is unavailable",
-  "verificationPassed": false,
+  "verificationPassed": true,
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -14,6 +14,11 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "The red command-surface regression must be reproduced against this isolated worktree before connector-local production edits."
+    },
+    {
+      "cycle": "shared-forwarder",
+      "decision": "local_critical_path",
+      "reason": "Captain authorised generic forwarding in internal/connectors/native/nativeset/promoted.go after runtime proof showed definitionConnector erased CommandSurfaceProvider and OperationDirectReader. The implementation must cover every enumerated optional runtime interface from connectors.go."
     }
   ],
   "counts": {

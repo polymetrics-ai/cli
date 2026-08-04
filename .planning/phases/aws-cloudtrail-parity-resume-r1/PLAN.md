@@ -10,6 +10,10 @@
 
 This lane owns only AWS CloudTrail connector files under `internal/connectors/defs/aws-cloudtrail/`, `internal/connectors/native/aws-cloudtrail/`, `internal/connectors/hooks/aws-cloudtrail/`, connector-generated documentation/data when the scoped generator changes it, and this phase's artifacts. The target connector is exactly `aws-cloudtrail`.
 
+The captain approved one narrow exception after runtime reproduction: `internal/connectors/native/nativeset/promoted.go` may receive only connector-agnostic optional-runtime forwarders. `definitionConnector` otherwise erases native optional capabilities before the CLI registry sees them. No other shared path is authorized.
+
+The enumerated runtime interfaces declared by `internal/connectors/connectors.go` are `DirectReader`, `OperationDirectReader`, `OperationBinaryDownloader`, `WriteValidator`, `DryRunWriter`, `Querier`, `CDCReader`, `StatefulReader`, `SchemaMapper`, `LiveConformanceProvider`, and `LocalWarehouseMaterializer`. `CommandSurfaceProvider` is the companion CLI provider in `command_surface.go`. `DefinitionProvider` remains intentionally supplied by the wrapper's bundle-backed implementation; `ManifestProvider` and `GuideProvider` are documentation metadata providers rather than runtime dispatch interfaces and are not changed by this authorization.
+
 Do not alter shared engine/runtime/schema files, including `internal/connectors/engine/write.go`, `internal/connectors/engine/schema/writes.schema.json`, `internal/connectors/engine/schema/operations.schema.json`, the connector definition validator, or `docs/migration/conventions.md`.
 
 ## Rehydration and source inventory
@@ -23,9 +27,10 @@ Do not alter shared engine/runtime/schema files, including `internal/connectors/
 
 1. Capture red evidence that the native connector does not implement `connectors.CommandSurfaceProvider`; consequently `pm aws-cloudtrail --help` is rejected as an unknown command despite a valid `cli_surface.json`.
 2. Add the established connector-local native-to-engine command-surface delegate, loading only the AWS CloudTrail bundle. Add a native contract test that checks all 60 command rows are exposed with the 57/3 implemented/disallowed split.
-3. Build `pm` and run runtime help/bare/representative direct-read/reverse-ETL commands without credentials or provider writes. The results must prove command registration and preserve the plan -> preview -> approval -> execute write gate.
-4. Complete the provider-field research matrix in `traces/` without changing shared citation schema: every request field must reference its operation's AWS API Reference Request Parameters section, evidence type, confidence, and requiredness rationale. Rebase the eventual shared citation convention before final validation if it lands.
-5. Run the connector-local and current-main gates specified by the parity resume contract, regenerate only scoped generated data if it changes, then commit the green slice.
+3. Add a generic `definitionConnector` forwarding test and the single authorized forwarder so every enumerated native optional runtime interface survives registry wrapping, or returns a typed `ErrUnsupportedOperation` when the wrapped connector does not implement it.
+4. Build `pm` and run runtime help/bare/representative direct-read/reverse-ETL commands without credentials or provider writes. The results must prove command registration and preserve the plan -> preview -> approval -> execute write gate.
+5. Complete the provider-field research matrix in `traces/` without changing shared citation schema: every request field must reference its operation's AWS API Reference Request Parameters section, evidence type, confidence, and requiredness rationale. Rebase the eventual shared citation convention before final validation if it lands.
+6. Run the connector-local and current-main gates specified by the parity resume contract, regenerate only scoped generated data if it changes, then commit the green slice.
 
 ## Safety constraints
 
