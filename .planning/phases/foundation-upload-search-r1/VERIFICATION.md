@@ -38,6 +38,14 @@ calls; nested happy path still uploads; a mutant reverting the wire-write site f
 - Upload **fails closed** on mismatch, deliberately unlike the download direction: there the provider
   makes the Content-Type claim and providers misreport it, so a mismatch is surfaced rather than
   rejected; here we are the party making the claim, so an unsatisfiable claim is our bug.
+- The part's **wire `Content-Type` is set from the sniffed type** when an allowlist is present
+  (captain's decision, option A). The sniffed type has just been proven to be one the bundle accepts,
+  so the claim we make is one we verified rather than one we merely declared; asserting the declared
+  `content_type` over disagreeing bytes was a claim we had already falsified. `allowed_media_types`
+  remains the only restriction, so **a single-entry list is how a bundle demands exactly one type**.
+  With no allowlist the declared `content_type` is sent untouched, because nothing verified the sniff
+  and `http.DetectContentType` is coarse enough (every CSV sniffs as `text/plain`) that overriding
+  would lose author intent.
 - Unclassifiable content gets its own message rather than being reported as an ordinary mismatch.
 - Load-time validation: entries must parse; a present-but-empty list is refused so "bounded" and
   "unbounded" can never be confused; a declared `content_type` must be a member of its own allowlist;
@@ -131,12 +139,72 @@ by design. The gate CI actually runs for this workflow is `connectorgen boundary
 - **The 169 `rest_read` POST operations without `additionalProperties: false` are untouched** — an
   unrelated migration that must not ride a foundation PR.
 
+## Rebase onto #3700
+
+The branch was rebased from `504a7c07a` onto `48e928398`, dropping a merge commit this repo's
+`required_linear_history` setting would reject. Verified after the rebase:
+
+```bash
+$ git merge-base --is-ancestor origin/main HEAD && echo linear
+linear
+
+$ git log --merges origin/main..HEAD --oneline | wc -l
+0
+```
+
+Conflict resolutions, on the merits rather than by picking a side:
+
+- **`minItems`/`maxItems` (schema.go)** — both PRs added the same dialect keywords. Main's factored
+  `compileArrayCardinality`/`validateArrayCardinality` kept, this phase's duplicate dropped, the
+  provider-search motivation folded into the surviving comment. `requireBoundedArrays` is *not*
+  redundant with it and stays: the keyword makes a bound expressible, that rule makes it mandatory
+  for `provider_search`.
+- **`bundle.go`** — pure adjacency; `validateBase64UploadSpec` (#3700) and
+  `validateProviderSearchSemantics`/`requireBoundedArrays`/`validateMultipartMediaTypes` (this phase)
+  are unrelated and all survive.
+- **`write.go`** — #3700's `base64_upload` builders kept whole; `buildMultipartPayload` takes this
+  phase's `root *os.Root` parameter. The two upload paths are complementary, not duplicates:
+  `base64_upload` buffers a payload to inline it in JSON, `multipart` streams under a held-open root.
+- **Two test assertions** updated from this phase's error wording to main's. The behaviour they pin —
+  rejection before any HTTP call — is unchanged.
+
+Re-verified by execution after the rebase, not by reading:
+
+```bash
+$ go build -o pm ./cmd/pm && ./pm connectors list --json | jq length
+554
+
+$ ./pm gong calls upload-media --help
+NAME
+  pm gong calls upload-media - Add call media (/v2/calls/{id}/media)
+# exit 0
+
+$ go run ./cmd/connectorgen boundary . --json
+# exit 0
+
+$ { git diff --name-only origin/main...HEAD; git status --porcelain | awk '{print $2}'; } \
+    | grep -c 'internal/connectors/defs/'
+0
+```
+
 ## Website catalog
 
 `.github/workflows/website.yml` triggers only on `website/**`,
 `internal/connectors/icon_data.json`, `docs/connectors/icons/**`, `.github/workflows/website.yml`,
 and `.gitlab-ci.yml`. This branch touches none of them, so `Website checks` does not run; the
 connector catalog is generated from `internal/connectors/defs/**`, which is unchanged.
+
+Confirmed by regenerating rather than by assuming — the generator reproduces the committed
+catalog byte-for-byte, so there is nothing to commit:
+
+```bash
+$ node website/scripts/gen-connector-catalog.mjs
+Wrote 550 connectors to lib/connectors.catalog.generated.ts and
+lib/connectors.catalog.data.generated.json (11413 KB).
+
+$ git status --porcelain website/
+# (no output)
+```
 
 ## What Freshchat can now do, in its own lane
 

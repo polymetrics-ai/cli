@@ -76,11 +76,18 @@ type MultipartFile struct {
 	Root    *os.Root
 	RelPath string
 
-	FileName    string
+	FileName string
+	// ContentType is the part header the bundle declares. When AllowedMediaTypes
+	// bounds the part, the sent header is replaced by the type the bytes actually
+	// sniffed as, so ContentType is then the authoring intent rather than the
+	// wire value.
 	ContentType string
 	// AllowedMediaTypes, when non-empty, bounds what the file's own bytes may
-	// sniff as. The declared ContentType is what we assert to the provider; this
-	// is what makes the assertion true. Enforced before any request is made.
+	// sniff as, and is the only restriction on the part's type — a single-entry
+	// list is how a bundle demands exactly one type. It is enforced before any
+	// request is made, and the sniffed type it admits becomes the header we send,
+	// so the claim made to the provider is one we have verified rather than one
+	// we merely declared.
 	AllowedMediaTypes []string
 	MaxBytes          int64
 	ExpectedSHA256    string
@@ -399,6 +406,16 @@ func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (Mu
 		prepared.Files[i].Path = tempPath
 		prepared.Files[i].Root = nil
 		prepared.Files[i].RelPath = ""
+		// The part header now describes the bytes we actually send, not the type
+		// the bundle hoped for. checkAllowedMediaType has already confirmed the
+		// sniffed type is one the bundle declared acceptable, so this is both
+		// truthful and within the declared bound. Only set when an allowlist made
+		// it binding: without one the sniff is unverified against any declaration,
+		// and http.DetectContentType is coarse enough (every CSV is text/plain)
+		// that overriding a deliberate content_type would lose information.
+		if len(file.AllowedMediaTypes) > 0 {
+			prepared.Files[i].ContentType = sniffed
+		}
 		total += size
 	}
 	return prepared, cleanup, nil
