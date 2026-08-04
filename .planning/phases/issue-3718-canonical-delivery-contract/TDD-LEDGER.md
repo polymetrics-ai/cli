@@ -2,8 +2,8 @@
 
 | ID | Enforcement | RED evidence | GREEN evidence | Refactor/verification |
 |---|---|---|---|---|
-| R1 | Every canonical GSD command resolves | Pending: temporary contract references absent `programming-loop`; focused test must fail with its `scripts/gsd sources` error | Pending | Pending |
-| R2 | Diverged projection fails | Pending: seeded marked projection differs from expected block while checker stub accepts it; focused test must fail | Pending | Pending |
+| R1 | Every canonical GSD command resolves | `go test ./internal/agentcontract` failed: `GSD command "programming-loop" does not resolve: scripts/gsd: unknown GSD command or prompt: programming-loop` | Pending | Pending |
+| R2 | Diverged projection fails | Same executed run failed: `CheckProjection accepted a diverged projection` against the pre-enforcement stub | Pending | Pending |
 | R3 | Stable deterministic rendering | N/A (added after R2 green) | Pending | Pending |
 | R4 | Required fields, single-worker/no-delegation, overlay inheritance | N/A (source validator coverage) | Pending | Pending |
 | R5 | CI drift entry point | N/A | Pending: `make agent-contract-check` | Pending |
