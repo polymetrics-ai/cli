@@ -83,5 +83,12 @@ Issue: #3718. Parent: #3714. Branch: `fm/cli-agents-wave1-canonical-contract-r1`
 3. Green generator/check and canonical source.
 4. Shared contract reframe and review/verification fixes.
 
-Do not push, open a PR, mark a draft ready, or merge during this worker stage. Firstmate owns the
-later no-mistakes ship instruction and all captain gates.
+## Captain topology disposition
+
+The initial Wave 1 branch started from `origin/main` before the required parent topology existed.
+Before any child push, PR, or CI phase, the outer delivery executor must create
+`refactor/3714-canonical-delivery-flow` from current `origin/main`, add a deliberate seed commit,
+and open its draft PR to `main` as the Waves 1–7 integration point. It must then restack this branch
+as the first child without squashing, resetting, rebuilding, or dropping any implementation or
+gate-fix commit. The active no-mistakes review step records this captain decision but does not own
+branch-topology, push, PR, or CI mutations.

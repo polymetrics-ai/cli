@@ -17,7 +17,7 @@ slice in roadmap workstream 0, "GSD Runtime and Agent Enablement." Waves 2–7 d
   `verify-work` (including `plan-phase --gaps` and `execute-phase --gaps-only`) → `code-review`.
   `programming-loop` is absent and must not be mandatory.
 - The repo stacked-PR contract owns GitHub topology. A deliberate parent seed and draft parent PR
-  exist before production changes. GSD ship is not used for PR creation.
+  must exist before production changes. GSD ship is not used for PR creation.
 - no-mistakes v1.41.2 has no non-default-base option. Child branches run
   `--skip=push,pr,ci`, then use `gh-axi` for the sub-PR; the integrated parent runs the full
   pipeline. `--yes` is forbidden.

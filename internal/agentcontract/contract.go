@@ -9,9 +9,12 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"unicode"
 )
 
 const SourcePath = ".agents/agentic-delivery/canonical/delivery-contract.json"
+
+const requiredChildCommand = "no-mistakes axi run --intent '<issue-intent>' --skip=push,pr,ci"
 
 type Contract struct {
 	SchemaVersion    int                `json:"schema_version"`
@@ -177,19 +180,45 @@ func (contract *Contract) Validate() error {
 	if !slices.Equal(contract.GSD.Commands, commands) || contract.GSD.ShipUsed || strings.TrimSpace(contract.GSD.ShipExclusion) == "" {
 		return fmt.Errorf("canonical contract: GSD lifecycle or ship exclusion is invalid")
 	}
-	if len(contract.GSD.Sequence) == 0 {
-		return fmt.Errorf("canonical contract: GSD sequence is required")
+	requiredGSDSequence := [...]GSDInvocation{
+		{Command: "discuss-phase", Args: "<phase>"},
+		{Command: "plan-phase", Args: "<phase> --tdd"},
+		{Command: "execute-phase", Args: "<phase>"},
+		{Command: "verify-work", Args: "<phase>"},
+		{Command: "plan-phase", Args: "<phase> --gaps"},
+		{Command: "execute-phase", Args: "<phase> --gaps-only"},
+		{Command: "code-review", Args: "<phase>"},
 	}
-	for _, invocation := range contract.GSD.Sequence {
-		if !slices.Contains(contract.GSD.Commands, invocation.Command) || strings.TrimSpace(invocation.Args) == "" || strings.TrimSpace(invocation.Purpose) == "" {
-			return fmt.Errorf("canonical contract: GSD sequence references undeclared command %q", invocation.Command)
+	if len(contract.GSD.Sequence) != len(requiredGSDSequence) {
+		return fmt.Errorf("canonical contract: GSD sequence is incomplete or out of order")
+	}
+	for index, want := range requiredGSDSequence {
+		invocation := contract.GSD.Sequence[index]
+		if invocation.Command != want.Command || invocation.Args != want.Args || strings.TrimSpace(invocation.Purpose) == "" {
+			return fmt.Errorf("canonical contract: GSD sequence is incomplete or out of order at step %d", index+1)
 		}
 	}
 	if !contract.Tracker.DraftParentBeforeProduction || strings.TrimSpace(contract.Tracker.ParentSeed) == "" || strings.TrimSpace(contract.Tracker.SubPRBase) == "" || !allNonEmpty(contract.Tracker.IntegrateWhen) || !allNonEmpty(contract.Tracker.ReadyWhen) || strings.TrimSpace(contract.Tracker.FinalMerge) == "" {
 		return fmt.Errorf("canonical contract: tracker draft, integration, readiness, and merge gates are required")
 	}
-	if strings.TrimSpace(contract.NoMistakes.VerifiedVersion) == "" || !slices.Contains(contract.NoMistakes.ForbiddenFlags, "--yes") || !strings.Contains(contract.NoMistakes.ChildCommand, "--skip=push,pr,ci") || strings.TrimSpace(contract.NoMistakes.GateResponse) == "" || strings.Contains(contract.NoMistakes.ParentCommand, "--skip=") || strings.TrimSpace(contract.NoMistakes.ParentCommand) == "" || !strings.Contains(contract.NoMistakes.SubPROpen, "gh-axi") {
+	if !slices.Contains(contract.Tracker.IntegrateWhen, "CI checks pass") {
+		return fmt.Errorf("canonical contract: child integration requires passing CI checks")
+	}
+	for _, criterion := range contract.Tracker.IntegrateWhen {
+		if strings.Contains(strings.ToLower(criterion), "infrastructure blocker") {
+			return fmt.Errorf("canonical contract: infrastructure blockers must pause child integration")
+		}
+	}
+	if contract.NoMistakes.VerifiedVersion != "v1.41.2" || !slices.Contains(contract.NoMistakes.ForbiddenFlags, "--yes") || contract.NoMistakes.ChildCommand != requiredChildCommand || strings.TrimSpace(contract.NoMistakes.GateResponse) == "" || strings.Contains(contract.NoMistakes.ParentCommand, "--skip=") || strings.TrimSpace(contract.NoMistakes.ParentCommand) == "" || !strings.Contains(contract.NoMistakes.SubPROpen, "gh-axi") {
 		return fmt.Errorf("canonical contract: no-mistakes child workaround, full parent pipeline, gh-axi, and --yes prohibition are required")
+	}
+	for _, forbidden := range contract.NoMistakes.ForbiddenFlags {
+		if strings.TrimSpace(forbidden) == "" {
+			return fmt.Errorf("canonical contract: no-mistakes forbidden flags must be non-empty")
+		}
+		if containsCommandToken(contract.NoMistakes.ChildCommand, forbidden) || containsCommandToken(contract.NoMistakes.ParentCommand, forbidden) {
+			return fmt.Errorf("canonical contract: no-mistakes command uses forbidden flag %q", forbidden)
+		}
 	}
 	pauseIDs := []string{"product_ambiguity", "destructive_irreversible", "secrets_auth_security", "dependency_production", "generic_write", "reverse_etl_execute", "quality_gate_weakening", "final_merge"}
 	if contract.Authority.Principle != "Absence never expands authority." || !equalRuleIDs(contract.Authority.PauseWhen, pauseIDs) {
@@ -217,6 +246,13 @@ func allNonEmpty(values []string) bool {
 		}
 	}
 	return true
+}
+
+func containsCommandToken(command, target string) bool {
+	tokens := strings.FieldsFunc(command, func(character rune) bool {
+		return unicode.IsSpace(character) || strings.ContainsRune("'\"`;|&()<>\\", character)
+	})
+	return slices.Contains(tokens, target)
 }
 
 func equalStepIDs(steps []Step, want []string) bool {

@@ -8,7 +8,7 @@ import (
 )
 
 func TestCanonicalContractRequiredInvariants(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := repositoryRoot(t)
 
 	tests := []struct {
 		name   string
@@ -45,6 +45,48 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 			},
 		},
 		{
+			name: "GSD sequence reordered",
+			mutate: func(value *Contract) {
+				value.GSD.Sequence[0], value.GSD.Sequence[1] = value.GSD.Sequence[1], value.GSD.Sequence[0]
+			},
+		},
+		{
+			name: "GSD TDD flag removed",
+			mutate: func(value *Contract) {
+				value.GSD.Sequence[1].Args = "<phase>"
+			},
+		},
+		{
+			name: "GSD ship executable",
+			mutate: func(value *Contract) {
+				value.GSD.Sequence[len(value.GSD.Sequence)-1].Command = "ship"
+			},
+		},
+		{
+			name: "yes used by child command",
+			mutate: func(value *Contract) {
+				value.NoMistakes.ChildCommand += " --yes"
+			},
+		},
+		{
+			name: "yes used by parent command",
+			mutate: func(value *Contract) {
+				value.NoMistakes.ParentCommand += " --yes"
+			},
+		},
+		{
+			name: "child intent unquoted",
+			mutate: func(value *Contract) {
+				value.NoMistakes.ChildCommand = strings.Replace(value.NoMistakes.ChildCommand, "'<issue-intent>'", "<issue-intent>", 1)
+			},
+		},
+		{
+			name: "infrastructure blocker substitutes for CI",
+			mutate: func(value *Contract) {
+				value.Tracker.IntegrateWhen[1] = "CI checks pass or an infrastructure blocker is recorded"
+			},
+		},
+		{
 			name: "missing parent pipeline",
 			mutate: func(value *Contract) {
 				value.NoMistakes.ParentCommand = ""
@@ -66,9 +108,9 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			copy := *contract
-			test.mutate(&copy)
-			if err := copy.Validate(); err == nil {
+			contract := loadRepositoryContract(t, root)
+			test.mutate(contract)
+			if err := contract.Validate(); err == nil {
 				t.Fatal("Validate accepted a contract missing a required invariant")
 			}
 		})
@@ -104,12 +146,12 @@ func TestRenderIsStableAndConnectorInheritsBase(t *testing.T) {
 		}
 	}
 
-	const expectedSHA256 = "467b9f87ec34fb14dc33504fc6f7b9ae3dfdc6c0134f28912571d2dee0c49ffe"
+	const expectedSHA256 = "da49efcdadddc85bb442a23ad75dc426ac23b9ee42cb3111ccbaef4e33d36bd1"
 	gotSHA256 := fmt.Sprintf("%x", sha256.Sum256(base))
 	if gotSHA256 != expectedSHA256 {
 		t.Fatalf("base rendering hash = %s, update expected hash after intentional canonical change", gotSHA256)
 	}
-	const expectedConnectorSHA256 = "556e6ea187dd5b5a9402a4b6799117980a766db9d06c9547d2b993262e70c87a"
+	const expectedConnectorSHA256 = "760c69bea2655c85c9e7ecee03e0fffcf61bf2b09fff8e74b255cfef669f1e2f"
 	gotConnectorSHA256 := fmt.Sprintf("%x", sha256.Sum256(connector))
 	if gotConnectorSHA256 != expectedConnectorSHA256 {
 		t.Fatalf("connector rendering hash = %s, update expected hash after intentional canonical change", gotConnectorSHA256)

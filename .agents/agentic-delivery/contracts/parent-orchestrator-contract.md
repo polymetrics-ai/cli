@@ -100,7 +100,7 @@ parent.
 Never use `--yes`.
 
 On a sub-issue branch, run the review/test/docs/lint loop with
-`no-mistakes axi run --intent <issue-intent> --skip=push,pr,ci`. Respond to each exact finding ID
+`no-mistakes axi run --intent '<issue-intent>' --skip=push,pr,ci`. Respond to each exact finding ID
 with recorded rationale. Let the pipeline apply bounded in-scope fixes, then rerun the gate. After
 local gates pass, use `gh-axi` to open the sub-PR to the parent branch; no-mistakes v1.41.2 cannot
 target a non-default PR base.
@@ -114,11 +114,14 @@ A sub-PR may integrate into the parent branch only when:
 
 - it targets the parent branch and uses `Refs #<sub-issue>` plus `Refs #<parent-issue>`
 - targeted and issue-level verification pass
-- CI checks pass, or a specific infrastructure blocker is recorded
+- CI checks pass
 - every actionable automated review finding is resolved or explicitly dispositioned
 - review coverage exists on the sub-PR, or the allowed parent-PR fallback is recorded
 - the diff remains inside the sub-issue scope and ownership boundaries
 - no requested-changes review or human gate remains
+
+A specific infrastructure blocker pauses integration, records the wave as blocked, and escalates
+the unblock action. It never substitutes for passing checks.
 
 If Claude skips a non-default-base sub-PR, integration is provisional until the main-targeted parent
 PR receives Claude review covering that commit range, or the documented Copilot/human fallback is

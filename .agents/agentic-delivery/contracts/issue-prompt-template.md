@@ -26,9 +26,13 @@ Choose the automated review route before posting review commands:
 For parent issues, sub-issues, and stacked PRs, follow:
 `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
 
-For parent issues that spawn or assign multiple workers, follow:
+For parent issues, sub-issues, and stacked PRs, use the single-worker compatibility ownership
+contract:
 `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
-`.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
+
+This contract supersedes the legacy parent-orchestration entry point. The canonical worker owns
+parent state inline and must not spawn or assign another worker or role. Legacy files remain only
+for Wave 6 cleanup and are not active instructions for this flow.
 
 Task type: `<task-type-from-task-skill-matrix>`
 

@@ -15,16 +15,23 @@ func CheckRoot(ctx context.Context, root string) error {
 	if err != nil {
 		return err
 	}
-	if err := CheckGSDCommands(ctx, filepath.Join(root, "scripts", "gsd"), contract.GSD.Commands); err != nil {
+	if err := CheckGSDCommands(ctx, root, contract.GSD.Commands); err != nil {
 		return err
 	}
 	return CheckProjections(root, contract)
 }
 
 // CheckGSDCommands verifies command names through the repository's real GSD adapter.
-func CheckGSDCommands(ctx context.Context, script string, commands []string) error {
+func CheckGSDCommands(ctx context.Context, root string, commands []string) error {
+	absoluteRoot, err := filepath.Abs(root)
+	if err != nil {
+		return fmt.Errorf("resolve GSD repository root: %w", err)
+	}
+	script := filepath.Join(absoluteRoot, "scripts", "gsd")
 	for _, command := range commands {
-		output, err := exec.CommandContext(ctx, script, "sources", command).CombinedOutput()
+		invocation := exec.CommandContext(ctx, script, "sources", command)
+		invocation.Dir = absoluteRoot
+		output, err := invocation.CombinedOutput()
 		if err != nil {
 			return fmt.Errorf("GSD command %q does not resolve: %s: %w", command, strings.TrimSpace(string(output)), err)
 		}

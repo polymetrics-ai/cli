@@ -5,7 +5,7 @@
   "ownership": {
     "source_path": ".agents/agentic-delivery/canonical/delivery-contract.json",
     "owner": "The one active canonical worker owns the assigned job and its parent GitHub state inline.",
-    "update_rule": "Edit this source, run agentcontractgen sync for existing registered projections, then run agentcontractgen check. Never hand-edit a generated block."
+    "update_rule": "Edit this source, run go run ./cmd/agentcontractgen sync for existing registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated block."
   },
   "base_role": {
     "name": "pm-delivery-worker",
@@ -128,7 +128,7 @@
     "sub_pr_base": "Every wave sub-PR targets the parent branch and uses Refs links for both parent and sub-issue.",
     "integrate_when": [
       "targeted and issue-level verification passes",
-      "CI checks pass or an infrastructure blocker is recorded",
+      "CI checks pass",
       "automated review findings are resolved and required coverage exists",
       "the diff stays inside the sub-issue scope",
       "no requested-changes review or human gate remains"
@@ -195,7 +195,7 @@
     "forbidden_flags": [
       "--yes"
     ],
-    "child_command": "no-mistakes axi run --intent <issue-intent> --skip=push,pr,ci",
+    "child_command": "no-mistakes axi run --intent '<issue-intent>' --skip=push,pr,ci",
     "gate_response": "Resolve gates individually by exact finding ID. Self-answer only when the issue, repo contract, or standing authority fixes a routine reversible answer; record the rationale. Use the pipeline to apply bounded fixes and rerun the gate.",
     "sub_pr_open": "After child-local gates pass, use gh-axi to open the sub-PR to the parent branch because this installed version cannot target a non-default PR base.",
     "parent_command": "Run the full no-mistakes pipeline once on the integrated parent branch and its existing draft parent PR."

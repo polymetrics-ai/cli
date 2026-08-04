@@ -3,10 +3,11 @@
 Use this workflow for large work that needs one parent issue, multiple sub-issues, one parent branch,
 and sub-PRs that merge into the parent branch before the parent PR goes to `main`.
 
-When a parent issue has multiple workers or sub-issues, use
-`.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`. The parent issue
-orchestrator owns shared parent artifacts, parent PR state, sub-PR merge decisions, and automated
-review coverage routing.
+For parent jobs, use the single-worker compatibility ownership contract at
+`.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`. It supersedes the legacy
+parent-orchestration entry point: the canonical worker owns shared parent artifacts, parent PR
+state, sub-PR integration decisions, and automated review coverage inline without spawning or
+assigning another worker or role.
 Use `.agents/agentic-delivery/workflows/automated-review-routing-loop.md` before posting any
 review command or requesting Copilot backup review.
 
@@ -92,7 +93,7 @@ keywords for PRs targeting the default branch.
    push to `main`; stop only when a human gate is triggered.
 10. If Claude skips the sub-PR because the base branch is not `main`, record that skip as a
     review-routing event, not as approval. The sub-PR may be integrated into the parent branch only
-    when the parent PR exists and the orchestrator observes Claude review, or records an
+    when the parent PR exists and the canonical worker observes Claude review, or records an
     allowed fallback route, on the parent PR commit range that includes the sub-issue.
 11. Merge the sub-PR into the parent branch without human approval only if every automated gate is
     green, automated review coverage is satisfied through the sub-PR, parent-PR fallback, or
@@ -104,8 +105,8 @@ keywords for PRs targeting the default branch.
     `workflows/automated-review-routing-loop.md`.
 13. Comment on the sub-issue with the merged sub-PR, commit, verification, automated review coverage
     route, and parent PR status.
-14. Leave the sub-issue open until the parent PR lands on `main`, unless the coordinator explicitly
-    decides that parent-branch integration is the definition of done.
+14. Leave the sub-issue open until the parent PR lands on `main`, unless the canonical worker
+    explicitly decides that parent-branch integration is the definition of done.
 
 ## Parent PR execution loop
 

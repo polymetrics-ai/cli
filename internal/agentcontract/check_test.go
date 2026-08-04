@@ -12,8 +12,27 @@ func TestReferencedGSDCommandsResolve(t *testing.T) {
 	root := repositoryRoot(t)
 	contract := loadRepositoryContract(t, root)
 
-	if err := CheckGSDCommands(context.Background(), filepath.Join(root, "scripts", "gsd"), contract.GSD.Commands); err != nil {
+	if err := CheckGSDCommands(context.Background(), root, contract.GSD.Commands); err != nil {
 		t.Fatalf("referenced GSD commands must resolve: %v", err)
+	}
+}
+
+func TestCheckGSDCommandsRunsFromSelectedRoot(t *testing.T) {
+	root := t.TempDir()
+	script := filepath.Join(root, "scripts", "gsd")
+	if err := os.MkdirAll(filepath.Dir(script), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, ".selected-root"), nil, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	contents := []byte("#!/bin/sh\n[ -f .selected-root ]\n")
+	if err := os.WriteFile(script, contents, 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := CheckGSDCommands(context.Background(), root, []string{"discuss-phase"}); err != nil {
+		t.Fatalf("GSD command did not run from selected root: %v", err)
 	}
 }
 
