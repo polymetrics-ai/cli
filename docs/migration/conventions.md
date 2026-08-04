@@ -183,7 +183,9 @@ not a full override by default.
   belong in the connector's CLI surface metadata, never in provider-named shared runner branches.
   Use `flags[].format:"date-time"` for RFC3339/ISO-8601 timestamp flags,
   `flags[].allow_empty:false` to reject present blank string flags, `flags[].required:true` for
-  command inputs that must be present before execution, and `constraints[]` `kind:"order"` /
+  command inputs that must be present before execution, `flags[].max_items`/`flags[].min_items`
+  to bound a `string_array` flag's item count against the flag the user typed (before the
+  assembled body is validated), and `constraints[]` `kind:"order"` /
   `op:"lt"` / `value_type:"date-time"` over mapped `query.*` or `body.*` targets for provider
   date-range rules. Optional `config.*` fallbacks preserve connection-level defaults when the
   command flag is absent. For implemented direct-read POST operations, every required
