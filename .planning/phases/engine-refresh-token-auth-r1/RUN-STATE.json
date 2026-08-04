@@ -5,7 +5,7 @@
   "runtime": "claude-code",
   "runtime_fallback": "manual-GSD inline execution; Pi runtime subagents unavailable in this session",
   "trace": ".planning/traces/gsd-plan-phase-engine-refresh-token-auth-r1-prompt.md",
-  "status": "planned",
+  "status": "implemented-verified",
   "branch": "fm/cli-engine-refresh-token-auth-r1",
   "parent_issue": 3702,
   "owned_paths": [
@@ -28,32 +28,44 @@
     {
       "id": 1,
       "name": "connsdk-oauth2-refresh-token-authenticator",
-      "state": "planned",
-      "issues": [3703, 3704, 3707]
+      "state": "done",
+      "issues": [
+        3703,
+        3704,
+        3707
+      ]
     },
     {
       "id": 2,
       "name": "connsdk-auth-refresher-401-hook",
-      "state": "planned",
-      "issues": [3706]
+      "state": "done",
+      "issues": [
+        3706
+      ]
     },
     {
       "id": 3,
       "name": "engine-oauth2-refresh-token-mode",
-      "state": "planned",
-      "issues": [3703]
+      "state": "done",
+      "issues": [
+        3703
+      ]
     },
     {
       "id": 4,
       "name": "vault-backed-secret-store-seam",
-      "state": "planned",
-      "issues": [3705]
+      "state": "done",
+      "issues": [
+        3705
+      ]
     },
     {
       "id": 5,
       "name": "docs-conventions-and-design",
-      "state": "planned",
-      "issues": [3702]
+      "state": "done",
+      "issues": [
+        3702
+      ]
     }
   ],
   "human_gates": [
@@ -66,5 +78,34 @@
     "secrets_never_in_argv_logs_or_error_text": true,
     "persisted_state_local_and_encrypted": "internal/vault (AES-256-GCM, .polymetrics/vault, 0600)",
     "connector_bundles_untouched": true
-  }
+  },
+  "verification": {
+    "harness": "verifyharness (scratch, deleted after the run) \u2014 real bundle on disk, real engine.Load/Read, live httptest token+API servers, real internal/vault project",
+    "scenarios_all_green": [
+      "first exchange",
+      "reuse before expiry",
+      "refresh at expiry",
+      "refresh on 401",
+      "persistent 401 terminates",
+      "rotation persisted + used on next run",
+      "concurrent callers => one exchange"
+    ],
+    "race": "go test -race over the 20 new connsdk tests \u2014 pass",
+    "mutation_checks": [
+      "redaction assertion",
+      "static ResolveCheckAuthSpec coverage"
+    ],
+    "connectors_loaded": 554,
+    "boundary_outcome": "clean",
+    "website_catalog_diff": "none (no connector bundle touched)"
+  },
+  "measured_findings": [
+    {
+      "finding": "engine.Read builds one authenticator per call (read.go:48 newRuntime), so a sync costs one token exchange per stream rather than one in total",
+      "measured": "3 Reads of a 3-page stream = 9 upstream requests, 3 token exchanges",
+      "in_scope": false,
+      "reason": "sharing an authenticator across streams needs a cache keyed on credential identity; a wrong key is credential confusion between connectors, so it is a separate security-sensitive change",
+      "action": "reported on parent issue #3702 as a follow-up"
+    }
+  ]
 }

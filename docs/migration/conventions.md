@@ -353,6 +353,57 @@ statically, exactly like `token_url`/`client_id`/`client_secret`/`scopes` — th
 `connectorgen validate` for free via the existing `engine.ResolveCheckAuthSpec(a, specKeys)` call in
 `checkInterpolations`, no `cmd/connectorgen/validate.go` change was needed.
 
+**`oauth2_refresh_token` — user-context tokens that expire** (`connsdk.OAuth2RefreshToken`,
+`engine/auth.go`'s `buildOAuth2RefreshToken`). Use this, NOT `oauth2_client_credentials`, whenever
+the provider's endpoints act on behalf of an end user. Client-credentials obtains an **app-only**
+token: it authenticates the application, so it cannot reach a user's own resources however many
+scopes it carries. A user-context token comes from the authorization-code flow and is renewed with
+a refresh token, which is what this mode does. Reddit is the motivating case — its bearer tokens
+expire one hour after issuance, so a caller-supplied `access_token` cannot survive a scheduled sync.
+
+```json
+{
+  "mode": "oauth2_refresh_token",
+  "token_url": "https://www.reddit.com/api/v1/access_token",
+  "client_id": "{{ config.client_id }}",
+  "client_secret": "{{ secrets.client_secret }}",
+  "refresh_token": "{{ secrets.refresh_token }}",
+  "refresh_token_store_key": "refresh_token",
+  "scopes": "identity read"
+}
+```
+
+`token_url`/`client_id`/`client_secret`/`scopes`/`extra_params` are the SAME fields
+`oauth2_client_credentials` uses, with the same `Interpolate` semantics (an unresolved key hard
+errors; never a silently unauthenticated request). Only the grant and two fields differ:
+
+- **`refresh_token`** — templated, normally `{{ secrets.refresh_token }}`.
+- **`refresh_token_store_key`** — OPTIONAL, and the one field that needs a decision. Many providers
+  rotate the refresh token on every exchange and invalidate the previous one; dropping the new value
+  means the connector works for one process lifetime and then fails with `invalid_grant` on the next
+  run, long after the run that caused it. Declaring this key (normally the same key `refresh_token`
+  reads from) persists the rotated value into the credential's encrypted vault entry, so the next
+  run picks it up through the ordinary `secrets` path. **Omit it only if you have confirmed the
+  provider does not rotate** — omitted means nothing is ever written, and the engine deliberately
+  does NOT guess a key name from the `refresh_token` template (a resolved template yields a value,
+  not a key; guessing would silently overwrite the wrong secret whenever it guessed wrong).
+
+Runtime behaviour a bundle gets for free, none of which is declarable: the access token is exchanged
+once and reused until shortly before expiry (safety margin clamped to half the lifetime, so a very
+short-lived token still caches rather than re-exchanging per request); a missing/zero/unparseable
+`expires_in` is treated as a conservative five-minute life, never as "never expires"; a 401 triggers
+at most ONE refresh-and-retry per request, so a revoked grant terminates instead of hammering the
+token endpoint; and the exchange is serialised, so concurrent callers sharing an authenticator
+produce one exchange whose result they share. Rotation persistence is per-credential and local —
+`internal/vault`, AES-256-GCM, `0600` under `.polymetrics/vault` — with zero centralized custody.
+The refresh token, client secret and access token never appear in argv, logs or error text: the
+token endpoint's error body is never surfaced (RFC 6749 §5.2 lets it echo the grant back), and
+transport errors are rendered through `safety.RedactErrorText`.
+
+`ResolveCheckAuthSpec` statically validates `refresh_token` alongside
+`token_url`/`client_id`/`client_secret`/`scopes`, and checks `refresh_token_store_key` as an
+identifier, so both flow into `connectorgen validate` for free.
+
 **Pagination — 7 types + none** (`bundle.go`'s `PaginationSpec`, `paginate.go`'s `newPaginator`):
 
 | `type` | Fields used | When to use |

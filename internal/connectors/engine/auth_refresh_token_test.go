@@ -63,10 +63,10 @@ func refreshTokenServer(t *testing.T, rotate bool) (*httptest.Server, func() int
 		mu.Unlock()
 		w.Header().Set("Content-Type", "application/json")
 		if rotate {
-			fmt.Fprintf(w, `{"access_token":"AT-%d","refresh_token":"rt-rotated-%d","expires_in":3600}`, n, n)
+			_, _ = fmt.Fprintf(w, `{"access_token":"AT-%d","refresh_token":"rt-rotated-%d","expires_in":3600}`, n, n)
 			return
 		}
-		fmt.Fprintf(w, `{"access_token":"AT-%d","expires_in":3600}`, n)
+		_, _ = fmt.Fprintf(w, `{"access_token":"AT-%d","expires_in":3600}`, n)
 	}))
 	t.Cleanup(srv.Close)
 	count := func() int {
@@ -467,4 +467,69 @@ func TestBundleLoadStillRejectsUnknownAuthKey(t *testing.T) {
 	if _, err := Load(fsys, "acme"); err == nil {
 		t.Fatalf("Load: expected an error for the unknown auth key %q, got nil", "refresh_tokens")
 	}
+}
+
+// TestResolveCheckAuthSpecCoversRefreshTokenFields closes the same gap F9
+// closed for token_url/client_id/client_secret/scopes: a typo'd template in a
+// new auth field must fail STATIC validation (connectorgen validate), not only
+// at runtime on a real sync.
+func TestResolveCheckAuthSpecCoversRefreshTokenFields(t *testing.T) {
+	specKeys := map[string]bool{"token_url": true, "client_id": true, "client_secret": true, "refresh_token": true}
+
+	t.Run("valid spec passes", func(t *testing.T) {
+		spec := AuthSpec{
+			Mode:                 "oauth2_refresh_token",
+			TokenURL:             "{{ config.token_url }}",
+			ClientID:             "{{ config.client_id }}",
+			ClientSecret:         "{{ secrets.client_secret }}",
+			RefreshToken:         "{{ secrets.refresh_token }}",
+			RefreshTokenStoreKey: "refresh_token",
+		}
+		if err := ResolveCheckAuthSpec(spec, specKeys); err != nil {
+			t.Fatalf("ResolveCheckAuthSpec() error = %v, want nil", err)
+		}
+	})
+
+	// The secrets.* namespace is deliberately not statically checkable against
+	// specKeys (checkNamespaceRef), and refresh_token is no exception — exactly
+	// like client_secret. What IS checkable is a config.* reference and the
+	// filter grammar, so those are what prove the field reaches ResolveCheck at
+	// all rather than being skipped like it was before.
+	for _, tc := range []struct {
+		name string
+		tmpl string
+	}{
+		{"undeclared config key", "{{ config.refersh_token }}"},
+		{"unknown filter", "{{ secrets.refresh_token | bogus_filter }}"},
+		{"unknown namespace", "{{ vault.refresh_token }}"},
+	} {
+		t.Run("rejected refresh_token template: "+tc.name, func(t *testing.T) {
+			spec := AuthSpec{
+				Mode:         "oauth2_refresh_token",
+				TokenURL:     "{{ config.token_url }}",
+				RefreshToken: tc.tmpl,
+			}
+			err := ResolveCheckAuthSpec(spec, specKeys)
+			if err == nil {
+				t.Fatalf("ResolveCheckAuthSpec(%q) error = nil, want rejection", tc.tmpl)
+			}
+			if !strings.Contains(err.Error(), "refresh_token") {
+				t.Fatalf("ResolveCheckAuthSpec() error = %v, want it to name the refresh_token field", err)
+			}
+		})
+	}
+
+	t.Run("invalid refresh_token_store_key is rejected statically", func(t *testing.T) {
+		for _, key := range []string{"../escape", "has space", "with/slash"} {
+			spec := AuthSpec{
+				Mode:                 "oauth2_refresh_token",
+				TokenURL:             "{{ config.token_url }}",
+				RefreshToken:         "{{ secrets.refresh_token }}",
+				RefreshTokenStoreKey: key,
+			}
+			if err := ResolveCheckAuthSpec(spec, specKeys); err == nil {
+				t.Fatalf("ResolveCheckAuthSpec() error = nil for store key %q, want rejection", key)
+			}
+		}
+	})
 }

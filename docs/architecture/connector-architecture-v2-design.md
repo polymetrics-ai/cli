@@ -374,11 +374,14 @@ type HTTPBase struct {
 }
 
 type AuthSpec struct {
-    Mode   string `json:"mode"`   // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|custom
+    Mode   string `json:"mode"`   // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|oauth2_refresh_token|custom
     Token  string `json:"token,omitempty"`
     Username, Password string     // basic
     Header, Prefix, Param, Value string // api_key_*
-    TokenURL, ClientID, ClientSecret, Scopes string // oauth2_client_credentials
+    TokenURL, ClientID, ClientSecret, Scopes string // oauth2_client_credentials + oauth2_refresh_token
+    ExtraParams map[string]string `json:"extra_params,omitempty"` // extra token-request form params
+    RefreshToken string `json:"refresh_token,omitempty"`                    // oauth2_refresh_token
+    RefreshTokenStoreKey string `json:"refresh_token_store_key,omitempty"`  // oauth2_refresh_token: where a rotated grant is persisted
     Hook   string `json:"hook,omitempty"` // custom: hook name resolved via hooks registry
     When   string `json:"when,omitempty"` // condition over config values
 }
