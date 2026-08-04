@@ -168,8 +168,11 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		if !ok {
 			continue
 		}
-		if stringField(cmd, "intent") != "direct_read" ||
-			stringField(cmd, "availability") != "implemented" {
+		intent := stringField(cmd, "intent")
+		if intent != "direct_read" && intent != "binary_download" {
+			continue
+		}
+		if stringField(cmd, "availability") != "implemented" {
 			continue
 		}
 		operation := stringField(cmd, "operation")
@@ -180,13 +183,21 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 		if op == nil {
 			continue
 		}
-		// Only rest_read operations are executable as direct reads; a
-		// binary_download operation gets no invented REST endpoint.
-		if stringField(op, "kind") != "rest_read" {
+		// The endpoint block is whichever one the operation's kind declares.
+		// A direct read never borrows a binary operation's endpoint and a
+		// binary download never borrows a REST one, so a mismatched pair is
+		// left untouched for the validator to report.
+		kind := stringField(op, "kind")
+		blockName := "rest"
+		if intent == "binary_download" {
+			blockName = "binary"
+		}
+		if (intent == "direct_read" && kind != "rest_read") ||
+			(intent == "binary_download" && kind != "binary_download") {
 			continue
 		}
-		restRaw, _ := op.get("rest")
-		rest, _ := restRaw.(*orderedObject)
+		blockRaw, _ := op.get(blockName)
+		rest, _ := blockRaw.(*orderedObject)
 		if rest == nil {
 			continue
 		}
@@ -203,7 +214,9 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			cmd.set("api_surface", []any{endpoint})
 			stats.APISurface++
 		}
-		if stringField(cmd, "output_policy") == "" {
+		// A binary download produces a file, not a JSON body, so no output
+		// policy applies to it.
+		if intent == "direct_read" && stringField(cmd, "output_policy") == "" {
 			cmd.set("output_policy", defaultDirectReadOutputPolicy)
 			stats.OutputPolicy++
 		}
@@ -224,9 +237,13 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			}
 		}
 
-		if maxBytes, _ := rest.get("max_bytes"); !positiveNumber(maxBytes) {
-			rest.set("max_bytes", json.Number(fmt.Sprint(defaultOperationRESTMaxBytes)))
-			stats.MaxBytes++
+		// binary_download operations already declare their own max_bytes at
+		// bundle load time, so only rest_read needs the default filled in.
+		if intent == "direct_read" {
+			if maxBytes, _ := rest.get("max_bytes"); !positiveNumber(maxBytes) {
+				rest.set("max_bytes", json.Number(fmt.Sprint(defaultOperationRESTMaxBytes)))
+				stats.MaxBytes++
+			}
 		}
 	}
 

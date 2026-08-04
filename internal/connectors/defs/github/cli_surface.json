@@ -2375,7 +2375,7 @@
     {
       "path": "artifact download",
       "summary": "Download /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "implemented",
       "operation": "github.actions_artifacts_artifact_id_archive_format",
       "source_cli_path": "",
@@ -2383,12 +2383,20 @@
         {
           "name": "artifact-id",
           "type": "string",
-          "summary": "artifact_id path parameter"
+          "summary": "artifact_id path parameter",
+          "maps_to": "path.artifact_id"
         },
         {
           "name": "archive-format",
           "type": "string",
-          "summary": "archive_format path parameter"
+          "summary": "archive_format path parameter",
+          "maps_to": "path.archive_format"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"
         }
       ]
     },
@@ -3167,7 +3175,7 @@
     {
       "path": "run logs view-2",
       "summary": "Download /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "implemented",
       "operation": "github.actions_runs_run_id_attempts_attempt_number_logs",
       "source_cli_path": "",
@@ -3175,12 +3183,20 @@
         {
           "name": "run-id",
           "type": "string",
-          "summary": "run_id path parameter"
+          "summary": "run_id path parameter",
+          "maps_to": "path.run_id"
         },
         {
           "name": "attempt-number",
           "type": "string",
-          "summary": "attempt_number path parameter"
+          "summary": "attempt_number path parameter",
+          "maps_to": "path.attempt_number"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs"
         }
       ]
     },
@@ -3270,7 +3286,7 @@
     {
       "path": "run logs view-3",
       "summary": "Download /repos/{owner}/{repo}/actions/runs/{run_id}/logs",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "implemented",
       "operation": "github.actions_runs_run_id_logs2",
       "source_cli_path": "",
@@ -3278,7 +3294,14 @@
         {
           "name": "run-id",
           "type": "string",
-          "summary": "run_id path parameter"
+          "summary": "run_id path parameter",
+          "maps_to": "path.run_id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs"
         }
       ]
     },
@@ -5529,16 +5552,22 @@
     {
       "path": "repo sbom view",
       "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "implemented",
       "operation": "github.dependency_graph_sbom",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/dependency-graph/sbom"
+        }
+      ]
     },
     {
       "path": "repo sbom fetch",
       "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid}",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "implemented",
       "operation": "github.dependency_graph_sbom_fetch_report_sbom_uuid",
       "source_cli_path": "",
@@ -5546,18 +5575,31 @@
         {
           "name": "sbom-uuid",
           "type": "string",
-          "summary": "sbom_uuid path parameter"
+          "summary": "sbom_uuid path parameter",
+          "maps_to": "path.sbom_uuid"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid}"
         }
       ]
     },
     {
       "path": "repo sbom generate",
       "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom/generate-report",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "implemented",
       "operation": "github.dependency_graph_sbom_generate_report",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/dependency-graph/sbom/generate-report"
+        }
+      ]
     },
     {
       "path": "dependency-graph snapshots create",
@@ -8210,7 +8252,7 @@
     {
       "path": "repo archive tarball",
       "summary": "Download /repos/{owner}/{repo}/tarball/{ref}",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "implemented",
       "operation": "github.tarball_ref",
       "source_cli_path": "",
@@ -8218,7 +8260,14 @@
         {
           "name": "ref",
           "type": "string",
-          "summary": "ref path parameter"
+          "summary": "ref path parameter",
+          "maps_to": "path.ref"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/tarball/{ref}"
         }
       ]
     },
@@ -8355,7 +8404,7 @@
     {
       "path": "repo archive zipball",
       "summary": "Download /repos/{owner}/{repo}/zipball/{ref}",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "implemented",
       "operation": "github.zipball_ref",
       "source_cli_path": "",
@@ -8363,7 +8412,14 @@
         {
           "name": "ref",
           "type": "string",
-          "summary": "ref path parameter"
+          "summary": "ref path parameter",
+          "maps_to": "path.ref"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/zipball/{ref}"
         }
       ]
     }

@@ -23,6 +23,8 @@ type fakeConnector struct {
 	readReq                connectors.ReadRequest
 	directReadReq          connectors.DirectReadRequest
 	operationDirectReadReq connectors.OperationDirectReadRequest
+	binaryDownloadReq      connectors.OperationBinaryDownloadRequest
+	binaryDownloadErr      error
 	validateReq            connectors.WriteRequest
 	dryRunReq              connectors.WriteRequest
 	writeReq               connectors.WriteRequest
@@ -80,6 +82,17 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Path:      "/v2/meetings/integration/status",
 		Status:    200,
 		Body:      map[string]any{"ok": true},
+	}, nil
+}
+func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
+	f.binaryDownloadReq = req
+	if f.binaryDownloadErr != nil {
+		return connectors.OperationBinaryDownloadResult{}, f.binaryDownloadErr
+	}
+	return connectors.OperationBinaryDownloadResult{
+		Connector: "github",
+		Operation: req.Operation,
+		Record:    connectors.Record{"file_path": "out/artifact", "file_size_bytes": 12},
 	}, nil
 }
 func (f *fakeConnector) Write(_ context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
@@ -1949,4 +1962,133 @@ func TestEveryImplementedCommandPassesRuntimePreflight(t *testing.T) {
 	}
 	b.WriteString("\nEither make the command executable or stop claiming it is implemented.")
 	t.Fatal(b.String())
+}
+
+func binaryDownloadTestConnector() *fakeConnector {
+	return &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "artifact download",
+				Intent:       "binary_download",
+				Availability: "implemented",
+				Operation:    "github.artifact",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"},
+				},
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "artifact-id", Type: "string", MapsTo: "path.artifact_id"},
+					{Name: "archive-format", Type: "string", MapsTo: "path.archive_format"},
+				},
+			},
+		},
+	}}
+}
+
+func TestRunBinaryDownloadCommandPassesDestinationThrough(t *testing.T) {
+	connector := binaryDownloadTestConnector()
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:     []string{"artifact", "download"},
+		Flags:    map[string][]string{"artifact-id": {"42"}, "archive-format": {"zip"}},
+		DestRoot: "out",
+		FileName: "artifact.zip",
+	}, func(connectors.Record) error {
+		t.Fatal("emit must not be called for a binary download")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.BinaryDownload == nil {
+		t.Fatal("Run result carries no binary download")
+	}
+	if got := connector.binaryDownloadReq.DestRoot; got != "out" {
+		t.Fatalf("DestRoot = %q, want %q", got, "out")
+	}
+	if got := connector.binaryDownloadReq.FileName; got != "artifact.zip" {
+		t.Fatalf("FileName = %q, want %q", got, "artifact.zip")
+	}
+	if got := connector.binaryDownloadReq.PathParams["artifact_id"]; got != "42" {
+		t.Fatalf("PathParams[artifact_id] = %q, want %q", got, "42")
+	}
+	// The response never becomes records: a download is a file, not a stream.
+	if result.Count != 0 || result.DirectRead != nil {
+		t.Fatalf("binary download produced stream/direct-read output: %+v", result)
+	}
+}
+
+// A destination is never inferred: without --dest-root the command is refused
+// rather than defaulting to the working directory.
+func TestRunBinaryDownloadRequiresDestinationRoot(t *testing.T) {
+	connector := binaryDownloadTestConnector()
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"artifact", "download"},
+		Flags: map[string][]string{"artifact-id": {"42"}, "archive-format": {"zip"}},
+	}, func(connectors.Record) error { return nil })
+	if err == nil {
+		t.Fatal("Run error = nil, want a missing destination refusal")
+	}
+	if !strings.Contains(err.Error(), "dest-root") {
+		t.Fatalf("Run error = %q, want it to name --dest-root", err.Error())
+	}
+}
+
+func TestPreflightBlocksBinaryDownloadWithUnsafeMetadata(t *testing.T) {
+	tests := []struct {
+		name    string
+		command connectors.CommandSurfaceCommand
+		wantErr string
+	}{
+		{
+			name: "no api_surface endpoint",
+			command: connectors.CommandSurfaceCommand{
+				Path: "artifact download", Intent: "binary_download",
+				Availability: "implemented", Operation: "github.artifact",
+			},
+			wantErr: "exactly one api_surface endpoint",
+		},
+		{
+			name: "non-GET endpoint",
+			command: connectors.CommandSurfaceCommand{
+				Path: "artifact download", Intent: "binary_download",
+				Availability: "implemented", Operation: "github.artifact",
+				APISurface: []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/artifacts"}},
+			},
+			wantErr: "require GET",
+		},
+		{
+			name: "absolute URL endpoint",
+			command: connectors.CommandSurfaceCommand{
+				Path: "artifact download", Intent: "binary_download",
+				Availability: "implemented", Operation: "github.artifact",
+				APISurface: []connectors.CommandSurfaceEndpointRef{{Method: "GET", Path: "https://evil.example.com/x"}},
+			},
+			wantErr: "absolute URL",
+		},
+		{
+			name: "missing operation",
+			command: connectors.CommandSurfaceCommand{
+				Path: "artifact download", Intent: "binary_download",
+				Availability: "implemented",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "GET", Path: "/artifacts"}},
+			},
+			wantErr: "require operation",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{
+				Commands: []connectors.CommandSurfaceCommand{tt.command},
+			}}
+			err := Preflight(connector, []string{"artifact", "download"})
+			if err == nil {
+				t.Fatalf("Preflight error = nil, want %q", tt.wantErr)
+			}
+			if !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("Preflight error = %q, want to contain %q", err.Error(), tt.wantErr)
+			}
+		})
+	}
 }

@@ -27,14 +27,20 @@ type Request struct {
 	Limit    int
 	MaxBytes int
 	Preview  bool
+	// DestRoot is the directory a binary_download command writes beneath.
+	// Required for that intent and ignored by every other one.
+	DestRoot string
+	// FileName optionally names the downloaded file within DestRoot.
+	FileName string
 }
 
 type Result struct {
-	Connector  string                       `json:"connector"`
-	Command    string                       `json:"command"`
-	Stream     string                       `json:"stream,omitempty"`
-	Count      int                          `json:"count,omitempty"`
-	DirectRead *connectors.DirectReadResult `json:"direct_read,omitempty"`
+	Connector      string                                    `json:"connector"`
+	Command        string                                    `json:"command"`
+	Stream         string                                    `json:"stream,omitempty"`
+	Count          int                                       `json:"count,omitempty"`
+	DirectRead     *connectors.DirectReadResult              `json:"direct_read,omitempty"`
+	BinaryDownload *connectors.OperationBinaryDownloadResult `json:"binary_download,omitempty"`
 }
 
 type WriteCommand struct {
@@ -160,6 +166,9 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	if cmd.Intent == "direct_read" {
 		return runDirectRead(ctx, connector, cmd, req)
 	}
+	if cmd.Intent == "binary_download" {
+		return runBinaryDownload(ctx, connector, cmd, req)
+	}
 	if cmd.Intent != "etl" || cmd.Availability != "implemented" || cmd.Stream == "" {
 		return Result{}, &BlockedCommandError{
 			Connector:    connector.Name(),
@@ -209,6 +218,9 @@ func resolveRunnableCommand(connector connectors.Connector, path []string) (conn
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" {
 		return cmd, command, nil
 	}
+	if cmd.Intent == "binary_download" && cmd.Availability == "implemented" {
+		return cmd, command, nil
+	}
 	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 		Connector:    connector.Name(),
 		Command:      command,
@@ -236,7 +248,7 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
-	if cmd.Operation != "" && (cmd.Intent != "direct_read" || cmd.Availability != "implemented") {
+	if cmd.Operation != "" && cmd.Intent != "binary_download" && (cmd.Intent != "direct_read" || cmd.Availability != "implemented") {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      command,
@@ -244,6 +256,12 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 			Availability: cmd.Availability,
 			Reason:       fmt.Sprintf("operation %s executor is not implemented in this slice", cmd.Operation),
 		}
+	}
+	if cmd.Intent == "binary_download" && cmd.Availability == "implemented" {
+		if err := validateBinaryDownloadCommand(connector, cmd); err != nil {
+			return connectors.CommandSurfaceCommand{}, command, err
+		}
+		return cmd, command, nil
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Operation != "" {
 		if err := validateOperationDirectReadCommand(connector, cmd); err != nil {
@@ -1292,4 +1310,68 @@ func firstNonEmpty(values ...string) string {
 func isAbsoluteHTTPURL(raw string) bool {
 	lower := strings.ToLower(strings.TrimSpace(raw))
 	return strings.HasPrefix(lower, "http://") || strings.HasPrefix(lower, "https://")
+}
+
+// validateBinaryDownloadCommand mirrors, for the binary_download intent, what
+// validateOperationDirectReadCommand does for direct reads: it refuses metadata
+// the executor cannot honour BEFORE any network or filesystem access.
+//
+// The endpoint must be a single connector-relative GET. Unlike a direct read,
+// no output_policy applies: the response never becomes a JSON body, it becomes
+// a file, and the record that describes it carries no response bytes.
+func validateBinaryDownloadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
+	if _, ok := connector.(connectors.OperationBinaryDownloader); !ok {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support binary downloads"}
+	}
+	if strings.TrimSpace(cmd.Operation) == "" {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "binary_download commands require operation"}
+	}
+	if len(cmd.APISurface) != 1 {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "binary_download commands require exactly one api_surface endpoint"}
+	}
+	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
+	if method != http.MethodGet {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("binary_download commands require GET api_surface endpoints, got %s", method)}
+	}
+	if isAbsoluteHTTPURL(cmd.APISurface[0].Path) {
+		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "binary_download commands must not reference an absolute URL"}
+	}
+	return nil
+}
+
+// runBinaryDownload executes a binary_download command. The destination is
+// caller-supplied and never inferred: without an explicit --dest-root the
+// command is refused rather than defaulting to the working directory.
+func runBinaryDownload(ctx context.Context, connector connectors.Connector, cmd connectors.CommandSurfaceCommand, req Request) (Result, error) {
+	downloader, ok := connector.(connectors.OperationBinaryDownloader)
+	if !ok {
+		return Result{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support binary downloads"}
+	}
+	if err := validateBinaryDownloadCommand(connector, cmd); err != nil {
+		return Result{}, err
+	}
+	if strings.TrimSpace(req.DestRoot) == "" {
+		return Result{}, fmt.Errorf("binary download requires --dest-root")
+	}
+	pathParams, query, err := directReadOverrides(cmd, req.Flags)
+	if err != nil {
+		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+	}
+	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
+		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+	}
+	download, err := downloader.OperationBinaryDownload(ctx, connectors.OperationBinaryDownloadRequest{
+		Operation:    cmd.Operation,
+		Config:       req.Config,
+		PathParams:   pathParams,
+		Query:        query,
+		MaxBytes:     int64(req.MaxBytes),
+		DestRoot:     req.DestRoot,
+		FileName:     req.FileName,
+		RedactFields: cmd.RedactFields,
+	})
+	if err != nil {
+		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+	}
+	return Result{Connector: connector.Name(), Command: cmd.Path, BinaryDownload: &download}, nil
 }

@@ -5279,7 +5279,7 @@
         "path": "/repos/{owner}/{repo}/tarball/{ref}",
         "max_bytes": 104857600,
         "allow_overwrite": false,
-        "extract_archives": true
+        "extract_archives": false
       }
     },
     {
@@ -5422,7 +5422,7 @@
         "path": "/repos/{owner}/{repo}/zipball/{ref}",
         "max_bytes": 104857600,
         "allow_overwrite": false,
-        "extract_archives": true
+        "extract_archives": false
       }
     }
   ]

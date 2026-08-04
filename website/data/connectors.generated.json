@@ -60448,7 +60448,7 @@
         {
           "path": "artifact download",
           "summary": "Download /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}",
-          "intent": "direct_read",
+          "intent": "binary_download",
           "availability": "implemented",
           "stream": "",
           "write": "",
@@ -60461,14 +60461,14 @@
               "type": "string",
               "summary": "artifact_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.artifact_id"
             },
             {
               "name": "archive-format",
               "type": "string",
               "summary": "archive_format path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.archive_format"
             }
           ],
           "examples": [],
@@ -60489,7 +60489,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60522,7 +60522,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60555,7 +60555,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60588,7 +60588,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60629,7 +60629,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60650,11 +60650,11 @@
               "type": "string",
               "summary": "concurrency_group_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.concurrency_group_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60675,11 +60675,11 @@
               "type": "integer",
               "summary": "job_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.job_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60700,11 +60700,11 @@
               "type": "integer",
               "summary": "job_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.job_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60745,7 +60745,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60778,7 +60778,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60795,7 +60795,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60812,7 +60812,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60845,7 +60845,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60878,7 +60878,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60911,7 +60911,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60944,7 +60944,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -60977,7 +60977,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61010,7 +61010,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61043,7 +61043,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61060,7 +61060,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61153,11 +61153,11 @@
               "type": "integer",
               "summary": "runner_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.runner_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61202,11 +61202,11 @@
               "type": "integer",
               "summary": "runner_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.runner_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61306,11 +61306,11 @@
               "type": "integer",
               "summary": "run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.run_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61355,18 +61355,18 @@
               "type": "integer",
               "summary": "run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.run_id"
             },
             {
               "name": "attempt-number",
               "type": "integer",
               "summary": "attempt_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.attempt_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61387,18 +61387,18 @@
               "type": "integer",
               "summary": "run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.run_id"
             },
             {
               "name": "attempt-number",
               "type": "integer",
               "summary": "attempt_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.attempt_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61406,7 +61406,7 @@
         {
           "path": "run logs view-2",
           "summary": "Download /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs",
-          "intent": "direct_read",
+          "intent": "binary_download",
           "availability": "implemented",
           "stream": "",
           "write": "",
@@ -61419,14 +61419,14 @@
               "type": "string",
               "summary": "run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.run_id"
             },
             {
               "name": "attempt-number",
               "type": "string",
               "summary": "attempt_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.attempt_number"
             }
           ],
           "examples": [],
@@ -61451,11 +61451,11 @@
               "type": "integer",
               "summary": "run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.run_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61500,11 +61500,11 @@
               "type": "integer",
               "summary": "run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.run_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61536,7 +61536,7 @@
         {
           "path": "run logs view-3",
           "summary": "Download /repos/{owner}/{repo}/actions/runs/{run_id}/logs",
-          "intent": "direct_read",
+          "intent": "binary_download",
           "availability": "implemented",
           "stream": "",
           "write": "",
@@ -61549,7 +61549,7 @@
               "type": "string",
               "summary": "run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.run_id"
             }
           ],
           "examples": [],
@@ -61574,11 +61574,11 @@
               "type": "integer",
               "summary": "run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.run_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61623,11 +61623,11 @@
               "type": "integer",
               "summary": "run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.run_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61644,7 +61644,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61661,7 +61661,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61706,11 +61706,11 @@
               "type": "string",
               "summary": "secret_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.secret_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61751,7 +61751,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61812,11 +61812,11 @@
               "type": "string",
               "summary": "name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61909,11 +61909,11 @@
               "type": "integer",
               "summary": "workflow_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.workflow_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61934,11 +61934,11 @@
               "type": "string",
               "summary": "assignee path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.assignee"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61975,11 +61975,11 @@
               "type": "string",
               "summary": "subject_digest path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.subject_digest"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62052,7 +62052,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62113,11 +62113,11 @@
               "type": "string",
               "summary": "branch path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62186,11 +62186,11 @@
               "type": "string",
               "summary": "branch path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62259,11 +62259,11 @@
               "type": "string",
               "summary": "branch path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62332,11 +62332,11 @@
               "type": "string",
               "summary": "branch path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62405,11 +62405,11 @@
               "type": "string",
               "summary": "branch path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62478,11 +62478,11 @@
               "type": "string",
               "summary": "branch path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62575,11 +62575,11 @@
               "type": "string",
               "summary": "branch path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62624,11 +62624,11 @@
               "type": "string",
               "summary": "branch path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62721,11 +62721,11 @@
               "type": "string",
               "summary": "branch path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62818,11 +62818,11 @@
               "type": "string",
               "summary": "branch path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62931,11 +62931,11 @@
               "type": "integer",
               "summary": "check_run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.check_run_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -62980,11 +62980,11 @@
               "type": "integer",
               "summary": "check_run_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.check_run_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63061,11 +63061,11 @@
               "type": "integer",
               "summary": "check_suite_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.check_suite_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63086,11 +63086,11 @@
               "type": "integer",
               "summary": "check_suite_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.check_suite_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63131,7 +63131,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63152,11 +63152,11 @@
               "type": "integer",
               "summary": "finding_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.finding_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63173,7 +63173,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63210,11 +63210,11 @@
               "type": "integer",
               "summary": "alert_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.alert_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63283,11 +63283,11 @@
               "type": "integer",
               "summary": "alert_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.alert_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63304,7 +63304,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63349,11 +63349,11 @@
               "type": "integer",
               "summary": "analysis_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.analysis_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63370,7 +63370,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63415,11 +63415,11 @@
               "type": "string",
               "summary": "language path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.language"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63456,11 +63456,11 @@
               "type": "integer",
               "summary": "codeql_variant_analysis_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.codeql_variant_analysis_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63481,25 +63481,25 @@
               "type": "integer",
               "summary": "codeql_variant_analysis_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.codeql_variant_analysis_id"
             },
             {
               "name": "repo-owner",
               "type": "string",
               "summary": "repo_owner path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.repo_owner"
             },
             {
               "name": "repo-name",
               "type": "string",
               "summary": "repo_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.repo_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63516,7 +63516,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63569,11 +63569,11 @@
               "type": "integer",
               "summary": "sarif_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.sarif_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63590,7 +63590,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63607,7 +63607,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63624,7 +63624,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63657,7 +63657,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63674,7 +63674,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63691,7 +63691,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63708,7 +63708,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63725,7 +63725,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63742,7 +63742,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63787,11 +63787,11 @@
               "type": "string",
               "summary": "secret_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.secret_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63836,11 +63836,11 @@
               "type": "integer",
               "summary": "comment_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.comment_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63916,11 +63916,11 @@
               "type": "string",
               "summary": "commit_sha path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.commit_sha"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63941,11 +63941,11 @@
               "type": "string",
               "summary": "commit_sha path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.commit_sha"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63966,11 +63966,11 @@
               "type": "string",
               "summary": "ref path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.ref"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -63991,11 +63991,11 @@
               "type": "string",
               "summary": "ref path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.ref"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64016,11 +64016,11 @@
               "type": "string",
               "summary": "ref path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.ref"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64041,11 +64041,11 @@
               "type": "string",
               "summary": "ref path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.ref"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64062,7 +64062,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64083,11 +64083,11 @@
               "type": "string",
               "summary": "basehead path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.basehead"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64104,7 +64104,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64121,7 +64121,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64138,7 +64138,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64183,11 +64183,11 @@
               "type": "string",
               "summary": "secret_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.secret_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64232,11 +64232,11 @@
               "type": "string",
               "summary": "basehead path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.basehead"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64244,7 +64244,7 @@
         {
           "path": "repo sbom view",
           "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom",
-          "intent": "direct_read",
+          "intent": "binary_download",
           "availability": "implemented",
           "stream": "",
           "write": "",
@@ -64261,7 +64261,7 @@
         {
           "path": "repo sbom fetch",
           "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid}",
-          "intent": "direct_read",
+          "intent": "binary_download",
           "availability": "implemented",
           "stream": "",
           "write": "",
@@ -64274,7 +64274,7 @@
               "type": "string",
               "summary": "sbom_uuid path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.sbom_uuid"
             }
           ],
           "examples": [],
@@ -64286,7 +64286,7 @@
         {
           "path": "repo sbom generate",
           "summary": "Download /repos/{owner}/{repo}/dependency-graph/sbom/generate-report",
-          "intent": "direct_read",
+          "intent": "binary_download",
           "availability": "implemented",
           "stream": "",
           "write": "",
@@ -64356,11 +64356,11 @@
               "type": "integer",
               "summary": "deployment_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.deployment_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64421,11 +64421,11 @@
               "type": "string",
               "summary": "environment_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.environment_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64501,18 +64501,18 @@
               "type": "string",
               "summary": "environment_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.environment_name"
             },
             {
               "name": "branch-policy-id",
               "type": "integer",
               "summary": "branch_policy_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.branch_policy_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64564,11 +64564,11 @@
               "type": "string",
               "summary": "environment_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.environment_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64613,11 +64613,11 @@
               "type": "string",
               "summary": "environment_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.environment_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64669,18 +64669,18 @@
               "type": "string",
               "summary": "environment_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.environment_name"
             },
             {
               "name": "protection-rule-id",
               "type": "integer",
               "summary": "protection_rule_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.protection_rule_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64701,11 +64701,11 @@
               "type": "string",
               "summary": "environment_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.environment_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64726,11 +64726,11 @@
               "type": "string",
               "summary": "environment_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.environment_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64782,18 +64782,18 @@
               "type": "string",
               "summary": "environment_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.environment_name"
             },
             {
               "name": "secret-name",
               "type": "string",
               "summary": "secret_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.secret_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64845,11 +64845,11 @@
               "type": "string",
               "summary": "environment_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.environment_name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -64925,18 +64925,18 @@
               "type": "string",
               "summary": "environment_name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.environment_name"
             },
             {
               "name": "name",
               "type": "string",
               "summary": "name path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.name"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65004,11 +65004,11 @@
               "type": "string",
               "summary": "file_sha path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.file_sha"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65045,11 +65045,11 @@
               "type": "string",
               "summary": "ref path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.ref"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65070,11 +65070,11 @@
               "type": "string",
               "summary": "tag_sha path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.tag_sha"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65111,11 +65111,11 @@
               "type": "string",
               "summary": "tree_sha path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.tree_sha"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65132,7 +65132,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65153,11 +65153,11 @@
               "type": "integer",
               "summary": "hook_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.hook_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65178,18 +65178,18 @@
               "type": "integer",
               "summary": "hook_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.hook_id"
             },
             {
               "name": "delivery-id",
               "type": "integer",
               "summary": "delivery_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.delivery_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65301,7 +65301,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65350,7 +65350,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65399,7 +65399,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65440,7 +65440,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65473,7 +65473,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65506,7 +65506,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65555,7 +65555,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65636,7 +65636,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65705,11 +65705,11 @@
               "type": "integer",
               "summary": "comment_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.comment_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65785,18 +65785,18 @@
               "type": "integer",
               "summary": "issue_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.issue_number"
             },
             {
               "name": "assignee",
               "type": "string",
               "summary": "assignee path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.assignee"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65817,11 +65817,11 @@
               "type": "integer",
               "summary": "issue_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.issue_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65897,11 +65897,11 @@
               "type": "integer",
               "summary": "issue_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.issue_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -65922,11 +65922,11 @@
               "type": "integer",
               "summary": "issue_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.issue_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66026,11 +66026,11 @@
               "type": "integer",
               "summary": "issue_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.issue_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66051,11 +66051,11 @@
               "type": "integer",
               "summary": "issue_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.issue_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66155,11 +66155,11 @@
               "type": "integer",
               "summary": "issue_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.issue_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66224,7 +66224,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66261,11 +66261,11 @@
               "type": "integer",
               "summary": "milestone_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.milestone_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66282,7 +66282,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66331,7 +66331,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66380,7 +66380,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66413,7 +66413,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66434,11 +66434,11 @@
               "type": "integer",
               "summary": "build_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.build_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66475,11 +66475,11 @@
               "type": "integer",
               "summary": "pages_deployment_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.pages_deployment_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66520,7 +66520,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66553,7 +66553,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66586,7 +66586,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66623,11 +66623,11 @@
               "type": "integer",
               "summary": "comment_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.comment_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66727,11 +66727,11 @@
               "type": "integer",
               "summary": "pull_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.pull_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66752,11 +66752,11 @@
               "type": "integer",
               "summary": "pull_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.pull_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66777,11 +66777,11 @@
               "type": "integer",
               "summary": "pull_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.pull_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66826,11 +66826,11 @@
               "type": "integer",
               "summary": "pull_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.pull_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66851,18 +66851,18 @@
               "type": "integer",
               "summary": "pull_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.pull_number"
             },
             {
               "name": "review-id",
               "type": "integer",
               "summary": "review_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.review_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66879,7 +66879,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66900,11 +66900,11 @@
               "type": "string",
               "summary": "dir path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.dir"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66925,11 +66925,11 @@
               "type": "integer",
               "summary": "asset_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.asset_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -66966,11 +66966,11 @@
               "type": "integer",
               "summary": "release_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.release_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67015,11 +67015,11 @@
               "type": "integer",
               "summary": "release_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.release_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67091,7 +67091,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67112,11 +67112,11 @@
               "type": "integer",
               "summary": "rule_suite_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.rule_suite_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67137,11 +67137,11 @@
               "type": "integer",
               "summary": "ruleset_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.ruleset_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67162,18 +67162,18 @@
               "type": "integer",
               "summary": "ruleset_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.ruleset_id"
             },
             {
               "name": "version-id",
               "type": "integer",
               "summary": "version_id path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.version_id"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67194,11 +67194,11 @@
               "type": "integer",
               "summary": "alert_number path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.alert_number"
             }
           ],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67231,7 +67231,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67352,7 +67352,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67369,7 +67369,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67386,7 +67386,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67403,7 +67403,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67420,7 +67420,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67477,7 +67477,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67501,7 +67501,7 @@
         {
           "path": "repo archive tarball",
           "summary": "Download /repos/{owner}/{repo}/tarball/{ref}",
-          "intent": "direct_read",
+          "intent": "binary_download",
           "availability": "implemented",
           "stream": "",
           "write": "",
@@ -67514,7 +67514,7 @@
               "type": "string",
               "summary": "ref path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.ref"
             }
           ],
           "examples": [],
@@ -67535,7 +67535,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67552,7 +67552,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67569,7 +67569,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67586,7 +67586,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67603,7 +67603,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67652,7 +67652,7 @@
           "source_url": "",
           "flags": [],
           "examples": [],
-          "output_policy": "",
+          "output_policy": "json_redacted",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -67676,7 +67676,7 @@
         {
           "path": "repo archive zipball",
           "summary": "Download /repos/{owner}/{repo}/zipball/{ref}",
-          "intent": "direct_read",
+          "intent": "binary_download",
           "availability": "implemented",
           "stream": "",
           "write": "",
@@ -67689,7 +67689,7 @@
               "type": "string",
               "summary": "ref path parameter",
               "values": [],
-              "maps_to": ""
+              "maps_to": "path.ref"
             }
           ],
           "examples": [],
