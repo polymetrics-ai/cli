@@ -2399,7 +2399,14 @@
       "availability": "implemented",
       "operation": "github.actions_cache_retention_limit",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/cache/retention-limit"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions retention-limit set",
@@ -2419,7 +2426,14 @@
       "availability": "implemented",
       "operation": "github.actions_cache_storage_limit",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/cache/storage-limit"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions storage-limit set",
@@ -2439,7 +2453,14 @@
       "availability": "implemented",
       "operation": "github.actions_cache_usage",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/cache/usage"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions caches delete",
@@ -2459,7 +2480,14 @@
       "availability": "implemented",
       "operation": "github.actions_caches2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/caches"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions caches delete-2",
@@ -2486,7 +2514,14 @@
       "availability": "implemented",
       "operation": "github.actions_concurrency_groups",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/concurrency_groups"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions concurrency_groups view-2",
@@ -2499,9 +2534,17 @@
         {
           "name": "concurrency-group-name",
           "type": "string",
-          "summary": "concurrency_group_name path parameter"
+          "summary": "concurrency_group_name path parameter",
+          "maps_to": "path.concurrency_group_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions jobs view",
@@ -2514,9 +2557,17 @@
         {
           "name": "job-id",
           "type": "integer",
-          "summary": "job_id path parameter"
+          "summary": "job_id path parameter",
+          "maps_to": "path.job_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "run logs view",
@@ -2529,9 +2580,17 @@
         {
           "name": "job-id",
           "type": "integer",
-          "summary": "job_id path parameter"
+          "summary": "job_id path parameter",
+          "maps_to": "path.job_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/logs"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions rerun create",
@@ -2558,7 +2617,14 @@
       "availability": "implemented",
       "operation": "github.actions_oidc_customization_sub",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions sub set",
@@ -2578,7 +2644,14 @@
       "availability": "implemented",
       "operation": "github.actions_organization_secrets",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/organization-secrets"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions organization-variables view",
@@ -2587,7 +2660,14 @@
       "availability": "implemented",
       "operation": "github.actions_organization_variables",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/organization-variables"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions view",
@@ -2596,7 +2676,14 @@
       "availability": "implemented",
       "operation": "github.actions_permissions",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/permissions"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set",
@@ -2616,7 +2703,14 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_access",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/permissions/access"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-2",
@@ -2636,7 +2730,14 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_artifact_and_log_retention",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-3",
@@ -2656,7 +2757,14 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_fork_pr_contributor_approval",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-4",
@@ -2676,7 +2784,14 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_fork_pr_workflows_private_repos",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-5",
@@ -2696,7 +2811,14 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_selected_actions",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-6",
@@ -2716,7 +2838,14 @@
       "availability": "implemented",
       "operation": "github.actions_permissions_workflow",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/permissions/workflow"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions permissions set-7",
@@ -2736,7 +2865,14 @@
       "availability": "implemented",
       "operation": "github.actions_runners",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runners"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions downloads view",
@@ -2745,7 +2881,14 @@
       "availability": "implemented",
       "operation": "github.actions_runners_downloads",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runners/downloads"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions generate-jitconfig create",
@@ -2809,9 +2952,17 @@
         {
           "name": "runner-id",
           "type": "integer",
-          "summary": "runner_id path parameter"
+          "summary": "runner_id path parameter",
+          "maps_to": "path.runner_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions labels delete",
@@ -2842,9 +2993,17 @@
         {
           "name": "runner-id",
           "type": "integer",
-          "summary": "runner_id path parameter"
+          "summary": "runner_id path parameter",
+          "maps_to": "path.runner_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions labels create",
@@ -2917,9 +3076,17 @@
         {
           "name": "run-id",
           "type": "integer",
-          "summary": "run_id path parameter"
+          "summary": "run_id path parameter",
+          "maps_to": "path.run_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approvals"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions approve create",
@@ -2950,14 +3117,23 @@
         {
           "name": "run-id",
           "type": "integer",
-          "summary": "run_id path parameter"
+          "summary": "run_id path parameter",
+          "maps_to": "path.run_id"
         },
         {
           "name": "attempt-number",
           "type": "integer",
-          "summary": "attempt_number path parameter"
+          "summary": "attempt_number path parameter",
+          "maps_to": "path.attempt_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions jobs view-2",
@@ -2970,14 +3146,23 @@
         {
           "name": "run-id",
           "type": "integer",
-          "summary": "run_id path parameter"
+          "summary": "run_id path parameter",
+          "maps_to": "path.run_id"
         },
         {
           "name": "attempt-number",
           "type": "integer",
-          "summary": "attempt_number path parameter"
+          "summary": "attempt_number path parameter",
+          "maps_to": "path.attempt_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "run logs view-2",
@@ -3010,9 +3195,17 @@
         {
           "name": "run-id",
           "type": "integer",
-          "summary": "run_id path parameter"
+          "summary": "run_id path parameter",
+          "maps_to": "path.run_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions deployment_protection_rule create",
@@ -3043,9 +3236,17 @@
         {
           "name": "run-id",
           "type": "integer",
-          "summary": "run_id path parameter"
+          "summary": "run_id path parameter",
+          "maps_to": "path.run_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/jobs"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions logs delete",
@@ -3092,9 +3293,17 @@
         {
           "name": "run-id",
           "type": "integer",
-          "summary": "run_id path parameter"
+          "summary": "run_id path parameter",
+          "maps_to": "path.run_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions pending_deployments create",
@@ -3125,9 +3334,17 @@
         {
           "name": "run-id",
           "type": "integer",
-          "summary": "run_id path parameter"
+          "summary": "run_id path parameter",
+          "maps_to": "path.run_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/timing"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions secrets view",
@@ -3136,7 +3353,14 @@
       "availability": "implemented",
       "operation": "github.actions_secrets",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/secrets"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "actions public-key view",
@@ -3145,7 +3369,14 @@
       "availability": "implemented",
       "operation": "github.actions_secrets_public_key",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/secrets/public-key"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret delete-2",
@@ -3176,9 +3407,17 @@
         {
           "name": "secret-name",
           "type": "string",
-          "summary": "secret_name path parameter"
+          "summary": "secret_name path parameter",
+          "maps_to": "path.secret_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret set-2",
@@ -3205,7 +3444,14 @@
       "availability": "implemented",
       "operation": "github.actions_variables",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/variables"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "variable create",
@@ -3247,9 +3493,17 @@
         {
           "name": "name",
           "type": "string",
-          "summary": "name path parameter"
+          "summary": "name path parameter",
+          "maps_to": "path.name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/variables/{name}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "variable update",
@@ -3316,9 +3570,17 @@
         {
           "name": "workflow-id",
           "type": "integer",
-          "summary": "workflow_id path parameter"
+          "summary": "workflow_id path parameter",
+          "maps_to": "path.workflow_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "assignees view",
@@ -3331,9 +3593,17 @@
         {
           "name": "assignee",
           "type": "string",
-          "summary": "assignee path parameter"
+          "summary": "assignee path parameter",
+          "maps_to": "path.assignee"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/assignees/{assignee}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "attestations create",
@@ -3357,9 +3627,17 @@
         {
           "name": "subject-digest",
           "type": "string",
-          "summary": "subject_digest path parameter"
+          "summary": "subject_digest path parameter",
+          "maps_to": "path.subject_digest"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/attestations/{subject_digest}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "autolinks create",
@@ -3408,7 +3686,14 @@
       "availability": "implemented",
       "operation": "github.automated_security_fixes2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/automated-security-fixes"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "automated-security-fixes set",
@@ -3450,9 +3735,17 @@
         {
           "name": "branch",
           "type": "string",
-          "summary": "branch path parameter"
+          "summary": "branch path parameter",
+          "maps_to": "path.branch"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches protection set",
@@ -3501,9 +3794,17 @@
         {
           "name": "branch",
           "type": "string",
-          "summary": "branch path parameter"
+          "summary": "branch path parameter",
+          "maps_to": "path.branch"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches enforce_admins create",
@@ -3552,9 +3853,17 @@
         {
           "name": "branch",
           "type": "string",
-          "summary": "branch path parameter"
+          "summary": "branch path parameter",
+          "maps_to": "path.branch"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches required_pull_request_reviews update",
@@ -3603,9 +3912,17 @@
         {
           "name": "branch",
           "type": "string",
-          "summary": "branch path parameter"
+          "summary": "branch path parameter",
+          "maps_to": "path.branch"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches required_signatures create",
@@ -3654,9 +3971,17 @@
         {
           "name": "branch",
           "type": "string",
-          "summary": "branch path parameter"
+          "summary": "branch path parameter",
+          "maps_to": "path.branch"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches required_status_checks update",
@@ -3705,9 +4030,17 @@
         {
           "name": "branch",
           "type": "string",
-          "summary": "branch path parameter"
+          "summary": "branch path parameter",
+          "maps_to": "path.branch"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches contexts create",
@@ -3774,9 +4107,17 @@
         {
           "name": "branch",
           "type": "string",
-          "summary": "branch path parameter"
+          "summary": "branch path parameter",
+          "maps_to": "path.branch"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches apps delete",
@@ -3807,9 +4148,17 @@
         {
           "name": "branch",
           "type": "string",
-          "summary": "branch path parameter"
+          "summary": "branch path parameter",
+          "maps_to": "path.branch"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches apps create",
@@ -3876,9 +4225,17 @@
         {
           "name": "branch",
           "type": "string",
-          "summary": "branch path parameter"
+          "summary": "branch path parameter",
+          "maps_to": "path.branch"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches teams create",
@@ -3945,9 +4302,17 @@
         {
           "name": "branch",
           "type": "string",
-          "summary": "branch path parameter"
+          "summary": "branch path parameter",
+          "maps_to": "path.branch"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "branches users create",
@@ -4026,9 +4391,17 @@
         {
           "name": "check-run-id",
           "type": "integer",
-          "summary": "check_run_id path parameter"
+          "summary": "check_run_id path parameter",
+          "maps_to": "path.check_run_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "check-runs update",
@@ -4059,9 +4432,17 @@
         {
           "name": "check-run-id",
           "type": "integer",
-          "summary": "check_run_id path parameter"
+          "summary": "check_run_id path parameter",
+          "maps_to": "path.check_run_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/annotations"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "check-runs rerequest create",
@@ -4114,9 +4495,17 @@
         {
           "name": "check-suite-id",
           "type": "integer",
-          "summary": "check_suite_id path parameter"
+          "summary": "check_suite_id path parameter",
+          "maps_to": "path.check_suite_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "check-suites check-runs view",
@@ -4129,9 +4518,17 @@
         {
           "name": "check-suite-id",
           "type": "integer",
-          "summary": "check_suite_id path parameter"
+          "summary": "check_suite_id path parameter",
+          "maps_to": "path.check_suite_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "check-suites rerequest create",
@@ -4158,7 +4555,14 @@
       "availability": "implemented",
       "operation": "github.code_quality_findings",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-quality/findings"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-quality findings view-2",
@@ -4171,9 +4575,17 @@
         {
           "name": "finding-number",
           "type": "integer",
-          "summary": "finding_number path parameter"
+          "summary": "finding_number path parameter",
+          "maps_to": "path.finding_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-quality/findings/{finding_number}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-quality setup view",
@@ -4182,7 +4594,14 @@
       "availability": "implemented",
       "operation": "github.code_quality_setup",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-quality/setup"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-quality setup update",
@@ -4206,9 +4625,17 @@
         {
           "name": "alert-number",
           "type": "integer",
-          "summary": "alert_number path parameter"
+          "summary": "alert_number path parameter",
+          "maps_to": "path.alert_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning autofix create",
@@ -4257,9 +4684,17 @@
         {
           "name": "alert-number",
           "type": "integer",
-          "summary": "alert_number path parameter"
+          "summary": "alert_number path parameter",
+          "maps_to": "path.alert_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning analyses view",
@@ -4268,7 +4703,14 @@
       "availability": "implemented",
       "operation": "github.code_scanning_analyses",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/analyses"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning analyses delete",
@@ -4299,9 +4741,17 @@
         {
           "name": "analysis-id",
           "type": "integer",
-          "summary": "analysis_id path parameter"
+          "summary": "analysis_id path parameter",
+          "maps_to": "path.analysis_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning databases view",
@@ -4310,7 +4760,14 @@
       "availability": "implemented",
       "operation": "github.code_scanning_codeql_databases",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning databases delete",
@@ -4341,9 +4798,17 @@
         {
           "name": "language",
           "type": "string",
-          "summary": "language path parameter"
+          "summary": "language path parameter",
+          "maps_to": "path.language"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning variant-analyses create",
@@ -4367,9 +4832,17 @@
         {
           "name": "codeql-variant-analysis-id",
           "type": "integer",
-          "summary": "codeql_variant_analysis_id path parameter"
+          "summary": "codeql_variant_analysis_id path parameter",
+          "maps_to": "path.codeql_variant_analysis_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning repos view",
@@ -4382,19 +4855,29 @@
         {
           "name": "codeql-variant-analysis-id",
           "type": "integer",
-          "summary": "codeql_variant_analysis_id path parameter"
+          "summary": "codeql_variant_analysis_id path parameter",
+          "maps_to": "path.codeql_variant_analysis_id"
         },
         {
           "name": "repo-owner",
           "type": "string",
-          "summary": "repo_owner path parameter"
+          "summary": "repo_owner path parameter",
+          "maps_to": "path.repo_owner"
         },
         {
           "name": "repo-name",
           "type": "string",
-          "summary": "repo_name path parameter"
+          "summary": "repo_name path parameter",
+          "maps_to": "path.repo_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses/{codeql_variant_analysis_id}/repos/{repo_owner}/{repo_name}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning default-setup view",
@@ -4403,7 +4886,14 @@
       "availability": "implemented",
       "operation": "github.code_scanning_default_setup",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/default-setup"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-scanning default-setup update",
@@ -4438,9 +4928,17 @@
         {
           "name": "sarif-id",
           "type": "integer",
-          "summary": "sarif_id path parameter"
+          "summary": "sarif_id path parameter",
+          "maps_to": "path.sarif_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "code-security-configuration view",
@@ -4449,7 +4947,14 @@
       "availability": "implemented",
       "operation": "github.code_security_configuration",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/code-security-configuration"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codeowners errors view",
@@ -4458,7 +4963,14 @@
       "availability": "implemented",
       "operation": "github.codeowners_errors",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/codeowners/errors"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces view",
@@ -4467,7 +4979,14 @@
       "availability": "implemented",
       "operation": "github.codespaces",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/codespaces"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces create",
@@ -4487,7 +5006,14 @@
       "availability": "implemented",
       "operation": "github.codespaces_devcontainers",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/codespaces/devcontainers"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces machines view",
@@ -4496,7 +5022,14 @@
       "availability": "implemented",
       "operation": "github.codespaces_machines",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/codespaces/machines"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces new view",
@@ -4505,7 +5038,14 @@
       "availability": "implemented",
       "operation": "github.codespaces_new",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/codespaces/new"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces permissions_check view",
@@ -4514,7 +5054,14 @@
       "availability": "implemented",
       "operation": "github.codespaces_permissions_check",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/codespaces/permissions_check"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces secrets view",
@@ -4523,7 +5070,14 @@
       "availability": "implemented",
       "operation": "github.codespaces_secrets",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/codespaces/secrets"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "codespaces public-key view",
@@ -4532,7 +5086,14 @@
       "availability": "implemented",
       "operation": "github.codespaces_secrets_public_key",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/codespaces/secrets/public-key"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret delete-3",
@@ -4563,9 +5124,17 @@
         {
           "name": "secret-name",
           "type": "string",
-          "summary": "secret_name path parameter"
+          "summary": "secret_name path parameter",
+          "maps_to": "path.secret_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret set-3",
@@ -4596,9 +5165,17 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "summary": "comment_id path parameter"
+          "summary": "comment_id path parameter",
+          "maps_to": "path.comment_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "comments reactions create",
@@ -4653,9 +5230,17 @@
         {
           "name": "commit-sha",
           "type": "string",
-          "summary": "commit_sha path parameter"
+          "summary": "commit_sha path parameter",
+          "maps_to": "path.commit_sha"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits pulls view",
@@ -4668,9 +5253,17 @@
         {
           "name": "commit-sha",
           "type": "string",
-          "summary": "commit_sha path parameter"
+          "summary": "commit_sha path parameter",
+          "maps_to": "path.commit_sha"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/commits/{commit_sha}/pulls"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits check-runs view",
@@ -4683,9 +5276,17 @@
         {
           "name": "ref",
           "type": "string",
-          "summary": "ref path parameter"
+          "summary": "ref path parameter",
+          "maps_to": "path.ref"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/commits/{ref}/check-runs"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits check-suites view",
@@ -4698,9 +5299,17 @@
         {
           "name": "ref",
           "type": "string",
-          "summary": "ref path parameter"
+          "summary": "ref path parameter",
+          "maps_to": "path.ref"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/commits/{ref}/check-suites"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits status view",
@@ -4713,9 +5322,17 @@
         {
           "name": "ref",
           "type": "string",
-          "summary": "ref path parameter"
+          "summary": "ref path parameter",
+          "maps_to": "path.ref"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/commits/{ref}/status"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "commits statuses view",
@@ -4728,9 +5345,17 @@
         {
           "name": "ref",
           "type": "string",
-          "summary": "ref path parameter"
+          "summary": "ref path parameter",
+          "maps_to": "path.ref"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/commits/{ref}/statuses"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "community profile view",
@@ -4739,7 +5364,14 @@
       "availability": "implemented",
       "operation": "github.community_profile",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/community/profile"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "compare view",
@@ -4752,9 +5384,17 @@
         {
           "name": "basehead",
           "type": "string",
-          "summary": "basehead path parameter"
+          "summary": "basehead path parameter",
+          "maps_to": "path.basehead"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/compare/{basehead}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "copilot configuration view",
@@ -4763,7 +5403,14 @@
       "availability": "implemented",
       "operation": "github.copilot_cloud_agent_configuration",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/copilot/cloud-agent/configuration"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot secrets view",
@@ -4772,7 +5419,14 @@
       "availability": "implemented",
       "operation": "github.dependabot_secrets",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/dependabot/secrets"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "dependabot public-key view",
@@ -4781,7 +5435,14 @@
       "availability": "implemented",
       "operation": "github.dependabot_secrets_public_key",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/dependabot/secrets/public-key"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret delete-4",
@@ -4812,9 +5473,17 @@
         {
           "name": "secret-name",
           "type": "string",
-          "summary": "secret_name path parameter"
+          "summary": "secret_name path parameter",
+          "maps_to": "path.secret_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret set-4",
@@ -4845,9 +5514,17 @@
         {
           "name": "basehead",
           "type": "string",
-          "summary": "basehead path parameter"
+          "summary": "basehead path parameter",
+          "maps_to": "path.basehead"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/dependency-graph/compare/{basehead}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "repo sbom view",
@@ -4923,9 +5600,17 @@
         {
           "name": "deployment-id",
           "type": "integer",
-          "summary": "deployment_id path parameter"
+          "summary": "deployment_id path parameter",
+          "maps_to": "path.deployment_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "deployments statuses create",
@@ -4967,9 +5652,17 @@
         {
           "name": "environment-name",
           "type": "string",
-          "summary": "environment_name path parameter"
+          "summary": "environment_name path parameter",
+          "maps_to": "path.environment_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment-branch-policies create",
@@ -5024,14 +5717,23 @@
         {
           "name": "environment-name",
           "type": "string",
-          "summary": "environment_name path parameter"
+          "summary": "environment_name path parameter",
+          "maps_to": "path.environment_name"
         },
         {
           "name": "branch-policy-id",
           "type": "integer",
-          "summary": "branch_policy_id path parameter"
+          "summary": "branch_policy_id path parameter",
+          "maps_to": "path.branch_policy_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment-branch-policies set",
@@ -5068,9 +5770,17 @@
         {
           "name": "environment-name",
           "type": "string",
-          "summary": "environment_name path parameter"
+          "summary": "environment_name path parameter",
+          "maps_to": "path.environment_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment_protection_rules create",
@@ -5101,9 +5811,17 @@
         {
           "name": "environment-name",
           "type": "string",
-          "summary": "environment_name path parameter"
+          "summary": "environment_name path parameter",
+          "maps_to": "path.environment_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments deployment_protection_rules delete",
@@ -5140,14 +5858,23 @@
         {
           "name": "environment-name",
           "type": "string",
-          "summary": "environment_name path parameter"
+          "summary": "environment_name path parameter",
+          "maps_to": "path.environment_name"
         },
         {
           "name": "protection-rule-id",
           "type": "integer",
-          "summary": "protection_rule_id path parameter"
+          "summary": "protection_rule_id path parameter",
+          "maps_to": "path.protection_rule_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments secrets view",
@@ -5160,9 +5887,17 @@
         {
           "name": "environment-name",
           "type": "string",
-          "summary": "environment_name path parameter"
+          "summary": "environment_name path parameter",
+          "maps_to": "path.environment_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "environments public-key view",
@@ -5175,9 +5910,17 @@
         {
           "name": "environment-name",
           "type": "string",
-          "summary": "environment_name path parameter"
+          "summary": "environment_name path parameter",
+          "maps_to": "path.environment_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret delete-5",
@@ -5214,14 +5957,23 @@
         {
           "name": "environment-name",
           "type": "string",
-          "summary": "environment_name path parameter"
+          "summary": "environment_name path parameter",
+          "maps_to": "path.environment_name"
         },
         {
           "name": "secret-name",
           "type": "string",
-          "summary": "secret_name path parameter"
+          "summary": "secret_name path parameter",
+          "maps_to": "path.secret_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret set-5",
@@ -5258,9 +6010,17 @@
         {
           "name": "environment-name",
           "type": "string",
-          "summary": "environment_name path parameter"
+          "summary": "environment_name path parameter",
+          "maps_to": "path.environment_name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "variable create-2",
@@ -5315,14 +6075,23 @@
         {
           "name": "environment-name",
           "type": "string",
-          "summary": "environment_name path parameter"
+          "summary": "environment_name path parameter",
+          "maps_to": "path.environment_name"
         },
         {
           "name": "name",
           "type": "string",
-          "summary": "name path parameter"
+          "summary": "name path parameter",
+          "maps_to": "path.name"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "variable update-2",
@@ -5370,9 +6139,17 @@
         {
           "name": "file-sha",
           "type": "string",
-          "summary": "file_sha path parameter"
+          "summary": "file_sha path parameter",
+          "maps_to": "path.file_sha"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/git/blobs/{file_sha}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "git commits create",
@@ -5396,9 +6173,17 @@
         {
           "name": "ref",
           "type": "string",
-          "summary": "ref path parameter"
+          "summary": "ref path parameter",
+          "maps_to": "path.ref"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/git/ref/{ref}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "git tags view",
@@ -5411,9 +6196,17 @@
         {
           "name": "tag-sha",
           "type": "string",
-          "summary": "tag_sha path parameter"
+          "summary": "tag_sha path parameter",
+          "maps_to": "path.tag_sha"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/git/tags/{tag_sha}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "git trees create",
@@ -5437,9 +6230,17 @@
         {
           "name": "tree-sha",
           "type": "string",
-          "summary": "tree_sha path parameter"
+          "summary": "tree_sha path parameter",
+          "maps_to": "path.tree_sha"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/git/trees/{tree_sha}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "hash-algorithm view",
@@ -5448,7 +6249,14 @@
       "availability": "implemented",
       "operation": "github.hash_algorithm",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/hash-algorithm"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "hooks deliveries view",
@@ -5461,9 +6269,17 @@
         {
           "name": "hook-id",
           "type": "integer",
-          "summary": "hook_id path parameter"
+          "summary": "hook_id path parameter",
+          "maps_to": "path.hook_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "hooks deliveries view-2",
@@ -5476,14 +6292,23 @@
         {
           "name": "hook-id",
           "type": "integer",
-          "summary": "hook_id path parameter"
+          "summary": "hook_id path parameter",
+          "maps_to": "path.hook_id"
         },
         {
           "name": "delivery-id",
           "type": "integer",
-          "summary": "delivery_id path parameter"
+          "summary": "delivery_id path parameter",
+          "maps_to": "path.delivery_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "webhook create",
@@ -5563,7 +6388,14 @@
       "availability": "implemented",
       "operation": "github.immutable_releases2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/immutable-releases"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "immutable-releases set",
@@ -5594,7 +6426,14 @@
       "availability": "implemented",
       "operation": "github.import2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/import"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "import update",
@@ -5625,7 +6464,14 @@
       "availability": "implemented",
       "operation": "github.import_authors",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/import/authors"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "import authors update",
@@ -5652,7 +6498,14 @@
       "availability": "implemented",
       "operation": "github.import_large_files",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/import/large_files"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "import lfs update",
@@ -5672,7 +6525,14 @@
       "availability": "implemented",
       "operation": "github.installation",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/installation"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "interaction-limits delete",
@@ -5692,7 +6552,14 @@
       "availability": "implemented",
       "operation": "github.interaction_limits2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/interaction-limits"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "interaction-limits set",
@@ -5723,7 +6590,14 @@
       "availability": "implemented",
       "operation": "github.interaction_limits_pulls_bypass_list2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "interaction-limits bypass-list set",
@@ -5779,7 +6653,14 @@
       "availability": "implemented",
       "operation": "github.issue_types",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issue-types"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues pin delete",
@@ -5828,9 +6709,17 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "summary": "comment_id path parameter"
+          "summary": "comment_id path parameter",
+          "maps_to": "path.comment_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues reactions create",
@@ -5885,14 +6774,23 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "summary": "issue_number path parameter"
+          "summary": "issue_number path parameter",
+          "maps_to": "path.issue_number"
         },
         {
           "name": "assignee",
           "type": "string",
-          "summary": "assignee path parameter"
+          "summary": "assignee path parameter",
+          "maps_to": "path.assignee"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues blocked_by view",
@@ -5905,9 +6803,17 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "summary": "issue_number path parameter"
+          "summary": "issue_number path parameter",
+          "maps_to": "path.issue_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues blocked_by create",
@@ -5962,9 +6868,17 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "summary": "issue_number path parameter"
+          "summary": "issue_number path parameter",
+          "maps_to": "path.issue_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues issue-field-values view",
@@ -5977,9 +6891,17 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "summary": "issue_number path parameter"
+          "summary": "issue_number path parameter",
+          "maps_to": "path.issue_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues issue-field-values create",
@@ -6052,9 +6974,17 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "summary": "issue_number path parameter"
+          "summary": "issue_number path parameter",
+          "maps_to": "path.issue_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/parent"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues reactions view-2",
@@ -6067,9 +6997,17 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "summary": "issue_number path parameter"
+          "summary": "issue_number path parameter",
+          "maps_to": "path.issue_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues reactions create-2",
@@ -6142,9 +7080,17 @@
         {
           "name": "issue-number",
           "type": "integer",
-          "summary": "issue_number path parameter"
+          "summary": "issue_number path parameter",
+          "maps_to": "path.issue_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issues sub_issues create",
@@ -6189,7 +7135,14 @@
       "availability": "implemented",
       "operation": "github.license",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/license"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "merge-upstream create",
@@ -6213,9 +7166,17 @@
         {
           "name": "milestone-number",
           "type": "integer",
-          "summary": "milestone_number path parameter"
+          "summary": "milestone_number path parameter",
+          "maps_to": "path.milestone_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/milestones/{milestone_number}/labels"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "notifications view",
@@ -6224,7 +7185,14 @@
       "availability": "implemented",
       "operation": "github.notifications",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/notifications"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "notifications set",
@@ -6255,7 +7223,14 @@
       "availability": "implemented",
       "operation": "github.pages2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pages"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages create",
@@ -6286,7 +7261,14 @@
       "availability": "implemented",
       "operation": "github.pages_builds",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pages/builds"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages builds create",
@@ -6306,7 +7288,14 @@
       "availability": "implemented",
       "operation": "github.pages_builds_latest",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pages/builds/latest"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages builds view-2",
@@ -6319,9 +7308,17 @@
         {
           "name": "build-id",
           "type": "integer",
-          "summary": "build_id path parameter"
+          "summary": "build_id path parameter",
+          "maps_to": "path.build_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pages/builds/{build_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages deployments create",
@@ -6345,9 +7342,17 @@
         {
           "name": "pages-deployment-id",
           "type": "integer",
-          "summary": "pages_deployment_id path parameter"
+          "summary": "pages_deployment_id path parameter",
+          "maps_to": "path.pages_deployment_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pages cancel create",
@@ -6374,7 +7379,14 @@
       "availability": "implemented",
       "operation": "github.pages_health",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pages/health"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "private-vulnerability-reporting delete",
@@ -6394,7 +7406,14 @@
       "availability": "implemented",
       "operation": "github.private_vulnerability_reporting2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/private-vulnerability-reporting"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "private-vulnerability-reporting set",
@@ -6414,7 +7433,14 @@
       "availability": "implemented",
       "operation": "github.properties_values",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/properties/values"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "properties values update",
@@ -6438,9 +7464,17 @@
         {
           "name": "comment-id",
           "type": "integer",
-          "summary": "comment_id path parameter"
+          "summary": "comment_id path parameter",
+          "maps_to": "path.comment_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls reactions create",
@@ -6513,9 +7547,17 @@
         {
           "name": "pull-number",
           "type": "integer",
-          "summary": "pull_number path parameter"
+          "summary": "pull_number path parameter",
+          "maps_to": "path.pull_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/commits"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls files view",
@@ -6528,9 +7570,17 @@
         {
           "name": "pull-number",
           "type": "integer",
-          "summary": "pull_number path parameter"
+          "summary": "pull_number path parameter",
+          "maps_to": "path.pull_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/files"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls merge view",
@@ -6543,9 +7593,17 @@
         {
           "name": "pull-number",
           "type": "integer",
-          "summary": "pull_number path parameter"
+          "summary": "pull_number path parameter",
+          "maps_to": "path.pull_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/merge"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls requested_reviewers delete",
@@ -6576,9 +7634,17 @@
         {
           "name": "pull-number",
           "type": "integer",
-          "summary": "pull_number path parameter"
+          "summary": "pull_number path parameter",
+          "maps_to": "path.pull_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "pulls comments view",
@@ -6591,14 +7657,23 @@
         {
           "name": "pull-number",
           "type": "integer",
-          "summary": "pull_number path parameter"
+          "summary": "pull_number path parameter",
+          "maps_to": "path.pull_number"
         },
         {
           "name": "review-id",
           "type": "integer",
-          "summary": "review_id path parameter"
+          "summary": "review_id path parameter",
+          "maps_to": "path.review_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "readme view",
@@ -6607,7 +7682,14 @@
       "availability": "implemented",
       "operation": "github.readme",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/readme"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "readme view-2",
@@ -6620,9 +7702,17 @@
         {
           "name": "dir",
           "type": "string",
-          "summary": "dir path parameter"
+          "summary": "dir path parameter",
+          "maps_to": "path.dir"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/readme/{dir}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "releases assets view",
@@ -6635,9 +7725,17 @@
         {
           "name": "asset-id",
           "type": "integer",
-          "summary": "asset_id path parameter"
+          "summary": "asset_id path parameter",
+          "maps_to": "path.asset_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/releases/assets/{asset_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "releases generate-notes view",
@@ -6661,9 +7759,17 @@
         {
           "name": "release-id",
           "type": "integer",
-          "summary": "release_id path parameter"
+          "summary": "release_id path parameter",
+          "maps_to": "path.release_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/assets"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "releases assets view-3",
@@ -6694,9 +7800,17 @@
         {
           "name": "release-id",
           "type": "integer",
-          "summary": "release_id path parameter"
+          "summary": "release_id path parameter",
+          "maps_to": "path.release_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "releases reactions create",
@@ -6747,7 +7861,14 @@
       "availability": "implemented",
       "operation": "github.rulesets_rule_suites",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/rulesets/rule-suites"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "rulesets rule-suites view-2",
@@ -6760,9 +7881,17 @@
         {
           "name": "rule-suite-id",
           "type": "integer",
-          "summary": "rule_suite_id path parameter"
+          "summary": "rule_suite_id path parameter",
+          "maps_to": "path.rule_suite_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/rulesets/rule-suites/{rule_suite_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "rulesets history view",
@@ -6775,9 +7904,17 @@
         {
           "name": "ruleset-id",
           "type": "integer",
-          "summary": "ruleset_id path parameter"
+          "summary": "ruleset_id path parameter",
+          "maps_to": "path.ruleset_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "rulesets history view-2",
@@ -6790,14 +7927,23 @@
         {
           "name": "ruleset-id",
           "type": "integer",
-          "summary": "ruleset_id path parameter"
+          "summary": "ruleset_id path parameter",
+          "maps_to": "path.ruleset_id"
         },
         {
           "name": "version-id",
           "type": "integer",
-          "summary": "version_id path parameter"
+          "summary": "version_id path parameter",
+          "maps_to": "path.version_id"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret-scanning locations view",
@@ -6810,9 +7956,17 @@
         {
           "name": "alert-number",
           "type": "integer",
-          "summary": "alert_number path parameter"
+          "summary": "alert_number path parameter",
+          "maps_to": "path.alert_number"
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "secret-scanning push-protection-bypasses create",
@@ -6832,7 +7986,14 @@
       "availability": "implemented",
       "operation": "github.secret_scanning_scan_history",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/secret-scanning/scan-history"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "security-advisories create",
@@ -6917,7 +8078,14 @@
       "availability": "implemented",
       "operation": "github.stats_code_frequency",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/stats/code_frequency"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats commit_activity view",
@@ -6926,7 +8094,14 @@
       "availability": "implemented",
       "operation": "github.stats_commit_activity",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/stats/commit_activity"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats contributors view",
@@ -6935,7 +8110,14 @@
       "availability": "implemented",
       "operation": "github.stats_contributors",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/stats/contributors"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats participation view",
@@ -6944,7 +8126,14 @@
       "availability": "implemented",
       "operation": "github.stats_participation",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/stats/participation"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "stats punch_card view",
@@ -6953,7 +8142,14 @@
       "availability": "implemented",
       "operation": "github.stats_punch_card",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/stats/punch_card"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "statuses create",
@@ -6991,7 +8187,14 @@
       "availability": "implemented",
       "operation": "github.subscription2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/subscription"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "subscription set",
@@ -7026,7 +8229,14 @@
       "availability": "implemented",
       "operation": "github.teams",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/teams"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic clones view",
@@ -7035,7 +8245,14 @@
       "availability": "implemented",
       "operation": "github.traffic_clones",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/traffic/clones"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic paths view",
@@ -7044,7 +8261,14 @@
       "availability": "implemented",
       "operation": "github.traffic_popular_paths",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/traffic/popular/paths"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic referrers view",
@@ -7053,7 +8277,14 @@
       "availability": "implemented",
       "operation": "github.traffic_popular_referrers",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/traffic/popular/referrers"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "traffic views view",
@@ -7062,7 +8293,14 @@
       "availability": "implemented",
       "operation": "github.traffic_views",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/traffic/views"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "transfer create",
@@ -7094,7 +8332,14 @@
       "availability": "implemented",
       "operation": "github.vulnerability_alerts2",
       "source_cli_path": "",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/repos/{owner}/{repo}/vulnerability-alerts"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "vulnerability-alerts set",

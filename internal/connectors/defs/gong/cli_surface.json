@@ -2207,7 +2207,13 @@
           "required": true
         }
       ],
-      "examples": []
+      "examples": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/meetings/integration/status"
+        }
+      ]
     },
     {
       "path": "flows steps",
@@ -2228,7 +2234,13 @@
           "required": true
         }
       ],
-      "examples": []
+      "examples": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/steps"
+        }
+      ]
     },
     {
       "path": "flows prospects",
@@ -2254,7 +2266,13 @@
           "maps_to": "body.flowInstanceIds"
         }
       ],
-      "examples": []
+      "examples": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/flows/prospects"
+        }
+      ]
     },
     {
       "path": "calls transcript",

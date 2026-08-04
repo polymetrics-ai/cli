@@ -1878,3 +1878,75 @@ func TestCoerceFlagValueBoundsStringArrayItems(t *testing.T) {
 		t.Fatal("coerceFlagValue under the minimum = nil, want rejection")
 	}
 }
+
+// TestEveryImplementedCommandPassesRuntimePreflight is the structural guard
+// against a command claiming availability "implemented" while failing at
+// runtime.
+//
+// It asserts against the REAL runtime rather than a description of it: it walks
+// every bundle registered from defs.FS and calls Preflight, the same entry
+// point internal/cli calls before executing a connector command. That matters
+// because the defect this test exists to prevent was precisely a validator that
+// hand-copied the runtime's rules and drifted from them -- cmd/connectorgen
+// exempted operation-backed direct reads from the api_surface check that
+// commandrunner enforces, so 174 dead commands validated clean.
+//
+// Because it calls the runtime instead of restating it, every future executor
+// kind is covered the day that executor lands, with no change here.
+func TestEveryImplementedCommandPassesRuntimePreflight(t *testing.T) {
+	registry := bundleregistry.New()
+
+	type deadCommand struct {
+		connector string
+		command   string
+		reason    string
+	}
+	var dead []deadCommand
+	checked := 0
+
+	for _, meta := range registry.List() {
+		connector, ok := registry.Get(meta.Name)
+		if !ok {
+			t.Fatalf("registry lists %q but Get returned nothing", meta.Name)
+		}
+		provider, ok := connector.(connectors.CommandSurfaceProvider)
+		if !ok || provider.CommandSurface() == nil {
+			continue
+		}
+		for _, cmd := range provider.CommandSurface().Commands {
+			if cmd.Availability != "implemented" {
+				continue
+			}
+			checked++
+			err := Preflight(connector, strings.Fields(cmd.Path))
+			if err == nil {
+				continue
+			}
+			reason := err.Error()
+			var blocked *BlockedCommandError
+			if errors.As(err, &blocked) {
+				reason = blocked.Reason
+			}
+			dead = append(dead, deadCommand{connector: connector.Name(), command: cmd.Path, reason: reason})
+		}
+	}
+
+	if checked == 0 {
+		t.Fatal("no implemented commands were checked; the sweep is not reaching any bundle")
+	}
+	if len(dead) == 0 {
+		return
+	}
+
+	var b strings.Builder
+	fmt.Fprintf(&b, "%d of %d commands marked \"implemented\" fail runtime Preflight:\n", len(dead), checked)
+	for i, entry := range dead {
+		if i == 25 {
+			fmt.Fprintf(&b, "  ... and %d more\n", len(dead)-i)
+			break
+		}
+		fmt.Fprintf(&b, "  %s %q: %s\n", entry.connector, entry.command, entry.reason)
+	}
+	b.WriteString("\nEither make the command executable or stop claiming it is implemented.")
+	t.Fatal(b.String())
+}

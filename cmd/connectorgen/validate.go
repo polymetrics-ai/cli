@@ -849,7 +849,10 @@ func checkCLISurfaceOperationSafety(
 	cmd engine.CLICommand,
 	operations map[string]engine.OperationSpec,
 ) []Finding {
-	if cmd.Availability != "implemented" || cmd.Operation == "" || strings.TrimSpace(cmd.OutputPolicy) == "" {
+	// An empty output_policy is NOT a reason to skip: it is precisely the
+	// state the runtime rejects. Skipping here is what gave GitHub's
+	// operation-backed commands zero validation from either path.
+	if cmd.Availability != "implemented" || cmd.Operation == "" {
 		return nil
 	}
 	op, ok := operations[cmd.Operation]
@@ -1411,6 +1414,16 @@ func cliFlagTypeMatchesSchema(flagType string, node *cliRecordSchemaNode) bool {
 	}
 }
 
+// directReadMethodRequirement names the methods a direct read command may
+// reference, matching commandrunner: operation-backed commands may POST for
+// bounded read-queries, endpoint-backed commands are GET-only.
+func directReadMethodRequirement(cmd engine.CLICommand) string {
+	if cmd.Operation != "" {
+		return "GET or POST"
+	}
+	return "GET"
+}
+
 func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
 	if cmd.Availability != "implemented" {
 		return nil
@@ -1436,9 +1449,10 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 			}}
 		}
 	case "direct_read":
-		if cmd.Operation != "" {
-			return nil
-		}
+		// Operation-backed commands are NOT exempt. The runtime
+		// (commandrunner.validateOperationDirectReadCommand) enforces exactly
+		// these rules on them, so exempting them here is what let 174 commands
+		// ship as "implemented" while blocking on every invocation.
 		var findings []Finding
 		if len(cmd.APISurface) != 1 {
 			findings = append(findings, Finding{
@@ -1449,12 +1463,16 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 			})
 		}
 		for _, ep := range cmd.APISurface {
-			if strings.ToUpper(strings.TrimSpace(ep.Method)) != "GET" {
+			// Operation-backed direct reads may use POST for bounded
+			// read-queries; endpoint-backed ones stay GET-only. This mirrors
+			// commandrunner exactly.
+			method := strings.ToUpper(strings.TrimSpace(ep.Method))
+			if method != "GET" && !(cmd.Operation != "" && method == "POST") {
 				findings = append(findings, Finding{
 					Connector: b.Name,
 					File:      "cli_surface.json",
 					Rule:      ruleCLISurfaceSafety,
-					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a GET api_surface endpoint, got %s", i, cmd.Path, strings.ToUpper(ep.Method)),
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a %s api_surface endpoint, got %s", i, cmd.Path, directReadMethodRequirement(cmd), method),
 				})
 			}
 			if isAbsoluteHTTPURL(ep.Path) {
@@ -1474,6 +1492,8 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 				})
 			}
 		}
+		// Asserted unconditionally: an empty output_policy is the finding, not
+		// a reason to skip. The runtime rejects both empty and unsupported.
 		if !directReadOutputPolicies[cmd.OutputPolicy] {
 			findings = append(findings, Finding{
 				Connector: b.Name,
