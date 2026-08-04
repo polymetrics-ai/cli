@@ -2,11 +2,11 @@
 
 | ID | Enforcement | RED evidence | GREEN evidence | Refactor/verification |
 |---|---|---|---|---|
-| R1 | Every canonical GSD command resolves | `go test ./internal/agentcontract` failed: `GSD command "programming-loop" does not resolve: scripts/gsd: unknown GSD command or prompt: programming-loop` | Pending | Pending |
-| R2 | Diverged projection fails | Same executed run failed: `CheckProjection accepted a diverged projection` against the pre-enforcement stub | Pending | Pending |
-| R3 | Stable deterministic rendering | N/A (added after R2 green) | Pending | Pending |
-| R4 | Required fields, single-worker/no-delegation, overlay inheritance | N/A (source validator coverage) | Pending | Pending |
-| R5 | CI drift entry point | N/A | Pending: `make agent-contract-check` | Pending |
+| R1 | Every canonical GSD command resolves | `go test ./internal/agentcontract` failed: `GSD command "programming-loop" does not resolve: scripts/gsd: unknown GSD command or prompt: programming-loop` | `TestReferencedGSDCommandsResolve` loads the canonical list and passed by executing `scripts/gsd sources` for all five commands | Focused package test and `make agent-contract-check` passed |
+| R2 | Diverged projection fails | Same RED run failed: `CheckProjection accepted a diverged projection` against the pre-enforcement stub | `TestProjectionDriftCheckAndSync` writes a matching wrapper, mutates `Receive one assigned job` to `Receive many jobs`, observes `CheckProjections` fail, runs bounded sync, and observes the check pass | Focused package test passed; sync preserves harness-owned prefix/suffix |
+| R3 | Stable deterministic rendering | N/A (added after R2 green) | `TestRenderIsStableAndConnectorInheritsBase` renders twice and locks the base output SHA-256 | Both base and connector renderings contain every base state; connector rendering contains every overlay state |
+| R4 | Required fields, single-worker/no-delegation, overlay inheritance | N/A (source validator coverage) | Table-driven mutation test rejects multiple workers, delegation, broken inheritance, allowed `--yes`, GSD ship, and missing authority pause state | Focused package test passed |
+| R5 | CI drift entry point | N/A | `make agent-contract-check` executed successfully and is included in serial and parallel `verify` targets | `go vet ./internal/agentcontract ./cmd/agentcontractgen` passed |
 
 Tests record executed output, not inferred behavior. Prose decisions are documented; only executable
 enforcement claims receive red/green evidence.
