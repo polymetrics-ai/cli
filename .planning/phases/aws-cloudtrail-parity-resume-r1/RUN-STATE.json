@@ -1,0 +1,25 @@
+{
+  "phase": "aws-cloudtrail-parity-resume-r1",
+  "state": "planned",
+  "branch": "fm/cli-aws-cloudtrail-parity-resume-r1",
+  "gsd": "manual fallback: scripts/gsd prompt programming-loop is unavailable",
+  "verificationPassed": false,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Single connector-local task; user assignment and current runtime policy do not authorize unsolicited subagent delegation."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "The red command-surface regression must be reproduced against this isolated worktree before connector-local production edits."
+    }
+  ],
+  "counts": {
+    "documented": 60,
+    "implemented_target": 57,
+    "disallowed": 3,
+    "planned": 0
+  }
+}
