@@ -272,6 +272,93 @@ func TestRequesterDoMultipartUnconstrainedMediaTypeStillUploads(t *testing.T) {
 	}
 }
 
+// uploadHeaderEcho captures the Content-Type header of the "mediaFile" part,
+// which is the claim we actually make to the provider. It is deliberately
+// separate from uploadEcho: these tests assert on the header rather than the
+// bytes, and a refused upload must leave *got empty for the same mid-stream
+// reason documented there.
+func uploadHeaderEcho(t *testing.T, got *string) *httptest.Server {
+	t.Helper()
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			return
+		}
+		parts := r.MultipartForm.File["mediaFile"]
+		if len(parts) == 0 {
+			return
+		}
+		*got = parts[0].Header.Get("Content-Type")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+}
+
+// jpegBytes is a minimal JFIF header, enough for http.DetectContentType.
+var jpegBytes = append([]byte("\xff\xd8\xff\xe0\x00\x10JFIF\x00"), bytes.Repeat([]byte{0}, 32)...)
+
+// TestRequesterDoMultipartSendsSniffedContentTypeWhenBounded pins the decision
+// that the part header describes the bytes we send rather than the type the
+// bundle hoped for. The file here is a JPEG while content_type declares PNG, and
+// both are allowed: before this, the request asserted "image/png" over JPEG
+// bytes — a claim we had just proven false. The allowlist stays the restriction;
+// declaring a single-entry list is how a bundle demands exactly one type, and
+// TestRequesterDoMultipartRejectsDisallowedMediaType covers that path.
+func TestRequesterDoMultipartSendsSniffedContentTypeWhenBounded(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "photo.png")
+	if err := os.WriteFile(path, jpegBytes, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var sawType string
+	srv := uploadHeaderEcho(t, &sawType)
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, Sleep: noSleep}
+	if _, err := r.DoMultipart(context.Background(), http.MethodPost, "/upload", nil, MultipartForm{
+		Files: []MultipartFile{{
+			FieldName:         "mediaFile",
+			Path:              path,
+			ContentType:       "image/png",
+			AllowedMediaTypes: []string{"image/png", "image/jpeg"},
+			MaxBytes:          1 << 20,
+		}},
+	}); err != nil {
+		t.Fatalf("DoMultipart error = %v", err)
+	}
+	if sawType != "image/jpeg" {
+		t.Fatalf("part Content-Type = %q, want the sniffed image/jpeg rather than the declared image/png", sawType)
+	}
+}
+
+// TestRequesterDoMultipartKeepsDeclaredContentTypeWhenUnbounded is the other
+// half of the decision: with no allowlist the sniff was never checked against a
+// declaration, and http.DetectContentType is coarse (every CSV sniffs as
+// text/plain), so a deliberate content_type must survive untouched.
+func TestRequesterDoMultipartKeepsDeclaredContentTypeWhenUnbounded(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "report.csv")
+	if err := os.WriteFile(path, []byte("id,name\n1,ada\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var sawType string
+	srv := uploadHeaderEcho(t, &sawType)
+	defer srv.Close()
+
+	r := &Requester{BaseURL: srv.URL, Sleep: noSleep}
+	if _, err := r.DoMultipart(context.Background(), http.MethodPost, "/upload", nil, MultipartForm{
+		Files: []MultipartFile{{
+			FieldName:   "mediaFile",
+			Path:        path,
+			ContentType: "text/csv",
+			MaxBytes:    1 << 20,
+		}},
+	}); err != nil {
+		t.Fatalf("DoMultipart error = %v", err)
+	}
+	if sawType != "text/csv" {
+		t.Fatalf("part Content-Type = %q, want the declared text/csv preserved", sawType)
+	}
+}
+
 // TestRequesterDoMultipartRootConfinedHappyPathUploads proves confinement does
 // not break the ordinary case.
 func TestRequesterDoMultipartRootConfinedHappyPathUploads(t *testing.T) {

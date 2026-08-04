@@ -81,6 +81,34 @@ rejected fail-closed) was classified `no-op`. The captain directed no action: it
 is the deliberate tradeoff, and bundle authors must account for Go's sniff table
 when declaring `allowed_media_types`.
 
+## Rebase round onto #3700, and the content-type decision
+
+This phase was rebased from `504a7c07a` onto `48e928398` (`origin/main`), which had
+advanced by two merged foundation PRs. The rebase dropped a merge commit that a
+`required_linear_history` repo would not accept; the branch is now linear on top of
+`origin/main` with no merge commits.
+
+`#3700` independently added `minItems`/`maxItems` to the same schema dialect this phase
+needed them in. The two implementations were semantically equivalent — both reject
+negative bounds and a `maxItems` below `minItems` — so main's factored
+`compileArrayCardinality`/`validateArrayCardinality` was kept and this phase's duplicate
+removed, with the provider-search motivation folded into the surviving comment. The
+`provider_search`-specific `requireBoundedArrays` rule is *not* redundant with it and
+stays: the dialect keyword makes a bound *expressible*, while `requireBoundedArrays`
+makes it *mandatory* for this kind. Two tests asserted this phase's error wording and
+were updated to main's; the behaviour they pin (rejection before any HTTP call) is
+unchanged.
+
+`#3700`'s `base64_upload` and this phase's streaming `multipart` upload both read local
+files under `os.Root`, but are not duplicates: `base64_upload` buffers a whole payload to
+inline it in JSON, while `multipart` holds the root open across a streamed snapshot so
+containment is re-checked at every open. Both survived intact.
+
+| Slice | Red evidence | Green evidence | Status |
+|---|---|---|---|
+| Part header asserted a type we had just disproved | Red: `TestRequesterDoMultipartSendsSniffedContentTypeWhenBounded` — a JPEG file declared `content_type: image/png` under an allowlist admitting both was uploaded with `Content-Type: image/png`. Confirmed as a real red by mutating the fix to `if false`: `part Content-Type = "image/png", want the sniffed image/jpeg`. | Captain decided option A: **the wire header is set from the sniffed type; the allowlist stays the restriction, and a single-entry allowlist is the documented way to demand exactly one type.** `snapshotApprovedMultipartFiles` overwrites the prepared part's `ContentType` with the sniffed value when — and only when — an allowlist made that sniff binding. | Green |
+| Overriding must not damage the unbounded case | Red risk: `http.DetectContentType` is coarse (every CSV sniffs as `text/plain`), so overriding unconditionally would have downgraded a deliberate `content_type`. | `TestRequesterDoMultipartKeepsDeclaredContentTypeWhenUnbounded` pins that a declared `text/csv` survives untouched with no allowlist present. | Green |
+
 ## Mutant that survived, and why
 
 Reverting `file.stat()` to `os.Stat(file.Path)` in `validateMultipartForm` alone does **not** fail the

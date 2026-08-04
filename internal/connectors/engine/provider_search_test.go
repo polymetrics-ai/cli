@@ -35,7 +35,7 @@ func TestSchemaEnforcesMaxItems(t *testing.T) {
 	if err == nil {
 		t.Fatal("Validate over the bound = nil, want rejection")
 	}
-	if !strings.Contains(err.Error(), "exceeds the declared maximum of 2") {
+	if !strings.Contains(err.Error(), "maxItems 2 exceeded") {
 		t.Fatalf("Validate error = %q", err.Error())
 	}
 }
@@ -243,7 +243,7 @@ func TestOperationDirectReadRejectsOverlongProviderSearchList(t *testing.T) {
 	if err == nil {
 		t.Fatal("OperationDirectRead error = nil, want the 101-item list rejected")
 	}
-	if !strings.Contains(err.Error(), "exceeds the declared maximum of 100") {
+	if !strings.Contains(err.Error(), "maxItems 100 exceeded") {
 		t.Fatalf("error = %q", err.Error())
 	}
 	if calls != 0 {
