@@ -50,6 +50,7 @@
               "source_url": { "type": "string" },
               "source_location": { "type": "string" },
               "sibling_operation": { "type": "string" },
+              "write_action": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
               "fields": {
                 "type": "array",
                 "items": {

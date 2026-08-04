@@ -677,6 +677,12 @@ func TestBundleLoadParsesOperations(t *testing.T) {
 				"risk": "low",
 				"approval": "none",
 				"output_policy": "json",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#get",
+					"source_location": "Get widget request",
+					"fields": [{"path":"path.id","source_url":"https://example.invalid/widgets#get","source_location":"path parameter id"}]
+				},
 				"rest": {
 					"method": "GET",
 					"path": "/widgets/{id}"
@@ -764,6 +770,114 @@ func TestBundleLoadParsesRequestContractAndNoBody(t *testing.T) {
 	}
 	if string(raw) != `"none"` {
 		t.Fatalf("marshaled body = %s, want %q", raw, "none")
+	}
+}
+
+func TestBundleLoadRequiresRequestContractForRESTOperations(t *testing.T) {
+	_, err := Load(operationsBundleFS(t, `{
+		"operations": [{
+			"id": "acme.widgets.list",
+			"kind": "rest_read",
+			"summary": "List widgets",
+			"risk": "low",
+			"approval": "none",
+			"output_policy": "json_redacted",
+			"rest": {"method": "GET", "path": "/widgets", "max_bytes": 1024}
+		}]
+	}`), "acme")
+	if err == nil || !strings.Contains(err.Error(), "REST operation must declare request_contract evidence") {
+		t.Fatalf("Load error = %v, want mandatory request_contract error", err)
+	}
+}
+
+func TestBundleLoadRequiresRequiredQueryCitations(t *testing.T) {
+	_, err := Load(operationsBundleFS(t, `{
+		"operations": [{
+			"id": "acme.widgets.list",
+			"kind": "rest_read",
+			"summary": "List widgets",
+			"risk": "low",
+			"approval": "none",
+			"output_policy": "json_redacted",
+			"request_contract": {
+				"source_tier": 3,
+				"source_url": "https://example.invalid/widgets#list",
+				"source_location": "List widgets request",
+				"fields": []
+			},
+			"rest": {
+				"method": "GET",
+				"path": "/widgets",
+				"max_bytes": 1024,
+				"required_query": [{"any_of": ["email", "id"]}]
+			}
+		}]
+	}`), "acme")
+	if err == nil || !strings.Contains(err.Error(), `missing citation for "query.email"`) {
+		t.Fatalf("Load error = %v, want required_query citation error", err)
+	}
+}
+
+func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
+	contract := func(id, writeAction string) string {
+		return fmt.Sprintf(`{
+			"id": %q,
+			"kind": "rest_write",
+			"summary": "Create widget",
+			"risk": "medium",
+			"approval": "required",
+			"output_policy": "json_redacted",
+			"mutation_class": "create",
+			"request_contract": {
+				"source_tier": 3,
+				"source_url": "https://example.invalid/widgets#create",
+				"source_location": "Create widget request",
+				"write_action": %q,
+				"fields": []
+			},
+			"rest": {"method": "POST", "path": "/widgets", "body": "none"}
+		}`, id, writeAction)
+	}
+	tests := []struct {
+		name       string
+		operations string
+		want       string
+	}{
+		{name: "valid", operations: contract("acme.widgets.create", "create_widget")},
+		{name: "unclaimed", operations: "", want: `writes.json action "create_widget" must be claimed`},
+		{name: "dangling", operations: contract("acme.widgets.create", "missing_widget"), want: `does not name a writes.json action`},
+		{name: "duplicate", operations: contract("acme.widgets.create", "create_widget") + "," + contract("acme.widgets.create_again", "create_widget"), want: `both claim writes.json action "create_widget"`},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+				"actions": [{
+					"name": "create_widget",
+					"kind": "create",
+					"method": "POST",
+					"path": "/widgets",
+					"record_schema": {"type":"object","required":["name"],"properties":{"name":{"type":"string"}}},
+					"risk": "creates a widget"
+				}]
+			}`)}
+			if tt.operations != "" {
+				fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{"operations":[` + tt.operations + `]}`)}
+			}
+			bundle, err := Load(fsys, "acme")
+			if tt.want == "" {
+				if err != nil {
+					t.Fatalf("Load: %v", err)
+				}
+				if got := bundle.Operations[0].RequestContract.WriteAction; got != "create_widget" {
+					t.Fatalf("write_action = %q, want create_widget", got)
+				}
+				return
+			}
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Load error = %v, want %q", err, tt.want)
+			}
+		})
 	}
 }
 
@@ -2210,6 +2324,15 @@ func TestBundleLoadAcceptsRequiredQueryGroups(t *testing.T) {
 			"risk": "medium",
 			"approval": "none",
 			"output_policy": "json_redacted",
+			"request_contract": {
+				"source_tier": 3,
+				"source_url": "https://example.invalid/users#list",
+				"source_location": "List users request",
+				"fields": [
+					{"path":"query.email","source_url":"https://example.invalid/users#list","source_location":"query parameter email"},
+					{"path":"query.id","source_url":"https://example.invalid/users#list","source_location":"query parameter id"}
+				]
+			},
 			"rest": {
 				"method": "GET",
 				"path": "/users",

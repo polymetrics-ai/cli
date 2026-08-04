@@ -230,6 +230,7 @@ not a full override by default.
       "source_tier": 2,
       "source_url": "https://example.invalid/openapi.json",
       "source_location": "paths./widgets.post.description fenced request example",
+      "write_action": "create_widget",
       "fields": [
         {
           "path": "body.name",
@@ -245,6 +246,15 @@ not a full override by default.
   Tier 5 has no executable representation: leave the operation deferred. The top-level operation
   `source_url` remains endpoint provenance and does not replace the anchored `request_contract`
   citations.
+
+  When a reviewed operation is promoted to a `writes.json` action, retain its evidence-bearing
+  `operations.json` row and set `request_contract.write_action` to the exact connector-local action
+  name. Every write action must have exactly one such forward link; dangling links and duplicate
+  claims are load errors. Method/path matching is not a substitute because templates can differ and
+  multiple operations can share the same method and path.
+
+  `docs/migration/request-contract-coverage.json` is the machine-readable rollout inventory, sorted
+  by each connector's remaining citation/link gap count and then connector slug.
 
   A genuinely empty documented body **MUST** use `"body": "none"` in an `operations.json` REST
   block; the `writes.json` spelling remains `"body_type": "none"`. `"body": {}` means an object

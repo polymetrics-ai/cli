@@ -960,9 +960,10 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 }
 
 func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
-	if op.REST == nil || op.REST.Body == nil || !op.REST.Body.None || op.RequestContract == nil {
+	if op.REST == nil || op.RequestContract == nil {
 		return nil
 	}
+	noBody := op.REST.Body != nil && op.REST.Body.None
 	citations := make(map[string]bool, len(op.RequestContract.Fields))
 	for _, field := range op.RequestContract.Fields {
 		citations[strings.TrimSpace(field.Path)] = true
@@ -972,13 +973,16 @@ func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLIC
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
 		mappings[mapsTo] = true
-		if strings.HasPrefix(mapsTo, "body.") {
+		if noBody && strings.HasPrefix(mapsTo, "body.") {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented no-body command %d (%q) flag --%s maps to body despite rest.body none", i, cmd.Path, flag.Name)})
 			continue
 		}
-		if (strings.HasPrefix(mapsTo, "path.") || strings.HasPrefix(mapsTo, "query.")) && !citations[mapsTo] {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented no-body command %d (%q) flag --%s maps to uncited request field %q", i, cmd.Path, flag.Name, mapsTo)})
+		if (strings.HasPrefix(mapsTo, "body.") || strings.HasPrefix(mapsTo, "path.") || strings.HasPrefix(mapsTo, "query.")) && !citations[mapsTo] {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented operation-backed command %d (%q) flag --%s maps to uncited request field %q", i, cmd.Path, flag.Name, mapsTo)})
 		}
+	}
+	if !noBody {
+		return findings
 	}
 	for _, field := range op.RequestContract.Fields {
 		path := strings.TrimSpace(field.Path)

@@ -632,6 +632,23 @@ func TestValidate_CLISurfaceNoBodyRequestContractRequiresFlags(t *testing.T) {
 					"max_bytes": 1024,
 					"body": "none"
 				}
+			},
+			{
+				"id": "cli-surface.widgets.create",
+				"kind": "rest_write",
+				"summary": "Create a widget",
+				"risk": "medium",
+				"approval": "required",
+				"output_policy": "json_redacted",
+				"mutation_class": "create",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#create",
+					"source_location": "Create widget request",
+					"write_action": "create_widget",
+					"fields": []
+				},
+				"rest": {"method":"POST","path":"/widgets","body":"none"}
 			}
 		]
 	}`
@@ -686,6 +703,53 @@ func TestValidate_CLISurfaceNoBodyRequestContractRequiresFlags(t *testing.T) {
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
+func TestValidate_CLISurfaceRequestContractFlagsApplyToAllOperations(t *testing.T) {
+	cliSurface := `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [{
+			"path": "widget list",
+			"summary": "List widgets",
+			"intent": "direct_read",
+			"availability": "implemented",
+			"operation": "cli-surface.widgets.list",
+			"api_surface": [{"method":"GET","path":"/widgets"}],
+			"output_policy": "json_redacted",
+			"flags": [{"name":"debug","type":"boolean","maps_to":"query.debug"}]
+		}]
+	}`
+	operations := `{
+		"operations": [{
+			"id": "cli-surface.widgets.list",
+			"kind": "rest_read",
+			"summary": "List widgets",
+			"risk": "low",
+			"approval": "none",
+			"output_policy": "json_redacted",
+			"request_contract": {
+				"source_tier": 3,
+				"source_url": "https://example.invalid/widgets#list",
+				"source_location": "List widgets request",
+				"fields": []
+			},
+			"rest": {"method":"GET","path":"/widgets","max_bytes":1024}
+		}]
+	}`
+	fsys := cliSurfaceBundleFS(cliSurface)
+	delete(fsys, "cli-surface/writes.json")
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api":"test API v1",
+		"operation_ledger_version":1,
+		"endpoints":[{"method":"GET","path":"/widgets","covered_by":{"direct_read":"widget list"}}]
+	}`)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
 func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T) {
 	cliSurface := `{
 		"tagline": "Work with CLI Surface from the command line.",
@@ -714,6 +778,12 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T
 				"risk": "low",
 				"approval": "none",
 				"output_policy": "json_redacted",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#preview",
+					"source_location": "Preview widget request",
+					"fields": [{"path":"body.payload","source_url":"https://example.invalid/widgets#preview","source_location":"request property payload"}]
+				},
 				"rest": {
 					"method": "POST",
 					"path": "/widgets:preview",
@@ -743,7 +813,7 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T
 	}`
 	fsys := cliSurfaceBundleFS(cliSurface)
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
-	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(withWriteEvidenceOperation(operations))}
 	report, err := validateDir(fsys)
 	if err != nil {
 		t.Fatalf("validateDir: %v", err)
@@ -782,6 +852,12 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 				"risk": "low",
 				"approval": "none",
 				"output_policy": "json_redacted",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#preview",
+					"source_location": "Preview widget request",
+					"fields": [{"path":"body.payload","source_url":"https://example.invalid/widgets#preview","source_location":"request property payload"}]
+				},
 				"rest": {
 					"method": "POST",
 					"path": "/widgets:preview",
@@ -811,7 +887,7 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 	}`
 	fsys := cliSurfaceBundleFS(cliSurface)
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
-	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(withWriteEvidenceOperation(operations))}
 	report, err := validateDir(fsys)
 	if err != nil {
 		t.Fatalf("validateDir: %v", err)
@@ -821,7 +897,7 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 	fixed := strings.Replace(cliSurface, `"maps_to": "body.payload"`, `"maps_to": "body.payload", "required": true`, 1)
 	fsys = cliSurfaceBundleFS(fixed)
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
-	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(withWriteEvidenceOperation(operations))}
 	report, err = validateDir(fsys)
 	if err != nil {
 		t.Fatalf("validateDir fixed: %v", err)
@@ -1747,6 +1823,7 @@ none
 none
 `)},
 		"cli-surface/cli_surface.json": &fstest.MapFile{Data: []byte(cliSurface)},
+		"cli-surface/operations.json":  &fstest.MapFile{Data: []byte(`{"operations":[` + validWriteEvidenceOperationJSON() + `]}`)},
 	}
 }
 
@@ -1775,14 +1852,56 @@ func validOperationsJSON() string {
 				"risk": "low",
 				"approval": "none",
 				"output_policy": "json_redacted",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#get",
+					"source_location": "Get widget request",
+					"fields": [{"path":"path.id","source_url":"https://example.invalid/widgets#get","source_location":"path parameter id"}]
+				},
 				"rest": {
 					"method": "GET",
 					"path": "/widgets/{id}",
 					"max_bytes": 1024
 				}
-			}
+			},
+			` + validWriteEvidenceOperationJSON() + `
 		]
 	}`
+}
+
+func validWriteEvidenceOperationJSON() string {
+	return `{
+		"id": "cli-surface.widgets.create",
+		"kind": "rest_write",
+		"summary": "Create a widget",
+		"risk": "medium",
+		"approval": "required",
+		"output_policy": "json_redacted",
+		"mutation_class": "create",
+		"request_contract": {
+			"source_tier": 3,
+			"source_url": "https://example.invalid/widgets#create",
+			"source_location": "Create widget request",
+			"write_action": "create_widget",
+			"fields": []
+		},
+		"rest": {"method":"POST","path":"/widgets","body":"none"}
+	}`
+}
+
+func withWriteEvidenceOperation(operations string) string {
+	var document struct {
+		Operations []json.RawMessage `json:"operations"`
+	}
+	if err := json.Unmarshal([]byte(operations), &document); err != nil {
+		panic(err)
+	}
+	document.Operations = append(document.Operations, json.RawMessage(validWriteEvidenceOperationJSON()))
+	data, err := json.Marshal(document)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
 }
 
 func validOperationCLISurfaceJSON() string {

@@ -683,6 +683,7 @@ type RequestContractSpec struct {
 	SourceURL        string                 `json:"source_url"`
 	SourceLocation   string                 `json:"source_location"`
 	SiblingOperation string                 `json:"sibling_operation,omitempty"`
+	WriteAction      string                 `json:"write_action,omitempty"`
 	Fields           []RequestContractField `json:"fields"`
 }
 
@@ -1167,6 +1168,9 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	operations, rawOperations, err := loadOperations(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
+	}
+	if err := validateWriteRequestContractLinks(writes, operations); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
 	}
 
 	schemas, err := loadStreamSchemas(sub, dirName, streams)
@@ -1925,9 +1929,6 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	if err := validateRequiredQuery(i, op); err != nil {
 		return err
 	}
-	if err := validateRequestContract(i, op); err != nil {
-		return err
-	}
 	switch op.Kind {
 	case "rest_read":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
@@ -1992,7 +1993,7 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	if err := validateSensitivePolicy(i, op); err != nil {
 		return err
 	}
-	return nil
+	return validateRequestContract(i, op)
 }
 
 func validateRequestContract(i int, op OperationSpec) error {
@@ -2006,12 +2007,9 @@ func validateRequestContract(i int, op OperationSpec) error {
 		if len(op.REST.BodySchema) != 0 {
 			return fmt.Errorf("operation %d (%q) rest body none must not declare body_schema", i, op.ID)
 		}
-		if op.RequestContract == nil {
-			return fmt.Errorf("operation %d (%q) rest body none must declare request_contract evidence", i, op.ID)
-		}
 	}
 	if op.RequestContract == nil {
-		return nil
+		return fmt.Errorf("operation %d (%q) REST operation must declare request_contract evidence", i, op.ID)
 	}
 
 	contract := op.RequestContract
@@ -2090,6 +2088,11 @@ func declaredRequestContractFields(rest *RESTOperationSpec) []string {
 	for name := range rest.Query {
 		fields["query."+name] = true
 	}
+	for _, group := range rest.RequiredQuery {
+		for _, name := range group.AnyOf {
+			fields["query."+strings.TrimSpace(name)] = true
+		}
+	}
 	if rest.Body != nil && !rest.Body.None {
 		collectRequestValueFields(rest.Body.Fields, "body", fields)
 	}
@@ -2106,6 +2109,44 @@ func declaredRequestContractFields(rest *RESTOperationSpec) []string {
 	}
 	sort.Strings(paths)
 	return paths
+}
+
+func validateWriteRequestContractLinks(writes []WriteAction, operations []OperationSpec) error {
+	writeIndexes := make(map[string]int, len(writes))
+	for i, action := range writes {
+		if previous, ok := writeIndexes[action.Name]; ok {
+			return fmt.Errorf("writes.json actions %d and %d duplicate name %q", previous, i, action.Name)
+		}
+		writeIndexes[action.Name] = i
+	}
+
+	claims := make(map[string]string, len(writes))
+	for _, op := range operations {
+		if op.RequestContract == nil || op.RequestContract.WriteAction == "" {
+			continue
+		}
+		action := op.RequestContract.WriteAction
+		if strings.TrimSpace(action) != action {
+			return fmt.Errorf("operations.json operation %q request_contract.write_action must not contain surrounding whitespace", op.ID)
+		}
+		if op.Kind != "rest_write" {
+			return fmt.Errorf("operations.json operation %q request_contract.write_action requires kind rest_write", op.ID)
+		}
+		if _, ok := writeIndexes[action]; !ok {
+			return fmt.Errorf("operations.json operation %q request_contract.write_action %q does not name a writes.json action", op.ID, action)
+		}
+		if previous, ok := claims[action]; ok {
+			return fmt.Errorf("operations.json operations %q and %q both claim writes.json action %q", previous, op.ID, action)
+		}
+		claims[action] = op.ID
+	}
+
+	for _, action := range writes {
+		if _, ok := claims[action.Name]; !ok {
+			return fmt.Errorf("writes.json action %q must be claimed by exactly one retained operations.json request_contract.write_action", action.Name)
+		}
+	}
+	return nil
 }
 
 func collectRequestValueFields(values map[string]any, prefix string, fields map[string]bool) {
