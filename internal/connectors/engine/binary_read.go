@@ -46,9 +46,10 @@ const (
 
 // BinaryDownloadRequest is one bounded binary/file download.
 //
-// It is intentionally NOT part of the connectors package: no CLI command is
-// wired to this executor yet (commands remain blocked in commandrunner), so
-// the type stays engine-local until a connector lane adopts the capability.
+// It stays engine-local on purpose: connectors.OperationBinaryDownloadRequest
+// is the cross-package contract, and Connector.OperationBinaryDownload is the
+// seam between them, so the executor's own shape can change without moving the
+// connectors package.
 type BinaryDownloadRequest struct {
 	Operation  string
 	Config     connectors.RuntimeConfig
@@ -63,6 +64,10 @@ type BinaryDownloadRequest struct {
 	// FileName optionally names the file within DestRoot. It must be a local,
 	// single-segment name; traversal is refused.
 	FileName string
+	// RedactFields names record fields to redact before the record is emitted.
+	// It matters here because source_ref carries the resolved endpoint path,
+	// including whatever path parameters the caller supplied.
+	RedactFields []string
 }
 
 // BinaryDownloadResult carries the flat record describing what landed on disk.
@@ -178,7 +183,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	return BinaryDownloadResult{
 		Connector: b.Name,
 		Operation: op.ID,
-		Record: connectors.Record{
+		Record: redactBinaryDownloadRecord(connectors.Record{
 			"file_path":       filepath.Join(req.DestRoot, fileName),
 			"file_name":       fileName,
 			"file_size_bytes": written,
@@ -199,8 +204,24 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 			// truncation. The field exists so consumers can rely on it and so
 			// a future ranged/resumable mode has somewhere to report.
 			"truncated": false,
-		},
+		}, req.RedactFields),
 	}, nil
+}
+
+// redactBinaryDownloadRecord applies the command's declared redact_fields to
+// the record describing the download, using the same field-name matching as a
+// direct read so one declaration means the same thing on both executors.
+//
+// The record is flat, so the result is always a flat record again.
+func redactBinaryDownloadRecord(record connectors.Record, fields []string) connectors.Record {
+	if len(fields) == 0 {
+		return record
+	}
+	redacted, ok := redactNamedJSONFields(map[string]any(record), fields).(map[string]any)
+	if !ok {
+		return record
+	}
+	return connectors.Record(redacted)
 }
 
 // clampOperationBinaryDownloadMaxBytes clamps request -> spec -> ceiling,

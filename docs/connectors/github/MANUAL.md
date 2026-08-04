@@ -1124,11 +1124,11 @@ COMMAND SURFACE
     repo ruleset delete - Delete a repository ruleset [intent=reverse_etl availability=implemented write=delete_repo_ruleset]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Deletes repository rules that can affect contribution workflows.; notes: Connector-native write action; the current gh ruleset surface documents check, list, and view, but not delete.; flags: --ruleset-id
     repo delete-2 - DELETE /repos/{owner}/{repo} [intent=reverse_etl availability=implemented write=repo]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: critical; notes: destructive; requires --allow-destructive + typed confirmation
     repo update - PATCH /repos/{owner}/{repo} [intent=reverse_etl availability=implemented write=repo2]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high
-    repo sbom view - Download /repos/{owner}/{repo}/dependency-graph/sbom [intent=direct_read availability=implemented operation=github.dependency_graph_sbom]
-    repo sbom fetch - Download /repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid} [intent=direct_read availability=implemented operation=github.dependency_graph_sbom_fetch_report_sbom_uuid]; flags: --sbom-uuid
-    repo sbom generate - Download /repos/{owner}/{repo}/dependency-graph/sbom/generate-report [intent=direct_read availability=implemented operation=github.dependency_graph_sbom_generate_report]
-    repo archive tarball - Download /repos/{owner}/{repo}/tarball/{ref} [intent=direct_read availability=implemented operation=github.tarball_ref]; flags: --ref
-    repo archive zipball - Download /repos/{owner}/{repo}/zipball/{ref} [intent=direct_read availability=implemented operation=github.zipball_ref]; flags: --ref
+    repo sbom view - Download /repos/{owner}/{repo}/dependency-graph/sbom [intent=binary_download availability=implemented operation=github.dependency_graph_sbom]; flags: --dest-root (required), --file-name, --max-bytes
+    repo sbom fetch - Download /repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid} [intent=binary_download availability=implemented operation=github.dependency_graph_sbom_fetch_report_sbom_uuid]; flags: --sbom-uuid, --dest-root (required), --file-name, --max-bytes
+    repo sbom generate - Download /repos/{owner}/{repo}/dependency-graph/sbom/generate-report [intent=binary_download availability=implemented operation=github.dependency_graph_sbom_generate_report]; flags: --dest-root (required), --file-name, --max-bytes
+    repo archive tarball - Download /repos/{owner}/{repo}/tarball/{ref} [intent=binary_download availability=implemented operation=github.tarball_ref]; flags: --ref, --dest-root (required), --file-name, --max-bytes
+    repo archive zipball - Download /repos/{owner}/{repo}/zipball/{ref} [intent=binary_download availability=implemented operation=github.zipball_ref]; flags: --ref, --dest-root (required), --file-name, --max-bytes
     release list - List releases [intent=etl availability=implemented stream=releases]
     release view - View a release [intent=etl availability=partial stream=releases]; notes: Release records are available as an ETL stream; single-release lookup is planned for direct reads.
     release create - Create a release [intent=reverse_etl availability=implemented write=create_release]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Creates a visible release.; flags: --tag-name, --target-commitish, --name, --body, --draft, --prerelease, --generate-release-notes, --make-latest
@@ -1151,9 +1151,9 @@ COMMAND SURFACE
     run delete - Delete a workflow run [intent=reverse_etl availability=implemented write=delete_workflow_run]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: Deletes workflow run data.; flags: --run-id
     run download - Download workflow artifacts [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Downloads artifacts to the local filesystem; artifact metadata is available through the workflow_artifacts stream.
     run watch - Watch a workflow run [intent=local_workflow availability=unsupported_local unsupported local workflow]; notes: Interactive watch behavior is outside connector command metadata.
-    run logs view - Read /repos/{owner}/{repo}/actions/jobs/{job_id}/logs [intent=direct_read availability=implemented operation=github.actions_jobs_job_id_logs]; flags: --job-id
-    run logs view-2 - Download /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs [intent=direct_read availability=implemented operation=github.actions_runs_run_id_attempts_attempt_number_logs]; flags: --run-id, --attempt-number
-    run logs view-3 - Download /repos/{owner}/{repo}/actions/runs/{run_id}/logs [intent=direct_read availability=implemented operation=github.actions_runs_run_id_logs2]; flags: --run-id
+    run logs view - Download /repos/{owner}/{repo}/actions/jobs/{job_id}/logs [intent=binary_download availability=implemented operation=github.actions_jobs_job_id_logs]; flags: --job-id, --dest-root (required), --file-name, --max-bytes
+    run logs view-2 - Download /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs [intent=binary_download availability=implemented operation=github.actions_runs_run_id_attempts_attempt_number_logs]; flags: --run-id, --attempt-number, --dest-root (required), --file-name, --max-bytes
+    run logs view-3 - Download /repos/{owner}/{repo}/actions/runs/{run_id}/logs [intent=binary_download availability=implemented operation=github.actions_runs_run_id_logs2]; flags: --run-id, --dest-root (required), --file-name, --max-bytes
     cache list - List GitHub Actions caches [intent=direct_read availability=unsupported_api]; notes: Actions cache endpoints are tracked but excluded from the current repository connector surface.
     cache delete - Delete GitHub Actions caches [intent=direct_write availability=unsafe_or_disallowed]; notes: Cache deletion is not exposed by the connector write surface.
   Collaboration Commands
@@ -1225,7 +1225,7 @@ COMMAND SURFACE
     skill list - List GitHub Skills [intent=direct_read availability=unsupported_api]; notes: GitHub Skills are not modeled by the repository connector surface.
     agent-task list - List GitHub agent tasks [intent=direct_read availability=unsupported_api]; notes: Agent task APIs are not modeled by the repository connector surface.
   Other Commands
-    artifact download - Download /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format} [intent=direct_read availability=implemented operation=github.actions_artifacts_artifact_id_archive_format]; flags: --artifact-id, --archive-format
+    artifact download - Download /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format} [intent=binary_download availability=implemented operation=github.actions_artifacts_artifact_id_archive_format]; flags: --artifact-id, --archive-format, --dest-root (required), --file-name, --max-bytes
     actions retention-limit view - Read /repos/{owner}/{repo}/actions/cache/retention-limit [intent=direct_read availability=implemented operation=github.actions_cache_retention_limit]
     actions retention-limit set - PUT /repos/{owner}/{repo}/actions/cache/retention-limit [intent=reverse_etl availability=implemented write=actions_cache_retention_limit2]; approval: reverse ETL writes require plan, preview, approval, execute.; risk: high
     actions storage-limit view - Read /repos/{owner}/{repo}/actions/cache/storage-limit [intent=direct_read availability=implemented operation=github.actions_cache_storage_limit]

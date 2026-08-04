@@ -396,14 +396,17 @@ Adding a connector is the highest-leverage contribution. The pattern:
    `source-*`/`destination-*` keys are rejected — and every connector needs its own entry; see
    `docs/migration/icon-registry-single-source.md`.
 6. **Validate and regenerate generated sets** — `go run ./cmd/connectorgen validate internal/connectors/defs`
-   must report zero findings. Run `go run ./cmd/connectorgen gen` if hook/native package sets
-   changed, then `make verify`.
+   must report zero findings. Run `go run ./cmd/connectorgen surface-sync` if the bundle has
+   `operations.json`-backed commands, so derivable command metadata is generated rather than
+   hand-copied. Run `go run ./cmd/connectorgen gen` if hook/native package sets changed, then
+   `make verify`.
 
 ```bash
 PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate
 go run ./cmd/connectorgen validate internal/connectors/defs
-go run ./cmd/connectorgen gen   # only when hook/native package sets change
-make verify                     # must stay green
+go run ./cmd/connectorgen surface-sync   # when commands are operations.json-backed
+go run ./cmd/connectorgen gen            # only when hook/native package sets change
+make verify                              # must stay green
 ```
 
 Optional local hook setup:

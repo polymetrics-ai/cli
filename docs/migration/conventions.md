@@ -194,18 +194,31 @@ not a full override by default.
   `internal/connectors/engine/schema/cli_surface.schema.json` is the schema source of truth, and
   `connectorgen validate` rejects unsupported formats, operators, fallback namespaces, unmapped
   constraint targets, missing required body mappings, and multi-line validation messages. The
-  shared-code boundary guard (`docs/migration/connector-boundary-guard.md`) enforces this ownership
-  rule outside connector defs/hooks/native escape hatches.
+  command fields that are derivable from `operations.json` — `api_surface`, flag `maps_to`,
+  `output_policy`, and `rest.max_bytes` — are not hand-authored:
+  `go run ./cmd/connectorgen surface-sync` fills them and `--check` fails on drift (see AGENTS.md,
+  "Command Surface Must Stay Executable"). The shared-code boundary guard
+  (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
+  defs/hooks/native escape hatches.
 - **Direct-read `output_policy` stays generic and bounded**: use `repository_contents_file_metadata`
   for a single repository file metadata response and `repository_contents_directory` for repository
   directory listings. Both policies reject sensitive repository paths before network access and
   redact `content` plus download URLs from returned JSON. Use `json_redacted` or
   `clinical_json_redacted` for non-repository direct reads, paired with `redact_fields` when the
-  operation has connector-specific sensitive response fields. Use `binary_file_bounded` only for
-  reviewed file/binary operation metadata with explicit byte bounds; it must stay blocked until the
-  shared bounded-transfer executor exists. Do not add provider-prefixed output policy names in shared
-  Go; new response families need a generic policy name and regression tests proving reuse by more
-  than one connector shape.
+  operation has connector-specific sensitive response fields. `binary_file_bounded` is not one of
+  them: `commandrunner` blocks a `direct_read` command that declares it, because a file/binary
+  command is no longer a direct read (see the next bullet). Do not add provider-prefixed output
+  policy names in shared Go; new response families need a generic policy name and regression tests
+  proving reuse by more than one connector shape.
+- **File/binary commands are their own intent**: declare `intent:"binary_download"` with an
+  `operation` of kind `binary_download` and exactly one connector-relative GET `api_surface`
+  endpoint, and leave the command's `output_policy` unset — the response becomes a file on disk,
+  not a JSON body, so no direct-read policy applies. Do not declare the destination flags in the
+  bundle: `--dest-root` (required), `--file-name`, and `--max-bytes` are runtime-owned, read from
+  `internal/connectors/binary_download_flags.json` by runtime help, the generated `MANUAL.md`/
+  `SKILL.md`, and the website generator, so one declaration keeps all three documenting the same
+  flag surface. `--max-bytes` may only lower the operation's declared `binary.max_bytes`, never
+  raise it.
 - **`certification.json` stays definition-owned and harness-only**: connector-specific certify
   contracts belong beside the connector bundle, never in provider-named shared certify branches.
   This optional file may declare `source.default_stream`, source credential defaults,

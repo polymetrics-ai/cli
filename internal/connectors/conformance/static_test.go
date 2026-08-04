@@ -127,6 +127,53 @@ func TestCheckInterpolationsResolve_AuthWhenClauseUsesFullGrammar(t *testing.T) 
 	}
 }
 
+// TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage pins the
+// covered_by bookkeeping for the binary_download intent. An api_surface row
+// records which CLI command consumes an endpoint; which executor runs that
+// command does not change who covers it, so an implemented binary_download
+// command satisfies covered_by.direct_reads exactly as a direct_read does
+// (the same rule cmd/connectorgen's checkSurfaceComplete already applies).
+// Availability still has to be honoured: a planned command covers nothing.
+func TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true},
+		},
+		Surface: &engine.APISurface{
+			API: "https://api.acme.test",
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "GET",
+				Path:      "/files/{file_id}/download",
+				CoveredBy: &engine.SurfaceCoverage{DirectReads: []string{"file download"}},
+			}},
+		},
+		CLISurface: &engine.CLISurface{
+			Commands: []engine.CLICommand{{
+				Path:         "file download",
+				Intent:       "binary_download",
+				Availability: "implemented",
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete: implemented binary_download must cover its covered_by.direct_reads endpoint: %v", err)
+	}
+
+	plannedB := b
+	plannedB.CLISurface = &engine.CLISurface{
+		Commands: []engine.CLICommand{{
+			Path:         "file download",
+			Intent:       "binary_download",
+			Availability: "planned",
+		}},
+	}
+	if err := checkSurfaceComplete(plannedB); err == nil {
+		t.Fatal("checkSurfaceComplete: a planned binary_download command must not satisfy covered_by.direct_reads")
+	}
+}
+
 // sanity: confirm the invalid corpus directories actually exist on disk
 // under this package (own corpus, not shared with cmd/connectorgen).
 func TestInvalidCorpus_DirsExist(t *testing.T) {

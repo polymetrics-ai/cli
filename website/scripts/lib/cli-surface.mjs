@@ -1,4 +1,22 @@
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 const trim = (value) => (typeof value === 'string' ? value.trim() : '');
+
+// The destination flags a binary_download command accepts are owned by the
+// runtime, not by the bundle, so they appear in no cli_surface.json. They are
+// read from the same file internal/connectors embeds, so the website cannot
+// document a different flag surface than `pm <connector> <command> --help`.
+const BINARY_DOWNLOAD_FLAGS = JSON.parse(
+  readFileSync(
+    resolve(
+      dirname(fileURLToPath(import.meta.url)),
+      '../../../internal/connectors/binary_download_flags.json',
+    ),
+    'utf8',
+  ),
+);
 
 const keyNames = (keyStyle) => {
   if (keyStyle === 'camel') {
@@ -30,6 +48,19 @@ const keyNames = (keyStyle) => {
     helpTopics: 'help_topics',
   };
 };
+
+// withBinaryDownloadFlags appends the runtime's destination flags to a
+// binary_download command, skipping any the command already lists.
+//
+// It must be idempotent: gen-connector-catalog.mjs re-maps the output of
+// gen-connector-bundles.mjs, so an unconditional append would document
+// --dest-root twice on the catalog page.
+function withBinaryDownloadFlags(flags, intent) {
+  const declared = Array.isArray(flags) ? flags : [];
+  if (intent !== 'binary_download') return declared;
+  const names = new Set(declared.map((flag) => trim(flag?.name)));
+  return [...declared, ...BINARY_DOWNLOAD_FLAGS.filter((flag) => !names.has(flag.name))];
+}
 
 export function mapFlags(flags, options = {}) {
   const keys = keyNames(options.keyStyle);
@@ -69,7 +100,7 @@ export function mapCLISurface(surface, options = {}) {
       Object.assign(out, {
         [keys.sourceCliPath]: trim(command.source_cli_path),
         [keys.sourceUrl]: trim(command.source_url),
-        flags: mapFlags(command.flags, options),
+        flags: mapFlags(withBinaryDownloadFlags(command.flags, out.intent), options),
         examples: Array.isArray(command.examples) ? command.examples.map((example) => trim(example)).filter(Boolean) : [],
         [keys.outputPolicy]: trim(command.output_policy),
         risk: trim(command.risk),

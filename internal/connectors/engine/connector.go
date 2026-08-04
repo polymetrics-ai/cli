@@ -116,6 +116,31 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
 }
 
+// OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
+// delegating to the package-level executor. The engine-local request type stays
+// the executor's own contract; this adapter is the seam that lets a CLI command
+// reach it without the connectors package depending on engine internals.
+func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
+	result, err := OperationBinaryDownload(ctx, c.bundle, BinaryDownloadRequest{
+		Operation:    req.Operation,
+		Config:       req.Config,
+		PathParams:   req.PathParams,
+		Query:        req.Query,
+		MaxBytes:     req.MaxBytes,
+		DestRoot:     req.DestRoot,
+		FileName:     req.FileName,
+		RedactFields: req.RedactFields,
+	}, c.hooks)
+	if err != nil {
+		return connectors.OperationBinaryDownloadResult{}, err
+	}
+	return connectors.OperationBinaryDownloadResult{
+		Connector: result.Connector,
+		Operation: result.Operation,
+		Record:    result.Record,
+	}, nil
+}
+
 // InitialState satisfies connectors.StatefulReader by delegating to the
 // package-level engine.InitialState.
 func (c *Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {

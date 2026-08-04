@@ -1,6 +1,9 @@
 # Connector Operation Kernel
 
-Status: foundation slice for GitHub CLI parity (#56).
+Started as the foundation slice for GitHub CLI parity (#56). The executor
+contract below describes what the runtime does today; `commandrunner` and
+`internal/connectors/engine` remain the authority when this document and the
+code disagree.
 
 ## Purpose
 
@@ -20,10 +23,10 @@ metadata use `covered_by.direct_read` or `covered_by.direct_reads`. Blocked
 `api_surface.operation` rows remain ledger-only and are not an execution
 allowlist.
 
-The #56 foundation loads and validates operation metadata but keeps operation
-execution blocked by default. Later issues add executors for fixed REST,
-GraphQL, XML, binary/file, local git, local file, browser, and composite
-operations.
+Operation execution is opt-in per intent, not blanket-enabled: an operation runs
+only through an intent whose executor exists. Direct reads and bounded binary
+downloads have executors today; GraphQL, XML, local git, local file, browser,
+and composite operations do not, and remain blocked.
 
 ## Supported Operation Kinds
 
@@ -58,19 +61,38 @@ rules are enforceable at load time.
 - Secrets must not appear in operation metadata, fixtures, logs, examples, or
   review comments.
 - GraphQL operations must use fixed documents and checked variables.
-- File and binary operations must define bounded output policy before becoming
-  executable.
+- Binary and file operations are bounded by a byte cap and an explicit
+  caller-supplied destination, never by an output policy: the response becomes a
+  file on disk, not a JSON body.
 - Local git/file operations must use allowlisted structured actions, never a
   shell string.
 - Generated candidates from provider specs are not executable until reviewed
   and promoted to production metadata.
 
-## Runtime Behavior In #56
+## Runtime Behavior
 
-If a command references `operation`, `commandrunner` returns a blocked command
-error naming the operation ID and explaining that its executor is not yet
-implemented. This fail-closed behavior is deliberate: it lets docs, validation,
-and parity planning land before any new side-effecting executor is available.
+`commandrunner` decides whether an operation-backed command executes, and it
+decides before any network or filesystem access:
+
+- `intent:"direct_read"` with `availability:"implemented"` executes as a bounded
+  REST read under the command's `output_policy`.
+- `intent:"binary_download"` with `availability:"implemented"` executes through
+  `connectors.OperationBinaryDownloader`, which the declarative engine satisfies
+  with `engine.OperationBinaryDownload`. The endpoint must be a single
+  connector-relative GET, the caller must supply a destination root, and the
+  byte cap is the request value clamped by the operation's declared maximum and
+  then by the engine's own ceiling.
+- Every other command that references an `operation` returns a blocked command
+  error naming the operation ID and explaining that its executor is not
+  implemented. This fail-closed default is deliberate: it lets docs, validation,
+  and parity planning land before any new side-effecting executor is available.
+
+`availability: "implemented"` is a runtime claim, not a label.
+`TestEveryImplementedCommandPassesRuntimePreflight` in
+`internal/connectors/commandrunner/runner_test.go` sweeps every bundle in
+`defs.FS` through the real `commandrunner.Preflight`, so a command cannot claim
+it while the runtime blocks it. See AGENTS.md, "Command Surface Must Stay
+Executable".
 
 ## Example
 

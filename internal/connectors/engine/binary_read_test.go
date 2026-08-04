@@ -633,3 +633,51 @@ func TestBinaryDownloadStallTimeoutIsEnforced(t *testing.T) {
 		t.Fatalf("aborted download must leave no file, found %d", len(entries))
 	}
 }
+
+// TestBinaryDownloadAppliesRedactFields: a command's declared redact_fields
+// reaches the record. source_ref carries the resolved endpoint path, including
+// whatever path parameters the caller supplied, so a connector that declares it
+// sensitive must actually get it redacted rather than merely documented.
+func TestBinaryDownloadAppliesRedactFields(t *testing.T) {
+	srv := binaryServer(t, []byte("data"), nil)
+	dest := t.TempDir()
+	b := binaryBundle(srv, &BinaryOperationSpec{})
+	req := downloadReq(dest)
+	req.RedactFields = []string{"source_ref"}
+
+	res, err := OperationBinaryDownload(context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("download: %v", err)
+	}
+	if _, present := res.Record["source_ref"]; present {
+		t.Fatalf("source_ref survived redaction: %v", res.Record)
+	}
+	if res.Record["source_ref_redacted"] != true {
+		t.Fatalf("record does not report the redaction: %v", res.Record)
+	}
+	// Redaction must not disturb the rest of the record, and must not nest it.
+	if res.Record["file_name"] == nil {
+		t.Fatalf("redaction dropped unrelated fields: %v", res.Record)
+	}
+	for k, v := range res.Record {
+		switch v.(type) {
+		case map[string]any, []any, connectors.Record:
+			t.Fatalf("redaction made field %q non-flat: %T", k, v)
+		}
+	}
+}
+
+// TestBinaryDownloadWithoutRedactFieldsKeepsRecord: the no-redaction path must
+// stay byte-identical, so an empty declaration costs nothing.
+func TestBinaryDownloadWithoutRedactFieldsKeepsRecord(t *testing.T) {
+	srv := binaryServer(t, []byte("data"), nil)
+	b := binaryBundle(srv, &BinaryOperationSpec{})
+
+	res, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil)
+	if err != nil {
+		t.Fatalf("download: %v", err)
+	}
+	if res.Record["source_ref"] != "/files/f1" {
+		t.Fatalf("source_ref = %v, want the resolved path", res.Record["source_ref"])
+	}
+}

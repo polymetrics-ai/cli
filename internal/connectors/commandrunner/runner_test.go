@@ -1,6 +1,7 @@
 package commandrunner
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -8,6 +9,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -23,6 +26,8 @@ type fakeConnector struct {
 	readReq                connectors.ReadRequest
 	directReadReq          connectors.DirectReadRequest
 	operationDirectReadReq connectors.OperationDirectReadRequest
+	binaryDownloadReq      connectors.OperationBinaryDownloadRequest
+	binaryDownloadErr      error
 	validateReq            connectors.WriteRequest
 	dryRunReq              connectors.WriteRequest
 	writeReq               connectors.WriteRequest
@@ -80,6 +85,17 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Path:      "/v2/meetings/integration/status",
 		Status:    200,
 		Body:      map[string]any{"ok": true},
+	}, nil
+}
+func (f *fakeConnector) OperationBinaryDownload(_ context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
+	f.binaryDownloadReq = req
+	if f.binaryDownloadErr != nil {
+		return connectors.OperationBinaryDownloadResult{}, f.binaryDownloadErr
+	}
+	return connectors.OperationBinaryDownloadResult{
+		Connector: "github",
+		Operation: req.Operation,
+		Record:    connectors.Record{"file_path": "out/artifact", "file_size_bytes": 12},
 	}, nil
 }
 func (f *fakeConnector) Write(_ context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
@@ -1877,4 +1893,305 @@ func TestCoerceFlagValueBoundsStringArrayItems(t *testing.T) {
 	if _, err := coerceFlagValue(flag, []string{","}); err == nil {
 		t.Fatal("coerceFlagValue under the minimum = nil, want rejection")
 	}
+}
+
+// TestEveryImplementedCommandPassesRuntimePreflight is the structural guard
+// against a command claiming availability "implemented" while failing at
+// runtime.
+//
+// It asserts against the REAL runtime rather than a description of it: it walks
+// every bundle registered from defs.FS and calls Preflight, the same entry
+// point internal/cli calls before executing a connector command. That matters
+// because the defect this test exists to prevent was precisely a validator that
+// hand-copied the runtime's rules and drifted from them -- cmd/connectorgen
+// exempted operation-backed direct reads from the api_surface check that
+// commandrunner enforces, so 174 dead commands validated clean.
+//
+// Because it calls the runtime instead of restating it, every future executor
+// kind is covered the day that executor lands, with no change here.
+func TestEveryImplementedCommandPassesRuntimePreflight(t *testing.T) {
+	registry := bundleregistry.New()
+
+	type deadCommand struct {
+		connector string
+		command   string
+		reason    string
+	}
+	var dead []deadCommand
+	checked := 0
+
+	for _, meta := range registry.List() {
+		connector, ok := registry.Get(meta.Name)
+		if !ok {
+			t.Fatalf("registry lists %q but Get returned nothing", meta.Name)
+		}
+		provider, ok := connector.(connectors.CommandSurfaceProvider)
+		if !ok || provider.CommandSurface() == nil {
+			continue
+		}
+		for _, cmd := range provider.CommandSurface().Commands {
+			if cmd.Availability != "implemented" {
+				continue
+			}
+			checked++
+			err := Preflight(connector, strings.Fields(cmd.Path))
+			if err == nil {
+				continue
+			}
+			reason := err.Error()
+			var blocked *BlockedCommandError
+			if errors.As(err, &blocked) {
+				reason = blocked.Reason
+			}
+			dead = append(dead, deadCommand{connector: connector.Name(), command: cmd.Path, reason: reason})
+		}
+	}
+
+	if checked == 0 {
+		t.Fatal("no implemented commands were checked; the sweep is not reaching any bundle")
+	}
+	if len(dead) == 0 {
+		return
+	}
+
+	var b strings.Builder
+	fmt.Fprintf(&b, "%d of %d commands marked \"implemented\" fail runtime Preflight:\n", len(dead), checked)
+	for i, entry := range dead {
+		if i == 25 {
+			fmt.Fprintf(&b, "  ... and %d more\n", len(dead)-i)
+			break
+		}
+		fmt.Fprintf(&b, "  %s %q: %s\n", entry.connector, entry.command, entry.reason)
+	}
+	b.WriteString("\nEither make the command executable or stop claiming it is implemented.")
+	t.Fatal(b.String())
+}
+
+func binaryDownloadTestConnector() *fakeConnector {
+	return &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "artifact download",
+				Intent:       "binary_download",
+				Availability: "implemented",
+				Operation:    "github.artifact",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "GET", Path: "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"},
+				},
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "artifact-id", Type: "string", MapsTo: "path.artifact_id"},
+					{Name: "archive-format", Type: "string", MapsTo: "path.archive_format"},
+				},
+			},
+		},
+	}}
+}
+
+func TestRunBinaryDownloadCommandPassesDestinationThrough(t *testing.T) {
+	connector := binaryDownloadTestConnector()
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:     []string{"artifact", "download"},
+		Flags:    map[string][]string{"artifact-id": {"42"}, "archive-format": {"zip"}},
+		DestRoot: "out",
+		FileName: "artifact.zip",
+	}, func(connectors.Record) error {
+		t.Fatal("emit must not be called for a binary download")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.BinaryDownload == nil {
+		t.Fatal("Run result carries no binary download")
+	}
+	if got := connector.binaryDownloadReq.DestRoot; got != "out" {
+		t.Fatalf("DestRoot = %q, want %q", got, "out")
+	}
+	if got := connector.binaryDownloadReq.FileName; got != "artifact.zip" {
+		t.Fatalf("FileName = %q, want %q", got, "artifact.zip")
+	}
+	if got := connector.binaryDownloadReq.PathParams["artifact_id"]; got != "42" {
+		t.Fatalf("PathParams[artifact_id] = %q, want %q", got, "42")
+	}
+	// The response never becomes records: a download is a file, not a stream.
+	if result.Count != 0 || result.DirectRead != nil {
+		t.Fatalf("binary download produced stream/direct-read output: %+v", result)
+	}
+}
+
+// A destination is never inferred: without --dest-root the command is refused
+// rather than defaulting to the working directory.
+func TestRunBinaryDownloadRequiresDestinationRoot(t *testing.T) {
+	connector := binaryDownloadTestConnector()
+
+	_, err := Run(context.Background(), connector, Request{
+		Path:  []string{"artifact", "download"},
+		Flags: map[string][]string{"artifact-id": {"42"}, "archive-format": {"zip"}},
+	}, func(connectors.Record) error { return nil })
+	if err == nil {
+		t.Fatal("Run error = nil, want a missing destination refusal")
+	}
+	if !strings.Contains(err.Error(), "dest-root") {
+		t.Fatalf("Run error = %q, want it to name --dest-root", err.Error())
+	}
+}
+
+func TestPreflightBlocksBinaryDownloadWithUnsafeMetadata(t *testing.T) {
+	tests := []struct {
+		name    string
+		command connectors.CommandSurfaceCommand
+		wantErr string
+	}{
+		{
+			name: "no api_surface endpoint",
+			command: connectors.CommandSurfaceCommand{
+				Path: "artifact download", Intent: "binary_download",
+				Availability: "implemented", Operation: "github.artifact",
+			},
+			wantErr: "exactly one api_surface endpoint",
+		},
+		{
+			name: "non-GET endpoint",
+			command: connectors.CommandSurfaceCommand{
+				Path: "artifact download", Intent: "binary_download",
+				Availability: "implemented", Operation: "github.artifact",
+				APISurface: []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/artifacts"}},
+			},
+			wantErr: "require GET",
+		},
+		{
+			name: "absolute URL endpoint",
+			command: connectors.CommandSurfaceCommand{
+				Path: "artifact download", Intent: "binary_download",
+				Availability: "implemented", Operation: "github.artifact",
+				APISurface: []connectors.CommandSurfaceEndpointRef{{Method: "GET", Path: "https://evil.example.com/x"}},
+			},
+			wantErr: "absolute URL",
+		},
+		{
+			name: "missing operation",
+			command: connectors.CommandSurfaceCommand{
+				Path: "artifact download", Intent: "binary_download",
+				Availability: "implemented",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "GET", Path: "/artifacts"}},
+			},
+			wantErr: "require operation",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{
+				Commands: []connectors.CommandSurfaceCommand{tt.command},
+			}}
+			err := Preflight(connector, []string{"artifact", "download"})
+			if err == nil {
+				t.Fatalf("Preflight error = nil, want %q", tt.wantErr)
+			}
+			if !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("Preflight error = %q, want to contain %q", err.Error(), tt.wantErr)
+			}
+		})
+	}
+}
+
+// TestRunBinaryDownloadReachesOperationDeclaredCap crosses the ceiling that the
+// CLI used to impose on every intent.
+//
+// It downloads a body LARGER than commandrunner.MaxOperationDirectReadBytes,
+// which is exactly the case the previous verification missed: it used a
+// 980-byte payload, so it never reached any ceiling and could not tell a
+// working cap from a broken one. The CLI defaulted --max-bytes to the 16 MiB
+// direct-read ceiling and passed it to every intent, so a github artifact
+// declaring max_bytes 104857600 was silently truncated to 16 MiB and a user
+// could not raise it back with the flag.
+//
+// The whole chain runs for real here -- commandrunner.Run, the engine executor,
+// and the file that lands on disk -- because the defect lived in the plumbing
+// between them, not in any one of them.
+func TestRunBinaryDownloadReachesOperationDeclaredCap(t *testing.T) {
+	const payloadSize = MaxOperationDirectReadBytes + (1 << 20)
+	payload := bytes.Repeat([]byte("z"), payloadSize)
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			t.Errorf("request method = %s, want GET", r.Method)
+		}
+		if want := "/repos/acme/widgets/actions/artifacts/7/zip"; r.URL.Path != want {
+			t.Errorf("request path = %s, want %s", r.URL.Path, want)
+		}
+		w.Header().Set("Content-Type", "application/zip")
+		_, _ = w.Write(payload)
+	}))
+	defer server.Close()
+
+	githubConnector := func(t *testing.T) connectors.Connector {
+		t.Helper()
+		bundle, err := engine.Load(defs.FS, "github")
+		if err != nil {
+			t.Fatalf("load github bundle: %v", err)
+		}
+		bundle.HTTP.URL = server.URL
+		return engine.New(bundle, nil)
+	}
+	config := connectors.RuntimeConfig{Config: map[string]string{
+		"owner":         "acme",
+		"repo":          "widgets",
+		"base_url":      server.URL,
+		"public_access": "true",
+	}}
+	flags := map[string][]string{"artifact-id": {"7"}, "archive-format": {"zip"}}
+
+	t.Run("unset max bytes reaches the operation cap", func(t *testing.T) {
+		dest := t.TempDir()
+		result, err := Run(context.Background(), githubConnector(t), Request{
+			Path:     []string{"artifact", "download"},
+			Flags:    flags,
+			Config:   config,
+			DestRoot: dest,
+			FileName: "artifact.zip",
+			// MaxBytes stays zero: that is what the CLI passes when the user
+			// does not type --max-bytes, and it must not lower the cap.
+		}, func(connectors.Record) error {
+			t.Fatal("emit must not be called for a binary download")
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("Run: %v", err)
+		}
+		if result.BinaryDownload == nil {
+			t.Fatal("Run result carries no binary download")
+		}
+		if got := result.BinaryDownload.Record["file_size_bytes"]; got != int64(payloadSize) {
+			t.Fatalf("file_size_bytes = %v, want %d", got, payloadSize)
+		}
+		info, err := os.Stat(filepath.Join(dest, "artifact.zip"))
+		if err != nil {
+			t.Fatalf("stat downloaded file: %v", err)
+		}
+		if info.Size() != int64(payloadSize) {
+			t.Fatalf("downloaded file size = %d, want %d", info.Size(), payloadSize)
+		}
+	})
+
+	// The flag still only ever lowers: an explicit value below the body size
+	// rejects rather than truncates.
+	t.Run("explicit max bytes still lowers", func(t *testing.T) {
+		dest := t.TempDir()
+		_, err := Run(context.Background(), githubConnector(t), Request{
+			Path:     []string{"artifact", "download"},
+			Flags:    flags,
+			Config:   config,
+			MaxBytes: 1 << 10,
+			DestRoot: dest,
+			FileName: "artifact.zip",
+		}, func(connectors.Record) error { return nil })
+		if err == nil {
+			t.Fatal("Run error = nil, want the explicit limit to reject the body")
+		}
+		if !strings.Contains(err.Error(), "too large") {
+			t.Fatalf("Run error = %q, want it to name the size limit", err.Error())
+		}
+	})
 }

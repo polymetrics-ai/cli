@@ -157,6 +157,40 @@ type OperationDirectReader interface {
 	OperationDirectRead(context.Context, OperationDirectReadRequest) (DirectReadResult, error)
 }
 
+// OperationBinaryDownloadRequest is one bounded binary/file download driven by
+// a declared binary_download operation.
+//
+// DestRoot is required and is the directory the download is confined beneath;
+// there is no implicit destination, because a CLI that guesses where to write
+// a file is a CLI that eventually writes it somewhere it should not.
+type OperationBinaryDownloadRequest struct {
+	Operation  string
+	Config     RuntimeConfig
+	PathParams map[string]string
+	Query      map[string]string
+	// MaxBytes may only lower the operation's declared cap, never raise it.
+	MaxBytes int64
+	DestRoot string
+	// FileName optionally names the file within DestRoot. It must be a local,
+	// single-segment name; traversal is refused.
+	FileName     string
+	RedactFields []string
+}
+
+// OperationBinaryDownloadResult describes what landed on disk. Bytes are never
+// inlined: a 25 MiB attachment would become a 34 MiB JSON line.
+type OperationBinaryDownloadResult struct {
+	Connector string `json:"connector"`
+	Operation string `json:"operation"`
+	Record    Record `json:"record"`
+}
+
+// OperationBinaryDownloader is implemented by connectors that can execute a
+// declared binary_download operation.
+type OperationBinaryDownloader interface {
+	OperationBinaryDownload(context.Context, OperationBinaryDownloadRequest) (OperationBinaryDownloadResult, error)
+}
+
 var ErrReadLimitReached = errors.New("connector read limit reached")
 
 func LimitEmitter(limit int, emit func(Record) error) func(Record) error {
