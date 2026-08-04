@@ -19,7 +19,7 @@
           "path_fields": { "type": "array", "items": { "type": "string" } },
           "query": { "type": "object" },
           "redact_fields": { "type": "array", "items": { "type": "string" } },
-          "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart"] },
+          "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart", "base64_upload"] },
           "body_fields": { "type": "array", "items": { "type": "string" } },
           "body_field": { "type": "string" },
           "body_schema": { "type": "object" },
@@ -58,6 +58,18 @@
                   }
                 }
               }
+            }
+          },
+          "base64_upload": {
+            "type": "object",
+            "required": ["source_field", "content_field", "max_decoded_bytes"],
+            "additionalProperties": false,
+            "properties": {
+              "source": { "type": "string", "enum": ["path", "base64"] },
+              "source_field": { "type": "string" },
+              "content_field": { "type": "string" },
+              "max_decoded_bytes": { "type": "integer" },
+              "max_encoded_bytes": { "type": "integer" }
             }
           },
           "record_schema": { "type": "object" },

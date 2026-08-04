@@ -8,8 +8,9 @@ Commands used throughout:
 
 ```
 go test ./internal/connectors/engine/ -run <TestName> -count=1
-go test ./... -count=1
 ```
+
+Package-group runs (never a bare `go test ./...`) are listed in the Final gate below.
 
 ---
 
@@ -17,21 +18,26 @@ go test ./... -count=1
 
 ### Red
 
-Test: `TestCompileSchemaArrayCardinalityKeywords`, `TestSchemaValidateMinItems`,
-`TestSchemaValidateMaxItems`, `TestCompileSchemaRejectsInvalidArrayCardinality` in
-`internal/connectors/engine/schema_test.go`.
+Tests in `internal/connectors/engine/schema_test.go`:
+`TestCompileSchemaArrayCardinalityKeywords`, `TestSchemaValidateMinItems`,
+`TestSchemaValidateMaxItems`, `TestSchemaArrayCardinalityIgnoresNonArrays`,
+`TestSchemaMinItemsZeroIsHonored`, `TestCompileSchemaRejectsInvalidArrayCardinality`.
 
 Observed failure before any production change (the dialect rejects the keyword outright):
 
 ```
---- FAIL: TestSchemaValidateMinItems
-    schema_test.go: CompileSchema: compile schema: unknown keyword "minItems"
---- FAIL: TestSchemaValidateMaxItems
-    schema_test.go: CompileSchema: compile schema: unknown keyword "maxItems"
---- FAIL: TestCompileSchemaArrayCardinalityKeywords
-    schema_test.go: CompileSchema: compile schema: unknown keyword "minItems"
---- FAIL: TestCompileSchemaRejectsInvalidArrayCardinality
-    schema_test.go: negative minItems: want compile error mentioning "minItems", got unknown keyword
+--- FAIL: TestCompileSchemaArrayCardinalityKeywords (0.00s)
+    schema_test.go:364: CompileSchema({"type":"array","minItems":1}): unexpected error: compile schema: unknown keyword "minItems"
+--- FAIL: TestSchemaValidateMinItems (0.00s)
+    schema_test.go:372: CompileSchema: compile schema: properties.ids: compile schema: unknown keyword "minItems"
+--- FAIL: TestSchemaValidateMaxItems (0.00s)
+    schema_test.go:401: CompileSchema: compile schema: unknown keyword "maxItems"
+--- FAIL: TestSchemaArrayCardinalityIgnoresNonArrays (0.00s)
+    schema_test.go:418: CompileSchema: compile schema: unknown keyword "minItems"
+--- FAIL: TestSchemaMinItemsZeroIsHonored (0.00s)
+    schema_test.go:430: CompileSchema: compile schema: unknown keyword "minItems"
+--- FAIL: TestCompileSchemaRejectsInvalidArrayCardinality/maxItems_below_minItems (0.00s)
+    schema_test.go:456: error should mention "maxItems", got compile schema: unknown keyword "minItems"
 ```
 
 This is the exact failure the Airtable ledger predicts: a bundle cannot even *load* with `minItems`
@@ -57,18 +63,30 @@ one rule into 25 unblocked operations.
 
 ### Red
 
-Test: `TestNewPaginatorStartIndex`, `TestStartIndexPaginatorWalk`,
-`TestStartIndexPaginatorStopsOnTotalResults`, `TestStartIndexPaginatorStopsOnEmptyPage`,
-`TestStartIndexPaginatorNonAdvancingIndexIsError`, `TestStartIndexPaginatorIgnoresLyingItemsPerPage`
-in `internal/connectors/engine/paginate_test.go`.
+Tests in `internal/connectors/engine/paginate_test.go`:
+`TestNewPaginatorStartIndexDefaultsToSCIMNames`, `TestStartIndexPaginatorWalksEveryPageOnce`,
+`TestStartIndexPaginatorStopsAtTotalResults`, `TestStartIndexPaginatorStopsOnEmptyPage`,
+`TestStartIndexPaginatorIgnoresLyingItemsPerPage`,
+`TestStartIndexPaginatorNonAdvancingIndexIsStickyError`,
+`TestStartIndexPaginatorHonorsDeclaredParamNames`, `TestNewPaginatorStartIndexRejectsNegativeBase`,
+`TestStartIndexPaginatorWithoutPageSizeIssuesOnePage`.
 
-Observed failure before any production change:
+Red arrived in two stages. First a compile failure — the spec fields did not exist:
 
 ```
---- FAIL: TestNewPaginatorStartIndex
-    paginate_test.go: newPaginator: new paginator: unknown pagination type "start_index"
---- FAIL: TestStartIndexPaginatorWalk
-    paginate_test.go: newPaginator: new paginator: unknown pagination type "start_index"
+paginate_test.go:1257:75: unknown field StartIndexBase in struct literal of type PaginationSpec
+paginate_test.go:1280:3:  unknown field StartIndexParam in struct literal of type PaginationSpec
+paginate_test.go:1281:3:  unknown field CountParam in struct literal of type PaginationSpec
+```
+
+Then, once `PaginationSpec` carried the fields, the behavioural red:
+
+```
+--- FAIL: TestNewPaginatorStartIndexDefaultsToSCIMNames (0.00s)
+    paginate_test.go:1106: newPaginator() error = new paginator: unknown pagination type "start_index"
+--- FAIL: TestStartIndexPaginatorWalksEveryPageOnce (0.00s)
+    paginate_test.go:1142: newPaginator() error = new paginator: unknown pagination type "start_index"
+    (… and five more, all the same cause)
 ```
 
 ### Green
@@ -83,20 +101,30 @@ both the `base` and per-stream `pagination` blocks.
 
 ### Red
 
-Test: `TestOperationDirectReadRequiredQueryAnyOf`,
-`TestOperationDirectReadRequiredQuerySatisfiedByDeclaredQuery`,
+Tests in `internal/connectors/engine/direct_read_test.go`:
+`TestOperationDirectReadRequiredQueryAnyOf`,
 `TestOperationDirectReadRequiredQueryRejectsBlankValue`,
-`TestBundleRejectsEmptyRequiredQueryGroup` in `internal/connectors/engine/direct_read_test.go` and
-`bundle_test.go`.
+`TestOperationDirectReadRequiredQuerySatisfiedByDeclaredQuery`,
+`TestOperationDirectReadRequiredQueryEveryGroupMustBeSatisfied`; in `bundle_test.go`:
+`TestBundleLoadAcceptsRequiredQueryGroups`, `TestBundleLoadRejectsUnenforceableRequiredQuery`.
 
-Observed failure before any production change (no constraint exists, so the unfiltered request
-succeeds where it must fail):
+Observed failure before any production change — no constraint exists, so the unfiltered request
+reaches the provider where it must not:
 
 ```
---- FAIL: TestOperationDirectReadRequiredQueryAnyOf
-    direct_read_test.go: want error requiring one of [email id], got nil (request was issued)
---- FAIL: TestBundleRejectsEmptyRequiredQueryGroup
-    bundle_test.go: want load error for empty any_of, got nil
+--- FAIL: TestOperationDirectReadRequiredQueryAnyOf (0.09s)
+    direct_read_test.go:750: unfiltered request: want error, got nil
+--- FAIL: TestOperationDirectReadRequiredQueryRejectsBlankValue (0.00s)
+    direct_read_test.go:785: blank value: want error, got nil
+--- FAIL: TestOperationDirectReadRequiredQueryEveryGroupMustBeSatisfied (0.00s)
+    direct_read_test.go:839: second group unsatisfied: want error, got nil
+```
+
+Then, after the runtime check landed, the load-side red:
+
+```
+--- FAIL: TestBundleLoadAcceptsRequiredQueryGroups (0.02s)
+    bundle_test.go:2118: Load: … /operations/0/rest/required_query: additional property not allowed
 ```
 
 ### Green
@@ -111,26 +139,34 @@ succeeds where it must fail):
 
 ### Red
 
-Test: `TestWriteBase64UploadFromPath`, `TestWriteBase64UploadRejectsOversizeFile`,
-`TestWriteBase64UploadRejectsPathOutsideProject`, `TestWriteBase64UploadStrictBase64Source`,
-`TestWriteBase64UploadRejectsNonStrictBase64`, `TestWriteBase64UploadOmitsSourceFieldFromBody`,
-`TestWriteBase64UploadRequiresApprovedDigest`, `TestBundleValidatesBase64UploadSpec` in
-`internal/connectors/engine/write_test.go` and `bundle_test.go`.
+Tests in `internal/connectors/engine/write_test.go`:
+`TestWriteBase64UploadEncodesFileAndOmitsSourceField`, `TestWriteBase64UploadRejectsOversizePayload`,
+`TestWriteBase64UploadRejectsPathEscape`, `TestWriteBase64UploadStrictSourceRejectsSloppyEncoding`,
+`TestWriteBase64UploadEnforcesEncodedBound`, `TestWriteBase64UploadHonorsApprovedPayloadDigest`,
+`TestDryRunBase64UploadDoesNotReadTheFile`; in `bundle_test.go`:
+`TestBundleLoadAcceptsBase64UploadAction`, `TestBundleLoadRejectsInvalidBase64UploadAction`.
 
-Observed failure before any production change (the body type is unknown, so the action silently
-falls through to the default JSON body and transmits the raw local path):
+Observed failure before any production change — the body type is unknown, so the action falls
+through to the default JSON body:
 
 ```
---- FAIL: TestWriteBase64UploadFromPath
-    write_test.go: body["file"]: want base64 content, got <nil>
---- FAIL: TestWriteBase64UploadOmitsSourceFieldFromBody
-    write_test.go: body["file_path"]: want absent, got "payload.txt"   <-- local path on the wire
---- FAIL: TestBundleValidatesBase64UploadSpec
-    bundle_test.go: want load error for missing base64_upload block, got nil
+--- FAIL: TestWriteBase64UploadEncodesFileAndOmitsSourceField (0.02s)
+    write_test.go:1227: body[file] = "", want "aGVsbG8gYXR0YWNobWVudA=="
+--- FAIL: TestWriteBase64UploadRejectsOversizePayload (0.01s)
+    write_test.go:1258: oversize payload: want error, got nil
+--- FAIL: TestWriteBase64UploadRejectsPathEscape (0.01s)
+    write_test.go:1296: "../escape.txt": want containment error, got nil
+--- FAIL: TestWriteBase64UploadStrictSourceRejectsSloppyEncoding (0.01s)
+    write_test.go:1332: "aGVsbG8": want strict-base64 rejection, got nil
+--- FAIL: TestWriteBase64UploadEnforcesEncodedBound (0.02s)
+    write_test.go:1372: over encoded bound: want error, got nil
+--- FAIL: TestWriteBase64UploadHonorsApprovedPayloadDigest (0.04s)
+    write_test.go:1415: substituted payload: want digest mismatch error, got nil
 ```
 
-The second failure is the important one: without this task the "obvious" workaround leaks a local
-filesystem path to the provider.
+The path-escape and digest failures are the important ones. Without this task the "obvious"
+workaround — carrying the payload as an ordinary JSON string field — would transmit a local
+filesystem path unchecked and bind nothing to the approved batch.
 
 ### Green
 
@@ -145,11 +181,33 @@ declared and `base64_upload` added to the `body_type` enum.
 
 ```
 gofmt -l cmd internal        -> (empty)
-go vet ./...                 -> ok
-go test ./...                -> ok
+go vet ./...                 -> clean
 go build ./cmd/pm            -> ok
-connectorgen validate --json -> 0 findings
-connectorgen boundary --json -> clean
+make connectorgen-validate   -> 550 connectors checked, 0 findings
+make connector-boundary      -> outcome clean, 0 findings, 550 connectors loaded
+pnpm run gen:website-data    -> regenerated, zero drift
 ```
 
-Executed-not-read evidence for the built binary is recorded in `VERIFICATION.md`.
+Tests were run per package group rather than as one `go test ./...`: `internal/cli` (444s) and
+`internal/connectors/certify` (557s) each exceed a single tool call, and a bare `go test` also hits
+Go's own 10-minute per-package default. All groups green — engine, conformance, commandrunner,
+connsdk, safety, cmd/..., connectors, app, cli, certify. Full matrix in `VERIFICATION.md` §1.
+
+Executed-not-read evidence — a scratch bundle validated by the **built** `connectorgen`, the built
+`pm` still loading 554 connectors, and twelve runtime checks driven against live HTTP servers — is
+recorded in `VERIFICATION.md` §2 and §3.
+
+## One correction worth recording
+
+`TestWriteBase64UploadStrictSourceRejectsSloppyEncoding` failed green-side on the newline case:
+
+```
+--- FAIL: TestWriteBase64UploadStrictSourceRejectsSloppyEncoding
+    write_test.go:1332: "aGVs\nbG8=": want strict-base64 rejection, got nil
+```
+
+Go's base64 decoder skips `\r` and `\n` **unconditionally** — `Strict()` only enforces canonical
+trailing padding bits, not a canonical alphabet. Relying on `Strict()` alone would have accepted a
+MIME-wrapped payload and silently re-encoded it into something the operator never wrote. Fixed by
+checking the alphabet explicitly before decoding (`requireCanonicalBase64Alphabet`). The test caught
+this; reading the stdlib documentation would not have.

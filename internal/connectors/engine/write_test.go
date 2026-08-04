@@ -1,8 +1,10 @@
 package engine
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -11,6 +13,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -1082,4 +1085,368 @@ type writeHookFunc struct {
 func (w *writeHookFunc) ConnectorName() string { return "write-hook-func-test" }
 func (w *writeHookFunc) ExecuteWrite(ctx context.Context, action WriteAction, rec connectors.Record, rt *Runtime) (bool, error) {
 	return w.fn(ctx, action, rec, rt)
+}
+
+// --- array cardinality reach ----------------------------------------------
+//
+// One keyword pair added to the shared dialect must reach every request-building
+// path with no per-site change. That property is what turns a single rule into
+// 25 unblocked Airtable operations, so it is asserted directly rather than
+// assumed: record_schema here, json_array body_schema below, and operation
+// rest.body_schema in direct_read_test.go.
+
+func TestWriteRecordSchemaMinItemsRejectsEmptyArray(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:   "delete_records",
+		Kind:   "delete",
+		Method: http.MethodDelete,
+		Path:   "/v0/base/table",
+		Risk:   "critical",
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["records"],
+			"additionalProperties": false,
+			"properties": {
+				"records": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+			}
+		}`),
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_records"},
+		[]connectors.Record{{"records": []any{}}}, nil)
+	if err == nil {
+		t.Fatal("empty documented array: want validation error, got nil")
+	}
+	if !strings.Contains(err.Error(), "minItems") {
+		t.Fatalf("error should name minItems, got %v", err)
+	}
+	if cap.method != "" {
+		t.Fatalf("request must not be issued for an invalid record, got %s %s", cap.method, cap.path)
+	}
+
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{Action: "delete_records"},
+		[]connectors.Record{{"records": []any{"rec1"}}}, nil); err != nil {
+		t.Fatalf("non-empty array: unexpected error: %v", err)
+	}
+}
+
+func TestWriteJSONArrayBodySchemaMinItems(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "upsert_records",
+		Kind:       "upsert",
+		Method:     http.MethodPut,
+		Path:       "/v0/acct/table/upsertRecords",
+		Risk:       "critical",
+		BodyType:   "json_array",
+		BodyField:  "records",
+		BodySchema: json.RawMessage(`{"type":"array","minItems":1,"items":{"type":"object"}}`),
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["records"],
+			"properties": {"records": {"type": "array"}}
+		}`),
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "upsert_records"},
+		[]connectors.Record{{"records": []any{}}}, nil)
+	if err == nil {
+		t.Fatal("empty json_array body: want validation error, got nil")
+	}
+	if !strings.Contains(err.Error(), "minItems") {
+		t.Fatalf("error should name minItems, got %v", err)
+	}
+	if cap.method != "" {
+		t.Fatalf("request must not be issued, got %s %s", cap.method, cap.path)
+	}
+}
+
+// --- bounded base64 upload -------------------------------------------------
+//
+// Airtable's ledger blocks POST /v0/{baseId}/{recordId}/{field}/uploadAttachment
+// "until an Airtable-owned executor validates official base64 encoding and
+// decoded-size bounds before transmission". The only alternative would be a raw
+// body escape hatch, which is banned outright.
+
+func base64UploadAction(spec *Base64UploadSpec) WriteAction {
+	return WriteAction{
+		Name:         "upload_attachment",
+		Kind:         "create",
+		Method:       http.MethodPost,
+		Path:         "/v0/base/rec/fld/uploadAttachment",
+		Risk:         "medium",
+		BodyType:     "base64_upload",
+		Base64Upload: spec,
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["file_path", "filename", "contentType"],
+			"additionalProperties": false,
+			"properties": {
+				"file_path": {"type": "string"},
+				"filename": {"type": "string"},
+				"contentType": {"type": "string"}
+			}
+		}`),
+	}
+}
+
+func writeTempPayload(t *testing.T, name string, content []byte) (projectDir, rel string) {
+	t.Helper()
+	dir := t.TempDir()
+	rel = name
+	if err := os.WriteFile(filepath.Join(dir, name), content, 0o600); err != nil {
+		t.Fatalf("write payload: %v", err)
+	}
+	return dir, rel
+}
+
+func TestWriteBase64UploadEncodesFileAndOmitsSourceField(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"id":"att1"}`)
+	dir, rel := writeTempPayload(t, "payload.txt", []byte("hello attachment"))
+
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+	}))
+
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{ProjectDir: dir},
+	}, []connectors.Record{{"file_path": rel, "filename": "payload.txt", "contentType": "text/plain"}}, nil); err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+
+	var body map[string]any
+	if err := json.Unmarshal(cap.body, &body); err != nil {
+		t.Fatalf("decode body: %v (raw %s)", err, cap.body)
+	}
+	want := base64.StdEncoding.EncodeToString([]byte("hello attachment"))
+	if got, _ := body["file"].(string); got != want {
+		t.Fatalf("body[file] = %q, want %q", got, want)
+	}
+	// The source field carries a LOCAL FILESYSTEM PATH. Transmitting it would
+	// leak the operator's directory layout to the provider.
+	if _, present := body["file_path"]; present {
+		t.Fatalf("source field must never reach the wire, body = %v", body)
+	}
+	// Ordinary declared fields still travel, governed by record_schema.
+	if got, _ := body["filename"].(string); got != "payload.txt" {
+		t.Fatalf("body[filename] = %q, want payload.txt", got)
+	}
+	if got, _ := body["contentType"].(string); got != "text/plain" {
+		t.Fatalf("body[contentType] = %q, want text/plain", got)
+	}
+}
+
+func TestWriteBase64UploadRejectsOversizePayload(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	dir, rel := writeTempPayload(t, "big.bin", bytes.Repeat([]byte("x"), 64))
+
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 32,
+	}))
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{ProjectDir: dir},
+	}, []connectors.Record{{"file_path": rel, "filename": "big.bin", "contentType": "application/octet-stream"}}, nil)
+	if err == nil {
+		t.Fatal("oversize payload: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "too large") {
+		t.Fatalf("error should name the size bound, got %v", err)
+	}
+	// Rejected, never truncated: a truncated attachment is a silently corrupt
+	// upload, which is worse than a failed one.
+	if cap.method != "" {
+		t.Fatalf("oversize payload must not be transmitted, got %s %s", cap.method, cap.path)
+	}
+}
+
+func TestWriteBase64UploadRejectsPathEscape(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	dir := t.TempDir()
+	outside := filepath.Join(t.TempDir(), "secret.txt")
+	if err := os.WriteFile(outside, []byte("secret"), 0o600); err != nil {
+		t.Fatalf("write outside file: %v", err)
+	}
+	// A symlink inside the project pointing out of it is the case a purely
+	// lexical path check cannot catch.
+	if err := os.Symlink(outside, filepath.Join(dir, "link.txt")); err != nil {
+		t.Skipf("symlink unsupported: %v", err)
+	}
+
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+	}))
+
+	for _, raw := range []string{"../escape.txt", "link.txt"} {
+		cap.method = ""
+		_, err := Write(context.Background(), b, connectors.WriteRequest{
+			Action: "upload_attachment",
+			Config: connectors.RuntimeConfig{ProjectDir: dir},
+		}, []connectors.Record{{"file_path": raw, "filename": "x", "contentType": "text/plain"}}, nil)
+		if err == nil {
+			t.Fatalf("%q: want containment error, got nil", raw)
+		}
+		if cap.method != "" {
+			t.Fatalf("%q: must not be transmitted", raw)
+		}
+	}
+}
+
+func TestWriteBase64UploadStrictSourceRejectsSloppyEncoding(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	action := base64UploadAction(&Base64UploadSpec{
+		Source:          "base64",
+		SourceField:     "content",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+	})
+	action.RecordSchema = json.RawMessage(`{
+		"type": "object",
+		"required": ["content"],
+		"additionalProperties": false,
+		"properties": {"content": {"type": "string"}}
+	}`)
+	b := newWriteTestBundle(srv, action)
+
+	// "Official base64" means RFC 4648 standard alphabet, canonical padding, no
+	// line breaks — exactly what StdEncoding.Strict() enforces.
+	for _, bad := range []string{
+		"aGVsbG8",             // missing padding
+		"aGVs\nbG8=",          // embedded newline
+		"aGVsbG8h_w==",        // URL-safe alphabet
+		"not base64 at all!!", // not base64
+	} {
+		cap.method = ""
+		_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "upload_attachment"},
+			[]connectors.Record{{"content": bad}}, nil)
+		if err == nil {
+			t.Fatalf("%q: want strict-base64 rejection, got nil", bad)
+		}
+		if cap.method != "" {
+			t.Fatalf("%q: must not be transmitted", bad)
+		}
+	}
+
+	good := base64.StdEncoding.EncodeToString([]byte("hello"))
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{Action: "upload_attachment"},
+		[]connectors.Record{{"content": good}}, nil); err != nil {
+		t.Fatalf("canonical base64: unexpected error: %v", err)
+	}
+	var body map[string]any
+	if err := json.Unmarshal(cap.body, &body); err != nil {
+		t.Fatalf("decode body: %v", err)
+	}
+	if got, _ := body["file"].(string); got != good {
+		t.Fatalf("body[file] = %q, want %q", got, good)
+	}
+}
+
+func TestWriteBase64UploadEnforcesEncodedBound(t *testing.T) {
+	srv, _ := captureServer(t, http.StatusOK, `{}`)
+	dir, rel := writeTempPayload(t, "p.bin", bytes.Repeat([]byte("y"), 40))
+
+	// 40 decoded bytes encode to 56 base64 characters. Real APIs (Airtable's
+	// 5 MB attachment cap among them) document the ENCODED limit, so both are
+	// checked.
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+		MaxEncodedBytes: 50,
+	}))
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{ProjectDir: dir},
+	}, []connectors.Record{{"file_path": rel, "filename": "p.bin", "contentType": "application/octet-stream"}}, nil)
+	if err == nil {
+		t.Fatal("over encoded bound: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "encoded") {
+		t.Fatalf("error should name the encoded bound, got %v", err)
+	}
+}
+
+func TestWriteBase64UploadHonorsApprovedPayloadDigest(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{}`)
+	content := []byte("approved bytes")
+	dir, rel := writeTempPayload(t, "file_path_payload.txt", content)
+
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+	}))
+	sum := sha256.Sum256(content)
+	digest := hex.EncodeToString(sum[:])
+	rec := []connectors.Record{{"file_path": rel, "filename": "p.txt", "contentType": "text/plain"}}
+
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{
+			ProjectDir:            dir,
+			ApprovedPayloadSHA256: map[string]string{connectors.PayloadApprovalKey(0, "file_path"): digest},
+		},
+	}, rec, nil); err != nil {
+		t.Fatalf("matching digest: unexpected error: %v", err)
+	}
+	if cap.method == "" {
+		t.Fatal("matching digest: request should have been issued")
+	}
+
+	cap.method = ""
+	_, err := Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{
+			ProjectDir:            dir,
+			ApprovedPayloadSHA256: map[string]string{connectors.PayloadApprovalKey(0, "file_path"): strings.Repeat("0", 64)},
+		},
+	}, rec, nil)
+	if err == nil {
+		t.Fatal("substituted payload: want digest mismatch error, got nil")
+	}
+	if cap.method != "" {
+		t.Fatal("substituted payload must not be transmitted")
+	}
+
+	cap.method = ""
+	_, err = Write(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{
+			ProjectDir:            dir,
+			ApprovedPayloadSHA256: map[string]string{connectors.PayloadApprovalKey(0, "other"): digest},
+		},
+	}, rec, nil)
+	if err == nil {
+		t.Fatal("unapproved field: want error, got nil")
+	}
+}
+
+func TestDryRunBase64UploadDoesNotReadTheFile(t *testing.T) {
+	srv, _ := captureServer(t, http.StatusOK, `{}`)
+	b := newWriteTestBundle(srv, base64UploadAction(&Base64UploadSpec{
+		SourceField:     "file_path",
+		ContentField:    "file",
+		MaxDecodedBytes: 1024,
+	}))
+
+	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{
+		Action: "upload_attachment",
+		Config: connectors.RuntimeConfig{ProjectDir: t.TempDir()},
+	}, []connectors.Record{{"file_path": "not-on-disk.txt", "filename": "x", "contentType": "text/plain"}}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite must not touch the filesystem: %v", err)
+	}
+	if preview.RecordsStaged != 1 {
+		t.Fatalf("RecordsStaged = %d, want 1", preview.RecordsStaged)
+	}
 }

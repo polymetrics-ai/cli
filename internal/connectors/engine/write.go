@@ -2,9 +2,13 @@ package engine
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"math"
 	"net/url"
 	"os"
@@ -445,6 +449,13 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		}
 		_, err = rt.Requester.DoMultipart(ctx, method, path, query, form)
 		return err
+	case "base64_upload":
+		payload, err := buildBase64UploadPayload(action, rec, recordIndex, cfg)
+		if err != nil {
+			return err
+		}
+		_, err = rt.Requester.Do(ctx, method, path, nil, payload)
+		return err
 	default: // "json" (default)
 		var body map[string]any
 		if len(action.BodyFields) > 0 {
@@ -697,6 +708,229 @@ func buildJSONArrayPayload(action WriteAction, rec connectors.Record) (any, erro
 		}
 	}
 	return value, nil
+}
+
+// maxBase64UploadDecodedBytes is the hard ceiling a declared max_decoded_bytes
+// is clamped against, mirroring maxOperationDirectReadBytes on the inbound
+// side. A base64 body is inherently buffered — there is no streaming form of it
+// — so the ceiling IS the containment against memory exhaustion.
+const maxBase64UploadDecodedBytes = 16 << 20
+
+// buildBase64UploadPayload builds the JSON body for body_type
+// "base64_upload": the ordinary declared body, with the source field removed
+// and the declared content field set to a validated, canonically encoded
+// payload.
+//
+// Bounds and containment deliberately mirror the bounded binary-download
+// direction so the two halves of file transfer obey one set of rules: clamp the
+// declared bound against a hard engine ceiling, read one byte past the limit and
+// REJECT rather than truncate (a truncated attachment is a silently corrupt
+// upload), confine filesystem access with os.Root, and verify the approved
+// payload digest before anything is transmitted.
+func buildBase64UploadPayload(action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig) (map[string]any, error) {
+	spec := action.Base64Upload
+	if spec == nil {
+		return nil, fmt.Errorf("engine: write action %q: base64_upload spec is required", action.Name)
+	}
+
+	var body map[string]any
+	if len(action.BodyFields) > 0 {
+		body = buildBodyFieldsPayload(rec, action.BodyFields)
+	} else {
+		body = buildJSONBody(rec, action.PathFields)
+	}
+	if body == nil {
+		body = map[string]any{}
+	}
+
+	decoded, err := resolveBase64UploadPayload(action, spec, rec, recordIndex, cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	encoded := base64.StdEncoding.EncodeToString(decoded)
+	if maxEncoded := base64UploadMaxEncodedBytes(spec); int64(len(encoded)) > maxEncoded {
+		return nil, fmt.Errorf("engine: write action %q: base64 upload too large: %d encoded bytes exceeds limit %d", action.Name, len(encoded), maxEncoded)
+	}
+
+	// The source field must never reach the wire: in "path" mode it is a local
+	// filesystem path, and transmitting it would hand the provider the
+	// operator's directory layout.
+	delete(body, spec.SourceField)
+	body[spec.ContentField] = encoded
+	return body, nil
+}
+
+// resolveBase64UploadPayload returns the decoded payload bytes for either source
+// mode, bounded by the clamped decoded limit.
+func resolveBase64UploadPayload(action WriteAction, spec *Base64UploadSpec, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig) ([]byte, error) {
+	maxDecoded := clampBase64UploadDecodedBytes(spec.MaxDecodedBytes)
+
+	raw, err := resolveRecordPathValue(map[string]any(rec), []string{spec.SourceField})
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: resolve base64_upload source_field %q: %w", action.Name, spec.SourceField, err)
+	}
+	value, ok := raw.(string)
+	if !ok || strings.TrimSpace(value) == "" {
+		return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q requires a non-empty string", action.Name, spec.SourceField)
+	}
+
+	if spec.Source == "base64" {
+		// "Official base64" in the sense the operation ledgers use: RFC 4648
+		// standard alphabet, canonical padding, no embedded line breaks.
+		//
+		// Two checks, because neither alone is enough. Strict() rejects
+		// non-zero trailing padding bits, which the ordinary decoder silently
+		// accepts — but Go's decoder skips \r and \n UNCONDITIONALLY, in Strict
+		// mode too, so a wrapped MIME-style payload would sail through and be
+		// re-encoded into something the operator never wrote. The alphabet check
+		// is what actually enforces "one canonical token".
+		if err := requireCanonicalBase64Alphabet(value); err != nil {
+			return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q: %w", action.Name, spec.SourceField, err)
+		}
+		decoded, err := base64.StdEncoding.Strict().DecodeString(value)
+		if err != nil {
+			return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q is not canonical base64: %w", action.Name, spec.SourceField, err)
+		}
+		if int64(len(decoded)) > maxDecoded {
+			return nil, fmt.Errorf("engine: write action %q: base64 upload too large: %d decoded bytes exceeds limit %d", action.Name, len(decoded), maxDecoded)
+		}
+		return decoded, nil
+	}
+
+	decoded, err := readBoundedProjectFile(cfg.ProjectDir, value, maxDecoded)
+	if err != nil {
+		return nil, fmt.Errorf("engine: write action %q: base64_upload source_field %q: %w", action.Name, spec.SourceField, err)
+	}
+	if err := verifyApprovedPayload(action, spec.SourceField, recordIndex, decoded, cfg); err != nil {
+		return nil, err
+	}
+	return decoded, nil
+}
+
+// requireCanonicalBase64Alphabet rejects any byte outside RFC 4648's standard
+// alphabet and its padding character — line breaks and whitespace included, and
+// the URL-safe '-'/'_' pair with them.
+func requireCanonicalBase64Alphabet(value string) error {
+	for i := 0; i < len(value); i++ {
+		c := value[i]
+		switch {
+		case c >= 'A' && c <= 'Z', c >= 'a' && c <= 'z', c >= '0' && c <= '9':
+		case c == '+', c == '/', c == '=':
+		default:
+			return fmt.Errorf("value is not canonical base64: unexpected character at offset %d", i)
+		}
+	}
+	return nil
+}
+
+// verifyApprovedPayload binds the bytes about to be transmitted to the bytes the
+// operator approved, mirroring the multipart file part's contract exactly: when
+// the runtime carries an approval map at all, this field must appear in it and
+// its digest must match. A nil map means no approval flow is in play (a direct
+// engine.Write, e.g. from a test), which is the existing multipart behaviour.
+func verifyApprovedPayload(action WriteAction, field string, recordIndex int, payload []byte, cfg connectors.RuntimeConfig) error {
+	if cfg.ApprovedPayloadSHA256 == nil {
+		return nil
+	}
+	expected := cfg.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(recordIndex, field)]
+	if expected == "" {
+		return fmt.Errorf("engine: write action %q: base64_upload source_field %q is missing its approved payload digest", action.Name, field)
+	}
+	sum := sha256.Sum256(payload)
+	if !strings.EqualFold(hex.EncodeToString(sum[:]), expected) {
+		return fmt.Errorf("engine: write action %q: base64_upload source_field %q payload does not match its approved digest", action.Name, field)
+	}
+	return nil
+}
+
+// readBoundedProjectFile reads at most maxBytes from a regular file confined to
+// projectDir.
+//
+// Containment is os.Root, not a lexical prefix check: os.Root refuses a path
+// that escapes the root through "..", through an absolute component, or through
+// a symlink, and it does so on the OPEN rather than on a separate stat, which
+// closes the check-then-open race that resolveMultipartFilePath's
+// EvalSymlinks-then-Stat sequence leaves open. The lexical
+// safety.ValidateLocalWritePath check still runs first: it is cheap, it rejects
+// control characters, and it produces the error message operators already know.
+func readBoundedProjectFile(projectDir, raw string, maxBytes int64) ([]byte, error) {
+	if strings.TrimSpace(projectDir) == "" {
+		projectDir = "."
+	}
+	if err := safety.ValidateLocalWritePath(projectDir, raw, "base64 upload source path", false); err != nil {
+		return nil, err
+	}
+	rootAbs, err := filepath.Abs(projectDir)
+	if err != nil {
+		return nil, fmt.Errorf("resolve project root: %w", err)
+	}
+
+	rel := filepath.Clean(filepath.FromSlash(raw))
+	if filepath.IsAbs(rel) {
+		rel, err = filepath.Rel(rootAbs, rel)
+		if err != nil {
+			return nil, fmt.Errorf("compare source path to project root: %w", err)
+		}
+	}
+	if !filepath.IsLocal(rel) {
+		return nil, fmt.Errorf("source path outside the project root is not allowed")
+	}
+
+	root, err := os.OpenRoot(rootAbs)
+	if err != nil {
+		return nil, err
+	}
+	defer root.Close()
+
+	file, err := root.Open(rel)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	info, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+	if !info.Mode().IsRegular() {
+		return nil, fmt.Errorf("source must be a regular file")
+	}
+	if info.Size() > maxBytes {
+		return nil, fmt.Errorf("base64 upload too large: %d bytes exceeds limit %d", info.Size(), maxBytes)
+	}
+
+	// Read one byte past the bound so a file that grew between Stat and Read is
+	// rejected rather than silently truncated into a corrupt upload.
+	payload, err := io.ReadAll(io.LimitReader(file, maxBytes+1))
+	if err != nil {
+		return nil, err
+	}
+	if int64(len(payload)) > maxBytes {
+		return nil, fmt.Errorf("base64 upload too large: exceeds limit %d", maxBytes)
+	}
+	return payload, nil
+}
+
+// clampBase64UploadDecodedBytes clamps a declared bound against the engine
+// ceiling, matching clampOperationDirectReadMaxBytes's request → spec → ceiling
+// shape on the inbound side. Bundle load already requires a positive bound; the
+// non-positive fallback here keeps a hand-built spec (a test, a future caller)
+// bounded rather than unbounded.
+func clampBase64UploadDecodedBytes(declared int64) int64 {
+	if declared <= 0 || declared > maxBase64UploadDecodedBytes {
+		return maxBase64UploadDecodedBytes
+	}
+	return declared
+}
+
+// base64UploadMaxEncodedBytes returns the encoded-size bound, defaulting to the
+// base64 length of the clamped decoded bound when none is declared.
+func base64UploadMaxEncodedBytes(spec *Base64UploadSpec) int64 {
+	if spec.MaxEncodedBytes > 0 {
+		return spec.MaxEncodedBytes
+	}
+	return int64(base64.StdEncoding.EncodedLen(int(clampBase64UploadDecodedBytes(spec.MaxDecodedBytes))))
 }
 
 func buildMultipartPayload(action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig) (connsdk.MultipartForm, error) {
