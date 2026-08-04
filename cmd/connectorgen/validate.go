@@ -1010,6 +1010,17 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		if flag.AllowEmpty != nil && flag.Type != "string" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s allow_empty is supported only for string flags", i, cmd.Path, flag.Name)})
 		}
+		// The meta-schema dialect has no "minimum", so these bounds are checked
+		// here instead of being declarable in cli_surface.schema.json.
+		if (flag.MaxItems != 0 || flag.MinItems != 0) && flag.Type != "string_array" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s max_items/min_items are supported only for string_array flags", i, cmd.Path, flag.Name)})
+		}
+		if flag.MaxItems < 0 || flag.MinItems < 0 {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s max_items/min_items must not be negative", i, cmd.Path, flag.Name)})
+		}
+		if flag.MaxItems > 0 && flag.MinItems > flag.MaxItems {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s min_items %d exceeds max_items %d", i, cmd.Path, flag.Name, flag.MinItems, flag.MaxItems)})
+		}
 	}
 	for j, constraint := range cmd.Constraints {
 		if constraint.Kind != "order" {

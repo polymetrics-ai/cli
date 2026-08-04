@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime"
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
@@ -64,12 +65,57 @@ type MultipartForm struct {
 }
 
 type MultipartFile struct {
-	FieldName      string
-	Path           string
-	FileName       string
-	ContentType    string
-	MaxBytes       int64
-	ExpectedSHA256 string
+	FieldName string
+	Path      string
+	// Root, when set, confines every access to this file beneath it, and
+	// RelPath is the root-relative path opened through it. Containment lives at
+	// the open rather than in a check performed once beforehand: Root is
+	// consulted on every Stat and Open, so a path swapped for an escaping
+	// symlink after validation is refused instead of followed. Path is then
+	// only a display value and is never opened.
+	Root    *os.Root
+	RelPath string
+
+	FileName    string
+	ContentType string
+	// AllowedMediaTypes, when non-empty, bounds what the file's own bytes may
+	// sniff as. The declared ContentType is what we assert to the provider; this
+	// is what makes the assertion true. Enforced before any request is made.
+	AllowedMediaTypes []string
+	MaxBytes          int64
+	ExpectedSHA256    string
+}
+
+// sourceName is the path used in messages and as the default upload filename.
+func (f MultipartFile) sourceName() string {
+	if f.Root != nil {
+		return f.RelPath
+	}
+	return f.Path
+}
+
+// stat resolves the file's metadata under Root when one is set.
+func (f MultipartFile) stat() (os.FileInfo, error) {
+	if f.Root != nil {
+		return f.Root.Stat(f.RelPath)
+	}
+	return os.Stat(f.Path)
+}
+
+// open opens the file under Root when one is set. os.Root refuses any path that
+// escapes the root, including via a symlink swapped in after an earlier check.
+func (f MultipartFile) open() (*os.File, error) {
+	if f.Root != nil {
+		return f.Root.Open(f.RelPath)
+	}
+	return os.Open(f.Path)
+}
+
+// needsSnapshot reports whether the file must be copied to a bounded temp file
+// before it is sent: either its content is bound to an approved digest, or its
+// media type is bounded and has to be checked against the actual bytes.
+func (f MultipartFile) needsSnapshot() bool {
+	return f.ExpectedSHA256 != "" || len(f.AllowedMediaTypes) > 0
 }
 
 type requestBody struct {
@@ -261,7 +307,7 @@ func validateMultipartForm(form MultipartForm) error {
 		if strings.TrimSpace(file.FieldName) == "" {
 			return fmt.Errorf("multipart file %d field name is required", i)
 		}
-		if strings.TrimSpace(file.Path) == "" {
+		if strings.TrimSpace(file.sourceName()) == "" {
 			return fmt.Errorf("multipart file %q path is required", file.FieldName)
 		}
 		if file.ExpectedSHA256 != "" {
@@ -270,7 +316,12 @@ func validateMultipartForm(form MultipartForm) error {
 				return fmt.Errorf("multipart file %q expected SHA-256 is invalid", file.FieldName)
 			}
 		}
-		info, err := os.Stat(file.Path)
+		for _, allowed := range file.AllowedMediaTypes {
+			if _, _, err := mime.ParseMediaType(allowed); err != nil {
+				return fmt.Errorf("multipart file %q allowed media type %q is invalid: %w", file.FieldName, allowed, err)
+			}
+		}
+		info, err := file.stat()
 		if err != nil {
 			return fmt.Errorf("multipart file %q: %w", file.FieldName, err)
 		}
@@ -299,8 +350,8 @@ func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (Mu
 	}
 	var total int64
 	for i, file := range form.Files {
-		if file.ExpectedSHA256 == "" {
-			info, err := os.Stat(file.Path)
+		if !file.needsSnapshot() {
+			info, err := file.stat()
 			if err != nil {
 				cleanup()
 				return MultipartForm{}, func() {}, fmt.Errorf("multipart file %q: %w", file.FieldName, err)
@@ -322,35 +373,81 @@ func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (Mu
 				limit = remaining
 			}
 		}
-		tempPath, size, digest, err := snapshotMultipartFile(ctx, file, limit)
+		tempPath, size, digest, sniffed, err := snapshotMultipartFile(ctx, file, limit)
 		if err != nil {
 			cleanup()
 			return MultipartForm{}, func() {}, err
 		}
 		tempPaths = append(tempPaths, tempPath)
-		expected, _ := hex.DecodeString(file.ExpectedSHA256)
-		if !bytes.Equal(digest, expected) {
+		if file.ExpectedSHA256 != "" {
+			expected, _ := hex.DecodeString(file.ExpectedSHA256)
+			if !bytes.Equal(digest, expected) {
+				cleanup()
+				return MultipartForm{}, func() {}, fmt.Errorf("multipart file %q changed since approval", file.FieldName)
+			}
+		}
+		if err := checkAllowedMediaType(file, sniffed); err != nil {
 			cleanup()
-			return MultipartForm{}, func() {}, fmt.Errorf("multipart file %q changed since approval", file.FieldName)
+			return MultipartForm{}, func() {}, err
 		}
 		if prepared.Files[i].FileName == "" {
-			prepared.Files[i].FileName = filepath.Base(file.Path)
+			prepared.Files[i].FileName = filepath.Base(file.sourceName())
 		}
+		// The snapshot lives outside the root by design, so the root handle is
+		// dropped: subsequent opens must target the verified copy, which is what
+		// makes the digest and media-type checks binding.
 		prepared.Files[i].Path = tempPath
+		prepared.Files[i].Root = nil
+		prepared.Files[i].RelPath = ""
 		total += size
 	}
 	return prepared, cleanup, nil
 }
 
-func snapshotMultipartFile(ctx context.Context, file MultipartFile, maxBytes int64) (string, int64, []byte, error) {
-	source, err := os.Open(file.Path)
+// checkAllowedMediaType rejects a file whose actual bytes do not sniff as one of
+// the media types the bundle declared. Upload fails closed here, deliberately
+// unlike the download direction: on download the provider makes the Content-Type
+// claim and providers misreport it, so a mismatch is recorded and surfaced; on
+// upload we are the party making the claim to the provider, so an unsatisfiable
+// claim is our bug and must not reach the wire.
+func checkAllowedMediaType(file MultipartFile, sniffed string) error {
+	if len(file.AllowedMediaTypes) == 0 {
+		return nil
+	}
+	got, _, err := mime.ParseMediaType(sniffed)
 	if err != nil {
-		return "", 0, nil, fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+		return fmt.Errorf("multipart file %q content type %q is not a valid media type: %w", file.FieldName, sniffed, err)
+	}
+	for _, allowed := range file.AllowedMediaTypes {
+		want, _, err := mime.ParseMediaType(allowed)
+		if err != nil {
+			return fmt.Errorf("multipart file %q allowed media type %q is invalid: %w", file.FieldName, allowed, err)
+		}
+		if strings.EqualFold(got, want) {
+			return nil
+		}
+	}
+	if got == "application/octet-stream" {
+		return fmt.Errorf("multipart file %q content could not be classified (sniffed %s); allowed media types are %s", file.FieldName, got, strings.Join(file.AllowedMediaTypes, ", "))
+	}
+	return fmt.Errorf("multipart file %q content sniffed as %s, which is not among the allowed media types %s", file.FieldName, got, strings.Join(file.AllowedMediaTypes, ", "))
+}
+
+// sniffLimit is the number of leading bytes http.DetectContentType inspects.
+const sniffLimit = 512
+
+// snapshotMultipartFile copies the source into a bounded temp file, computing
+// the SHA-256 and sniffing the media type in the same pass, so neither costs an
+// extra read and neither can race a separate one.
+func snapshotMultipartFile(ctx context.Context, file MultipartFile, maxBytes int64) (string, int64, []byte, string, error) {
+	source, err := file.open()
+	if err != nil {
+		return "", 0, nil, "", fmt.Errorf("multipart file %q: %w", file.FieldName, err)
 	}
 	defer source.Close()
 	temp, err := os.CreateTemp("", "polymetrics-upload-*")
 	if err != nil {
-		return "", 0, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+		return "", 0, nil, "", fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
 	}
 	tempPath := temp.Name()
 	removeTemp := true
@@ -362,29 +459,47 @@ func snapshotMultipartFile(ctx context.Context, file MultipartFile, maxBytes int
 	}()
 
 	hash := sha256.New()
+	prefix := &prefixWriter{limit: sniffLimit}
 	reader := io.Reader(&contextReader{ctx: ctx, reader: source})
 	if maxBytes >= 0 {
 		reader = io.LimitReader(reader, maxBytes)
 	}
-	written, err := io.Copy(io.MultiWriter(temp, hash), reader)
+	written, err := io.Copy(io.MultiWriter(temp, hash, prefix), reader)
 	if err != nil {
-		return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+		return "", written, nil, "", fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
 	}
 	if maxBytes >= 0 && written == maxBytes {
 		var extra [1]byte
 		n, readErr := (&contextReader{ctx: ctx, reader: source}).Read(extra[:])
 		if n > 0 {
-			return "", written, nil, fmt.Errorf("multipart file %q too large: exceeds limit %d", file.FieldName, maxBytes)
+			return "", written, nil, "", fmt.Errorf("multipart file %q too large: exceeds limit %d", file.FieldName, maxBytes)
 		}
 		if readErr != nil && readErr != io.EOF {
-			return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, readErr)
+			return "", written, nil, "", fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, readErr)
 		}
 	}
 	if err := temp.Close(); err != nil {
-		return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+		return "", written, nil, "", fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
 	}
 	removeTemp = false
-	return tempPath, written, hash.Sum(nil), nil
+	return tempPath, written, hash.Sum(nil), http.DetectContentType(prefix.head), nil
+}
+
+// prefixWriter retains the first limit bytes written through it and discards the
+// rest, so the sniff sample rides the snapshot copy instead of a second read.
+type prefixWriter struct {
+	head  []byte
+	limit int
+}
+
+func (w *prefixWriter) Write(p []byte) (int, error) {
+	if remaining := w.limit - len(w.head); remaining > 0 {
+		if len(p) < remaining {
+			remaining = len(p)
+		}
+		w.head = append(w.head, p[:remaining]...)
+	}
+	return len(p), nil
 }
 
 type contextReader struct {
@@ -462,7 +577,7 @@ func writeMultipartForm(mw *multipart.Writer, form MultipartForm) error {
 func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64) (int64, error) {
 	name := file.FileName
 	if strings.TrimSpace(name) == "" {
-		name = filepath.Base(file.Path)
+		name = filepath.Base(file.sourceName())
 	}
 	header := make(textproto.MIMEHeader)
 	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name=%q; filename=%q`, file.FieldName, name))
@@ -473,7 +588,7 @@ func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64
 	if err != nil {
 		return 0, err
 	}
-	f, err := os.Open(file.Path)
+	f, err := file.open()
 	if err != nil {
 		return 0, err
 	}

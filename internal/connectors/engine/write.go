@@ -443,7 +443,12 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		_, err = rt.Requester.Do(ctx, method, path, query, payload)
 		return err
 	case "multipart":
-		form, err := buildMultipartPayload(action, rec, recordIndex, cfg)
+		root, err := openMultipartRoot(cfg.ProjectDir)
+		if err != nil {
+			return fmt.Errorf("engine: write action %q: %w", action.Name, err)
+		}
+		defer root.Close()
+		form, err := buildMultipartPayload(action, rec, recordIndex, cfg, root)
 		if err != nil {
 			return err
 		}
@@ -933,7 +938,7 @@ func base64UploadMaxEncodedBytes(spec *Base64UploadSpec) int64 {
 	return int64(base64.StdEncoding.EncodedLen(int(clampBase64UploadDecodedBytes(spec.MaxDecodedBytes))))
 }
 
-func buildMultipartPayload(action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig) (connsdk.MultipartForm, error) {
+func buildMultipartPayload(action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, root *os.Root) (connsdk.MultipartForm, error) {
 	if action.Multipart == nil {
 		return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart spec is required", action.Name)
 	}
@@ -965,7 +970,7 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 			if cfg.ApprovedPayloadSHA256 != nil && expectedSHA256 == "" {
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart file part %q is missing its approved payload digest", action.Name, part.Name)
 			}
-			resolved, size, err := resolveMultipartFilePath(cfg.ProjectDir, path, part.MaxBytes)
+			relPath, size, err := resolveMultipartFilePath(root, cfg.ProjectDir, path, part.MaxBytes)
 			if err != nil {
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart file part %q: %w", action.Name, part.Name, err)
 			}
@@ -974,11 +979,16 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart payload too large: %d bytes exceeds limit %d", action.Name, total, action.Multipart.MaxBytes)
 			}
 			form.Files = append(form.Files, connsdk.MultipartFile{
-				FieldName:      part.Name,
-				Path:           resolved,
-				ContentType:    part.ContentType,
-				MaxBytes:       part.MaxBytes,
-				ExpectedSHA256: expectedSHA256,
+				FieldName: part.Name,
+				// Root and RelPath, not an absolute path: every later Stat and
+				// Open re-checks containment instead of trusting this one.
+				Root:              root,
+				RelPath:           relPath,
+				Path:              relPath,
+				ContentType:       part.ContentType,
+				AllowedMediaTypes: part.AllowedMediaTypes,
+				MaxBytes:          part.MaxBytes,
+				ExpectedSHA256:    expectedSHA256,
 			})
 		default:
 			return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart part %q has unsupported type %q", action.Name, part.Name, part.Type)
@@ -987,34 +997,41 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 	return form, nil
 }
 
-func resolveMultipartFilePath(projectDir, raw string, maxBytes int64) (string, int64, error) {
+// openMultipartRoot opens the containment root for a multipart upload. Every
+// access to a multipart source file goes through this root, so an escaping path
+// is refused at each open rather than by a single check performed beforehand.
+func openMultipartRoot(projectDir string) (*os.Root, error) {
+	if strings.TrimSpace(projectDir) == "" {
+		projectDir = "."
+	}
+	root, err := os.OpenRoot(projectDir)
+	if err != nil {
+		return nil, fmt.Errorf("open project root: %w", err)
+	}
+	return root, nil
+}
+
+// resolveMultipartFilePath converts a record-supplied path into a path relative
+// to root and pre-checks its type and size.
+//
+// The returned path is deliberately root-relative rather than absolute: it is
+// re-resolved through os.Root on every subsequent Stat and Open, which is what
+// closes the check-then-open race the previous EvalSymlinks-then-compare
+// approach left open. The lexical safety check is kept ahead of it as a cheap
+// first filter with a clearer message, but it is no longer load-bearing for
+// containment.
+func resolveMultipartFilePath(root *os.Root, projectDir, raw string, maxBytes int64) (string, int64, error) {
 	if strings.TrimSpace(projectDir) == "" {
 		projectDir = "."
 	}
 	if err := safetyRejectLocalFilePath(projectDir, raw); err != nil {
 		return "", 0, err
 	}
-	rootAbs, err := filepath.Abs(projectDir)
-	if err != nil {
-		return "", 0, fmt.Errorf("resolve project root: %w", err)
-	}
-	if resolvedRoot, err := filepath.EvalSymlinks(rootAbs); err == nil {
-		rootAbs = resolvedRoot
-	}
-	var candidate string
-	if filepath.IsAbs(raw) {
-		candidate = filepath.Clean(raw)
-	} else {
-		candidate = filepath.Join(rootAbs, filepath.Clean(raw))
-	}
-	resolved, err := filepath.EvalSymlinks(candidate)
+	rel, err := multipartRootRelativePath(projectDir, raw)
 	if err != nil {
 		return "", 0, err
 	}
-	if err := requireInsideRoot(rootAbs, resolved); err != nil {
-		return "", 0, err
-	}
-	info, err := os.Stat(resolved)
+	info, err := root.Stat(rel)
 	if err != nil {
 		return "", 0, err
 	}
@@ -1024,7 +1041,41 @@ func resolveMultipartFilePath(projectDir, raw string, maxBytes int64) (string, i
 	if maxBytes > 0 && info.Size() > maxBytes {
 		return "", 0, fmt.Errorf("file too large: %d bytes exceeds limit %d", info.Size(), maxBytes)
 	}
-	return resolved, info.Size(), nil
+	return rel, info.Size(), nil
+}
+
+// multipartRootRelativePath expresses raw relative to projectDir. Absolute paths
+// inside the project directory stay accepted, as they were before, but they are
+// converted to root-relative form so os.Root can confine them. The project
+// directory is compared both as given and with symlinks resolved, because on
+// macOS a configured "/var/..." root and an absolute "/private/var/..." record
+// value denote the same directory.
+func multipartRootRelativePath(projectDir, raw string) (string, error) {
+	clean := filepath.Clean(raw)
+	if !filepath.IsAbs(clean) {
+		if !filepath.IsLocal(clean) {
+			return "", fmt.Errorf("multipart file path must stay inside the project root")
+		}
+		return clean, nil
+	}
+	rootAbs, err := filepath.Abs(projectDir)
+	if err != nil {
+		return "", fmt.Errorf("resolve project root: %w", err)
+	}
+	candidates := []string{rootAbs}
+	if resolvedRoot, err := filepath.EvalSymlinks(rootAbs); err == nil && resolvedRoot != rootAbs {
+		candidates = append(candidates, resolvedRoot)
+	}
+	for _, base := range candidates {
+		rel, err := filepath.Rel(base, clean)
+		if err != nil {
+			continue
+		}
+		if rel == "." || filepath.IsLocal(rel) {
+			return rel, nil
+		}
+	}
+	return "", fmt.Errorf("multipart file path outside the project root is not allowed")
 }
 
 func safetyRejectLocalFilePath(projectDir, raw string) error {
