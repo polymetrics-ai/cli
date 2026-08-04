@@ -89,14 +89,9 @@
     },
     {
       "method": "GET",
-      "path": "/v1/media/{+resourceName}",
-      "operation": {
-        "model": "binary_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official media.download returns generated report bytes at /v1/media/{+resourceName}?alt=media. This is not JSON metadata and is intentionally not modeled as a stream; keep blocked until a bounded binary file-download executor with destination path safety, size limits, digest/audit evidence, and explicit approval exists.",
-        "source_url": "https://developers.google.com/youtube/reporting/v1/reports"
+      "path": "/v1/media/{path}?alt=media",
+      "covered_by": {
+        "direct_reads": ["reports download"]
       }
     }
   ]

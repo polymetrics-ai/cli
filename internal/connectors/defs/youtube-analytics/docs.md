@@ -119,7 +119,10 @@ omit that optional query rather than hard-coding an empty or required content-ow
   operation metadata rows.
 - YouTube Analytics `reports.query` is blocked pending a bounded provider-query/direct-read
   foundation for the separate Analytics API host.
-- YouTube Reporting `media.download` is blocked pending a bounded binary file-download executor with
-  destination path safety, size limits, digest/audit evidence, and explicit approval.
-- Report metadata streams expose `download_url`; they do not download or parse generated report CSV,
-  GZIP, or other binary payload bytes.
+- YouTube Reporting `media.download` is reachable as `pm youtube-analytics reports download`.
+  It requires the provider `resourceName` plus an explicit `--dest-root`, may use `--file-name`,
+  streams at most 100 MiB, refuses path traversal/overwrite/archive extraction, and records file
+  metadata and SHA-256 rather than placing report bytes in JSON output. The source is the Reporting
+  guide's [download step](https://developers.google.com/youtube/reporting/v1/reports#step-6-download-the-report).
+- Report metadata streams expose `download_url`; it is provider metadata only. The download command
+  uses the documented media resource name rather than accepting arbitrary absolute URLs.

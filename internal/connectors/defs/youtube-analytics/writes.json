@@ -9,7 +9,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["reportTypeId"],
+        "required": ["reportTypeId", "name"],
         "additionalProperties": false,
         "properties": {
           "reportTypeId": { "type": "string" },

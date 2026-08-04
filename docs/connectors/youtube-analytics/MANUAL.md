@@ -77,7 +77,7 @@ SYNC MODES
 REVERSE ETL ACTIONS
   create_job:
     endpoint: POST /jobs
-    required fields: reportTypeId
+    required fields: reportTypeId, name
     risk: creates a YouTube Reporting job that schedules future report generation; requires reverse ETL plan, preview, and explicit approval
   delete_job:
     endpoint: DELETE /jobs/{{ record.job_id }}
@@ -125,13 +125,13 @@ COMMAND SURFACE
   YouTube Reporting
     jobs list - Read YouTube Reporting jobs through the declared ETL stream. [intent=etl availability=implemented stream=jobs]; flags: --include-system-managed
     jobs get - Read one YouTube Reporting job by configured job_id. [intent=etl availability=implemented stream=job]; notes: Pass --config job_id=<job id>; ETL command flags intentionally map only to query parameters, not connector config path variables.
-    jobs create - Plan creation of a YouTube Reporting job. [intent=reverse_etl availability=implemented write=create_job]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Creates a scheduled YouTube Reporting job; requires reverse ETL plan, preview, explicit approval, then execute.; flags: --report-type-id, --name
+    jobs create - Plan creation of a YouTube Reporting job. [intent=reverse_etl availability=implemented write=create_job]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Creates a scheduled YouTube Reporting job; requires reverse ETL plan, preview, explicit approval, then execute.; flags: --report-type-id, --name (required)
     jobs delete - Plan deletion of a YouTube Reporting job with typed destructive confirmation. [intent=reverse_etl availability=implemented write=delete_job]; approval: Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.; risk: Destructive job deletion stops future report generation; redacts job_id from previews/errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.; flags: --job-id
     report-types list - Read YouTube Reporting report types through the declared ETL stream. [intent=etl availability=implemented stream=report_types]; flags: --include-system-managed
     reports list - Read generated report metadata for the configured YouTube Reporting job. [intent=etl availability=implemented stream=reports]; notes: Pass --config job_id=<job id>; downloaded report bytes are intentionally not emitted by this JSON metadata stream.; flags: --created-after, --start-time-at-or-after, --start-time-before
-    reports get - Read one generated report metadata resource for the configured job_id/report_id. [intent=etl availability=implemented stream=report]; notes: Pass --config job_id=<job id> --config report_id=<report id>; downloaded report bytes remain a blocked binary operation.
-    reports query - Documented YouTube Analytics reports.query provider query operation (blocked by default). [intent=direct_read availability=planned]; notes: Blocked until provider-query/direct-read foundation supports bounded typed cross-host query execution without raw query escape hatches.
-    reports download - Documented YouTube Reporting media.download operation for generated report bytes (blocked by default). [intent=direct_read availability=planned]; notes: Blocked until a bounded binary file-download executor exists with destination path safety, size limits, digest/audit evidence, and explicit approval.
+    reports get - Read one generated report metadata resource for the configured job_id/report_id. [intent=etl availability=implemented stream=report]; notes: Pass --config job_id=<job id> --config report_id=<report id>; use reports download with the documented resourceName to fetch report bytes.
+    reports query - Documented YouTube Analytics reports.query provider query operation (blocked by default). [intent=direct_read availability=planned operation=reports_query]; notes: Blocked until provider-query/direct-read foundation supports bounded typed cross-host query execution without raw query escape hatches.
+    reports download - Download generated YouTube Reporting report bytes to an explicit local destination. [intent=binary_download availability=implemented operation=download_report]; notes: The required --resource-name maps to the provider resourceName. Runtime download flags require --dest-root; --file-name is optional. The executor refuses path traversal, overwrites, archive extraction, and payloads over 100 MiB, and emits only file metadata with a SHA-256 receipt.; flags: --resource-name (required), --dest-root (required), --file-name, --max-bytes
   YouTube Analytics groups
     groups list - Read YouTube Analytics groups through the declared ETL stream. [intent=etl availability=implemented stream=groups]; flags: --mine, --group-ids
     groups create - Plan creation of a YouTube Analytics group. [intent=reverse_etl availability=implemented write=create_group]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Creates a YouTube Analytics group; requires reverse ETL plan, preview, explicit approval, then execute.; flags: --title
@@ -141,7 +141,7 @@ COMMAND SURFACE
     group-items create - Plan adding a channel, playlist, video, or asset to a YouTube Analytics group. [intent=reverse_etl availability=implemented write=create_group_item]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Adds an item to a YouTube Analytics group; redacts group/resource identifiers from write errors; requires reverse ETL plan, preview, explicit approval, then execute.; flags: --group-id, --resource-kind, --resource-id
     group-items delete - Plan removal of an item from a YouTube Analytics group with typed destructive confirmation. [intent=reverse_etl availability=implemented write=delete_group_item]; approval: Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.; risk: Destructive removal of a group item; redacts group-item id from previews/errors; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.; flags: --id
   Help topics:
-    binary-downloads - Generated report metadata includes download_url, but media.download report bytes remain blocked until a bounded binary file-download executor exists.
+    binary-downloads - Generated report metadata includes download_url; use reports download with the documented resourceName and an explicit destination root to fetch report bytes safely.
     content-owner-writes - Read streams support onBehalfOfContentOwner from content_owner_id; declarative write actions omit that optional query until write-action query templates are available.
     destructive-confirmation - YouTube Reporting job deletes and YouTube Analytics group/group-item deletes require reverse ETL plan, preview, explicit approval, and typed destructive confirmation.
 

@@ -33,10 +33,10 @@
       "id": "download_report",
       "kind": "binary_download",
       "summary": "Download generated YouTube Reporting report bytes.",
-      "description": "Official youtubereporting.media.download (GET /v1/media/{+resourceName}?alt=media). Kept blocked because generated report payloads are CSV/GZIP/binary bytes and the connector runtime intentionally lacks a bounded binary file-download executor for this surface.",
-      "source_url": "https://developers.google.com/youtube/reporting/v1/reports",
+      "description": "Official youtubereporting.media.download. The provider's resourceName path field is mapped to the runtime's safe multi-segment {path} placeholder, preserving the documented GET /v1/media/{+resourceName}?alt=media request without accepting an arbitrary absolute download URL.",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reports#step-6-download-the-report",
       "risk": "medium",
-      "approval": "blocked by default pending bounded destination-file policy, size limits, digest/audit evidence, and explicit operator approval",
+      "approval": "read-only download; requires an explicit destination root and is bounded to 100 MiB with a SHA-256 receipt",
       "output_policy": "bounded_binary_file",
       "auth_scopes": [
         "https://www.googleapis.com/auth/yt-analytics-monetary.readonly",
@@ -45,7 +45,7 @@
       "mutation_class": "none",
       "binary": {
         "method": "GET",
-        "path": "/media/{resourceName}?alt=media",
+        "path": "/v1/media/{path}?alt=media",
         "max_bytes": 104857600,
         "allow_overwrite": false,
         "extract_archives": false
