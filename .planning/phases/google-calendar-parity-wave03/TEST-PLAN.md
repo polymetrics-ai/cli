@@ -5,3 +5,4 @@
 3. Exercise fixture-backed conformance and the CLI package after generated surfaces refresh.
 4. Build `pm`, inspect Google Calendar help, and run only uncredentialed argument-validation commands.
 5. Verify the citation research matrix has exactly the field records derived from the official Discovery document for the connector's declared inputs.
+6. Exercise metadata honesty, optional event cutoffs, legacy projections, and two-page settings reads in the connector-owned hook package.

@@ -64905,12 +64905,12 @@
     "description": "Reads Google Calendar calendars, calendar-list entries, events, recurring-event instances, colors, settings, and ACL rules, plus a bounded typed free/busy query, through the Calendar API v3 using an OAuth2 refresh token.",
     "integration_type": "api",
     "docs_url": "https://developers.google.com/workspace/calendar/api/v3/reference",
-    "release_stage": "ga",
+    "release_stage": "alpha",
     "capabilities": {
       "check": true,
       "catalog": true,
       "read": true,
-      "write": true,
+      "write": false,
       "query": false
     },
     "spec": {
@@ -64943,8 +64943,7 @@
         "start_date": {
           "type": "string",
           "format": "date-time",
-          "default": "2020-01-01T00:00:00Z",
-          "description": "Lower bound for events.updated incremental reads."
+          "description": "Optional lower bound for events.updated incremental reads; fresh reads are unfiltered when omitted."
         },
         "client_id": {
           "type": "string",

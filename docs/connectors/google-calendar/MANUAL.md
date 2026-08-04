@@ -26,7 +26,7 @@ ICON
   matched_by: google-calendar
 
 CAPABILITIES
-  check=true catalog=true read=true write=true query=false
+  check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION
@@ -45,7 +45,7 @@ CONFIGURATION
 ETL STREAMS
   calendar_list:
     primary key: id
-    fields: accessRole(), backgroundColor(), colorId(), conferenceProperties(), defaultReminders(), deleted(), description(), etag(), foregroundColor(), hidden(), id(), kind(), location(), notificationSettings(), primary(), selected(), summary(), summaryOverride(), timeZone()
+    fields: accessRole(), colorId(), deleted(), description(), etag(), hidden(), id(), kind(), primary(), selected(), summary(), timeZone()
   calendar_list_entry:
     primary key: id
     fields: accessRole(), backgroundColor(), colorId(), conferenceProperties(), defaultReminders(), deleted(), description(), etag(), foregroundColor(), hidden(), id(), kind(), location(), notificationSettings(), primary(), selected(), summary(), summaryOverride(), timeZone()
@@ -58,7 +58,7 @@ ETL STREAMS
   events:
     primary key: id
     cursor: updated
-    fields: anyoneCanAddSelf(), attachments(), attendees(), attendeesOmitted(), birthdayProperties(), colorId(), conferenceData(), created(), creator(), description(), end(), endTimeUnspecified(), etag(), eventType(), extendedProperties(), focusTimeProperties(), gadget(), guestsCanInviteOthers(), guestsCanModify(), guestsCanSeeOtherGuests(), hangoutLink(), htmlLink(), iCalUID(), id(), kind(), location(), locked(), organizer(), originalStartTime(), outOfOfficeProperties(), privateCopy(), recurrence(), recurringEventId(), reminders(), sequence(), source(), start(), status(), summary(), transparency(), updated(), visibility(), workingLocationProperties()
+    fields: attendees(), created(), creator(), description(), end(), etag(), htmlLink(), iCalUID(), id(), kind(), location(), organizer(), recurringEventId(), start(), status(), summary(), updated()
   event:
     primary key: id
     fields: anyoneCanAddSelf(), attachments(), attendees(), attendeesOmitted(), birthdayProperties(), colorId(), conferenceData(), created(), creator(), description(), end(), endTimeUnspecified(), etag(), eventType(), extendedProperties(), focusTimeProperties(), gadget(), guestsCanInviteOthers(), guestsCanModify(), guestsCanSeeOtherGuests(), hangoutLink(), htmlLink(), iCalUID(), id(), kind(), location(), locked(), organizer(), originalStartTime(), outOfOfficeProperties(), privateCopy(), recurrence(), recurringEventId(), reminders(), sequence(), source(), start(), status(), summary(), transparency(), updated(), visibility(), workingLocationProperties()

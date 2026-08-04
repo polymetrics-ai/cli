@@ -20,7 +20,11 @@
 - Executable now: 12 (11 streams plus `freeBusy.query`).
 - Blocked: 26, all with the identical named foundation blocker: `rest_write` has no command-runner dispatch.
 - Planned: 0.
-- Provider citations: 25/25 declared request-field uses and 38/38 operation-level sources, recorded in `REQUEST-FIELD-RESEARCH.md` and `google-calendar-official-operations.json`.
+- Provider citations: 27/27 declared request-field uses and 38/38 operation-level sources, recorded in `REQUEST-FIELD-RESEARCH.md` and `google-calendar-official-operations.json`.
+
+## Review remediation gate
+
+- [x] `go test ./internal/connectors/hooks/google-calendar -count=1` — pass; metadata, fresh event reads, legacy projections, and settings pagination are covered.
 
 ## Constraints
 

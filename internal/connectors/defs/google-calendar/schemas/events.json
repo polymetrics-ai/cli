@@ -47,12 +47,6 @@
         "null"
       ]
     },
-    "colorId": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "creator": {
       "type": [
         "object",
@@ -71,37 +65,7 @@
     "end": {
       "type": "object"
     },
-    "endTimeUnspecified": {
-      "type": [
-        "boolean",
-        "null"
-      ]
-    },
-    "recurrence": {
-      "type": [
-        "array",
-        "null"
-      ]
-    },
     "recurringEventId": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "originalStartTime": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "transparency": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "visibility": {
       "type": [
         "string",
         "null"
@@ -113,129 +77,9 @@
         "null"
       ]
     },
-    "sequence": {
-      "type": [
-        "integer",
-        "null"
-      ]
-    },
     "attendees": {
       "type": [
         "array",
-        "null"
-      ]
-    },
-    "attendeesOmitted": {
-      "type": [
-        "boolean",
-        "null"
-      ]
-    },
-    "extendedProperties": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "hangoutLink": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "conferenceData": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "gadget": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "anyoneCanAddSelf": {
-      "type": [
-        "boolean",
-        "null"
-      ]
-    },
-    "guestsCanInviteOthers": {
-      "type": [
-        "boolean",
-        "null"
-      ]
-    },
-    "guestsCanModify": {
-      "type": [
-        "boolean",
-        "null"
-      ]
-    },
-    "guestsCanSeeOtherGuests": {
-      "type": [
-        "boolean",
-        "null"
-      ]
-    },
-    "privateCopy": {
-      "type": [
-        "boolean",
-        "null"
-      ]
-    },
-    "locked": {
-      "type": [
-        "boolean",
-        "null"
-      ]
-    },
-    "reminders": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "source": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "attachments": {
-      "type": [
-        "array",
-        "null"
-      ]
-    },
-    "eventType": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "outOfOfficeProperties": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "focusTimeProperties": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "workingLocationProperties": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "birthdayProperties": {
-      "type": [
-        "object",
         "null"
       ]
     }

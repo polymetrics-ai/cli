@@ -23,7 +23,7 @@ The stream-backed GET operations are:
 - `settings` and `setting`
 - `acl` and `acl_rule`
 
-The `events` stream is incremental on `updated`; its configured `start_date` is sent as the `updatedMin` first-run lower bound. Cursor-paginated streams use the provider's `nextPageToken` response field.
+The `events` stream is incremental on `updated`. An explicitly configured `start_date` is sent as the `updatedMin` first-run lower bound; when it is omitted, a fresh read is unfiltered. Cursor-paginated streams, including `settings`, use the provider's `nextPageToken` response field.
 
 `freebusy query` accepts one calendar ID and RFC3339 `timeMin`/`timeMax` bounds, validates that the lower bound precedes the upper bound, caps the response, and returns JSON-redacted output.
 

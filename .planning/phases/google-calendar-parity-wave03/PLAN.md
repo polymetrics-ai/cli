@@ -23,6 +23,7 @@ Google's current Calendar v3 Discovery document (`revision=20260731`) lists 38 o
 3. **Honest mutation ledger:** retire the recovered checkpoint's 26 executable `rest_write` actions and commands. Each documented mutation becomes a blocked `api_surface` ledger row with the named missing foundation: `rest_write` is schema-only and has no commandrunner dispatch. Do not use `planned` as a resting state.
 4. **Citations and generated surfaces:** record provider-owned evidence for every declared request field in the phase research matrix; current main has no shared machine citation schema, so preserve convention-neutral evidence and regenerate only Google Calendar outputs.
 5. **Verification and handoff:** run the contract's focused gates on current main, build `pm`, verify help and representative read commands without credentials, update phase records, commit the green slice, then hand branch custody to no-mistakes.
+6. **Review remediation:** restore read-only alpha metadata, preserve unfiltered fresh event reads, retain legacy list-stream projection contracts, paginate settings, add connector-owned regressions, and refresh generated surfaces before one final focused package test.
 
 ## Safety and non-goals
 

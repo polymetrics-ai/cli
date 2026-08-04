@@ -21,40 +21,10 @@
         "null"
       ]
     },
-    "location": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "timeZone": {
       "type": "string"
     },
-    "conferenceProperties": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "summaryOverride": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "colorId": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "backgroundColor": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "foregroundColor": {
       "type": [
         "string",
         "null"
@@ -74,18 +44,6 @@
     },
     "accessRole": {
       "type": "string"
-    },
-    "defaultReminders": {
-      "type": [
-        "array",
-        "null"
-      ]
-    },
-    "notificationSettings": {
-      "type": [
-        "object",
-        "null"
-      ]
     },
     "primary": {
       "type": [
