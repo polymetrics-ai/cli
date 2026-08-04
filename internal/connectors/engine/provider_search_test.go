@@ -139,7 +139,7 @@ func TestProviderSearchLoadContract(t *testing.T) {
 		{
 			name: "nested unbounded array is refused",
 			mutate: func(o *OperationSpec) {
-				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"filter":{"type":"object","properties":{"tags":{"type":"array","items":{"type":"string"}}}}}}`)
+				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"filter":{"type":"object","additionalProperties":false,"properties":{"tags":{"type":"array","items":{"type":"string"}}}}}}`)
 			},
 			wantErr: "array without maxItems",
 		},
@@ -160,9 +160,30 @@ func TestProviderSearchLoadContract(t *testing.T) {
 		{
 			name: "nested multi-form array is refused",
 			mutate: func(o *OperationSpec) {
-				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"filter":{"type":"object","properties":{"tags":{"type":["array","null"],"items":{"type":"string"}}}}}}`)
+				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"filter":{"type":"object","additionalProperties":false,"properties":{"tags":{"type":["array","null"],"items":{"type":"string"}}}}}}`)
 			},
 			wantErr: "array without maxItems",
+		},
+		{
+			name: "open nested object is refused",
+			mutate: func(o *OperationSpec) {
+				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"filter":{"type":"object","properties":{"tags":{"type":"array","items":{"type":"string"},"maxItems":10}}}}}`)
+			},
+			wantErr: "must declare additionalProperties: false",
+		},
+		{
+			name: "deeply open nested object is refused",
+			mutate: func(o *OperationSpec) {
+				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"filter":{"type":"object","additionalProperties":false,"properties":{"inner":{"type":"object","properties":{"ids":{"type":"array","items":{"type":"string"},"maxItems":10}}}}}}}`)
+			},
+			wantErr: "must declare additionalProperties: false",
+		},
+		{
+			name: "valid with closed nested object",
+			mutate: func(o *OperationSpec) {
+				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"ids":{"type":"array","items":{"type":"string"},"maxItems":100},"filter":{"type":"object","additionalProperties":false,"properties":{"tags":{"type":"array","items":{"type":"string"},"maxItems":20}}}}}`)
+			},
+			wantErr: "",
 		},
 		{
 			name: "multiple unbounded lists keep a deterministic error",
@@ -266,6 +287,30 @@ func TestOperationDirectReadRejectsUndeclaredProviderSearchBodyKey(t *testing.T)
 	}, nil)
 	if err == nil {
 		t.Fatal("OperationDirectRead error = nil, want the undeclared body key rejected")
+	}
+}
+
+// TestOperationDirectReadRejectsUndeclaredNestedProviderSearchKey pins that the
+// no-escape-hatch invariant holds recursively, not just at the body root: a
+// caller cannot inject an undeclared key inside a nested object either.
+func TestOperationDirectReadRejectsUndeclaredNestedProviderSearchKey(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = w.Write([]byte(`{}`))
+	}))
+	defer srv.Close()
+
+	op := providerSearchOp(func(o *OperationSpec) {
+		o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"ids":{"type":"array","items":{"type":"string"},"maxItems":100},"filter":{"type":"object","additionalProperties":false,"properties":{"tags":{"type":"array","items":{"type":"string"},"maxItems":20}}}}}`)
+	})
+	b := providerSearchBundle(srv.URL)
+	b.Operations = []OperationSpec{op}
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "search_users",
+		Body:      map[string]any{"ids": []any{"u1"}, "filter": map[string]any{"tags": []any{"a"}, "evil": "x"}},
+	}, nil)
+	if err == nil {
+		t.Fatal("OperationDirectRead error = nil, want the undeclared nested body key rejected")
 	}
 }
 
