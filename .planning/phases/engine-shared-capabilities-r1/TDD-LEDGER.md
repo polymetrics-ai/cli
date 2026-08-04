@@ -52,7 +52,22 @@ client clone — nothing extra is ever sent.
 | 2.18 | `TestBinaryDownloadRecordIsFlatAndSurvivesRedaction` | flat scalars only; no field trips `shouldRedactJSONField`; all 10 fields present; no `download_url` | GREEN |
 | 2.19 | `TestBinaryDownloadRequiresDestRoot` | no implicit destination | GREEN |
 | 2.20 | `TestBinaryDownloadHTTPErrorLeavesNoFile` | a 403 leaves the destination empty | GREEN |
-| 2.21 | `TestOperationsSchemaAcceptsBinaryPolicyFields` | new optional `binary` fields declared (block is `additionalProperties:false`) | GREEN |
+| 2.21 | `TestOperationsSchemaAcceptsBinaryPolicyFields` | the real meta-schema is COMPILED and RUN against a document using the new fields, and still rejects an undeclared one | GREEN |
+| 2.22 | `TestBinaryDownloadRefusesCrossHostRedirectByDefault` | executed end-to-end: an undeclared cross-host redirect is refused and the CDN sees no credential | GREEN |
+| 2.23 | `TestBinaryDownloadAllowCrossHostIsEnforced` | declaring `allow_cross_host` actually changes behaviour; credential still does not travel | GREEN |
+| 2.24 | `TestBinaryDownloadAllowedHostsIsEnforced` | `allowed_hosts` admits exactly the named host, refuses others, sends no credential | GREEN |
+| 2.25 | `TestBinaryDownloadStallTimeoutIsEnforced` | a stalled transfer is actually aborted and leaves no file | GREEN |
+
+**Third real defect, caught by insisting on execution over schema-reading.** The first version of
+test 2.21 only did `strings.Contains(operationsSchemaJSON, field)` — it would have passed on a field
+name appearing anywhere in the file, with no enforcement whatsoever. Replaced with a real
+compile-and-validate, plus negative coverage that the block stays `additionalProperties:false`.
+
+Rewriting it that way then exposed a genuine bug in `stall_timeout_seconds`: `newStallReader` derived
+its OWN context and cancelled that, so the watchdog fired correctly and aborted nothing — the read
+hung until connsdk's 60s client timeout. The declared field was inert. Fixed by passing the cancel
+func of the context the HTTP request was actually built with; the test now completes in ~1s instead
+of 60s.
 
 **Red evidence (task 2):** `undefined: OperationBinaryDownload`, `undefined:
 BinaryDownloadRequest`.

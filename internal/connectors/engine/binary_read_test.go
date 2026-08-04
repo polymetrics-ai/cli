@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -487,13 +488,148 @@ func TestBinaryDownloadHTTPErrorLeavesNoFile(t *testing.T) {
 	}
 }
 
-// TestOperationsSchemaAcceptsBinaryPolicyFields pins the new optional binary
-// block fields. The block is additionalProperties:false, so they must be
-// declared in the schema to be usable at all.
+// TestOperationsSchemaAcceptsBinaryPolicyFields COMPILES and RUNS the real
+// operations meta-schema against a document using the new binary fields. The
+// binary block is additionalProperties:false, so a field that is not properly
+// declared makes this fail — unlike a substring check, which would pass on a
+// field name appearing anywhere in the file.
 func TestOperationsSchemaAcceptsBinaryPolicyFields(t *testing.T) {
-	for _, field := range []string{"allow_cross_host", "allowed_hosts", "content_types", "stall_timeout_seconds"} {
-		if !strings.Contains(operationsSchemaJSON, field) {
-			t.Fatalf("operations.schema.json does not declare binary.%s", field)
+	sch, err := CompileSchema([]byte(operationsSchemaJSON))
+	if err != nil {
+		t.Fatalf("compile operations schema: %v", err)
+	}
+	doc := map[string]any{"operations": []any{map[string]any{
+		"id": "acme.download_file", "kind": "binary_download",
+		"summary": "download", "risk": "low", "approval": "none",
+		"output_policy": "binary_file_bounded",
+		"binary": map[string]any{
+			"method": "GET", "path": "/files/{id}", "max_bytes": 1024,
+			"allow_cross_host": true, "allowed_hosts": []any{"cdn.example"},
+			"content_types": []any{"application/pdf"}, "stall_timeout_seconds": 30,
+		},
+	}}}
+	if err := sch.Validate(doc); err != nil {
+		t.Fatalf("operations.schema.json must accept the binary policy fields: %v", err)
+	}
+	// And the closed block must still reject an undeclared field.
+	bad := map[string]any{"operations": []any{map[string]any{
+		"id": "acme.download_file", "kind": "binary_download",
+		"summary": "download", "risk": "low", "approval": "none",
+		"output_policy": "binary_file_bounded",
+		"binary": map[string]any{
+			"method": "GET", "path": "/files/{id}", "unknown_field": true,
+		},
+	}}}
+	if err := sch.Validate(bad); err == nil {
+		t.Fatal("binary block must stay additionalProperties:false")
+	}
+}
+
+// redirectingBinaryServers wires an origin that redirects to a separate CDN
+// host, recording what the CDN receives.
+func redirectingBinaryServers(t *testing.T) (origin *httptest.Server, cdnHost *string, cdnSawAuth *string) {
+	t.Helper()
+	sawAuth := ""
+	host := ""
+	cdn := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sawAuth = r.Header.Get("X-API-Key")
+		_, _ = w.Write([]byte("cdn-bytes"))
+	}))
+	t.Cleanup(cdn.Close)
+	host = strings.TrimPrefix(cdn.URL, "http://")
+	origin = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, cdn.URL+"/blob", http.StatusFound)
+	}))
+	t.Cleanup(origin.Close)
+	return origin, &host, &sawAuth
+}
+
+func binaryBundleWithAuth(srv *httptest.Server, spec *BinaryOperationSpec) Bundle {
+	b := binaryBundle(srv, spec)
+	b.HTTP.Auth = []AuthSpec{{Mode: "api_key_header", Header: "X-API-Key", Value: "supersecret"}}
+	return b
+}
+
+// TestBinaryDownloadRefusesCrossHostRedirectByDefault EXECUTES the capability
+// to prove the declaration is enforced, not merely accepted by the schema.
+// This is the 71-connector custom-auth-header hazard: without the policy, Go
+// forwards X-API-Key to the CDN.
+func TestBinaryDownloadRefusesCrossHostRedirectByDefault(t *testing.T) {
+	origin, _, cdnSawAuth := redirectingBinaryServers(t)
+	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{})
+	_, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil)
+	if err == nil {
+		t.Fatal("cross-host redirect must be refused when the operation does not declare it")
+	}
+	if *cdnSawAuth != "" {
+		t.Fatalf("credential reached the CDN: %q", *cdnSawAuth)
+	}
+}
+
+// TestBinaryDownloadAllowCrossHostIsEnforced: declaring allow_cross_host
+// actually changes behaviour, and the credential still does not travel.
+func TestBinaryDownloadAllowCrossHostIsEnforced(t *testing.T) {
+	origin, _, cdnSawAuth := redirectingBinaryServers(t)
+	dest := t.TempDir()
+	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{AllowCrossHost: true})
+	res, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil)
+	if err != nil {
+		t.Fatalf("declared allow_cross_host must permit the hop: %v", err)
+	}
+	got, err := os.ReadFile(res.Record["file_path"].(string))
+	if err != nil || string(got) != "cdn-bytes" {
+		t.Fatalf("cdn bytes not written: %q %v", got, err)
+	}
+	if *cdnSawAuth != "" {
+		t.Fatalf("credential leaked to the CDN even on a permitted hop: %q", *cdnSawAuth)
+	}
+}
+
+// TestBinaryDownloadAllowedHostsIsEnforced: the per-operation allowlist admits
+// exactly the named host and nothing else.
+func TestBinaryDownloadAllowedHostsIsEnforced(t *testing.T) {
+	origin, cdnHost, cdnSawAuth := redirectingBinaryServers(t)
+
+	b := binaryBundleWithAuth(origin, &BinaryOperationSpec{AllowedHosts: []string{*cdnHost}})
+	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil); err != nil {
+		t.Fatalf("allowlisted host must be permitted: %v", err)
+	}
+	if *cdnSawAuth != "" {
+		t.Fatalf("credential leaked to an allowlisted host: %q", *cdnSawAuth)
+	}
+
+	other := binaryBundleWithAuth(origin, &BinaryOperationSpec{AllowedHosts: []string{"somewhere.invalid:443"}})
+	if _, err := OperationBinaryDownload(context.Background(), other, downloadReq(t.TempDir()), nil); err == nil {
+		t.Fatal("a host outside allowed_hosts must stay refused")
+	}
+}
+
+// TestBinaryDownloadStallTimeoutIsEnforced: stall_timeout_seconds must be
+// plumbed through and actually abort a stalled transfer, rather than being an
+// inert schema field.
+func TestBinaryDownloadStallTimeoutIsEnforced(t *testing.T) {
+	release := make(chan struct{})
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Length", "1024")
+		_, _ = w.Write([]byte("partial"))
+		if f, ok := w.(http.Flusher); ok {
+			f.Flush()
 		}
+		<-release // stall forever until the test releases us
+	}))
+	t.Cleanup(func() { close(release); srv.Close() })
+
+	dest := t.TempDir()
+	b := binaryBundle(srv, &BinaryOperationSpec{StallTimeoutSeconds: 1})
+	start := time.Now()
+	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil); err == nil {
+		t.Fatal("a stalled transfer must be aborted")
+	}
+	if elapsed := time.Since(start); elapsed > 30*time.Second {
+		t.Fatalf("stall timeout did not fire promptly: %v", elapsed)
+	}
+	entries, _ := os.ReadDir(dest)
+	if len(entries) != 0 {
+		t.Fatalf("aborted download must leave no file, found %d", len(entries))
 	}
 }

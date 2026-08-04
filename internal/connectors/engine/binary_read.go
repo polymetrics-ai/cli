@@ -170,7 +170,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		return BinaryDownloadResult{}, err
 	}
 
-	written, digest, sniffed, err := streamBinaryDownloadToRoot(ctx, resp.Body, req.DestRoot, fileName, maxBytes, spec.AllowOverwrite, stall)
+	written, digest, sniffed, err := streamBinaryDownloadToRoot(resp.Body, req.DestRoot, fileName, maxBytes, spec.AllowOverwrite, stall, cancel)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
@@ -228,7 +228,7 @@ func clampOperationBinaryDownloadMaxBytes(requested int64, operationMax int) int
 // escaping symlinks. The bytes land in a temp file inside the SAME root (so the
 // rename cannot cross a filesystem and stop being atomic), are fsync'd, and are
 // only then renamed into place.
-func streamBinaryDownloadToRoot(ctx context.Context, body io.Reader, destRoot, fileName string, maxBytes int64, allowOverwrite bool, stall time.Duration) (int64, string, string, error) {
+func streamBinaryDownloadToRoot(body io.Reader, destRoot, fileName string, maxBytes int64, allowOverwrite bool, stall time.Duration, cancel context.CancelFunc) (int64, string, string, error) {
 	root, err := os.OpenRoot(destRoot)
 	if err != nil {
 		return 0, "", "", fmt.Errorf("binary download destination: %w", err)
@@ -267,7 +267,7 @@ func streamBinaryDownloadToRoot(ctx context.Context, body io.Reader, destRoot, f
 	// Read ONE byte past the limit: io.LimitReader signals exhaustion with
 	// EOF, not an error, so a download stopping exactly at the cap is
 	// indistinguishable from a complete one unless we look for the extra byte.
-	limited := io.LimitReader(newStallReader(ctx, body, stall), maxBytes+1)
+	limited := io.LimitReader(newStallReader(body, stall, cancel), maxBytes+1)
 	written, err := io.Copy(io.MultiWriter(temp, hash, sniff), limited)
 	if err != nil {
 		cleanup()
@@ -321,25 +321,33 @@ func (s *sniffBuffer) Write(p []byte) (int, error) {
 type stallReader struct {
 	reader   io.Reader
 	lastRead atomic.Int64
-	cancel   context.CancelFunc
 	done     chan struct{}
 }
 
-func newStallReader(ctx context.Context, r io.Reader, stall time.Duration) io.Reader {
-	if stall <= 0 {
+// newStallReader wraps r and calls cancel when no bytes arrive for the stall
+// window.
+//
+// cancel MUST be the cancel func of the context the in-flight HTTP request was
+// built with. Deriving a fresh context here instead would produce a watchdog
+// that fires correctly and yet aborts nothing, because the request body would
+// still be governed by the original context — the read would hang on until the
+// client's own timeout.
+func newStallReader(r io.Reader, stall time.Duration, cancel context.CancelFunc) io.Reader {
+	if stall <= 0 || cancel == nil {
 		return r
 	}
-	ctx, cancel := context.WithCancel(ctx)
-	sr := &stallReader{reader: r, cancel: cancel, done: make(chan struct{})}
+	sr := &stallReader{reader: r, done: make(chan struct{})}
 	sr.lastRead.Store(time.Now().UnixNano())
+	tick := stall / 4
+	if tick <= 0 {
+		tick = stall
+	}
 	go func() {
-		ticker := time.NewTicker(stall / 4)
+		ticker := time.NewTicker(tick)
 		defer ticker.Stop()
 		for {
 			select {
 			case <-sr.done:
-				return
-			case <-ctx.Done():
 				return
 			case now := <-ticker.C:
 				if now.UnixNano()-sr.lastRead.Load() > int64(stall) {
