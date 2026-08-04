@@ -35,12 +35,20 @@ type StreamSummary struct {
 
 // WriteActionInfo is one Definition.WriteActions entry.
 type WriteActionInfo struct {
-	Name    string `json:"name"`
-	Kind    string `json:"kind"`
-	Method  string `json:"method"`
-	Path    string `json:"path"`
-	Risk    string `json:"risk"`
-	Confirm string `json:"confirm,omitempty"`
+	Name   string `json:"name"`
+	Kind   string `json:"kind"`
+	Method string `json:"method"`
+	Path   string `json:"path"`
+	Risk   string `json:"risk"`
+	// Batchable mirrors the bundle's "batchable" declaration; nil means
+	// undeclared and therefore batchable. See WriteActionSpec.IsBatchable.
+	Batchable *bool  `json:"batchable,omitempty"`
+	Confirm   string `json:"confirm,omitempty"`
+}
+
+// IsBatchable reports whether the action may run from a bulk reverse ETL plan.
+func (i WriteActionInfo) IsBatchable() bool {
+	return i.Batchable == nil || *i.Batchable
 }
 
 // DefinitionProvider is implemented by engine-backed and Tier-3 connectors in
@@ -78,14 +86,25 @@ func streamSummariesFromManifest(manifest Manifest) []StreamSummary {
 	return out
 }
 
+// cloneBoolPtr copies the pointed-to value so a projection cannot alias — and
+// therefore mutate — the source spec's policy flag.
+func cloneBoolPtr(v *bool) *bool {
+	if v == nil {
+		return nil
+	}
+	copied := *v
+	return &copied
+}
+
 func writeActionInfosFromManifest(manifest Manifest) []WriteActionInfo {
 	out := make([]WriteActionInfo, 0, len(manifest.WriteActions))
 	for _, action := range manifest.WriteActions {
 		out = append(out, WriteActionInfo{
-			Name:   action.Name,
-			Method: action.Method,
-			Path:   action.Path,
-			Risk:   action.Risk,
+			Name:      action.Name,
+			Method:    action.Method,
+			Path:      action.Path,
+			Risk:      action.Risk,
+			Batchable: cloneBoolPtr(action.Batchable),
 		})
 	}
 	return out

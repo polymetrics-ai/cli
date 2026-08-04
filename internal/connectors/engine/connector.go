@@ -247,6 +247,7 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			Path:           a.Path,
 			RedactFields:   append([]string(nil), a.RedactFields...),
 			Risk:           a.Risk,
+			Batchable:      cloneBoolPtr(a.Batchable),
 			Confirm:        a.Confirm,
 		})
 	}
@@ -328,12 +329,13 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 	writeActions := make([]connectors.WriteActionInfo, 0, len(b.Writes))
 	for _, a := range b.Writes {
 		writeActions = append(writeActions, connectors.WriteActionInfo{
-			Name:    a.Name,
-			Kind:    a.Kind,
-			Method:  a.Method,
-			Path:    a.Path,
-			Risk:    a.Risk,
-			Confirm: a.Confirm,
+			Name:      a.Name,
+			Kind:      a.Kind,
+			Method:    a.Method,
+			Path:      a.Path,
+			Risk:      a.Risk,
+			Batchable: cloneBoolPtr(a.Batchable),
+			Confirm:   a.Confirm,
 		})
 	}
 

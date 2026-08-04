@@ -578,6 +578,11 @@ func writeActionSection(manifest Manifest) GuideSection {
 		if action.Risk != "" {
 			lines = append(lines, "  risk: "+action.Risk)
 		}
+		// Only non-batchable actions render a line, so connectors that never
+		// declare the field keep byte-identical help and generated docs.
+		if !action.IsBatchable() {
+			lines = append(lines, "  bulk reverse ETL: refused (non-batchable; run it as its own pm command, one record at a time)")
+		}
 	}
 	return GuideSection{Title: "Reverse ETL Actions", Lines: lines}
 }

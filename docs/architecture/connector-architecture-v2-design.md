@@ -297,6 +297,22 @@ Write semantics baked into the format:
   `create_pull_request` + reviewer follow-up) use a **write hook** (§B.7).
 - **`confirm: "destructive"`** feeds the existing plan → preview → approve flow with per-action
   risk tiering.
+- **`batchable: false`** gates an action out of SourceTable-driven bulk reverse ETL. It defaults to
+  `true`, so an action that omits it is unaffected. `PlanReverseETL` refuses a declared
+  non-batchable action before it stores a plan or mints an approval token, and `RunReverseETL`
+  re-checks the live manifest before executing a stored bulk plan, so a hand-edited `state.json`
+  cannot launder one through. The action stays fully executable as its own
+  `pm <connector> <command>` — that single-record path is what the declaration exists to preserve.
+
+  Use it for operations that must never be fanned out over N records under one approval:
+  moderation actions, irreversible sends, rate-sensitive endpoints, and anything governed by a
+  provider rule about human intent (for example an API that permits proxying a human's action
+  one-for-one but forbids a bot amplifying it).
+
+  `batchable` and `confirm` are **orthogonal**. `confirm` asks how severe one call is; `batchable`
+  asks whether the action may be fanned out at all. A vote is non-batchable but not destructive; a
+  bulk delete is destructive but legitimately batchable. An action may declare either, both, or
+  neither.
 
 ## B. The declarative runtime engine
 
