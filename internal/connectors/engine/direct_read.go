@@ -37,12 +37,19 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	if op.Kind != "rest_read" || op.REST == nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires rest_read operation, got %q", op.Kind)
+	// provider_search shares this executor deliberately: its response bounding,
+	// clamping, redaction and output-policy handling are the same as any other
+	// bounded read. What differs is the stricter front half, which is enforced at
+	// bundle load (validateProviderSearchSemantics), not here.
+	if (op.Kind != "rest_read" && op.Kind != "provider_search") || op.REST == nil {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
 	}
 	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 	if method != http.MethodGet && method != http.MethodPost {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
+	}
+	if op.Kind == "provider_search" && method != http.MethodPost {
+		return connectors.DirectReadResult{}, fmt.Errorf("provider search requires POST, got %s", method)
 	}
 	if isAbsoluteHTTPURL(op.REST.Path) {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
