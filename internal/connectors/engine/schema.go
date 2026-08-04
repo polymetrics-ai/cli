@@ -26,6 +26,9 @@ type schemaNode struct {
 	required             []string
 	properties           map[string]*schemaNode
 	items                *schemaNode
+	allOf                []*schemaNode
+	anyOf                []*schemaNode
+	oneOf                []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
 	minProperties        int
@@ -78,6 +81,9 @@ var structuralKeywords = map[string]bool{
 	"required":             true,
 	"properties":           true,
 	"items":                true,
+	"allOf":                true,
+	"anyOf":                true,
+	"oneOf":                true,
 	"enum":                 true,
 	"pattern":              true,
 	"minProperties":        true,
@@ -166,6 +172,17 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		n.items = child
 	}
 
+	var err error
+	if n.allOf, err = compileSchemaBranches(m, "allOf"); err != nil {
+		return nil, err
+	}
+	if n.anyOf, err = compileSchemaBranches(m, "anyOf"); err != nil {
+		return nil, err
+	}
+	if n.oneOf, err = compileSchemaBranches(m, "oneOf"); err != nil {
+		return nil, err
+	}
+
 	if raw, ok := m["enum"]; ok {
 		var vals []any
 		dec := json.NewDecoder(strings.NewReader(string(raw)))
@@ -246,6 +263,29 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 	}
 
 	return n, nil
+}
+
+func compileSchemaBranches(m map[string]json.RawMessage, keyword string) ([]*schemaNode, error) {
+	raw, ok := m[keyword]
+	if !ok {
+		return nil, nil
+	}
+	var branches []map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &branches); err != nil {
+		return nil, fmt.Errorf("compile schema: %s: %w", keyword, err)
+	}
+	if len(branches) == 0 {
+		return nil, fmt.Errorf("compile schema: %s must be non-empty", keyword)
+	}
+	compiled := make([]*schemaNode, 0, len(branches))
+	for i, branch := range branches {
+		node, err := compileNode(branch)
+		if err != nil {
+			return nil, fmt.Errorf("compile schema: %s[%d]: %w", keyword, i, err)
+		}
+		compiled = append(compiled, node)
+	}
+	return compiled, nil
 }
 
 // compileArrayCardinality compiles the draft-07 minItems/maxItems pair.
@@ -365,6 +405,35 @@ func (n *schemaNode) validate(v any, path string) error {
 					return err
 				}
 			}
+		}
+	}
+
+	for i, branch := range n.allOf {
+		if err := branch.validate(v, path); err != nil {
+			return fmt.Errorf("%s: allOf[%d]: %w", displayPath(path), i, err)
+		}
+	}
+	if len(n.anyOf) > 0 {
+		matched := false
+		for _, branch := range n.anyOf {
+			if branch.validate(v, path) == nil {
+				matched = true
+				break
+			}
+		}
+		if !matched {
+			return fmt.Errorf("%s: value does not match anyOf", displayPath(path))
+		}
+	}
+	if len(n.oneOf) > 0 {
+		matches := 0
+		for _, branch := range n.oneOf {
+			if branch.validate(v, path) == nil {
+				matches++
+			}
+		}
+		if matches != 1 {
+			return fmt.Errorf("%s: value matches %d oneOf branches", displayPath(path), matches)
 		}
 	}
 

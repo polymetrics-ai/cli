@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/url"
 	stdpath "path"
-	"regexp"
 	"strings"
 	"time"
 
@@ -26,8 +25,6 @@ const (
 	directReadPolicyJSONRedacted                   = "json_redacted"
 	directReadPolicyClinicalJSONRedacted           = "clinical_json_redacted"
 )
-
-var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
 
 func OperationDirectRead(ctx context.Context, b Bundle, req connectors.OperationDirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
@@ -356,7 +353,11 @@ func validateDirectReadOutputPolicy(policy, endpointPath string, pathParams map[
 }
 
 func repositoryDirectReadPathValue(policy, endpointPath string, pathParams map[string]string, cfg connectors.RuntimeConfig) (string, error) {
-	if !surfacePathHasVariable(endpointPath, "path") {
+	hasPath, err := surfacePathHasVariable(endpointPath, "path")
+	if err != nil {
+		return "", err
+	}
+	if !hasPath {
 		return "", fmt.Errorf("direct read output policy %q requires endpoint path variable {path}", policy)
 	}
 	if pathParams != nil && pathParams["path"] != "" {
@@ -368,13 +369,17 @@ func repositoryDirectReadPathValue(policy, endpointPath string, pathParams map[s
 	return "", nil
 }
 
-func surfacePathHasVariable(template, name string) bool {
-	for _, match := range surfacePathVarPattern.FindAllStringSubmatch(template, -1) {
-		if len(match) == 2 && match[1] == name {
-			return true
+func surfacePathHasVariable(template, name string) (bool, error) {
+	variables, err := parsePathTemplate(template)
+	if err != nil {
+		return false, fmt.Errorf("invalid direct read path template %q: %w", template, err)
+	}
+	for _, variable := range variables {
+		if variable.Name == name {
+			return true, nil
 		}
 	}
-	return false
+	return false, nil
 }
 
 func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
@@ -611,34 +616,32 @@ func resolveSurfaceEndpointPath(template string, cfg connectors.RuntimeConfig, p
 	if isAbsoluteHTTPURL(template) {
 		return "", fmt.Errorf("direct read endpoint must be connector-relative, got absolute URL")
 	}
-	var firstErr error
-	resolved := surfacePathVarPattern.ReplaceAllStringFunc(template, func(match string) string {
-		if firstErr != nil {
-			return ""
-		}
-		name := strings.Trim(match, "{}")
+	variables, err := parsePathTemplate(template)
+	if err != nil {
+		return "", fmt.Errorf("invalid direct read path template %q: %w", template, err)
+	}
+	var resolved strings.Builder
+	resolved.Grow(len(template))
+	last := 0
+	for _, variable := range variables {
+		resolved.WriteString(template[last:variable.Start])
+		name := variable.Name
 		value, ok := pathParams[name]
 		if !ok || value == "" {
 			value, ok = cfg.Config[name]
 		}
 		if !ok || value == "" {
-			firstErr = fmt.Errorf("missing path variable %q", name)
-			return ""
+			return "", fmt.Errorf("missing path variable %q", name)
 		}
 		encoded, err := encodeSurfacePathValue(name, value)
 		if err != nil {
-			firstErr = err
-			return ""
+			return "", err
 		}
-		return encoded
-	})
-	if firstErr != nil {
-		return "", firstErr
+		resolved.WriteString(encoded)
+		last = variable.End
 	}
-	if strings.Contains(resolved, "{") || strings.Contains(resolved, "}") {
-		return "", fmt.Errorf("unresolved path template %q", template)
-	}
-	return resolved, nil
+	resolved.WriteString(template[last:])
+	return resolved.String(), nil
 }
 
 func encodeSurfacePathValue(name, value string) (string, error) {

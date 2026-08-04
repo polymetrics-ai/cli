@@ -136,6 +136,37 @@ func TestDirectReadMissingPathVariableFailsBeforeNetwork(t *testing.T) {
 	}
 }
 
+func TestResolveSurfaceEndpointPathSupportsHyphenatedVariable(t *testing.T) {
+	got, err := resolveSurfaceEndpointPath(
+		"/apps/{appId}/subscriptions/{subscription-id}",
+		connectors.RuntimeConfig{Config: map[string]string{"appId": "app123"}},
+		map[string]string{"subscription-id": "subscription123"},
+	)
+	if err != nil {
+		t.Fatalf("resolveSurfaceEndpointPath: %v", err)
+	}
+	if got != "/apps/app123/subscriptions/subscription123" {
+		t.Fatalf("resolved path = %q", got)
+	}
+}
+
+func TestResolveSurfaceEndpointPathRejectsMalformedTemplates(t *testing.T) {
+	tests := []string{
+		"/widgets/{}",
+		"/widgets/{bad?name}",
+		"/widgets/{missing",
+		"/widgets/unexpected}",
+	}
+	for _, template := range tests {
+		t.Run(template, func(t *testing.T) {
+			_, err := resolveSurfaceEndpointPath(template, connectors.RuntimeConfig{}, nil)
+			if err == nil {
+				t.Fatalf("resolveSurfaceEndpointPath(%q) error = nil", template)
+			}
+		})
+	}
+}
+
 func TestDirectReadRejectsPathTraversalBeforeNetwork(t *testing.T) {
 	var hits int
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {

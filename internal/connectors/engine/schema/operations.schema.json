@@ -51,6 +51,10 @@
               "source_location": { "type": "string" },
               "sibling_operation": { "type": "string" },
               "write_action": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+              "write_field_map": {
+                "type": "object",
+                "additionalProperties": true
+              },
               "fields": {
                 "type": "array",
                 "items": {

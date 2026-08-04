@@ -231,6 +231,9 @@ not a full override by default.
       "source_url": "https://example.invalid/openapi.json",
       "source_location": "paths./widgets.post.description fenced request example",
       "write_action": "create_widget",
+      "write_field_map": {
+        "body.name": "body.name"
+      },
       "fields": [
         {
           "path": "body.name",
@@ -251,10 +254,36 @@ not a full override by default.
   `operations.json` row and set `request_contract.write_action` to the exact connector-local action
   name. Every write action must have exactly one such forward link; dangling links and duplicate
   claims are load errors. Method/path matching is not a substitute because templates can differ and
-  multiple operations can share the same method and path.
+  multiple operations can share the same method and path. The same operation-side contract must set
+  `write_field_map` for every effective write input. Keys use the linked write action's input name:
+  `path.<path_fields entry>`, `query.<outgoing query key>`, or `body.<outgoing body field>`; values
+  name the cited `request_contract.fields[].path` on the retained operation. The loader derives the
+  complete input set for each supported body type and rejects missing or stale mappings, mappings
+  across namespaces, and mappings to uncited request fields. This explicit map is required even
+  when names happen to match, so a promotion cannot silently pair an empty operation contract with
+  a body-bearing write action. For path inputs, every `record.*` expression in the write template
+  must have an exact `path_fields` entry and every declared path field must be used; the loader
+  rejects either direction of drift before deriving the map.
+
+  REST path placeholders use the shared validation/runtime grammar
+  `[A-Za-z_][A-Za-z0-9_.-]*`. The loader rejects unmatched braces and unsupported placeholder
+  characters, while runtime substitution uses the same parsed placeholders; names such as
+  `{subscription-id}` therefore cannot disappear from citation or flag validation.
+
+  For `rest.body_schema`, the loader resolves and inlines connector-local JSON Pointer `$ref`
+  values, preserves executable `allOf`, `anyOf`, and `oneOf` validation, and unions fields exposed
+  by those branches before checking citations. External, dangling, cyclic, or non-object
+  references fail loading. A root schema that still exposes no named request fields also fails
+  instead of being treated as an empty contract; use `body: "none"` only when the documentation
+  truly declares no body.
 
   `docs/migration/request-contract-coverage.json` is the machine-readable rollout inventory, sorted
-  by each connector's remaining citation/link gap count and then connector slug.
+  by each connector's remaining citation/link gap count and then connector slug. Its
+  `source_of_truth_api_docs_reference` is normally a URL string. When repository research finds no
+  authoritative public reference, it is an object with
+  `state: "no_discoverable_public_docs"` and a required `research_note`; free-form placeholder text
+  is not a valid state. The top-level schema-resolution and path-template sections record measured
+  corpus blockers that must be resolved during connector backfill.
 
   A genuinely empty documented body **MUST** use `"body": "none"` in an `operations.json` REST
   block; the `writes.json` spelling remains `"body_type": "none"`. `"body": {}` means an object

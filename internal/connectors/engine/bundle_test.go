@@ -819,7 +819,8 @@ func TestBundleLoadRequiresRequiredQueryCitations(t *testing.T) {
 }
 
 func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
-	contract := func(id, writeAction string) string {
+	const validFieldMap = `"path.id":"path.widget-id","query.notify":"query.notify","body.name":"body.name"`
+	contract := func(id, writeAction, fieldMap string) string {
 		return fmt.Sprintf(`{
 			"id": %q,
 			"kind": "rest_write",
@@ -833,34 +834,57 @@ func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
 				"source_url": "https://example.invalid/widgets#create",
 				"source_location": "Create widget request",
 				"write_action": %q,
-				"fields": []
+				"write_field_map": {%s},
+				"fields": [
+					{"path":"path.widget-id","source_url":"https://example.invalid/widgets#create","source_location":"widget-id path parameter"},
+					{"path":"query.notify","source_url":"https://example.invalid/widgets#create","source_location":"notify query parameter"},
+					{"path":"body.name","source_url":"https://example.invalid/widgets#create","source_location":"name body property"}
+				]
 			},
-			"rest": {"method": "POST", "path": "/widgets", "body": "none"}
-		}`, id, writeAction)
+			"rest": {
+				"method": "POST",
+				"path": "/widgets/{widget-id}",
+				"query": {"notify":"true"},
+				"body_schema": {"type":"object","properties":{"name":{"type":"string"}}}
+			}
+		}`, id, writeAction, fieldMap)
 	}
 	tests := []struct {
 		name       string
 		operations string
 		want       string
+		pathFields string
 	}{
-		{name: "valid", operations: contract("acme.widgets.create", "create_widget")},
+		{name: "valid", operations: contract("acme.widgets.create", "create_widget", validFieldMap)},
 		{name: "unclaimed", operations: "", want: `writes.json action "create_widget" must be claimed`},
-		{name: "dangling", operations: contract("acme.widgets.create", "missing_widget"), want: `does not name a writes.json action`},
-		{name: "duplicate", operations: contract("acme.widgets.create", "create_widget") + "," + contract("acme.widgets.create_again", "create_widget"), want: `both claim writes.json action "create_widget"`},
+		{name: "dangling", operations: contract("acme.widgets.create", "missing_widget", validFieldMap), want: `does not name a writes.json action`},
+		{name: "duplicate", operations: contract("acme.widgets.create", "create_widget", validFieldMap) + "," + contract("acme.widgets.create_again", "create_widget", validFieldMap), want: `both claim writes.json action "create_widget"`},
+		{name: "missing path mapping", operations: contract("acme.widgets.create", "create_widget", `"query.notify":"query.notify","body.name":"body.name"`), want: `missing write_field_map entry for "path.id"`},
+		{name: "uncited mapping target", operations: contract("acme.widgets.create", "create_widget", `"path.id":"path.widget-id","query.notify":"query.notify","body.name":"body.unlisted"`), want: `maps "body.name" to uncited request field "body.unlisted"`},
+		{name: "cross namespace mapping", operations: contract("acme.widgets.create", "create_widget", `"path.id":"body.name","query.notify":"query.notify","body.name":"body.name"`), want: `maps "path.id" across namespaces to "body.name"`},
+		{name: "stale mapping", operations: contract("acme.widgets.create", "create_widget", validFieldMap+`,"body.extra":"body.name"`), want: `write_field_map entry "body.extra" does not match a write input`},
+		{name: "undeclared path input", operations: contract("acme.widgets.create", "create_widget", validFieldMap), want: `path template record field "id" is missing from path_fields`, pathFields: `[]`},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			pathFields := tt.pathFields
+			if pathFields == "" {
+				pathFields = `["id"]`
+			}
 			fsys := fullValidBundleFS("acme")
-			fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+			fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
 				"actions": [{
 					"name": "create_widget",
 					"kind": "create",
 					"method": "POST",
-					"path": "/widgets",
-					"record_schema": {"type":"object","required":["name"],"properties":{"name":{"type":"string"}}},
+					"path": "/widgets/{{ record.id }}",
+					"path_fields": %s,
+					"query": {"notify":"{{ record.notify }}"},
+					"body_fields": ["name"],
+					"record_schema": {"type":"object","required":["id","notify","name"],"properties":{"id":{"type":"string"},"notify":{"type":"string"},"name":{"type":"string"}}},
 					"risk": "creates a widget"
 				}]
-			}`)}
+			}`, pathFields))}
 			if tt.operations != "" {
 				fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{"operations":[` + tt.operations + `]}`)}
 			}
@@ -872,12 +896,132 @@ func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
 				if got := bundle.Operations[0].RequestContract.WriteAction; got != "create_widget" {
 					t.Fatalf("write_action = %q, want create_widget", got)
 				}
+				if got := bundle.Operations[0].RequestContract.WriteFieldMap["path.id"]; got != "path.widget-id" {
+					t.Fatalf("write_field_map[path.id] = %q, want path.widget-id", got)
+				}
 				return
 			}
 			if err == nil || !strings.Contains(err.Error(), tt.want) {
 				t.Fatalf("Load error = %v, want %q", err, tt.want)
 			}
 		})
+	}
+}
+
+func TestBundleLoadResolvesRequestBodySchemaReferencesAndComposition(t *testing.T) {
+	fsys := operationsBundleFS(t, `{
+		"operations": [{
+			"id": "acme.widgets.create",
+			"kind": "rest_write",
+			"summary": "Create widget",
+			"risk": "medium",
+			"approval": "required",
+			"output_policy": "json_redacted",
+			"mutation_class": "create",
+			"request_contract": {
+				"source_tier": 1,
+				"source_url": "https://example.invalid/openapi.json",
+				"source_location": "paths./widgets.post.requestBody",
+				"fields": [
+					{"path":"body.name","source_url":"https://example.invalid/openapi.json","source_location":"Widget.properties.name"},
+					{"path":"body.metadata","source_url":"https://example.invalid/openapi.json","source_location":"Widget.properties.metadata"},
+					{"path":"body.metadata.label","source_url":"https://example.invalid/openapi.json","source_location":"Metadata.properties.label"}
+				]
+			},
+			"rest": {
+				"method": "POST",
+				"path": "/widgets",
+				"body_schema": {
+					"$defs": {
+						"Widget": {"allOf":[
+							{"type":"object","properties":{"name":{"type":"string"}}},
+							{"type":"object","properties":{"metadata":{"$ref":"#/$defs/Metadata"}}}
+						]},
+						"Metadata": {"type":"object","properties":{"label":{"type":"string"}}}
+					},
+					"$ref": "#/$defs/Widget"
+				}
+			}
+		}]
+	}`)
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if strings.Contains(string(bundle.Operations[0].REST.BodySchema), `$ref`) {
+		t.Fatalf("inlined body_schema still contains $ref: %s", bundle.Operations[0].REST.BodySchema)
+	}
+	schema, err := CompileSchema(bundle.Operations[0].REST.BodySchema)
+	if err != nil {
+		t.Fatalf("CompileSchema(inlined body_schema): %v", err)
+	}
+	if err := schema.Validate(map[string]any{"name": "widget", "metadata": map[string]any{"label": "primary"}}); err != nil {
+		t.Fatalf("Validate(inlined body_schema): %v", err)
+	}
+	if err := schema.Validate(map[string]any{"name": 42}); err == nil {
+		t.Fatal("Validate(inlined body_schema) error = nil, want allOf property type error")
+	}
+}
+
+func TestBundleLoadRejectsUnresolvedOrUnenumerableRequestBodySchema(t *testing.T) {
+	tests := []struct {
+		name   string
+		schema string
+		want   string
+	}{
+		{name: "unresolved local reference", schema: `{"$ref":"#/components/schemas/Missing"}`, want: `cannot resolve local reference`},
+		{name: "external reference", schema: `{"$ref":"https://example.invalid/openapi.json#/components/schemas/Widget"}`, want: `external reference`},
+		{name: "root array", schema: `{"type":"array","items":{"type":"string"}}`, want: `root arrays cannot be represented`},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			operations := fmt.Sprintf(`{
+				"operations": [{
+					"id":"acme.widgets.create",
+					"kind":"rest_write",
+					"summary":"Create widget",
+					"risk":"medium",
+					"approval":"required",
+					"output_policy":"json_redacted",
+					"mutation_class":"create",
+					"request_contract":{"source_tier":1,"source_url":"https://example.invalid/openapi.json","source_location":"requestBody","fields":[]},
+					"rest":{"method":"POST","path":"/widgets","body_schema":%s}
+				}]
+			}`, tt.schema)
+			_, err := Load(operationsBundleFS(t, operations), "acme")
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Load error = %v, want %q", err, tt.want)
+			}
+		})
+	}
+}
+
+func TestBundleLoadValidatesFullRESTPathParameterGrammar(t *testing.T) {
+	valid := `{
+		"operations": [{
+			"id":"acme.subscriptions.get",
+			"kind":"rest_read",
+			"summary":"Get subscription",
+			"risk":"low",
+			"approval":"none",
+			"output_policy":"json_redacted",
+			"request_contract":{
+				"source_tier":3,
+				"source_url":"https://example.invalid/subscriptions#get",
+				"source_location":"Get subscription",
+				"fields":[{"path":"path.subscription-id","source_url":"https://example.invalid/subscriptions#get","source_location":"subscription-id path parameter"}]
+			},
+			"rest":{"method":"GET","path":"/subscriptions/{subscription-id}","max_bytes":1024}
+		}]
+	}`
+	if _, err := Load(operationsBundleFS(t, valid), "acme"); err != nil {
+		t.Fatalf("Load hyphenated path variable: %v", err)
+	}
+
+	invalid := strings.Replace(valid, `{subscription-id}`, `{subscription?id}`, 1)
+	_, err := Load(operationsBundleFS(t, invalid), "acme")
+	if err == nil || !strings.Contains(err.Error(), "invalid path variable") {
+		t.Fatalf("Load malformed path variable error = %v, want invalid path variable", err)
 	}
 }
 

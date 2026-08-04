@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "sort": "coverage_gap_count_ascending_then_connector",
   "totals": {
     "connector_count": 550,
@@ -7,6 +7,41 @@
     "unclaimed_write_action_count": 6927,
     "rest_operation_count": 4300,
     "rest_operation_without_request_contract_count": 4300
+  },
+  "request_schema_resolution": {
+    "connector": "hubspot",
+    "reference_only_body_schema_count": 1552,
+    "locally_resolved_count": 0,
+    "unresolved_count": 1552,
+    "unresolved_reason": "Each schema references an absent #/components/schemas target; the connector-local operations.json contains no components object."
+  },
+  "path_template_compatibility": {
+    "connector": "hubspot",
+    "parameter": "subscription-id",
+    "affected_operation_count": 4,
+    "resolution": "supported_by_shared_path_template_parser",
+    "operations": [
+      {
+        "operation_id": "hubspot.delete-_meta_network-origins_2026-09-beta_ip-ranges_webhook-subscriptions_app_id_subscription-id_meta_network-origins_2026-09-beta_ip-ranges",
+        "method": "DELETE",
+        "path": "/meta/network-origins/2026-09-beta/ip-ranges/webhook-subscriptions/{appId}/{subscription-id}"
+      },
+      {
+        "operation_id": "hubspot.post-_meta_network-origins_2026-09-beta_ip-ranges_webhook-subscriptions_app_id_subscription-id_test_meta_network-origins_2026-09-beta_ip-ran",
+        "method": "POST",
+        "path": "/meta/network-origins/2026-09-beta/ip-ranges/webhook-subscriptions/{appId}/{subscription-id}/test"
+      },
+      {
+        "operation_id": "hubspot.delete-_meta_network-origins_2026-09_ip-ranges_webhook-subscriptions_app_id_subscription-id_meta_network-origins_2026-09_ip-ranges_webhook-s",
+        "method": "DELETE",
+        "path": "/meta/network-origins/2026-09/ip-ranges/webhook-subscriptions/{appId}/{subscription-id}"
+      },
+      {
+        "operation_id": "hubspot.post-_meta_network-origins_2026-09_ip-ranges_webhook-subscriptions_app_id_subscription-id_test_meta_network-origins_2026-09_ip-ranges_webhoo",
+        "method": "POST",
+        "path": "/meta/network-origins/2026-09/ip-ranges/webhook-subscriptions/{appId}/{subscription-id}/test"
+      }
+    ]
   },
   "connectors": [
     {
@@ -927,7 +962,10 @@
       "rest_operation_count": 0,
       "rest_operation_without_request_contract_count": 0,
       "coverage_gap_count": 0,
-      "source_of_truth_api_docs_reference": "manual intervention needed"
+      "source_of_truth_api_docs_reference": {
+        "state": "no_discoverable_public_docs",
+        "research_note": "Connector metadata and api_surface.json identify a customer-derived Hellobaton API with no public API reference URL; legacy connector behavior is the only repository evidence."
+      }
     },
     {
       "connector": "help-scout",
@@ -997,7 +1035,10 @@
       "rest_operation_count": 0,
       "rest_operation_without_request_contract_count": 0,
       "coverage_gap_count": 0,
-      "source_of_truth_api_docs_reference": "manual intervention needed"
+      "source_of_truth_api_docs_reference": {
+        "state": "no_discoverable_public_docs",
+        "research_note": "Connector metadata and api_surface.json record no public Huntr organization API documentation URL; legacy connector behavior is the only repository evidence."
+      }
     },
     {
       "connector": "imagga",
@@ -2147,7 +2188,10 @@
       "rest_operation_count": 0,
       "rest_operation_without_request_contract_count": 0,
       "coverage_gap_count": 0,
-      "source_of_truth_api_docs_reference": "manual intervention needed"
+      "source_of_truth_api_docs_reference": {
+        "state": "no_discoverable_public_docs",
+        "research_note": "Connector metadata and api_surface.json record no authoritative public Pocket v3 reference for this legacy hook surface; legacy connector behavior is the only repository evidence."
+      }
     },
     {
       "connector": "pokeapi",
@@ -3057,7 +3101,10 @@
       "rest_operation_count": 0,
       "rest_operation_without_request_contract_count": 0,
       "coverage_gap_count": 0,
-      "source_of_truth_api_docs_reference": "manual intervention needed"
+      "source_of_truth_api_docs_reference": {
+        "state": "no_discoverable_public_docs",
+        "research_note": "Connector metadata and api_surface.json record an unreachable Workday REST documentation assignment; the conservative legacy HCM v1 implementation is the only repository evidence."
+      }
     },
     {
       "connector": "wrike",
