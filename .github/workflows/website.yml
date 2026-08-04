@@ -75,19 +75,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --reporter=silent
 
+      # Also checked by .github/workflows/website-data.yml, which carries the
+      # wider connector-bundle trigger. Kept here too because `image` and
+      # `deploy` chain off this job, so dropping it would let stale generated
+      # data deploy. The check is repo-wide rather than a hand-listed file set:
+      # an enumerated list goes stale the moment a generator gains an output,
+      # which is how content/docs/github-cli-surface.mdx and
+      # data/connectors.generated.json both ended up unchecked.
       - name: Verify generated website data
         run: |
           pnpm run gen:website-data
-          changed="$(git status --short -- \
-            content/docs/github-cli-surface.mdx \
-            lib/connectors.catalog.data.generated.json \
-            lib/connectors.catalog.generated.ts \
-            lib/connectors.generated.ts \
-            lib/connectors.enrichment.generated.ts \
-            lib/docs.generated.ts \
-            public/connectors/icons)"
+          changed="$(git status --porcelain)"
           if [ -n "$changed" ]; then
+            printf 'generated website data is stale; run `cd website && pnpm run gen:website-data` and commit the result\n'
             printf '%s\n' "$changed"
+            git diff
             exit 1
           fi
 

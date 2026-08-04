@@ -583,6 +583,14 @@ func syncModeSection(manifest Manifest) GuideSection {
 	return GuideSection{Title: "Sync Modes", Lines: lines}
 }
 
+// writeActionSection renders one line per required/optional field set. It
+// cannot express an either/or constraint ("A, or B together with C"), because
+// Manifest.RequiredFields is a flat list. amazon-sqs set_queue_attributes and
+// tag_queue have exactly that constraint, so their committed MANUAL.md/SKILL.md
+// carry hand-written prose the generator cannot reproduce, which is why
+// `pm docs generate --dir docs/cli` is not idempotent for that connector.
+// Leave those two files alone until the renderer learns required-field groups:
+// https://github.com/polymetrics-ai/cli/issues/3710
 func writeActionSection(manifest Manifest) GuideSection {
 	if len(manifest.WriteActions) == 0 {
 		return GuideSection{}
