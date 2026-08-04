@@ -1,9 +1,9 @@
 {
   "phase": "google-calendar-parity-wave03",
   "branch": "fm/cli-google-calendar-parity-resume-r1",
-  "status": "in_progress",
-  "verificationPassed": false,
-  "verificationNotes": "PR #3554 was rebased onto current main. Its old green evidence is superseded; current connector validation reproduces three expected required-body-flag findings.",
+  "status": "complete_pending_no_mistakes",
+  "verificationPassed": true,
+  "verificationNotes": "Recovered PR #3554 is rebased on current main and the focused connector, conformance, CLI, generated-docs, website, lint, smoke, boundary, and release-workflow gates passed. The only runtime limitation is correctly represented as 26 rest_write-blocked ledger rows.",
   "orchestrationDecisions": [
     {
       "cycle": "recovery_and_plan",
@@ -14,6 +14,11 @@
       "cycle": "tdd_gate",
       "decision": "local_critical_path",
       "reason": "The three current connector validation findings provide red evidence before connector-definition edits."
+    },
+    {
+      "cycle": "fixture_conformance_recovery",
+      "decision": "reapply_preserved_fixture_sentinel",
+      "reason": "Current conformance omitted the Google hook's fixture sentinel and safely failed against synthetic OAuth values; the preserved PR's targeted ProjectDir marker restores no-network replay behavior."
     }
   ],
   "counts": {

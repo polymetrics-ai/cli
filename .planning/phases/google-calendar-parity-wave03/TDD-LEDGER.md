@@ -13,6 +13,7 @@ The failure was reproduced after rebasing PR #3554 onto `origin/main`; the prese
 | Slice | Minimum production change | Focused proof |
 | --- | --- | --- |
 | Direct read | Made `--calendar`, `--time-min`, and `--time-max` required. | `connectorgen validate` and `surface-sync --check` pass; built help marks all three required. |
+| Fixture auth | Focused conformance initially failed when the fixture runtime omitted the preserved hook's sentinel and attempted an OAuth token exchange using synthetic values. | Restore `ProjectDir=__polymetrics_conformance_fixture__` in shared fixture configuration, then rerun all conformance. |
 | Mutation truthfulness | Removed 26 unavailable write actions and replaced each `covered_by.write` with a blocked operation-ledger classifier. | Bundle validation passes; focused conformance and runtime-preflight gates remain in the verification checklist. |
 | Runtime activation | Restored the recovered engine-bundle promotion so the legacy native connector cannot shadow the CLI surface. | `bundleregistry` regression test plus built `pm google-calendar` and `freebusy query --help` pass. |
 | Citation research | Added provider field evidence without inventing a shared machine citation schema that is absent from current main. | `REQUEST-FIELD-RESEARCH.md` records 25/25 declared field uses and 38/38 operation-level sources. |

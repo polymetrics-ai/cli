@@ -161,7 +161,7 @@ func withReplayURL(b engine.Bundle, baseURL string) engine.Bundle {
 // from real credentials) per THREAT-MODEL §4 — conformance never touches
 // live secrets.
 func runtimeConfigForEngine(b engine.Bundle) connectors.RuntimeConfig {
-	cfg := connectors.RuntimeConfig{Config: map[string]string{}, Secrets: map[string]string{}}
+	cfg := connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__", Config: map[string]string{}, Secrets: map[string]string{}}
 	if b.Spec == nil {
 		return cfg
 	}
