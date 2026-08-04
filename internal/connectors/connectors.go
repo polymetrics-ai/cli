@@ -75,11 +75,35 @@ type Catalog struct {
 	Streams   []Stream `json:"streams"`
 }
 
+// SecretStore writes a single rotated secret back to the caller's credential
+// store. It exists for provider-rotated credentials — an OAuth2 refresh token
+// that the provider replaces on every exchange and invalidates the old value
+// of, so dropping the new one silently breaks the connector on its next run.
+//
+// It is deliberately narrow. There is no Get (the current values already
+// arrive in RuntimeConfig.Secrets), no Delete, and no enumeration: nothing here
+// gives a connector a way to read secrets it was not given, or to reach a
+// credential other than its own.
+//
+// Implementations must persist encrypted and locally — the CLI's is backed by
+// internal/vault (AES-256-GCM under .polymetrics/vault) — must be safe for
+// concurrent use, and must never place a secret value in an error string.
+//
+// A nil SecretStore is valid and means "this caller has no credential store".
+// Rotation is then held in memory for the process lifetime; it is never
+// downgraded to a plaintext write.
+type SecretStore interface {
+	PutSecret(ctx context.Context, key, value string) error
+}
+
 type RuntimeConfig struct {
 	ProjectDir            string            `json:"-"`
 	Config                map[string]string `json:"config"`
 	Secrets               map[string]string `json:"-"`
 	ApprovedPayloadSHA256 map[string]string `json:"-"`
+	// SecretStore, when set, persists a provider-rotated secret back to the
+	// caller's encrypted credential store. Optional; see SecretStore.
+	SecretStore SecretStore `json:"-"`
 }
 
 // PayloadApprovalKey identifies a file field within an approved write batch.
