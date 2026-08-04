@@ -1171,7 +1171,7 @@ func validateProviderSearchSemantics(i int, op OperationSpec) error {
 // by construction rather than by convention: an unbounded list cannot be
 // declared, so it cannot reach a provider.
 func requireBoundedArrays(i int, id string, node map[string]any, path string) error {
-	if typeOf, ok := node["type"].(string); ok && typeOf == "array" {
+	if isArrayType(node) {
 		if _, ok := node["maxItems"]; !ok {
 			return fmt.Errorf("operation %d (%q) provider_search %s declares an array without maxItems; every list must be bounded", i, id, path)
 		}
@@ -1200,6 +1200,32 @@ func requireBoundedArrays(i int, id string, node map[string]any, path string) er
 		}
 	}
 	return nil
+}
+
+// isArrayType reports whether a schema node is an array. It recognises the
+// single string form ("array") as well as the multi-form type list that
+// compileTypes accepts (e.g. ["array","null"]), and an items-bearing node with
+// no string type at all. The bound must hold regardless of how the dialect lets
+// a list be declared, so ["array","null"] cannot smuggle an unbounded list in.
+func isArrayType(node map[string]any) bool {
+	switch typeOf := node["type"].(type) {
+	case string:
+		if typeOf == "array" {
+			return true
+		}
+		return false
+	case []any:
+		for _, t := range typeOf {
+			if s, ok := t.(string); ok && s == "array" {
+				return true
+			}
+		}
+		return false
+	}
+	if _, ok := node["items"]; ok {
+		return true
+	}
+	return false
 }
 
 // validateMultipartMediaTypes enforces the media-type declaration on one part.
