@@ -41,22 +41,26 @@ Connector implementation scope (fill when applicable):
 - no-mistakes handling: connector PR validation must stop/ask for foundation split instead of auto-absorbing generic shared changes
 
 Required skills:
-- `gsd-programming-loop` for implementation or behavior-changing work through `/gsd-programming-loop` in Pi or `scripts/gsd prompt programming-loop ...` from shell
+- the installed GSD sequence for implementation or behavior-changing work: `discuss-phase`,
+  `plan-phase --tdd`, `execute-phase`, `verify-work` with gap closure, then `code-review`
 - `golang-how-to` for Go work, plus task-specific Go skills from `required-skills-routing.md`
 - design skills such as `frontend-design`, `web-design-guidelines`, and `vercel-react-best-practices` for website/docs UI work
 - `<skill capability or local skill name>`
 
-Primary agent:
-`.agents/<functional-area>/agents/<type>/<agent>.agent.yaml`
+Canonical worker:
+- role: `pm-delivery-worker` or inheriting `pm-connector-worker`
+- source: `.agents/agentic-delivery/canonical/delivery-contract.json`
+- delegation: none
 
 Parent issue:
 - `<parent issue URL or "None">`
 
-Orchestration:
-- spawned by: `<parent issue orchestrator or "None">`
+Parent job ownership:
+- active owner: `<canonical worker or "not applicable">`
 - state ledger: `<issue comment, PR body section, file path, or "None">`
-- worker handoff template: `.agents/agentic-delivery/contracts/worker-handoff-template.md`
-- merge owner: `<parent issue orchestrator | assigned coordinator | not applicable>`
+- durable handoff: `<issues, branches, PRs, and GSD artifacts>`
+- sub-PR integration owner: `<canonical worker | not applicable>`
+- parent merge owner: `<captain | not applicable>`
 - Automated review coverage route: `<sub_pr | parent_pr_fallback | copilot_backup | blocked | not applicable>`
 - Copilot fallback route: `<copilot_backup | human | none | not applicable>`
 
@@ -75,9 +79,9 @@ PR body must include one of:
 - `Refs #<issue-number>` when the PR is stacked or incremental
 
 Before merge:
-- confirm `gsd-programming-loop` was loaded and followed through `/gsd-programming-loop ...` or
-  `scripts/gsd prompt programming-loop ...` for implementation or behavior-changing work, or record
-  the manual-GSD fallback when the repo-local adapter is unavailable
+- confirm the installed GSD lifecycle commands resolved through `scripts/gsd sources`, were
+  followed through Pi aliases or `scripts/gsd prompt ...`, and any inline/manual fallback was
+  recorded
 - confirm the GSD plan, TDD ledger, and verification checklist were created or updated before
   production edits
 - confirm required Go/design skills from `.agents/agentic-delivery/references/required-skills-routing.md` were loaded and recorded

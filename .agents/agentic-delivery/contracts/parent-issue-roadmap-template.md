@@ -15,8 +15,8 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 - Final target branch:
 - Milestones:
 - Project:
-- Orchestrator:
-- Orchestration workflow: `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
+- Canonical worker: `pm-delivery-worker` or `pm-connector-worker`
+- Parent ownership contract: `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
 - Automated review routing: `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
 
 ## Sub-issues
@@ -25,15 +25,17 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 | --- | --- | --- | --- | --- | --- |
 | #N | <milestone> | `<type>/<issue>-<slug>` | `<parent-branch>` | <one-slice outcome> | Backlog |
 
-## Orchestration state
+## Parent job state
 
-| Issue | Worker | Branch | PR | Latest SHA | Verification | Automated review coverage | Merge state | Blocker |
+| Issue | Active owner | Branch | PR | Latest SHA | Verification | Automated review coverage | Integration state | Blocker |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| #N | `<agent>` | `<branch>` | `<url>` | `<sha>` | Pending | `<sub_pr|parent_pr_fallback|copilot_backup|blocked>` | Planned | None |
+| #N | `<canonical worker>` | `<branch>` | `<url>` | `<sha>` | Pending | `<sub_pr|parent_pr_fallback|copilot_backup|blocked>` | Planned | None |
 
 ## Branch and PR policy
 
-- Connector implementation sub-issues must declare exactly one target connector, ownership guard evidence, changed-path compliance requirements, and any foundation issue/PR path before worker spawn.
+- Connector implementation sub-issues must declare exactly one target connector, ownership guard
+  evidence, changed-path compliance requirements, and any foundation issue/PR path before the
+  canonical worker starts the wave.
 - Shared runtime/tooling, schema, generated-index, or unrelated connector work discovered by a connector lane is split to a separate foundation issue/PR before the connector implementation proceeds.
 - Parent branch starts from `main`.
 - Parent PR targets `main` and is created as soon as the parent branch exists.
@@ -49,8 +51,8 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 
 ## Automated sub-PR merge policy
 
-Agents may merge a sub-PR into the parent branch without human approval only when all of these are
-true:
+The canonical worker may merge a sub-PR into the parent branch without human approval only when all
+of these are true:
 
 - the sub-PR is scoped to exactly one sub-issue
 - branch name and PR title checks pass
@@ -67,7 +69,7 @@ true:
 - no human gate is triggered
 - no requested-changes review is open
 - the parent branch is current enough that the sub-PR diff is reviewable
-- the parent issue orchestrator records the merge decision
+- the canonical worker records the integration decision and evidence in durable parent state
 
 ## Human gates
 

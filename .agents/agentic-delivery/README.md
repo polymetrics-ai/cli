@@ -53,8 +53,9 @@ Specialized agent families can live beside it under `.agents/<functional-area>/`
 same schema and issue-to-PR contract.
 
 Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are thin
-activation adapters. They must point back to the `.agents/` YAML and Markdown contracts instead of
-copying GSD/TDD, Claude, or human-gate policy.
+activation adapters. The `pm-delivery-worker` and `pm-connector-worker` adapters project marked
+blocks from `canonical/delivery-contract.json`; they must not copy GSD/TDD, review, or human-gate
+policy by hand.
 
 ## Design principles
 
@@ -62,21 +63,20 @@ copying GSD/TDD, Claude, or human-gate policy.
 - Issues remain the unit of work. PRs must reference issues.
 - Large goals use parent issues with sub-issues. Sub-PRs may merge into a parent branch without
   human approval only when all automated gates pass and no human gate is triggered.
-- A parent issue orchestrator owns shared parent artifacts, parent PR state, sub-PR merge
-  arbitration, automated review coverage routing, and final readiness. Worker agents implement one
-  assigned sub-issue and report back through the worker handoff template.
-- Parent issue orchestration is active, not advisory. If ready sub-issues exist and runtime
-  subagent tools are available, the orchestrator must spawn or assign all independent ready workers
-  up to runtime limits, or record the blocker category and next unblock action.
+- One canonical worker owns the job and its shared parent artifacts, parent PR state, sub-PR
+  integration decisions, automated review coverage, and final readiness inline. It processes ready
+  sub-issues without spawning orchestrator, shepherd, planner, reviewer, verifier, or GSD roles;
+  durable GitHub and GSD artifacts let a later worker resume if needed.
 - Stacked work must have a parent PR from the parent branch to `main` before sub-issues are treated
   as executable. If the parent branch has no useful file diff, use a deliberate seed commit to open
   the parent PR thread.
 - Skills are declared by capability, with preferred local skill names when available.
 - Guardrails are explicit hard stops, not prose suggestions.
-- Production behavior changes require `gsd-programming-loop` through the repo-local Pi adapter:
-  use `/gsd-programming-loop ...` in Pi or `scripts/gsd prompt programming-loop ...` from shell. If
-  the adapter is unavailable, agents must record a manual-GSD fallback and still provide test-first
-  evidence.
+- Production behavior changes use the installed repo-local GSD sequence: `discuss-phase`,
+  `plan-phase --tdd`, `execute-phase`, `verify-work` with gap planning/execution when needed, then
+  `code-review`. The pinned adapter has no `programming-loop` command. Generated prompts may be
+  executed inline when compatible isolated runtime agents are unavailable or the canonical
+  single-worker contract forbids spawning roles; record the fallback and retain test-first evidence.
 - Implementation agents must plan before production edits, keep GSD/TDD/verification artifacts
   current, record the GSD command path used, record required Go/design skills loaded from
   `references/required-skills-routing.md`, and commit/push coherent green slices to the active
@@ -94,9 +94,9 @@ copying GSD/TDD, Claude, or human-gate policy.
 - Claude automatic review is the primary automated review route. GitHub Copilot review is
   fallback-only when a Claude run errors, its quota is exhausted, the automatic review did not run,
   or Claude is otherwise unavailable and review coverage is blocking progress.
-- A skipped Claude review is not approval. For sub-PRs whose base is not `main`, the
-  orchestrator must record sub-PR review coverage or route the integrated commit range through the
-  parent PR review fallback.
+- A skipped Claude review is not approval. For sub-PRs whose base is not `main`, the canonical
+  worker must record sub-PR review coverage or route the integrated commit range through the parent
+  PR review fallback.
 - GitHub Copilot review is a backup route when a Claude run errors, its quota is exhausted, the
   review did not run, or Claude is otherwise unavailable. Copilot comments must be dispositioned
   like Claude comments, but Copilot review is not approval and must not bypass human gates.

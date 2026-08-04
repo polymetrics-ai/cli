@@ -1,18 +1,20 @@
-# Worker Handoff Template
+# Durable Wave Checkpoint Template
 
-Workers use this template when returning control to a parent issue orchestrator.
+The canonical worker uses this compatibility template to persist one completed wave in an issue,
+PR, or GSD artifact. It is durable resume state for the same worker or a successor, not a handoff to
+a spawned parent-orchestrator role.
 
 ````markdown
-## Worker Handoff
+## Wave Checkpoint
 
 Sub-issue:
 Parent issue:
-Worker agent:
+Canonical worker:
 Branch:
 Sub-PR:
 Parent PR:
 Base branch:
-Worker directory:
+Worktree:
 Head SHA:
 
 ## Scope Delivered

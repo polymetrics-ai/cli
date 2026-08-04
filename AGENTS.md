@@ -47,15 +47,20 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
 
 This repo uses official GSD Core workflows through a project-local Pi adapter:
 
-- Interactive Pi: use `/gsd <command> [args...]` or generated aliases such as `/gsd-plan-phase`,
-  `/gsd-programming-loop`, and `/gsd-code-review` after project trust/reload.
+- Interactive Pi: use `/gsd <command> [args...]` or generated aliases such as
+  `/gsd-discuss-phase`, `/gsd-plan-phase`, `/gsd-execute-phase`, `/gsd-verify-work`, and
+  `/gsd-code-review` after project trust/reload.
 - Shell/non-interactive: use `scripts/gsd prompt <command> [args...]` and execute the generated
   prompt with local tools.
 - Health/provenance: run `scripts/gsd doctor`, `scripts/gsd list`, and
   `scripts/gsd sources <command>` when validating the adapter.
 - Agent reference: read `.agents/agentic-delivery/references/gsd-pi-adapter.md` before GSD work.
-- Manual-GSD fallback is allowed only when the adapter is unavailable; record the fallback in the
-  planning trace, phase artifact, worker handoff, or PR body.
+- The canonical issue-first flow is
+  `.agents/agentic-delivery/canonical/delivery-contract.json`; run
+  `go run ./cmd/agentcontractgen check` to validate its commands and registered projections.
+- Inline/manual execution is allowed when the runtime cannot provide compatible isolated agents or
+  the canonical contract forbids spawning them. Record the fallback in the planning trace, phase
+  artifact, worker handoff, or PR body.
 
 ## CLI Help, Manual, Docs, And Website Parity
 
@@ -74,23 +79,19 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 
 - For issue-to-PR work, read `.agents/agentic-delivery/contracts/issue-agent-contract.md` and keep
   the PR scoped to one primary issue.
-- For parent issues that spawn or assign multiple sub-issue workers, read
-  `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md` and follow
-  `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`. The parent issue
-  orchestrator owns shared parent artifacts, parent PR state, sub-PR merge decisions, automated
-  review coverage routing, and final human-readiness.
-- When a task references a parent issue, sub-issues, stacked PRs, parent branch, parent PR, or
-  automated review coverage, invoke the parent issue orchestrator as the active owner before worker
-  execution. Do not stop at a plan when the parent issue has ready, unblocked sub-issues and the
-  runtime can spawn workers.
-- For implementation or behavior-changing work, `gsd-programming-loop` is mandatory. Load it before
-  coding through `/gsd-programming-loop` in Pi or `scripts/gsd prompt programming-loop ...` from
-  shell, follow its TDD/programming lifecycle, and record GSD/TDD evidence in the phase or PR
-  artifacts. If the repo-local GSD adapter is unavailable, run the manual GSD loop and record that
-  fallback explicitly; do not skip test-first implementation.
-- Treat `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` as the shared runtime
-  policy for Codex, Claude, OpenCode, Pi, and future agents. Runtime adapters may activate the loop, but
-  must not weaken active orchestration, TDD, review, compact-mode, or human-gate requirements.
+- For a parent job with sub-issues and stacked PRs, the one canonical worker owns parent issue,
+  branch, PR, integration, review-coverage, and human-readiness state inline. Read
+  `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`; the compatibility filename
+  now contains the parent job ownership contract, not a dedicated role. Do not spawn an
+  orchestrator, shepherd, planner, reviewer, verifier, or GSD role.
+- For implementation or behavior-changing work, use the installed lifecycle:
+  `discuss-phase` → `plan-phase --tdd` → `execute-phase` → `verify-work`; plan and execute gaps with
+  `plan-phase --gaps` and `execute-phase --gaps-only` until green, then run `code-review`. Resolve
+  each command first with `scripts/gsd sources <command>` and record GSD/TDD evidence. Do not invoke
+  the absent `programming-loop` command.
+- `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` is background procedure only
+  where it agrees with the canonical contract. It cannot authorize role spawning or weaken TDD,
+  review, compact-mode, or human gates.
 - Plan before coding. Create or update the issue's GSD plan, TDD ledger, and verification checklist
   before production edits, then keep them current as the implementation changes.
 - Commit and push regularly to the active issue/PR branch after each coherent green slice: plan

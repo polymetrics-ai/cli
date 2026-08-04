@@ -1,197 +1,149 @@
-# Parent Issue Orchestrator Contract
+# Parent Job Ownership Contract
 
-Use this contract when a parent issue owns multiple sub-issues and stacked PRs. The orchestrator is
-the single owner for shared parent artifacts, merge arbitration, automated review coverage routing,
-and final human approval readiness.
+This compatibility path no longer defines or activates a dedicated parent-orchestrator role. Use
+it when one delivery job owns a parent issue, outcome-sized sub-issues, a parent branch, and stacked
+PRs. The one canonical worker owns that state inline and follows
+`.agents/agentic-delivery/canonical/delivery-contract.json`.
 
-## Required Input
+GitHub issues, branches, PRs, review records, and GSD artifacts are the durable handoff. Never spawn
+an orchestrator, shepherd, planner, reviewer, verifier, GSD role, or additional worker for the job.
+If the active worker stops, its successor resumes from those artifacts rather than from a role
+handoff.
+
+## Required input
 
 The parent issue must provide:
 
-- objective
-- background
-- acceptance criteria
-- parent branch name
-- parent PR URL or explicit blocker
-- sub-issue roster with dependencies and branch names
-- verification commands
-- human gates
-- source links
+- objective, background, acceptance criteria, and non-goals
+- parent branch name and draft parent PR URL or exact blocker
+- a navigable sub-issue roster whose children are named as deliverable outcomes, sized to one worker
+  session, and linked to explicit dependencies and decisions
+- verification commands and integrated parent gates
+- human gates and source links
+- the automated review coverage route
 
-The orchestrator must also read:
+The worker also reads:
 
 - `AGENTS.md`
-- `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
+- `.agents/agentic-delivery/canonical/delivery-contract.json`
+- `.agents/agentic-delivery/contracts/issue-agent-contract.md`
 - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
-- `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
-- `.agents/agentic-delivery/workflows/claude-review-loop.md`
 - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
+- `.agents/agentic-delivery/workflows/claude-review-loop.md`
 - `.agents/agentic-delivery/references/gsd-pi-adapter.md`
 - `.agents/agentic-delivery/references/required-skills-routing.md`
-- `.agents/agentic-delivery/contracts/worker-handoff-template.md`
-- `.agents/agentic-delivery/schemas/orchestration-state.schema.yaml`
 
-## Activation
+## Activation and ownership
 
-When triggered, the orchestrator is the active execution owner, not an advisory reviewer. It creates
-or confirms parent branch/PR state, assigns workers, records state, arbitrates sub-PR merges, and
-drives review coverage until the parent issue is human-ready or blocked. Runtime adapters must
-invoke this contract; they must not fork or weaken its GSD, TDD, review, compact-mode, or human-gate
-rules.
+When a task references a parent issue, sub-issues, stacked PRs, a parent branch, a parent PR, or
+automated review coverage, the current canonical worker owns the parent state as part of the same
+job. Activation does not create another role.
 
-Triggers:
+The worker must:
 
-- user references a parent issue with sub-issues
-- user references stacked PRs, parent branch, or parent PR
-- parent PR is missing or lacks review coverage
-- sub-PR merge arbitration is needed
-- Claude/Copilot review coverage gap blocks integration
-- remaining sub-issues are ready or need dependency scheduling
+- create or confirm the parent branch from the default branch
+- create a deliberate parent seed and draft parent PR before any production edit
+- maintain the parent issue as the navigable index and record dependency/decision state
+- process one ready sub-issue at a time through the installed GSD lifecycle
+- keep each sub-issue to one primary branch, scoped diff, and sub-PR to the parent branch
+- decide child integration only after the checks and review contract below passes
+- obtain parent review coverage for provisionally integrated commits when the stacked sub-PR route
+  did not produce coverage
+- run the full integrated parent verification and no-mistakes pipeline once all children land
+- mark the draft ready only after every child and parent gate is green
+- preserve final merge for explicit captain approval while the parent remains green
 
-## Responsibilities
+## State machine
 
-The orchestrator owns:
+Record these states in the parent issue, parent PR, or a GSD artifact:
 
-- creating or confirming the parent branch from `main`
-- creating the parent PR to `main` before sub-issue execution
-- creating a deliberate parent seed commit when GitHub needs a diff to open the parent PR
-- maintaining the parent issue status and orchestration state ledger
-- selecting sub-issues that can run in parallel without write-scope collisions
-- for connector implementation lanes, requiring exactly one target connector before spawn and stopping the lane when shared runtime/tooling, schema, generated-index, or unrelated connector work is needed; legitimate shared work becomes a separate foundation issue/PR before the connector worker proceeds
-- spawning or assigning worker agents with bounded prompts that name the `/gsd ...` or `scripts/gsd prompt ...` command path, required Go/design skills from `required-skills-routing.md`, target connector scope when applicable, ownership guard evidence expected, changed-path compliance evidence expected, and the foundation PR path for legitimate shared work
-- receiving worker handoffs
-- deciding whether a sub-PR can merge into the parent branch
-- requesting or observing parent PR Claude coverage after integrated batches
-- routing Copilot backup review when Claude is blocked by rate limits or unavailability
-- launching or assigning automated review disposition work
-- declaring final parent PR readiness for human approval
+- `planned`: issue map exists; parent branch or draft PR is not ready.
+- `parent_pr_open`: parent branch, deliberate seed, and draft parent PR exist before production
+  work.
+- `wave_ready`: one sub-issue has complete inputs and satisfied dependencies.
+- `wave_in_progress`: the canonical worker is executing that sub-issue's GSD/TDD plan inline.
+- `sub_pr_open`: a sub-PR targets the parent branch.
+- `sub_pr_green`: local and remote checks pass.
+- `sub_pr_reviewed`: required automated review coverage exists, or an allowed parent fallback is
+  explicitly recorded.
+- `provisionally_integrated`: the sub-PR landed on the parent branch while parent fallback review
+  coverage is still pending.
+- `parent_review_pending`: integrated commits still need parent review coverage or disposition.
+- `parent_review_clean`: integrated commits have no unresolved actionable review finding.
+- `final_verification`: all children are integrated and full parent gates are running.
+- `ready_for_captain`: the parent is green and ready, but final merge is not authorized.
+- `blocked`: a dependency, human gate, failed verification, or review blocker prevents progress.
+- `complete`: the captain-approved parent PR merged to the default branch.
 
-The orchestrator must not stop after describing next steps when all required inputs are available,
-no human gate is triggered, and at least one sub-issue is worker-ready.
+Only one `wave_in_progress` state may exist. There is no parallel worker fan-out. When multiple
+waves are dependency-ready, process them deterministically and persist the remaining order in the
+parent issue.
 
-The meaning of `spawn` is runtime-generic:
+## Installed GSD lifecycle
 
-- Claude Code: create Agent/Task workers.
-- Codex: explicitly invoke Codex subagent tools or a custom Codex worker after assigning a separate
-  git worktree or working directory for any worker that can edit files.
-- OpenCode: invoke configured worker subagents or worker commands with `subtask: true`; keep the
-  primary orchestrator in the main context.
-- Future runtimes: create an isolated worker context with one issue, one branch, one write scope,
-  one working directory, and the worker handoff template.
+For each ready wave:
 
-If the runtime has no worker mechanism and the requested mode requires agents, record
-`not_spawned_runtime_capability_missing`.
+1. map the sub-issue to a GSD phase
+2. `discuss-phase` for known decisions
+3. `plan-phase --tdd`
+4. `execute-phase` inline through RED, GREEN, and REFACTOR
+5. `verify-work`; when needed, `plan-phase --gaps`, `execute-phase --gaps-only`, and verify again
+6. `code-review` with reasoned finding disposition
 
-If the runtime can spawn workers but cannot isolate mutating workers from the coordinator checkout,
-record `not_spawned_isolation_missing`. Do not spawn code-writing workers into the same working tree
-as the orchestrator. Read-only explorer/reviewer agents may still run in the shared checkout when
-their prompt forbids edits.
+Every command must resolve through `scripts/gsd sources <command>`. Do not invoke the absent
+`programming-loop`. Do not use GSD ship: official ship creates a PR after verification, while this
+contract already requires the draft parent PR before implementation and stacked sub-PRs to that
+parent.
 
-Worker agents own implementation for one assigned sub-issue. Workers do not own shared parent issue
-comments, parent PR bodies, parent branch pushes, or default sub-PR merge decisions unless the
-orchestrator explicitly delegates those actions.
+## no-mistakes topology
 
-## State Machine
+Never use `--yes`.
 
-Use these states in the parent issue, parent PR, or durable state ledger:
+On a sub-issue branch, run the review/test/docs/lint loop with
+`no-mistakes axi run --intent <issue-intent> --skip=push,pr,ci`. Respond to each exact finding ID
+with recorded rationale. Let the pipeline apply bounded in-scope fixes, then rerun the gate. After
+local gates pass, use `gh-axi` to open the sub-PR to the parent branch; no-mistakes v1.41.2 cannot
+target a non-default PR base.
 
-- `planned`: parent issue exists, but parent branch or parent PR is not ready.
-- `parent_pr_open`: parent branch and draft parent PR exist.
-- `worker_ready`: a sub-issue has complete inputs and no blockers.
-- `worker_in_progress`: a worker is implementing the sub-issue.
-- `sub_pr_open`: worker opened a sub-PR against the parent branch.
-- `sub_pr_green`: sub-PR local and remote checks are green.
-- `sub_pr_reviewed`: automated review coverage exists on the sub-PR, or an explicit fallback is
-  planned.
-- `provisionally_integrated`: sub-PR merged into parent branch, but parent PR review coverage is
-  still pending.
-- `parent_review_pending`: automatic parent PR review is running, coverage is waiting for the
-  parent PR to leave draft, or an allowed fallback review route is recorded for an integrated batch.
-- `parent_review_clean`: integrated batch has no unresolved actionable automated review findings.
-- `final_verification`: all sub-issues are integrated and full parent verification is running.
-- `ready_for_human`: parent PR is ready, but merge to `main` still needs human approval.
-- `blocked`: a human gate, failed verification, review blocker, or dependency blocks progress.
-- `complete`: parent PR merged to `main` and closing issue references have landed.
+Run the full no-mistakes pipeline once on the integrated parent branch and its existing draft
+parent PR.
 
-## Parallelism Rules
+## Child integration gate
 
-Sub-issues may run in parallel only when all of these are true:
+A sub-PR may integrate into the parent branch only when:
 
-- dependency order permits it
-- write scopes are disjoint
-- each worker has one primary issue
-- each worker has a bounded branch and PR base
-- each mutating worker has a separate worktree or working directory
-- shared parent artifacts are orchestrator-owned
-- human gates are not crossed
-
-When file ownership is unclear, run the sub-issues sequentially or split them further.
-
-At every parent orchestration turn, record whether workers were spawned. If no worker is spawned
-while work remains, the orchestrator must either take the local critical-path action that unblocks
-workers or record exactly one blocker category:
-
-- `not_spawned_dependency_blocked`
-- `not_spawned_write_scope_collision`
-- `not_spawned_human_gate`
-- `not_spawned_isolation_missing`
-- `not_spawned_runtime_capability_missing`
-- `not_spawned_review_blocked`
-- `not_spawned_verification_blocked`
-
-Compact handoffs are allowed only for agent prose. Do not compact exact code, commands, test output,
-review findings, security warnings, destructive-action warnings, ordered safety gates, or approval
-gates in worker prompts or handoffs.
-
-## Merge Policy
-
-A sub-PR may merge into the parent branch only when:
-
-- it targets the parent branch
-- it uses `Refs #<sub-issue>` and `Refs #<parent-issue>`, not closing keywords
+- it targets the parent branch and uses `Refs #<sub-issue>` plus `Refs #<parent-issue>`
 - targeted and issue-level verification pass
-- CI checks pass or an infrastructure blocker is recorded
-- automated review findings on the sub-PR are resolved, or the parent PR fallback path is recorded
-- the diff is within the sub-issue scope; connector implementation diffs declare exactly one target connector
-  and contain no generic shared runtime/tooling or unrelated connector changes; naming or linking a
-  foundation issue/PR does not authorize those paths in the connector PR, and they must move into
-  the foundation PR before target-aware validation or integration
-- no requested-changes review is open
-- no human gate is triggered
+- CI checks pass, or a specific infrastructure blocker is recorded
+- every actionable automated review finding is resolved or explicitly dispositioned
+- review coverage exists on the sub-PR, or the allowed parent-PR fallback is recorded
+- the diff remains inside the sub-issue scope and ownership boundaries
+- no requested-changes review or human gate remains
 
-If Claude skips a non-`main` sub-PR, merge into the parent branch is only provisional. The
-orchestrator must observe automatic parent PR review, or record an allowed fallback route such as
-Copilot backup or human review, for the integrated commit range before marking that sub-issue
-review-complete.
+If Claude skips a non-default-base sub-PR, integration is provisional until the main-targeted parent
+PR receives Claude review covering that commit range, or the documented Copilot/human fallback is
+completed. A skipped, errored, rate-limited, or never-started review is not review coverage.
 
-The parent PR into `main` always requires human approval.
+## Parent readiness and merge gate
 
-## Automated Review Coverage Record
+After all sub-issues are integrated:
 
-For every sub-issue, record:
+1. run full integrated tests, lint, docs, build, and issue-specific verification
+2. run the full parent no-mistakes pipeline
+3. ensure every integrated range has automated review coverage and all findings are dispositioned
+4. update the parent issue and draft PR with GSD/TDD/review/verification evidence
+5. mark the draft ready only while all checks remain green
 
-- sub-issue number
-- sub-PR URL
-- parent PR URL
-- base branch
-- head branch
-- head SHA
-- reviewed commit or commit range
-- primary route: `claude_auto`, `claude_auto_incremental`,
-  `claude_manual_fallback`, `copilot_backup`, `human`, or `blocked`
-- coverage route: `sub_pr`, `parent_pr_fallback`, `copilot_backup`, or `blocked`
-- fallback route: `copilot_backup`, `human`, or `none`
-- review status: `pending`, `clean`, `comments_addressed`, `skipped`, or `blocked`
-- disposition summary URL or comment
+Ready is not approval. Never infer permission from captain absence, never merge red, and never merge
+the parent to the default branch without explicit captain approval while it is still green.
 
-## Output Requirements
+## Away-mode boundary
 
-The orchestrator must leave a reviewer able to answer:
+Self-answer only a routine, reversible gate fixed by an issue decision, repo contract, or explicit
+standing authority; address the exact finding and record why. Auto-fix bounded code, test, and docs
+findings inside scope through the active gate, then rerun it.
 
-- which sub-issues were launched
-- which worker owned each sub-issue
-- which branches and PRs were used
-- which checks ran
-- which automated review route covered each sub-issue
-- why any sub-issue was deferred or blocked
-- whether the parent PR is ready for human approval
+Pause and preserve state for product ambiguity, destructive or irreversible actions, secrets/auth
+or security-boundary changes, dependencies or production impact, generic write capabilities,
+reverse-ETL execute approval, quality-gate weakening, and final merge. Absence never expands
+authority.
