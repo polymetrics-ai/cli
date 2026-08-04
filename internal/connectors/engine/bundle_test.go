@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -710,6 +711,109 @@ func TestBundleLoadParsesOperations(t *testing.T) {
 	}
 	if b.CLISurface.Commands[0].Operation != "acme.widgets.get" {
 		t.Fatalf("command operation = %q, want acme.widgets.get", b.CLISurface.Commands[0].Operation)
+	}
+}
+
+func TestBundleLoadParsesRequestContractAndNoBody(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.refresh",
+				"kind": "rest_write",
+				"summary": "Refresh one widget",
+				"risk": "medium",
+				"approval": "plan, preview, approval, execute",
+				"output_policy": "json_redacted",
+				"mutation_class": "update",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#refresh",
+					"source_location": "Refresh widget request",
+					"fields": [
+						{
+							"path": "path.id",
+							"source_url": "https://example.invalid/widgets#refresh",
+							"source_location": "Refresh widget path parameter id"
+						}
+					]
+				},
+				"rest": {
+					"method": "POST",
+					"path": "/widgets/{id}:refresh",
+					"body": "none"
+				}
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	op := b.Operations[0]
+	if op.RequestContract == nil || op.RequestContract.SourceTier != 3 {
+		t.Fatalf("request contract = %+v, want source tier 3", op.RequestContract)
+	}
+	if op.REST == nil || op.REST.Body == nil || !op.REST.Body.None {
+		t.Fatalf("rest body = %+v, want explicit none", op.REST)
+	}
+	raw, err := json.Marshal(op.REST.Body)
+	if err != nil {
+		t.Fatalf("Marshal body: %v", err)
+	}
+	if string(raw) != `"none"` {
+		t.Fatalf("marshaled body = %s, want %q", raw, "none")
+	}
+}
+
+func TestBundleLoadRejectsInvalidRequestContracts(t *testing.T) {
+	tests := []struct {
+		name       string
+		operations string
+		want       string
+	}{
+		{
+			name:       "tier four without sibling",
+			operations: `{"operations":[{"id":"acme.widgets.update","kind":"rest_write","summary":"Update","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":4,"source_url":"https://example.invalid/widgets#update","source_location":"Update request","fields":[]},"rest":{"method":"PATCH","path":"/widgets"}}]}`,
+			want:       "requires sibling_operation",
+		},
+		{
+			name:       "field missing citation",
+			operations: `{"operations":[{"id":"acme.widgets.update","kind":"rest_write","summary":"Update","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":2,"source_url":"https://example.invalid/openapi.json","source_location":"update description","fields":[{"path":"body.name","source_url":"https://example.invalid/openapi.json","source_location":""}]},"rest":{"method":"PATCH","path":"/widgets"}}]}`,
+			want:       "source_location is required",
+		},
+		{
+			name:       "uncited schema field",
+			operations: `{"operations":[{"id":"acme.widgets.update","kind":"rest_write","summary":"Update","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":2,"source_url":"https://example.invalid/openapi.json","source_location":"update description","fields":[]},"rest":{"method":"PATCH","path":"/widgets","body_schema":{"type":"object","properties":{"name":{"type":"string"}}}}}]}`,
+			want:       `missing citation for "body.name"`,
+		},
+		{
+			name:       "no body with body field",
+			operations: `{"operations":[{"id":"acme.widgets.refresh","kind":"rest_write","summary":"Refresh","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","request_contract":{"source_tier":3,"source_url":"https://example.invalid/widgets#refresh","source_location":"Refresh request","fields":[{"path":"body.payload","source_url":"https://example.invalid/widgets#refresh","source_location":"Refresh payload"}]},"rest":{"method":"POST","path":"/widgets:refresh","body":"none"}}]}`,
+			want:       "conflicts with rest body none",
+		},
+		{
+			name:       "no body without evidence",
+			operations: `{"operations":[{"id":"acme.widgets.refresh","kind":"rest_write","summary":"Refresh","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","rest":{"method":"POST","path":"/widgets:refresh","body":"none"}}]}`,
+			want:       "must declare request_contract evidence",
+		},
+		{
+			name:       "unsupported body mode",
+			operations: `{"operations":[{"id":"acme.widgets.refresh","kind":"rest_write","summary":"Refresh","risk":"medium","approval":"required","output_policy":"json_redacted","mutation_class":"update","rest":{"method":"POST","path":"/widgets:refresh","body":"empty"}}]}`,
+			want:       `rest body string must be "none"`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(tt.operations)}
+			_, err := Load(fsys, "acme")
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Load error = %v, want %q", err, tt.want)
+			}
+		})
 	}
 }
 

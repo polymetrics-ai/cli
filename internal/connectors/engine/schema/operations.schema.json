@@ -38,6 +38,33 @@
           "summary": { "type": "string" },
           "description": { "type": "string" },
           "source_url": { "type": "string" },
+          "request_contract": {
+            "type": "object",
+            "required": ["source_tier", "source_url", "source_location", "fields"],
+            "additionalProperties": false,
+            "properties": {
+              "source_tier": {
+                "type": "integer",
+                "enum": [1, 2, 3, 4]
+              },
+              "source_url": { "type": "string" },
+              "source_location": { "type": "string" },
+              "sibling_operation": { "type": "string" },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["path", "source_url", "source_location"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": { "type": "string" },
+                    "source_url": { "type": "string" },
+                    "source_location": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
           "risk": {
             "type": "string",
             "enum": ["none", "low", "medium", "high", "critical"]
@@ -107,7 +134,7 @@
                 }
               },
               "body": {
-                "type": "object",
+                "type": ["object", "string"],
                 "additionalProperties": true
               },
               "body_schema": { "type": "object" }

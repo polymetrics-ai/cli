@@ -219,13 +219,42 @@ not a full override by default.
   as sibling-derived and identify the cited sibling operation, so reviewers can audit the inference
   instead of mistaking it for first-party documentation of the target operation.
 
-  A genuinely empty documented body **MUST** be represented as `body: none` (the `writes.json`
-  spelling is `body_type: "none"`), never `body: {}`. Every documented path and query parameter
-  **MUST** instead be promoted to a command flag. If the definition/CLI surface cannot express the
-  no-body contract or those flags, defer the operation. This is a usability requirement, not a
-  stylistic preference: the 2026-08-04 hollow-command incident shipped two commands as implemented
-  with record schemas that admitted only `{}`; an empty record schema with no flags is unusable by
-  construction.
+  `operations.json` records that evidence in the supported `request_contract` block. Field paths
+  use `body.<field>`, `path.<parameter>`, or `query.<parameter>`; nested body properties use dotted
+  segments and array item properties use `[]` after the array segment. Each entry carries its own
+  citation even when several fields share a source:
+
+  ```json
+  {
+    "request_contract": {
+      "source_tier": 2,
+      "source_url": "https://example.invalid/openapi.json",
+      "source_location": "paths./widgets.post.description fenced request example",
+      "fields": [
+        {
+          "path": "body.name",
+          "source_url": "https://example.invalid/openapi.json",
+          "source_location": "paths./widgets.post.description request example property name"
+        }
+      ]
+    }
+  }
+  ```
+
+  Tier 4 additionally requires `sibling_operation` naming the cited create/update operation.
+  Tier 5 has no executable representation: leave the operation deferred. The top-level operation
+  `source_url` remains endpoint provenance and does not replace the anchored `request_contract`
+  citations.
+
+  A genuinely empty documented body **MUST** use `"body": "none"` in an `operations.json` REST
+  block; the `writes.json` spelling remains `"body_type": "none"`. `"body": {}` means an object
+  body assembled from static values and/or command flags and therefore does not declare an empty
+  body. Every documented path and query parameter on a no-body operation **MUST** instead appear in
+  `request_contract.fields` and be promoted to a command flag. If the definition/CLI surface cannot
+  express the no-body contract or those flags, defer the operation. This is a usability requirement,
+  not a stylistic preference: the 2026-08-04 hollow-command incident shipped two commands as
+  implemented with record schemas that admitted only `{}`; an empty record schema with no flags is
+  unusable by construction.
 - **Direct-read `output_policy` stays generic and bounded**: use `repository_contents_file_metadata`
   for a single repository file metadata response and `repository_contents_directory` for repository
   directory listings. Both policies reject sensitive repository paths before network access and

@@ -607,6 +607,85 @@ func TestValidate_CLISurfaceOperationReferencePasses(t *testing.T) {
 	}
 }
 
+func TestValidate_CLISurfaceNoBodyRequestContractRequiresFlags(t *testing.T) {
+	operations := `{
+		"operations": [
+			{
+				"id": "cli-surface.widgets.refresh",
+				"kind": "rest_read",
+				"summary": "Refresh widget metadata",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json_redacted",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#refresh",
+					"source_location": "Refresh widget request",
+					"fields": [
+						{"path":"path.id","source_url":"https://example.invalid/widgets#refresh","source_location":"path parameter id"},
+						{"path":"query.force","source_url":"https://example.invalid/widgets#refresh","source_location":"query parameter force"}
+					]
+				},
+				"rest": {
+					"method": "POST",
+					"path": "/widgets/{id}:refresh",
+					"max_bytes": 1024,
+					"body": "none"
+				}
+			}
+		]
+	}`
+	cliSurface := `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget refresh",
+				"summary": "Refresh widget metadata",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.refresh",
+				"api_surface": [{"method":"POST","path":"/widgets/{id}:refresh"}],
+				"output_policy": "json_redacted",
+				"flags": [
+					{"name":"id","type":"string","maps_to":"path.id","required":true},
+					{"name":"force","type":"boolean","maps_to":"query.force"}
+				]
+			}
+		]
+	}`
+	apiSurface := `{
+		"api":"test API v1",
+		"operation_ledger_version":1,
+		"endpoints":[
+			{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},
+			{"method":"POST","path":"/widgets","covered_by":{"write":"create_widget"}},
+			{"method":"POST","path":"/widgets/{id}:refresh","covered_by":{"direct_read":"widget refresh"}}
+		]
+	}`
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for cited no-body flags, got %+v", report.Findings)
+	}
+
+	missingFlag := strings.Replace(cliSurface, `,
+					{"name":"force","type":"boolean","maps_to":"query.force"}`, "", 1)
+	fsys = cliSurfaceBundleFS(missingFlag)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err = validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir missing flag: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
 func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T) {
 	cliSurface := `{
 		"tagline": "Work with CLI Surface from the command line.",

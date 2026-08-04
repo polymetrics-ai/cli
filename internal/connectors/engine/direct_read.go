@@ -54,10 +54,11 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if isAbsoluteHTTPURL(op.REST.Path) {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
 	}
-	if method == http.MethodPost && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+	noBody := op.REST.Body != nil && op.REST.Body.None
+	if method == http.MethodPost && !noBody && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST requires application/json content_type")
 	}
-	if method == http.MethodPost && len(op.REST.BodySchema) == 0 {
+	if method == http.MethodPost && !noBody && len(op.REST.BodySchema) == 0 {
 		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST requires body_schema")
 	}
 	if op.REST.MaxBytes <= 0 {
@@ -271,7 +272,17 @@ func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) 
 	if op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodPost {
 		return nil, nil
 	}
-	body := cloneAnyMap(op.REST.Body)
+	if op.REST.Body != nil && op.REST.Body.None {
+		if len(overrides) != 0 {
+			return nil, fmt.Errorf("operation %q declares body none and cannot accept body fields", op.ID)
+		}
+		return nil, nil
+	}
+	var staticBody map[string]any
+	if op.REST.Body != nil {
+		staticBody = op.REST.Body.Fields
+	}
+	body := cloneAnyMap(staticBody)
 	for key, value := range overrides {
 		body[key] = value
 	}

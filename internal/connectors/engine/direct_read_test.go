@@ -600,6 +600,62 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadPOSTNoBody(t *testing.T) {
+	var bodyBytes int64
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", r.Method)
+		}
+		bodyBytes = r.ContentLength
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:           "acme.widgets.refresh",
+			Kind:         "rest_read",
+			Summary:      "Refresh widget status",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:   http.MethodPost,
+				Path:     "/widgets/refresh",
+				MaxBytes: 1024,
+				Body:     &RESTOperationBody{None: true},
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/widgets/refresh",
+			Operation: &SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "low", BlockedByDefault: true, Reason: "typed operation metadata"},
+		}}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation:    "acme.widgets.refresh",
+		MaxBytes:     1024,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if bodyBytes > 0 {
+		t.Fatalf("Content-Length = %d, want no request body", bodyBytes)
+	}
+
+	_, err = OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.widgets.refresh",
+		Body:      map[string]any{"payload": "unexpected"},
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "body none") {
+		t.Fatalf("body override error = %v, want body none rejection", err)
+	}
+}
+
 func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/v2/calls/call-1" {

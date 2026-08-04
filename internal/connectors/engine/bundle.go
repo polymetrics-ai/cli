@@ -18,6 +18,7 @@ import (
 // design §F.3): dir name == metadata.name == registry key.
 var namePattern = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 var graphQLNamePattern = regexp.MustCompile(`^[_A-Za-z][_0-9A-Za-z]*$`)
+var requestContractPathVariablePattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
@@ -656,6 +657,7 @@ type OperationSpec struct {
 	Summary         string                  `json:"summary"`
 	Description     string                  `json:"description,omitempty"`
 	SourceURL       string                  `json:"source_url,omitempty"`
+	RequestContract *RequestContractSpec    `json:"request_contract,omitempty"`
 	Risk            string                  `json:"risk"`
 	Approval        string                  `json:"approval"`
 	OutputPolicy    string                  `json:"output_policy"`
@@ -676,14 +678,28 @@ type OperationSpec struct {
 	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
 }
 
+type RequestContractSpec struct {
+	SourceTier       int                    `json:"source_tier"`
+	SourceURL        string                 `json:"source_url"`
+	SourceLocation   string                 `json:"source_location"`
+	SiblingOperation string                 `json:"sibling_operation,omitempty"`
+	Fields           []RequestContractField `json:"fields"`
+}
+
+type RequestContractField struct {
+	Path           string `json:"path"`
+	SourceURL      string `json:"source_url"`
+	SourceLocation string `json:"source_location"`
+}
+
 type RESTOperationSpec struct {
-	Method      string            `json:"method"`
-	Path        string            `json:"path"`
-	ContentType string            `json:"content_type,omitempty"`
-	MaxBytes    int               `json:"max_bytes,omitempty"`
-	Query       map[string]string `json:"query,omitempty"`
-	Body        map[string]any    `json:"body,omitempty"`
-	BodySchema  json.RawMessage   `json:"body_schema,omitempty"`
+	Method      string             `json:"method"`
+	Path        string             `json:"path"`
+	ContentType string             `json:"content_type,omitempty"`
+	MaxBytes    int                `json:"max_bytes,omitempty"`
+	Query       map[string]string  `json:"query,omitempty"`
+	Body        *RESTOperationBody `json:"body,omitempty"`
+	BodySchema  json.RawMessage    `json:"body_schema,omitempty"`
 	// RequiredQuery declares query-parameter cardinality for endpoints that
 	// must never be called unfiltered — a listing that returns an entire
 	// enterprise when no filter is supplied, for example. Every group must be
@@ -692,6 +708,44 @@ type RESTOperationSpec struct {
 	// the constraint is about the wire request rather than about who supplied
 	// it. Empty (the default) imposes nothing.
 	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
+}
+
+type RESTOperationBody struct {
+	Fields map[string]any
+	None   bool
+}
+
+func (b *RESTOperationBody) UnmarshalJSON(raw []byte) error {
+	var mode string
+	if err := json.Unmarshal(raw, &mode); err == nil {
+		if mode != "none" {
+			return fmt.Errorf("rest body string must be %q, got %q", "none", mode)
+		}
+		b.Fields = nil
+		b.None = true
+		return nil
+	}
+
+	var fields map[string]any
+	if err := json.Unmarshal(raw, &fields); err != nil {
+		return fmt.Errorf("rest body must be an object or %q: %w", "none", err)
+	}
+	if fields == nil {
+		return fmt.Errorf("rest body must be an object or %q", "none")
+	}
+	b.Fields = fields
+	b.None = false
+	return nil
+}
+
+func (b RESTOperationBody) MarshalJSON() ([]byte, error) {
+	if b.None {
+		return json.Marshal("none")
+	}
+	if b.Fields == nil {
+		return []byte("{}"), nil
+	}
+	return json.Marshal(b.Fields)
 }
 
 // RequiredQueryGroup is one "at least one of these" constraint. Several groups
@@ -1871,13 +1925,16 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	if err := validateRequiredQuery(i, op); err != nil {
 		return err
 	}
+	if err := validateRequestContract(i, op); err != nil {
+		return err
+	}
 	switch op.Kind {
 	case "rest_read":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 		if method != "GET" && method != "POST" {
 			return fmt.Errorf("operation %d (%q) rest_read method must be GET or POST, got %s", i, op.ID, method)
 		}
-		if method == "POST" && len(op.REST.BodySchema) == 0 {
+		if method == "POST" && len(op.REST.BodySchema) == 0 && (op.REST.Body == nil || !op.REST.Body.None) {
 			return fmt.Errorf("operation %d (%q) rest_read POST must declare body_schema", i, op.ID)
 		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
@@ -1936,6 +1993,167 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		return err
 	}
 	return nil
+}
+
+func validateRequestContract(i int, op OperationSpec) error {
+	if op.REST == nil {
+		if op.RequestContract != nil {
+			return fmt.Errorf("operation %d (%q) request_contract is only supported for REST operations", i, op.ID)
+		}
+		return nil
+	}
+	if op.REST.Body != nil && op.REST.Body.None {
+		if len(op.REST.BodySchema) != 0 {
+			return fmt.Errorf("operation %d (%q) rest body none must not declare body_schema", i, op.ID)
+		}
+		if op.RequestContract == nil {
+			return fmt.Errorf("operation %d (%q) rest body none must declare request_contract evidence", i, op.ID)
+		}
+	}
+	if op.RequestContract == nil {
+		return nil
+	}
+
+	contract := op.RequestContract
+	if strings.TrimSpace(contract.SourceURL) == "" {
+		return fmt.Errorf("operation %d (%q) request_contract source_url is required", i, op.ID)
+	}
+	if strings.TrimSpace(contract.SourceLocation) == "" {
+		return fmt.Errorf("operation %d (%q) request_contract source_location is required", i, op.ID)
+	}
+	switch contract.SourceTier {
+	case 1, 2, 3:
+		if strings.TrimSpace(contract.SiblingOperation) != "" {
+			return fmt.Errorf("operation %d (%q) request_contract sibling_operation is only valid for source_tier 4", i, op.ID)
+		}
+	case 4:
+		if strings.TrimSpace(contract.SiblingOperation) == "" {
+			return fmt.Errorf("operation %d (%q) request_contract source_tier 4 requires sibling_operation", i, op.ID)
+		}
+	default:
+		return fmt.Errorf("operation %d (%q) request_contract source_tier must be 1, 2, 3, or 4", i, op.ID)
+	}
+
+	citations := make(map[string]bool, len(contract.Fields))
+	for j, field := range contract.Fields {
+		path := strings.TrimSpace(field.Path)
+		if !validRequestContractFieldPath(path) {
+			return fmt.Errorf("operation %d (%q) request_contract field %d has invalid path %q", i, op.ID, j, field.Path)
+		}
+		if citations[path] {
+			return fmt.Errorf("operation %d (%q) request_contract field %d duplicates path %q", i, op.ID, j, path)
+		}
+		if strings.TrimSpace(field.SourceURL) == "" {
+			return fmt.Errorf("operation %d (%q) request_contract field %q source_url is required", i, op.ID, path)
+		}
+		if strings.TrimSpace(field.SourceLocation) == "" {
+			return fmt.Errorf("operation %d (%q) request_contract field %q source_location is required", i, op.ID, path)
+		}
+		if strings.HasPrefix(path, "body.") && op.REST.Body != nil && op.REST.Body.None {
+			return fmt.Errorf("operation %d (%q) request_contract field %q conflicts with rest body none", i, op.ID, path)
+		}
+		if strings.HasPrefix(path, "path.") && !strings.Contains(op.REST.Path, "{"+strings.TrimPrefix(path, "path.")+"}") {
+			return fmt.Errorf("operation %d (%q) request_contract field %q does not match a rest.path variable", i, op.ID, path)
+		}
+		citations[path] = true
+	}
+
+	for _, path := range declaredRequestContractFields(op.REST) {
+		if !citations[path] {
+			return fmt.Errorf("operation %d (%q) request_contract is missing citation for %q", i, op.ID, path)
+		}
+	}
+	return nil
+}
+
+func validRequestContractFieldPath(path string) bool {
+	if path == "" || strings.ContainsAny(path, "\r\n\t") {
+		return false
+	}
+	namespace, name, ok := strings.Cut(path, ".")
+	if !ok || strings.TrimSpace(name) == "" {
+		return false
+	}
+	switch namespace {
+	case "body", "path", "query":
+		return true
+	default:
+		return false
+	}
+}
+
+func declaredRequestContractFields(rest *RESTOperationSpec) []string {
+	fields := map[string]bool{}
+	for _, match := range requestContractPathVariablePattern.FindAllStringSubmatch(rest.Path, -1) {
+		fields["path."+match[1]] = true
+	}
+	for name := range rest.Query {
+		fields["query."+name] = true
+	}
+	if rest.Body != nil && !rest.Body.None {
+		collectRequestValueFields(rest.Body.Fields, "body", fields)
+	}
+	if len(rest.BodySchema) != 0 {
+		var schema map[string]any
+		if err := json.Unmarshal(rest.BodySchema, &schema); err == nil {
+			collectRequestSchemaFields(schema, "body", fields)
+		}
+	}
+
+	paths := make([]string, 0, len(fields))
+	for path := range fields {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths)
+	return paths
+}
+
+func collectRequestValueFields(values map[string]any, prefix string, fields map[string]bool) {
+	names := make([]string, 0, len(values))
+	for name := range values {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		path := prefix + "." + name
+		fields[path] = true
+		collectRequestValueField(values[name], path, fields)
+	}
+}
+
+func collectRequestValueField(value any, path string, fields map[string]bool) {
+	switch nested := value.(type) {
+	case map[string]any:
+		collectRequestValueFields(nested, path, fields)
+	case []any:
+		for _, item := range nested {
+			collectRequestValueField(item, path+"[]", fields)
+		}
+	}
+}
+
+func collectRequestSchemaFields(schema map[string]any, prefix string, fields map[string]bool) {
+	properties, ok := schema["properties"].(map[string]any)
+	if !ok {
+		return
+	}
+	names := make([]string, 0, len(properties))
+	for name := range properties {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		path := prefix + "." + name
+		fields[path] = true
+		child, ok := properties[name].(map[string]any)
+		if !ok {
+			continue
+		}
+		collectRequestSchemaFields(child, path, fields)
+		if items, ok := child["items"].(map[string]any); ok {
+			collectRequestSchemaFields(items, path+"[]", fields)
+		}
+	}
 }
 
 // validateSensitivePolicy enforces the sensitive/admin reverse-ETL policy model

@@ -890,15 +890,17 @@ func checkCLISurfaceOperationSafety(
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must declare positive rest.max_bytes", i, cmd.Path, cmd.Operation)})
 	}
 	if method == "POST" {
-		if !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+		noBody := op.REST.Body != nil && op.REST.Body.None
+		if !noBody && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare application/json content_type", i, cmd.Path, cmd.Operation)})
 		}
-		if len(op.REST.BodySchema) == 0 {
+		if !noBody && len(op.REST.BodySchema) == 0 {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q POST must declare body_schema", i, cmd.Path, cmd.Operation)})
-		} else {
+		} else if !noBody {
 			findings = append(findings, checkCLISurfaceOperationBodyMappings(b, i, cmd, op)...)
 		}
 	}
+	findings = append(findings, checkCLISurfaceRequestContractFlags(b, i, cmd, op)...)
 	if !directReadOutputPolicies[cmd.OutputPolicy] {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must declare a supported output_policy", i, cmd.Path, cmd.Operation)})
 	}
@@ -942,7 +944,7 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 	}
 	var findings []Finding
 	for _, requiredPath := range requiredPaths {
-		if operationStaticBodyProvidesPath(op.REST.Body, requiredPath) {
+		if op.REST.Body != nil && operationStaticBodyProvidesPath(op.REST.Body.Fields, requiredPath) {
 			continue
 		}
 		mapping, ok := commandBodyFlagCoveringRequiredPath(schema, mappedTargets, requiredPath)
@@ -952,6 +954,39 @@ func checkCLISurfaceOperationBodyMappings(b engine.Bundle, i int, cmd engine.CLI
 		}
 		if !mapping.required {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q requires body.%s but flag --%s is not marked required", i, cmd.Path, op.ID, requiredPath, mapping.name)})
+		}
+	}
+	return findings
+}
+
+func checkCLISurfaceRequestContractFlags(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	if op.REST == nil || op.REST.Body == nil || !op.REST.Body.None || op.RequestContract == nil {
+		return nil
+	}
+	citations := make(map[string]bool, len(op.RequestContract.Fields))
+	for _, field := range op.RequestContract.Fields {
+		citations[strings.TrimSpace(field.Path)] = true
+	}
+	mappings := make(map[string]bool, len(cmd.Flags))
+	var findings []Finding
+	for _, flag := range cmd.Flags {
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		mappings[mapsTo] = true
+		if strings.HasPrefix(mapsTo, "body.") {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented no-body command %d (%q) flag --%s maps to body despite rest.body none", i, cmd.Path, flag.Name)})
+			continue
+		}
+		if (strings.HasPrefix(mapsTo, "path.") || strings.HasPrefix(mapsTo, "query.")) && !citations[mapsTo] {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented no-body command %d (%q) flag --%s maps to uncited request field %q", i, cmd.Path, flag.Name, mapsTo)})
+		}
+	}
+	for _, field := range op.RequestContract.Fields {
+		path := strings.TrimSpace(field.Path)
+		if !strings.HasPrefix(path, "path.") && !strings.HasPrefix(path, "query.") {
+			continue
+		}
+		if !mappings[path] {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented no-body command %d (%q) request field %q must map to a command flag", i, cmd.Path, path)})
 		}
 	}
 	return findings
