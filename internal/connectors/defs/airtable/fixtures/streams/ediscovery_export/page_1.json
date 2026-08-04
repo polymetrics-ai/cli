@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/enterpriseAccounts/synthetic-conformance-value/exports/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "exp_fixture_1",
+      "state": "completed",
+      "baseId": "app_fixture_1",
+      "createdByUserId": "usr_fixture_1",
+      "createdTime": "2026-01-01T00:00:00.000Z",
+      "completedTime": "2026-01-01T00:01:00.000Z",
+      "downloadUrl": "https://example.invalid/airtable/ediscovery-export.zip"
+    }
+  }
+}

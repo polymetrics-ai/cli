@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/enterpriseAccounts/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "ent_fixture_1",
+      "rootEnterpriseAccountId": "ent_fixture_1",
+      "userIds": [
+        "usr_fixture_1"
+      ],
+      "groupIds": [
+        "ugp_fixture_1"
+      ],
+      "workspaceIds": [
+        "wsp_fixture_1"
+      ],
+      "emailDomains": [
+        {
+          "emailDomain": "example.invalid",
+          "isSsoRequired": true
+        }
+      ],
+      "createdTime": "2026-01-01T00:00:00.000Z",
+      "descendantEnterpriseAccountIds": [
+        "ent_fixture_2"
+      ]
+    }
+  }
+}

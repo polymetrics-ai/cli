@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/comments"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "comments": [
+        {
+          "id": "com_fixture_1",
+          "text": "Fixture comment"
+        }
+      ]
+    }
+  }
+}

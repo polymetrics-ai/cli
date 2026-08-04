@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/groups/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "grp_fixture_1",
+      "name": "Fixture User Group",
+      "createdTime": "2026-01-01T00:00:00.000Z",
+      "memberUserIds": [
+        "usr_fixture_1"
+      ]
+    }
+  }
+}

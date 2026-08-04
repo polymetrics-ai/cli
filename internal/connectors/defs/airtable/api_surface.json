@@ -1,44 +1,881 @@
 {
-  "api": "Airtable Web API (https://api.airtable.com/v0)",
+  "api": "airtable_web_api",
   "docs": "https://airtable.com/developers/web/api/introduction",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every endpoint documented under airtable.com/developers/web/api/ (meta bases/tables/fields, records, comments, webhooks) is enumerated below. 5 GET list resources are streams (bases, tables, records, webhooks, comments — comments via the fan_out dialect over each table's own records); 12 dialect-expressible mutations are writes.json actions (records, tables, fields, comments, webhooks). Legacy was fully read-only (capabilities.write:false); this pass flips capabilities.write to true. Base/workspace-provisioning (create-base, requiring a workspaceId this connector's spec has no config surface for), webhook-operational sub-actions, and view-metadata endpoints remain excluded (see per-endpoint reasons).",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "official Airtable Web API OpenAPI bundle embedded in developers/web/api/introduction",
   "endpoints": [
-    { "method": "GET", "path": "/v0/meta/bases", "covered_by": { "stream": "bases" } },
-    { "method": "GET", "path": "/v0/meta/bases/{baseId}", "excluded": { "category": "duplicate_of", "reason": "get-base-schema is the same operation as GET /v0/meta/bases/{baseId}/tables (fields are embedded per-table, no separate list-fields endpoint exists); not a separate resource from the tables stream" } },
-    { "method": "POST", "path": "/v0/meta/bases", "excluded": { "category": "requires_elevated_scope", "reason": "creating a base requires a workspaceId and the schema.bases:write scope; this connector's spec.json is scoped to an already-existing base_id/table_id, with no workspace config surface to hang a create_base write action off of" } },
-
-    { "method": "GET", "path": "/v0/meta/bases/{baseId}/tables", "covered_by": { "stream": "tables" } },
-    { "method": "POST", "path": "/v0/meta/bases/{baseId}/tables", "covered_by": { "write": "create_table" } },
-    { "method": "PATCH", "path": "/v0/meta/bases/{baseId}/tables/{tableIdOrName}", "covered_by": { "write": "update_table" } },
-
-    { "method": "POST", "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields", "covered_by": { "write": "create_field" } },
-    { "method": "PATCH", "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields/{columnId}", "covered_by": { "write": "update_field" } },
-
-    { "method": "GET", "path": "/v0/{baseId}/{tableIdOrName}", "covered_by": { "stream": "records" } },
-    { "method": "GET", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}", "excluded": { "category": "duplicate_of", "reason": "single-record detail; the records stream already covers the list data" } },
-    { "method": "POST", "path": "/v0/{baseId}/{tableIdOrName}", "covered_by": { "write": "create_record" } },
-    { "method": "PATCH", "path": "/v0/{baseId}/{tableIdOrName}", "excluded": { "category": "duplicate_of", "reason": "bulk multi-record PATCH (up to 10 records/request); the single-record create_record/update_record write actions already cover create and update, one request per record, matching the engine's one-request-per-record write semantics (conventions.md §3)" } },
-    { "method": "PUT", "path": "/v0/{baseId}/{tableIdOrName}", "excluded": { "category": "destructive_admin", "reason": "bulk destructive multi-record PUT clears every unincluded cell value across up to 10 records in one call; update_record's PATCH already covers the non-destructive per-record update case" } },
-    { "method": "PATCH", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}", "covered_by": { "write": "update_record" } },
-    { "method": "PUT", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}", "excluded": { "category": "destructive_admin", "reason": "destructive update clears every unincluded cell value on the record; update_record's PATCH already covers the non-destructive case" } },
-    { "method": "DELETE", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}", "covered_by": { "write": "delete_record" } },
-    { "method": "DELETE", "path": "/v0/{baseId}/{tableIdOrName}", "excluded": { "category": "duplicate_of", "reason": "bulk multi-record DELETE via records[] query params; delete_record's single-record DELETE already covers deletion, one request per record" } },
-
-    { "method": "GET", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments", "covered_by": { "stream": "comments" } },
-    { "method": "POST", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments", "covered_by": { "write": "create_comment" } },
-    { "method": "PATCH", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}", "covered_by": { "write": "update_comment" } },
-    { "method": "DELETE", "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{commentId}", "covered_by": { "write": "delete_comment" } },
-
-    { "method": "GET", "path": "/v0/bases/{baseId}/webhooks", "covered_by": { "stream": "webhooks" } },
-    { "method": "POST", "path": "/v0/bases/{baseId}/webhooks", "covered_by": { "write": "create_webhook" } },
-    { "method": "DELETE", "path": "/v0/bases/{baseId}/webhooks/{webhookId}", "covered_by": { "write": "delete_webhook" } },
-    { "method": "POST", "path": "/v0/bases/{baseId}/webhooks/{webhookId}/enableNotifications", "excluded": { "category": "out_of_scope", "reason": "toggles delivery-retry notification state on an existing webhook; a minor operational knob, not core reverse-ETL surface" } },
-    { "method": "POST", "path": "/v0/bases/{baseId}/webhooks/{webhookId}/refresh", "excluded": { "category": "out_of_scope", "reason": "extends a webhook's expiration window; an operational keep-alive action, not reverse-ETL record data" } },
-    { "method": "GET", "path": "/v0/bases/{baseId}/webhooks/{webhookId}/payloads", "excluded": { "category": "out_of_scope", "reason": "webhook delivery-payload inspection/debugging endpoint, not a syncable business-data record stream" } },
-
-    { "method": "POST", "path": "/v0/{baseId}/{tableIdOrName}/listRecords", "excluded": { "category": "duplicate_of", "reason": "POST-with-body alternative to the same GET list-records operation the records stream already covers, used only when the query string would exceed URL length limits" } },
-    { "method": "GET", "path": "/v0/meta/whoami", "excluded": { "category": "non_data_endpoint", "reason": "returns the authenticated user's own identity/scopes for token introspection, not syncable business data" } },
-    { "method": "GET", "path": "/v0/meta/bases/{baseId}/tables/{tableId}/views/{viewId}", "excluded": { "category": "out_of_scope", "reason": "view metadata detail is a UI-configuration sub-resource already embedded in the tables stream's views field" } }
+    {
+      "method": "GET",
+      "path": "/scim/v2/Groups",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-scim-pagination-foundation can derive SCIM startIndex pagination from Resources, startIndex, itemsPerPage, and totalResults without using a nonexistent nextStartIndex token",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scim/v2/Groups",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/scim/v2/Groups/{groupId}",
+      "covered_by": {
+        "write": "delete_scim_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/Groups/{groupId}",
+      "covered_by": {
+        "stream": "scim_group"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/scim/v2/Groups/{groupId}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/scim/v2/Groups/{groupId}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/Users",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-scim-pagination-foundation can derive SCIM startIndex pagination from Resources, startIndex, itemsPerPage, and totalResults without using a nonexistent nextStartIndex token",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/scim/v2/Users",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/scim/v2/Users/{userId}",
+      "covered_by": {
+        "write": "delete_scim_user"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/scim/v2/Users/{userId}",
+      "covered_by": {
+        "stream": "scim_user"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/scim/v2/Users/{userId}",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/scim/v2/Users/{userId}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/bases/{baseId}/webhooks",
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/bases/{baseId}/webhooks",
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/bases/{baseId}/webhooks/{webhookId}",
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/bases/{baseId}/webhooks/{webhookId}/enableNotifications",
+      "covered_by": {
+        "write": "set_webhook_notifications"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/bases/{baseId}/webhooks/{webhookId}/payloads",
+      "covered_by": {
+        "stream": "webhook_payloads"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/bases/{baseId}/webhooks/{webhookId}/refresh",
+      "covered_by": {
+        "write": "refresh_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/bases",
+      "covered_by": {
+        "stream": "bases"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/bases",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/bases/{baseId}",
+      "covered_by": {
+        "write": "delete_base"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/bases/{baseId}",
+      "covered_by": {
+        "stream": "base_collaborators"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/bases/{baseId}/blockInstallations",
+      "covered_by": {
+        "stream": "block_installations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/bases/{baseId}/blockInstallations/{blockInstallationId}",
+      "covered_by": {
+        "write": "delete_block_installation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/meta/bases/{baseId}/blockInstallations/{blockInstallationId}",
+      "covered_by": {
+        "write": "manage_block_installation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/bases/{baseId}/collaborators",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/bases/{baseId}/collaborators/{userOrGroupId}",
+      "covered_by": {
+        "write": "delete_base_collaborator"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/meta/bases/{baseId}/collaborators/{userOrGroupId}",
+      "covered_by": {
+        "write": "update_collaborator_base_permission"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}",
+      "covered_by": {
+        "stream": "interface"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators/{userOrGroupId}",
+      "covered_by": {
+        "write": "delete_interface_collaborator"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}/collaborators/{userOrGroupId}",
+      "covered_by": {
+        "write": "update_interface_collaborator"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/bases/{baseId}/interfaces/{pageBundleId}/invites/{inviteId}",
+      "covered_by": {
+        "write": "delete_interface_invite"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/bases/{baseId}/invites/{inviteId}",
+      "covered_by": {
+        "write": "delete_base_invite"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/bases/{baseId}/shares",
+      "covered_by": {
+        "stream": "shares"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/bases/{baseId}/shares/{shareId}",
+      "covered_by": {
+        "write": "delete_share"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/meta/bases/{baseId}/shares/{shareId}",
+      "covered_by": {
+        "write": "manage_share"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/bases/{baseId}/tables",
+      "covered_by": {
+        "stream": "tables"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/bases/{baseId}/tables",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/meta/bases/{baseId}/tables/{tableIdOrName}",
+      "covered_by": {
+        "write": "update_table"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields",
+      "covered_by": {
+        "write": "create_field"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/meta/bases/{baseId}/tables/{tableId}/fields/{columnId}",
+      "covered_by": {
+        "write": "update_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/bases/{baseId}/views",
+      "covered_by": {
+        "stream": "views"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/bases/{baseId}/views/{viewId}",
+      "covered_by": {
+        "write": "delete_view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/bases/{baseId}/views/{viewId}",
+      "covered_by": {
+        "stream": "view_metadata"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}",
+      "covered_by": {
+        "stream": "enterprise"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogEvents",
+      "covered_by": {
+        "stream": "audit_log_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs",
+      "covered_by": {
+        "stream": "audit_log_requests"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs",
+      "covered_by": {
+        "write": "create_audit_log_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/auditLogs/{enterpriseAuditLogTaskId}",
+      "covered_by": {
+        "stream": "audit_log_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/changeEvents",
+      "covered_by": {
+        "stream": "change_events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/descendants",
+      "covered_by": {
+        "write": "create_descendant_enterprise"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports",
+      "covered_by": {
+        "stream": "ediscovery_exports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports",
+      "covered_by": {
+        "write": "create_ediscovery_export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/exports/{enterpriseTaskId}",
+      "covered_by": {
+        "stream": "ediscovery_export"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveGroups",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/moveWorkspaces",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/packages",
+      "covered_by": {
+        "stream": "enterprise_packages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/packages/{packageId}/install",
+      "covered_by": {
+        "write": "create_base_from_package_enterprise"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens",
+      "covered_by": {
+        "stream": "enterprise_personal_access_tokens"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/personalAccessTokens/revoke",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users",
+      "covered_by": {
+        "write": "delete_users_by_email"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-required-query-foundation can require at least one documented email[] or id[] query value without claiming an unfiltered executable stream",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/claim",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/grantAdminAccess",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/revokeAdminAccess",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}",
+      "covered_by": {
+        "write": "delete_user_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}",
+      "covered_by": {
+        "stream": "enterprise_user"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}",
+      "covered_by": {
+        "write": "manage_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}/logout",
+      "covered_by": {
+        "write": "logout_user"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/users/{userId}/remove",
+      "covered_by": {
+        "write": "remove_user_from_enterprise"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/enterpriseAccounts/{enterpriseAccountId}/workspaceAiAllowlist",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/groups/{groupId}",
+      "covered_by": {
+        "stream": "user_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/whoami",
+      "covered_by": {
+        "stream": "whoami"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/workspaces",
+      "covered_by": {
+        "write": "create_workspace"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/workspaces/{workspaceId}",
+      "covered_by": {
+        "write": "delete_workspace"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/meta/workspaces/{workspaceId}",
+      "covered_by": {
+        "stream": "workspace_collaborators"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/workspaces/{workspaceId}/collaborators",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/workspaces/{workspaceId}/collaborators/{userOrGroupId}",
+      "covered_by": {
+        "write": "delete_workspace_collaborator"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/meta/workspaces/{workspaceId}/collaborators/{userOrGroupId}",
+      "covered_by": {
+        "write": "update_workspace_collaborator"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/meta/workspaces/{workspaceId}/invites/{inviteId}",
+      "covered_by": {
+        "write": "delete_workspace_invite"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/workspaces/{workspaceId}/moveBase",
+      "covered_by": {
+        "write": "move_base"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/meta/workspaces/{workspaceId}/updateRestrictions",
+      "covered_by": {
+        "write": "update_workspace_restrictions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/{baseId}/{recordId}/{attachmentFieldIdOrName}/uploadAttachment",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked on airtable-bounded-base64-upload-foundation until an Airtable-owned executor validates official base64 encoding and decoded-size bounds before transmission",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/{baseId}/{tableIdOrName}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/{baseId}/{tableIdOrName}",
+      "covered_by": {
+        "stream": "records"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/{baseId}/{tableIdOrName}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/{baseId}/{tableIdOrName}",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v0/{baseId}/{tableIdOrName}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/{baseId}/{tableIdOrName}/sync/{apiEndpointSyncId}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Airtable Sync API CSV import requires a text/csv request body. The current declarative write runtime supports typed JSON/form/graphql/json_array/multipart bodies, but not bounded text/csv bodies; exposing raw CSV upload through a generic body escape hatch is intentionally disallowed.",
+        "source_url": "https://airtable.com/developers/web/api/introduction",
+        "notes": "Blocked until a typed, bounded text/csv write body dialect exists; no live provider calls or CSV writes were made in this fixture-only wave."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+      "covered_by": {
+        "write": "delete_record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+      "covered_by": {
+        "stream": "record"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+      "covered_by": {
+        "write": "update_record"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}",
+      "covered_by": {
+        "write": "replace_record"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments",
+      "covered_by": {
+        "stream": "comments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments",
+      "covered_by": {
+        "write": "create_comment"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{rowCommentId}",
+      "covered_by": {
+        "write": "delete_comment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/comments/{rowCommentId}",
+      "covered_by": {
+        "write": "update_comment"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v0/{baseId}/{tableIdOrName}/{recordId}/dateDependencyMetadata",
+      "covered_by": {
+        "write": "update_date_dependency_metadata"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/{enterpriseAccountId}/{dataTableId}/deleteRecords",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v0/{enterpriseAccountId}/{dataTableId}/getRecords",
+      "covered_by": {
+        "direct_read": "hyperdb get-records"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v0/{enterpriseAccountId}/{dataTableId}/upsertRecords",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "blocked until airtable-array-cardinality-foundation can enforce non-empty documented request arrays without shared minItems/runtime changes",
+        "source_url": "https://airtable.com/developers/web/api/introduction"
+      }
+    }
   ]
 }

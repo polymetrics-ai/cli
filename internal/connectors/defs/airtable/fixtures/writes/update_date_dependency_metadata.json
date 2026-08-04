@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "predecessorRecordId": "predecessorRecordId_fixture",
+    "dateDependencyMetadata": {
+      "dependencyType": "finishToStart",
+      "buffer": 1
+    }
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/v0/synthetic-conformance-value/synthetic-conformance-value/id_fixture/dateDependencyMetadata",
+    "body": {
+      "predecessorRecordId": "predecessorRecordId_fixture",
+      "dateDependencyMetadata": {
+        "dependencyType": "finishToStart",
+        "buffer": 1
+      }
+    }
+  }
+}

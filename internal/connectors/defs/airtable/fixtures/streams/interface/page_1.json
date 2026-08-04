@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/bases/synthetic-conformance-value/interfaces/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "pbk_fixture_1",
+      "name": "Fixture Interface",
+      "rootTableId": "tbl_fixture_1",
+      "createdTime": "2026-01-01T00:00:00.000Z",
+      "isPublished": true
+    }
+  }
+}

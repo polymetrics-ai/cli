@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Airtable enterprise_user record",
+  "type": "object",
+  "required": [
+    "id",
+    "state",
+    "email",
+    "name",
+    "lastActivityTime",
+    "isTwoFactorAuthEnabled",
+    "isSsoRequired",
+    "isServiceAccount"
+  ],
+  "properties": {
+    "aggregated": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "collaborations": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "createdTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "descendants": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "email": {
+      "type": "string"
+    },
+    "enterpriseUserType": {
+      "type": "string"
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "id": {
+      "type": "string"
+    },
+    "invitedToAirtableByUserId": {
+      "type": "string"
+    },
+    "isAdmin": {
+      "type": "boolean"
+    },
+    "isManaged": {
+      "type": "boolean"
+    },
+    "isServiceAccount": {
+      "type": "boolean"
+    },
+    "isSsoRequired": {
+      "type": "boolean"
+    },
+    "isSuperAdmin": {
+      "type": "boolean"
+    },
+    "isTwoFactorAuthEnabled": {
+      "type": "boolean"
+    },
+    "lastActivityTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "licenseType": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ]
+}

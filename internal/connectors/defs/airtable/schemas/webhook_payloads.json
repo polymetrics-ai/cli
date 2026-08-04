@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Airtable webhook_payloads record",
+  "type": "object",
+  "required": [
+    "actionMetadata",
+    "baseTransactionNumber",
+    "payloadFormat",
+    "timestamp"
+  ],
+  "properties": {
+    "actionMetadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "baseTransactionNumber": {
+      "type": "number"
+    },
+    "changedTablesById": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "code": {
+      "type": "string"
+    },
+    "createdTablesById": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "destroyedTableIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "error": {
+      "type": "boolean"
+    },
+    "payloadFormat": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": true,
+  "x-primary-key": [
+    "baseTransactionNumber",
+    "timestamp"
+  ]
+}

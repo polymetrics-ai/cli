@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/bases/synthetic-conformance-value/blockInstallations"
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "id": "bli_fixture_1",
+        "state": "enabled",
+        "blockId": "blk_fixture_1",
+        "createdByUserId": "usr_fixture_1",
+        "createdTime": "2026-01-01T00:00:00.000Z"
+      }
+    ]
+  }
+}

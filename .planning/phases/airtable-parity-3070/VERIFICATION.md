@@ -1,0 +1,92 @@
+# Verification checklist — Airtable official API parity
+
+## Prior required gates
+
+These gates passed before the review-hardening changes and are retained as historical evidence; the outer pipeline owns authoritative full-tree validation for the final tree.
+
+- [!] `go run ./cmd/connectorgen validate internal/connectors/defs/airtable` — current `connectorgen validate` treats the argument as a directory of bundle directories, so this exact single-bundle path validates `fixtures/` and `schemas/` as fake connectors and exits 1 with missing `metadata.json`. No tooling/runtime behavior was changed for this local-only connector wave.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — `connectorgen validate: 549 connector(s) checked, 0 findings`.
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/airtable' -count=1` — `ok polymetrics.ai/internal/connectors/conformance`.
+- [x] `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` — `ok polymetrics.ai/internal/cli`.
+- [x] `go build ./cmd/pm`.
+- [x] `make connector-boundary` — outcome `clean`.
+- [x] `make verify` — passed on cached retry after one transient full-suite timeout in `internal/connectors/certify` under parallel `go test -timeout 20m ./...`; package passed standalone and final `make verify` completed successfully.
+- [x] `git diff --check`.
+
+## Fixture-only safety
+
+- No live provider calls.
+- No credentials requested or used.
+- No Airtable writes executed.
+- Certification metadata is fixture/candidate-only; no live certification claim was made.
+- No push, PR, `/no-mistakes`, VPS, Thaalam, or provider-side operations were run.
+
+## Results
+
+Implemented fixture-only Airtable parity partition: 103 official OpenAPI operations tracked as 28 stream-backed GET/read/changefeed operations, 44 typed write actions, 1 HyperDB direct-read operation/CLI command, and 30 blocked operations. Comments use the exact official per-record endpoint, webhook replay uses the executable `limit=50`, and attachment upload remains blocked on `airtable-bounded-base64-upload-foundation` instead of exposing an unbounded write.
+
+## Review-hardening gate
+
+- [x] `go test ./internal/connectors/defs ./internal/connectors/conformance -run 'Airtable|Conformance/airtable' -count=1` — passed for both focused packages.
+
+## CI issue-link guard repair — 2026-08-02
+
+- [x] GSD adapter preflight: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase airtable-parity-3070 --dry-run` remained unavailable with `unknown GSD command: programming-loop`, so this slice reused the phase's recorded manual-GSD/TDD fallback.
+- [x] Red: the focused checkpoint regression test failed with the reported `PR body must reference an issue` violation before production changes.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` — passed.
+- [x] `go vet ./internal/coordination/issueguard ./cmd/prissueguard` — passed.
+- [x] Exact PR #3540 title/body through `go run ./cmd/prissueguard` — `issueguard: ok (8 linked issues)`.
+- [x] Negative coverage keeps standalone GitHub issue URLs, incomplete checkpoint wording, and vague `Issue`/`References` relationships rejected; positive coverage passes with LF and CRLF bodies.
+- [x] `git diff --check` — passed.
+
+The outer no-mistakes executor still owns commit, push, PR-body mutation, broader validation phases, and authoritative hosted CI rerun.
+
+## CI connector-boundary repair — 2026-08-02
+
+- [x] Red: `make connector-boundary` reported one `connector_literal` finding for `github` in the canonical issue-host regex at `internal/coordination/issueguard/guard.go:34`.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` — passed, preserving the exact PR #3540 checkpoint acceptance and negative cases.
+- [x] `make connector-boundary` — `outcome: clean`, 130 shared files and 550 connectors checked with zero findings or warnings.
+- [x] `make verify` — passed end-to-end: format, tidy check, vet, full tests, build, docs validation, smoke, lint, connector validation, connector boundary, and release notification assertions.
+- [x] No live Airtable calls, provider credentials, provider writes, dependency changes, PR mutation, push, or pipeline-control commands were used.
+
+## CI checkpoint-indentation repair — 2026-08-02
+
+- [x] Live read-only PR inspection confirmed the hosted body indents the exact canonical-section heading and first issue URL by four spaces.
+- [x] Red: `go test ./internal/coordination/issueguard -run TestValidatePRAcceptsUnvalidatedCheckpointCanonicalIssueLinks/GitHub-indented_body -count=1` failed with the reported missing-issue violation before the production regex changed.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` — passed with standard and GitHub-indented LF/CRLF fixtures.
+- [x] `go vet ./internal/coordination/issueguard ./cmd/prissueguard` — passed.
+- [x] Exact PR #3540 title/body through `go run ./cmd/prissueguard` — `issueguard: ok (8 linked issues)`.
+- [x] `make connector-boundary` — passed with a clean report.
+- [x] `make verify` — passed end-to-end on the final tree.
+- [x] No live Airtable calls, credentials, provider writes, dependencies, PR mutation, push, or no-mistakes pipeline-control commands were used.
+
+## CI phase repair — stale check runs from abandoned temp branch — 2026-08-04
+
+This branch's own `branch-name` and `require-linked-issue` runs at head `ff794c51b3` already passed;
+the two failing checks on this PR were **stale runs from the abandoned temp branch
+`fm-airtable-import-tmp` (PR #3678)** attached to the same head SHA. Because GitHub shows the newest
+run per check name for a head SHA, that branch's failing runs temporarily superseded this PR's passing
+ones in the checks UI. Diagnosis (all read-only):
+
+- `branch-name` failed only because the stale run carried `HEAD_REF=fm-airtable-import-tmp`, which contains
+  no `/` and therefore matches neither `fm/*` nor a conventional `<type>/…` prefix. This PR's branch
+  `fm/cli-airtable-parity-wave03-r1` matches the `fm/*` allowlist.
+- `require-linked-issue` failed only because the stale run carried PR #3678's body (`## What Changed …
+  expanded the Airtable connector …`), which contains no `Closes #…`/issue wording. This PR's body
+  (`Closes #3070` … `Closes #3077`) passes `go run ./cmd/prissueguard --title "feat(connectors): complete
+  Airtable Web API parity" --body-file …` → `issueguard: ok (8 linked issues)`.
+
+Deliberately **not** adopted (they would be out-of-scope or wrong-scope fixes; the shared-runtime
+`internal/coordination/issueguard` change belongs to merged foundation PR #3675, and adding `fm-*` to
+`.github/workflows/conventions.yml` would globally loosen the branch-name check):
+
+- [x] `internal/coordination/issueguard/*` left untouched — `git diff origin/main -- internal/coordination/issueguard` is empty, confirming no leaked shared-runtime change.
+- [x] `.github/workflows/conventions.yml` left untouched — no global branch-name allowance added.
+
+Fix: a head-SHA refresh commit on this branch, so fresh workflow runs attach only to this branch's new
+SHA. At the new SHA both checks pass: `branch-name` (fm/* allowlist) and `require-linked-issue` (issueguard
+ok, 8 linked issues).
+- [x] `go run ./cmd/prissueguard --title "feat(connectors): complete Airtable Web API parity" --body-file <pr3540 body>` — `issueguard: ok (8 linked issues)`.
+- [x] Branch-name gate: `fm/cli-airtable-parity-wave03-r1` is allowlisted via `fm/*`; a genuinely malformed branch is still rejected.
+- [x] `git diff --check` — passed.
+- [x] No live Airtable calls, credentials, provider writes, dependencies, PR mutation, push, or no-mistakes pipeline-control commands were used.

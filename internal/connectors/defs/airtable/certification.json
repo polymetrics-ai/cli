@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "bases",
+    "source_credential_defaults": {
+      "base_url": "https://api.airtable.com"
+    },
+    "live_unavailable": [
+      {
+        "kind": "credential_scope",
+        "contains": [
+          "not authorized",
+          "insufficient scope",
+          "forbidden"
+        ]
+      },
+      {
+        "kind": "resource_missing",
+        "contains": [
+          "not found",
+          "could not find",
+          "not visible"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [
+    {
+      "stage_name": "hyperdb_table_read_records",
+      "command": "airtable hyperdb get-records",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "hyperdb"
+        },
+        {
+          "literal": "get-records"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--enterprise-account-id"
+        },
+        {
+          "config_key": "enterprise_account_id"
+        },
+        {
+          "literal": "--data-table-id"
+        },
+        {
+          "config_key": "data_table_id"
+        },
+        {
+          "literal": "--primary-key"
+        },
+        {
+          "config_key": "primary_key",
+          "default": "fixture-primary-key"
+        },
+        {
+          "literal": "--json"
+        }
+      ]
+    }
+  ],
+  "binary_candidates": [],
+  "write_pairings": []
+}

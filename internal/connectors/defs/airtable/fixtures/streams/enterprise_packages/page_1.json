@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/enterpriseAccounts/synthetic-conformance-value/packages"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "packages": [
+        {
+          "id": "pkg_fixture_1",
+          "latestReleaseId": "pkr_fixture_1",
+          "sourceApplicationId": "app_fixture_1",
+          "enterpriseAccountId": "ent_fixture_1",
+          "name": "Fixture Package",
+          "tagline": "Fixture package tagline",
+          "description": "Fixture package description",
+          "installCount": 1,
+          "type": "base",
+          "createdTime": "2026-01-01T00:00:00.000Z",
+          "createdByUserId": "usr_fixture_1",
+          "lastUpdatedTime": "2026-01-02T00:00:00.000Z",
+          "lastUpdatedByUserId": "usr_fixture_1"
+        }
+      ]
+    }
+  }
+}

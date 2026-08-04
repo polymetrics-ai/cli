@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v0/meta/bases/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "app_fixture_1",
+      "name": "Fixture Base",
+      "permissionLevel": "edit",
+      "createdTime": "2026-01-01T00:00:00.000Z",
+      "collaborators": [
+        {
+          "id": "usr_fixture_1",
+          "type": "user",
+          "permissionLevel": "edit",
+          "user": {
+            "id": "usr_fixture_1",
+            "email": "user.fixture@example.invalid",
+            "name": "Fixture User"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "record": {
+    "enterprise_account_id": "enterprise_account_id_fixture",
+    "package_id": "package_id_fixture",
+    "workspaceId": "workspaceId_fixture",
+    "packageReleaseId": "packageReleaseId_fixture",
+    "name": "Fixture Name",
+    "description": "description_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v0/meta/enterpriseAccounts/enterprise_account_id_fixture/packages/package_id_fixture/install",
+    "body": {
+      "workspaceId": "workspaceId_fixture",
+      "packageReleaseId": "packageReleaseId_fixture",
+      "name": "Fixture Name",
+      "description": "description_fixture"
+    }
+  }
+}

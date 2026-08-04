@@ -1,0 +1,98 @@
+{
+  "phase": "airtable-parity-3070",
+  "issue": 3070,
+  "branch": "fm/cli-airtable-parity-wave03-r1",
+  "status": "ci_repair_complete_awaiting_outer_ci",
+  "verificationPassed": true,
+  "reviewFixVerificationPassed": true,
+  "verificationNote": "The exact hosted PR body now yields eight linked issues despite its bounded heading indentation, focused guard and connector-boundary checks pass, and full make verify passes. The outer pipeline still owns commit, push, and authoritative hosted CI.",
+  "gsd": {
+    "doctor": "passed",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase airtable-parity-3070 --dry-run",
+    "programmingLoopResult": "unavailable: unknown GSD command: programming-loop",
+    "fallback": "manual GSD execution of scripts/gsd prompt plan-phase and execute-phase prompts",
+    "planCommand": "scripts/gsd prompt plan-phase airtable-parity-3070 --skip-research",
+    "executeCommand": "scripts/gsd prompt execute-phase airtable-parity-3070 --dry-run"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "all child issues share internal/connectors/defs/airtable and generated docs/catalog surfaces; mutating worker fan-out would collide"
+    },
+    {
+      "cycle": "review-fix",
+      "decision": "local_critical_path",
+      "reason": "all legitimate findings are confined to the Airtable bundle, fixtures, generated Airtable surfaces, and target phase evidence"
+    },
+    {
+      "cycle": "ci",
+      "decision": "local_critical_path",
+      "reason": "the failing connector-boundary and verify gates share one deterministic false positive in the existing PR issue-link guard repair"
+    },
+    {
+      "cycle": "ci-checkpoint-indentation",
+      "decision": "local_critical_path",
+      "reason": "the hosted require-linked-issue failure is isolated to four-space indentation in the generated checkpoint body and requires one bounded parser regression"
+    }
+  ],
+  "sourceAudit": {
+    "url": "https://airtable.com/developers/web/api/introduction",
+    "openapiVersion": "3.1.0",
+    "openapiSHA256": "f1506571034500ffb0887e7244f770c0b060a4205e734881bd3de6fa20d6f6b8",
+    "operationCount": 103,
+    "methodCounts": {
+      "GET": 31,
+      "POST": 33,
+      "DELETE": 19,
+      "PATCH": 15,
+      "PUT": 5
+    },
+    "laneCounts": {
+      "etl_read": 27,
+      "reverse_etl_write": 69,
+      "direct_read_query_search": 1,
+      "binary_file": 1,
+      "cdc_changefeed": 5
+    }
+  },
+  "implementation": {
+    "apiSurfaceRows": 103,
+    "streams": 28,
+    "writes": 44,
+    "directReads": 1,
+    "blockedRows": 30,
+    "blockedReason": "Unsupported operations remain blocked on named typed-runtime foundations; Sync API CSV import lacks a bounded text/csv body dialect, and attachment upload lacks Airtable-owned base64 and decoded-size enforcement."
+  },
+  "ciRepair": {
+    "pr": 3540,
+    "checks": ["connector-boundary", "require-linked-issue", "verify"],
+    "status": "local_verification_passed_awaiting_outer_ci",
+    "linkedIssues": [3070, 3071, 3072, 3073, 3074, 3075, 3076, 3077],
+    "hostedCanonicalHeadingIndentation": 4,
+    "issueGuardResult": "focused packages and LF/CRLF regressions pass with 8 non-closing linked issues for the exact hosted checkpoint body",
+    "connectorBoundaryResult": "clean: 130 shared files and 550 connectors checked with zero findings or warnings",
+    "fullVerifyPassed": true
+  },
+  "safety": {
+    "liveProviderCalls": false,
+    "credentialsRequested": false,
+    "providerWrites": false,
+    "noMistakes": false,
+    "pushOrPR": false
+  },
+  "recovery": {
+    "localHead": "69f87c4976a0dbd225eb74d9768f4e74294e120e",
+    "pipelineHead": "325d7ea1148969327eb369c0b3062edcf00e6cda",
+    "mergeBase": "86d510927a05aa56b184bf5a8778b5444c69b9b1",
+    "run": "01KZ0FXWMF7XAMXADPFY2HTQ7N",
+    "strategy": "forward-only no-ff merge; conflicts resolved to pipeline Airtable/generated tree plus required HyperDB primary-key CLI flag fix",
+    "preCommitFocusedGates": [
+      "git diff --check",
+      "git diff --cached --check",
+      "go run ./cmd/connectorgen validate internal/connectors/defs/airtable",
+      "go test ./internal/connectors/conformance -run 'TestConformance/airtable' -count=1",
+      "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1"
+    ]
+  }
+}
