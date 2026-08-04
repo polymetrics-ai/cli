@@ -108,3 +108,19 @@ Status: green-verified
   declarative and native executors; command and bulk paths atomically reload and consume the grant
   before dispatch, and copied engine evidence remains one-shot.
 - EXECUTED VERIFICATION: `go test ./internal/connectors ./internal/vault ./internal/connectors/engine ./internal/connectors/hooks/github ./internal/connectors/conformance ./internal/connectors/native/amazon-sqs ./internal/app ./internal/connectors/defs/asana ./internal/connectors/defs/zendesk-support -count=1` passed.
+
+## task:tdd-trusted-input-hardening
+
+Status: green-verified
+
+- MANUAL-GSD FALLBACK: `scripts/gsd doctor` passed, then `scripts/gsd prompt programming-loop init --phase delete-confirmation-foundation-r1 --dry-run` exited 1 with `unknown GSD command: programming-loop`; the repository-approved manual programming loop remained active.
+- RED: `go test ./internal/connectors/engine ./internal/app -run 'Test(GateRejectsForgedAndReplayedDestructiveEvidence|ConsumedApprovalCannotBeResurrectedByStaleStateSave|PreviewGrantExpiryIgnoresExtendedMutablePlanDeadline)$' -count=1` exited 1. Caller-key evidence invoked the executor, a stale `AddCredential` whole-state save succeeded after consumption, and extending mutable `expires_at` produced a grant expiring in 2126.
+- RED trusted-input validation: the starting `WriteApprovalTarget` had no configuration digest or batchable field, production accepted `NewWriteApprovalAuthority([]byte)`, `App.save` called blind `JSONStore.Save`, and consumption left no record outside replaceable state JSON. The completed field-by-field audit is `TRUSTED-INPUT-SWEEP.md`.
+- GREEN: production authority now accepts only the opaque project-vault root; caller-key evidence is untrusted; a signed plan seal authenticates identity, mode, connector/action, credential/configuration revisions, batchability, confirmation, and lifetime before preview; grant lifetime is authority-derived and short-lived.
+- GREEN: every whole-state save uses revision CAS, locked security updates advance the revision, and production grant verification creates an authenticated create-exclusive vault marker before state commit or executor invocation. A rolled-back valid state snapshot therefore cannot replay its spent nonce.
+- GREEN: the marker is stable for the sealed plan identity and retains an opaque nonce identity, so rolling state back cannot re-preview the consumed plan into a fresh executable grant.
+- GREEN: current prepared writes carry configuration digest, batchability, scope, and confirmation in the MAC-bound target; the fixture authority is limited to loopback requests while App execution always uses project scope.
+- RED REGRESSION: the first focused verification exposed SQS zero-record destructive previews failing because fixture scope required a request even when the executor had no request to send.
+- GREEN REGRESSION: zero-record/no-request prepared writes remain approval-gated but substitute a no-op closure, so fixture preview stays exact and no executor can turn an empty preview into an outbound mutation.
+- EXECUTED VERIFICATION: `go test ./internal/connectors ./internal/vault ./internal/connectors/engine ./internal/connectors/hooks/github ./internal/connectors/conformance ./internal/connectors/native/amazon-sqs ./internal/app ./internal/connectors/defs/asana ./internal/connectors/defs/zendesk-support -count=1` passed every package except the two zero-record SQS regressions above; after the shared no-op correction, `go test ./internal/connectors/engine ./internal/connectors/native/amazon-sqs -count=1` passed.
+- EXECUTED VERIFICATION: `go test ./internal/connectors ./internal/vault ./internal/app -run 'Test(ProcessWriteApprovalRequiresSealedPlanAndPersistentConsumption|WriteApprovalConsumptionMarkerIsMonotonic|ConsumedApprovalCannotReplayFromRolledBackStateSnapshot)$' -count=1` passed after the plan-stable consumption refinement.

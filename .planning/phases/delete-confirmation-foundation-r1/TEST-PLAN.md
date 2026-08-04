@@ -22,6 +22,10 @@ provider calls or credential values are permitted.
    generic re-preview, incomplete request digests, and native SQS bypass. Green shares atomic grant
    consumption and canonical prepared-write execution across command, bulk, declarative, and SQS
    paths; Asana and Zendesk fixtures use real app preview/approval without provider calls.
+7. **Trusted-input review** — red proves caller-key authority, stale whole-state resurrection, and
+   mutable lifetime control. Green adds a vault-root plan seal, authority-derived grant expiry,
+   configuration/batchability target binding, revision CAS, and an authenticated monotonic
+   consumption marker outside state JSON.
 
 ## Verification
 

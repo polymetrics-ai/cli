@@ -101,6 +101,8 @@ type RuntimeConfig struct {
 	Config                map[string]string `json:"config"`
 	Secrets               map[string]string `json:"-"`
 	CredentialRevision    string            `json:"-"`
+	ConfigurationDigest   string            `json:"-"`
+	WriteApprovalScope    string            `json:"-"`
 	ApprovedPayloadSHA256 map[string]string `json:"-"`
 	// SecretStore, when set, persists a provider-rotated secret back to the
 	// caller's encrypted credential store. Optional; see SecretStore.

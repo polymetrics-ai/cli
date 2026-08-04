@@ -2,7 +2,6 @@ package amazonsqs_test
 
 import (
 	"context"
-	"crypto/sha256"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -13,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 	"testing"
-	"time"
 
 	"polymetrics.ai/internal/connectors"
 	native "polymetrics.ai/internal/connectors/native/amazon-sqs"
@@ -1409,14 +1407,15 @@ func testRuntimeConfig(endpoint string) connectors.RuntimeConfig {
 			"endpoint_url": endpoint,
 			"region":       "us-east-1",
 		},
-		Secrets:            map[string]string{"access_key": "AKIATEST", "secret_key": "synthetic-signing-key"},
-		CredentialRevision: "amazon-sqs-fixture-credential-revision",
+		Secrets:             map[string]string{"access_key": "AKIATEST", "secret_key": "synthetic-signing-key"},
+		CredentialRevision:  "amazon-sqs-fixture-credential-revision",
+		ConfigurationDigest: "amazon-sqs-fixture-configuration-digest",
+		WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
 	}
 }
 
 func approvedSQSWriteRequest(t *testing.T, connector native.Connector, action string, cfg connectors.RuntimeConfig, records []connectors.Record) connectors.WriteRequest {
 	t.Helper()
-	req := connectors.WriteRequest{Action: action, Config: cfg}
 	var destructive bool
 	for _, declared := range connector.Manifest().WriteActions {
 		if declared.Name == strings.TrimSpace(action) {
@@ -1425,18 +1424,26 @@ func approvedSQSWriteRequest(t *testing.T, connector native.Connector, action st
 		}
 	}
 	if !destructive {
-		return req
+		return connectors.WriteRequest{Action: action, Config: cfg}
 	}
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		t.Fatalf("NewFixtureWriteApprovalAuthority() error = %v", err)
+	}
+	cfg.CredentialRevision, err = authority.CredentialRevision("amazon-sqs-fixture", cfg.Secrets)
+	if err != nil {
+		t.Fatalf("CredentialRevision(%s) error = %v", action, err)
+	}
+	cfg.ConfigurationDigest, err = authority.ConfigurationDigest("amazon-sqs-fixture", cfg.Config)
+	if err != nil {
+		t.Fatalf("ConfigurationDigest(%s) error = %v", action, err)
+	}
+	cfg.WriteApprovalScope = connectors.WriteApprovalScopeFixture
+	req := connectors.WriteRequest{Action: action, Config: cfg}
 	preview, err := connector.DryRunWrite(context.Background(), req, records)
 	if err != nil {
 		t.Fatalf("DryRunWrite(%s) error = %v", action, err)
 	}
-	key := sha256.Sum256([]byte("amazon-sqs-test-write-approval-v1"))
-	authority, err := connectors.NewWriteApprovalAuthority(key[:])
-	if err != nil {
-		t.Fatalf("NewWriteApprovalAuthority() error = %v", err)
-	}
-	now := time.Now().UTC()
 	token := "amazon-sqs-fixture-approval"
 	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
 		PlanID:        "rplan_amazon_sqs_fixture",
@@ -1444,8 +1451,6 @@ func approvedSQSWriteRequest(t *testing.T, connector native.Connector, action st
 		PreviewDigest: preview.Digest,
 		ApprovalToken: token,
 		Target:        preview.ApprovalTarget,
-		IssuedAt:      now,
-		ExpiresAt:     now.Add(time.Hour),
 		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
 	})
 	if err != nil {
@@ -1457,9 +1462,7 @@ func approvedSQSWriteRequest(t *testing.T, connector native.Connector, action st
 		PreviewDigest: grant.PreviewDigest,
 		ApprovalToken: token,
 		Target:        grant.Target,
-		ExpiresAt:     grant.ExpiresAt,
 		Confirmation:  grant.Confirmation,
-		Now:           now,
 	})
 	if err != nil {
 		t.Fatalf("VerifyWriteGrant(%s) error = %v", action, err)

@@ -8,5 +8,6 @@ task explicitly required independent work rather than delegated lanes.
 
 Required skills used: `gsd-programming-loop`, `golang-how-to`, `golang-design-patterns`,
 `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`,
-`golang-testing`, `golang-cli`, `golang-documentation`, and `no-mistakes` (instructions loaded;
+`golang-testing`, `golang-concurrency`, `golang-context`, `golang-lint`, `golang-cli`,
+`golang-documentation`, and `no-mistakes` (instructions loaded;
 shipping pipeline remains firstmate-gated).

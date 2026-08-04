@@ -22,20 +22,26 @@ runtime refuses unsafe execution.
 
 ## Runtime evidence
 
+Before preview, destructive plans persist a vault-authenticated plan seal containing plan identity,
+mode, connector/action identity, credential and effective-configuration revisions, batchability,
+typed confirmation, and an authority-generated lifetime.
+
 The persisted authenticated grant contains:
 
 - plan ID;
 - immutable plan hash;
 - engine-produced canonical prepared-request digest;
-- concrete target digest and secret-safe credential revision;
+- concrete target digest, secret-safe credential/configuration revisions, and batchability;
 - issue and expiry timestamps plus a one-shot nonce;
 - approval-token hash and typed confirmation kind;
 - HMAC-SHA256 authentication from a vault-derived key outside state JSON.
 
-`internal/app` authenticates and atomically consumes the grant and approval token through
-`JSONStore.Update`. It then creates opaque, execution-scoped evidence whose shared one-shot state
-cannot be copied into a replay. The raw token is never copied into engine evidence, persisted JSON,
-logs, fixtures, or errors.
+Grant expiry is derived from trusted process time and capped by the signed plan deadline; mutable
+state timestamps do not extend it. `internal/app` authenticates and consumes the grant under a
+locked revisioned state update. Before state replacement or dispatch, it creates an authenticated
+create-exclusive marker under the project vault. It then creates opaque, execution-scoped evidence
+whose shared one-shot state cannot be copied into a replay. The raw token is never copied into
+engine evidence, persisted JSON, logs, fixtures, or errors.
 
 ## Gate seam
 
@@ -44,6 +50,10 @@ complete definition/hook identity, and credential revision. Preview and executio
 prepared-write digest, and the wrapper consumes authenticated evidence before invoking the supplied
 executor callback. Declarative `writes.json` and native Amazon SQS use the wrapper. The future
 `rest_write` executor supplies its prepared requests and executor closure without changing the gate.
+
+Production evidence is rooted only in the opened project vault. Caller-key authorities produce
+explicitly untrusted evidence. Fixture evidence has a distinct MAC-bound scope and can authorize
+only loopback prepared requests.
 
 ## Compatibility
 

@@ -12,6 +12,8 @@ Verdict: passed by automated execution; no human-judgment deliverables.
 | Canonical public command | `pm github repo deploy-key delete` help and local fixture lifecycle | PASS |
 | Future executor seam | Unapproved closure blocked; approved `rest_write` closure executes | PASS |
 | Bulk/reverse-ETL resistance | batchable guard, native digest drift, Asana/Zendesk fixtures | PASS |
+| State concurrency/rollback resistance | revision-CAS stale-save and vault consumption-marker replay tests | PASS |
+| Trusted lifetime/configuration | signed plan seal, short-lived grant, configuration/batchability drift tests | PASS |
 
 All tests used temporary state, dry-run previews, replay fixtures, or `httptest`. No credentials or
 live provider calls were used.

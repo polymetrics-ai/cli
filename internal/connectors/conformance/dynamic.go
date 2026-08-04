@@ -199,8 +199,7 @@ func writeRequestFor(actionName string, cfg connectors.RuntimeConfig) connectors
 // engine's real no-network preview so fixture execution exercises the same
 // gate as production without granting a bypass to arbitrary callers.
 func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionName string, cfg connectors.RuntimeConfig, records []connectors.Record, hooks engine.Hooks) (connectors.WriteRequest, error) {
-	authorityKey := sha256.Sum256([]byte("polymetrics-conformance-write-approval-v1"))
-	authority, err := connectors.NewWriteApprovalAuthority(authorityKey[:])
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
 	if err != nil {
 		return connectors.WriteRequest{}, err
 	}
@@ -208,6 +207,11 @@ func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionNam
 	if err != nil {
 		return connectors.WriteRequest{}, err
 	}
+	cfg.ConfigurationDigest, err = authority.ConfigurationDigest("conformance:"+b.Name, cfg.Config)
+	if err != nil {
+		return connectors.WriteRequest{}, err
+	}
+	cfg.WriteApprovalScope = connectors.WriteApprovalScopeFixture
 	req := writeRequestFor(actionName, cfg)
 	preview, err := engine.DryRunWrite(ctx, b, req, records, hooks)
 	if err != nil {
@@ -223,7 +227,6 @@ func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionNam
 		return connectors.WriteRequest{}, fmt.Errorf("marshal conformance fixture plan: %w", err)
 	}
 	planHash := sha256.Sum256(planPayload)
-	now := time.Now().UTC()
 	token := "conformance-fixture-approval"
 	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
 		PlanID:        "rplan_conformance_fixture",
@@ -231,8 +234,6 @@ func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionNam
 		PreviewDigest: preview.Digest,
 		ApprovalToken: token,
 		Target:        preview.ApprovalTarget,
-		IssuedAt:      now,
-		ExpiresAt:     now.Add(time.Hour),
 		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
 	})
 	if err != nil {
@@ -244,9 +245,7 @@ func approvedFixtureWriteRequest(ctx context.Context, b engine.Bundle, actionNam
 		PreviewDigest: grant.PreviewDigest,
 		ApprovalToken: token,
 		Target:        grant.Target,
-		ExpiresAt:     grant.ExpiresAt,
 		Confirmation:  grant.Confirmation,
-		Now:           now,
 	})
 	if err != nil {
 		return connectors.WriteRequest{}, err

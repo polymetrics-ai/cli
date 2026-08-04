@@ -39,3 +39,17 @@ completed separated evidence is below; CI carries the full 550+ connector suite.
 
 No dependency install, live credential, live provider call, browser UAT, or runtime service was
 required for this Go-only engine/CLI foundation.
+
+## Review-fix verification
+
+The trusted-input hardening round rechecked only the packages in its changed area. The initial
+focused command passed connectors, vault, engine, GitHub hooks, conformance, app, Asana, and
+Zendesk Support, then exposed two zero-record SQS preview regressions. After correcting the shared
+no-op prepared-write path, the final focused command passed:
+
+`go test ./internal/connectors/engine ./internal/connectors/native/amazon-sqs -count=1`
+
+The subsequent rollback audit made consumption stable for the sealed plan identity and retained the
+opaque nonce in the authenticated marker. Its final targeted check passed:
+
+`go test ./internal/connectors ./internal/vault ./internal/app -run 'Test(ProcessWriteApprovalRequiresSealedPlanAndPersistentConsumption|WriteApprovalConsumptionMarkerIsMonotonic|ConsumedApprovalCannotReplayFromRolledBackStateSnapshot)$' -count=1`

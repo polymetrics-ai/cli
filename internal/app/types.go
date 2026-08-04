@@ -148,6 +148,7 @@ type ReversePlan struct {
 	RecordCount            int                            `json:"record_count"`
 	Sample                 []connectors.Record            `json:"sample,omitempty"`
 	PlanHash               string                         `json:"plan_hash"`
+	PlanSeal               *connectors.WritePlanSeal      `json:"plan_seal,omitempty"`
 	PreviewDigest          string                         `json:"preview_digest,omitempty"`
 	PreviewedAt            time.Time                      `json:"previewed_at,omitempty"`
 	ApprovalTokenHash      string                         `json:"approval_token_hash,omitempty"`

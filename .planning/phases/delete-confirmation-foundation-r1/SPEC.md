@@ -19,10 +19,12 @@ does not add connector aliases, synthetic duplicate commands, or a generic HTTP 
 3. A destructive plan does not become executable merely because it exists. A real no-network
    preview must materialize every canonical request and bind all records, query/body construction,
    definition/hook identity, concrete target, and secret-safe credential revision.
-4. The persisted grant is authenticated with a vault-derived key outside state and binds plan,
-   preview, target, token hash, typed confirmation, nonce, and expiry without carrying secrets.
-5. App execution atomically reloads and consumes the grant before dispatch. The opaque engine
-   evidence is independently one-shot even when copied.
+4. A vault-authenticated plan seal binds plan lifetime, identity, mode, connector/action,
+   credential/configuration revisions, batchability, and confirmation before preview. The persisted
+   grant adds the exact preview and concrete target without carrying secrets.
+5. App execution reloads under a revisioned state update and creates a monotonic authenticated
+   vault consumption marker before dispatch. The opaque engine evidence is independently one-shot
+   even when copied or when state JSON is rolled back.
 6. The shared prepared-write gate validates evidence before invoking an executor callback.
    Declarative writes and native Amazon SQS use this seam, and a future `rest_write` executor can use
    it unchanged.

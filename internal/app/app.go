@@ -25,6 +25,8 @@ import (
 
 const reversePlanModeConnectorCommand = "connector_command"
 
+var errStateRevisionConflict = errors.New("project state changed in another process")
+
 type App struct {
 	root       string
 	projectDir string
@@ -46,6 +48,7 @@ type sqlQueryEngine interface {
 }
 
 type state struct {
+	Revision     uint64                       `json:"revision"`
 	Credentials  []CredentialMeta             `json:"credentials"`
 	Connections  []Connection                 `json:"connections"`
 	Catalogs     []CatalogSnapshot            `json:"catalogs"`
@@ -108,7 +111,7 @@ func Open(root string) (*App, error) {
 	if err != nil {
 		return nil, err
 	}
-	approval, err := connectors.NewWriteApprovalAuthority(v.WriteApprovalKey())
+	approval, err := connectors.NewProcessWriteApprovalAuthority(v.WriteApprovalRoot())
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +169,34 @@ func (a *App) load() error {
 }
 
 func (a *App) save() error {
-	return a.store.Save(a.state)
+	expectedRevision := a.state.Revision
+	next := a.state
+	updated, err := a.store.Update(func(current state) (state, error) {
+		if current.Revision != expectedRevision {
+			return current, errStateRevisionConflict
+		}
+		next.Revision = current.Revision + 1
+		return next, nil
+	})
+	if err == nil || errors.Is(err, errStateRevisionConflict) {
+		a.state = updated
+	}
+	return err
+}
+
+func (a *App) updateState(update func(state) (state, error)) (state, error) {
+	updated, err := a.store.Update(func(current state) (state, error) {
+		next, updateErr := update(current)
+		if updateErr != nil {
+			return current, updateErr
+		}
+		next.Revision = current.Revision + 1
+		return next, nil
+	})
+	if err == nil {
+		a.state = updated
+	}
+	return updated, err
 }
 
 func newStateStore(path string) statestore.JSONStore[state] {
@@ -684,7 +714,6 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 	if err != nil {
 		return ReversePlan{}, err
 	}
-	created := time.Now().UTC()
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mapped)
 	if err != nil {
 		return ReversePlan{}, err
@@ -695,7 +724,25 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 	}
 	sampleCount := min(3, len(mapped))
 	redactFields := reversePlanRedactFields(destination, req.Action)
-	challenge := a.confirmationChallengeForAction(req.DestinationConnector, req.Action)
+	confirmation := a.confirmationPolicyForAction(req.DestinationConnector, req.Action)
+	challenge := string(confirmation.Kind)
+	created := time.Now().UTC()
+	expires := created.Add(24 * time.Hour)
+	var planSeal *connectors.WritePlanSeal
+	if confirmation.Kind != "" {
+		seal, err := a.approval.IssueWritePlanSeal(connectors.WritePlanSealRequest{
+			PlanID: id, PlanHash: planHash, Connector: req.DestinationConnector, Operation: req.Action,
+			CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest,
+			Batchable: a.actionIsBatchable(req.DestinationConnector, req.Action), Scope: runtime.WriteApprovalScope,
+			Confirmation: confirmation,
+		})
+		if err != nil {
+			return ReversePlan{}, err
+		}
+		planSeal = &seal
+		created = seal.IssuedAt
+		expires = seal.ExpiresAt
+	}
 	plan := ReversePlan{
 		ID:                    id,
 		Name:                  req.Name,
@@ -713,8 +760,9 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		RecordCount:           len(records),
 		Sample:                RedactReversePlanRecords(mapped[:sampleCount], redactFields),
 		PlanHash:              planHash,
+		PlanSeal:              planSeal,
 		CreatedAt:             created,
-		ExpiresAt:             created.Add(24 * time.Hour),
+		ExpiresAt:             expires,
 	}
 	if challenge == "" {
 		token, err := randomToken(18)
@@ -778,7 +826,25 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	if err != nil {
 		return ReversePlan{}, nil, err
 	}
+	confirmation := confirmationFromChallenge(writeCommand.ConfirmationChallenge)
 	created := time.Now().UTC()
+	expires := created.Add(24 * time.Hour)
+	var planSeal *connectors.WritePlanSeal
+	if confirmation.Kind != "" {
+		seal, err := a.approval.IssueWritePlanSeal(connectors.WritePlanSealRequest{
+			PlanID: id, PlanHash: planHash, Mode: reversePlanModeConnectorCommand,
+			Connector: req.Connector, Operation: writeCommand.Write,
+			CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest,
+			Batchable: a.actionIsBatchable(req.Connector, writeCommand.Write), Scope: runtime.WriteApprovalScope,
+			Confirmation: confirmation,
+		})
+		if err != nil {
+			return ReversePlan{}, nil, err
+		}
+		planSeal = &seal
+		created = seal.IssuedAt
+		expires = seal.ExpiresAt
+	}
 	plan := ReversePlan{
 		ID:                     id,
 		Name:                   name,
@@ -798,8 +864,9 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		RecordCount:            1,
 		Sample:                 []connectors.Record{cloneRecord(writeCommand.RedactedRecord)},
 		PlanHash:               planHash,
+		PlanSeal:               planSeal,
 		CreatedAt:              created,
-		ExpiresAt:              created.Add(24 * time.Hour),
+		ExpiresAt:              expires,
 	}
 	if strings.TrimSpace(writeCommand.ConfirmationChallenge) == "" {
 		token, err := randomToken(18)
@@ -841,6 +908,9 @@ func (a *App) PreviewConnectorCommandPlan(ctx context.Context, id string) (Rever
 		Config:     plan.DestinationConfig,
 	})
 	if err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, []connectors.Record{plan.ConnectorCommandRecord})
@@ -905,11 +975,6 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 	if err := a.guardBatchableAction(plan.DestinationConnector, plan.Action, plan.SourceTable); err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
-	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
-	if err != nil {
-		return ReversePlan{}, connectors.WritePreview{}, err
-	}
-	mapped := mapReverseRecords(records, plan.Mappings)
 	writer, runtime, err := a.resolveEndpoint(ctx, EndpointConfig{
 		Connector:  plan.DestinationConnector,
 		Credential: plan.DestinationCredential,
@@ -918,6 +983,14 @@ func (a *App) PreviewReversePlan(ctx context.Context, id string) (ReversePlan, c
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
 	}
+	if err := a.verifyPlanSealForRuntime(plan, runtime); err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	records, err := a.QueryTable(ctx, QueryTableRequest{Table: plan.SourceTable, Limit: max(1, plan.RecordCount+1)})
+	if err != nil {
+		return ReversePlan{}, connectors.WritePreview{}, err
+	}
+	mapped := mapReverseRecords(records, plan.Mappings)
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mapped)
 	if err != nil {
 		return ReversePlan{}, connectors.WritePreview{}, err
@@ -966,7 +1039,7 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 	}
 	now := time.Now().UTC()
 	var issued ReversePlan
-	updated, err := a.store.Update(func(current state) (state, error) {
+	updated, err := a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			stored := current.ReversePlans[i]
 			if stored.ID != plan.ID {
@@ -978,14 +1051,17 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 			if stored.PlanHash != plan.PlanHash || stored.DestinationConnector != plan.DestinationConnector || stored.DestinationCredential != plan.DestinationCredential || stored.Action != plan.Action {
 				return current, fmt.Errorf("reverse plan %q changed while its preview was prepared", plan.ID)
 			}
+			if err := a.verifyPlanSealForTarget(stored, preview.ApprovalTarget); err != nil {
+				return current, err
+			}
 			grant, err := a.approval.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
 				PlanID:        stored.ID,
 				PlanHash:      stored.PlanHash,
+				Mode:          stored.Mode,
+				PlanSeal:      stored.PlanSeal,
 				PreviewDigest: preview.Digest,
 				ApprovalToken: token,
 				Target:        preview.ApprovalTarget,
-				IssuedAt:      now,
-				ExpiresAt:     stored.ExpiresAt,
 				Confirmation:  a.confirmationPolicyForPlan(stored),
 			})
 			if err != nil {
@@ -1012,11 +1088,9 @@ func (a *App) persistDestructivePreview(plan ReversePlan, preview connectors.Wri
 }
 
 func previewabilityError(plan ReversePlan, now time.Time) error {
+	_ = now
 	if plan.Status != "planned" && plan.Status != "previewed" {
 		return fmt.Errorf("reverse plan %q was already %s", plan.ID, plan.Status)
-	}
-	if plan.ExpiresAt.IsZero() || !now.UTC().Before(plan.ExpiresAt) {
-		return errors.New("reverse plan approval has expired")
 	}
 	return nil
 }
@@ -1058,6 +1132,48 @@ func (a *App) confirmationPolicyForPlan(plan ReversePlan) connectors.WriteConfir
 		return plan.ConfirmationPolicy
 	}
 	return confirmationFromChallenge(plan.ConfirmationChallenge)
+}
+
+func (a *App) actionIsBatchable(connectorName, actionName string) bool {
+	connector, ok := a.registry.Get(connectorName)
+	if !ok {
+		return true
+	}
+	for _, action := range connectors.ManifestOf(connector).WriteActions {
+		if action.Name == actionName {
+			return action.IsBatchable()
+		}
+	}
+	return true
+}
+
+func (a *App) verifyPlanSealForRuntime(plan ReversePlan, runtime connectors.RuntimeConfig) error {
+	confirmation := a.confirmationPolicyForPlan(plan)
+	if confirmation.Kind == "" {
+		return nil
+	}
+	if plan.PlanSeal == nil {
+		return fmt.Errorf("reverse plan %q has no authenticated plan seal", plan.ID)
+	}
+	return a.approval.VerifyWritePlanSeal(*plan.PlanSeal, connectors.WritePlanSealExpectation{
+		PlanID: plan.ID, PlanHash: plan.PlanHash, Mode: plan.Mode,
+		Connector: plan.DestinationConnector, Operation: plan.Action,
+		CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest,
+		Batchable: a.actionIsBatchable(plan.DestinationConnector, plan.Action), Scope: runtime.WriteApprovalScope,
+		Confirmation: confirmation,
+	})
+}
+
+func (a *App) verifyPlanSealForTarget(plan ReversePlan, target connectors.WriteApprovalTarget) error {
+	if plan.PlanSeal == nil {
+		return fmt.Errorf("reverse plan %q has no authenticated plan seal", plan.ID)
+	}
+	return a.approval.VerifyWritePlanSeal(*plan.PlanSeal, connectors.WritePlanSealExpectation{
+		PlanID: plan.ID, PlanHash: plan.PlanHash, Mode: plan.Mode,
+		Connector: target.Connector, Operation: target.Operation,
+		CredentialRevision: target.CredentialRevision, ConfigurationDigest: target.ConfigurationDigest,
+		Batchable: target.Batchable, Scope: target.Scope, Confirmation: target.Confirmation,
+	})
 }
 
 func (a *App) confirmationChallengeForPlan(plan ReversePlan) string {
@@ -1266,7 +1382,7 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 	now := time.Now().UTC()
 	var consumed ReversePlan
 	var evidence *connectors.WriteApprovalEvidence
-	updated, err := a.store.Update(func(current state) (state, error) {
+	updated, err := a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			stored := current.ReversePlans[i]
 			if stored.ID != expected.ID {
@@ -1295,14 +1411,13 @@ func (a *App) consumePlanApproval(expected ReversePlan, req RunReverseETLRequest
 					return current, fmt.Errorf("reverse plan %q no longer matches its approved preview", stored.ID)
 				}
 				verified, err := a.approval.VerifyWriteGrant(*stored.ApprovalGrant, connectors.WriteApprovalExpectation{
-					PlanID:        stored.ID,
-					PlanHash:      stored.PlanHash,
+					PlanID:        expected.ID,
+					PlanHash:      expected.PlanHash,
+					Mode:          expected.Mode,
 					PreviewDigest: preview.Digest,
 					ApprovalToken: req.ApprovalToken,
 					Target:        preview.ApprovalTarget,
-					ExpiresAt:     stored.ExpiresAt,
 					Confirmation:  req.Confirmation,
-					Now:           now,
 				})
 				if err != nil {
 					return current, err
@@ -1341,7 +1456,7 @@ func (a *App) finishReverseWrite(planID string, run ReverseRun, result connector
 	} else {
 		run.Status = "completed"
 	}
-	updated, persistErr := a.store.Update(func(current state) (state, error) {
+	updated, persistErr := a.updateState(func(current state) (state, error) {
 		current.ReverseRuns = append(current.ReverseRuns, run)
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID == planID && current.ReversePlans[i].Status == "executing" {
@@ -1365,7 +1480,7 @@ func (a *App) finishReverseWrite(planID string, run ReverseRun, result connector
 
 func (a *App) invalidateReversePlan(planID string) {
 	now := time.Now().UTC()
-	updated, err := a.store.Update(func(current state) (state, error) {
+	updated, err := a.updateState(func(current state) (state, error) {
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID != planID {
 				continue
@@ -1436,11 +1551,17 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 	if err != nil {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, err
 	}
+	configurationDigest, err := a.approval.ConfigurationDigest(cred.ID, config)
+	if err != nil {
+		return CredentialMeta{}, connectors.RuntimeConfig{}, err
+	}
 	return cred, connectors.RuntimeConfig{
-		ProjectDir:         a.projectDir,
-		Config:             config,
-		Secrets:            secrets,
-		CredentialRevision: credentialRevision,
+		ProjectDir:          a.projectDir,
+		Config:              config,
+		Secrets:             secrets,
+		CredentialRevision:  credentialRevision,
+		ConfigurationDigest: configurationDigest,
+		WriteApprovalScope:  connectors.WriteApprovalScopeProject,
 		// Scoped to this credential, so a provider-rotated secret (an OAuth2
 		// refresh token) is written back to the same encrypted vault entry it
 		// was read from, and to no other.

@@ -74,9 +74,11 @@ func loadBundle(t *testing.T) engine.Bundle {
 
 func runtimeConfig(baseURL string) connectors.RuntimeConfig {
 	return connectors.RuntimeConfig{
-		Config:             map[string]string{"base_url": baseURL},
-		Secrets:            map[string]string{"access_token": "synthetic-test-token"},
-		CredentialRevision: "zendesk-support-fixture-credential-revision",
+		Config:              map[string]string{"base_url": baseURL},
+		Secrets:             map[string]string{"access_token": "synthetic-test-token"},
+		CredentialRevision:  "zendesk-support-fixture-credential-revision",
+		ConfigurationDigest: "zendesk-support-fixture-configuration-digest",
+		WriteApprovalScope:  connectors.WriteApprovalScopeFixture,
 	}
 }
 

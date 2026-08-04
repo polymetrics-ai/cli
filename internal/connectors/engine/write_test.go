@@ -16,7 +16,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -101,7 +100,10 @@ func TestWriteRejectsDestructiveActionWithoutTypedApprovalEvidence(t *testing.T)
 		BodyType:   "none",
 	})
 
-	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "remove_widget", Config: connectors.RuntimeConfig{CredentialRevision: "fixture-credential-revision"}}, []connectors.Record{{"id": "42"}}, nil)
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "remove_widget", Config: connectors.RuntimeConfig{
+		CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest",
+		WriteApprovalScope: connectors.WriteApprovalScopeFixture,
+	}}, []connectors.Record{{"id": "42"}}, nil)
 	if err == nil {
 		t.Fatal("Write() dispatched DELETE without typed approval evidence")
 	}
@@ -120,7 +122,7 @@ func TestGateRejectsForgedAndReplayedDestructiveEvidence(t *testing.T) {
 		Method:        http.MethodDelete,
 		MutationClass: "delete",
 		Confirmation:  connectors.ConfirmationKindDestructive,
-	}, CredentialRevision: "fixture-credential-revision", RecordsStaged: 1, Action: "delete_widget", Definition: map[string]any{"kind": "delete"}, Requests: []PreparedRequest{{Method: http.MethodDelete, URL: "https://api.example.test/widgets/42", Target: "https://api.example.test/widgets/42"}}}
+	}, CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest", ApprovalScope: connectors.WriteApprovalScopeFixture, Batchable: false, RecordsStaged: 1, Action: "delete_widget", Definition: map[string]any{"kind": "delete"}, Requests: []PreparedRequest{{Method: http.MethodDelete, URL: "http://127.0.0.1/widgets/42", Target: "http://127.0.0.1/widgets/42"}}}
 	preview, err := PreviewPreparedWrite(prepared)
 	if err != nil {
 		t.Fatalf("PreviewPreparedWrite() error = %v", err)
@@ -134,6 +136,22 @@ func TestGateRejectsForgedAndReplayedDestructiveEvidence(t *testing.T) {
 		})
 		if err == nil || executed {
 			t.Fatal("GateDestructiveExecution() accepted caller-minted evidence")
+		}
+	})
+
+	t.Run("caller-selected-authority", func(t *testing.T) {
+		authority, err := connectors.NewUntrustedWriteApprovalAuthority(bytes.Repeat([]byte{0x31}, sha256.Size))
+		if err != nil {
+			t.Fatalf("NewUntrustedWriteApprovalAuthority() error = %v", err)
+		}
+		evidence := approvedEvidenceWithAuthority(t, authority, preview)
+		executed := false
+		err = ExecutePreparedWrite(context.Background(), prepared, evidence, preview.Digest, func(context.Context) error {
+			executed = true
+			return nil
+		})
+		if err == nil || executed {
+			t.Fatal("ExecutePreparedWrite() trusted caller-selected approval authority")
 		}
 	})
 
@@ -153,6 +171,78 @@ func TestGateRejectsForgedAndReplayedDestructiveEvidence(t *testing.T) {
 	})
 }
 
+func TestGateBindsConfigurationAndBatchability(t *testing.T) {
+	prepared := PreparedWrite{
+		Target: DestructiveTarget{
+			Connector: "acme", Operation: "delete_widget", Method: http.MethodDelete,
+			MutationClass: "delete", Confirmation: connectors.ConfirmationKindDestructive,
+		},
+		CredentialRevision:  "fixture-credential-revision",
+		ConfigurationDigest: "fixture-configuration-one",
+		ApprovalScope:       connectors.WriteApprovalScopeFixture,
+		Batchable:           false,
+		RecordsStaged:       1,
+		Action:              "delete_widget",
+		Definition:          map[string]any{"kind": "delete"},
+		Requests: []PreparedRequest{{
+			Method: http.MethodDelete, URL: "http://127.0.0.1/widgets/42", Target: "http://127.0.0.1/widgets/42",
+		}},
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite() error = %v", err)
+	}
+	for _, mutate := range []struct {
+		name string
+		fn   func(*PreparedWrite)
+	}{
+		{name: "configuration", fn: func(changed *PreparedWrite) { changed.ConfigurationDigest = "fixture-configuration-two" }},
+		{name: "batchability", fn: func(changed *PreparedWrite) { changed.Batchable = true }},
+	} {
+		t.Run(mutate.name, func(t *testing.T) {
+			changed := prepared
+			mutate.fn(&changed)
+			executed := false
+			err := ExecutePreparedWrite(context.Background(), changed, approvedEvidenceForPreview(t, preview), preview.Digest, func(context.Context) error {
+				executed = true
+				return nil
+			})
+			if err == nil || executed {
+				t.Fatalf("ExecutePreparedWrite() accepted %s drift", mutate.name)
+			}
+		})
+	}
+}
+
+func TestZeroRecordPreparedWriteNeverInvokesExecutor(t *testing.T) {
+	prepared := PreparedWrite{
+		Target: DestructiveTarget{
+			Connector: "acme", Operation: "purge_widgets", Method: http.MethodPost,
+			MutationClass: "delete", Confirmation: connectors.ConfirmationKindDestructive,
+		},
+		CredentialRevision:  "fixture-credential-revision",
+		ConfigurationDigest: "fixture-configuration-digest",
+		ApprovalScope:       connectors.WriteApprovalScopeFixture,
+		Action:              "purge_widgets",
+		Definition:          map[string]any{"kind": "delete"},
+	}
+	preview, err := PreviewPreparedWrite(prepared)
+	if err != nil {
+		t.Fatalf("PreviewPreparedWrite() error = %v", err)
+	}
+	executed := false
+	err = ExecutePreparedWrite(context.Background(), prepared, approvedEvidenceForPreview(t, preview), preview.Digest, func(context.Context) error {
+		executed = true
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("ExecutePreparedWrite() error = %v", err)
+	}
+	if executed {
+		t.Fatal("ExecutePreparedWrite() invoked executor for an empty prepared write")
+	}
+}
+
 func TestWriteFailsClosedForUnknownConfirmationDeclaration(t *testing.T) {
 	calls := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
@@ -169,7 +259,10 @@ func TestWriteFailsClosedForUnknownConfirmationDeclaration(t *testing.T) {
 		Confirm:  "type-anything",
 	})
 
-	if _, err := Write(context.Background(), b, connectors.WriteRequest{Action: "dangerous_widget_action", Config: connectors.RuntimeConfig{CredentialRevision: "fixture-credential-revision"}}, []connectors.Record{{"id": "42"}}, nil); err == nil {
+	if _, err := Write(context.Background(), b, connectors.WriteRequest{Action: "dangerous_widget_action", Config: connectors.RuntimeConfig{
+		CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest",
+		WriteApprovalScope: connectors.WriteApprovalScopeFixture,
+	}}, []connectors.Record{{"id": "42"}}, nil); err == nil {
 		t.Fatal("Write() accepted an unknown non-empty confirmation declaration")
 	}
 	if calls != 0 {
@@ -187,12 +280,15 @@ func TestRestWriteOperationUsesSharedDestructiveExecutionGate(t *testing.T) {
 		Confirmation:  &ConfirmationSpec{Kind: "destructive"},
 	}
 	prepared := PreparedWrite{
-		Target:             DestructiveTargetForOperation("acme", operation),
-		CredentialRevision: "fixture-credential-revision",
-		RecordsStaged:      1,
-		Action:             operation.ID,
-		Definition:         operation,
-		Requests:           []PreparedRequest{{Method: http.MethodDelete, URL: "https://api.example.test/widgets/42", Target: "https://api.example.test/widgets/42"}},
+		Target:              DestructiveTargetForOperation("acme", operation),
+		CredentialRevision:  "fixture-credential-revision",
+		ConfigurationDigest: "fixture-configuration-digest",
+		ApprovalScope:       connectors.WriteApprovalScopeFixture,
+		Batchable:           false,
+		RecordsStaged:       1,
+		Action:              operation.ID,
+		Definition:          operation,
+		Requests:            []PreparedRequest{{Method: http.MethodDelete, URL: "http://127.0.0.1/widgets/42", Target: "http://127.0.0.1/widgets/42"}},
 	}
 	preview, err := PreviewPreparedWrite(prepared)
 	if err != nil {
@@ -266,7 +362,14 @@ func approvedWriteRequest(t *testing.T, b Bundle, action string, records []conne
 	if err != nil {
 		t.Fatalf("CredentialRevision(%s): %v", action, err)
 	}
-	req := connectors.WriteRequest{Action: action, Config: connectors.RuntimeConfig{CredentialRevision: revision}}
+	configurationDigest, err := authority.ConfigurationDigest("fixture-credential", nil)
+	if err != nil {
+		t.Fatalf("ConfigurationDigest(%s): %v", action, err)
+	}
+	req := connectors.WriteRequest{Action: action, Config: connectors.RuntimeConfig{
+		CredentialRevision: revision, ConfigurationDigest: configurationDigest,
+		WriteApprovalScope: connectors.WriteApprovalScopeFixture,
+	}}
 	preview, err := DryRunWrite(context.Background(), b, req, records, h)
 	if err != nil {
 		t.Fatalf("DryRunWrite(%s): %v", action, err)
@@ -277,9 +380,9 @@ func approvedWriteRequest(t *testing.T, b Bundle, action string, records []conne
 
 func fixtureWriteApprovalAuthority(t *testing.T) *connectors.WriteApprovalAuthority {
 	t.Helper()
-	authority, err := connectors.NewWriteApprovalAuthority(bytes.Repeat([]byte{0x5a}, sha256.Size))
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
 	if err != nil {
-		t.Fatalf("NewWriteApprovalAuthority() error = %v", err)
+		t.Fatalf("NewFixtureWriteApprovalAuthority() error = %v", err)
 	}
 	return authority
 }
@@ -291,7 +394,6 @@ func approvedEvidenceForPreview(t *testing.T, preview connectors.WritePreview) *
 
 func approvedEvidenceWithAuthority(t *testing.T, authority *connectors.WriteApprovalAuthority, preview connectors.WritePreview) *connectors.WriteApprovalEvidence {
 	t.Helper()
-	now := time.Now().UTC()
 	token := "fixture-approval-token"
 	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
 		PlanID:        "rplan_fixture",
@@ -299,8 +401,6 @@ func approvedEvidenceWithAuthority(t *testing.T, authority *connectors.WriteAppr
 		PreviewDigest: preview.Digest,
 		ApprovalToken: token,
 		Target:        preview.ApprovalTarget,
-		IssuedAt:      now,
-		ExpiresAt:     now.Add(time.Hour),
 		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
 	})
 	if err != nil {
@@ -312,9 +412,7 @@ func approvedEvidenceWithAuthority(t *testing.T, authority *connectors.WriteAppr
 		PreviewDigest: preview.Digest,
 		ApprovalToken: token,
 		Target:        preview.ApprovalTarget,
-		ExpiresAt:     grant.ExpiresAt,
 		Confirmation:  grant.Confirmation,
-		Now:           now,
 	})
 	if err != nil {
 		t.Fatalf("VerifyWriteGrant() error = %v", err)
@@ -747,9 +845,16 @@ func TestDryRunWriteDigestBindsCanonicalRequestAndCredentialRevision(t *testing.
 		if err != nil {
 			t.Fatalf("CredentialRevision() error = %v", err)
 		}
+		configurationDigest, err := authority.ConfigurationDigest("twilio-fixture", nil)
+		if err != nil {
+			t.Fatalf("ConfigurationDigest() error = %v", err)
+		}
 		got, err := DryRunWrite(context.Background(), bundle, connectors.WriteRequest{
 			Action: "delete_message",
-			Config: connectors.RuntimeConfig{Secrets: map[string]string{"account_sid": sid}, CredentialRevision: revision},
+			Config: connectors.RuntimeConfig{
+				Secrets: map[string]string{"account_sid": sid}, CredentialRevision: revision,
+				ConfigurationDigest: configurationDigest, WriteApprovalScope: connectors.WriteApprovalScopeProject,
+			},
 		}, records, nil)
 		if err != nil {
 			t.Fatalf("DryRunWrite() error = %v", err)

@@ -72,11 +72,14 @@ func prepareDeclarativeWrite(ctx context.Context, b Bundle, req connectors.Write
 		requests = append(requests, prepared)
 	}
 	return PreparedWrite{
-		Target:             target,
-		CredentialRevision: cfg.CredentialRevision,
-		RecordsStaged:      len(records),
-		Action:             action.Name,
-		Warnings:           warnings,
+		Target:              target,
+		CredentialRevision:  cfg.CredentialRevision,
+		ConfigurationDigest: cfg.ConfigurationDigest,
+		ApprovalScope:       cfg.WriteApprovalScope,
+		Batchable:           action.IsBatchable(),
+		RecordsStaged:       len(records),
+		Action:              action.Name,
+		Warnings:            warnings,
 		Definition: declarativeWriteDefinition{
 			Connector:           b.Name,
 			Metadata:            b.Metadata,

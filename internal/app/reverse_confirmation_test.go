@@ -443,6 +443,98 @@ func TestRunReverseETLConsumesBulkApprovalAtomicallyAcrossProcesses(t *testing.T
 	}
 }
 
+func TestConsumedApprovalCannotBeResurrectedByStaleStateSave(t *testing.T) {
+	ctx := context.Background()
+	var calls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls.Add(1)
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	active, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
+	plan, _, err := active.PreviewConnectorCommandPlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
+	}
+	stale, err := app.Open(filepath.Dir(active.ProjectDir()))
+	if err != nil {
+		t.Fatalf("Open(stale process) error = %v", err)
+	}
+	if _, err := active.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}); err != nil {
+		t.Fatalf("RunReverseETL() error = %v", err)
+	}
+
+	_, staleSaveErr := stale.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "stale-github",
+		Connector: "github",
+		Config:    map[string]string{"owner": "acme", "repo": "stale", "public_access": "true", "base_url": server.URL},
+	})
+	reopened, err := app.Open(filepath.Dir(active.ProjectDir()))
+	if err != nil {
+		t.Fatalf("Open(reloaded process) error = %v", err)
+	}
+	_, replayErr := reopened.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if staleSaveErr == nil {
+		t.Fatal("stale whole-state save succeeded after approval consumption")
+	}
+	if replayErr == nil || calls.Load() != 1 {
+		t.Fatalf("replayed consumed approval: error=%v calls=%d, want rejection after one request", replayErr, calls.Load())
+	}
+}
+
+func TestConsumedApprovalCannotReplayFromRolledBackStateSnapshot(t *testing.T) {
+	ctx := context.Background()
+	var calls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls.Add(1)
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	a, plan := setupGitHubDestructiveCommandPlan(t, ctx, server.URL)
+	plan, _, err := a.PreviewConnectorCommandPlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewConnectorCommandPlan() error = %v", err)
+	}
+	statePath := filepath.Join(a.ProjectDir(), "state", "state.json")
+	snapshot, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("ReadFile(previewed state) error = %v", err)
+	}
+	request := app.RunReverseETLRequest{
+		PlanID: plan.ID, ApprovalToken: plan.ApprovalToken,
+		Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	}
+	if _, err := a.RunReverseETL(ctx, request); err != nil {
+		t.Fatalf("RunReverseETL() error = %v", err)
+	}
+	if err := os.WriteFile(statePath, snapshot, 0o600); err != nil {
+		t.Fatalf("WriteFile(rolled-back state) error = %v", err)
+	}
+	rolledBack, err := app.Open(filepath.Dir(a.ProjectDir()))
+	if err != nil {
+		t.Fatalf("Open(rolled-back state) error = %v", err)
+	}
+	if _, _, err := rolledBack.PreviewConnectorCommandPlan(ctx, plan.ID); err == nil {
+		t.Fatal("PreviewConnectorCommandPlan() re-approved a consumed plan from rolled-back state")
+	}
+	if _, err := rolledBack.RunReverseETL(ctx, request); err == nil {
+		t.Fatal("RunReverseETL() replayed a consumed grant from rolled-back state")
+	}
+	if calls.Load() != 1 {
+		t.Fatalf("destructive request calls = %d, want exactly one", calls.Load())
+	}
+}
+
 func TestPreviewReversePlanRejectsExpiredGenericPlan(t *testing.T) {
 	ctx := context.Background()
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
@@ -452,7 +544,11 @@ func TestPreviewReversePlanRejectsExpiredGenericPlan(t *testing.T) {
 
 	a, plan := setupGitHubGenericDestructivePlan(t, ctx, server.URL)
 	mutateStoredReversePlan(t, a.ProjectDir(), plan.ID, func(stored map[string]any) {
-		stored["expires_at"] = time.Now().UTC().Add(-time.Minute).Format(time.RFC3339Nano)
+		seal, ok := stored["plan_seal"].(map[string]any)
+		if !ok {
+			t.Fatalf("stored plan seal has type %T", stored["plan_seal"])
+		}
+		seal["expires_at"] = time.Now().UTC().Add(-time.Minute).Format(time.RFC3339Nano)
 	})
 	expired, err := app.Open(filepath.Dir(a.ProjectDir()))
 	if err != nil {
@@ -461,6 +557,33 @@ func TestPreviewReversePlanRejectsExpiredGenericPlan(t *testing.T) {
 
 	if _, _, err := expired.PreviewReversePlan(ctx, plan.ID); err == nil {
 		t.Fatal("PreviewReversePlan() minted approval for an expired generic plan")
+	}
+}
+
+func TestPreviewGrantExpiryIgnoresExtendedMutablePlanDeadline(t *testing.T) {
+	ctx := context.Background()
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+
+	a, plan := setupGitHubGenericDestructivePlan(t, ctx, server.URL)
+	mutateStoredReversePlan(t, a.ProjectDir(), plan.ID, func(stored map[string]any) {
+		stored["expires_at"] = time.Now().UTC().Add(100 * 365 * 24 * time.Hour).Format(time.RFC3339Nano)
+	})
+	extended, err := app.Open(filepath.Dir(a.ProjectDir()))
+	if err != nil {
+		t.Fatalf("Open(extended state) error = %v", err)
+	}
+	previewed, _, err := extended.PreviewReversePlan(ctx, plan.ID)
+	if err != nil {
+		t.Fatalf("PreviewReversePlan() error = %v", err)
+	}
+	if previewed.ApprovalGrant == nil {
+		t.Fatal("PreviewReversePlan() returned no authenticated grant")
+	}
+	if previewed.ApprovalGrant.ExpiresAt.After(time.Now().UTC().Add(time.Hour)) {
+		t.Fatalf("grant expiry = %s, want trusted short-lived deadline", previewed.ApprovalGrant.ExpiresAt)
 	}
 }
 
@@ -535,6 +658,8 @@ func (c *driftingDestructiveConnector) DryRunWrite(_ context.Context, req connec
 		ApprovalTarget: connectors.WriteApprovalTarget{
 			Connector: c.Name(), Operation: req.Action, Method: http.MethodDelete, MutationClass: "delete",
 			TargetDigest: strings.Repeat("c", 64), CredentialRevision: req.Config.CredentialRevision,
+			ConfigurationDigest: req.Config.ConfigurationDigest, Batchable: true, Scope: req.Config.WriteApprovalScope,
+			Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
 		},
 	}, nil
 }

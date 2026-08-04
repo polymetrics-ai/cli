@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net"
+	"net/url"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
@@ -24,14 +26,17 @@ type PreparedRequest struct {
 }
 
 type PreparedWrite struct {
-	Target             DestructiveTarget
-	CredentialRevision string
-	RecordsStaged      int
-	Action             string
-	Warnings           []string
-	Definition         any
-	HookIdentity       string
-	Requests           []PreparedRequest
+	Target              DestructiveTarget
+	CredentialRevision  string
+	ConfigurationDigest string
+	ApprovalScope       string
+	Batchable           bool
+	RecordsStaged       int
+	Action              string
+	Warnings            []string
+	Definition          any
+	HookIdentity        string
+	Requests            []PreparedRequest
 }
 
 func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, error) {
@@ -44,17 +49,36 @@ func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, erro
 	if prepared.Target.RequiresApproval() && strings.TrimSpace(prepared.CredentialRevision) == "" {
 		return connectors.WritePreview{}, fmt.Errorf("engine: destructive operation %q requires a credential revision", prepared.Target.Operation)
 	}
+	if prepared.Target.RequiresApproval() && strings.TrimSpace(prepared.ConfigurationDigest) == "" {
+		return connectors.WritePreview{}, fmt.Errorf("engine: destructive operation %q requires a configuration digest", prepared.Target.Operation)
+	}
+	scope := strings.TrimSpace(prepared.ApprovalScope)
+	if scope == "" {
+		scope = connectors.WriteApprovalScopeProject
+	}
+	if prepared.Target.RequiresApproval() && scope != connectors.WriteApprovalScopeProject && scope != connectors.WriteApprovalScopeFixture {
+		return connectors.WritePreview{}, fmt.Errorf("engine: destructive operation %q has an invalid approval scope", prepared.Target.Operation)
+	}
+	if prepared.Target.RequiresApproval() && scope == connectors.WriteApprovalScopeFixture {
+		if err := validateFixturePreparedRequests(prepared.Requests, prepared.RecordsStaged); err != nil {
+			return connectors.WritePreview{}, err
+		}
+	}
 	targetDigest, err := digestPreparedTargets(prepared)
 	if err != nil {
 		return connectors.WritePreview{}, err
 	}
 	approvalTarget := connectors.WriteApprovalTarget{
-		Connector:          prepared.Target.Connector,
-		Operation:          prepared.Target.Operation,
-		Method:             methodOrDefault(prepared.Target.Method),
-		MutationClass:      prepared.Target.MutationClass,
-		TargetDigest:       targetDigest,
-		CredentialRevision: prepared.CredentialRevision,
+		Connector:           prepared.Target.Connector,
+		Operation:           prepared.Target.Operation,
+		Method:              methodOrDefault(prepared.Target.Method),
+		MutationClass:       prepared.Target.MutationClass,
+		TargetDigest:        targetDigest,
+		CredentialRevision:  prepared.CredentialRevision,
+		ConfigurationDigest: prepared.ConfigurationDigest,
+		Batchable:           prepared.Batchable,
+		Scope:               scope,
+		Confirmation:        connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
 	}
 	payload := struct {
 		Version          int                            `json:"version"`
@@ -87,6 +111,27 @@ func PreviewPreparedWrite(prepared PreparedWrite) (connectors.WritePreview, erro
 	}, nil
 }
 
+func validateFixturePreparedRequests(requests []PreparedRequest, recordsStaged int) error {
+	if len(requests) == 0 {
+		if recordsStaged == 0 {
+			return nil
+		}
+		return errors.New("engine: fixture write approval requires a prepared loopback request")
+	}
+	for index, request := range requests {
+		parsed, err := url.Parse(request.URL)
+		if err != nil {
+			return fmt.Errorf("engine: fixture prepared request %d has an invalid URL", index)
+		}
+		host := strings.TrimSuffix(strings.ToLower(parsed.Hostname()), ".")
+		ip := net.ParseIP(host)
+		if host != "localhost" && (ip == nil || !ip.IsLoopback()) {
+			return fmt.Errorf("engine: fixture prepared request %d must target loopback", index)
+		}
+	}
+	return nil
+}
+
 func ExecutePreparedWrite(ctx context.Context, prepared PreparedWrite, evidence *connectors.WriteApprovalEvidence, previewDigest string, execute func(context.Context) error) error {
 	preview, err := PreviewPreparedWrite(prepared)
 	if err != nil {
@@ -94,6 +139,9 @@ func ExecutePreparedWrite(ctx context.Context, prepared PreparedWrite, evidence 
 	}
 	if strings.TrimSpace(previewDigest) == "" || preview.Digest != previewDigest {
 		return fmt.Errorf("engine: operation %q no longer matches its prepared preview", prepared.Target.Operation)
+	}
+	if prepared.RecordsStaged == 0 && len(prepared.Requests) == 0 {
+		execute = func(context.Context) error { return nil }
 	}
 	return GateDestructiveExecution(ctx, prepared.Target, evidence, preview.Digest, preview.ApprovalTarget, execute)
 }

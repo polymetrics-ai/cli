@@ -63,9 +63,11 @@ The end-to-end proof uses the existing canonical public command
 - Engine dry-run previews produce a deterministic digest over connector, action, method, path,
   effective config, records, and preview output without making a provider call.
 - Destructive plans mint no approval token until a real preview persists that digest.
-- Execution revalidates the stored plan hash and dry-run digest, consumes the single-use token,
-  creates non-secret typed approval evidence, and lets the engine compare the digest again before
-  invoking its executor closure.
+- A project-vault plan seal authenticates plan lifetime, mode, connector/action, credential and
+  effective-configuration revisions, batchability, and confirmation before preview.
+- Execution revalidates the stored plan hash and dry-run digest, creates a monotonic authenticated
+  vault consumption marker under a revision-CAS state transition, and lets the engine compare the
+  complete MAC-bound target again before invoking its executor closure.
 - The shared `DestructiveTargetForOperation` plus `GateDestructiveExecution` seam already accepts a
   `rest_write` operation and an executor callback; the future executor needs no gate changes.
 - Generic reverse ETL rechecks `batchable:false` before preview and execution. Confirmation never
@@ -75,11 +77,10 @@ The end-to-end proof uses the existing canonical public command
 
 Captain decision `defs-delete-fixtures` authorized exactly two test-only connector files:
 
-- Asana `reverse_etl_execute_test.go` now computes a plan hash from connector/action/fixture records,
-  takes the real engine dry-run digest, and attaches approval time plus typed destructive
-  confirmation before each existing DELETE replay.
-- Zendesk Support `reverse_etl_execute_test.go` supplies the same preview-bound evidence for its
-  existing DELETE replays.
+- Asana `reverse_etl_execute_test.go` obtains destructive evidence through the real app canonical
+  command plan, preview, typed confirmation, and execute lifecycle.
+- Zendesk Support `reverse_etl_execute_test.go` obtains the same evidence through the real app bulk
+  plan, preview, typed confirmation, and execute lifecycle.
 
 Both retain their original HTTP method/path/body/redaction assertions. No bundle JSON or other
 connector file changed.
@@ -91,6 +92,11 @@ approval, the future executor seam, direct/bulk/replay bypass resistance, DELETE
 unknown confirmation fail-closed behavior, and the independent `destructive:true` flag. All
 changed packages, the full `internal/cli` suite, local smoke, vet/lint/build, connector validation,
 surface sync, boundary, docs, and release gates passed.
+
+The follow-up trusted-input review additionally covers caller-key authority rejection, signed plan
+lifetime, stale whole-state CAS rejection, rolled-back-state replay, persistent nonce consumption,
+and configuration/batchability drift. Its field-by-field disposition is recorded in
+`TRUSTED-INPUT-SWEEP.md`.
 
 ## Operation coverage
 
