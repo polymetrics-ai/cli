@@ -5,12 +5,12 @@ VERIFY_JOBS ?= 2
 # fetch the matching toolchain when the ambient one is older.
 export GOTOOLCHAIN ?= auto
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint connectorgen-validate connectorgen-surface-sync connector-boundary
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary
 
 # Packages covered by `lint`: the declarative connector architecture packages.
 # Paths are filtered to existing directories so optional local trees do not
 # hard-fail golangci-lint's arg parsing.
-LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify internal/connectors/boundary cmd/connectorgen
+LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify internal/connectors/boundary internal/agentcontract cmd/connectorgen cmd/agentcontractgen
 LINT_PKGS := $(foreach d,$(LINT_CANDIDATE_DIRS),$(if $(wildcard $(d)),./$(d)/...))
 
 fmt:
@@ -73,6 +73,11 @@ lint:
 	@command -v golangci-lint >/dev/null || (echo "golangci-lint not found — brew install golangci-lint" && exit 1)
 	golangci-lint run $(LINT_PKGS)
 
+# Validates the singular delivery source, every referenced GSD command, and any
+# harness projection already registered by its owning wave.
+agent-contract-check:
+	go run ./cmd/agentcontractgen check
+
 connectorgen-validate:
 	go run ./cmd/connectorgen validate internal/connectors/defs
 
@@ -88,12 +93,12 @@ connector-boundary:
 release-workflow-check:
 	./scripts/tests/homebrew-release-notify.sh
 
-verify: fmt tidy-check vet test build docs-check smoke lint connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check
+verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check
 
 # Opt-in local gate that overlaps independent read/build checks after the
 # mutating fmt/tidy steps. CI keeps using serial `verify` for stable logs.
 verify-parallel: fmt tidy-check
-	$(MAKE) -j$(VERIFY_JOBS) vet test build lint connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check
+	$(MAKE) -j$(VERIFY_JOBS) vet test build lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check
 	$(MAKE) -j$(VERIFY_JOBS) docs-check-no-build smoke-no-build
 
 verify-duckdb:
