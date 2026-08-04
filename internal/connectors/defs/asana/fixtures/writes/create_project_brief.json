@@ -1,9 +1,21 @@
 {
   "record": {
-    "project_gid": "fixture-project-gid"
+    "project_gid": "fixture-project-gid",
+    "data": {
+      "text": "fixture-text",
+      "html_text": "fixture-html-text",
+      "title": "fixture-title"
+    }
   },
   "expect": {
     "method": "POST",
-    "path": "/projects/fixture-project-gid/project_briefs"
+    "path": "/projects/fixture-project-gid/project_briefs",
+    "body": {
+      "data": {
+        "text": "fixture-text",
+        "html_text": "fixture-html-text",
+        "title": "fixture-title"
+      }
+    }
   }
 }

@@ -1,7 +1,16 @@
 {
-  "record": {},
+  "record": {
+    "job": {
+      "action": "fixture-action"
+    }
+  },
   "expect": {
     "method": "POST",
-    "path": "/api/v2/trigger_categories/jobs"
+    "path": "/api/v2/trigger_categories/jobs",
+    "body": {
+      "job": {
+        "action": "fixture-action"
+      }
+    }
   }
 }

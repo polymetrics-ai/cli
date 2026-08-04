@@ -1,7 +1,24 @@
 {
-  "record": {},
+  "record": {
+    "data": {
+      "name": "fixture-name",
+      "due_on": "fixture-due-on",
+      "followers": [
+        "fixture-followers"
+      ]
+    }
+  },
   "expect": {
     "method": "POST",
-    "path": "/goals"
+    "path": "/goals",
+    "body": {
+      "data": {
+        "name": "fixture-name",
+        "due_on": "fixture-due-on",
+        "followers": [
+          "fixture-followers"
+        ]
+      }
+    }
   }
 }

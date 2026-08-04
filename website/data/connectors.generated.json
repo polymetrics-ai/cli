@@ -8136,6 +8136,22 @@
               "summary": "Optional request field data.people_value.",
               "values": [],
               "maps_to": "record.data.people_value"
+            },
+            {
+              "name": "resource-subtype",
+              "type": "string",
+              "summary": "Required request field data.resource_subtype.",
+              "values": [],
+              "maps_to": "record.data.resource_subtype",
+              "allow_empty": false
+            },
+            {
+              "name": "workspace",
+              "type": "string",
+              "summary": "Required request field data.workspace.",
+              "values": [],
+              "maps_to": "record.data.workspace",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -8371,6 +8387,14 @@
               "summary": "Optional request field data.people_value.",
               "values": [],
               "maps_to": "record.data.people_value"
+            },
+            {
+              "name": "workspace",
+              "type": "string",
+              "summary": "Required request field data.workspace.",
+              "values": [],
+              "maps_to": "record.data.workspace",
+              "allow_empty": false
             }
           ],
           "examples": [],
@@ -245074,11 +245098,6 @@
         "kind": "create"
       },
       {
-        "name": "tickets_update_many",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
         "name": "create_trigger_category",
         "method": "POST",
         "kind": "create"
@@ -245105,11 +245124,6 @@
       },
       {
         "name": "update_current_user_settings",
-        "method": "PUT",
-        "kind": "update"
-      },
-      {
-        "name": "update_many_users",
         "method": "PUT",
         "kind": "update"
       },
@@ -247480,10 +247494,10 @@
             },
             {
               "name": "attribute-value-ids",
-              "type": "string_array",
-              "summary": "Optional request field ticket.attribute_value_ids.",
+              "type": "integer",
+              "summary": "Optional request field ticket.attribute_value_ids.0.",
               "values": [],
-              "maps_to": "record.ticket.attribute_value_ids"
+              "maps_to": "record.ticket.attribute_value_ids.0"
             },
             {
               "name": "brand-id",
@@ -247494,10 +247508,10 @@
             },
             {
               "name": "collaborator-ids",
-              "type": "string_array",
-              "summary": "Optional request field ticket.collaborator_ids.",
+              "type": "integer",
+              "summary": "Optional request field ticket.collaborator_ids.0.",
               "values": [],
-              "maps_to": "record.ticket.collaborator_ids"
+              "maps_to": "record.ticket.collaborator_ids.0"
             },
             {
               "name": "ticket-collaborators-0-email",
@@ -248219,6 +248233,22 @@
               "summary": "Optional request field custom_object_field.tag.",
               "values": [],
               "maps_to": "record.custom_object_field.tag",
+              "allow_empty": false
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "summary": "Required request field custom_object_field.title.",
+              "values": [],
+              "maps_to": "record.custom_object_field.title",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "Required request field custom_object_field.type.",
+              "values": [],
+              "maps_to": "record.custom_object_field.type",
               "allow_empty": false
             }
           ],
@@ -251400,6 +251430,22 @@
               "summary": "Optional request field field.tag.",
               "values": [],
               "maps_to": "record.field.tag",
+              "allow_empty": false
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "summary": "Required request field field.title.",
+              "values": [],
+              "maps_to": "record.field.title",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "Required request field field.type.",
+              "values": [],
+              "maps_to": "record.field.type",
               "allow_empty": false
             }
           ],
@@ -256300,10 +256346,10 @@
             },
             {
               "name": "attribute-value-ids",
-              "type": "string_array",
-              "summary": "Optional request field tickets.0.attribute_value_ids.",
+              "type": "integer",
+              "summary": "Optional request field tickets.0.attribute_value_ids.0.",
               "values": [],
-              "maps_to": "record.tickets.0.attribute_value_ids"
+              "maps_to": "record.tickets.0.attribute_value_ids.0"
             },
             {
               "name": "brand-id",
@@ -256314,10 +256360,10 @@
             },
             {
               "name": "collaborator-ids",
-              "type": "string_array",
-              "summary": "Optional request field tickets.0.collaborator_ids.",
+              "type": "integer",
+              "summary": "Optional request field tickets.0.collaborator_ids.0.",
               "values": [],
-              "maps_to": "record.tickets.0.collaborator_ids"
+              "maps_to": "record.tickets.0.collaborator_ids.0"
             },
             {
               "name": "tickets-0-collaborators-0-email",
@@ -256545,17 +256591,18 @@
           "path": "operations tickets_update_many",
           "summary": "Update Many Tickets",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
-          "write": "tickets_update_many",
+          "write": "",
+          "operation": "zendesk-support.tickets_update_many",
           "source_cli_path": "",
           "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
           "flags": [],
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
-          "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+          "approval": "reverse ETL plan, preview, explicit approval, execute",
+          "notes": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
         },
         {
           "path": "operations list_trigger_categories",
@@ -258240,10 +258287,10 @@
             },
             {
               "name": "agent-home-pinned-views",
-              "type": "string_array",
-              "summary": "Optional request field settings.agent_home_pinned_views.",
+              "type": "integer",
+              "summary": "Optional request field settings.agent_home_pinned_views.0.",
               "values": [],
-              "maps_to": "record.settings.agent_home_pinned_views"
+              "maps_to": "record.settings.agent_home_pinned_views.0"
             },
             {
               "name": "agent-workspace-theme-preference",
@@ -258284,10 +258331,10 @@
             },
             {
               "name": "shared-views-order",
-              "type": "string_array",
-              "summary": "Optional request field settings.shared_views_order.",
+              "type": "integer",
+              "summary": "Optional request field settings.shared_views_order.0.",
               "values": [],
-              "maps_to": "record.settings.shared_views_order"
+              "maps_to": "record.settings.shared_views_order.0"
             }
           ],
           "examples": [],
@@ -258351,17 +258398,18 @@
           "path": "operations update_many_users",
           "summary": "Update Many Users",
           "intent": "reverse_etl",
-          "availability": "implemented",
+          "availability": "planned",
           "stream": "",
-          "write": "update_many_users",
+          "write": "",
+          "operation": "zendesk-support.update_many_users",
           "source_cli_path": "",
           "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
           "flags": [],
           "examples": [],
           "output_policy": "",
           "risk": "medium",
-          "approval": "reverse ETL plan -> preview -> explicit approval -> execute",
-          "notes": "Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute."
+          "approval": "reverse ETL plan, preview, explicit approval, execute",
+          "notes": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface."
         },
         {
           "path": "operations show_view",
@@ -258672,10 +258720,10 @@
             },
             {
               "name": "macros",
-              "type": "string_array",
-              "summary": "Optional request field workspace.macros.",
+              "type": "integer",
+              "summary": "Optional request field workspace.macros.0.",
               "values": [],
-              "maps_to": "record.workspace.macros"
+              "maps_to": "record.workspace.macros.0"
             },
             {
               "name": "ticket-form-id",
@@ -258745,10 +258793,10 @@
             },
             {
               "name": "macros",
-              "type": "string_array",
-              "summary": "Optional request field workspace.macros.",
+              "type": "integer",
+              "summary": "Optional request field workspace.macros.0.",
               "values": [],
-              "maps_to": "record.workspace.macros"
+              "maps_to": "record.workspace.macros.0"
             },
             {
               "name": "ticket-form-id",
@@ -258818,10 +258866,10 @@
           "flags": [
             {
               "name": "ids",
-              "type": "string_array",
-              "summary": "Optional request field ids.",
+              "type": "integer",
+              "summary": "Optional request field ids.0.",
               "values": [],
-              "maps_to": "record.ids"
+              "maps_to": "record.ids.0"
             }
           ],
           "examples": [],

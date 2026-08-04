@@ -1,7 +1,24 @@
 {
-  "record": {},
+  "record": {
+    "macros": [
+      {
+        "id": 1,
+        "active": true,
+        "position": 1
+      }
+    ]
+  },
   "expect": {
     "method": "PUT",
-    "path": "/api/v2/macros/update_many"
+    "path": "/api/v2/macros/update_many",
+    "body": {
+      "macros": [
+        {
+          "id": 1,
+          "active": true,
+          "position": 1
+        }
+      ]
+    }
   }
 }

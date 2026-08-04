@@ -6450,6 +6450,28 @@
       }
     },
     {
+      "id": "zendesk-support.tickets_update_many",
+      "kind": "rest_write",
+      "summary": "Update Many Tickets (PUT /api/v2/tickets/update_many)",
+      "description": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "risk": "medium",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "output_policy": "write_result_redacted",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/tickets/update_many",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "title": "TicketsUpdateRequest",
+          "additionalProperties": true
+        }
+      }
+    },
+    {
       "id": "zendesk-support.list_trigger_categories",
       "kind": "rest_read",
       "summary": "List Ticket Trigger Categories (GET /api/v2/trigger_categories)",
@@ -8074,6 +8096,38 @@
         "method": "GET",
         "path": "/api/v2/users/show_many",
         "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zendesk-support.update_many_users",
+      "kind": "rest_write",
+      "summary": "Update Many Users (PUT /api/v2/users/update_many)",
+      "description": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+      "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+      "risk": "medium",
+      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "output_policy": "write_result_redacted",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v2/users/update_many",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "oneOf": [
+            {
+              "type": "object",
+              "title": "UserUpdateRequest",
+              "additionalProperties": true
+            },
+            {
+              "type": "object",
+              "title": "UsersRequest",
+              "additionalProperties": true
+            }
+          ],
+          "additionalProperties": true
+        }
       }
     },
     {

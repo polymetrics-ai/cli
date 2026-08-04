@@ -273,6 +273,7 @@ REVERSE ETL ACTIONS
     risk: deletes a Zendesk ticket field record; destructive external mutation requiring approval
   update_account_email_settings:
     endpoint: PUT /api/v2/account/email_settings
+    required fields: settings
     risk: external mutation; high-risk update against PUT /api/v2/account/email_settings; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_approval_request:
     endpoint: POST /api/v2/approval_requests
@@ -280,47 +281,51 @@ REVERSE ETL ACTIONS
     risk: external mutation; high-risk create against POST /api/v2/approval_requests; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_attachment:
     endpoint: PUT /api/v2/attachments/{{ record.attachment_id }}
-    required fields: attachment_id
+    required fields: attachment_id, attachment
     risk: external mutation; high-risk update against PUT /api/v2/attachments/{attachment_id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_bookmark:
     endpoint: POST /api/v2/bookmarks
+    required fields: bookmark
     risk: external mutation; medium-risk create against POST /api/v2/bookmarks; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_brand:
     endpoint: POST /api/v2/brands
+    required fields: brand
     risk: external mutation; high-risk create against POST /api/v2/brands; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_brand:
     endpoint: PUT /api/v2/brands/{{ record.brand_id }}
-    required fields: brand_id
+    required fields: brand_id, brand
     risk: external mutation; high-risk update against PUT /api/v2/brands/{brand_id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_ticket_or_voicemail_ticket:
     endpoint: POST /api/v2/channels/voice/tickets
+    required fields: ticket
     risk: external mutation; medium-risk create against POST /api/v2/channels/voice/tickets; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_custom_object:
     endpoint: POST /api/v2/custom_objects
+    required fields: custom_object
     risk: external mutation; high-risk create against POST /api/v2/custom_objects; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_access_rule:
     endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/access_rules
-    required fields: custom_object_key
+    required fields: custom_object_key, access_rule
     risk: external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/access_rules; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_access_rule:
     endpoint: PATCH /api/v2/custom_objects/{{ record.custom_object_key }}/access_rules/{{ record.id }}
-    required fields: custom_object_key, id
+    required fields: custom_object_key, id, access_rule
     risk: external mutation; high-risk update against PATCH /api/v2/custom_objects/{custom_object_key}/access_rules/{id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_custom_object_field:
     endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/fields
-    required fields: custom_object_key
+    required fields: custom_object_key, custom_object_field
     risk: external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/fields; requires reverse ETL plan -> preview -> explicit approval -> execute
   custom_object_record_bulk_jobs:
     endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/jobs
-    required fields: custom_object_key
+    required fields: custom_object_key, job
     risk: external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/jobs; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_custom_object_record:
     endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/records
-    required fields: custom_object_key
+    required fields: custom_object_key, custom_object_record
     risk: external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/records; requires reverse ETL plan -> preview -> explicit approval -> execute
   upsert_custom_object_record_by_external_id_or_name:
     endpoint: PATCH /api/v2/custom_objects/{{ record.custom_object_key }}/records
-    required fields: custom_object_key
+    required fields: custom_object_key, custom_object_record
     risk: external mutation; high-risk update against PATCH /api/v2/custom_objects/{custom_object_key}/records; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_custom_object_record_attachment:
     endpoint: PUT /api/v2/custom_objects/{{ record.custom_object_key }}/records/{{ record.record_id }}/attachments/{{ record.id }}
@@ -328,36 +333,39 @@ REVERSE ETL ACTIONS
     risk: external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments/{id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_object_trigger:
     endpoint: POST /api/v2/custom_objects/{{ record.custom_object_key }}/triggers
-    required fields: custom_object_key
+    required fields: custom_object_key, trigger
     risk: external mutation; high-risk create against POST /api/v2/custom_objects/{custom_object_key}/triggers; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_object_trigger:
     endpoint: PUT /api/v2/custom_objects/{{ record.custom_object_key }}/triggers/{{ record.trigger_id }}
-    required fields: custom_object_key, trigger_id
+    required fields: custom_object_key, trigger_id, trigger
     risk: external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/triggers/{trigger_id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_many_object_triggers:
     endpoint: PUT /api/v2/custom_objects/{{ record.custom_object_key }}/triggers/update_many
-    required fields: custom_object_key
+    required fields: custom_object_key, triggers
     risk: external mutation; high-risk update against PUT /api/v2/custom_objects/{custom_object_key}/triggers/update_many; requires reverse ETL plan -> preview -> explicit approval -> execute
   bulk_update_default_custom_status:
     endpoint: PUT /api/v2/custom_status/default
+    required fields: ids
     risk: external mutation; high-risk update against PUT /api/v2/custom_status/default; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_custom_status:
     endpoint: POST /api/v2/custom_statuses
+    required fields: custom_status
     risk: external mutation; high-risk create against POST /api/v2/custom_statuses; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_custom_status:
     endpoint: PUT /api/v2/custom_statuses/{{ record.custom_status_id }}
-    required fields: custom_status_id
+    required fields: custom_status_id, custom_status
     risk: external mutation; high-risk update against PUT /api/v2/custom_statuses/{custom_status_id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_ticket_form_statuses_for_custom_status:
     endpoint: POST /api/v2/custom_statuses/{{ record.custom_status_id }}/ticket_form_statuses
-    required fields: custom_status_id
+    required fields: custom_status_id, ticket_form_status
     risk: external mutation; high-risk create against POST /api/v2/custom_statuses/{custom_status_id}/ticket_form_statuses; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_deletion_schedule:
     endpoint: POST /api/v2/deletion_schedules
+    required fields: deletion_schedule
     risk: external mutation; high-risk create against POST /api/v2/deletion_schedules; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_deletion_schedule:
     endpoint: PUT /api/v2/deletion_schedules/{{ record.deletion_schedule_id }}
-    required fields: deletion_schedule_id
+    required fields: deletion_schedule_id, deletion_schedule
     risk: external mutation; high-risk update against PUT /api/v2/deletion_schedules/{deletion_schedule_id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_group_membership:
     endpoint: POST /api/v2/group_memberships
@@ -369,38 +377,47 @@ REVERSE ETL ACTIONS
     risk: external mutation; high-risk create against POST /api/v2/group_memberships/create_many; requires reverse ETL plan -> preview -> explicit approval -> execute
   ticket_import:
     endpoint: POST /api/v2/imports/tickets
+    required fields: ticket
     risk: external mutation; high-risk create against POST /api/v2/imports/tickets; requires reverse ETL plan -> preview -> explicit approval -> execute
   ticket_bulk_import:
     endpoint: POST /api/v2/imports/tickets/create_many
+    required fields: tickets
     risk: external mutation; high-risk create against POST /api/v2/imports/tickets/create_many; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_itam_asset_type:
     endpoint: POST /api/v2/it_asset_management/asset_types
+    required fields: asset_type
     risk: external mutation; high-risk create against POST /api/v2/it_asset_management/asset_types; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_itam_asset_type_field:
     endpoint: POST /api/v2/it_asset_management/asset_types/{{ record.asset_type_id }}/fields
-    required fields: asset_type_id
+    required fields: asset_type_id, field
     risk: external mutation; high-risk create against POST /api/v2/it_asset_management/asset_types/{asset_type_id}/fields; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_itam_asset:
     endpoint: POST /api/v2/it_asset_management/assets
+    required fields: asset
     risk: external mutation; high-risk create against POST /api/v2/it_asset_management/assets; requires reverse ETL plan -> preview -> explicit approval -> execute
   itam_asset_bulk_jobs:
     endpoint: POST /api/v2/it_asset_management/assets/jobs
+    required fields: job
     risk: external mutation; high-risk create against POST /api/v2/it_asset_management/assets/jobs; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_itam_location:
     endpoint: POST /api/v2/it_asset_management/locations
+    required fields: location
     risk: external mutation; high-risk create against POST /api/v2/it_asset_management/locations; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_itam_status:
     endpoint: POST /api/v2/it_asset_management/statuses
+    required fields: status
     risk: external mutation; high-risk create against POST /api/v2/it_asset_management/statuses; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_itam_status:
     endpoint: PATCH /api/v2/it_asset_management/statuses/{{ record.status_id }}
-    required fields: status_id
+    required fields: status_id, status
     risk: external mutation; high-risk update against PATCH /api/v2/it_asset_management/statuses/{status_id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_many_macros:
     endpoint: PUT /api/v2/macros/update_many
+    required fields: macros
     risk: external mutation; high-risk update against PUT /api/v2/macros/update_many; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_organization_subscription:
     endpoint: POST /api/v2/organization_subscriptions
+    required fields: organization_subscription
     risk: external mutation; high-risk create against POST /api/v2/organization_subscriptions; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_saved_search:
     endpoint: POST /api/v2/saved_searches
@@ -412,16 +429,19 @@ REVERSE ETL ACTIONS
     risk: external mutation; medium-risk update against PUT /api/v2/saved_searches/{id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   bulk_recover_suspended_tickets:
     endpoint: PUT /api/v2/suspended_tickets/bulk_recover
+    required fields: author
     risk: external mutation; high-risk update against PUT /api/v2/suspended_tickets/bulk_recover; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_task_list_template:
     endpoint: POST /api/v2/task_list_templates
+    required fields: task_list_template
     risk: external mutation; high-risk create against POST /api/v2/task_list_templates; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_task_list_template:
     endpoint: PUT /api/v2/task_list_templates/{{ record.task_list_template_id }}
-    required fields: task_list_template_id
+    required fields: task_list_template_id, task_list_template
     risk: external mutation; high-risk update against PUT /api/v2/task_list_templates/{task_list_template_id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_ticket_content_pin:
     endpoint: POST /api/v2/ticket_content_pins
+    required fields: ticket_content_pin
     risk: external mutation; high-risk create against POST /api/v2/ticket_content_pins; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_ticket_form_statuses:
     endpoint: POST /api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses
@@ -429,34 +449,35 @@ REVERSE ETL ACTIONS
     risk: external mutation; high-risk create against POST /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_ticket_form_statuses:
     endpoint: PUT /api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses
-    required fields: ticket_form_id
+    required fields: ticket_form_id, ticket_form_status
     risk: external mutation; high-risk update against PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_ticket_form_status_by_id:
     endpoint: PUT /api/v2/ticket_forms/{{ record.ticket_form_id }}/ticket_form_statuses/{{ record.ticket_form_status_id }}
-    required fields: ticket_form_id, ticket_form_status_id
+    required fields: ticket_form_id, ticket_form_status_id, ticket_form_status
     risk: external mutation; high-risk update against PUT /api/v2/ticket_forms/{ticket_form_id}/ticket_form_statuses/{ticket_form_status_id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_task_list:
     endpoint: POST /api/v2/tickets/{{ record.ticket_id }}/task_lists
-    required fields: ticket_id
+    required fields: ticket_id, task_list
     risk: external mutation; medium-risk create against POST /api/v2/tickets/{ticket_id}/task_lists; requires reverse ETL plan -> preview -> explicit approval -> execute
   tickets_create_many:
     endpoint: POST /api/v2/tickets/create_many
+    required fields: tickets
     risk: external mutation; high-risk create against POST /api/v2/tickets/create_many; requires reverse ETL plan -> preview -> explicit approval -> execute
-  tickets_update_many:
-    endpoint: PUT /api/v2/tickets/update_many
-    risk: external mutation; medium-risk update against PUT /api/v2/tickets/update_many; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_trigger_category:
     endpoint: POST /api/v2/trigger_categories
+    required fields: trigger_category
     risk: external mutation; high-risk create against POST /api/v2/trigger_categories; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_trigger_category:
     endpoint: PATCH /api/v2/trigger_categories/{{ record.trigger_category_id }}
-    required fields: trigger_category_id
+    required fields: trigger_category_id, trigger_category
     risk: external mutation; high-risk update against PATCH /api/v2/trigger_categories/{trigger_category_id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   batch_operate_trigger_categories:
     endpoint: POST /api/v2/trigger_categories/jobs
+    required fields: job
     risk: external mutation; high-risk create against POST /api/v2/trigger_categories/jobs; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_many_triggers:
     endpoint: PUT /api/v2/triggers/update_many
+    required fields: triggers
     risk: external mutation; high-risk update against PUT /api/v2/triggers/update_many; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_user_group_membership:
     endpoint: POST /api/v2/users/{{ record.user_id }}/group_memberships
@@ -464,19 +485,19 @@ REVERSE ETL ACTIONS
     risk: external mutation; high-risk create against POST /api/v2/users/{user_id}/group_memberships; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_current_user_settings:
     endpoint: PUT /api/v2/users/me/settings
+    required fields: settings
     risk: external mutation; high-risk update against PUT /api/v2/users/me/settings; requires reverse ETL plan -> preview -> explicit approval -> execute
-  update_many_users:
-    endpoint: PUT /api/v2/users/update_many
-    risk: external mutation; medium-risk update against PUT /api/v2/users/update_many; requires reverse ETL plan -> preview -> explicit approval -> execute
   create_workspace:
     endpoint: POST /api/v2/workspaces
+    required fields: workspace
     risk: external mutation; high-risk create against POST /api/v2/workspaces; requires reverse ETL plan -> preview -> explicit approval -> execute
   update_workspace:
     endpoint: PUT /api/v2/workspaces/{{ record.workspace_id }}
-    required fields: workspace_id
+    required fields: workspace_id, workspace
     risk: external mutation; high-risk update against PUT /api/v2/workspaces/{workspace_id}; requires reverse ETL plan -> preview -> explicit approval -> execute
   reorder_workspaces:
     endpoint: PUT /api/v2/workspaces/reorder
+    required fields: ids
     risk: external mutation; high-risk update against PUT /api/v2/workspaces/reorder; requires reverse ETL plan -> preview -> explicit approval -> execute
 
 SECURITY
@@ -629,7 +650,7 @@ COMMAND SURFACE
     operations delete_access_rule - Delete Access Rule [intent=reverse_etl availability=planned operation=zendesk-support.delete_access_rule]; approval: reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required; risk: critical; notes: In scope, but blocked by default until represented by a typed action with confirm:"destructive", idempotency notes where applicable, and plan/preview/explicit approval/execute.
     operations list_access_rule_definitions - List Access Rule Definitions [intent=direct_read availability=planned operation=zendesk-support.list_access_rule_definitions]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
     operations list_custom_object_fields - List Custom Object Fields [intent=direct_read availability=planned operation=zendesk-support.list_custom_object_fields]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
-    operations create_custom_object_field - Create Custom Object Field [intent=reverse_etl availability=implemented write=create_custom_object_field]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: high; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --custom-object-key (required), --active, --allow-solving, --name, --position, --value, --description, --key, --custom-object-field-position, --allowed-currencies, --autoincrement-enabled, --autoincrement-next-sequence, --autoincrement-padding, --autoincrement-prefix, --cascade-permissions-enabled, --is-unique, --rollup-aggregated-field, --rollup-aggregation-type, --rollup-child-object, --raw-description, --raw-title, --regexp-for-validation, --relationship-target-type, --required, --tag
+    operations create_custom_object_field - Create Custom Object Field [intent=reverse_etl availability=implemented write=create_custom_object_field]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: high; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --custom-object-key (required), --active, --allow-solving, --name, --position, --value, --description, --key, --custom-object-field-position, --allowed-currencies, --autoincrement-enabled, --autoincrement-next-sequence, --autoincrement-padding, --autoincrement-prefix, --cascade-permissions-enabled, --is-unique, --rollup-aggregated-field, --rollup-aggregation-type, --rollup-child-object, --raw-description, --raw-title, --regexp-for-validation, --relationship-target-type, --required, --tag, --title, --type
     operations show_custom_object_field - Show Custom Object Field [intent=direct_read availability=planned operation=zendesk-support.show_custom_object_field]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
     operations update_custom_object_field - Update Custom Object Field [intent=reverse_etl availability=planned operation=zendesk-support.update_custom_object_field]; approval: reverse ETL plan, preview, explicit approval, execute; risk: high; notes: Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.
     operations delete_custom_object_field - Delete Custom Object Field [intent=reverse_etl availability=planned operation=zendesk-support.delete_custom_object_field]; approval: reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required; risk: high; notes: In scope, but blocked by default until represented by a typed action with confirm:"destructive", idempotency notes where applicable, and plan/preview/explicit approval/execute.
@@ -754,7 +775,7 @@ COMMAND SURFACE
     operations update_itam_asset_type - Update Asset Type [intent=reverse_etl availability=planned operation=zendesk-support.update_itam_asset_type]; approval: reverse ETL plan, preview, explicit approval, execute; risk: high; notes: Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.
     operations delete_itam_asset_type - Delete Asset Type [intent=reverse_etl availability=planned operation=zendesk-support.delete_itam_asset_type]; approval: reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required; risk: high; notes: In scope, but blocked by default until represented by a typed action with confirm:"destructive", idempotency notes where applicable, and plan/preview/explicit approval/execute.
     operations list_itam_asset_type_fields - List Asset Fields [intent=direct_read availability=planned operation=zendesk-support.list_itam_asset_type_fields]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: low; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
-    operations create_itam_asset_type_field - Create Asset Field [intent=reverse_etl availability=implemented write=create_itam_asset_type_field]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: high; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --asset-type-id (required), --active, --allow-solving, --name, --position, --value, --description, --key, --field-position, --allowed-currencies, --autoincrement-enabled, --autoincrement-next-sequence, --autoincrement-padding, --autoincrement-prefix, --cascade-permissions-enabled, --is-unique, --rollup-aggregated-field, --rollup-aggregation-type, --rollup-child-object, --raw-description, --raw-title, --regexp-for-validation, --relationship-target-type, --required, --tag
+    operations create_itam_asset_type_field - Create Asset Field [intent=reverse_etl availability=implemented write=create_itam_asset_type_field]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: high; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --asset-type-id (required), --active, --allow-solving, --name, --position, --value, --description, --key, --field-position, --allowed-currencies, --autoincrement-enabled, --autoincrement-next-sequence, --autoincrement-padding, --autoincrement-prefix, --cascade-permissions-enabled, --is-unique, --rollup-aggregated-field, --rollup-aggregation-type, --rollup-child-object, --raw-description, --raw-title, --regexp-for-validation, --relationship-target-type, --required, --tag, --title, --type
     operations show_itam_asset_type_field - Show Asset Field [intent=direct_read availability=planned operation=zendesk-support.show_itam_asset_type_field]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: low; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
     operations update_itam_asset_type_field - Update Asset Field [intent=reverse_etl availability=planned operation=zendesk-support.update_itam_asset_type_field]; approval: reverse ETL plan, preview, explicit approval, execute; risk: high; notes: Blocked by default until the pinned Zendesk Support OpenAPI source declares a request body for this operation. A typed reverse-ETL action requires a bounded record schema, and https://developer.zendesk.com/zendesk/oas.yaml documents no request contract for it, so one cannot be derived without inventing the payload shape.
     operations delete_itam_asset_type_field - Delete Asset Field [intent=reverse_etl availability=planned operation=zendesk-support.delete_itam_asset_type_field]; approval: reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required; risk: high; notes: In scope, but blocked by default until represented by a typed action with confirm:"destructive", idempotency notes where applicable, and plan/preview/explicit approval/execute.
@@ -1012,7 +1033,7 @@ COMMAND SURFACE
     operations show_ticket_by_messaging_conversation_id - Show Ticket by Messaging Conversation ID [intent=direct_read availability=planned operation=zendesk-support.show_ticket_by_messaging_conversation_id]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
     operations list_recent_tickets - List Recent Tickets [intent=direct_read availability=planned operation=zendesk-support.list_recent_tickets]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
     operations tickets_show_many - Show Multiple Tickets [intent=direct_read availability=planned operation=zendesk-support.tickets_show_many]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
-    operations tickets_update_many - Update Many Tickets [intent=reverse_etl availability=implemented write=tickets_update_many]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.
+    operations tickets_update_many - Update Many Tickets [intent=reverse_etl availability=planned operation=zendesk-support.tickets_update_many]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium; notes: Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.
     operations list_trigger_categories - List Ticket Trigger Categories [intent=direct_read availability=planned operation=zendesk-support.list_trigger_categories]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
     operations create_trigger_category - Create Ticket Trigger Category [intent=reverse_etl availability=implemented write=create_trigger_category]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: high; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --name, --position
     operations show_trigger_category_by_id - Show Ticket Trigger Category [intent=direct_read availability=planned operation=zendesk-support.show_trigger_category_by_id]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
@@ -1109,7 +1130,7 @@ COMMAND SURFACE
     operations request_user_create - Request User Create [intent=reverse_etl availability=planned operation=zendesk-support.request_user_create]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium; notes: Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.
     operations search_users - Search Users [intent=direct_read availability=planned operation=zendesk-support.search_users]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
     operations show_many_users - Show Many Users [intent=direct_read availability=planned operation=zendesk-support.show_many_users]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
-    operations update_many_users - Update Many Users [intent=reverse_etl availability=implemented write=update_many_users]; approval: reverse ETL plan -> preview -> explicit approval -> execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.
+    operations update_many_users - Update Many Users [intent=reverse_etl availability=planned operation=zendesk-support.update_many_users]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium; notes: Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.
     operations show_view - Show View [intent=direct_read availability=planned operation=zendesk-support.show_view]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: low; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
     operations get_view_count - Count Tickets in View [intent=direct_read availability=planned operation=zendesk-support.get_view_count]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.
     operations execute_view - Execute View [intent=direct_read availability=planned operation=zendesk-support.execute_view]; approval: none: read-only bounded operation metadata; executor remains blocked by default; risk: medium; notes: Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.

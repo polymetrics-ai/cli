@@ -1,7 +1,16 @@
 {
-  "record": {},
+  "record": {
+    "bookmark": {
+      "ticket_id": 1
+    }
+  },
   "expect": {
     "method": "POST",
-    "path": "/api/v2/bookmarks"
+    "path": "/api/v2/bookmarks",
+    "body": {
+      "bookmark": {
+        "ticket_id": 1
+      }
+    }
   }
 }

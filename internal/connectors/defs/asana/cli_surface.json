@@ -1349,6 +1349,20 @@
           "type": "string_array",
           "summary": "Optional request field data.people_value.",
           "maps_to": "record.data.people_value"
+        },
+        {
+          "name": "resource-subtype",
+          "type": "string",
+          "summary": "Required request field data.resource_subtype.",
+          "maps_to": "record.data.resource_subtype",
+          "allow_empty": false
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "summary": "Required request field data.workspace.",
+          "maps_to": "record.data.workspace",
+          "allow_empty": false
         }
       ],
       "api_surface": [
@@ -1561,6 +1575,13 @@
           "type": "string_array",
           "summary": "Optional request field data.people_value.",
           "maps_to": "record.data.people_value"
+        },
+        {
+          "name": "workspace",
+          "type": "string",
+          "summary": "Required request field data.workspace.",
+          "maps_to": "record.data.workspace",
+          "allow_empty": false
         }
       ],
       "api_surface": [

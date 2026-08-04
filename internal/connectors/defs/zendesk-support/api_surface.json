@@ -5844,8 +5844,14 @@
     {
       "method": "PUT",
       "path": "/api/v2/tickets/update_many",
-      "covered_by": {
-        "write": "tickets_update_many"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=TicketsUpdateMany; summary=Update Many Tickets; tags=Tickets"
       }
     },
     {
@@ -7126,8 +7132,14 @@
     {
       "method": "PUT",
       "path": "/api/v2/users/update_many",
-      "covered_by": {
-        "write": "update_many_users"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+        "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
+        "notes": "operationId=UpdateManyUsers; summary=Update Many Users; tags=Users"
       }
     },
     {

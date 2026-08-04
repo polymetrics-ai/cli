@@ -53,20 +53,62 @@ bundles already cite in `operation.source_url`:
 - asana: `https://raw.githubusercontent.com/Asana/openapi/master/defs/asana_oas.yaml` (Asana, 175 paths)
 
 All 222 blocked endpoints resolve in those documents (162/162 and 60/60), so no
-schema is invented. 64 of the 162 zendesk endpoints declare a request body; the
-remaining 98 are bodiless path-parameter mutations and get a path-fields-only
-record schema.
+schema is invented.
 
 Schema shape rules (matching the existing `asana/create_task` precedent):
 
 - root object, `additionalProperties: false`, path parameters as required strings
 - the provider's request envelope (`data` for asana, the singular resource key
-  for zendesk) closed with an explicit property list
+  for zendesk) closed with an explicit property list and listed in the root
+  `required` array, exactly as `create_task` requires `data` and `create_ticket`
+  requires `ticket`. An optional envelope would leave the provider-required
+  fields declared inside it unenforced, so a flagless invocation would validate,
+  stage a preview, burn a single-use approval token, and only then be rejected
+  by the provider. `connectorgen`'s `mappedRecordPathSatisfies` accepts a flag
+  mapped *below* a required region, so the envelope is required and its leaves
+  carry the flags.
 - deeply nested free-form regions stay `type: object` with
   `additionalProperties: true`, as `create_task.custom_fields` already does
-- a property is only listed in `required` when it transitively resolves to a
-  scalar/array leaf, because `connectorgen`'s `requiredMappingPaths` demands a
-  CLI flag for every required leaf and a flag cannot map to a bare object
+- every path that ends up in `required` — transitively, including array item
+  fields — must have a CLI flag mapped at or below it, so an implemented
+  command can always build a valid record from its own flag surface
+
+## Delivered scope, and why it is smaller than the plan
+
+| | zendesk-support | asana | total |
+|---|---:|---:|---:|
+| Planned (rows carrying the promotable blocked reason) | 162 | 60 | **222** |
+| Promoted to a typed write action | 57 | 60 | **117** |
+| Deferred — pinned source declares **no request body** | 98 | 0 | **98** |
+| Deferred — request body is **unbounded / not flag-representable** | 7 | 0 | **7** |
+
+**Why the 105 deferrals happened.** A typed reverse-ETL action needs a bounded
+record schema, and the only permitted derivation source is the document the
+connector itself cites. For 98 zendesk operations
+`https://developer.zendesk.com/zendesk/oas.yaml` declares no `requestBody` at
+all; for 7 more it declares one whose payload is an unbounded, bulk, or `oneOf`
+free-form region (`TicketsUpdateRequest`, the `UserUpdateRequest`/`UsersRequest`
+`oneOf`, the `create_many`/`create_or_update_many` bulk user payloads, the
+routing bulk-job payload, and `UpdatePermissionPolicy`). In both buckets a
+bounded schema could only be produced by inventing the payload shape — for
+example by reading it back out of the operation's *response* schema. That is
+exactly the defect class this repository is closing: shipping an inferred write
+contract as `availability: "implemented"` recreates the implemented-but-
+unreachable command (the 174 dead commands the audit counted). Two operations
+were authored that way in the first pass — `tickets_update_many` and
+`update_many_users` shipped with `record_schema.properties == {}` and zero
+flags, so the only record they admitted was `{}` and the only request they could
+ever send was a bodyless `PUT`. Both were de-promoted back into the unbounded-
+shape bucket rather than given an invented payload.
+
+**What would unblock them.** Either the pinned source gains a request body (and
+a bounded one) for those operations, or the connector grows a local
+request-schema ledger that cites a second reviewable source per operation. Until
+one of those exists, each deferred row carries a specific, cited, actionable
+reason string in `api_surface.json`, `operations.json`, and `cli_surface.json`
+rather than the generic blocked reason, and the counts are pinned by
+`TestReverseETLLedgerReconciles` so the shortfall cannot be quietly reworded
+away.
 
 ## Tasks
 
@@ -76,12 +118,17 @@ Schema shape rules (matching the existing `asana/create_task` precedent):
    `BuildWriteCommand` / `DryRunWrite`, (c) every write action issues the
    expected HTTP request through the real `engine.Write`, and (d) no unbound
    destructive row was promoted. Capture the failing run.
-2. **GREEN zendesk-support** — author 162 actions in `writes.json`, rebind the
-   162 `api_surface.json` rows to `covered_by.write`, promote the 162
-   `cli_surface.json` commands, add 162 sanitized `fixtures/writes/*.json`.
-3. **GREEN asana** — the same for 60.
+2. **GREEN zendesk-support** — author an action in `writes.json` for every row
+   whose pinned source yields a bounded request body (57 of 162), rebind those
+   `api_surface.json` rows to `covered_by.write`, promote the matching
+   `cli_surface.json` commands, and add one sanitized
+   `fixtures/writes/*.json` per action whose `expect.body` asserts the exact
+   JSON body `engine.Write` constructs. Re-block the remaining 105 rows under
+   the two cited reasons above, in all three ledgers.
+3. **GREEN asana** — the same for 60 of 60.
 4. **REFACTOR** — consolidate shared shapes, drop the superseded
-   `operations.json` rows, regenerate manuals/skills/website catalog.
+   `operations.json` rows for promoted operations, regenerate manuals/skills/
+   website catalog.
 5. **Gates** — `connectorgen validate` (0 findings), conformance, commandrunner,
    `internal/cli`, boundary, docs-check.
 

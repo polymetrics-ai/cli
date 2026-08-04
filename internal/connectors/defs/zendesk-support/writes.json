@@ -1099,6 +1099,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "settings"
+        ],
         "properties": {
           "settings": {
             "type": "object",
@@ -1167,15 +1170,15 @@
         "additionalProperties": false
       },
       "redact_fields": [
-        "accept_wildcard_emails",
-        "email_sender_authentication",
-        "email_sender_authentication_profile",
-        "email_status",
-        "email_template_photos",
-        "email_template_selection",
-        "modern_email_template",
-        "multi_recipient_email_tickets",
-        "rich_content_in_emails"
+        "settings.email.accept_wildcard_emails",
+        "settings.email.email_sender_authentication",
+        "settings.email.email_sender_authentication_profile",
+        "settings.email.email_status",
+        "settings.email.email_template_photos",
+        "settings.email.email_template_selection",
+        "settings.email.modern_email_template",
+        "settings.email.multi_recipient_email_tickets",
+        "settings.email.rich_content_in_emails"
       ],
       "risk": "external mutation; high-risk update against PUT /api/v2/account/email_settings; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
@@ -1233,7 +1236,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "attachment_id"
+          "attachment_id",
+          "attachment"
         ],
         "properties": {
           "attachment_id": {
@@ -1262,6 +1266,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "bookmark"
+        ],
         "properties": {
           "bookmark": {
             "type": "object",
@@ -1286,6 +1293,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "brand"
+        ],
         "properties": {
           "brand": {
             "type": "object",
@@ -1335,7 +1345,7 @@
         "additionalProperties": false
       },
       "redact_fields": [
-        "signature_template"
+        "brand.signature_template"
       ],
       "risk": "external mutation; high-risk create against POST /api/v2/brands; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
@@ -1352,7 +1362,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "brand_id"
+          "brand_id",
+          "brand"
         ],
         "properties": {
           "brand_id": {
@@ -1406,7 +1417,7 @@
         "additionalProperties": false
       },
       "redact_fields": [
-        "signature_template"
+        "brand.signature_template"
       ],
       "risk": "external mutation; high-risk update against PUT /api/v2/brands/{brand_id}; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
@@ -1419,6 +1430,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "ticket"
+        ],
         "properties": {
           "display_to_agent": {
             "type": "integer"
@@ -2204,12 +2218,10 @@
         "additionalProperties": false
       },
       "redact_fields": [
-        "assignee_email",
-        "email",
-        "phone_name",
-        "user_email",
-        "voicemail",
-        "voicemail_requested_at"
+        "ticket.assignee_email",
+        "ticket.tpe_voice_comment.phone_name",
+        "ticket.tpe_voice_comment.voicemail",
+        "ticket.tpe_voice_comment.voicemail_requested_at"
       ],
       "risk": "external mutation; medium-risk create against POST /api/v2/channels/voice/tickets; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
@@ -2222,6 +2234,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "custom_object"
+        ],
         "properties": {
           "custom_object": {
             "type": "object",
@@ -2268,7 +2283,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "custom_object_key"
+          "custom_object_key",
+          "access_rule"
         ],
         "properties": {
           "custom_object_key": {
@@ -2326,7 +2342,8 @@
         "type": "object",
         "required": [
           "custom_object_key",
-          "id"
+          "id",
+          "access_rule"
         ],
         "properties": {
           "custom_object_key": {
@@ -2385,7 +2402,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "custom_object_key"
+          "custom_object_key",
+          "custom_object_field"
         ],
         "properties": {
           "custom_object_key": {
@@ -2534,7 +2552,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "custom_object_key"
+          "custom_object_key",
+          "job"
         ],
         "properties": {
           "custom_object_key": {
@@ -2574,7 +2593,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "custom_object_key"
+          "custom_object_key",
+          "custom_object_record"
         ],
         "properties": {
           "custom_object_key": {
@@ -2618,7 +2638,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "custom_object_key"
+          "custom_object_key",
+          "custom_object_record"
         ],
         "properties": {
           "custom_object_key": {
@@ -2709,7 +2730,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "custom_object_key"
+          "custom_object_key",
+          "trigger"
         ],
         "properties": {
           "custom_object_key": {
@@ -2795,7 +2817,8 @@
         "type": "object",
         "required": [
           "custom_object_key",
-          "trigger_id"
+          "trigger_id",
+          "trigger"
         ],
         "properties": {
           "custom_object_key": {
@@ -2882,7 +2905,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "custom_object_key"
+          "custom_object_key",
+          "triggers"
         ],
         "properties": {
           "custom_object_key": {
@@ -2923,6 +2947,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "ids"
+        ],
         "properties": {
           "ids": {
             "type": "string"
@@ -2941,6 +2968,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "custom_status"
+        ],
         "properties": {
           "custom_status": {
             "type": "object",
@@ -2984,7 +3014,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "custom_status_id"
+          "custom_status_id",
+          "custom_status"
         ],
         "properties": {
           "custom_status_id": {
@@ -3029,7 +3060,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "custom_status_id"
+          "custom_status_id",
+          "ticket_form_status"
         ],
         "properties": {
           "custom_status_id": {
@@ -3061,6 +3093,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "deletion_schedule"
+        ],
         "properties": {
           "deletion_schedule": {
             "type": "object",
@@ -3118,7 +3153,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "deletion_schedule_id"
+          "deletion_schedule_id",
+          "deletion_schedule"
         ],
         "properties": {
           "deletion_schedule_id": {
@@ -3253,6 +3289,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "ticket"
+        ],
         "properties": {
           "ticket": {
             "type": "object",
@@ -3513,10 +3552,6 @@
         },
         "additionalProperties": false
       },
-      "redact_fields": [
-        "email",
-        "user_email"
-      ],
       "risk": "external mutation; high-risk create against POST /api/v2/imports/tickets; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
     {
@@ -3528,6 +3563,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "tickets"
+        ],
         "properties": {
           "tickets": {
             "type": "array",
@@ -3791,10 +3829,6 @@
         },
         "additionalProperties": false
       },
-      "redact_fields": [
-        "email",
-        "user_email"
-      ],
       "risk": "external mutation; high-risk create against POST /api/v2/imports/tickets/create_many; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
     {
@@ -3806,6 +3840,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "asset_type"
+        ],
         "properties": {
           "asset_type": {
             "type": "object",
@@ -3855,7 +3892,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "asset_type_id"
+          "asset_type_id",
+          "field"
         ],
         "properties": {
           "asset_type_id": {
@@ -4000,6 +4038,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "asset"
+        ],
         "properties": {
           "asset": {
             "type": "object",
@@ -4113,6 +4154,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "job"
+        ],
         "properties": {
           "job": {
             "type": "object",
@@ -4144,6 +4188,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "location"
+        ],
         "properties": {
           "location": {
             "type": "object",
@@ -4177,6 +4224,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "status"
+        ],
         "properties": {
           "status": {
             "type": "object",
@@ -4224,7 +4274,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "status_id"
+          "status_id",
+          "status"
         ],
         "properties": {
           "status_id": {
@@ -4268,6 +4319,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "macros"
+        ],
         "properties": {
           "macros": {
             "type": "array",
@@ -4304,6 +4358,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "organization_subscription"
+        ],
         "properties": {
           "organization_subscription": {
             "type": "object",
@@ -4402,6 +4459,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "author"
+        ],
         "properties": {
           "author": {
             "type": "object",
@@ -4419,7 +4479,7 @@
         "additionalProperties": false
       },
       "redact_fields": [
-        "email"
+        "author.email"
       ],
       "risk": "external mutation; high-risk update against PUT /api/v2/suspended_tickets/bulk_recover; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
@@ -4432,6 +4492,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "task_list_template"
+        ],
         "properties": {
           "task_list_template": {
             "type": "object",
@@ -4496,7 +4559,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "task_list_template_id"
+          "task_list_template_id",
+          "task_list_template"
         ],
         "properties": {
           "task_list_template_id": {
@@ -4541,6 +4605,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "ticket_content_pin"
+        ],
         "properties": {
           "ticket_content_pin": {
             "type": "object",
@@ -4623,7 +4690,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "ticket_form_id"
+          "ticket_form_id",
+          "ticket_form_status"
         ],
         "properties": {
           "ticket_form_id": {
@@ -4667,7 +4735,8 @@
         "type": "object",
         "required": [
           "ticket_form_id",
-          "ticket_form_status_id"
+          "ticket_form_status_id",
+          "ticket_form_status"
         ],
         "properties": {
           "ticket_form_id": {
@@ -4712,7 +4781,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "ticket_id"
+          "ticket_id",
+          "task_list"
         ],
         "properties": {
           "ticket_id": {
@@ -4741,6 +4811,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "tickets"
+        ],
         "properties": {
           "tickets": {
             "type": "array",
@@ -5516,29 +5589,7 @@
         },
         "additionalProperties": false
       },
-      "redact_fields": [
-        "assignee_email",
-        "email",
-        "phone_name",
-        "user_email",
-        "voicemail",
-        "voicemail_requested_at"
-      ],
       "risk": "external mutation; high-risk create against POST /api/v2/tickets/create_many; requires reverse ETL plan -> preview -> explicit approval -> execute"
-    },
-    {
-      "name": "tickets_update_many",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/api/v2/tickets/update_many",
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "risk": "external mutation; medium-risk update against PUT /api/v2/tickets/update_many; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
     {
       "name": "create_trigger_category",
@@ -5549,6 +5600,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "trigger_category"
+        ],
         "properties": {
           "trigger_category": {
             "type": "object",
@@ -5583,7 +5637,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "trigger_category_id"
+          "trigger_category_id",
+          "trigger_category"
         ],
         "properties": {
           "trigger_category_id": {
@@ -5615,6 +5670,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "job"
+        ],
         "properties": {
           "job": {
             "type": "object",
@@ -5659,6 +5717,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "triggers"
+        ],
         "properties": {
           "triggers": {
             "type": "array",
@@ -5738,6 +5799,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "settings"
+        ],
         "properties": {
           "settings": {
             "type": "object",
@@ -5793,20 +5857,6 @@
       "risk": "external mutation; high-risk update against PUT /api/v2/users/me/settings; requires reverse ETL plan -> preview -> explicit approval -> execute"
     },
     {
-      "name": "update_many_users",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/api/v2/users/update_many",
-      "body_type": "json",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "risk": "external mutation; medium-risk update against PUT /api/v2/users/update_many; requires reverse ETL plan -> preview -> explicit approval -> execute"
-    },
-    {
       "name": "create_workspace",
       "kind": "create",
       "method": "POST",
@@ -5815,6 +5865,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "workspace"
+        ],
         "properties": {
           "workspace": {
             "type": "object",
@@ -5875,7 +5928,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "workspace_id"
+          "workspace_id",
+          "workspace"
         ],
         "properties": {
           "workspace_id": {
@@ -5936,6 +5990,9 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "ids"
+        ],
         "properties": {
           "ids": {
             "type": "array",

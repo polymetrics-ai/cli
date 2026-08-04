@@ -4,7 +4,7 @@
     "record_id": "fixture-record-id",
     "id": "fixture-id",
     "custom_object_record_attachment": {
-      "malware_access_override": false
+      "malware_access_override": true
     }
   },
   "expect": {
@@ -12,7 +12,7 @@
     "path": "/api/v2/custom_objects/fixture-custom-object-key/records/fixture-record-id/attachments/fixture-id",
     "body": {
       "custom_object_record_attachment": {
-        "malware_access_override": false
+        "malware_access_override": true
       }
     }
   }

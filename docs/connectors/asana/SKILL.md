@@ -135,235 +135,243 @@ Reads implemented Asana project-management streams and safely plans implemented 
   - risk: external mutation; posts a task story/comment visible to task collaborators; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_custom_field:
   - endpoint: POST /custom_fields
+  - required fields: data
   - risk: external mutation; medium-risk create against POST /custom_fields; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_custom_field:
   - endpoint: PUT /custom_fields/{{ record.custom_field_gid }}
-  - required fields: custom_field_gid
+  - required fields: custom_field_gid, data
   - risk: external mutation; medium-risk update against PUT /custom_fields/{custom_field_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_enum_option_for_custom_field:
   - endpoint: POST /custom_fields/{{ record.custom_field_gid }}/enum_options
-  - required fields: custom_field_gid
+  - required fields: custom_field_gid, data
   - risk: external mutation; medium-risk create against POST /custom_fields/{custom_field_gid}/enum_options; requires reverse ETL plan -> preview -> explicit approval -> execute
 - insert_enum_option_for_custom_field:
   - endpoint: POST /custom_fields/{{ record.custom_field_gid }}/enum_options/insert
-  - required fields: custom_field_gid
+  - required fields: custom_field_gid, data
   - risk: external mutation; medium-risk create against POST /custom_fields/{custom_field_gid}/enum_options/insert; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_enum_option:
   - endpoint: PUT /enum_options/{{ record.enum_option_gid }}
-  - required fields: enum_option_gid
+  - required fields: enum_option_gid, data
   - risk: external mutation; medium-risk update against PUT /enum_options/{enum_option_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_graph_export:
   - endpoint: POST /exports/graph
+  - required fields: data
   - risk: external mutation; medium-risk create against POST /exports/graph; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_resource_export:
   - endpoint: POST /exports/resource
+  - required fields: data
   - risk: external mutation; medium-risk create against POST /exports/resource; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_goal_relationship:
   - endpoint: PUT /goal_relationships/{{ record.goal_relationship_gid }}
-  - required fields: goal_relationship_gid
+  - required fields: goal_relationship_gid, data
   - risk: external mutation; medium-risk update against PUT /goal_relationships/{goal_relationship_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_supporting_relationship:
   - endpoint: POST /goals/{{ record.goal_gid }}/addSupportingRelationship
-  - required fields: goal_gid
+  - required fields: goal_gid, data
   - risk: external mutation; medium-risk create against POST /goals/{goal_gid}/addSupportingRelationship; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_goal:
   - endpoint: PUT /goals/{{ record.goal_gid }}
-  - required fields: goal_gid
+  - required fields: goal_gid, data
   - risk: external mutation; medium-risk update against PUT /goals/{goal_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_goal:
   - endpoint: POST /goals
+  - required fields: data
   - risk: external mutation; medium-risk create against POST /goals; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_goal_metric:
   - endpoint: POST /goals/{{ record.goal_gid }}/setMetric
-  - required fields: goal_gid
+  - required fields: goal_gid, data
   - risk: external mutation; medium-risk create against POST /goals/{goal_gid}/setMetric; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_goal_metric:
   - endpoint: POST /goals/{{ record.goal_gid }}/setMetricCurrentValue
-  - required fields: goal_gid
+  - required fields: goal_gid, data
   - risk: external mutation; medium-risk create against POST /goals/{goal_gid}/setMetricCurrentValue; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_followers:
   - endpoint: POST /goals/{{ record.goal_gid }}/addFollowers
-  - required fields: goal_gid
+  - required fields: goal_gid, data
   - risk: external mutation; medium-risk create against POST /goals/{goal_gid}/addFollowers; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_custom_field_setting_for_goal:
   - endpoint: POST /goals/{{ record.goal_gid }}/addCustomFieldSetting
-  - required fields: goal_gid
+  - required fields: goal_gid, data
   - risk: external mutation; medium-risk create against POST /goals/{goal_gid}/addCustomFieldSetting; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_ooo_entry:
   - endpoint: PUT /ooo_entries/{{ record.ooo_entry_gid }}
-  - required fields: ooo_entry_gid
+  - required fields: ooo_entry_gid, data
   - risk: external mutation; medium-risk update against PUT /ooo_entries/{ooo_entry_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_ooo_entry:
   - endpoint: POST /ooo_entries
+  - required fields: data
   - risk: external mutation; medium-risk create against POST /ooo_entries; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_portfolio:
   - endpoint: POST /portfolios
+  - required fields: data
   - risk: external mutation; medium-risk create against POST /portfolios; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_portfolio:
   - endpoint: PUT /portfolios/{{ record.portfolio_gid }}
-  - required fields: portfolio_gid
+  - required fields: portfolio_gid, data
   - risk: external mutation; medium-risk update against PUT /portfolios/{portfolio_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_item_for_portfolio:
   - endpoint: POST /portfolios/{{ record.portfolio_gid }}/addItem
-  - required fields: portfolio_gid
+  - required fields: portfolio_gid, data
   - risk: external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addItem; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_custom_field_setting_for_portfolio:
   - endpoint: POST /portfolios/{{ record.portfolio_gid }}/addCustomFieldSetting
-  - required fields: portfolio_gid
+  - required fields: portfolio_gid, data
   - risk: external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addCustomFieldSetting; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_members_for_portfolio:
   - endpoint: POST /portfolios/{{ record.portfolio_gid }}/addMembers
-  - required fields: portfolio_gid
+  - required fields: portfolio_gid, data
   - risk: external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/addMembers; requires reverse ETL plan -> preview -> explicit approval -> execute
 - duplicate_portfolio:
   - endpoint: POST /portfolios/{{ record.portfolio_gid }}/duplicate
-  - required fields: portfolio_gid
+  - required fields: portfolio_gid, data
   - risk: external mutation; medium-risk create against POST /portfolios/{portfolio_gid}/duplicate; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_project_brief:
   - endpoint: PUT /project_briefs/{{ record.project_brief_gid }}
-  - required fields: project_brief_gid
+  - required fields: project_brief_gid, data
   - risk: external mutation; medium-risk update against PUT /project_briefs/{project_brief_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_project_brief:
   - endpoint: POST /projects/{{ record.project_gid }}/project_briefs
-  - required fields: project_gid
+  - required fields: project_gid, data
   - risk: external mutation; medium-risk create against POST /projects/{project_gid}/project_briefs; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_project_portfolio_setting:
   - endpoint: PUT /project_portfolio_settings/{{ record.project_portfolio_setting_gid }}
-  - required fields: project_portfolio_setting_gid
+  - required fields: project_portfolio_setting_gid, data
   - risk: external mutation; medium-risk update against PUT /project_portfolio_settings/{project_portfolio_setting_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_project_status_for_project:
   - endpoint: POST /projects/{{ record.project_gid }}/project_statuses
-  - required fields: project_gid
+  - required fields: project_gid, data
   - risk: external mutation; medium-risk create against POST /projects/{project_gid}/project_statuses; requires reverse ETL plan -> preview -> explicit approval -> execute
 - instantiate_project:
   - endpoint: POST /project_templates/{{ record.project_template_gid }}/instantiateProject
-  - required fields: project_template_gid
+  - required fields: project_template_gid, data
   - risk: external mutation; medium-risk create against POST /project_templates/{project_template_gid}/instantiateProject; requires reverse ETL plan -> preview -> explicit approval -> execute
 - duplicate_project:
   - endpoint: POST /projects/{{ record.project_gid }}/duplicate
-  - required fields: project_gid
+  - required fields: project_gid, data
   - risk: external mutation; medium-risk create against POST /projects/{project_gid}/duplicate; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_project_for_team:
   - endpoint: POST /teams/{{ record.team_gid }}/projects
-  - required fields: team_gid
+  - required fields: team_gid, data
   - risk: external mutation; medium-risk create against POST /teams/{team_gid}/projects; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_project_for_workspace:
   - endpoint: POST /workspaces/{{ record.workspace_gid }}/projects
-  - required fields: workspace_gid
+  - required fields: workspace_gid, data
   - risk: external mutation; medium-risk create against POST /workspaces/{workspace_gid}/projects; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_custom_field_setting_for_project:
   - endpoint: POST /projects/{{ record.project_gid }}/addCustomFieldSetting
-  - required fields: project_gid
+  - required fields: project_gid, data
   - risk: external mutation; medium-risk create against POST /projects/{project_gid}/addCustomFieldSetting; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_members_for_project:
   - endpoint: POST /projects/{{ record.project_gid }}/addMembers
-  - required fields: project_gid
+  - required fields: project_gid, data
   - risk: external mutation; medium-risk create against POST /projects/{project_gid}/addMembers; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_followers_for_project:
   - endpoint: POST /projects/{{ record.project_gid }}/addFollowers
-  - required fields: project_gid
+  - required fields: project_gid, data
   - risk: external mutation; medium-risk create against POST /projects/{project_gid}/addFollowers; requires reverse ETL plan -> preview -> explicit approval -> execute
 - project_save_as_template:
   - endpoint: POST /projects/{{ record.project_gid }}/saveAsTemplate
-  - required fields: project_gid
+  - required fields: project_gid, data
   - risk: external mutation; medium-risk create against POST /projects/{project_gid}/saveAsTemplate; requires reverse ETL plan -> preview -> explicit approval -> execute
 - trigger_rule:
   - endpoint: POST /rule_triggers/{{ record.rule_trigger_gid }}/run
-  - required fields: rule_trigger_gid
+  - required fields: rule_trigger_gid, data
   - risk: external mutation; medium-risk create against POST /rule_triggers/{rule_trigger_gid}/run; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_task_for_section:
   - endpoint: POST /sections/{{ record.section_gid }}/addTask
-  - required fields: section_gid
+  - required fields: section_gid, data
   - risk: external mutation; medium-risk create against POST /sections/{section_gid}/addTask; requires reverse ETL plan -> preview -> explicit approval -> execute
 - insert_section_for_project:
   - endpoint: POST /projects/{{ record.project_gid }}/sections/insert
-  - required fields: project_gid
+  - required fields: project_gid, data
   - risk: external mutation; medium-risk create against POST /projects/{project_gid}/sections/insert; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_status_for_object:
   - endpoint: POST /status_updates
+  - required fields: data
   - risk: external mutation; medium-risk create against POST /status_updates; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_story:
   - endpoint: PUT /stories/{{ record.story_gid }}
-  - required fields: story_gid
+  - required fields: story_gid, data
   - risk: external mutation; medium-risk update against PUT /stories/{story_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_story_for_goal:
   - endpoint: POST /goals/{{ record.goal_gid }}/stories
-  - required fields: goal_gid
+  - required fields: goal_gid, data
   - risk: external mutation; medium-risk create against POST /goals/{goal_gid}/stories; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_tag_for_workspace:
   - endpoint: POST /workspaces/{{ record.workspace_gid }}/tags
-  - required fields: workspace_gid
+  - required fields: workspace_gid, data
   - risk: external mutation; medium-risk create against POST /workspaces/{workspace_gid}/tags; requires reverse ETL plan -> preview -> explicit approval -> execute
 - instantiate_task:
   - endpoint: POST /task_templates/{{ record.task_template_gid }}/instantiateTask
-  - required fields: task_template_gid
+  - required fields: task_template_gid, data
   - risk: external mutation; medium-risk create against POST /task_templates/{task_template_gid}/instantiateTask; requires reverse ETL plan -> preview -> explicit approval -> execute
 - duplicate_task:
   - endpoint: POST /tasks/{{ record.task_gid }}/duplicate
-  - required fields: task_gid
+  - required fields: task_gid, data
   - risk: external mutation; medium-risk create against POST /tasks/{task_gid}/duplicate; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_subtask_for_task:
   - endpoint: POST /tasks/{{ record.task_gid }}/subtasks
-  - required fields: task_gid
+  - required fields: task_gid, data
   - risk: external mutation; medium-risk create against POST /tasks/{task_gid}/subtasks; requires reverse ETL plan -> preview -> explicit approval -> execute
 - set_parent_for_task:
   - endpoint: POST /tasks/{{ record.task_gid }}/setParent
-  - required fields: task_gid
+  - required fields: task_gid, data
   - risk: external mutation; medium-risk create against POST /tasks/{task_gid}/setParent; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_dependencies_for_task:
   - endpoint: POST /tasks/{{ record.task_gid }}/addDependencies
-  - required fields: task_gid
+  - required fields: task_gid, data
   - risk: external mutation; medium-risk create against POST /tasks/{task_gid}/addDependencies; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_dependents_for_task:
   - endpoint: POST /tasks/{{ record.task_gid }}/addDependents
-  - required fields: task_gid
+  - required fields: task_gid, data
   - risk: external mutation; medium-risk create against POST /tasks/{task_gid}/addDependents; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_project_for_task:
   - endpoint: POST /tasks/{{ record.task_gid }}/addProject
-  - required fields: task_gid
+  - required fields: task_gid, data
   - risk: external mutation; medium-risk create against POST /tasks/{task_gid}/addProject; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_tag_for_task:
   - endpoint: POST /tasks/{{ record.task_gid }}/addTag
-  - required fields: task_gid
+  - required fields: task_gid, data
   - risk: external mutation; medium-risk create against POST /tasks/{task_gid}/addTag; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_followers_for_task:
   - endpoint: POST /tasks/{{ record.task_gid }}/addFollowers
-  - required fields: task_gid
+  - required fields: task_gid, data
   - risk: external mutation; medium-risk create against POST /tasks/{task_gid}/addFollowers; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_team:
   - endpoint: POST /teams
+  - required fields: data
   - risk: external mutation; medium-risk create against POST /teams; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_team:
   - endpoint: PUT /teams/{{ record.team_gid }}
-  - required fields: team_gid
+  - required fields: team_gid, data
   - risk: external mutation; medium-risk update against PUT /teams/{team_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_user_for_team:
   - endpoint: POST /teams/{{ record.team_gid }}/addUser
-  - required fields: team_gid
+  - required fields: team_gid, data
   - risk: external mutation; medium-risk create against POST /teams/{team_gid}/addUser; requires reverse ETL plan -> preview -> explicit approval -> execute
 - create_time_tracking_entry:
   - endpoint: POST /tasks/{{ record.task_gid }}/time_tracking_entries
-  - required fields: task_gid
+  - required fields: task_gid, data
   - risk: external mutation; medium-risk create against POST /tasks/{task_gid}/time_tracking_entries; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_time_tracking_entry:
   - endpoint: PUT /time_tracking_entries/{{ record.time_tracking_entry_gid }}
-  - required fields: time_tracking_entry_gid
+  - required fields: time_tracking_entry_gid, data
   - risk: external mutation; medium-risk update against PUT /time_tracking_entries/{time_tracking_entry_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_user:
   - endpoint: PUT /users/{{ record.user_gid }}
-  - required fields: user_gid
+  - required fields: user_gid, data
   - risk: external mutation; medium-risk update against PUT /users/{user_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_user_for_workspace:
   - endpoint: PUT /workspaces/{{ record.workspace_gid }}/users/{{ record.user_gid }}
-  - required fields: workspace_gid, user_gid
+  - required fields: workspace_gid, user_gid, data
   - risk: external mutation; medium-risk update against PUT /workspaces/{workspace_gid}/users/{user_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - update_workspace:
   - endpoint: PUT /workspaces/{{ record.workspace_gid }}
-  - required fields: workspace_gid
+  - required fields: workspace_gid, data
   - risk: external mutation; medium-risk update against PUT /workspaces/{workspace_gid}; requires reverse ETL plan -> preview -> explicit approval -> execute
 - add_user_for_workspace:
   - endpoint: POST /workspaces/{{ record.workspace_gid }}/addUser
-  - required fields: workspace_gid
+  - required fields: workspace_gid, data
   - risk: external mutation; medium-risk create against POST /workspaces/{workspace_gid}/addUser; requires reverse ETL plan -> preview -> explicit approval -> execute
 
 ## Security
@@ -427,9 +435,9 @@ Reads implemented Asana project-management streams and safely plans implemented 
   - custom-field-settings get-custom-field-settings-for-goal - Planned fixed-target Asana read: Get a goal's custom fields. [intent=etl availability=planned operation=get_custom_field_settings_for_goal]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --goal-gid
   - custom-field-settings get-custom-field-settings-for-team - Planned fixed-target Asana read: Get a team's custom fields. [intent=etl availability=planned operation=get_custom_field_settings_for_team]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --team-gid
 - Custom fields
-  - custom-fields create-custom-field - fixed-target Asana mutation: Create a custom field. [intent=reverse_etl availability=implemented write=create_custom_field]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --currency-code, --custom-label, --custom-label-position, --date, --date-time, --description, --color, --enabled, --name, --data-enum-value-color, --data-enum-value-enabled, --data-enum-value-name, --format, --has-notifications-enabled, --id-prefix, --input-restrictions, --is-formula-field, --data-multi-enum-values-0-color, --data-multi-enum-values-0-enabled, --data-multi-enum-values-0-name, --data-name, --number-value, --owned-by-app, --people-value
+  - custom-fields create-custom-field - fixed-target Asana mutation: Create a custom field. [intent=reverse_etl availability=implemented write=create_custom_field]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --currency-code, --custom-label, --custom-label-position, --date, --date-time, --description, --color, --enabled, --name, --data-enum-value-color, --data-enum-value-enabled, --data-enum-value-name, --format, --has-notifications-enabled, --id-prefix, --input-restrictions, --is-formula-field, --data-multi-enum-values-0-color, --data-multi-enum-values-0-enabled, --data-multi-enum-values-0-name, --data-name, --number-value, --owned-by-app, --people-value, --resource-subtype, --workspace
   - custom-fields get-custom-field - Planned fixed-target Asana read: Get a custom field. [intent=etl availability=planned operation=get_custom_field]; notes: Planned ETL/direct read metadata only; no raw provider request execution is exposed.; flags: --custom-field-gid
-  - custom-fields update-custom-field - fixed-target Asana mutation: Update a custom field. [intent=reverse_etl availability=implemented write=update_custom_field]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --custom-field-gid (required), --currency-code, --custom-label, --custom-label-position, --date, --date-time, --description, --color, --enabled, --name, --data-enum-value-color, --data-enum-value-enabled, --data-enum-value-name, --format, --has-notifications-enabled, --id-prefix, --input-restrictions, --is-formula-field, --data-multi-enum-values-0-color, --data-multi-enum-values-0-enabled, --data-multi-enum-values-0-name, --data-name, --number-value, --owned-by-app, --people-value
+  - custom-fields update-custom-field - fixed-target Asana mutation: Update a custom field. [intent=reverse_etl availability=implemented write=update_custom_field]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --custom-field-gid (required), --currency-code, --custom-label, --custom-label-position, --date, --date-time, --description, --color, --enabled, --name, --data-enum-value-color, --data-enum-value-enabled, --data-enum-value-name, --format, --has-notifications-enabled, --id-prefix, --input-restrictions, --is-formula-field, --data-multi-enum-values-0-color, --data-multi-enum-values-0-enabled, --data-multi-enum-values-0-name, --data-name, --number-value, --owned-by-app, --people-value, --workspace
   - custom-fields delete-custom-field - Planned fixed-target Asana mutation: Delete a custom field. [intent=reverse_etl availability=planned operation=delete_custom_field]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Planned reverse-ETL metadata only; not executable until a named write action, fixtures, and approval evidence exist.; flags: --custom-field-gid, --confirm
   - custom-fields list - Get the configured workspace's custom fields through the declared Asana ETL stream. [intent=etl availability=implemented stream=custom_fields]
   - custom-fields create-enum-option-for-custom-field - fixed-target Asana mutation: Create an enum option. [intent=reverse_etl availability=implemented write=create_enum_option_for_custom_field]; approval: reverse ETL plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: medium; notes: Typed reverse-ETL write action; executes only through plan -> preview -> explicit approval -> execute.; flags: --custom-field-gid (required), --color, --enabled, --insert-after, --insert-before, --name

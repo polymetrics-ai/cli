@@ -1,7 +1,18 @@
 {
-  "record": {},
+  "record": {
+    "organization_subscription": {
+      "user_id": 1,
+      "organization_id": 1
+    }
+  },
   "expect": {
     "method": "POST",
-    "path": "/api/v2/organization_subscriptions"
+    "path": "/api/v2/organization_subscriptions",
+    "body": {
+      "organization_subscription": {
+        "user_id": 1,
+        "organization_id": 1
+      }
+    }
   }
 }

@@ -161676,13 +161676,6 @@
         "risk": "external mutation; high-risk create against POST /api/v2/tickets/create_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
-        "name": "tickets_update_many",
-        "kind": "update",
-        "method": "PUT",
-        "path": "/api/v2/tickets/update_many",
-        "risk": "external mutation; medium-risk update against PUT /api/v2/tickets/update_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
-      },
-      {
         "name": "create_trigger_category",
         "kind": "create",
         "method": "POST",
@@ -161723,13 +161716,6 @@
         "method": "PUT",
         "path": "/api/v2/users/me/settings",
         "risk": "external mutation; high-risk update against PUT /api/v2/users/me/settings; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
-      },
-      {
-        "name": "update_many_users",
-        "kind": "update",
-        "method": "PUT",
-        "path": "/api/v2/users/update_many",
-        "risk": "external mutation; medium-risk update against PUT /api/v2/users/update_many; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
       },
       {
         "name": "create_workspace",

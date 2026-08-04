@@ -3,7 +3,8 @@
     "group_memberships": [
       {
         "group_id": 1,
-        "user_id": 1
+        "user_id": 1,
+        "default": true
       }
     ]
   },
@@ -14,7 +15,8 @@
       "group_memberships": [
         {
           "group_id": 1,
-          "user_id": 1
+          "user_id": 1,
+          "default": true
         }
       ]
     }

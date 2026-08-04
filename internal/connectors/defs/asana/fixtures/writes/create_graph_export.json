@@ -1,7 +1,16 @@
 {
-  "record": {},
+  "record": {
+    "data": {
+      "parent": "fixture-parent"
+    }
+  },
   "expect": {
     "method": "POST",
-    "path": "/exports/graph"
+    "path": "/exports/graph",
+    "body": {
+      "data": {
+        "parent": "fixture-parent"
+      }
+    }
   }
 }

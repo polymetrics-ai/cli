@@ -1,7 +1,20 @@
 {
-  "record": {},
+  "record": {
+    "asset_type": {
+      "parent_id": "fixture-parent-id",
+      "description": "fixture-description",
+      "external_id": "fixture-external-id"
+    }
+  },
   "expect": {
     "method": "POST",
-    "path": "/api/v2/it_asset_management/asset_types"
+    "path": "/api/v2/it_asset_management/asset_types",
+    "body": {
+      "asset_type": {
+        "parent_id": "fixture-parent-id",
+        "description": "fixture-description",
+        "external_id": "fixture-external-id"
+      }
+    }
   }
 }

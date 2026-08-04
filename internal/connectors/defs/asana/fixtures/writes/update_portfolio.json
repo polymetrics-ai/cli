@@ -1,9 +1,21 @@
 {
   "record": {
-    "portfolio_gid": "fixture-portfolio-gid"
+    "portfolio_gid": "fixture-portfolio-gid",
+    "data": {
+      "name": "fixture-name",
+      "archived": true,
+      "color": "fixture-color"
+    }
   },
   "expect": {
     "method": "PUT",
-    "path": "/portfolios/fixture-portfolio-gid"
+    "path": "/portfolios/fixture-portfolio-gid",
+    "body": {
+      "data": {
+        "name": "fixture-name",
+        "archived": true,
+        "color": "fixture-color"
+      }
+    }
   }
 }

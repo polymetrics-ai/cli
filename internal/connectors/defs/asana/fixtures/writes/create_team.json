@@ -1,7 +1,20 @@
 {
-  "record": {},
+  "record": {
+    "data": {
+      "name": "fixture-name",
+      "description": "fixture-description",
+      "edit_team_name_or_description_access_level": "fixture-edit-team-name-or-description-access-level"
+    }
+  },
   "expect": {
     "method": "POST",
-    "path": "/teams"
+    "path": "/teams",
+    "body": {
+      "data": {
+        "name": "fixture-name",
+        "description": "fixture-description",
+        "edit_team_name_or_description_access_level": "fixture-edit-team-name-or-description-access-level"
+      }
+    }
   }
 }

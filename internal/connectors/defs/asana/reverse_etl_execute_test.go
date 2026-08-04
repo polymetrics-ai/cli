@@ -48,6 +48,12 @@ const (
 	deferredNoBoundedShape       = 0
 	originalBlockedReverseETL    = 60
 
+	// reverseETLBoundEndpoints is the measured number of api_surface.json rows
+	// bound to a write action, pinned on its own so the ledger arithmetic can
+	// never be satisfied by dropping covered_by blocks and re-blocking them
+	// under a freshly worded reason.
+	reverseETLBoundEndpoints = 73
+
 	// blockedDestructiveOperations is the number of destructive_action rows
 	// that must remain unbound until cli-delete-confirmation-foundation-r1
 	// ships the destructive-write confirm gate.
@@ -73,9 +79,12 @@ func runtimeConfig(baseURL string) connectors.RuntimeConfig {
 // TestReverseETLLedgerReconciles accounts for every ledger row that originally
 // carried the typed reverse-ETL blocked reason. A promoted row is bound to a
 // write action; a row that could not be promoted must carry one of the two
-// precise, cited reasons and be counted here. The arithmetic is the point:
-// rewording a blocked reason cannot quietly shrink the shortfall, because the
-// three buckets still have to add up to originalBlockedReverseETL.
+// precise, cited reasons and be counted here. Two independent things are
+// pinned: the MEASURED number of endpoints bound to a write action, and the
+// arithmetic that the three buckets still add up to originalBlockedReverseETL.
+// Neither alone is enough - the count alone would not notice a reworded
+// blocked reason, and the arithmetic alone would not notice a covered_by block
+// being dropped and re-blocked under a third reason string.
 func TestReverseETLLedgerReconciles(t *testing.T) {
 	b := loadBundle(t)
 
@@ -109,6 +118,9 @@ func TestReverseETLLedgerReconciles(t *testing.T) {
 	}
 	if noShape != deferredNoBoundedShape {
 		t.Errorf("rows blocked on an unbounded request shape = %d, want %d", noShape, deferredNoBoundedShape)
+	}
+	if promoted != reverseETLBoundEndpoints {
+		t.Errorf("api_surface rows bound to a write action = %d, want %d", promoted, reverseETLBoundEndpoints)
 	}
 	if got := promotedReverseETLOperations + noContract + noShape; got != originalBlockedReverseETL {
 		t.Fatalf("promoted(%d) + deferred(%d+%d) = %d, want %d ledger rows accounted for",
@@ -214,7 +226,7 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 				if built.Preview == nil || built.Preview.RecordsStaged != 1 {
 					t.Fatalf("command %q preview = %+v, want 1 staged record", cmd.Path, built.Preview)
 				}
-				assertRedactedFieldsHidden(t, action, built.RedactedRecord)
+				assertRedactedFieldsHidden(t, action, cmd, fixture.Record, built.RedactedRecord)
 			} else if err := commandrunner.Preflight(conn, path); err == nil {
 				t.Fatalf("Preflight(%q) = nil for a command marked %q, want it refused", cmd.Path, cmd.Availability)
 			}
@@ -254,21 +266,80 @@ func TestReverseETLWriteActionsExecute(t *testing.T) {
 	}
 }
 
-// assertRedactedFieldsHidden proves the action's redaction declarations reach
-// the operator-visible plan sample, which is the record a reviewer reads before
-// approving the mutation.
-func assertRedactedFieldsHidden(t *testing.T, action engine.WriteAction, redacted connectors.Record) {
+// assertRedactedFieldsHidden proves the redaction declarations are live rather
+// than decorative. Two separate things have to hold, and a declaration that
+// silently resolves to nothing fails BOTH here rather than being skipped:
+//
+//   - every path writes.json declares must resolve against the authored record
+//     the way the engine resolves it, descending maps only from the record
+//     root, because a path the engine cannot walk redacts nothing;
+//   - every field the action or its command declares must be masked wherever it
+//     appears in the operator-visible plan sample, at any depth.
+func assertRedactedFieldsHidden(t *testing.T, action engine.WriteAction, cmd connectors.CommandSurfaceCommand, record map[string]any, redacted connectors.Record) {
 	t.Helper()
 	for _, field := range action.RedactFields {
 		target := strings.TrimPrefix(strings.TrimSpace(field), "record.")
-		value, ok := lookupRecordPath(map[string]any(redacted), strings.Split(target, "."))
-		if !ok {
-			continue
-		}
-		if s, isString := value.(string); !isString || (s != "***" && s != "redacted") {
-			t.Errorf("redact_fields declares %q but the approval sample still shows %v", field, value)
+		if _, ok := lookupMapPath(record, strings.Split(target, ".")); !ok {
+			t.Errorf("write action %q declares redact field %q, but the engine's map-only resolver cannot reach it in the sanitized record", action.Name, field)
 		}
 	}
+
+	declared := map[string]bool{}
+	for _, field := range append(append([]string{}, action.RedactFields...), cmd.RedactFields...) {
+		parts := strings.Split(strings.TrimPrefix(strings.TrimSpace(field), "record."), ".")
+		declared[parts[len(parts)-1]] = true
+	}
+	if len(declared) == 0 {
+		return
+	}
+	assertRedactedValuesHidden(t, declared, "", map[string]any(redacted))
+}
+
+// assertRedactedValuesHidden walks the entire approval sample instead of
+// probing declared paths, so a declared field that surfaces somewhere the
+// declaration did not anticipate is still caught.
+func assertRedactedValuesHidden(t *testing.T, declared map[string]bool, prefix string, value any) {
+	t.Helper()
+	switch typed := value.(type) {
+	case map[string]any:
+		for key, child := range typed {
+			path := key
+			if prefix != "" {
+				path = prefix + "." + key
+			}
+			if declared[key] {
+				if s, isString := child.(string); !isString || (s != "***" && s != "redacted") {
+					t.Errorf("redact field %q is still visible as %v at record.%s of the approval sample", key, child, path)
+				}
+				continue
+			}
+			assertRedactedValuesHidden(t, declared, path, child)
+		}
+	case connectors.Record:
+		assertRedactedValuesHidden(t, declared, prefix, map[string]any(typed))
+	case []any:
+		for i, item := range typed {
+			assertRedactedValuesHidden(t, declared, fmt.Sprintf("%s.%d", prefix, i), item)
+		}
+	}
+}
+
+// lookupMapPath mirrors the engine's record-path resolver exactly: it descends
+// maps only and has no array-index support, so an array-nested declaration
+// fails here for the same reason it is inert in the engine.
+func lookupMapPath(record map[string]any, parts []string) (any, bool) {
+	var current any = record
+	for _, part := range parts {
+		object, ok := current.(map[string]any)
+		if !ok {
+			return nil, false
+		}
+		current, ok = object[part]
+		if !ok {
+			return nil, false
+		}
+	}
+	return current, true
 }
 
 type writeFixture struct {
