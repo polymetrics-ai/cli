@@ -22,6 +22,7 @@
               "stream_etl",
               "rest_read",
               "rest_write",
+              "provider_search",
               "graphql_query",
               "graphql_mutation",
               "xml_export",

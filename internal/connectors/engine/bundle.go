@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
+	"mime"
 	"regexp"
 	"sort"
 	"strconv"
@@ -557,8 +558,13 @@ type MultipartPartSpec struct {
 	Type        string `json:"type"`
 	Field       string `json:"field"`
 	ContentType string `json:"content_type,omitempty"`
-	Required    bool   `json:"required,omitempty"`
-	MaxBytes    int64  `json:"max_bytes,omitempty"`
+	// AllowedMediaTypes bounds what the part's bytes may sniff as. ContentType
+	// is what the bundle asserts to the provider; this is what makes that
+	// assertion checkable. Absent means unconstrained; present and empty is a
+	// load error, so "bounded" and "unbounded" can never be confused.
+	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
+	Required          bool     `json:"required,omitempty"`
+	MaxBytes          int64    `json:"max_bytes,omitempty"`
 }
 
 type DeleteSpec struct {
@@ -790,6 +796,11 @@ type CLIFlag struct {
 	Format     string   `json:"format,omitempty"`
 	AllowEmpty *bool    `json:"allow_empty,omitempty"`
 	Required   bool     `json:"required,omitempty"`
+	// MaxItems/MinItems bound a string_array flag's item count so a bounded
+	// provider-search list can be enforced against the flag the user typed, not
+	// only against the assembled body.
+	MaxItems int `json:"max_items,omitempty"`
+	MinItems int `json:"min_items,omitempty"`
 }
 
 // CLIConstraint describes a provider-neutral validation rule over mapped
@@ -1364,6 +1375,9 @@ func validateWriteBodies(actions []WriteAction) error {
 				default:
 					return fmt.Errorf("action %d (%q) multipart part %d has unsupported type %q", i, action.Name, j, part.Type)
 				}
+				if err := validateMultipartMediaTypes(part); err != nil {
+					return fmt.Errorf("action %d (%q) multipart part %d: %w", i, action.Name, j, err)
+				}
 			}
 		}
 	}
@@ -1415,6 +1429,122 @@ func validateBase64UploadSpec(i int, action WriteAction) error {
 		}
 	}
 	return nil
+}
+
+// validateProviderSearchSemantics enforces the provider_search contract at load
+// time, so an unbounded or open-bodied declaration cannot ship.
+//
+// provider_search is a read that carries a fixed POST body containing bounded
+// lists. It is a distinct kind rather than a convention over rest_read because
+// these rules have to be enforceable, and because #2985's recorded decision is
+// that provider search is a separate typed capability — `pm query` stays
+// warehouse-focused. Nothing here lets a caller choose the method, the path, or
+// a body key the schema does not declare.
+func validateProviderSearchSemantics(i int, op OperationSpec) error {
+	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+	if method != "POST" {
+		return fmt.Errorf("operation %d (%q) provider_search method must be POST, got %s", i, op.ID, method)
+	}
+	if isAbsoluteHTTPURL(op.REST.Path) {
+		return fmt.Errorf("operation %d (%q) provider_search path must be connector-relative, got an absolute URL", i, op.ID)
+	}
+	if !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+		return fmt.Errorf("operation %d (%q) provider_search requires application/json content_type", i, op.ID)
+	}
+	if op.REST.MaxBytes <= 0 {
+		return fmt.Errorf("operation %d (%q) provider_search must declare positive max_bytes", i, op.ID)
+	}
+	if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
+		return fmt.Errorf("operation %d (%q) provider_search is a read and must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
+	}
+	if len(op.REST.BodySchema) == 0 {
+		return fmt.Errorf("operation %d (%q) provider_search must declare body_schema", i, op.ID)
+	}
+	var body map[string]any
+	if err := json.Unmarshal(op.REST.BodySchema, &body); err != nil {
+		return fmt.Errorf("operation %d (%q) provider_search body_schema is not an object: %w", i, op.ID, err)
+	}
+	if closed, ok := body["additionalProperties"].(bool); !ok || closed {
+		return fmt.Errorf("operation %d (%q) provider_search body_schema must declare additionalProperties: false so no undeclared body key can be supplied", i, op.ID)
+	}
+	if _, err := CompileSchema(op.REST.BodySchema); err != nil {
+		return fmt.Errorf("operation %d (%q) provider_search body_schema: %w", i, op.ID, err)
+	}
+	return requireBoundedArrays(i, op.ID, body, "body_schema")
+}
+
+// requireBoundedArrays walks a provider_search body schema and refuses any array
+// property that does not declare maxItems. This is what makes the kind bounded
+// by construction rather than by convention: an unbounded list cannot be
+// declared, so it cannot reach a provider.
+func requireBoundedArrays(i int, id string, node map[string]any, path string) error {
+	if typeOf, ok := node["type"].(string); ok && typeOf == "array" {
+		if _, ok := node["maxItems"]; !ok {
+			return fmt.Errorf("operation %d (%q) provider_search %s declares an array without maxItems; every list must be bounded", i, id, path)
+		}
+	}
+	if items, ok := node["items"].(map[string]any); ok {
+		if err := requireBoundedArrays(i, id, items, path+"/items"); err != nil {
+			return err
+		}
+	}
+	props, ok := node["properties"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	names := make([]string, 0, len(props))
+	for name := range props {
+		names = append(names, name)
+	}
+	sort.Strings(names) // deterministic error for a bundle with several unbounded lists
+	for _, name := range names {
+		child, ok := props[name].(map[string]any)
+		if !ok {
+			continue
+		}
+		if err := requireBoundedArrays(i, id, child, path+"/"+name); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// validateMultipartMediaTypes enforces the media-type declaration on one part.
+// A present-but-empty list is rejected rather than read as "allow anything":
+// absent means unconstrained and present means bounded, and a bundle must not be
+// able to look bounded while permitting everything.
+func validateMultipartMediaTypes(part MultipartPartSpec) error {
+	if part.AllowedMediaTypes == nil {
+		return nil
+	}
+	if len(part.AllowedMediaTypes) == 0 {
+		return fmt.Errorf("allowed_media_types must not be empty; omit it to leave the part unconstrained")
+	}
+	if part.Type != "file" {
+		return fmt.Errorf("allowed_media_types is only meaningful on a file part, got type %q", part.Type)
+	}
+	parsed := make([]string, 0, len(part.AllowedMediaTypes))
+	for _, raw := range part.AllowedMediaTypes {
+		value, _, err := mime.ParseMediaType(raw)
+		if err != nil {
+			return fmt.Errorf("allowed_media_types entry %q is not a valid media type: %w", raw, err)
+		}
+		parsed = append(parsed, value)
+	}
+	declared := strings.TrimSpace(part.ContentType)
+	if declared == "" {
+		return nil
+	}
+	want, _, err := mime.ParseMediaType(declared)
+	if err != nil {
+		return fmt.Errorf("content_type %q is not a valid media type: %w", declared, err)
+	}
+	for _, allowed := range parsed {
+		if strings.EqualFold(allowed, want) {
+			return nil
+		}
+	}
+	return fmt.Errorf("content_type %q is not among its own allowed_media_types %s", declared, strings.Join(part.AllowedMediaTypes, ", "))
 }
 
 func validateGraphQLSpec(spec *GraphQLRequestSpec, operationKind string) error {
@@ -1611,7 +1741,7 @@ func operationExecutionBlock(op OperationSpec) (string, int) {
 
 func expectedOperationBlock(kind string) string {
 	switch kind {
-	case "rest_read", "rest_write":
+	case "rest_read", "rest_write", "provider_search":
 		return "rest"
 	case "graphql_query", "graphql_mutation":
 		return "graphql"
@@ -1671,6 +1801,10 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
 			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
+		}
+	case "provider_search":
+		if err := validateProviderSearchSemantics(i, op); err != nil {
+			return err
 		}
 	case "rest_write":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
