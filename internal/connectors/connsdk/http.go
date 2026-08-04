@@ -523,6 +523,10 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 
 	attempts := r.maxRetries() + 1
 	var lastErr error
+	// reauthAttempted bounds the 401-refresh path to ONCE per request. It is
+	// set before the refresh is attempted (see below), so a provider that keeps
+	// returning 401 terminates with that 401 instead of being hammered.
+	reauthAttempted := false
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -573,6 +577,33 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		resp.Body.Close()
+
+		// A 401 can mean the credential was invalidated out of band (revoked
+		// grant, password change, scope change) rather than that it was never
+		// valid — something an expiry clock cannot see. An Authenticator that
+		// knows how to renew itself gets exactly one chance to do so.
+		//
+		// Authenticators that do not implement AuthRefresher — every mode that
+		// predates the refresh-token grant — never enter this branch, so their
+		// 401 behaviour is byte-for-byte unchanged.
+		if resp.StatusCode == http.StatusUnauthorized && !reauthAttempted {
+			if refresher, ok := r.Auth.(AuthRefresher); ok {
+				// Set before the attempt: a refresh that itself errors must not
+				// buy a second one.
+				reauthAttempted = true
+				if err := refresher.RefreshAuth(ctx, req); err == nil {
+					lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+					// The reauth retry does not spend the transient-failure
+					// budget, so a MaxRetries:0 requester still gets its one
+					// post-refresh attempt. Bounded by reauthAttempted, which
+					// is now true, so this can decrement at most once.
+					attempt--
+					continue
+				}
+				// The refresh failed; fall through and report the 401 itself,
+				// which is the more useful of the two errors.
+			}
+		}
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
