@@ -200,6 +200,32 @@ not a full override by default.
   "Command Surface Must Stay Executable"). The shared-code boundary guard
   (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside connector
   defs/hooks/native escape hatches.
+- **Request-contract evidence follows a fixed source order**: use the first tier that documents a
+  determinate contract; a lower tier is not permission to override or embellish a higher one.
+  The order is:
+  1. the operation's OAS `requestBody` (preferred);
+  2. the operation's own OAS `description` in the same pinned file, when it contains a markdown
+     property table or fenced example body;
+  3. the published API reference section for that operation, cited by a permanent anchor URL;
+  4. a create/update sibling on the same API reference page; or
+  5. deferred when none of the preceding sources determines the contract.
+
+  Every field derived from tiers 1-4 **MUST** carry the URL and exact operation/section anchor that
+  supports it, and the definition **MUST** record the tier used. For OAS evidence, cite the pinned
+  OAS URL plus the exact operation and `requestBody` or `description` location; for rendered prose,
+  cite the operation's permanent page anchor. A generic `source_url` that merely points at an OAS
+  file is not evidence when the request contract actually came from prose and **MUST NOT** be used
+  that way. Tier 4 is intentionally weaker: the definition **MUST** additionally flag the contract
+  as sibling-derived and identify the cited sibling operation, so reviewers can audit the inference
+  instead of mistaking it for first-party documentation of the target operation.
+
+  A genuinely empty documented body **MUST** be represented as `body: none` (the `writes.json`
+  spelling is `body_type: "none"`), never `body: {}`. Every documented path and query parameter
+  **MUST** instead be promoted to a command flag. If the definition/CLI surface cannot express the
+  no-body contract or those flags, defer the operation. This is a usability requirement, not a
+  stylistic preference: the 2026-08-04 hollow-command incident shipped two commands as implemented
+  with record schemas that admitted only `{}`; an empty record schema with no flags is unusable by
+  construction.
 - **Direct-read `output_policy` stays generic and bounded**: use `repository_contents_file_metadata`
   for a single repository file metadata response and `repository_contents_directory` for repository
   directory listings. Both policies reject sensitive repository paths before network access and
