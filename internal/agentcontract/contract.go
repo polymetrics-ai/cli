@@ -14,8 +14,6 @@ import (
 
 const SourcePath = ".agents/agentic-delivery/canonical/delivery-contract.json"
 
-const requiredChildCommand = "no-mistakes axi run --intent '<issue-intent>' --skip=push,pr,ci"
-
 type Contract struct {
 	SchemaVersion    int                `json:"schema_version"`
 	ContractVersion  string             `json:"contract_version"`
@@ -84,18 +82,22 @@ type GSDContract struct {
 }
 
 type GSDInvocation struct {
-	Command string `json:"command"`
-	Args    string `json:"args"`
-	Purpose string `json:"purpose"`
+	Argv    []string `json:"argv"`
+	Purpose string   `json:"purpose"`
+}
+
+type ExecutableAction struct {
+	Argv        []string `json:"argv"`
+	Instruction string   `json:"instruction"`
 }
 
 type NoMistakesContract struct {
-	VerifiedVersion string   `json:"verified_version"`
-	ForbiddenFlags  []string `json:"forbidden_flags"`
-	ChildCommand    string   `json:"child_command"`
-	GateResponse    string   `json:"gate_response"`
-	SubPROpen       string   `json:"sub_pr_open"`
-	ParentCommand   string   `json:"parent_command"`
+	VerifiedVersion string           `json:"verified_version"`
+	ForbiddenFlags  []string         `json:"forbidden_flags"`
+	ChildCommand    ExecutableAction `json:"child_command"`
+	GateResponse    string           `json:"gate_response"`
+	SubPROpen       ExecutableAction `json:"sub_pr_open"`
+	ParentCommand   ExecutableAction `json:"parent_command"`
 }
 
 type AuthorityContract struct {
@@ -180,21 +182,32 @@ func (contract *Contract) Validate() error {
 	if !slices.Equal(contract.GSD.Commands, commands) || contract.GSD.ShipUsed || strings.TrimSpace(contract.GSD.ShipExclusion) == "" {
 		return fmt.Errorf("canonical contract: GSD lifecycle or ship exclusion is invalid")
 	}
-	requiredGSDSequence := [...]GSDInvocation{
-		{Command: "discuss-phase", Args: "<phase>"},
-		{Command: "plan-phase", Args: "<phase> --tdd"},
-		{Command: "execute-phase", Args: "<phase>"},
-		{Command: "verify-work", Args: "<phase>"},
-		{Command: "plan-phase", Args: "<phase> --gaps"},
-		{Command: "execute-phase", Args: "<phase> --gaps-only"},
-		{Command: "code-review", Args: "<phase>"},
+	if contract.NoMistakes.VerifiedVersion != "v1.41.2" || !slices.Contains(contract.NoMistakes.ForbiddenFlags, "--yes") || strings.TrimSpace(contract.NoMistakes.GateResponse) == "" {
+		return fmt.Errorf("canonical contract: no-mistakes version, gate response, and forbidden flags are required")
+	}
+	for _, forbidden := range contract.NoMistakes.ForbiddenFlags {
+		if strings.TrimSpace(forbidden) == "" {
+			return fmt.Errorf("canonical contract: no-mistakes forbidden flags must be non-empty")
+		}
+	}
+	if err := validateExecutableFields(contract.executableFields(), contract.NoMistakes.ForbiddenFlags); err != nil {
+		return err
+	}
+	requiredGSDSequence := [...][]string{
+		{"scripts/gsd", "prompt", "discuss-phase", "<phase>"},
+		{"scripts/gsd", "prompt", "plan-phase", "<phase>", "--tdd"},
+		{"scripts/gsd", "prompt", "execute-phase", "<phase>"},
+		{"scripts/gsd", "prompt", "verify-work", "<phase>"},
+		{"scripts/gsd", "prompt", "plan-phase", "<phase>", "--gaps"},
+		{"scripts/gsd", "prompt", "execute-phase", "<phase>", "--gaps-only"},
+		{"scripts/gsd", "prompt", "code-review", "<phase>"},
 	}
 	if len(contract.GSD.Sequence) != len(requiredGSDSequence) {
 		return fmt.Errorf("canonical contract: GSD sequence is incomplete or out of order")
 	}
 	for index, want := range requiredGSDSequence {
 		invocation := contract.GSD.Sequence[index]
-		if invocation.Command != want.Command || invocation.Args != want.Args || strings.TrimSpace(invocation.Purpose) == "" {
+		if !slices.Equal(invocation.Argv, want) || strings.TrimSpace(invocation.Purpose) == "" {
 			return fmt.Errorf("canonical contract: GSD sequence is incomplete or out of order at step %d", index+1)
 		}
 	}
@@ -209,16 +222,16 @@ func (contract *Contract) Validate() error {
 			return fmt.Errorf("canonical contract: infrastructure blockers must pause child integration")
 		}
 	}
-	if contract.NoMistakes.VerifiedVersion != "v1.41.2" || !slices.Contains(contract.NoMistakes.ForbiddenFlags, "--yes") || contract.NoMistakes.ChildCommand != requiredChildCommand || strings.TrimSpace(contract.NoMistakes.GateResponse) == "" || strings.Contains(contract.NoMistakes.ParentCommand, "--skip=") || strings.TrimSpace(contract.NoMistakes.ParentCommand) == "" || !strings.Contains(contract.NoMistakes.SubPROpen, "gh-axi") {
-		return fmt.Errorf("canonical contract: no-mistakes child workaround, full parent pipeline, gh-axi, and --yes prohibition are required")
-	}
-	for _, forbidden := range contract.NoMistakes.ForbiddenFlags {
-		if strings.TrimSpace(forbidden) == "" {
-			return fmt.Errorf("canonical contract: no-mistakes forbidden flags must be non-empty")
-		}
-		if containsCommandToken(contract.NoMistakes.ChildCommand, forbidden) || containsCommandToken(contract.NoMistakes.ParentCommand, forbidden) {
-			return fmt.Errorf("canonical contract: no-mistakes command uses forbidden flag %q", forbidden)
-		}
+	requiredChildCommand := []string{"no-mistakes", "axi", "run", "--intent", "<issue-intent>", "--skip=push,pr,ci"}
+	requiredSubPROpen := []string{"gh-axi", "pr", "create", "--base", "<parent-branch>", "--head", "<child-branch>", "--title", "<conventional-title>", "--body-file", "<pr-body-file>"}
+	requiredParentCommand := []string{"no-mistakes", "axi", "run", "--intent", "<parent-intent>"}
+	if !slices.Equal(contract.NoMistakes.ChildCommand.Argv, requiredChildCommand) ||
+		!slices.Equal(contract.NoMistakes.SubPROpen.Argv, requiredSubPROpen) ||
+		!slices.Equal(contract.NoMistakes.ParentCommand.Argv, requiredParentCommand) ||
+		strings.TrimSpace(contract.NoMistakes.ChildCommand.Instruction) == "" ||
+		strings.TrimSpace(contract.NoMistakes.SubPROpen.Instruction) == "" ||
+		strings.TrimSpace(contract.NoMistakes.ParentCommand.Instruction) == "" {
+		return fmt.Errorf("canonical contract: no-mistakes child workaround, full parent pipeline, and gh-axi sub-PR action are required")
 	}
 	pauseIDs := []string{"product_ambiguity", "destructive_irreversible", "secrets_auth_security", "dependency_production", "generic_write", "reverse_etl_execute", "quality_gate_weakening", "final_merge"}
 	if contract.Authority.Principle != "Absence never expands authority." || !equalRuleIDs(contract.Authority.PauseWhen, pauseIDs) {
@@ -248,11 +261,49 @@ func allNonEmpty(values []string) bool {
 	return true
 }
 
-func containsCommandToken(command, target string) bool {
-	tokens := strings.FieldsFunc(command, func(character rune) bool {
-		return unicode.IsSpace(character) || strings.ContainsRune("'\"`;|&()<>\\", character)
-	})
-	return slices.Contains(tokens, target)
+type executableField struct {
+	name string
+	argv []string
+}
+
+func (contract *Contract) executableFields() []executableField {
+	fields := make([]executableField, 0, len(contract.GSD.Sequence)+3)
+	for index, invocation := range contract.GSD.Sequence {
+		fields = append(fields, executableField{
+			name: fmt.Sprintf("gsd.sequence[%d]", index),
+			argv: invocation.Argv,
+		})
+	}
+	return append(fields,
+		executableField{name: "no_mistakes.child_command", argv: contract.NoMistakes.ChildCommand.Argv},
+		executableField{name: "no_mistakes.sub_pr_open", argv: contract.NoMistakes.SubPROpen.Argv},
+		executableField{name: "no_mistakes.parent_command", argv: contract.NoMistakes.ParentCommand.Argv},
+	)
+}
+
+func validateExecutableFields(fields []executableField, forbiddenFlags []string) error {
+	for _, field := range fields {
+		if len(field.argv) == 0 {
+			return fmt.Errorf("canonical contract: executable field %s requires argv", field.name)
+		}
+		for index, argument := range field.argv {
+			if strings.TrimSpace(argument) == "" || strings.IndexFunc(argument, unicode.IsControl) >= 0 {
+				return fmt.Errorf("canonical contract: executable field %s has an invalid argv[%d]", field.name, index)
+			}
+			if strings.ContainsAny(argument, "'\"\\`$;&|()") {
+				return fmt.Errorf("canonical contract: executable field %s argv[%d] contains shell syntax", field.name, index)
+			}
+			if argument == "ship" {
+				return fmt.Errorf("canonical contract: executable field %s uses prohibited GSD action ship", field.name)
+			}
+			for _, forbidden := range forbiddenFlags {
+				if argument == forbidden || strings.HasPrefix(argument, forbidden+"=") {
+					return fmt.Errorf("canonical contract: executable field %s uses forbidden flag %q", field.name, forbidden)
+				}
+			}
+		}
+	}
+	return nil
 }
 
 func equalStepIDs(steps []Step, want []string) bool {

@@ -2,6 +2,7 @@ package agentcontract
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"strings"
 )
@@ -44,16 +45,32 @@ func RenderBlock(contract *Contract, role string) ([]byte, error) {
 	fmt.Fprintln(&output, "## Installed GSD lifecycle")
 	fmt.Fprintln(&output)
 	for _, invocation := range contract.GSD.Sequence {
-		fmt.Fprintf(&output, "- `scripts/gsd prompt %s %s` — %s\n", invocation.Command, invocation.Args, invocation.Purpose)
+		argv, err := marshalArgv(invocation.Argv)
+		if err != nil {
+			return nil, err
+		}
+		fmt.Fprintf(&output, "- argv `%s` — %s\n", argv, invocation.Purpose)
 	}
 	fmt.Fprintf(&output, "- GSD ship exclusion: %s\n\n", contract.GSD.ShipExclusion)
 
 	fmt.Fprintln(&output, "## no-mistakes topology")
 	fmt.Fprintln(&output)
 	fmt.Fprintf(&output, "- Verified installed version: `%s`. Never use `%s`; it auto-resolves captain-owned ask-user gates.\n", contract.NoMistakes.VerifiedVersion, strings.Join(contract.NoMistakes.ForbiddenFlags, "` or `"))
-	fmt.Fprintf(&output, "- Child branch: `%s`. %s\n", contract.NoMistakes.ChildCommand, contract.NoMistakes.GateResponse)
-	fmt.Fprintf(&output, "- Child PR: %s\n", contract.NoMistakes.SubPROpen)
-	fmt.Fprintf(&output, "- Integrated parent: %s\n\n", contract.NoMistakes.ParentCommand)
+	childArgv, err := marshalArgv(contract.NoMistakes.ChildCommand.Argv)
+	if err != nil {
+		return nil, err
+	}
+	subPRArgv, err := marshalArgv(contract.NoMistakes.SubPROpen.Argv)
+	if err != nil {
+		return nil, err
+	}
+	parentArgv, err := marshalArgv(contract.NoMistakes.ParentCommand.Argv)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Fprintf(&output, "- Child branch argv: `%s`. %s %s\n", childArgv, contract.NoMistakes.ChildCommand.Instruction, contract.NoMistakes.GateResponse)
+	fmt.Fprintf(&output, "- Child PR argv: `%s`. %s\n", subPRArgv, contract.NoMistakes.SubPROpen.Instruction)
+	fmt.Fprintf(&output, "- Integrated parent argv: `%s`. %s\n\n", parentArgv, contract.NoMistakes.ParentCommand.Instruction)
 
 	fmt.Fprintf(&output, "## Away-mode authority\n\n%s\n\nSelf-answer only when:\n", contract.Authority.Principle)
 	writeRules(&output, contract.Authority.SelfAnswerWhen)
@@ -76,6 +93,16 @@ func roleSummary(contract *Contract, role string) string {
 		return contract.ConnectorOverlay.Summary
 	}
 	return contract.BaseRole.Summary
+}
+
+func marshalArgv(argv []string) (string, error) {
+	var output bytes.Buffer
+	encoder := json.NewEncoder(&output)
+	encoder.SetEscapeHTML(false)
+	if err := encoder.Encode(argv); err != nil {
+		return "", fmt.Errorf("canonical contract: encode argv: %w", err)
+	}
+	return strings.TrimSuffix(output.String(), "\n"), nil
 }
 
 func writeBullets(output *bytes.Buffer, values []string) {

@@ -152,38 +152,69 @@
     ],
     "sequence": [
       {
-        "command": "discuss-phase",
-        "args": "<phase>",
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "discuss-phase",
+          "<phase>"
+        ],
         "purpose": "Record known decisions."
       },
       {
-        "command": "plan-phase",
-        "args": "<phase> --tdd",
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "plan-phase",
+          "<phase>",
+          "--tdd"
+        ],
         "purpose": "Plan explicit test-first slices."
       },
       {
-        "command": "execute-phase",
-        "args": "<phase>",
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "execute-phase",
+          "<phase>"
+        ],
         "purpose": "Execute RED, GREEN, and REFACTOR inline."
       },
       {
-        "command": "verify-work",
-        "args": "<phase>",
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "verify-work",
+          "<phase>"
+        ],
         "purpose": "Verify behavior and record gaps."
       },
       {
-        "command": "plan-phase",
-        "args": "<phase> --gaps",
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "plan-phase",
+          "<phase>",
+          "--gaps"
+        ],
         "purpose": "Plan verified gap closure when needed."
       },
       {
-        "command": "execute-phase",
-        "args": "<phase> --gaps-only",
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "execute-phase",
+          "<phase>",
+          "--gaps-only"
+        ],
         "purpose": "Execute only planned gaps, then re-verify."
       },
       {
-        "command": "code-review",
-        "args": "<phase>",
+        "argv": [
+          "scripts/gsd",
+          "prompt",
+          "code-review",
+          "<phase>"
+        ],
         "purpose": "Review the completed phase and disposition findings."
       }
     ],
@@ -195,10 +226,44 @@
     "forbidden_flags": [
       "--yes"
     ],
-    "child_command": "no-mistakes axi run --intent '<issue-intent>' --skip=push,pr,ci",
+    "child_command": {
+      "argv": [
+        "no-mistakes",
+        "axi",
+        "run",
+        "--intent",
+        "<issue-intent>",
+        "--skip=push,pr,ci"
+      ],
+      "instruction": "Replace the intent placeholder element with the complete issue intent and execute the argv vector directly without shell interpolation."
+    },
     "gate_response": "Resolve gates individually by exact finding ID. Self-answer only when the issue, repo contract, or standing authority fixes a routine reversible answer; record the rationale. Use the pipeline to apply bounded fixes and rerun the gate.",
-    "sub_pr_open": "After child-local gates pass, use gh-axi to open the sub-PR to the parent branch because this installed version cannot target a non-default PR base.",
-    "parent_command": "Run the full no-mistakes pipeline once on the integrated parent branch and its existing draft parent PR."
+    "sub_pr_open": {
+      "argv": [
+        "gh-axi",
+        "pr",
+        "create",
+        "--base",
+        "<parent-branch>",
+        "--head",
+        "<child-branch>",
+        "--title",
+        "<conventional-title>",
+        "--body-file",
+        "<pr-body-file>"
+      ],
+      "instruction": "After child-local gates pass, open the sub-PR to the parent branch because this installed version cannot target a non-default PR base."
+    },
+    "parent_command": {
+      "argv": [
+        "no-mistakes",
+        "axi",
+        "run",
+        "--intent",
+        "<parent-intent>"
+      ],
+      "instruction": "Replace the intent placeholder element with the integrated parent intent, then run the full pipeline once on the integrated parent branch and its existing draft parent PR without shell interpolation."
+    }
   },
   "authority": {
     "principle": "Absence never expands authority.",

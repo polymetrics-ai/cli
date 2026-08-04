@@ -2,7 +2,9 @@ package agentcontract
 
 import (
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -53,31 +55,73 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 		{
 			name: "GSD TDD flag removed",
 			mutate: func(value *Contract) {
-				value.GSD.Sequence[1].Args = "<phase>"
+				value.GSD.Sequence[1].Argv = []string{"scripts/gsd", "prompt", "plan-phase", "<phase>"}
 			},
 		},
 		{
 			name: "GSD ship executable",
 			mutate: func(value *Contract) {
-				value.GSD.Sequence[len(value.GSD.Sequence)-1].Command = "ship"
+				value.GSD.Sequence[len(value.GSD.Sequence)-1].Argv[2] = "ship"
+			},
+		},
+		{
+			name: "GSD ship executable through parent field",
+			mutate: func(value *Contract) {
+				value.NoMistakes.ParentCommand.Argv = []string{"scripts/gsd", "prompt", "ship", "<phase>"}
+			},
+		},
+		{
+			name: "yes used by GSD command",
+			mutate: func(value *Contract) {
+				value.GSD.Sequence[0].Argv = append(value.GSD.Sequence[0].Argv, "--yes")
 			},
 		},
 		{
 			name: "yes used by child command",
 			mutate: func(value *Contract) {
-				value.NoMistakes.ChildCommand += " --yes"
+				value.NoMistakes.ChildCommand.Argv = append(value.NoMistakes.ChildCommand.Argv, "--yes")
+			},
+		},
+		{
+			name: "yes used by sub-PR command",
+			mutate: func(value *Contract) {
+				value.NoMistakes.SubPROpen.Argv = append(value.NoMistakes.SubPROpen.Argv, "--yes")
 			},
 		},
 		{
 			name: "yes used by parent command",
 			mutate: func(value *Contract) {
-				value.NoMistakes.ParentCommand += " --yes"
+				value.NoMistakes.ParentCommand.Argv = append(value.NoMistakes.ParentCommand.Argv, "--yes")
 			},
 		},
 		{
-			name: "child intent unquoted",
+			name: "shell-quoted yes used by GSD command",
 			mutate: func(value *Contract) {
-				value.NoMistakes.ChildCommand = strings.Replace(value.NoMistakes.ChildCommand, "'<issue-intent>'", "<issue-intent>", 1)
+				value.GSD.Sequence[0].Argv = append(value.GSD.Sequence[0].Argv, "--'yes'")
+			},
+		},
+		{
+			name: "shell-quoted yes used by child command",
+			mutate: func(value *Contract) {
+				value.NoMistakes.ChildCommand.Argv = append(value.NoMistakes.ChildCommand.Argv, "--'yes'")
+			},
+		},
+		{
+			name: "shell-quoted yes used by sub-PR command",
+			mutate: func(value *Contract) {
+				value.NoMistakes.SubPROpen.Argv = append(value.NoMistakes.SubPROpen.Argv, "--'yes'")
+			},
+		},
+		{
+			name: "shell-quoted yes used by parent command",
+			mutate: func(value *Contract) {
+				value.NoMistakes.ParentCommand.Argv = append(value.NoMistakes.ParentCommand.Argv, "--'yes'")
+			},
+		},
+		{
+			name: "child intent split across argv",
+			mutate: func(value *Contract) {
+				value.NoMistakes.ChildCommand.Argv = []string{"no-mistakes", "axi", "run", "--intent", "<issue", "intent>", "--skip=push,pr,ci"}
 			},
 		},
 		{
@@ -89,7 +133,7 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 		{
 			name: "missing parent pipeline",
 			mutate: func(value *Contract) {
-				value.NoMistakes.ParentCommand = ""
+				value.NoMistakes.ParentCommand.Argv = nil
 			},
 		},
 		{
@@ -114,6 +158,23 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 				t.Fatal("Validate accepted a contract missing a required invariant")
 			}
 		})
+	}
+}
+
+func TestMarshalArgvPreservesIntentAsOneArgument(t *testing.T) {
+	intent := "Complete Wave 5's overlay; $(unexpected)"
+	argv := []string{"no-mistakes", "axi", "run", "--intent", intent, "--skip=push,pr,ci"}
+
+	rendered, err := marshalArgv(argv)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var decoded []string
+	if err := json.Unmarshal([]byte(rendered), &decoded); err != nil {
+		t.Fatalf("rendered argv is not valid JSON: %v", err)
+	}
+	if !slices.Equal(decoded, argv) || len(decoded) != 6 || decoded[4] != intent {
+		t.Fatalf("rendered argv did not preserve the complete intent as one argument: %#v", decoded)
 	}
 }
 
@@ -146,12 +207,12 @@ func TestRenderIsStableAndConnectorInheritsBase(t *testing.T) {
 		}
 	}
 
-	const expectedSHA256 = "da49efcdadddc85bb442a23ad75dc426ac23b9ee42cb3111ccbaef4e33d36bd1"
+	const expectedSHA256 = "8eeb8b7eb3a37eb991cff7736f60e1f2085760cb88b63692b9cc8991d3ec5f25"
 	gotSHA256 := fmt.Sprintf("%x", sha256.Sum256(base))
 	if gotSHA256 != expectedSHA256 {
 		t.Fatalf("base rendering hash = %s, update expected hash after intentional canonical change", gotSHA256)
 	}
-	const expectedConnectorSHA256 = "760c69bea2655c85c9e7ecee03e0fffcf61bf2b09fff8e74b255cfef669f1e2f"
+	const expectedConnectorSHA256 = "124f7fb259a1bf8cc2d8002d62be81955996abf438ed6c814193139452cb118f"
 	gotConnectorSHA256 := fmt.Sprintf("%x", sha256.Sum256(connector))
 	if gotConnectorSHA256 != expectedConnectorSHA256 {
 		t.Fatalf("connector rendering hash = %s, update expected hash after intentional canonical change", gotConnectorSHA256)

@@ -1,6 +1,7 @@
 package agentcontract
 
 import (
+	"bytes"
 	"context"
 	"os"
 	"path/filepath"
@@ -92,6 +93,46 @@ func TestOptionalWaveProjectionMayBeAbsent(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	if err := CheckProjections(t.TempDir(), contract); err != nil {
 		t.Fatalf("optional Wave 2-4 projections should be absent in Wave 1: %v", err)
+	}
+}
+
+func TestProjectionIORejectsSymlinkEscape(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	contract.Projections[0].Required = true
+	target := contract.Projections[0]
+
+	root := t.TempDir()
+	outside := t.TempDir()
+	escapedPath := filepath.Join(outside, "agents", filepath.Base(target.Path))
+	if err := os.MkdirAll(filepath.Dir(escapedPath), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	block, err := RenderBlock(contract, target.Role)
+	if err != nil {
+		t.Fatal(err)
+	}
+	original := append([]byte("---\nname: escaped\n---\n\n"), block...)
+	original = append(original, []byte("\noutside footer\n")...)
+	original = []byte(strings.Replace(string(original), "Receive one assigned job", "Receive escaped work", 1))
+	if err := os.WriteFile(escapedPath, original, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(outside, filepath.Join(root, ".claude")); err != nil {
+		t.Skipf("cannot create projection ancestor symlink: %v", err)
+	}
+
+	if err := CheckProjections(root, contract); err == nil {
+		t.Fatal("CheckProjections followed a projection ancestor outside the selected root")
+	}
+	if _, err := SyncProjections(root, contract); err == nil {
+		t.Fatal("SyncProjections followed a projection ancestor outside the selected root")
+	}
+	after, err := os.ReadFile(escapedPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(after, original) {
+		t.Fatal("SyncProjections modified a projection outside the selected root")
 	}
 }
 

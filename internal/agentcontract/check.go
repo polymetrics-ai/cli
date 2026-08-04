@@ -3,6 +3,8 @@ package agentcontract
 import (
 	"bytes"
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"os/exec"
@@ -39,10 +41,23 @@ func CheckGSDCommands(ctx context.Context, root string, commands []string) error
 	return nil
 }
 
-func CheckProjections(root string, contract *Contract) error {
+func CheckProjections(root string, contract *Contract) (returnErr error) {
+	projectionRoot, err := openProjectionRoot(root, contract)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err := projectionRoot.Close(); err != nil && returnErr == nil {
+			returnErr = fmt.Errorf("close projection root: %w", err)
+		}
+	}()
+
 	for _, target := range contract.Projections {
-		path := filepath.Join(root, filepath.FromSlash(target.Path))
-		content, err := os.ReadFile(path)
+		path, err := projectionPath(target.Path)
+		if err != nil {
+			return err
+		}
+		content, err := projectionRoot.ReadFile(path)
 		if err != nil {
 			if os.IsNotExist(err) && !target.Required {
 				continue
@@ -71,11 +86,23 @@ func CheckProjection(want, got []byte) error {
 	return nil
 }
 
-func SyncProjections(root string, contract *Contract) (int, error) {
-	updated := 0
+func SyncProjections(root string, contract *Contract) (updated int, returnErr error) {
+	projectionRoot, err := openProjectionRoot(root, contract)
+	if err != nil {
+		return 0, err
+	}
+	defer func() {
+		if err := projectionRoot.Close(); err != nil && returnErr == nil {
+			returnErr = fmt.Errorf("close projection root: %w", err)
+		}
+	}()
+
 	for _, target := range contract.Projections {
-		path := filepath.Join(root, filepath.FromSlash(target.Path))
-		content, err := os.ReadFile(path)
+		path, err := projectionPath(target.Path)
+		if err != nil {
+			return updated, err
+		}
+		content, err := projectionRoot.ReadFile(path)
 		if err != nil {
 			if os.IsNotExist(err) && !target.Required {
 				continue
@@ -93,11 +120,11 @@ func SyncProjections(root string, contract *Contract) (int, error) {
 		next = append(next, content[:start]...)
 		next = append(next, expected...)
 		next = append(next, content[end:]...)
-		info, err := os.Stat(path)
+		info, err := projectionRoot.Stat(path)
 		if err != nil {
 			return updated, fmt.Errorf("stat projection %s: %w", target.Path, err)
 		}
-		if err := writeAtomic(path, next, info.Mode().Perm()); err != nil {
+		if err := writeAtomic(projectionRoot, path, next, info.Mode().Perm()); err != nil {
 			return updated, fmt.Errorf("write projection %s: %w", target.Path, err)
 		}
 		updated++
@@ -136,14 +163,31 @@ func extractProjectionBlock(content []byte) ([]byte, int, int, error) {
 	return content[start:end], start, end, nil
 }
 
-func writeAtomic(path string, content []byte, mode os.FileMode) error {
-	directory := filepath.Dir(path)
-	temporary, err := os.CreateTemp(directory, ".agentcontractgen-*")
+func openProjectionRoot(root string, contract *Contract) (*os.Root, error) {
+	if err := contract.Validate(); err != nil {
+		return nil, err
+	}
+	projectionRoot, err := os.OpenRoot(root)
+	if err != nil {
+		return nil, fmt.Errorf("open projection root: %w", err)
+	}
+	return projectionRoot, nil
+}
+
+func projectionPath(path string) (string, error) {
+	localPath := filepath.FromSlash(path)
+	if !filepath.IsLocal(localPath) || filepath.Clean(localPath) != localPath {
+		return "", fmt.Errorf("canonical contract: projection path %q is not local", path)
+	}
+	return localPath, nil
+}
+
+func writeAtomic(root *os.Root, path string, content []byte, mode os.FileMode) error {
+	temporary, temporaryPath, err := createRootTemp(root, filepath.Dir(path))
 	if err != nil {
 		return err
 	}
-	temporaryPath := temporary.Name()
-	cleanup := func() { _ = os.Remove(temporaryPath) }
+	cleanup := func() { _ = root.Remove(temporaryPath) }
 	defer cleanup()
 	if err := temporary.Chmod(mode); err != nil {
 		_ = temporary.Close()
@@ -156,5 +200,23 @@ func writeAtomic(path string, content []byte, mode os.FileMode) error {
 	if err := temporary.Close(); err != nil {
 		return err
 	}
-	return os.Rename(temporaryPath, path)
+	return root.Rename(temporaryPath, path)
+}
+
+func createRootTemp(root *os.Root, directory string) (*os.File, string, error) {
+	for range 10 {
+		var random [16]byte
+		if _, err := rand.Read(random[:]); err != nil {
+			return nil, "", fmt.Errorf("generate temporary projection name: %w", err)
+		}
+		path := filepath.Join(directory, ".agentcontractgen-"+hex.EncodeToString(random[:]))
+		file, err := root.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0o600)
+		if err == nil {
+			return file, path, nil
+		}
+		if !os.IsExist(err) {
+			return nil, "", err
+		}
+	}
+	return nil, "", fmt.Errorf("create temporary projection: name collision limit reached")
 }

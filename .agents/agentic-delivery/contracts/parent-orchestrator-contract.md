@@ -99,14 +99,20 @@ parent.
 
 Never use `--yes`.
 
-On a sub-issue branch, run the review/test/docs/lint loop with
-`no-mistakes axi run --intent '<issue-intent>' --skip=push,pr,ci`. Respond to each exact finding ID
-with recorded rationale. Let the pipeline apply bounded in-scope fixes, then rerun the gate. After
-local gates pass, use `gh-axi` to open the sub-PR to the parent branch; no-mistakes v1.41.2 cannot
-target a non-default PR base.
+On a sub-issue branch, run the review/test/docs/lint loop with the argv vector
+`["no-mistakes","axi","run","--intent","<issue-intent>","--skip=push,pr,ci"]`. Replace the
+intent placeholder element with the complete issue intent and pass the vector directly to the
+process without shell interpolation. Respond to each exact finding ID with recorded rationale. Let
+the pipeline apply bounded in-scope fixes, then rerun the gate.
 
-Run the full no-mistakes pipeline once on the integrated parent branch and its existing draft
-parent PR.
+After local gates pass, open the sub-PR with
+`["gh-axi","pr","create","--base","<parent-branch>","--head","<child-branch>","--title","<conventional-title>","--body-file","<pr-body-file>"]`.
+No-mistakes v1.41.2 cannot target a non-default PR base.
+
+On the integrated parent branch, run
+`["no-mistakes","axi","run","--intent","<parent-intent>"]` against its existing draft parent PR,
+replacing the placeholder element with the complete parent intent and passing the vector directly
+without shell interpolation.
 
 ## Child integration gate
 
