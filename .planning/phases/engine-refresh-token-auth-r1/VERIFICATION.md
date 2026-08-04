@@ -74,8 +74,8 @@ What that means in practice:
 
 Making the *engine* share one authenticator across streams would need a cache keyed on credential
 identity. That is a security-sensitive change — a wrong cache key is credential confusion between
-two connectors — and it is deliberately **not** smuggled into this phase. Filed as a follow-up on
-the parent issue rather than implemented here.
+two connectors — and it is deliberately **not** smuggled into this phase. Filed as
+[#3708](https://github.com/polymetrics-ai/cli/issues/3708) rather than implemented here.
 
 ## 2. Unit tests, including `-race`
 

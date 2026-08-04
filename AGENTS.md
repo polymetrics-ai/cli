@@ -147,6 +147,14 @@ go build ./cmd/pm
 make verify
 ```
 
+Agents running under a per-command timeout should not run `go test ./...` or `make verify` (which
+includes it) as a single command: the suite spans 550+ connectors and `internal/cli` alone takes
+~6.5 minutes, so the whole run is routinely cut off — and a cutoff is indistinguishable from a hang.
+Scope local runs to the packages you changed plus `internal/cli`, in separate commands, run
+`make verify`'s other gates individually (`tidy-check`, `lint`, `docs-check`, `smoke-no-build`,
+`connectorgen-validate`, `connector-boundary`, `release-workflow-check`), and let CI carry the full
+suite.
+
 Runtime-backed checks are optional and require local services:
 
 ```bash
@@ -155,3 +163,10 @@ scripts/runtime.sh up
 POLYMETRICS_INTEGRATION=1 go test ./...
 scripts/runtime.sh down
 ```
+
+## Maintaining this file
+
+Keep this file for knowledge useful to almost every future agent session in this project.
+Do not repeat what the codebase already shows; point to the authoritative file or command instead.
+Prefer rewriting or pruning existing entries over appending new ones.
+When updating this file, preserve this bar for all agents and keep entries concise.

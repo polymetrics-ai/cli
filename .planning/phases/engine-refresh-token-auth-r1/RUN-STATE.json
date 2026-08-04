@@ -105,7 +105,7 @@
       "measured": "3 Reads of a 3-page stream = 9 upstream requests, 3 token exchanges",
       "in_scope": false,
       "reason": "sharing an authenticator across streams needs a cache keyed on credential identity; a wrong key is credential confusion between connectors, so it is a separate security-sensitive change",
-      "action": "reported on parent issue #3702 as a follow-up"
+      "action": "filed as issue #3708 (perf(engine): consider sharing one authenticator across a sync's streams)"
     }
   ]
 }
