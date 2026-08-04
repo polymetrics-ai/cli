@@ -1512,6 +1512,11 @@ func requireBoundedArrays(i int, id string, node map[string]any, path string) er
 			return fmt.Errorf("operation %d (%q) provider_search %s declares an array without maxItems; every list must be bounded", i, id, path)
 		}
 	}
+	if isObjectType(node) {
+		if closed, ok := node["additionalProperties"].(bool); !ok || closed {
+			return fmt.Errorf("operation %d (%q) provider_search %s is an object and must declare additionalProperties: false so no undeclared body key can be supplied inside it", i, id, path)
+		}
+	}
 	if items, ok := node["items"].(map[string]any); ok {
 		if err := requireBoundedArrays(i, id, items, path+"/items"); err != nil {
 			return err
@@ -1536,6 +1541,27 @@ func requireBoundedArrays(i int, id string, node map[string]any, path string) er
 		}
 	}
 	return nil
+}
+
+// isObjectType reports whether a schema node is an object. It recognises the
+// single string form ("object") as well as the multi-form type list that
+// compileTypes accepts (e.g. ["object","null"]), and a properties-bearing node
+// with no string type at all. Every object node in a provider_search body must
+// be closed, regardless of how the dialect lets it be declared.
+func isObjectType(node map[string]any) bool {
+	switch typeOf := node["type"].(type) {
+	case string:
+		return typeOf == "object"
+	case []any:
+		for _, t := range typeOf {
+			if s, ok := t.(string); ok && s == "object" {
+				return true
+			}
+		}
+		return false
+	}
+	_, hasProps := node["properties"]
+	return hasProps
 }
 
 // isArrayType reports whether a schema node is an array. It recognises the
