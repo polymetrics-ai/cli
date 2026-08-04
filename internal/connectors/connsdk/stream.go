@@ -152,6 +152,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 // redirect policy. The shared client is never mutated.
 func (r *Requester) streamClient(base *url.URL, opts StreamOptions, credKeys *[]string) *http.Client {
 	clone := *r.client()
+	clone.Timeout = 0
 	clone.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 		if len(via) >= maxStreamRedirects {
 			return fmt.Errorf("stopped after %d redirects", maxStreamRedirects)

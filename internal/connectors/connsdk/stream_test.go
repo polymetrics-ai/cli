@@ -231,7 +231,7 @@ func TestDoStreamDoesNotMutateSharedClient(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	shared := &http.Client{}
+	shared := &http.Client{Timeout: 90 * time.Second}
 	r := &Requester{BaseURL: srv.URL, Client: shared}
 	resp, err := r.DoStream(context.Background(), http.MethodGet, "/file", nil, StreamOptions{})
 	if err != nil {
@@ -240,6 +240,52 @@ func TestDoStreamDoesNotMutateSharedClient(t *testing.T) {
 	_ = drain(t, resp.Body)
 	if shared.CheckRedirect != nil {
 		t.Fatal("DoStream must not install CheckRedirect on the shared client")
+	}
+	if shared.Timeout != 90*time.Second {
+		t.Fatal("DoStream must not mutate the shared client timeout")
+	}
+}
+
+// TestDoStreamSlowProgressingDownloadOutlivesClientTimeout: http.Client.Timeout
+// is a wall-clock deadline that starts at Do() and keeps running while the
+// caller reads the returned body. A slow-but-progressing download that takes
+// longer than the configured timeout must still deliver the full payload —
+// liveness for a streamed body is the stall watchdog's job, not a wall-clock
+// bound that doubles as a bandwidth requirement.
+func TestDoStreamSlowProgressingDownloadOutlivesClientTimeout(t *testing.T) {
+	payload := strings.Repeat("0123456789abcdef", 128) // 2 KiB
+	const chunk = 256
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/octet-stream")
+		fl, ok := w.(http.Flusher)
+		if !ok {
+			t.Error("test server must support flushing")
+			return
+		}
+		for i := 0; i < len(payload); i += chunk {
+			end := i + chunk
+			if end > len(payload) {
+				end = len(payload)
+			}
+			_, _ = w.Write([]byte(payload[i:end]))
+			fl.Flush()
+			time.Sleep(60 * time.Millisecond)
+		}
+	}))
+	defer srv.Close()
+
+	shared := &http.Client{Timeout: 300 * time.Millisecond}
+	r := &Requester{BaseURL: srv.URL, Client: shared}
+	resp, err := r.DoStream(context.Background(), http.MethodGet, "/file", nil, StreamOptions{})
+	if err != nil {
+		t.Fatalf("DoStream: %v", err)
+	}
+	got := drain(t, resp.Body)
+	if got != payload {
+		t.Fatalf("slow-but-progressing download truncated: got %d bytes, want %d", len(got), len(payload))
+	}
+	if shared.Timeout != 300*time.Millisecond {
+		t.Fatalf("DoStream mutated the shared client timeout: %v", shared.Timeout)
 	}
 }
 

@@ -625,7 +625,7 @@ func TestBinaryDownloadStallTimeoutIsEnforced(t *testing.T) {
 	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(dest), nil); err == nil {
 		t.Fatal("a stalled transfer must be aborted")
 	}
-	if elapsed := time.Since(start); elapsed > 30*time.Second {
+	if elapsed := time.Since(start); elapsed > 15*time.Second {
 		t.Fatalf("stall timeout did not fire promptly: %v", elapsed)
 	}
 	entries, _ := os.ReadDir(dest)
