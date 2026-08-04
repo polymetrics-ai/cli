@@ -409,8 +409,15 @@ type WriteAction struct {
 	DynamicFields *DynamicFieldsSpec `json:"dynamic_fields,omitempty"`
 	Delete        *DeleteSpec        `json:"delete,omitempty"`
 	Risk          string             `json:"risk"`
-	Confirm       string             `json:"confirm,omitempty"` // "" | "destructive"
-	Hook          string             `json:"hook,omitempty"`
+	// Batchable gates the action out of SourceTable-driven bulk reverse ETL
+	// when explicitly false. It is a pointer because bool's zero value is
+	// false, and false is the restrictive setting: a plain bool would silently
+	// mark every hand-constructed WriteAction as non-batchable. nil means the
+	// bundle did not declare it, which is the permissive default every shipped
+	// action relies on. Read it through IsBatchable, never directly.
+	Batchable *bool  `json:"batchable,omitempty"`
+	Confirm   string `json:"confirm,omitempty"` // "" | "destructive"
+	Hook      string `json:"hook,omitempty"`
 }
 
 // DynamicFieldsSpec declares ONE record field as a typed dynamic-key region,
@@ -456,6 +463,16 @@ type DynamicFieldsSpec struct {
 	// the body root; "nested" keeps it under Field. Providers differ; both are
 	// declarative and neither is caller-controlled.
 	Target string `json:"target,omitempty"`
+}
+
+// IsBatchable reports whether the action may be executed from a bulk reverse
+// ETL plan. Only an explicit "batchable": false in the bundle says no.
+//
+// Batchability is independent of Confirm: Confirm asks how severe one call is,
+// IsBatchable asks whether the action may be fanned out over many records under
+// a single approval. An action may declare either, both, or neither.
+func (a WriteAction) IsBatchable() bool {
+	return a.Batchable == nil || *a.Batchable
 }
 
 // GraphQLRequestSpec describes a fixed GraphQL document whose variables are

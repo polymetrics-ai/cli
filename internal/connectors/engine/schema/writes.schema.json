@@ -86,6 +86,7 @@
             }
           },
           "risk": { "type": "string" },
+          "batchable": { "type": "boolean", "default": true },
           "confirm": { "type": "string", "enum": ["", "destructive"] },
           "hook": { "type": "string" }
         }
