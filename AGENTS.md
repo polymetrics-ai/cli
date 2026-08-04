@@ -135,6 +135,28 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 - Resolve a Claude review thread only after every actionable finding has been addressed or
   explicitly dispositioned; resolve the conversation in GitHub rather than with a bot command.
 
+## Command Surface Must Stay Executable
+
+`availability: implemented` is a claim the runtime has to honour. Two rules keep
+it honest; both exist because a validator that hand-copied the runtime's rules
+drifted and let 174 commands validate clean while blocking on every invocation.
+
+- Do not restate a runtime rule inside `cmd/connectorgen`. The guard is
+  `TestEveryImplementedCommandPassesRuntimePreflight` in
+  `internal/connectors/commandrunner/runner_test.go`: it sweeps every bundle in
+  `defs.FS` through the real `commandrunner.Preflight`, so it covers new
+  executor kinds the day they land. Any `connectorgen` rule for an executable
+  intent must mirror its `commandrunner` counterpart exactly, and an absent
+  field is a finding, never a reason to skip a check.
+- Do not hand-edit command metadata that is derivable. Run
+  `go run ./cmd/connectorgen surface-sync` to fill `api_surface`, flag
+  `maps_to`, `output_policy`, and `rest.max_bytes` from the bundle's own
+  `operations.json`; `--check` fails when a bundle has drifted.
+
+Never invent an `api_surface` endpoint to make a command look implemented. If
+the endpoint is not in the connector's own `api_surface.json` and
+`operations.json`, the command is not ready.
+
 ## Verification
 
 Use local gates before handing off code:
