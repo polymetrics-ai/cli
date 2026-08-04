@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "google-calendar-parity-wave03",
+  "mode": "inline",
+  "decision": "local_critical_path",
+  "reason": "The task assigns one isolated connector lane and active runtime policy prohibits proactive delegation."
+}

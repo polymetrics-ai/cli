@@ -1,7 +1,7 @@
 {
   "name": "google-calendar",
   "display_name": "Google Calendar",
-  "description": "Reads Google Calendar calendars, calendar-list entries, events, recurring-event instances, colors, settings, and ACL rules; executes typed reverse-ETL mutations and bounded free/busy queries through the Calendar API v3 using an OAuth2 refresh token.",
+  "description": "Reads Google Calendar calendars, calendar-list entries, events, recurring-event instances, colors, settings, and ACL rules, plus a bounded typed free/busy query, through the Calendar API v3 using an OAuth2 refresh token.",
   "integration_type": "api",
   "docs_url": "https://developers.google.com/workspace/calendar/api/v3/reference",
   "release_stage": "ga",
@@ -14,12 +14,11 @@
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 250,
-    "write_batch_size": 1
+    "read_page_size": 250
   },
   "risk": {
     "read": "external Google Calendar API reads for the authenticated account and configured calendar; bounded direct free/busy query responses are JSON-redacted",
-    "write": "external Google Calendar mutations including event creation/update/deletion, calendar metadata changes, ACL sharing changes, calendar-list edits, notification-channel watch setup, and channel stop requests",
-    "approval": "reverse ETL writes require plan, preview, explicit approval, and execute; destructive deletes, calendar clearing, ownership transfer, and channel stop actions require destructive confirmation"
+    "write": "the provider exposes documented mutations, but this connector has no executable write action: all 26 mutation operations are ledger-blocked because the shared rest_write executor has no command-runner dispatch",
+    "approval": "no reverse-ETL write action is exposed by this connector"
   }
 }

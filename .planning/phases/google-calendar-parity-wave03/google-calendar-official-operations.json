@@ -1,5 +1,6 @@
 {
-  "accessed_at": "2026-07-31",
+  "accessed_at": "2026-08-05",
+  "discovery_revision": "20260731",
   "source_url": "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
   "operation_count": 38,
   "operations": [

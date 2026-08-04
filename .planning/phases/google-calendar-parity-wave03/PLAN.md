@@ -1,53 +1,34 @@
-# Google Calendar parity wave 03 plan
+# Google Calendar documented-operation parity — resume R1
 
-## Scope
+## Scope and ownership
 
-Branch: `fm/cli-google-calendar-parity-wave03-r1`
+- Branch: `fm/cli-google-calendar-parity-resume-r1`, rebased from PR #3554 onto `origin/main` at `36b431cf1`.
+- Own `internal/connectors/defs/google-calendar/**`, `internal/connectors/hooks/google-calendar/**`, this phase's artifacts, and generated Google Calendar catalogs/manuals/website data. The recovered PR's minimal `native/nativeset` promotion wiring and its regression test are included because the legacy native registration otherwise shadows the bundle at runtime.
+- Do not change the engine, schema, validator, hook generator, or any other connector. Those paths are owned by parallel foundation lanes.
 
-Primary issue: #3054. Capability subissues: #3055-#3061.
+## GSD and skills
 
-This is a connector-local parity implementation for `google-calendar` using fixture-only validation. No live Google Calendar API calls, credential requests, provider writes, pushes, PRs, `/no-mistakes`, VPS, Thaalam, or Herdr lifecycle commands are in scope.
+- `scripts/gsd doctor` passed. `scripts/gsd prompt programming-loop init --phase google-calendar-parity-wave03 --dry-run` returned `unknown GSD command: programming-loop`; this is the documented adapter-unavailable case, so the manual GSD workflow is in use.
+- Manual lifecycle evidence: this plan, `SPEC.md`, `TEST-PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `PROMPTS.md`, and `RUN-STATE.json`.
+- Skills loaded: `gsd-programming-loop`; `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-documentation`.
 
-## GSD command path and fallback
+## Provider baseline
 
-- Ran `scripts/gsd doctor` successfully.
-- Tried the required documented command `scripts/gsd prompt programming-loop init --phase google-calendar-parity-wave03 --dry-run`; the repo-local GSD adapter returned `unknown GSD command: programming-loop`.
-- Manual GSD programming-loop fallback is active for this branch, using `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` and this phase artifact set (`PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.json`, `SUMMARY.md`).
-- Generated fallback prompt evidence: `GSD-PROMPT.txt` (from `scripts/gsd prompt execute-phase google-calendar-parity-wave03 --dry-run`).
+Google's current Calendar v3 Discovery document (`revision=20260731`) lists 38 operations: 11 GET, 15 POST, 4 PATCH, 4 PUT, and 4 DELETE. The saved machine-readable research matrix is the authoritative field-level evidence for this resume.
 
-## Skills loaded
+## TDD slices
 
-- Repository routing: `.agents/agentic-delivery/references/required-skills-routing.md`.
-- GSD: `gsd-core`, `.agents/agentic-delivery/references/gsd-pi-adapter.md`, issue-agent/parent workflow references.
-- Connector architecture: `docs/migration/HANDOFF-CODEX.md`, `docs/migration/conventions.md`, `docs/architecture/connector-architecture-v2-design.md`.
-- CLI docs parity: `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`.
-- Go skills: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`.
+1. **Red validator evidence:** preserve the current three failures that prove `freebusy query` does not mark its three required body inputs (`timeMin`, `timeMax`, `items[].id`) as required CLI flags.
+2. **Reachable read surface:** mark those flags required, keep the 11 fixture-backed GET streams and the bounded `freebusy query` direct read implemented, then run surface sync and focused conformance/CLI/runtime-preflight checks.
+3. **Honest mutation ledger:** retire the recovered checkpoint's 26 executable `rest_write` actions and commands. Each documented mutation becomes a blocked `api_surface` ledger row with the named missing foundation: `rest_write` is schema-only and has no commandrunner dispatch. Do not use `planned` as a resting state.
+4. **Citations and generated surfaces:** record provider-owned evidence for every declared request field in the phase research matrix; current main has no shared machine citation schema, so preserve convention-neutral evidence and regenerate only Google Calendar outputs.
+5. **Verification and handoff:** run the contract's focused gates on current main, build `pm`, verify help and representative read commands without credentials, update phase records, commit the green slice, then hand branch custody to no-mistakes.
 
-## Official-source evidence
+## Safety and non-goals
 
-- Read parent/subissue bodies with `gh-axi issue view <issue> --full`; saved exact outputs under `sources/issue-3054.md` through `sources/issue-3061.md`.
-- Re-audited public official Google Calendar sources without credentials:
-  - Discovery: `https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest`.
-  - Reference root and resource pages under `https://developers.google.com/workspace/calendar/api/v3/reference`.
-- Parsed the discovery document into `google-calendar-official-operations.json`: 38 operations total (`GET=11`, `POST=15`, `PATCH=4`, `PUT=4`, `DELETE=4`).
-
-## Implementation slices
-
-1. **Ledger and schemas (red static gate):** replace the quarantine hook-only surface with an operation-level `api_surface.json`, operations/direct-read metadata, complete stream list, write actions, and schemas. Run `connectorgen validate` and expect initial failures until fixtures are present.
-2. **Fixture-backed conformance:** add sanitized `fixtures/check.json`, stream pages for every executable read stream, and write fixtures for every executable reverse action. Ensure the custom OAuth refresh hook has a fixture/conformance no-op path so replay never calls Google token endpoints.
-3. **CLI/config/help metadata:** add `cli_surface.json` with implemented ETL/direct-read/reverse commands and safety notes. Ensure generated manuals/skills/catalog/website data reflect the connector definition.
-4. **Runtime registration alignment:** ensure `pm connectors inspect google-calendar --json` reflects bundle capabilities and command surfaces. If the promoted native registration masks engine bundle capabilities, switch only the google-calendar promoted factory to the engine bundle and document why.
-5. **Docs and issue addendum:** update connector docs, generated surfaces, and append the captain-policy addendum to #3054-#3061 with actual post-change counts and no certification claim.
-6. **Verification and commit:** run required local gates, update `SUMMARY.md`/`RUN-STATE.json`, commit a clean green slice, and stop without push/PR/no-mistakes.
-
-## Safety decisions
-
-- Auth remains OAuth2 refresh-token based. Secrets stay in `spec.json` with `x-secret: true`; fixtures use synthetic placeholder values only.
-- Reverse ETL writes are named actions only; there is no generic Google Calendar HTTP method/path/body command.
-- Destructive or cancellation actions (`delete_*`, `clear_calendar`, `transfer_calendar_ownership`, `stop_channel`) require typed closed schemas, destructive confirmation, risk text, and reverse ETL plan -> preview -> approval -> execute.
-- `cdc` metadata remains false unless a real `CDCReader`/webhook state runtime exists. Google Calendar watch/channel operations can be represented as explicit reverse-ETL management actions; webhook delivery/changefeed consumption remains a documented shared-runtime dependency.
-- Certification remains `0`; fixture-only conformance is not live provider certification.
+- No credentialed Google calls, credential access, reverse-ETL execution, provider writes, dependencies, shared-schema changes, or main-branch merge.
+- `rest_write` is not an implementation path. The 26 mutation rows remain blocked until the dedicated executor foundation exists.
 
 ## Orchestration decision
 
-Cycle `plan`: `local_critical_path`. This worker owns one connector and no isolated sub-worker is needed; firstmate owns parent orchestration/integration.
+`local_critical_path`: this is one connector in one isolated worktree. No subagent was requested, and the active runtime policy prohibits proactive delegation.

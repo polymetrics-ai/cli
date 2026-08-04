@@ -1,26 +1,19 @@
-# Google Calendar parity verification checklist
+# Google Calendar parity resume — verification checklist
 
-## Required local gates
+## Required after implementation
 
-- [x] `go run ./cmd/connectorgen validate internal/connectors/defs/google-calendar`
-- [x] `go test ./internal/connectors/conformance -run 'TestConformance/google-calendar' -count=1`
-- [x] `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1`
-- [x] `go build ./cmd/pm`
-- [x] `make connector-boundary`
-- [x] `make verify`
-- [x] `git diff --check`
+- [ ] `go run ./cmd/connectorgen surface-sync`
+- [ ] `go run ./cmd/connectorgen surface-sync --check`
+- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs/google-calendar`
+- [ ] `go test ./internal/connectors/conformance/...`
+- [ ] `go test ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight`
+- [ ] `go test ./internal/cli/...`
+- [ ] `go vet` and `go build` for changed packages
+- [ ] `go build ./cmd/pm`
+- [ ] `cd website && pnpm run gen:website-data`
+- [ ] `./pm google-calendar --help`, `./pm google-calendar freebusy query --help`, and representative uncredentialed validation paths
+- [ ] `git diff --check`
 
-## Additional fixture-only checks
+## Constraints
 
-- [x] `go test ./internal/connectors/hooks/google-calendar -count=1`
-- [x] `go test ./internal/connectors/native/nativeset -count=1`
-- [x] `go test ./cmd/connectorgen -count=1`
-- [x] `go test ./internal/connectors/engine -run 'TestSchemaAnyOfRequiredAlternatives|TestSchemaOneOfRejectsMultipleMatches' -count=1`
-- [x] `./pm connectors inspect google-calendar --json` after build (no credentials; inspect only)
-- [x] `pm help connectors` before connector CLI inspection
-
-## Gate evidence notes
-
-- `make verify` completed after warming long-running package test caches for `internal/cli` and `internal/connectors/certify`; the final `make verify` invocation passed its own `go test -timeout 20m ./...`, docs validation, smoke test, golangci-lint, full connectorgen validation, connector-boundary, and release notification assertions.
-- Bundled reviewer subagent found no remaining findings after auth, EventDateTime, query-conformance, and CLI-help fixes.
-- No live Google Calendar endpoint calls, credentialed connector checks, or provider writes were performed.
+Run no credentialed provider checks and no write execution. Do not claim full `make verify` or `go test ./...`; the shared parity contract requires focused gates because the full suite exceeds bounded command windows.
