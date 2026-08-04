@@ -210,9 +210,10 @@ projection**: by default the engine emits only declared properties (today's hand
 }
 ```
 
-Pagination types (all four already exist in `connsdk/paginate.go`): `link_header`, `page_number`,
+Pagination types (all five already exist in `connsdk/paginate.go`): `link_header`, `page_number`,
 `offset_limit`, `cursor` (body token), plus `next_url` (aircall's `meta.next_page_link`, a cursor
-variant where the token is a full URL) and `none`.
+variant where the token is a full URL), `start_index` (SCIM 2.0 RFC 7644 §3.4.2.4 1-based index
+pagination that carries its own total), and `none`.
 
 ### `writes.json` (github, abridged)
 
@@ -417,7 +418,7 @@ type WriteAction struct {
     Method, Path string
     PathFields   []string        `json:"path_fields,omitempty"`
     RedactFields []string        `json:"redact_fields,omitempty"` // record fields redacted from plan samples, write previews/errors
-    BodyType     string          `json:"body_type,omitempty"` // json (default) | form | none
+    BodyType     string          `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload
     BodyFields   []string        `json:"body_fields,omitempty"`
     RecordSchema json.RawMessage `json:"record_schema"`
     Delete       *DeleteSpec     `json:"delete,omitempty"` // idempotent, missing_ok_status

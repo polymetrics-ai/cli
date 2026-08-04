@@ -639,3 +639,209 @@ func directReadBundle(baseURL, method, endpointPath string) Bundle {
 		},
 	}
 }
+
+func TestOperationDirectReadBodySchemaMinItems(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:           "acme.search",
+			Kind:         "rest_read",
+			Summary:      "Search",
+			Risk:         "medium",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/v1/search",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema: json.RawMessage(`{
+					"type": "object",
+					"required": ["ids"],
+					"properties": {"ids": {"type": "array", "minItems": 1, "items": {"type": "string"}}}
+				}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/v1/search",
+			Operation: &SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "typed operation metadata"},
+		}}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.search",
+		Body:      map[string]any{"ids": []any{}},
+	}, nil)
+	if err == nil {
+		t.Fatal("empty documented array: want body_schema error, got nil")
+	}
+	if !strings.Contains(err.Error(), "minItems") {
+		t.Fatalf("error should name minItems, got %v", err)
+	}
+	if issued {
+		t.Fatal("request must not be issued for an invalid body")
+	}
+
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.search",
+		Body:      map[string]any{"ids": []any{"a"}},
+	}, nil); err != nil {
+		t.Fatalf("non-empty array: unexpected error: %v", err)
+	}
+}
+
+// --- required_query any-of groups ------------------------------------------
+//
+// Airtable's ledger blocks GET /v0/meta/enterpriseAccounts/{id}/users until the
+// engine can "require at least one documented email[] or id[] query value
+// without claiming an unfiltered executable stream". Nothing in the rule below
+// mentions email, id, or Airtable.
+
+func requiredQueryBundle(srv *httptest.Server, issued *bool) Bundle {
+	return Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:           "acme.list_users",
+			Kind:         "rest_read",
+			Summary:      "List users by filter",
+			Risk:         "medium",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:        http.MethodGet,
+				Path:          "/v1/users",
+				MaxBytes:      1024,
+				RequiredQuery: []RequiredQueryGroup{{AnyOf: []string{"email", "id"}}},
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodGet,
+			Path:      "/v1/users",
+			Operation: &SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "typed operation metadata"},
+		}}},
+	}
+}
+
+func TestOperationDirectReadRequiredQueryAnyOf(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"users":[]}`))
+	}))
+	defer srv.Close()
+	b := requiredQueryBundle(srv, &issued)
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list_users",
+	}, nil)
+	if err == nil {
+		t.Fatal("unfiltered request: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "email") || !strings.Contains(err.Error(), "id") {
+		t.Fatalf("error should name the group's parameters, got %v", err)
+	}
+	if issued {
+		t.Fatal("the unfiltered request must never reach the provider")
+	}
+
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list_users",
+		Query:     map[string]string{"id": "usr123"},
+	}, nil); err != nil {
+		t.Fatalf("one member supplied: unexpected error: %v", err)
+	}
+	if !issued {
+		t.Fatal("a satisfied request must be issued")
+	}
+}
+
+func TestOperationDirectReadRequiredQueryRejectsBlankValue(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		_, _ = w.Write([]byte(`{}`))
+	}))
+	defer srv.Close()
+
+	// A present-but-empty parameter is exactly the unfiltered request the
+	// constraint exists to prevent, so presence alone must not satisfy it.
+	_, err := OperationDirectRead(context.Background(), requiredQueryBundle(srv, &issued), connectors.OperationDirectReadRequest{
+		Operation: "acme.list_users",
+		Query:     map[string]string{"email": "   "},
+	}, nil)
+	if err == nil {
+		t.Fatal("blank value: want error, got nil")
+	}
+	if issued {
+		t.Fatal("blank value must not reach the provider")
+	}
+}
+
+func TestOperationDirectReadRequiredQuerySatisfiedByDeclaredQuery(t *testing.T) {
+	// The constraint is about the request that goes on the wire, not about who
+	// supplied the value: a value hardcoded in the operation's own rest.query
+	// satisfies the group.
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		issued = true
+		if got := r.URL.Query().Get("email"); got != "ops@example.com" {
+			t.Fatalf("email = %q, want the declared value", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{}`))
+	}))
+	defer srv.Close()
+
+	b := requiredQueryBundle(srv, &issued)
+	b.Operations[0].REST.Query = map[string]string{"email": "ops@example.com"}
+
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list_users",
+	}, nil); err != nil {
+		t.Fatalf("declared query value: unexpected error: %v", err)
+	}
+	if !issued {
+		t.Fatal("request should have been issued")
+	}
+}
+
+func TestOperationDirectReadRequiredQueryEveryGroupMustBeSatisfied(t *testing.T) {
+	issued := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		issued = true
+		_, _ = w.Write([]byte(`{}`))
+	}))
+	defer srv.Close()
+
+	b := requiredQueryBundle(srv, &issued)
+	b.Operations[0].REST.RequiredQuery = []RequiredQueryGroup{
+		{AnyOf: []string{"email", "id"}},
+		{AnyOf: []string{"since"}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.list_users",
+		Query:     map[string]string{"id": "usr123"},
+	}, nil)
+	if err == nil {
+		t.Fatal("second group unsatisfied: want error, got nil")
+	}
+	if !strings.Contains(err.Error(), "since") {
+		t.Fatalf("error should name the unsatisfied group, got %v", err)
+	}
+	if issued {
+		t.Fatal("request must not be issued while a group is unsatisfied")
+	}
+}

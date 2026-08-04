@@ -3,6 +3,7 @@
 package engine
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/fs"
@@ -185,6 +186,26 @@ type PaginationSpec struct {
 	StopPath        string `json:"stop_path,omitempty"`         // cursor: falsy body value stops (stripe)
 
 	NextURLPath string `json:"next_url_path,omitempty"` // next_url type
+
+	// start_index type — 1-based index pagination that carries its own total,
+	// the shape SCIM 2.0 list responses use (RFC 7644 §3.4.2.4):
+	//
+	//	request:  ?startIndex=1&count=100
+	//	response: {"totalResults":N,"itemsPerPage":M,"startIndex":S,"Resources":[…]}
+	//
+	// Named for the mechanism rather than for SCIM: any API that pages by a
+	// 1-based index and reports a total is served by the same walk. Every field
+	// below defaults to SCIM's own name, so a SCIM stream declares nothing
+	// beyond {"type":"start_index","page_size":N}.
+	StartIndexParam string `json:"start_index_param,omitempty"` // default "startIndex"
+	CountParam      string `json:"count_param,omitempty"`       // default "count"
+	TotalPath       string `json:"total_path,omitempty"`        // default "totalResults"
+	StartIndexPath  string `json:"start_index_path,omitempty"`  // default "startIndex"
+	// StartIndexBase is a pointer for the same reason StartPage is: an explicit
+	// 0 (a 0-based server that still reports a total) must stay distinguishable
+	// from an absent key, which unmarshals to the identical Go zero value. nil
+	// means "not declared", defaulting to 1 — SCIM's first index.
+	StartIndexBase *int `json:"start_index_base,omitempty"`
 
 	PageSize int `json:"page_size,omitempty"`
 	MaxPages int `json:"max_pages,omitempty"`
@@ -397,12 +418,13 @@ type WriteAction struct {
 	// existing bundle changes behavior by its introduction.
 	Query        map[string]QueryParam `json:"query,omitempty"`
 	RedactFields []string              `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
-	BodyType     string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart
+	BodyType     string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart | base64_upload
 	BodyFields   []string              `json:"body_fields,omitempty"`
 	BodyField    string                `json:"body_field,omitempty"`
 	BodySchema   json.RawMessage       `json:"body_schema,omitempty"`
 	GraphQL      *GraphQLRequestSpec   `json:"graphql,omitempty"`
 	Multipart    *MultipartSpec        `json:"multipart,omitempty"`
+	Base64Upload *Base64UploadSpec     `json:"base64_upload,omitempty"`
 	RecordSchema json.RawMessage       `json:"record_schema"`
 	// DynamicFields optionally declares ONE record field as a typed
 	// dynamic-key region. Absent means today's exact behavior.
@@ -488,6 +510,46 @@ type GraphQLRequestSpec struct {
 type MultipartSpec struct {
 	MaxBytes int64               `json:"max_bytes,omitempty"`
 	Parts    []MultipartPartSpec `json:"parts,omitempty"`
+}
+
+// Base64UploadSpec describes body_type "base64_upload": a JSON body carrying a
+// base64-encoded payload in one declared property. It exists because APIs that
+// want an inline encoded upload (Airtable's uploadAttachment among them) had no
+// typed route at all — the only alternative would have been letting a caller
+// hand the engine a raw body, which is banned outright.
+//
+// The spec stays deliberately small. The body is built by the ordinary rules
+// (body_fields if declared, otherwise every record field minus path_fields) and
+// exactly two things then happen: SourceField is REMOVED and ContentField is set
+// to the validated base64 string. Everything else an API needs alongside the
+// payload — a filename, a content type — is an ordinary record field already
+// governed by the action's closed record_schema, so nothing here duplicates a
+// constraint the schema dialect can already express.
+type Base64UploadSpec struct {
+	// Source selects where the payload comes from: "path" (default) reads a
+	// local file, "base64" takes an already-encoded string. Both converge on the
+	// same validated, canonically re-encoded string.
+	Source string `json:"source,omitempty"`
+
+	// SourceField is the record field holding the file path (Source "path") or
+	// the encoded payload (Source "base64"). It never reaches the wire — in
+	// "path" mode it holds a local filesystem path, and transmitting that would
+	// leak the operator's directory layout to the provider.
+	SourceField string `json:"source_field"`
+
+	// ContentField is the JSON body property that receives the base64 payload.
+	ContentField string `json:"content_field"`
+
+	// MaxDecodedBytes bounds the payload's decoded size. Required and positive:
+	// an unbounded inline upload is a memory-exhaustion vector, and the engine
+	// additionally clamps this to maxBase64UploadDecodedBytes.
+	MaxDecodedBytes int64 `json:"max_decoded_bytes"`
+
+	// MaxEncodedBytes bounds the transmitted (encoded) size. Optional; defaults
+	// to the base64 length of MaxDecodedBytes. Declared explicitly because real
+	// APIs document the encoded limit — Airtable's attachment cap is 5 MB of
+	// base64, not 5 MB of file.
+	MaxEncodedBytes int64 `json:"max_encoded_bytes,omitempty"`
 }
 
 type MultipartPartSpec struct {
@@ -587,6 +649,22 @@ type RESTOperationSpec struct {
 	Query       map[string]string `json:"query,omitempty"`
 	Body        map[string]any    `json:"body,omitempty"`
 	BodySchema  json.RawMessage   `json:"body_schema,omitempty"`
+	// RequiredQuery declares query-parameter cardinality for endpoints that
+	// must never be called unfiltered — a listing that returns an entire
+	// enterprise when no filter is supplied, for example. Every group must be
+	// satisfied by at least one of its named parameters carrying a non-blank
+	// value on the outgoing request; a value hardcoded in Query counts, since
+	// the constraint is about the wire request rather than about who supplied
+	// it. Empty (the default) imposes nothing.
+	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
+}
+
+// RequiredQueryGroup is one "at least one of these" constraint. Several groups
+// compose as AND-of-ORs: "at least one of A or B, and at least one of C" is two
+// groups, which is the shape of an endpoint requiring both a subject filter and
+// a time window.
+type RequiredQueryGroup struct {
+	AnyOf []string `json:"any_of"`
 }
 
 // SensitivePolicySpec is the reverse-ETL sensitive/admin policy for an operation
@@ -1245,6 +1323,9 @@ func validateWriteBodies(actions []WriteAction) error {
 		if action.Multipart != nil && bodyType != "multipart" {
 			return fmt.Errorf("action %d (%q) declares multipart but body_type is %q", i, action.Name, bodyType)
 		}
+		if action.Base64Upload != nil && bodyType != "base64_upload" {
+			return fmt.Errorf("action %d (%q) declares base64_upload but body_type is %q", i, action.Name, bodyType)
+		}
 		switch bodyType {
 		case "graphql":
 			if action.GraphQL == nil {
@@ -1266,6 +1347,10 @@ func validateWriteBodies(actions []WriteAction) error {
 			if len(action.BodySchema) == 0 {
 				return fmt.Errorf("action %d (%q) body_type json_array requires body_schema", i, action.Name)
 			}
+		case "base64_upload":
+			if err := validateBase64UploadSpec(i, action); err != nil {
+				return err
+			}
 		case "multipart":
 			if action.Multipart == nil || len(action.Multipart.Parts) == 0 {
 				return fmt.Errorf("action %d (%q) body_type multipart requires multipart.parts", i, action.Name)
@@ -1280,6 +1365,53 @@ func validateWriteBodies(actions []WriteAction) error {
 					return fmt.Errorf("action %d (%q) multipart part %d has unsupported type %q", i, action.Name, j, part.Type)
 				}
 			}
+		}
+	}
+	return nil
+}
+
+// validateBase64UploadSpec fails a bundle whose base64_upload declaration could
+// not be executed safely. Each rule closes a way the declaration could look
+// valid but behave wrongly at runtime, which for an upload means transmitting
+// something the author did not intend.
+func validateBase64UploadSpec(i int, action WriteAction) error {
+	spec := action.Base64Upload
+	if spec == nil {
+		return fmt.Errorf("action %d (%q) body_type base64_upload requires base64_upload", i, action.Name)
+	}
+	switch spec.Source {
+	case "", "path", "base64":
+	default:
+		return fmt.Errorf("action %d (%q) base64_upload source must be path or base64, got %q", i, action.Name, spec.Source)
+	}
+	if strings.TrimSpace(spec.SourceField) == "" {
+		return fmt.Errorf("action %d (%q) base64_upload requires source_field", i, action.Name)
+	}
+	if strings.TrimSpace(spec.ContentField) == "" {
+		return fmt.Errorf("action %d (%q) base64_upload requires content_field", i, action.Name)
+	}
+	// In path mode the source field holds a local filesystem path. Naming the
+	// same field as the content target would mean the removal and the
+	// assignment collide, and whether the path leaks would depend on ordering.
+	// In base64 mode the two may legitimately coincide: the field is simply
+	// replaced by its canonically re-encoded self.
+	if spec.Source != "base64" && spec.SourceField == spec.ContentField {
+		return fmt.Errorf("action %d (%q) base64_upload source_field and content_field must differ in path mode", i, action.Name)
+	}
+	if spec.MaxDecodedBytes <= 0 {
+		return fmt.Errorf("action %d (%q) base64_upload requires positive max_decoded_bytes", i, action.Name)
+	}
+	if spec.MaxDecodedBytes > maxBase64UploadDecodedBytes {
+		return fmt.Errorf("action %d (%q) base64_upload max_decoded_bytes %d exceeds the engine ceiling %d", i, action.Name, spec.MaxDecodedBytes, maxBase64UploadDecodedBytes)
+	}
+	// An encoded bound below the encoded length of the decoded bound can never
+	// be satisfied by a payload at the decoded bound, so the pair is
+	// contradictory — an authoring mistake, caught here rather than as a
+	// runtime rejection of every large payload.
+	if spec.MaxEncodedBytes > 0 {
+		needed := int64(base64.StdEncoding.EncodedLen(int(spec.MaxDecodedBytes)))
+		if spec.MaxEncodedBytes < needed {
+			return fmt.Errorf("action %d (%q) base64_upload max_encoded_bytes %d cannot hold max_decoded_bytes %d (needs %d)", i, action.Name, spec.MaxEncodedBytes, spec.MaxDecodedBytes, needed)
 		}
 	}
 	return nil
@@ -1502,7 +1634,32 @@ func expectedOperationBlock(kind string) string {
 	}
 }
 
+// validateRequiredQuery rejects a required_query group that could never be
+// satisfied. The meta-schema already enforces a non-empty any_of; this catches
+// the blank-name case it cannot express. Both failures are load errors rather
+// than silent no-ops: a constraint that never fires is worse than an absent one,
+// because the bundle author believes the endpoint is protected.
+func validateRequiredQuery(i int, op OperationSpec) error {
+	if op.REST == nil {
+		return nil
+	}
+	for j, group := range op.REST.RequiredQuery {
+		if len(group.AnyOf) == 0 {
+			return fmt.Errorf("operation %d (%q) required_query group %d must name at least one parameter", i, op.ID, j)
+		}
+		for _, name := range group.AnyOf {
+			if strings.TrimSpace(name) == "" {
+				return fmt.Errorf("operation %d (%q) required_query group %d has a blank parameter name", i, op.ID, j)
+			}
+		}
+	}
+	return nil
+}
+
 func validateOperationSemantics(i int, op OperationSpec) error {
+	if err := validateRequiredQuery(i, op); err != nil {
+		return err
+	}
 	switch op.Kind {
 	case "rest_read":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))

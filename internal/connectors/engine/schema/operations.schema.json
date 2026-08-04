@@ -90,6 +90,21 @@
                 "type": "object",
                 "additionalProperties": true
               },
+              "required_query": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["any_of"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "any_of": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": { "type": "string" }
+                    }
+                  }
+                }
+              },
               "body": {
                 "type": "object",
                 "additionalProperties": true
