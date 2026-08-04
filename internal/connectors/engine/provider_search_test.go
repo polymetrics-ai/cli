@@ -143,6 +143,34 @@ func TestProviderSearchLoadContract(t *testing.T) {
 			},
 			wantErr: "array without maxItems",
 		},
+		{
+			name: "multi-form type list array is refused",
+			mutate: func(o *OperationSpec) {
+				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"ids":{"type":["array","null"],"items":{"type":"string"}}}}`)
+			},
+			wantErr: "array without maxItems",
+		},
+		{
+			name: "items-bearing node without a string type is refused",
+			mutate: func(o *OperationSpec) {
+				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"ids":{"items":{"type":"string"}}}}`)
+			},
+			wantErr: "array without maxItems",
+		},
+		{
+			name: "nested multi-form array is refused",
+			mutate: func(o *OperationSpec) {
+				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"filter":{"type":"object","properties":{"tags":{"type":["array","null"],"items":{"type":"string"}}}}}}`)
+			},
+			wantErr: "array without maxItems",
+		},
+		{
+			name: "multiple unbounded lists keep a deterministic error",
+			mutate: func(o *OperationSpec) {
+				o.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"zeta":{"type":"array","items":{"type":"string"}},"alpha":{"type":"array","items":{"type":"string"}}}}`)
+			},
+			wantErr: "body_schema/alpha declares an array without maxItems",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
