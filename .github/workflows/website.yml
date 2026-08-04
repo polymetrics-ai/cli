@@ -79,6 +79,7 @@ jobs:
         run: |
           pnpm run gen:website-data
           changed="$(git status --short -- \
+            content/docs/github-cli-surface.mdx \
             lib/connectors.catalog.data.generated.json \
             lib/connectors.catalog.generated.ts \
             lib/connectors.generated.ts \

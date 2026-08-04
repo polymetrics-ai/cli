@@ -151,7 +151,8 @@ drifted and let 174 commands validate clean while blocking on every invocation.
 - Do not hand-edit command metadata that is derivable. Run
   `go run ./cmd/connectorgen surface-sync` to fill `api_surface`, flag
   `maps_to`, `output_policy`, and `rest.max_bytes` from the bundle's own
-  `operations.json`; `--check` fails when a bundle has drifted.
+  `operations.json`; `--check` fails when a bundle has drifted, and `make verify`
+  runs it as the `connectorgen-surface-sync` gate.
 
 Never invent an `api_surface` endpoint to make a command look implemented. If
 the endpoint is not in the connector's own `api_surface.json` and
@@ -174,8 +175,8 @@ includes it) as a single command: the suite spans 550+ connectors and `internal/
 ~6.5 minutes, so the whole run is routinely cut off — and a cutoff is indistinguishable from a hang.
 Scope local runs to the packages you changed plus `internal/cli`, in separate commands, run
 `make verify`'s other gates individually (`tidy-check`, `lint`, `docs-check`, `smoke-no-build`,
-`connectorgen-validate`, `connector-boundary`, `release-workflow-check`), and let CI carry the full
-suite.
+`connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`,
+`release-workflow-check`), and let CI carry the full suite.
 
 Runtime-backed checks are optional and require local services:
 
