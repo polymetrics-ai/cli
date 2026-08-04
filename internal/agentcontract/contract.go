@@ -157,6 +157,9 @@ func (contract *Contract) Validate() error {
 	if contract.BaseRole.Name != "pm-delivery-worker" || contract.BaseRole.MaxActiveWorkers != 1 || contract.BaseRole.Delegation != "none" {
 		return fmt.Errorf("canonical contract: base role must be pm-delivery-worker with one active worker and no delegation")
 	}
+	if strings.TrimSpace(contract.BaseRole.Summary) == "" || !slices.Equal(contract.BaseRole.DurableHandoff, []string{"GitHub issues", "branches", "pull requests", "GSD artifacts"}) {
+		return fmt.Errorf("canonical contract: base role summary and durable handoff are required")
+	}
 	for _, forbidden := range []string{"orchestrator", "shepherd", "planner", "reviewer", "verifier", "GSD role"} {
 		if !slices.Contains(contract.BaseRole.ForbiddenRoles, forbidden) {
 			return fmt.Errorf("canonical contract: base role must forbid %q", forbidden)
@@ -167,35 +170,53 @@ func (contract *Contract) Validate() error {
 		return fmt.Errorf("canonical contract: base state machine is incomplete or out of order")
 	}
 	connectorIDs := []string{"source_policy_map", "bundle_operation_plan", "replay_conformance", "implementation_slices", "runtime_surface_gates", "website_data_refresh"}
-	if contract.ConnectorOverlay.Name != "pm-connector-worker" || contract.ConnectorOverlay.Inherits != contract.BaseRole.Name || contract.ConnectorOverlay.WrapsState != "execute_tdd" || !equalStepIDs(contract.ConnectorOverlay.Steps, connectorIDs) {
+	if contract.ConnectorOverlay.Name != "pm-connector-worker" || contract.ConnectorOverlay.Inherits != contract.BaseRole.Name || strings.TrimSpace(contract.ConnectorOverlay.Summary) == "" || contract.ConnectorOverlay.CompletionWave != 5 || contract.ConnectorOverlay.WrapsState != "execute_tdd" || !equalStepIDs(contract.ConnectorOverlay.Steps, connectorIDs) {
 		return fmt.Errorf("canonical contract: connector role must inherit the base and wrap execute_tdd with the required ordered gates")
 	}
-	commands := []string{"discuss-phase", "plan-phase", "execute-phase", "verify-work", "code-review"}
+	commands := []string{"discuss-phase", "plan-phase", "execute-phase", "verify-work", "code-review", "ship"}
 	if !slices.Equal(contract.GSD.Commands, commands) || contract.GSD.ShipUsed || strings.TrimSpace(contract.GSD.ShipExclusion) == "" {
 		return fmt.Errorf("canonical contract: GSD lifecycle or ship exclusion is invalid")
 	}
+	if len(contract.GSD.Sequence) == 0 {
+		return fmt.Errorf("canonical contract: GSD sequence is required")
+	}
 	for _, invocation := range contract.GSD.Sequence {
-		if !slices.Contains(contract.GSD.Commands, invocation.Command) {
+		if !slices.Contains(contract.GSD.Commands, invocation.Command) || strings.TrimSpace(invocation.Args) == "" || strings.TrimSpace(invocation.Purpose) == "" {
 			return fmt.Errorf("canonical contract: GSD sequence references undeclared command %q", invocation.Command)
 		}
 	}
-	if !contract.GitHub.DraftParentBeforeProduction || len(contract.GitHub.IntegrateWhen) == 0 || len(contract.GitHub.ReadyWhen) == 0 || strings.TrimSpace(contract.GitHub.FinalMerge) == "" {
+	if !contract.GitHub.DraftParentBeforeProduction || strings.TrimSpace(contract.GitHub.ParentSeed) == "" || strings.TrimSpace(contract.GitHub.SubPRBase) == "" || !allNonEmpty(contract.GitHub.IntegrateWhen) || !allNonEmpty(contract.GitHub.ReadyWhen) || strings.TrimSpace(contract.GitHub.FinalMerge) == "" {
 		return fmt.Errorf("canonical contract: GitHub draft, integration, readiness, and merge gates are required")
 	}
-	if !slices.Contains(contract.NoMistakes.ForbiddenFlags, "--yes") || !strings.Contains(contract.NoMistakes.ChildCommand, "--skip=push,pr,ci") || strings.Contains(contract.NoMistakes.ParentCommand, "--skip=") || !strings.Contains(contract.NoMistakes.SubPROpen, "gh-axi") {
+	if strings.TrimSpace(contract.NoMistakes.VerifiedVersion) == "" || !slices.Contains(contract.NoMistakes.ForbiddenFlags, "--yes") || !strings.Contains(contract.NoMistakes.ChildCommand, "--skip=push,pr,ci") || strings.TrimSpace(contract.NoMistakes.GateResponse) == "" || strings.Contains(contract.NoMistakes.ParentCommand, "--skip=") || strings.TrimSpace(contract.NoMistakes.ParentCommand) == "" || !strings.Contains(contract.NoMistakes.SubPROpen, "gh-axi") {
 		return fmt.Errorf("canonical contract: no-mistakes child workaround, full parent pipeline, gh-axi, and --yes prohibition are required")
 	}
 	pauseIDs := []string{"product_ambiguity", "destructive_irreversible", "secrets_auth_security", "dependency_production", "generic_write", "reverse_etl_execute", "quality_gate_weakening", "final_merge"}
 	if contract.Authority.Principle != "Absence never expands authority." || !equalRuleIDs(contract.Authority.PauseWhen, pauseIDs) {
 		return fmt.Errorf("canonical contract: away-mode authority principle or pause boundary is incomplete")
 	}
+	if !equalRuleIDs(contract.Authority.SelfAnswerWhen, []string{"contract_fixed"}) || !equalRuleIDs(contract.Authority.AutoFixWhen, []string{"bounded_finding"}) {
+		return fmt.Errorf("canonical contract: away-mode self-answer or bounded auto-fix rule is incomplete")
+	}
 	if !equalRuleIDs(contract.Authority.Invariants, []string{"absence_no_authority", "never_merge_red", "parent_merge_captain"}) {
 		return fmt.Errorf("canonical contract: merge and absence invariants are incomplete")
 	}
-	if contract.Wayfinder.Disposition != "rejected" || contract.Wayfinder.Dependency || len(contract.Wayfinder.Borrowed) != 3 || len(contract.Wayfinder.Rationale) == 0 {
+	if contract.Wayfinder.Disposition != "rejected" || contract.Wayfinder.Dependency || len(contract.Wayfinder.Borrowed) != 3 || !allNonEmpty(contract.Wayfinder.Borrowed) || !allNonEmpty(contract.Wayfinder.Rationale) {
 		return fmt.Errorf("canonical contract: Wayfinder rejection and borrowed ideas are required")
 	}
 	return validateProjections(contract.Projections)
+}
+
+func allNonEmpty(values []string) bool {
+	if len(values) == 0 {
+		return false
+	}
+	for _, value := range values {
+		if strings.TrimSpace(value) == "" {
+			return false
+		}
+	}
+	return true
 }
 
 func equalStepIDs(steps []Step, want []string) bool {

@@ -45,6 +45,18 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 			},
 		},
 		{
+			name: "missing parent pipeline",
+			mutate: func(value *Contract) {
+				value.NoMistakes.ParentCommand = ""
+			},
+		},
+		{
+			name: "missing durable handoff",
+			mutate: func(value *Contract) {
+				value.BaseRole.DurableHandoff = nil
+			},
+		},
+		{
 			name: "authority pause removed",
 			mutate: func(value *Contract) {
 				value.Authority.PauseWhen = value.Authority.PauseWhen[:len(value.Authority.PauseWhen)-1]
@@ -96,5 +108,10 @@ func TestRenderIsStableAndConnectorInheritsBase(t *testing.T) {
 	gotSHA256 := fmt.Sprintf("%x", sha256.Sum256(base))
 	if gotSHA256 != expectedSHA256 {
 		t.Fatalf("base rendering hash = %s, update expected hash after intentional canonical change", gotSHA256)
+	}
+	const expectedConnectorSHA256 = "6b6d433476c140f089d2b9232c6ff05ea5018e1b8a797ba3311eef13b311f1c3"
+	gotConnectorSHA256 := fmt.Sprintf("%x", sha256.Sum256(connector))
+	if gotConnectorSHA256 != expectedConnectorSHA256 {
+		t.Fatalf("connector rendering hash = %s, update expected hash after intentional canonical change", gotConnectorSHA256)
 	}
 }
