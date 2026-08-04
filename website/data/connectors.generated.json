@@ -60469,6 +60469,28 @@
               "summary": "archive_format path parameter",
               "values": [],
               "maps_to": "path.archive_format"
+            },
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [],
@@ -60686,8 +60708,8 @@
         },
         {
           "path": "run logs view",
-          "summary": "Read /repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
-          "intent": "direct_read",
+          "summary": "Download /repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
+          "intent": "binary_download",
           "availability": "implemented",
           "stream": "",
           "write": "",
@@ -60701,10 +60723,32 @@
               "summary": "job_id path parameter",
               "values": [],
               "maps_to": "path.job_id"
+            },
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [],
-          "output_policy": "json_redacted",
+          "output_policy": "",
           "risk": "",
           "approval": "",
           "notes": ""
@@ -61427,6 +61471,28 @@
               "summary": "attempt_number path parameter",
               "values": [],
               "maps_to": "path.attempt_number"
+            },
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [],
@@ -61550,6 +61616,28 @@
               "summary": "run_id path parameter",
               "values": [],
               "maps_to": "path.run_id"
+            },
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [],
@@ -64251,7 +64339,30 @@
           "operation": "github.dependency_graph_sbom",
           "source_cli_path": "",
           "source_url": "",
-          "flags": [],
+          "flags": [
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
           "examples": [],
           "output_policy": "",
           "risk": "",
@@ -64275,6 +64386,28 @@
               "summary": "sbom_uuid path parameter",
               "values": [],
               "maps_to": "path.sbom_uuid"
+            },
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [],
@@ -64293,7 +64426,30 @@
           "operation": "github.dependency_graph_sbom_generate_report",
           "source_cli_path": "",
           "source_url": "",
-          "flags": [],
+          "flags": [
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
           "examples": [],
           "output_policy": "",
           "risk": "",
@@ -67515,6 +67671,28 @@
               "summary": "ref path parameter",
               "values": [],
               "maps_to": "path.ref"
+            },
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [],
@@ -67690,6 +67868,28 @@
               "summary": "ref path parameter",
               "values": [],
               "maps_to": "path.ref"
+            },
+            {
+              "name": "dest-root",
+              "type": "string",
+              "summary": "directory the download is written beneath; traversal outside it is refused.",
+              "values": [],
+              "maps_to": "",
+              "required": true
+            },
+            {
+              "name": "file-name",
+              "type": "string",
+              "summary": "name for the downloaded file within --dest-root; must be a single path segment.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "max-bytes",
+              "type": "integer",
+              "summary": "lower the operation's declared size cap; it can never raise it.",
+              "values": [],
+              "maps_to": ""
             }
           ],
           "examples": [],

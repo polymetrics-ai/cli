@@ -1,6 +1,7 @@
 package commandrunner
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -8,6 +9,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -2091,4 +2094,104 @@ func TestPreflightBlocksBinaryDownloadWithUnsafeMetadata(t *testing.T) {
 			}
 		})
 	}
+}
+
+// TestRunBinaryDownloadReachesOperationDeclaredCap crosses the ceiling that the
+// CLI used to impose on every intent.
+//
+// It downloads a body LARGER than commandrunner.MaxOperationDirectReadBytes,
+// which is exactly the case the previous verification missed: it used a
+// 980-byte payload, so it never reached any ceiling and could not tell a
+// working cap from a broken one. The CLI defaulted --max-bytes to the 16 MiB
+// direct-read ceiling and passed it to every intent, so a github artifact
+// declaring max_bytes 104857600 was silently truncated to 16 MiB and a user
+// could not raise it back with the flag.
+//
+// The whole chain runs for real here -- commandrunner.Run, the engine executor,
+// and the file that lands on disk -- because the defect lived in the plumbing
+// between them, not in any one of them.
+func TestRunBinaryDownloadReachesOperationDeclaredCap(t *testing.T) {
+	const payloadSize = MaxOperationDirectReadBytes + (1 << 20)
+	payload := bytes.Repeat([]byte("z"), payloadSize)
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			t.Errorf("request method = %s, want GET", r.Method)
+		}
+		if want := "/repos/acme/widgets/actions/artifacts/7/zip"; r.URL.Path != want {
+			t.Errorf("request path = %s, want %s", r.URL.Path, want)
+		}
+		w.Header().Set("Content-Type", "application/zip")
+		_, _ = w.Write(payload)
+	}))
+	defer server.Close()
+
+	githubConnector := func(t *testing.T) connectors.Connector {
+		t.Helper()
+		bundle, err := engine.Load(defs.FS, "github")
+		if err != nil {
+			t.Fatalf("load github bundle: %v", err)
+		}
+		bundle.HTTP.URL = server.URL
+		return engine.New(bundle, nil)
+	}
+	config := connectors.RuntimeConfig{Config: map[string]string{
+		"owner":         "acme",
+		"repo":          "widgets",
+		"base_url":      server.URL,
+		"public_access": "true",
+	}}
+	flags := map[string][]string{"artifact-id": {"7"}, "archive-format": {"zip"}}
+
+	t.Run("unset max bytes reaches the operation cap", func(t *testing.T) {
+		dest := t.TempDir()
+		result, err := Run(context.Background(), githubConnector(t), Request{
+			Path:     []string{"artifact", "download"},
+			Flags:    flags,
+			Config:   config,
+			DestRoot: dest,
+			FileName: "artifact.zip",
+			// MaxBytes stays zero: that is what the CLI passes when the user
+			// does not type --max-bytes, and it must not lower the cap.
+		}, func(connectors.Record) error {
+			t.Fatal("emit must not be called for a binary download")
+			return nil
+		})
+		if err != nil {
+			t.Fatalf("Run: %v", err)
+		}
+		if result.BinaryDownload == nil {
+			t.Fatal("Run result carries no binary download")
+		}
+		if got := result.BinaryDownload.Record["file_size_bytes"]; got != int64(payloadSize) {
+			t.Fatalf("file_size_bytes = %v, want %d", got, payloadSize)
+		}
+		info, err := os.Stat(filepath.Join(dest, "artifact.zip"))
+		if err != nil {
+			t.Fatalf("stat downloaded file: %v", err)
+		}
+		if info.Size() != int64(payloadSize) {
+			t.Fatalf("downloaded file size = %d, want %d", info.Size(), payloadSize)
+		}
+	})
+
+	// The flag still only ever lowers: an explicit value below the body size
+	// rejects rather than truncates.
+	t.Run("explicit max bytes still lowers", func(t *testing.T) {
+		dest := t.TempDir()
+		_, err := Run(context.Background(), githubConnector(t), Request{
+			Path:     []string{"artifact", "download"},
+			Flags:    flags,
+			Config:   config,
+			MaxBytes: 1 << 10,
+			DestRoot: dest,
+			FileName: "artifact.zip",
+		}, func(connectors.Record) error { return nil })
+		if err == nil {
+			t.Fatal("Run error = nil, want the explicit limit to reject the body")
+		}
+		if !strings.Contains(err.Error(), "too large") {
+			t.Fatalf("Run error = %q, want it to name the size limit", err.Error())
+		}
+	})
 }

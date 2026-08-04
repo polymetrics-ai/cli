@@ -883,14 +883,18 @@ func renderConnectorCommandDetail(connectorName string, surface *connectors.Comm
 // binary_download command accepts. --dest-root is required: the destination is
 // never inferred, so a user who does not see it documented cannot run the
 // command at all.
+//
+// The flags come from connectors.BinaryDownloadFlags rather than from literals
+// here, so runtime help and the generated manual/skill/website docs cannot
+// document different flags.
 func writeConnectorDownloadFlags(b *strings.Builder, cmd connectors.CommandSurfaceCommand) {
 	if cmd.Intent != "binary_download" {
 		return
 	}
 	b.WriteString("\nDOWNLOAD FLAGS\n")
-	b.WriteString("  --dest-root (string) required: directory the download is written beneath; traversal outside it is refused.\n")
-	b.WriteString("  --file-name (string): name for the downloaded file within --dest-root; must be a single path segment.\n")
-	b.WriteString("  --max-bytes (integer): lower the operation's declared size cap; it can never raise it.\n")
+	for _, flag := range connectors.BinaryDownloadFlags() {
+		writeConnectorFlag(b, flag)
+	}
 }
 
 func writeConnectorField(b *strings.Builder, title, value string) {
@@ -1155,16 +1159,23 @@ func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
 	return nil
 }
 
+// connectorCommandMaxBytes returns what the user asked for, and nothing else.
+// Zero means "unset", which is how the runner is told to apply the intent's own
+// default.
+//
+// It deliberately applies no default and no ceiling. Every intent already owns
+// its own limit — commandrunner clamps direct reads to the direct-read ceiling
+// and the engine clamps a binary download to its operation's declared
+// max_bytes — and restating the direct-read ceiling here silently capped every
+// binary download at 16 MiB, against operations declaring 100 MiB, while the
+// help text promised the flag could only ever lower a cap.
 func connectorCommandMaxBytes(flags parsedFlags) (int, error) {
-	maxBytes, err := parseIntFlag("max-bytes", flags.first("max-bytes"), commandrunner.MaxOperationDirectReadBytes)
+	maxBytes, err := parseIntFlag("max-bytes", flags.first("max-bytes"), 0)
 	if err != nil {
 		return 0, err
 	}
-	if maxBytes <= 0 {
-		maxBytes = commandrunner.MaxOperationDirectReadBytes
-	}
-	if maxBytes > commandrunner.MaxOperationDirectReadBytes {
-		maxBytes = commandrunner.MaxOperationDirectReadBytes
+	if maxBytes < 0 {
+		return 0, validationErrorf("invalid --max-bytes %d, want a positive integer", maxBytes)
 	}
 	return maxBytes, nil
 }

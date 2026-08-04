@@ -22,23 +22,37 @@ import (
 // derivation cannot drift from its source the way a copy can, and --check
 // turns that guarantee into a CI gate.
 //
-// It fills only what is derivable or governed by a documented default:
+// Two field classes, with different rules, because "derived" and "defaulted"
+// are not the same guarantee:
 //
-//   - api_surface  <- the operation's rest.method + rest.path. The endpoint is
-//     already tracked in api_surface.json, whose covered_by names this exact
-//     command, so this is a join across three consistent files, never an
-//     invented endpoint.
+// DERIVED — the operation is the only source of truth, so a present value that
+// disagrees with it is drift, not a choice. These are compared, not merely
+// filled, or a hand-edited api_surface would pass --check clean while help,
+// docs and the website advertised an endpoint the executor never calls:
+//
+//   - api_surface  <- the operation's endpoint method + path, taken from the
+//     block its kind declares (rest for direct_read, binary for
+//     binary_download). The endpoint is already tracked in api_surface.json,
+//     whose covered_by names this exact command, so this is a join across three
+//     consistent files, never an invented endpoint.
 //   - flags[].maps_to <- "path.<var>" when the flag's name matches a {var} in
-//     the operation's rest.path.
-//   - output_policy <- defaultDirectReadOutputPolicy when unset. Operations
-//     declare "json", which is not a legal direct-read policy in any layer;
-//     the redacting variant is the only supported analogue.
-//   - rest.max_bytes <- defaultOperationRESTMaxBytes when unset, matching the
-//     engine's own defaultDirectReadMaxBytes.
+//     that endpoint's path.
 //
-// It never edits a value that is already present, never touches a command that
-// is not an implemented operation-backed direct_read, and never invents an
-// endpoint for an operation that does not declare one.
+// DEFAULTED — the bundle author's value wins; only an absent or unusable one is
+// replaced:
+//
+//   - output_policy <- defaultDirectReadOutputPolicy when unset or unsupported.
+//     Operations declare "json", which is not a legal direct-read policy in any
+//     layer; the redacting variant is the only supported analogue. A
+//     binary_download carries no output policy at all: the response becomes a
+//     file, not a JSON body.
+//   - rest.max_bytes <- defaultOperationRESTMaxBytes when unset or
+//     non-positive, matching the engine's own defaultDirectReadMaxBytes. A
+//     positive value is the operation's own declaration and is left alone.
+//
+// It never touches a command that is not an implemented operation-backed
+// direct_read or binary_download, and never invents an endpoint for an
+// operation that does not declare one.
 const (
 	// defaultDirectReadOutputPolicy mirrors engine.directReadPolicyJSONRedacted.
 	defaultDirectReadOutputPolicy = "json_redacted"
@@ -48,15 +62,50 @@ const (
 
 var surfacePathVarRE = regexp.MustCompile(`\{([^}]+)\}`)
 
-type surfaceSyncStats struct {
+// surfaceSyncFields counts one outcome across the four synced fields.
+type surfaceSyncFields struct {
 	APISurface   int
 	OutputPolicy int
 	FlagMapsTo   int
 	MaxBytes     int
 }
 
+func (f surfaceSyncFields) total() int {
+	return f.APISurface + f.OutputPolicy + f.FlagMapsTo + f.MaxBytes
+}
+
+func (f surfaceSyncFields) String() string {
+	return fmt.Sprintf("api_surface=%d output_policy=%d flag_maps_to=%d rest.max_bytes=%d",
+		f.APISurface, f.OutputPolicy, f.FlagMapsTo, f.MaxBytes)
+}
+
+func (f *surfaceSyncFields) add(other surfaceSyncFields) {
+	f.APISurface += other.APISurface
+	f.OutputPolicy += other.OutputPolicy
+	f.FlagMapsTo += other.FlagMapsTo
+	f.MaxBytes += other.MaxBytes
+}
+
+// surfaceSyncStats separates a field that was ABSENT and got filled from one
+// that was PRESENT and disagreed with its source. Collapsing the two would let
+// the tool report a clean fill while it silently rewrote a hand-edited value.
+type surfaceSyncStats struct {
+	Filled    surfaceSyncFields
+	Corrected surfaceSyncFields
+}
+
 func (s surfaceSyncStats) total() int {
-	return s.APISurface + s.OutputPolicy + s.FlagMapsTo + s.MaxBytes
+	return s.Filled.total() + s.Corrected.total()
+}
+
+// cliFieldTotal counts the fields that live in cli_surface.json, so the writer
+// only rewrites the file it actually changed.
+func (s surfaceSyncStats) cliFieldTotal() int {
+	return s.total() - s.Filled.MaxBytes - s.Corrected.MaxBytes
+}
+
+func (s surfaceSyncStats) opsFieldTotal() int {
+	return s.Filled.MaxBytes + s.Corrected.MaxBytes
 }
 
 func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
@@ -100,23 +149,22 @@ func runSurfaceSync(args []string, stdout, stderr io.Writer) int {
 			continue
 		}
 		changed++
-		total.APISurface += stats.APISurface
-		total.OutputPolicy += stats.OutputPolicy
-		total.FlagMapsTo += stats.FlagMapsTo
-		total.MaxBytes += stats.MaxBytes
+		total.Filled.add(stats.Filled)
+		total.Corrected.add(stats.Corrected)
 		verb := "updated"
 		if check {
 			verb = "would update"
 		}
-		logf(stdout, "%s: %s api_surface=%d output_policy=%d flag_maps_to=%d rest.max_bytes=%d\n",
-			name, verb, stats.APISurface, stats.OutputPolicy, stats.FlagMapsTo, stats.MaxBytes)
+		logf(stdout, "%s: %s filled %s; corrected %s\n", name, verb, stats.Filled, stats.Corrected)
 	}
 
 	if check && total.total() > 0 {
-		logf(stderr, "connectorgen surface-sync: %d connector(s) out of sync, %d field(s) missing; run `connectorgen surface-sync`\n", changed, total.total())
+		logf(stderr, "connectorgen surface-sync: %d connector(s) out of sync, %d field(s) missing and %d field(s) divergent; run `connectorgen surface-sync`\n",
+			changed, total.Filled.total(), total.Corrected.total())
 		return 1
 	}
-	logf(stdout, "connectorgen surface-sync: %d connector(s) scanned, %d field(s) filled across %d connector(s)\n", len(names), total.total(), changed)
+	logf(stdout, "connectorgen surface-sync: %d connector(s) scanned, %d field(s) filled and %d field(s) corrected across %d connector(s)\n",
+		len(names), total.Filled.total(), total.Corrected.total(), changed)
 	return 0
 }
 
@@ -197,52 +245,88 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 			continue
 		}
 		blockRaw, _ := op.get(blockName)
-		rest, _ := blockRaw.(*orderedObject)
-		if rest == nil {
+		block, _ := blockRaw.(*orderedObject)
+		if block == nil {
 			continue
 		}
-		method := strings.ToUpper(strings.TrimSpace(stringField(rest, "method")))
-		restPath := stringField(rest, "path")
-		if method == "" || restPath == "" {
+		method := strings.ToUpper(strings.TrimSpace(stringField(block, "method")))
+		endpointPath := stringField(block, "path")
+		if method == "" || endpointPath == "" {
 			continue
 		}
 
-		if len(arrayField(cmd, "api_surface")) == 0 {
-			endpoint := newOrderedObject()
-			endpoint.set("method", method)
-			endpoint.set("path", restPath)
-			cmd.set("api_surface", []any{endpoint})
-			stats.APISurface++
+		// DERIVED: the operation's endpoint is the only source, so a present
+		// api_surface that disagrees with it is drift and gets replaced. The
+		// schema allows exactly method and path on an entry, so replacing the
+		// whole array loses nothing an author could have written.
+		existing := arrayField(cmd, "api_surface")
+		switch {
+		case len(existing) == 0:
+			cmd.set("api_surface", derivedAPISurface(method, endpointPath))
+			stats.Filled.APISurface++
+		case len(existing) != 1 || !endpointMatches(existing[0], method, endpointPath):
+			cmd.set("api_surface", derivedAPISurface(method, endpointPath))
+			stats.Corrected.APISurface++
 		}
-		// A binary download produces a file, not a JSON body, so no output
-		// policy applies to it.
-		if intent == "direct_read" && stringField(cmd, "output_policy") == "" {
+
+		// DEFAULTED for a direct read, and absent by construction for a binary
+		// download: the response becomes a file, not a JSON body.
+		switch policy := strings.TrimSpace(stringField(cmd, "output_policy")); {
+		case intent == "binary_download":
+			if cmd.remove("output_policy") {
+				stats.Corrected.OutputPolicy++
+			}
+		case policy == "":
 			cmd.set("output_policy", defaultDirectReadOutputPolicy)
-			stats.OutputPolicy++
+			stats.Filled.OutputPolicy++
+		case !directReadOutputPolicies[policy]:
+			// A policy no layer supports is not a deliberate choice; the
+			// runtime refuses it. A supported one is left exactly as authored.
+			cmd.set("output_policy", defaultDirectReadOutputPolicy)
+			stats.Corrected.OutputPolicy++
 		}
 
 		pathVars := map[string]bool{}
-		for _, match := range surfacePathVarRE.FindAllStringSubmatch(restPath, -1) {
+		for _, match := range surfacePathVarRE.FindAllStringSubmatch(endpointPath, -1) {
 			pathVars[match[1]] = true
 		}
 		for _, flagRaw := range arrayField(cmd, "flags") {
 			flag, ok := flagRaw.(*orderedObject)
-			if !ok || strings.TrimSpace(stringField(flag, "maps_to")) != "" {
+			if !ok {
 				continue
 			}
 			name := strings.ReplaceAll(stringField(flag, "name"), "-", "_")
-			if pathVars[name] {
-				flag.set("maps_to", "path."+name)
-				stats.FlagMapsTo++
+			if !pathVars[name] {
+				// Flags that name no path variable map to query or body
+				// targets the operation does not determine; leave them alone.
+				continue
+			}
+			// DERIVED: a flag named after a path variable resolves that
+			// variable. Any other target leaves the path unresolvable.
+			want := "path." + name
+			switch got := strings.TrimSpace(stringField(flag, "maps_to")); {
+			case got == "":
+				flag.set("maps_to", want)
+				stats.Filled.FlagMapsTo++
+			case got != want:
+				flag.set("maps_to", want)
+				stats.Corrected.FlagMapsTo++
 			}
 		}
 
-		// binary_download operations already declare their own max_bytes at
-		// bundle load time, so only rest_read needs the default filled in.
+		// DEFAULTED, and only for rest_read: a binary_download operation must
+		// declare its own positive max_bytes at bundle load, and a positive
+		// rest.max_bytes is the operation's own declaration rather than
+		// anything this tool derives.
 		if intent == "direct_read" {
-			if maxBytes, _ := rest.get("max_bytes"); !positiveNumber(maxBytes) {
-				rest.set("max_bytes", json.Number(fmt.Sprint(defaultOperationRESTMaxBytes)))
-				stats.MaxBytes++
+			maxBytes, present := block.get("max_bytes")
+			if !positiveNumber(maxBytes) {
+				block.set("max_bytes", json.Number(fmt.Sprint(defaultOperationRESTMaxBytes)))
+				if present {
+					stats.Corrected.MaxBytes++
+				} else {
+					stats.Filled.MaxBytes++
+				}
 			}
 		}
 	}
@@ -250,17 +334,39 @@ func syncBundle(dir string, check bool) (surfaceSyncStats, error) {
 	if stats.total() == 0 || check {
 		return stats, nil
 	}
-	if stats.APISurface+stats.OutputPolicy+stats.FlagMapsTo > 0 {
+	if stats.cliFieldTotal() > 0 {
 		if err := writeBundleJSON(cliPath, cli, cliRaw); err != nil {
 			return stats, err
 		}
 	}
-	if stats.MaxBytes > 0 {
+	if stats.opsFieldTotal() > 0 {
 		if err := writeBundleJSON(opsPath, ops, opsRaw); err != nil {
 			return stats, err
 		}
 	}
 	return stats, nil
+}
+
+// derivedAPISurface builds the single-endpoint api_surface an operation-backed
+// command implies.
+func derivedAPISurface(method, path string) []any {
+	endpoint := newOrderedObject()
+	endpoint.set("method", method)
+	endpoint.set("path", path)
+	return []any{endpoint}
+}
+
+// endpointMatches reports whether an existing api_surface entry already states
+// exactly the operation's endpoint. Method comparison is case-insensitive
+// because that is how every consumer reads it; path comparison is exact,
+// because a path is a template the executor substitutes into.
+func endpointMatches(raw any, method, path string) bool {
+	endpoint, ok := raw.(*orderedObject)
+	if !ok {
+		return false
+	}
+	return strings.EqualFold(strings.TrimSpace(stringField(endpoint, "method")), method) &&
+		stringField(endpoint, "path") == path
 }
 
 // writeBundleJSON re-renders a bundle file with the repository's 2-space

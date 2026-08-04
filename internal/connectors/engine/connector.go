@@ -122,13 +122,14 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 // reach it without the connectors package depending on engine internals.
 func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
 	result, err := OperationBinaryDownload(ctx, c.bundle, BinaryDownloadRequest{
-		Operation:  req.Operation,
-		Config:     req.Config,
-		PathParams: req.PathParams,
-		Query:      req.Query,
-		MaxBytes:   req.MaxBytes,
-		DestRoot:   req.DestRoot,
-		FileName:   req.FileName,
+		Operation:    req.Operation,
+		Config:       req.Config,
+		PathParams:   req.PathParams,
+		Query:        req.Query,
+		MaxBytes:     req.MaxBytes,
+		DestRoot:     req.DestRoot,
+		FileName:     req.FileName,
+		RedactFields: req.RedactFields,
 	}, c.hooks)
 	if err != nil {
 		return connectors.OperationBinaryDownloadResult{}, err

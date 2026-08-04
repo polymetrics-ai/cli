@@ -42,6 +42,22 @@ func (o *orderedObject) set(key string, value any) {
 	o.values[key] = value
 }
 
+// remove deletes a key, keeping the remaining keys in their original order. It
+// reports whether the key was present.
+func (o *orderedObject) remove(key string) bool {
+	if _, exists := o.values[key]; !exists {
+		return false
+	}
+	delete(o.values, key)
+	for i, existing := range o.keys {
+		if existing == key {
+			o.keys = append(o.keys[:i:i], o.keys[i+1:]...)
+			break
+		}
+	}
+	return true
+}
+
 func (o *orderedObject) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	buf.WriteByte('{')

@@ -383,16 +383,18 @@
     },
     {
       "id": "github.actions_jobs_job_id_logs",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
+      "kind": "binary_download",
+      "summary": "Download /repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
       "source_url": "https://docs.github.com/en/rest",
       "risk": "medium",
       "approval": "none",
-      "output_policy": "json",
-      "rest": {
+      "output_policy": "binary",
+      "binary": {
         "method": "GET",
         "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
-        "max_bytes": 1048576
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
       }
     },
     {

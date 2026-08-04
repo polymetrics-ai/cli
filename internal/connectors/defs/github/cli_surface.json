@@ -2579,8 +2579,8 @@
     },
     {
       "path": "run logs view",
-      "summary": "Read /repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
-      "intent": "direct_read",
+      "summary": "Download /repos/{owner}/{repo}/actions/jobs/{job_id}/logs",
+      "intent": "binary_download",
       "availability": "implemented",
       "operation": "github.actions_jobs_job_id_logs",
       "source_cli_path": "",
@@ -2597,8 +2597,7 @@
           "method": "GET",
           "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/logs"
         }
-      ],
-      "output_policy": "json_redacted"
+      ]
     },
     {
       "path": "actions rerun create",

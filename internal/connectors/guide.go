@@ -162,6 +162,29 @@ func renderCommandSurfaceFlag(flag CommandSurfaceFlag) string {
 	return strings.Join(parts, ": ")
 }
 
+// commandSurfaceRenderedFlags returns the flags a command actually accepts.
+//
+// A binary_download command also accepts the runtime's destination flags, one
+// of which is required. They are declared in no bundle, so a renderer showing
+// only the bundle's own flags documents a command that cannot be run as
+// written. A flag the bundle already declares is never repeated.
+func commandSurfaceRenderedFlags(cmd CommandSurfaceCommand) []CommandSurfaceFlag {
+	if cmd.Intent != "binary_download" {
+		return cmd.Flags
+	}
+	declared := make(map[string]bool, len(cmd.Flags))
+	for _, flag := range cmd.Flags {
+		declared[flag.Name] = true
+	}
+	rendered := append([]CommandSurfaceFlag(nil), cmd.Flags...)
+	for _, flag := range BinaryDownloadFlags() {
+		if !declared[flag.Name] {
+			rendered = append(rendered, flag)
+		}
+	}
+	return rendered
+}
+
 func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	line := cmd.Path
 	if cmd.Summary != "" {
@@ -198,9 +221,10 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	if cmd.Notes != "" {
 		line += "; notes: " + cmd.Notes
 	}
-	if len(cmd.Flags) > 0 {
-		flags := make([]string, 0, len(cmd.Flags))
-		for _, flag := range cmd.Flags {
+	rendered := commandSurfaceRenderedFlags(cmd)
+	if len(rendered) > 0 {
+		flags := make([]string, 0, len(rendered))
+		for _, flag := range rendered {
 			name := "--" + strings.TrimLeft(flag.Name, "-")
 			if flag.Required {
 				name += " (required)"
