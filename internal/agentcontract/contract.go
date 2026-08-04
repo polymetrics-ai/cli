@@ -21,7 +21,7 @@ type Contract struct {
 	BaseRole         Role               `json:"base_role"`
 	StateMachine     StateMachine       `json:"state_machine"`
 	ConnectorOverlay ConnectorOverlay   `json:"connector_overlay"`
-	GitHub           GitHubContract     `json:"github"`
+	Tracker          TrackerContract    `json:"tracker"`
 	GSD              GSDContract        `json:"gsd"`
 	NoMistakes       NoMistakesContract `json:"no_mistakes"`
 	Authority        AuthorityContract  `json:"authority"`
@@ -64,7 +64,7 @@ type ConnectorOverlay struct {
 	Steps          []Step `json:"steps"`
 }
 
-type GitHubContract struct {
+type TrackerContract struct {
 	DraftParentBeforeProduction bool     `json:"draft_parent_before_production"`
 	ParentSeed                  string   `json:"parent_seed"`
 	SubPRBase                   string   `json:"sub_pr_base"`
@@ -127,7 +127,7 @@ func Load(path string) (*Contract, error) {
 	if err != nil {
 		return nil, fmt.Errorf("open canonical contract: %w", err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	decoder := json.NewDecoder(file)
 	decoder.DisallowUnknownFields()
@@ -157,7 +157,7 @@ func (contract *Contract) Validate() error {
 	if contract.BaseRole.Name != "pm-delivery-worker" || contract.BaseRole.MaxActiveWorkers != 1 || contract.BaseRole.Delegation != "none" {
 		return fmt.Errorf("canonical contract: base role must be pm-delivery-worker with one active worker and no delegation")
 	}
-	if strings.TrimSpace(contract.BaseRole.Summary) == "" || !slices.Equal(contract.BaseRole.DurableHandoff, []string{"GitHub issues", "branches", "pull requests", "GSD artifacts"}) {
+	if strings.TrimSpace(contract.BaseRole.Summary) == "" || len(contract.BaseRole.DurableHandoff) != 4 || !allNonEmpty(contract.BaseRole.DurableHandoff) {
 		return fmt.Errorf("canonical contract: base role summary and durable handoff are required")
 	}
 	for _, forbidden := range []string{"orchestrator", "shepherd", "planner", "reviewer", "verifier", "GSD role"} {
@@ -185,8 +185,8 @@ func (contract *Contract) Validate() error {
 			return fmt.Errorf("canonical contract: GSD sequence references undeclared command %q", invocation.Command)
 		}
 	}
-	if !contract.GitHub.DraftParentBeforeProduction || strings.TrimSpace(contract.GitHub.ParentSeed) == "" || strings.TrimSpace(contract.GitHub.SubPRBase) == "" || !allNonEmpty(contract.GitHub.IntegrateWhen) || !allNonEmpty(contract.GitHub.ReadyWhen) || strings.TrimSpace(contract.GitHub.FinalMerge) == "" {
-		return fmt.Errorf("canonical contract: GitHub draft, integration, readiness, and merge gates are required")
+	if !contract.Tracker.DraftParentBeforeProduction || strings.TrimSpace(contract.Tracker.ParentSeed) == "" || strings.TrimSpace(contract.Tracker.SubPRBase) == "" || !allNonEmpty(contract.Tracker.IntegrateWhen) || !allNonEmpty(contract.Tracker.ReadyWhen) || strings.TrimSpace(contract.Tracker.FinalMerge) == "" {
+		return fmt.Errorf("canonical contract: tracker draft, integration, readiness, and merge gates are required")
 	}
 	if strings.TrimSpace(contract.NoMistakes.VerifiedVersion) == "" || !slices.Contains(contract.NoMistakes.ForbiddenFlags, "--yes") || !strings.Contains(contract.NoMistakes.ChildCommand, "--skip=push,pr,ci") || strings.TrimSpace(contract.NoMistakes.GateResponse) == "" || strings.Contains(contract.NoMistakes.ParentCommand, "--skip=") || strings.TrimSpace(contract.NoMistakes.ParentCommand) == "" || !strings.Contains(contract.NoMistakes.SubPROpen, "gh-axi") {
 		return fmt.Errorf("canonical contract: no-mistakes child workaround, full parent pipeline, gh-axi, and --yes prohibition are required")

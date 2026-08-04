@@ -122,7 +122,7 @@
       }
     ]
   },
-  "github": {
+  "tracker": {
     "draft_parent_before_production": true,
     "parent_seed": "Use a deliberate roadmap or status scaffold when useful; otherwise use an empty seed commit solely to make the draft parent PR possible.",
     "sub_pr_base": "Every wave sub-PR targets the parent branch and uses Refs links for both parent and sub-issue.",

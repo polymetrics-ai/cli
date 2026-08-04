@@ -28,10 +28,10 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 			return 2
 		}
 		if err := agentcontract.CheckRoot(ctx, root); err != nil {
-			fmt.Fprintf(stderr, "agentcontractgen: check failed: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "agentcontractgen: check failed: %v\n", err)
 			return 1
 		}
-		fmt.Fprintln(stdout, "agentcontractgen: canonical contract and registered projections are current")
+		_, _ = fmt.Fprintln(stdout, "agentcontractgen: canonical contract and registered projections are current")
 		return 0
 
 	case "render":
@@ -41,27 +41,27 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		role := flags.String("role", "", "canonical role name")
 		if err := flags.Parse(args[1:]); err != nil || flags.NArg() != 0 || *role == "" {
 			if err == nil {
-				fmt.Fprintln(stderr, "agentcontractgen: render requires --role and no positional arguments")
+				_, _ = fmt.Fprintln(stderr, "agentcontractgen: render requires --role and no positional arguments")
 			}
 			return 2
 		}
 		root, err := resolveRoot(*rootFlag)
 		if err != nil {
-			fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
 			return 2
 		}
 		contract, err := agentcontract.Load(filepath.Join(root, agentcontract.SourcePath))
 		if err != nil {
-			fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
 			return 1
 		}
 		block, err := agentcontract.RenderBlock(contract, *role)
 		if err != nil {
-			fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
 			return 1
 		}
 		if _, err := stdout.Write(block); err != nil {
-			fmt.Fprintf(stderr, "agentcontractgen: write rendered contract: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "agentcontractgen: write rendered contract: %v\n", err)
 			return 1
 		}
 		return 0
@@ -73,19 +73,19 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		}
 		contract, err := agentcontract.Load(filepath.Join(root, agentcontract.SourcePath))
 		if err != nil {
-			fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
 			return 1
 		}
 		updated, err := agentcontract.SyncProjections(root, contract)
 		if err != nil {
-			fmt.Fprintf(stderr, "agentcontractgen: sync failed: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "agentcontractgen: sync failed: %v\n", err)
 			return 1
 		}
-		fmt.Fprintf(stdout, "agentcontractgen: synchronized %d registered projection(s)\n", updated)
+		_, _ = fmt.Fprintf(stdout, "agentcontractgen: synchronized %d registered projection(s)\n", updated)
 		return 0
 
 	default:
-		fmt.Fprintf(stderr, "agentcontractgen: unknown command %q\n", args[0])
+		_, _ = fmt.Fprintf(stderr, "agentcontractgen: unknown command %q\n", args[0])
 		usage(stderr)
 		return 2
 	}
@@ -100,7 +100,7 @@ func parseRoot(args []string, stderr io.Writer) (string, bool) {
 	}
 	root, err := resolveRoot(*rootFlag)
 	if err != nil {
-		fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
+		_, _ = fmt.Fprintf(stderr, "agentcontractgen: %v\n", err)
 		return "", false
 	}
 	return root, true
@@ -135,5 +135,5 @@ func resolveRoot(value string) (string, error) {
 }
 
 func usage(output io.Writer) {
-	fmt.Fprintln(output, "usage: agentcontractgen <check|render|sync> [--root <path>] [--role <name>]")
+	_, _ = fmt.Fprintln(output, "usage: agentcontractgen <check|render|sync> [--root <path>] [--role <name>]")
 }

@@ -115,7 +115,7 @@ func extractProjectionBlock(content []byte) ([]byte, int, int, error) {
 	if start < 0 {
 		return nil, 0, 0, fmt.Errorf("generated block start marker is missing")
 	}
-	if bytes.Index(content[start+len(beginMarkerPrefix):], []byte(beginMarkerPrefix)) >= 0 {
+	if bytes.Contains(content[start+len(beginMarkerPrefix):], []byte(beginMarkerPrefix)) {
 		return nil, 0, 0, fmt.Errorf("multiple generated block start markers found")
 	}
 	relativeEnd := bytes.Index(content[start:], []byte(endMarker))

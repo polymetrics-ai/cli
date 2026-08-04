@@ -35,11 +35,11 @@ func RenderBlock(contract *Contract, role string) ([]byte, error) {
 		}
 	}
 
-	fmt.Fprintf(&output, "\n## GitHub topology and merge gates\n\n- Parent seed: %s\n- Sub-PR topology: %s\n- Integrate a child only when:\n", contract.GitHub.ParentSeed, contract.GitHub.SubPRBase)
-	writeBullets(&output, contract.GitHub.IntegrateWhen)
+	fmt.Fprintf(&output, "\n## Tracker and pull-request topology\n\n- Parent seed: %s\n- Sub-PR topology: %s\n- Integrate a child only when:\n", contract.Tracker.ParentSeed, contract.Tracker.SubPRBase)
+	writeBullets(&output, contract.Tracker.IntegrateWhen)
 	fmt.Fprintln(&output, "- Mark the parent ready only when:")
-	writeBullets(&output, contract.GitHub.ReadyWhen)
-	fmt.Fprintf(&output, "- Final merge: %s\n\n", contract.GitHub.FinalMerge)
+	writeBullets(&output, contract.Tracker.ReadyWhen)
+	fmt.Fprintf(&output, "- Final merge: %s\n\n", contract.Tracker.FinalMerge)
 
 	fmt.Fprintln(&output, "## Installed GSD lifecycle")
 	fmt.Fprintln(&output)
