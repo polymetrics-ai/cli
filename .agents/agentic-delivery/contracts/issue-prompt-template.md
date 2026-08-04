@@ -107,7 +107,7 @@ Before merge:
 - ensure accepted fix commits are Claude-reviewed; wait for automatic incremental review when
   active, and use manual `@claude review` only when automatic review is paused, disabled,
   skipped, rate-limit retry is due, or the automatic pause threshold was reached
-- merge sub-PRs into parent branches only when all automated gates pass and no human gate is
+- advance sub-PRs to canonical integration only when all automated gates pass and no human gate is
   triggered
 - require human approval before merging parent PRs into `main`
 ```

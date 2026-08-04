@@ -47,7 +47,7 @@ The worker must:
 - process one ready sub-issue at a time through the installed GSD lifecycle
 - keep each sub-issue to one primary branch, scoped diff, and sub-PR to the parent branch
 - decide child integration only after the checks and review contract below passes
-- obtain parent review coverage for provisionally integrated commits when the stacked sub-PR route
+- obtain parent review coverage for provisionally landed commits when the stacked sub-PR route
   did not produce coverage
 - run the full integrated parent verification and no-mistakes pipeline once all children land
 - mark the draft ready only after every child and parent gate is green
@@ -55,104 +55,49 @@ The worker must:
 
 ## State machine
 
-Record these states in the parent issue, parent PR, or a GSD artifact:
-
-- `planned`: issue map exists; parent branch or draft PR is not ready.
-- `parent_pr_open`: parent branch, deliberate seed, and draft parent PR exist before production
-  work.
-- `wave_ready`: one sub-issue has complete inputs and satisfied dependencies.
-- `wave_in_progress`: the canonical worker is executing that sub-issue's GSD/TDD plan inline.
-- `sub_pr_open`: a sub-PR targets the parent branch.
-- `sub_pr_green`: local and remote checks pass.
-- `sub_pr_reviewed`: required automated review coverage exists, or an allowed parent fallback is
-  explicitly recorded.
-- `provisionally_integrated`: the sub-PR landed on the parent branch while parent fallback review
-  coverage is still pending.
-- `parent_review_pending`: integrated commits still need parent review coverage or disposition.
-- `parent_review_clean`: integrated commits have no unresolved actionable review finding.
-- `final_verification`: all children are integrated and full parent gates are running.
-- `ready_for_captain`: the parent is green and ready, but final merge is not authorized.
-- `blocked`: a dependency, human gate, failed verification, or review blocker prevents progress.
-- `complete`: the captain-approved parent PR merged to the default branch.
-
-Only one `wave_in_progress` state may exist. There is no parallel worker fan-out. When multiple
-waves are dependency-ready, process them deterministically and persist the remaining order in the
-parent issue.
+The ordered IDs under `state_machine.steps` in
+`.agents/agentic-delivery/canonical/delivery-contract.json` are the sole state vocabulary. Record
+those IDs verbatim in the parent issue, parent PR, or GSD artifact; do not maintain a second state
+machine here. The canonical single-worker and no-delegation fields require ready waves to run one
+at a time, with any remaining order persisted in durable parent state.
 
 ## Installed GSD lifecycle
 
-For each ready wave:
-
-1. map the sub-issue to a GSD phase
-2. `discuss-phase` for known decisions
-3. `plan-phase --tdd`
-4. `execute-phase` inline through RED, GREEN, and REFACTOR
-5. `verify-work`; when needed, `plan-phase --gaps`, `execute-phase --gaps-only`, and verify again
-6. `code-review` with reasoned finding disposition
-
-Every command must resolve through `scripts/gsd sources <command>`. Do not invoke the absent
-`programming-loop`. Do not use GSD ship: official ship creates a PR after verification, while this
-contract already requires the draft parent PR before implementation and stacked sub-PRs to that
-parent.
+The exact lifecycle and ship exclusion live under `gsd` in the canonical source. Resolve and
+execute that sequence through
+`.agents/agentic-delivery/references/gsd-pi-adapter.md`; do not maintain a second command list here.
 
 ## no-mistakes topology
 
-Never use `--yes`.
-
-On a sub-issue branch, run the review/test/docs/lint loop with the argv vector
-`["no-mistakes","axi","run","--intent","<issue-intent>","--skip=push,pr,ci"]`. Replace the
-intent placeholder element with the complete issue intent and pass the vector directly to the
-process without shell interpolation. Respond to each exact finding ID with recorded rationale. Let
-the pipeline apply bounded in-scope fixes, then rerun the gate.
-
-After local gates pass, open the sub-PR with
-`["gh-axi","pr","create","--base","<parent-branch>","--head","<child-branch>","--title","<conventional-title>","--body-file","<pr-body-file>"]`.
-No-mistakes v1.41.2 cannot target a non-default PR base.
-
-On the integrated parent branch, run
-`["no-mistakes","axi","run","--intent","<parent-intent>"]` against its existing draft parent PR,
-replacing the placeholder element with the complete parent intent and passing the vector directly
-without shell interpolation.
+The `no_mistakes` object in the canonical source owns the verified version, forbidden flags, exact
+child and parent argv vectors, gate-response boundary, and sub-PR action. Execute those vectors
+directly after replacing placeholder elements; never reconstruct them as shell strings or copy them
+into this compatibility document.
 
 ## Child integration gate
 
-A sub-PR may integrate into the parent branch only when:
+The `tracker.integrate_when` array in the canonical source is the sole integration checklist.
+Evaluate every current entry; the stacked workflow owns PR-shape and review-routing mechanics. Do
+not reproduce either list here.
 
-- it targets the parent branch and uses `Refs #<sub-issue>` plus `Refs #<parent-issue>`
-- targeted and issue-level verification pass
-- CI checks pass
-- every actionable automated review finding is resolved or explicitly dispositioned
-- review coverage exists on the sub-PR, or the allowed parent-PR fallback is recorded
-- the diff remains inside the sub-issue scope and ownership boundaries
-- no requested-changes review or human gate remains
+A specific infrastructure blocker pauses integration, records the exact blocker without advancing
+the canonical state, and escalates the unblock action. It never substitutes for passing checks.
 
-A specific infrastructure blocker pauses integration, records the wave as blocked, and escalates
-the unblock action. It never substitutes for passing checks.
-
-If Claude skips a non-default-base sub-PR, integration is provisional until the main-targeted parent
-PR receives Claude review covering that commit range, or the documented Copilot/human fallback is
-completed. A skipped, errored, rate-limited, or never-started review is not review coverage.
+If Claude skips a non-default-base sub-PR, do not record the canonical `integrate_sub_pr` state. A
+technical parent-branch landing used only to expose the commit range for parent-PR fallback review
+is provisional transport, not completed integration. Obtain Claude coverage on that range, or
+complete the documented Copilot/human fallback, before advancing the canonical state. A skipped,
+errored, rate-limited, or never-started review is not review coverage.
 
 ## Parent readiness and merge gate
 
-After all sub-issues are integrated:
-
-1. run full integrated tests, lint, docs, build, and issue-specific verification
-2. run the full parent no-mistakes pipeline
-3. ensure every integrated range has automated review coverage and all findings are dispositioned
-4. update the parent issue and draft PR with GSD/TDD/review/verification evidence
-5. mark the draft ready only while all checks remain green
-
-Ready is not approval. Never infer permission from captain absence, never merge red, and never merge
-the parent to the default branch without explicit captain approval while it is still green.
+The canonical `tracker.ready_when` and `tracker.final_merge` fields are the sole readiness and merge
+criteria. Record evidence for every current entry while executing the canonical
+`integrated_parent_gates`, `ready_parent`, and `captain_merge` states; do not restate the criteria
+here.
 
 ## Away-mode boundary
 
-Self-answer only a routine, reversible gate fixed by an issue decision, repo contract, or explicit
-standing authority; address the exact finding and record why. Auto-fix bounded code, test, and docs
-findings inside scope through the active gate, then rerun it.
-
-Pause and preserve state for product ambiguity, destructive or irreversible actions, secrets/auth
-or security-boundary changes, dependencies or production impact, generic write capabilities,
-reverse-ETL execute approval, quality-gate weakening, and final merge. Absence never expands
-authority.
+The canonical `authority` object is the sole owner of self-answer, auto-fix, pause, and invariant
+rules. Apply its IDs and instructions verbatim; do not create local variants in this compatibility
+document.

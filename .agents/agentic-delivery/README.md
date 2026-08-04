@@ -1,13 +1,13 @@
 # Agentic delivery system
 
-Status: implementation planning artifact. This package is agent-neutral and can be consumed by
+Status: active project-local delivery policy. This package is agent-neutral and can be consumed by
 Codex, Claude, OpenCode, GitHub Actions, local scripts, or future orchestration runtimes.
 
 ## Purpose
 
 Make a GitHub issue sufficient to launch a safe implementation PR without relying on chat history.
-The issue provides task-specific scope; this package provides the reusable execution contract,
-skills, guardrails, YAML agent definitions, and handoff rules.
+The issue provides task-specific scope; this package provides the canonical delivery contract,
+skills, guardrails, compatibility guidance, and durable checkpoint templates.
 
 ## Files
 
@@ -15,21 +15,25 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `contracts/issue-prompt-template.md`: issue section template that points at the generic contract.
 - `contracts/code-review-disposition-template.md`: required reply format for automated review
   findings.
+- `canonical/delivery-contract.json`: authoritative issue-first worker, connector overlay, delivery
+  state machine, authority boundary, and projection registry.
 - `contracts/parent-issue-roadmap-template.md`: parent issue format for epic-sized work with
   sub-issues and stacked PRs.
-- `contracts/parent-orchestrator-contract.md`: runtime contract for parent issue orchestration.
-- `contracts/worker-handoff-template.md`: required worker-to-orchestrator handoff format.
+- `contracts/parent-orchestrator-contract.md`: compatibility path for single-worker parent job
+  ownership; it does not activate a parent-orchestrator role.
+- `contracts/worker-handoff-template.md`: durable wave checkpoint format for the active worker or a
+  successor.
 - `matrices/task-skill-matrix.yaml`: required skills and capabilities by task type.
 - `workflows/claude-review-loop.md`: post-implementation Claude review and disposition
   loop.
 - `workflows/automated-review-routing-loop.md`: routing policy for Claude primary review,
   Copilot backup review, and human fallback.
-- `workflows/parent-issue-orchestration-loop.md`: full parent issue execution loop across workers,
-  sub-PRs, parent PR review, and human readiness.
-- `workflows/gsd-universal-runtime-loop.md`: cross-runtime GSD loop contract for Claude, Codex,
-  OpenCode, and future runtimes.
-- `workflows/codex-active-orchestration-loop.md`: Codex-specific active orchestration loop for
-  parent issues, because Codex subagents must be spawned explicitly.
+- `workflows/parent-issue-orchestration-loop.md`: legacy multi-worker procedure retained for its
+  owning cleanup wave; it is not an active instruction for the canonical flow.
+- `workflows/gsd-universal-runtime-loop.md`: background runtime procedure only where it agrees with
+  the canonical contract.
+- `workflows/codex-active-orchestration-loop.md`: legacy multi-worker Codex procedure retained for
+  its owning cleanup wave; it is not an active instruction for the canonical flow.
 - `workflows/stacked-parent-subissue-workflow.md`: parent branch and sub-PR workflow for large
   issue hierarchies.
 - `references/issue-roadmap-best-practices.md`: source-backed GitHub and Atlassian planning
@@ -45,24 +49,30 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `references/runtime-rlm-website-integration.md`: required runtime/RLM/Pi-agent/website integration knowledge for Podman, PostgreSQL, DragonflyDB/Redis-compatible coordination, Temporal, RLM agent mode, and website docs.
 - `references/cli-help-docs-website-parity.md`: required parity checklist for CLI help, manual docs, generated docs, and website docs.
 - `schemas/agent-spec.schema.yaml`: lightweight schema contract for repo-local YAML agents.
-- `schemas/orchestration-state.schema.yaml`: field contract for parent issue state ledgers.
-- `agents/<type>/*.agent.yaml`: reusable role definitions grouped by agent type.
+- `schemas/orchestration-state.schema.yaml`: legacy multi-worker ledger schema retained for its
+  owning cleanup wave; canonical jobs use `state_machine.steps` from the JSON source.
+- `agents/<type>/*.agent.yaml`: legacy role definitions retained for their owning cleanup wave; the
+  canonical issue-first flow does not activate them.
 
 The `.agents/agentic-delivery/` directory holds shared contracts, conventions, and role specs.
 Specialized agent families can live beside it under `.agents/<functional-area>/` while reusing the
 same schema and issue-to-PR contract.
 
 Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are thin
-activation adapters. The `pm-delivery-worker` and `pm-connector-worker` adapters project marked
-blocks from `canonical/delivery-contract.json`; they must not copy GSD/TDD, review, or human-gate
-policy by hand.
+activation adapters. The six `pm-delivery-worker` and `pm-connector-worker` targets registered in
+`canonical/delivery-contract.json` remain optional until their owning harness wave adds each
+wrapper. Once present, they project marked blocks from the canonical source and must not copy
+GSD/TDD, review, or human-gate policy by hand.
 
 ## Design principles
 
+- `canonical/delivery-contract.json` is the sole owner of the canonical roles, ordered delivery
+  states, tracker gates, GSD/no-mistakes topology, authority boundary, and projection registry.
 - Agent definitions are declarative YAML, but runtime-specific adapters stay optional.
 - Issues remain the unit of work. PRs must reference issues.
-- Large goals use parent issues with sub-issues. Sub-PRs may merge into a parent branch without
-  human approval only when all automated gates pass and no human gate is triggered.
+- Large goals use parent issues with sub-issues. A sub-PR may advance to completed parent-branch
+  integration without human approval only when all automated gates pass and no human gate is
+  triggered.
 - One canonical worker owns the job and its shared parent artifacts, parent PR state, sub-PR
   integration decisions, automated review coverage, and final readiness inline. It processes ready
   sub-issues without spawning orchestrator, shepherd, planner, reviewer, verifier, or GSD roles;

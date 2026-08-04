@@ -50,10 +50,11 @@ coverage:
 - Added deterministic generated blocks, exact drift checking, bounded marked-block sync, and six
   optional future harness targets without creating harness-native files.
 - Added an executed contract test that resolves every named GSD command through `scripts/gsd
-  sources` and removed stale mandatory `programming-loop` guidance from active shared policy.
+  sources` and removed stale mandatory `programming-loop` guidance from the changed canonical
+  issue-first policy surfaces.
 - Wired the check into serial and parallel `make verify` paths.
 - Reframed parent state ownership around one canonical worker while preserving child checks/review
-  coverage, provisional integration, full parent gates, and explicit captain approval.
+  coverage, parent-review fallback tracking, full parent gates, and explicit captain approval.
 
 ## TDD outcome
 

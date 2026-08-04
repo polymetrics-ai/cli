@@ -117,9 +117,10 @@ Stop and ask for human approval before:
 ## Parent/subissue work
 
 Use `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md` when the issue belongs
-to a parent roadmap. A sub-PR may be merged into the parent branch without human approval only after
-all automated checks pass, automated review comments are resolved, review coverage exists through
-the sub-PR, main-targeted parent PR, or an approved fallback route, and no human gate is triggered.
+to a parent roadmap. A sub-PR may advance to the canonical `integrate_sub_pr` state without human
+approval only after all automated checks pass, automated review comments are resolved, review
+coverage exists through the sub-PR, main-targeted parent PR, or an approved fallback route, and no
+human gate is triggered.
 
 For parent jobs, use `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`. The
 compatibility filename now defines single-worker parent ownership: the canonical worker owns shared

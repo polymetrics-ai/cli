@@ -27,9 +27,9 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 
 ## Parent job state
 
-| Issue | Active owner | Branch | PR | Latest SHA | Verification | Automated review coverage | Integration state | Blocker |
+| Issue | Active owner | Branch | PR | Latest SHA | Verification | Automated review coverage | Canonical state | Blocker |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| #N | `<canonical worker>` | `<branch>` | `<url>` | `<sha>` | Pending | `<sub_pr|parent_pr_fallback|copilot_backup|blocked>` | Planned | None |
+| #N | `<canonical worker>` | `<branch>` | `<url>` | `<sha>` | Pending | `<sub_pr|parent_pr_fallback|copilot_backup|blocked>` | `<state_machine step ID>` | None |
 
 ## Branch and PR policy
 
@@ -49,27 +49,18 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 - If the parent branch has no useful diff yet, create a deliberate parent seed commit so GitHub has
   a parent PR thread, checks surface, and review target.
 
-## Automated sub-PR merge policy
+## Child integration evidence
 
-The canonical worker may merge a sub-PR into the parent branch without human approval only when all
-of these are true:
+Do not copy a gate list into the issue. The authoritative integration criteria are
+`tracker.integrate_when` in `.agents/agentic-delivery/canonical/delivery-contract.json`; PR-shape
+and review-routing mechanics live in
+`.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`. Record evidence against
+every current criterion in the parent job state before advancing `integrate_sub_pr`.
 
-- the sub-PR is scoped to exactly one sub-issue
-- branch name and PR title checks pass
-- PR body references the sub-issue and parent issue
-- targeted tests and issue verification pass
-- automated review loop is complete and comments are resolved
-- automated review coverage exists through the sub-PR, through a parent PR fallback review that
-  covers the newly integrated commit range, or through an explicitly recorded Copilot/human fallback
-  because Claude is blocked
-- connector implementation sub-PRs include exactly one target connector and no generic shared
-  runtime/tooling or unrelated connector changes; naming or linking a foundation issue/PR does not
-  authorize those paths in the connector PR, and they must move into the foundation PR before
-  target-aware validation or integration
-- no human gate is triggered
-- no requested-changes review is open
-- the parent branch is current enough that the sub-PR diff is reviewable
-- the canonical worker records the integration decision and evidence in durable parent state
+For a connector implementation child, also record the exact target connector, ownership guard,
+changed-path compliance, and separate foundation issue/PR for any shared runtime/tooling or
+unrelated connector work. Naming or linking a foundation issue does not authorize those paths in
+the connector PR.
 
 ## Human gates
 

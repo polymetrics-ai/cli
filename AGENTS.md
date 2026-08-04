@@ -116,7 +116,7 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
   exists. If the automatic review does not run on the stacked sub-PR (for example, an untrusted
   author), a maintainer must invoke `@claude review` on it, or the parent PR must receive Claude
   review or a recorded Copilot/human fallback for the commit range that includes the sub-issue
-  before the sub-issue is considered integrated.
+  before the canonical `integrate_sub_pr` state is recorded.
 - If a parent branch has no diff yet, create a draft parent PR with a deliberate parent seed commit.
   Prefer a real roadmap/status scaffold when useful; otherwise use an empty commit to avoid noisy
   file churn.
@@ -176,7 +176,7 @@ includes it) as a single command: the suite spans 550+ connectors and `internal/
 ~6.5 minutes, so the whole run is routinely cut off — and a cutoff is indistinguishable from a hang.
 Scope local runs to the packages you changed plus `internal/cli`, in separate commands, run
 `make verify`'s other gates individually (`tidy-check`, `lint`, `docs-check`, `smoke-no-build`,
-`connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`,
+`agent-contract-check`, `connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`,
 `release-workflow-check`), and let CI carry the full suite.
 
 Runtime-backed checks are optional and require local services:

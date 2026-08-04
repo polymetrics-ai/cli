@@ -71,8 +71,8 @@ Issue: #3718. Parent: #3714. Branch: `fm/cli-agents-wave1-canonical-contract-r1`
 - Formatting/static: `gofmt -w cmd internal`, `go vet ./internal/agentcontract ./cmd/agentcontractgen`.
 - Broader non-timeout gates: `go test ./internal/agentcontract ./cmd/agentcontractgen`,
   `make tidy-check`, `make release-workflow-check`, and `make agent-contract-check`.
-- Policy grep: no active shared mandate invokes `programming-loop`; forbidden role projections and
-  Wave 2–4 harness files are absent from this diff.
+- Policy grep: no changed canonical issue-first policy surface invokes `programming-loop`;
+  forbidden role projections and Wave 2–4 harness files are absent from this diff.
 - GSD verify prompt after implementation; gap-plan/re-execute only if verification finds gaps.
 - GSD code-review prompt and reasoned disposition before the final commit.
 

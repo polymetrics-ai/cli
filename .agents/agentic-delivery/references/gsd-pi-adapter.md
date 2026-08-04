@@ -70,8 +70,8 @@ In Pi after project trust/reload, use the interactive equivalents:
   canonical single-worker contract forbids spawning roles. Record the inline/manual fallback in the
   phase, planning trace, handoff, or PR body without weakening TDD, verification, or review.
 - Do not copy raw upstream `agents/` or `commands/` files into this repo as runtime commands; use adapter-generated prompts and registry entries.
-- Run `go run ./cmd/agentcontractgen check` to verify the canonical delivery contract references
-  only commands that resolve through `scripts/gsd sources`.
+- Run `go run ./cmd/agentcontractgen check` to validate the canonical source, registered projection
+  drift, and resolution of every referenced GSD command through `scripts/gsd sources`.
 
 ## Safety overlay
 

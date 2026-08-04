@@ -37,7 +37,8 @@ Status: passed by automated execution.
 - `scripts/verify-gsd-workflow origin/main`: passed with this phase's GSD/TDD evidence.
 - `git diff --check`: passed.
 - Policy/path grep: no changed harness projection, reserved concurrent-lane path, or stale mandatory
-  `programming-loop` instruction in active shared policy.
+  `programming-loop` instruction in the changed canonical issue-first policy surfaces; the legacy
+  role fleet remained untouched.
 
 The full `go test ./...` / `make verify` monolith was intentionally not run locally under the repo's
 per-command timeout policy; CI owns that 550+ connector suite. Its component gates relevant to this
