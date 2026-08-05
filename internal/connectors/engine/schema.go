@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
+	"unicode/utf8"
 
 	"polymetrics.ai/internal/safety"
 )
@@ -145,8 +147,7 @@ type RequestBodyInput struct {
 type dynamicRequestBodyValue struct{}
 
 type regexpStringDomain struct {
-	acceptsEmpty      bool
-	mayAcceptNonempty bool
+	program *syntax.Prog
 }
 
 func (s *Schema) RequiredMappingPaths() ([]string, error) {
@@ -327,10 +328,8 @@ func (n *schemaNode) validateRequestInputDomain(pointer string, input RequestBod
 	if input.Type != "" && input.Type != "string" {
 		return nil
 	}
-	for _, domain := range n.mappingPatternDomains() {
-		if domain.mayAcceptNonempty || domain.acceptsEmpty && requestInputDomainAcceptsValue(input, "") {
-			continue
-		}
+	domains := n.mappingPatternDomains()
+	if len(domains) > 0 && !requestPatternDomainsOverlapInput(domains, input) {
 		return fmt.Errorf("request mapping %q input domain has no values accepted by schema pattern constraints", pointer)
 	}
 	return nil
@@ -466,64 +465,337 @@ func (n *schemaNode) mappingPatternDomains() []regexpStringDomain {
 	return out
 }
 
-func compileRegexpStringDomain(pattern string, compiled *regexp.Regexp) (regexpStringDomain, error) {
-	expr, err := syntax.Parse(pattern, syntax.Perl)
+func compileRegexpStringDomain(pattern string) (regexpStringDomain, error) {
+	program, err := compileRegexpProgram(pattern, true)
 	if err != nil {
 		return regexpStringDomain{}, err
 	}
-	program, err := syntax.Compile(expr.Simplify())
-	if err != nil {
-		return regexpStringDomain{}, err
-	}
-	domain := regexpStringDomain{acceptsEmpty: compiled.MatchString("")}
-	type pathState struct {
-		pc         uint32
-		consumed   bool
-		conditions syntax.EmptyOp
-	}
-	stack := []pathState{{pc: uint32(program.Start)}}
-	seen := map[pathState]bool{}
-	for len(stack) > 0 {
-		state := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		if seen[state] || int(state.pc) >= len(program.Inst) {
-			continue
-		}
-		seen[state] = true
-		instruction := program.Inst[state.pc]
-		switch instruction.Op {
-		case syntax.InstAlt, syntax.InstAltMatch:
-			stack = append(stack,
-				pathState{pc: instruction.Out, consumed: state.consumed, conditions: state.conditions},
-				pathState{pc: instruction.Arg, consumed: state.consumed, conditions: state.conditions},
-			)
-		case syntax.InstCapture, syntax.InstNop:
-			stack = append(stack, pathState{pc: instruction.Out, consumed: state.consumed, conditions: state.conditions})
-		case syntax.InstEmptyWidth:
-			stack = append(stack, pathState{pc: instruction.Out, consumed: state.consumed, conditions: state.conditions | syntax.EmptyOp(instruction.Arg)})
-		case syntax.InstRune, syntax.InstRune1, syntax.InstRuneAny, syntax.InstRuneAnyNotNL:
-			stack = append(stack, pathState{pc: instruction.Out, consumed: true, conditions: state.conditions})
-		case syntax.InstMatch:
-			if state.consumed || emptyRegexpMatchMayOccurInNonemptyInput(state.conditions) {
-				domain.mayAcceptNonempty = true
-				return domain, nil
-			}
-		case syntax.InstFail:
-		default:
-			domain.mayAcceptNonempty = true
-			return domain, nil
-		}
-	}
-	return domain, nil
+	return regexpStringDomain{program: program}, nil
 }
 
-func emptyRegexpMatchMayOccurInNonemptyInput(conditions syntax.EmptyOp) bool {
-	if conditions&syntax.EmptyWordBoundary != 0 && conditions&syntax.EmptyNoWordBoundary != 0 {
+func compileRegexpProgram(pattern string, search bool) (*syntax.Prog, error) {
+	expr, err := syntax.Parse(pattern, syntax.Perl)
+	if err != nil {
+		return nil, err
+	}
+	subexpressions := []*syntax.Regexp{{Op: syntax.OpBeginText}}
+	if search {
+		subexpressions = append(subexpressions, &syntax.Regexp{Op: syntax.OpStar, Sub: []*syntax.Regexp{{Op: syntax.OpAnyChar}}})
+	}
+	subexpressions = append(subexpressions, expr)
+	if search {
+		subexpressions = append(subexpressions, &syntax.Regexp{Op: syntax.OpStar, Sub: []*syntax.Regexp{{Op: syntax.OpAnyChar}}})
+	}
+	subexpressions = append(subexpressions, &syntax.Regexp{Op: syntax.OpEndText})
+	return syntax.Compile((&syntax.Regexp{Op: syntax.OpConcat, Sub: subexpressions}).Simplify())
+}
+
+type requestPatternSearchState struct {
+	programs [][]uint32
+	input    requestInputStringState
+}
+
+type requestInputStringState struct {
+	started       bool
+	hasNonSpace   bool
+	trailingSpace bool
+	previousWord  bool
+}
+
+func requestPatternDomainsOverlapInput(domains []regexpStringDomain, input RequestBodyInput) bool {
+	programs := make([]*syntax.Prog, 0, len(domains)+1)
+	for _, domain := range domains {
+		if domain.program == nil {
+			return true
+		}
+		programs = append(programs, domain.program)
+	}
+	formatProgram, formatKnown := requestInputFormatProgram(input)
+	if !formatKnown {
 		return false
 	}
-	requiresStart := conditions&(syntax.EmptyBeginLine|syntax.EmptyBeginText) != 0
-	requiresEnd := conditions&(syntax.EmptyEndLine|syntax.EmptyEndText) != 0
-	return !requiresStart || !requiresEnd
+	if formatProgram != nil {
+		programs = append(programs, formatProgram)
+	}
+	initial := requestPatternSearchState{programs: make([][]uint32, len(programs))}
+	for i, program := range programs {
+		initial.programs[i] = []uint32{uint32(program.Start)}
+	}
+	alphabet := regexpProductAlphabet(programs)
+	queue := []requestPatternSearchState{initial}
+	seen := map[string]bool{requestPatternSearchKey(initial): true}
+	const stateLimit = 16384
+	for len(queue) > 0 {
+		state := queue[0]
+		queue = queue[1:]
+		if requestPatternSearchAccepts(programs, state, input) {
+			return true
+		}
+		before := regexpBoundaryRune(state.input)
+		for _, candidate := range alphabet {
+			nextInput, ok := state.input.consume(candidate, input)
+			if !ok {
+				continue
+			}
+			next := requestPatternSearchState{programs: make([][]uint32, len(programs)), input: nextInput}
+			matched := true
+			for i, program := range programs {
+				next.programs[i] = regexpProgramStep(program, state.programs[i], before, candidate)
+				if len(next.programs[i]) == 0 {
+					matched = false
+					break
+				}
+			}
+			if !matched {
+				continue
+			}
+			key := requestPatternSearchKey(next)
+			if seen[key] {
+				continue
+			}
+			if len(seen) >= stateLimit {
+				return true
+			}
+			seen[key] = true
+			queue = append(queue, next)
+		}
+	}
+	return false
+}
+
+func requestInputFormatProgram(input RequestBodyInput) (*syntax.Prog, bool) {
+	switch input.Format {
+	case "":
+		return nil, true
+	case "date-time":
+		const safeSpace = `[ \x{A0}\x{1680}\x{2000}-\x{200A}\x{202F}\x{205F}\x{3000}]`
+		core := `[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:[.,][0-9]+)?(?:Z|[+-][0-9]{2}:[0-9]{2})`
+		if !input.Required && input.AllowEmpty != nil && *input.AllowEmpty {
+			core = `(?:` + core + `)?`
+		}
+		program, err := compileRegexpProgram(safeSpace+`*`+core+safeSpace+`*`, false)
+		if err != nil {
+			return nil, false
+		}
+		return program, true
+	default:
+		return nil, false
+	}
+}
+
+func requestPatternSearchAccepts(programs []*syntax.Prog, state requestPatternSearchState, input RequestBodyInput) bool {
+	if !state.input.accepts(input) {
+		return false
+	}
+	before := regexpBoundaryRune(state.input)
+	for i, program := range programs {
+		if !regexpProgramAccepts(program, state.programs[i], before) {
+			return false
+		}
+	}
+	return true
+}
+
+func (state requestInputStringState) consume(candidate rune, input RequestBodyInput) (requestInputStringState, bool) {
+	if !commandInputStringSafe(string(candidate)) {
+		return requestInputStringState{}, false
+	}
+	space := CommandInputValueEmpty(string(candidate))
+	if input.arrayItem && (candidate == ',' || !state.started && space) {
+		return requestInputStringState{}, false
+	}
+	state.started = true
+	state.hasNonSpace = state.hasNonSpace || !space
+	state.trailingSpace = space
+	state.previousWord = syntax.IsWordChar(candidate)
+	return state, true
+}
+
+func (state requestInputStringState) accepts(input RequestBodyInput) bool {
+	if input.arrayItem {
+		return state.started && state.hasNonSpace && !state.trailingSpace
+	}
+	empty := !state.hasNonSpace
+	if input.Required && empty {
+		return false
+	}
+	if input.AllowEmpty != nil && empty {
+		return *input.AllowEmpty
+	}
+	return true
+}
+
+func regexpBoundaryRune(state requestInputStringState) rune {
+	if !state.started {
+		return -1
+	}
+	if state.previousWord {
+		return 'a'
+	}
+	return '-'
+}
+
+func regexpProgramStep(program *syntax.Prog, raw []uint32, before, candidate rune) []uint32 {
+	closure := regexpProgramClosure(program, raw, before, candidate)
+	next := map[uint32]bool{}
+	for _, pc := range closure {
+		instruction := program.Inst[pc]
+		if regexpInstructionMatchesRune(instruction, candidate) {
+			next[instruction.Out] = true
+		}
+	}
+	return sortedProgramCounters(next)
+}
+
+func regexpProgramAccepts(program *syntax.Prog, raw []uint32, before rune) bool {
+	for _, pc := range regexpProgramClosure(program, raw, before, -1) {
+		if program.Inst[pc].Op == syntax.InstMatch {
+			return true
+		}
+	}
+	return false
+}
+
+func regexpProgramClosure(program *syntax.Prog, raw []uint32, before, after rune) []uint32 {
+	stack := append([]uint32(nil), raw...)
+	seen := map[uint32]bool{}
+	leaves := map[uint32]bool{}
+	for len(stack) > 0 {
+		pc := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if seen[pc] || int(pc) >= len(program.Inst) {
+			continue
+		}
+		seen[pc] = true
+		instruction := program.Inst[pc]
+		switch instruction.Op {
+		case syntax.InstAlt, syntax.InstAltMatch:
+			stack = append(stack, instruction.Out, instruction.Arg)
+		case syntax.InstCapture, syntax.InstNop:
+			stack = append(stack, instruction.Out)
+		case syntax.InstEmptyWidth:
+			if instruction.MatchEmptyWidth(before, after) {
+				stack = append(stack, instruction.Out)
+			}
+		case syntax.InstRune, syntax.InstRune1, syntax.InstRuneAny, syntax.InstRuneAnyNotNL, syntax.InstMatch:
+			leaves[pc] = true
+		}
+	}
+	return sortedProgramCounters(leaves)
+}
+
+func regexpInstructionMatchesRune(instruction syntax.Inst, candidate rune) bool {
+	switch instruction.Op {
+	case syntax.InstRune, syntax.InstRune1:
+		return instruction.MatchRune(candidate)
+	case syntax.InstRuneAny:
+		return true
+	case syntax.InstRuneAnyNotNL:
+		return candidate != '\n'
+	default:
+		return false
+	}
+}
+
+func sortedProgramCounters(counters map[uint32]bool) []uint32 {
+	out := make([]uint32, 0, len(counters))
+	for counter := range counters {
+		out = append(out, counter)
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i] < out[j] })
+	return out
+}
+
+func requestPatternSearchKey(state requestPatternSearchState) string {
+	var key strings.Builder
+	for _, counters := range state.programs {
+		key.WriteByte('|')
+		for _, counter := range counters {
+			key.WriteString(strconv.FormatUint(uint64(counter), 10))
+			key.WriteByte(',')
+		}
+	}
+	key.WriteByte('|')
+	for _, value := range []bool{state.input.started, state.input.hasNonSpace, state.input.trailingSpace, state.input.previousWord} {
+		if value {
+			key.WriteByte('1')
+		} else {
+			key.WriteByte('0')
+		}
+	}
+	return key.String()
+}
+
+func regexpProductAlphabet(programs []*syntax.Prog) []rune {
+	boundaries := map[int]bool{0: true, utf8.MaxRune + 1: true, 0xD800: true, 0xE000: true}
+	addRange := func(first, last rune) {
+		if first < 0 {
+			first = 0
+		}
+		if last > utf8.MaxRune {
+			last = utf8.MaxRune
+		}
+		if first > last {
+			return
+		}
+		boundaries[int(first)] = true
+		boundaries[int(last)+1] = true
+	}
+	for candidate := rune(0); candidate < 128; candidate++ {
+		addRange(candidate, candidate)
+	}
+	for _, table := range []*unicode.RangeTable{unicode.White_Space} {
+		for _, item := range table.R16 {
+			for candidate := rune(item.Lo); candidate <= rune(item.Hi); candidate += rune(item.Stride) {
+				addRange(candidate, candidate)
+			}
+		}
+		for _, item := range table.R32 {
+			for candidate := rune(item.Lo); candidate <= rune(item.Hi); candidate += rune(item.Stride) {
+				addRange(candidate, candidate)
+			}
+		}
+	}
+	for _, span := range [][2]rune{{0, 0x1F}, {0x7F, 0x9F}, {0x200B, 0x200D}, {0x2028, 0x202E}, {0x2066, 0x2069}, {0xFEFF, 0xFEFF}} {
+		addRange(span[0], span[1])
+	}
+	for _, program := range programs {
+		for _, instruction := range program.Inst {
+			switch instruction.Op {
+			case syntax.InstRune, syntax.InstRune1:
+				if len(instruction.Rune) == 1 {
+					candidate := instruction.Rune[0]
+					addRange(candidate, candidate)
+					if syntax.Flags(instruction.Arg)&syntax.FoldCase != 0 {
+						for folded := unicode.SimpleFold(candidate); folded != candidate; folded = unicode.SimpleFold(folded) {
+							addRange(folded, folded)
+						}
+					}
+					continue
+				}
+				for i := 0; i+1 < len(instruction.Rune); i += 2 {
+					addRange(instruction.Rune[i], instruction.Rune[i+1])
+				}
+			}
+		}
+	}
+	ordered := make([]int, 0, len(boundaries))
+	for boundary := range boundaries {
+		ordered = append(ordered, boundary)
+	}
+	sort.Ints(ordered)
+	alphabet := make([]rune, 0, len(ordered))
+	for i := 0; i+1 < len(ordered); i++ {
+		candidate := rune(ordered[i])
+		if candidate >= 0xD800 && candidate < 0xE000 {
+			candidate = 0xE000
+		}
+		if int(candidate) >= ordered[i+1] || !utf8.ValidRune(candidate) || !commandInputStringSafe(string(candidate)) {
+			continue
+		}
+		alphabet = append(alphabet, candidate)
+	}
+	return alphabet
 }
 
 func (n *schemaNode) validateRequestInputCardinality(pointer string, input RequestBodyInput) error {
@@ -1264,7 +1536,7 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		if err != nil {
 			return nil, fmt.Errorf("compile schema: pattern %q: %w", pat, err)
 		}
-		domain, err := compileRegexpStringDomain(pat, re)
+		domain, err := compileRegexpStringDomain(pat)
 		if err != nil {
 			return nil, fmt.Errorf("compile schema: pattern %q: %w", pat, err)
 		}
