@@ -48,7 +48,7 @@ func multipartRestWriteBundleFS(rest, kind string) fstest.MapFS {
 			"operation": {
 				"model": "destructive_action",
 				"status": "blocked",
-				"risk": "medium",
+				"risk": "high",
 				"blocked_by_default": true,
 				"reason": "operation metadata is bound by the executor"
 			}
@@ -59,10 +59,11 @@ func multipartRestWriteBundleFS(rest, kind string) fstest.MapFS {
 			"id": "acme.attachments.create",
 			"kind": %q,
 			"summary": "Attach one declared local file",
-			"risk": "medium",
+			"risk": "high",
 			"approval": "plan-preview-confirm-execute",
 			"output_policy": "json",
-			"mutation_class": "create",
+			"mutation_class": "destructive",
+			"confirmation": {"kind": "destructive"},
 			"rest": %s
 		}]
 	}`, kind, rest))}

@@ -3,8 +3,8 @@
 | ID | Requirement | RED evidence | GREEN evidence | Refactor / verification |
 | --- | --- | --- | --- | --- |
 | R1 | Closed `rest.multipart` contract only loads for safe `rest_write` declarations | `go test ./internal/connectors/engine -run 'TestBundleLoadAcceptsTypedMultipartRestWriteContract|TestBundleLoadRejectsUnsafeMultipartRestWriteContracts' -count=1` failed before production changes: `operations.json: /operations/0/rest/multipart: additional property not allowed`; the valid fixture could not load and unsafe cases could not reach their intended semantic guards. | The same focused command passed after the schema/type/semantic contract; `go vet ./internal/connectors/engine` also passed. The retained metadata test remains red until the dispatcher recognizes the new format. | Pending |
-| R2 | Preview binds fields, source identity, and every approved file SHA-256 without network I/O | Pending | Pending | Pending |
-| R3 | Direct multipart dispatch is root-confined, bounded, media-checked, response-bounded, and exactly once | Pending | Pending | Pending |
+| R2 | Preview binds fields, source identity, and every approved file SHA-256 without network I/O | `go test ./internal/connectors/engine -run 'TestOperationDirectWriteMetadataRecognizesTypedMultipartRestWrite|TestOperationDirectWriteMultipart' -count=1` failed before direct-write production edits with `rest_write content_type "multipart/form-data" is not supported by the typed executor`; previews could not represent the approved payload. | Pending | Pending |
+| R3 | Direct multipart dispatch is root-confined, bounded, media-checked, response-bounded, and exactly once | The same focused engine command failed before dispatch changes; the connsdk bounded-response test was added first and intentionally did not compile because `Requester.DoMultipartLimited` did not yet exist. | Pending | Pending |
 | R4 | Docs distinguish shared capability from connector adoption and legacy `file_upload` | Pending | Pending | Pending |
 | R5 | Implemented command claim reaches real preflight and plan → preview → approval → execute loopback path | Pending | Pending | Pending |
 
