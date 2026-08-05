@@ -2,10 +2,10 @@
 
 ## Planned checks
 
-- [ ] `gofmt -w` on changed Go files
-- [ ] focused `internal/connectors/commandrunner` tests
-- [ ] focused `internal/app` tests
-- [ ] focused `internal/cli` tests and command help checks
+- [x] `gofmt -w` on changed Go files
+- [x] focused `internal/connectors/commandrunner` tests — #3782 and #3790 selections passed
+- [x] focused `internal/app` tests — `TestPlanConnectorCommandPersistsCompleteDeclaredContent` passed
+- [x] focused `internal/cli` tests — policy test and regenerated `TestGoldenTranscripts` passed
 - [ ] `go vet ./...`
 - [ ] `go build ./cmd/pm`
 - [ ] `make tidy-check`

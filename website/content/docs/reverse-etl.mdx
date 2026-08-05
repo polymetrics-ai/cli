@@ -31,7 +31,7 @@ pm reverse plan sync \
   --json
 ```
 
-The `plan` subcommand reads from the named table, maps columns to action fields, and returns a plan ID. Non-destructive plans also return an approval token in plain-text mode. Destructive plans deliberately do not: their token is issued only after preview succeeds. Newly created plans persist the destination write action's `redact_fields` metadata and mask those fields in plan samples.
+The `plan` subcommand reads from the named table, maps columns to action fields, and returns a plan ID. Non-destructive plans also return an approval token in plain-text mode. Destructive plans deliberately do not: their token is issued only after preview succeeds. The source-table plan output path is separate from connector-command execution and remains unchanged here. Connector-command request, response, error, and preview content is complete; declared `redact_fields` remains load-compatible metadata, not a runtime masking instruction.
 
 JSON output:
 
@@ -58,10 +58,10 @@ JSON output:
 
 ```bash
 pm reverse preview plan_abc123          # destructive plans issue the token here
-pm reverse preview plan_abc123 --json   # machine-readable output redacts the token
+pm reverse preview plan_abc123 --json   # machine-readable output omits the token
 ```
 
-Preview returns the plan metadata and mapped sample rows. For destructive plans it also runs the destination's real no-network dry-run path, returns resolved warnings, persists a digest that binds the complete staged request set and its execution identity, changes the plan status to `previewed`, and issues the approval token in plain-text output. Plans created with persisted connector-declared `redact_fields` keep those fields masked. The non-destructive `create_issue` example below remains `planned`; a destructive preview reports `previewed`.
+Preview returns the plan metadata and mapped sample rows. For destructive plans it also runs the destination's real no-network dry-run path, returns resolved warnings, persists a digest that binds the complete staged request set and its execution identity, changes the plan status to `previewed`, and issues the approval token in plain-text output. Connector-command request, response, error, and preview content remains complete; `redact_fields` declarations do not alter it. This foundation does not change the separate source-table plan output path. The non-destructive `create_issue` example below remains `planned`; a destructive preview reports `previewed`.
 
 ```json
 {
@@ -84,6 +84,8 @@ Preview returns the plan metadata and mapped sample rows. For destructive plans 
 pm reverse run plan_abc123 --approve tk_xyz789 --json
 # Destructive plans additionally require: --confirm destructive
 ```
+
+A failed dispatch is recorded and is not automatically retried.
 
 JSON output:
 
@@ -118,7 +120,7 @@ Returns all plans and their associated runs.
 | **Destructive tokens follow preview** | DELETE and declared destructive operations receive no token until a no-network preview digest is persisted. |
 | **Preview identity is revalidated** | The app recomputes the digest immediately before dispatch; the shared engine gate compares it again. |
 | **Confirmation is closed and typed** | Destructive execution accepts `--confirm destructive`, not caller-defined confirmation text. |
-| **Secrets are never printed** | Only secret field names appear in plan manifests; newly created plans with persisted `redact_fields` mask connector-declared sensitive sample fields. |
+| **Connector-command content is complete** | Connector request, response, error, and preview content is not stripped. Declared `redact_fields` remains load-compatible metadata, not a runtime masking instruction. The separate source-table plan output path is unchanged. |
 | **Agents get a diff first** | An agent can run `plan` and `preview` autonomously; it must present an approval token for `run`. |
 
 This design lets you delegate reverse-ETL to an AI agent with confidence: the agent proposes changes, the app issues a token at the allowed lifecycle point, and a human (or an explicitly trusted policy) authorizes its use before data moves.

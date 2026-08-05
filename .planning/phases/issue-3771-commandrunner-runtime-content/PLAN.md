@@ -16,20 +16,20 @@ and all unrelated safety controls.
      unchanged, return original errors, stop setting `RedactFields` on executor requests, and
      delete the runner redaction helpers and now-unused safety import.
 
-2. **#3784 — application persistence proof**
+2. **#3784 — application persistence proof** — completed
    - Add a credential-free fake connector test under `internal/app` that calls the public
      `PlanConnectorCommand` path, persists a reverse command plan, reopens state, and verifies
      nested/token/content fields remain in the saved sample.
    - Keep the test preview-only and assert it does not invoke the fake write method.
 
-3. **#3786 — CLI, manual, and website parity**
+3. **#3786 — CLI, manual, and website parity** — completed
    - Update the reverse help text, CLI manual, golden transcript fixture/test, and website reverse
      ETL guide. Explain that connector command content is complete; approval-token and destructive
      lifecycle protections remain; generic source-table output handling is out of scope.
    - Regenerate or deliberately update only the relevant golden artifact using the repository's
      established test path.
 
-4. **#3790 — behavior regression matrix**
+4. **#3790 — behavior regression matrix** — completed
    - Add a focused commandrunner test file that exercises ETL, reverse preview, direct read,
      operation direct read, binary download, and their error paths through public behavior.
    - Assert executor request structs have nil/empty `RedactFields`, records retain exact nested and
