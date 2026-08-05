@@ -36,9 +36,10 @@ Follow the Ruby pattern (`connection_specification.json` / `metadata.json` / `sc
 agent-readability (a 60-line schema file, not a 4,000-line manifest), diff hygiene (one stream =
 one file; parallel authoring doesn't conflict), concern separation matching the runtime
 (`spec.json` at connection-setup time, `streams.json` at read time, `writes.json` at reverse-ETL
-time, `api_surface.json` only by conformance, `certification.json` only by the certification
-harness). One deviation from Ruby: request/pagination/cursor config is **not** code — it is
-`streams.json`, interpreted by the engine.
+time, `api_surface.json` at conformance and disk-backed direct-write provenance checks,
+`certification.json` only by the certification harness). One deviation from Ruby:
+request/pagination/cursor config is **not** code — it is `streams.json`, interpreted by the
+engine.
 
 ### Layout
 
@@ -51,7 +52,7 @@ internal/connectors/defs/
     spec.json                 // connection specification (JSON Schema draft-07)
     streams.json              // declarative read config: base HTTP + streams
     writes.json               // declarative write actions
-    api_surface.json          // API coverage manifest (conformance input)
+    api_surface.json          // API coverage + disk-backed direct-write provenance manifest
     certification.json        // optional certify defaults, candidates, pairings
     schemas/
       issues.json             // per-stream record schema (draft-07 + x- extensions)
@@ -362,7 +363,7 @@ type Bundle struct {
     Streams  []StreamSpec      // streams.json "streams"
     Writes   []WriteAction     // writes.json (nil if absent)
     Schemas  map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
-    Surface  *APISurface       // api_surface.json (conformance only)
+    Surface  *APISurface       // api_surface.json (conformance + disk-backed provenance)
     Docs     string            // docs.md
     Fixtures fs.FS             // fixtures/ subtree
 }
@@ -475,8 +476,11 @@ closed `rest.multipart` declaration. This is not a second upload runner and is n
 write: the bundle fixes the mutating method, connector-relative path, literal
 `multipart/form-data` content type, closed typed body schema, response cap, aggregate/file caps,
 and all form/file-part names. The operation's `source_url` is the connector author's provider
-evidence for those values. A caller can only supply declared `body.*` fields; a file source is a
-required string path, never inline bytes or a caller-selected request shape.
+evidence for those values. In a disk-backed bundle, its fixed method and path must also match an
+`api_surface.json` operation entry before execution. Production embeds the limited endpoint shape
+derived from the declared `rest_write` operation because `api_surface.json` remains outside
+`defs.FS`. A caller can only supply declared `body.*` fields; a file source is a required string
+path, never inline bytes or a caller-selected request shape.
 
 `PreviewOperationDirectWrite` serializes the existing canonical multipart representation, so its
 digest binds the request target/query, fixed declaration, typed fields, source-path identities, and

@@ -620,7 +620,8 @@ type DeleteSpec struct {
 	MissingOkStatus []int `json:"missing_ok_status,omitempty"`
 }
 
-// APISurface is the parsed api_surface.json (conformance input only).
+// APISurface is the parsed api_surface.json. When present, it supports
+// conformance and direct-write endpoint provenance checks.
 type APISurface struct {
 	API                    string            `json:"api"`
 	Docs                   string            `json:"docs,omitempty"`
@@ -666,9 +667,9 @@ type SurfaceOperation struct {
 	DuplicateOf      string `json:"duplicate_of,omitempty"`
 }
 
-// OperationSpec is one reviewed, typed operation definition. The first phase
-// loads and validates these definitions only; executors are added in later
-// issue slices and every unknown kind remains rejected by the meta-schema.
+// OperationSpec is one reviewed, typed operation definition. Executors are
+// opt-in per kind; unsupported kinds stay metadata-only and unknown kinds are
+// rejected by the meta-schema.
 type OperationSpec struct {
 	ID            string            `json:"id"`
 	Kind          string            `json:"kind"`
@@ -1011,11 +1012,12 @@ func init() {
 // requiredFiles lists the bundle files that must always exist relative to a
 // bundle's directory, excepting streams.json (conditionally required).
 //
-// api_surface.json is intentionally not required here. It is a
-// conformance/authoring artifact, not runtime input for check/read/write/catalog
-// execution, and production defs.FS excludes it to keep cmd/pm small. When the
-// file is present, loadAPISurface still parses and validates it so disk-backed
-// validation keeps the full coverage gate.
+// api_surface.json is intentionally not required here. Production defs.FS
+// excludes it to keep cmd/pm small, while embedded rest_write definitions retain
+// the limited endpoint shape needed by direct-write preflight. When the file is
+// present, loadAPISurface parses and validates it, and direct-write preflight
+// checks its operation provenance so disk-backed validation keeps the full
+// coverage gate.
 var requiredFiles = []string{"metadata.json", "spec.json", "docs.md"}
 
 // LoadAllError is the structured error LoadAll returns whenever one or more

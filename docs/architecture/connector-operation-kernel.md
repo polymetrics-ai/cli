@@ -20,14 +20,16 @@ Command surface entries may reference exactly one executable target:
 
 API surface rows that are already executable through fixed direct-read command
 metadata use `covered_by.direct_read` or `covered_by.direct_reads`. Blocked
-`api_surface.operation` rows remain ledger-only and are not an execution
-allowlist.
+`api_surface.operation` rows remain ledger-only. An API-surface operation row
+is never an execution allowlist: an implemented direct write must independently
+pass its declared operation and command preflight before it can enter the write
+lifecycle.
 
 Operation execution is opt-in per intent, not blanket-enabled: an operation runs
-only through an intent whose executor exists. Direct reads, direct writes that
-traverse the plan → preview → approval → execute lifecycle, and bounded binary
-downloads have executors today; GraphQL, XML, local git, local file, browser,
-and composite operations do not, and remain blocked.
+only through an intent whose executor exists. Direct reads, declared `rest_write`
+direct writes, and bounded binary downloads have executors today; GraphQL, XML,
+local git, local file, browser, and composite operations do not, and remain
+blocked.
 
 ## Supported Operation Kinds
 
@@ -88,6 +90,14 @@ decides before any network or filesystem access:
   connector-relative GET, the caller must supply a destination root, and the
   byte cap is the request value clamped by the operation's declared maximum and
   then by the engine's own ceiling.
+- `intent:"direct_write"` with `availability:"implemented"` can enter the
+  plan → preview → approval → execute lifecycle for one declared `rest_write`
+  operation. Disk-backed bundles verify the operation's fixed method/path
+  against an `api_surface.json` operation entry; production uses the limited
+  endpoint shape derived from embedded `rest_write` metadata because
+  `api_surface.json` is not embedded. Command preflight requires one
+  connector-relative mutating API-surface endpoint. `commandrunner` never
+  dispatches the write directly.
 - Every other command that references an `operation` returns a blocked command
   error naming the operation ID and explaining that its executor is not
   implemented. This fail-closed default is deliberate: it lets docs, validation,
