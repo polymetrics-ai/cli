@@ -164,7 +164,7 @@ func (f *Flow) requestDeviceAuth(ctx context.Context) (*deviceAuthResponse, erro
 
 	resp, err := f.cfg.HTTPClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("device: device authorization request: %w", err)
+		return nil, fmt.Errorf("device: device authorization request: %w", browserauth.SafeOAuthTransportError(err))
 	}
 	defer func() { _ = resp.Body.Close() }()
 
@@ -209,7 +209,7 @@ func (f *Flow) pollToken(ctx context.Context, deviceCode string) (*browserauth.O
 
 	resp, err := f.cfg.HTTPClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("device: token poll request: %w", err)
+		return nil, fmt.Errorf("device: token poll request: %w", browserauth.SafeOAuthTransportError(err))
 	}
 	defer func() { _ = resp.Body.Close() }()
 
@@ -236,6 +236,9 @@ func (f *Flow) pollToken(ctx context.Context, deviceCode string) (*browserauth.O
 		return nil, errors.New("device: device code expired before the user completed verification")
 	default:
 		return nil, fmt.Errorf("device: token poll failed: %s", browserauth.SafeOAuthErrorCode(parsed.Error))
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("device: token poll failed: status %d", resp.StatusCode)
 	}
 
 	if parsed.AccessToken == "" {

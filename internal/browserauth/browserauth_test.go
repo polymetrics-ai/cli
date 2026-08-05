@@ -2,6 +2,7 @@ package browserauth
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"testing"
 	"time"
@@ -72,6 +73,20 @@ func TestSafeOAuthErrorCode(t *testing.T) {
 				t.Fatalf("SafeOAuthErrorCode(%q) = %q, want %q", tc.raw, got, tc.want)
 			}
 		})
+	}
+}
+
+func TestSafeOAuthTransportError(t *testing.T) {
+	const marker = "redaction-sentinel"
+	err := SafeOAuthTransportError(errors.New(marker))
+	if err == nil {
+		t.Fatal("SafeOAuthTransportError() error = nil, want safe error")
+	}
+	if strings.Contains(err.Error(), marker) {
+		t.Fatalf("SafeOAuthTransportError() exposed transport detail: %v", err)
+	}
+	if err.Error() != "oauth transport request failed" {
+		t.Fatalf("SafeOAuthTransportError() error = %v, want generic transport error", err)
 	}
 }
 

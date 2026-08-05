@@ -53,6 +53,20 @@ func SafeOAuthErrorCode(raw string) string {
 	}
 }
 
+// SafeOAuthTransportError removes untrusted transport details from OAuth errors.
+func SafeOAuthTransportError(err error) error {
+	switch {
+	case err == nil:
+		return nil
+	case errors.Is(err, context.Canceled):
+		return context.Canceled
+	case errors.Is(err, context.DeadlineExceeded):
+		return context.DeadlineExceeded
+	default:
+		return errors.New("oauth transport request failed")
+	}
+}
+
 // Credential is the result of a successful Login: exactly one of OAuth or
 // Session is set, matching which Flow produced it.
 type Credential struct {

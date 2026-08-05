@@ -309,7 +309,7 @@ func (f *Flow) exchangeCode(ctx context.Context, code, verifier, redirectURI str
 
 	resp, err := f.cfg.HTTPClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("loopback: token request: %w", err)
+		return nil, fmt.Errorf("loopback: token request: %w", browserauth.SafeOAuthTransportError(err))
 	}
 	defer func() { _ = resp.Body.Close() }()
 
