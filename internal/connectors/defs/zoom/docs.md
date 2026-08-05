@@ -20,8 +20,8 @@ Connection fields:
   (Authorization: Bearer `<access_token>`). Never logged.
 - `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL
   override for tests or proxies.
-- `max_pages` (optional, string); default `0`; Maximum pages; use `0`, `all`, or `unlimited` to
-  exhaust the stream.
+- `max_pages` (optional, string); default `0`. The field remains in the connection specification,
+  but the current Zoom cursor paginator does not consume it.
 - `mode` (optional, string).
 - `page_size` (optional, string); default `100`; records per page (1-300); sent as the `page_size`
   query parameter.
@@ -31,6 +31,7 @@ Connection fields:
 Secret fields are redacted in logs and write previews: `access_token`.
 
 Default configuration values: `base_url=https://api.zoom.us/v2`, `max_pages=0`, `page_size=100`.
+`max_pages` is materialized as configuration but does not affect Zoom pagination.
 
 Authentication behavior:
 
