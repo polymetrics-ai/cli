@@ -652,6 +652,75 @@ pm reverse run <plan-id> --approve <token> --json`,
       },
     ],
   },
+  {
+    slug: 'the-review-agent-was-right',
+    title: 'The Review Agent Was Right',
+    description:
+      'A review gate rejected a claim I had approved earlier that day. The code stayed; the claim changed; the missing evidence went back to the foundation that owns it.',
+    publishedAt: '2026-08-06',
+    updatedAt: '2026-08-06',
+    readingTime: '6 min read',
+    category: 'Build in public',
+    tags: ['AI agents', 'code review', 'connector architecture', 'provenance'],
+    summary:
+      'Several agents working in parallel made shared gaps visible quickly. The useful correction came when a review gate rejected an approved claim and returned the work to its proper boundary.',
+    sections: [
+      {
+        heading: 'The wrong approval',
+        body: [
+          'One morning I had several agents working in parallel against one codebase. The work had separate branches and scopes. The defects were shared anyway.',
+          'One lane needed a preflight check for the endpoints behind dynamic connector commands. I approved a shortcut: derive the validation data from operation declarations that already ship, rather than embed a second copy of every provider surface in the binary. It kept the binary smaller and avoided another inventory to synchronize.',
+          'That mechanism proved something useful. It could confirm that a command agreed with the operation we had declared for it. It could not independently confirm that our declaration agreed with the provider documentation. Those are different facts.',
+          'Documentation review stopped the lane while it was still moving. The draft described the result as provider-surface-backed provenance. The reviewer rejected that sentence. A system cannot use its own declarations as independent evidence for the same declarations.',
+          'I had approved both the shortcut and the wording earlier that day. The reviewer was right. We kept the mechanism and narrowed the claim to what it actually proves: command-to-declaration agreement. The separate foundation that owns provider citations and inventories still owns the missing evidence.',
+          'That was not a dramatic reversal. The binary stayed small. The test remained useful. We just stopped asking it to prove more than it could.',
+        ],
+      },
+      {
+        heading: 'Workers that stopped',
+        body: [
+          'Several other lanes stopped rather than work around the nearest problem. That was slower in the moment. It was also why the day produced fixes instead of a collection of local stories about why an exception was reasonable.',
+          'One worker found a generated artifact that would have been easy to hand-edit. It left the file alone and exposed a generator defect that blocked new connectors from being added. The repair belonged in the generator, not in the next connector patch.',
+          'Another worker needed to declare complete output. It would not label that output as redacting merely because the schema did not have a permitted word for complete content. The runtime could return the full response, but the declaration language could not ask for it. A small test made that disagreement visible, and the schema gained the missing policy.',
+          'A third lane made a stricter preflight rule. The focused tests passed. The real sweep did not: 178 of 1,239 commands marked implemented would fail runtime preflight. The candidate was reverted instead of softened. The missing shared read contract became its own piece of work.',
+          'This was the useful rhythm. A worker could stop with a precise reason. It did not have to make a local exception, change a generated file by hand, or describe a false policy as close enough.',
+        ],
+      },
+      {
+        heading: 'The tests that were too kind',
+        body: [
+          'One near-miss was harder to be pleased about. A rule passed every test we had given it. In the shipped binary, the data that rule expected is deliberately absent. The tests supplied it anyway.',
+          'If the change had merged, every command in its affected set would have failed before dispatch. Review caught it before a user did. The lesson was not that tests are unreliable. The lesson was that a fixture can accidentally prove a world production does not have.',
+          'The same review path found another content-stripping layer after an earlier correction had removed one. The documentation was about to promise complete runtime content while preview and error paths still replaced values. The review did not accept the broader sentence, and that hidden engine behavior became a separate foundation with its own preservation tests.',
+          'I liked that failure more than I liked the green tests. It was specific. The reviewer could point to the sentence, then to the runtime path that made the sentence untrue.',
+        ],
+      },
+      {
+        heading: 'Measured, not advertised',
+        body: [
+          'The inventory work had the same shape. Three connector inventories were rebuilt from provider documentation. One local record held 7 operations where the documented inventory held 1,913. Another held 11 where the documented inventory held 1,745. A third had no record at all; its documented inventory contained 234 operations.',
+          'Those numbers did not make hundreds of commands appear. Most of the new rows were blocked, restricted, or deliberately excluded. The value was not a larger catalog. It was an honest accounting of what exists, what the product can execute, and what still needs a foundation or a connector-specific implementation.',
+          'The same discipline found public pages that spoke more broadly than the commands that actually respond. A planned operation is useful information. It is not generally available behavior. Calling it that turns an inventory into a promise.',
+        ],
+      },
+      {
+        heading: 'One builder, two scopes',
+        body: [
+          'I made one more correction in public. At first, rate limiting and an authentication failure cascade looked like one abstraction. Research showed they share a builder but not a scope. Provider rate policy is not always per credential. Authentication failure can be.',
+          'Collapsing both into a per-token rule would have made the system look simpler while changing its safety boundary. We kept the shared construction and separated the scopes. That was a smaller correction than the review reversal, but it came from the same habit: do not let a convenient model overstate what the evidence says.',
+        ],
+      },
+      {
+        heading: 'The agent that said no',
+        body: [
+          'Parallel work does not make a codebase self-correcting. It makes contradictions appear faster. They can still be papered over if a reviewer has to treat an earlier approval as law.',
+          'That day, the review gate did not. It could not edit the code or merge the branch. It could say that a claim and its evidence did not match, explain why, and return the work. It did. I had approved the error. The review agent overruled it, and it was right.',
+          'The useful result was not a tidy process story. Several branches stopped. A candidate was reverted. Some documentation got narrower. Some missing foundations became visible. But the same defect we were removing from the product — advertised but not implemented — had pointed back at a decision I had made an hour earlier.',
+          'That is the standard I want from agents working in the repository. Not agreement. A bounded ability to say no, with enough evidence that the next decision is better than the last one.',
+        ],
+      },
+    ],
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
