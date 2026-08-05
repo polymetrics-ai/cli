@@ -30,3 +30,18 @@ The coverage counts above measure only shapes discoverable from checked-in defin
 The recurring failure pattern is **declarative-marker execution drift**: a guard trusts optional metadata instead of the code path that actually owns dispatch. Request-contract enforcement therefore takes effective runtime ownership as its source of truth.
 
 The cross-layer failure class is **correct at authoring but wrong at runtime**. The lesson is **verify the fix where the action happens**: evidence collection alone is insufficient unless the authoring validator and command/write runtime consume the same decoded wire shape. The escaped-pointer, bracket-query, static-array, and deep-merge tests therefore exercise the acting layer as well as citation normalization.
+
+## Delivery-pipeline finding
+
+The no-mistakes run that produced this mechanism retained its original documentation-only
+`--intent` after the authorized scope changed. The running intent was superseded by
+`decision-request-contract-review.md`, `decision-request-contract-fix-review.md`,
+`decision-request-contract-write-link.md`, `decision-request-contract-rollout-coverage.md`,
+`decision-request-contract-shape-review.md`, `decision-request-contract-runtime-shape-review.md`,
+`decision-request-contract-systematic-sweep-review.md`,
+`decision-request-contract-pointer-mapping-review.md`, and
+`decision-request-contract-runtime-pointer-edge-review.md`. AXI provided no supported way to amend
+that intent or reject a non-gated test auto-fix. The test phase therefore committed `7f43e5b7`,
+which removed captain-authorized enforcement by reasoning from stale scope. That commit is retained
+in history for auditability and immediately reverted; enforcement must not be weakened to satisfy a
+stale run-intent string.
