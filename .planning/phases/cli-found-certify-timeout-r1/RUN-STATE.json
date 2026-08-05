@@ -66,8 +66,27 @@
         "totalWallElapsedSeconds": 193.213,
         "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample",
         "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero"
+      },
+      {
+        "run": "https://github.com/polymetrics-ai/cli/actions/runs/31054516637/job/92468986349",
+        "retrieved": "2026-08-06",
+        "runner": "GitHub-hosted Ubuntu 24.04.4 (ubuntu-24.04 image 20260720.247.2)",
+        "certifyElapsedSeconds": 63.34,
+        "certifyWallElapsedSeconds": 91.407,
+        "cliElapsedSeconds": 47.563,
+        "cliWallElapsedSeconds": 49.525,
+        "totalElapsedSeconds": 110.903,
+        "totalWallElapsedSeconds": 140.932,
+        "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample",
+        "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero"
       }
-    ]
+    ],
+    "measuredWallTimeBudget": {
+      "formula": "max(193.213, 140.932) + (193.213 - 140.932), rounded up to the next 15 seconds",
+      "unroundedSeconds": 245.494,
+      "budget": "4m15s",
+      "budgetSeconds": 255
+    }
   },
   "verificationPassed": false
 }

@@ -144,8 +144,12 @@ The deliberate no-sleep duplicate fixtures exercise both independent guards:
 real harness calls against the 85-call contract, while
 `TestCheckDurationBudgetRejectsControlledDuplicateFixture` rejects two
 4-second wall measurements against a 7-second bound. The fixed production
-wall-time threshold remains intentionally unset until two post-refactor
-GitHub-hosted samples from the new measurement are recorded.
+wall-time threshold was held unset until two post-refactor GitHub-hosted
+samples from the new measurement were recorded. The selected `4m15s` bound is
+not a guess: sample walls were 193.213s and 140.932s, so `max + observed
+spread = 193.213 + 52.281 = 245.494s`; rounding up to the next 15-second
+boundary yields 255s. The Make target supplies that fixed value to the timing
+command, which reports the observed and allowed duration when it fails.
 
 ```text
 $ go test -count=1 -run '^TestCertifyRealCLIInvocationBudgetRejectsControlledDuplicate$' ./internal/connectors/certify
