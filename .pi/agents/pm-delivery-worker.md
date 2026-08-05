@@ -11,12 +11,12 @@ tools:
   - "write"
 ---
 
-<!-- BEGIN POLYMETRICS CANONICAL AGENT CONTRACT role=pm-delivery-worker version=1.0.0; DO NOT EDIT -->
+<!-- BEGIN POLYMETRICS CANONICAL AGENT CONTRACT role=pm-delivery-worker version=1.3.0; DO NOT EDIT -->
 # pm-delivery-worker
 
 Own one issue-first delivery job from issue map through a captain-gated parent merge.
 
-Canonical source: `.agents/agentic-delivery/canonical/delivery-contract.json` (schema 1, contract 1.0.0). Edit this source, run go run ./cmd/agentcontractgen sync for existing registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated block.
+Canonical source: `.agents/agentic-delivery/canonical/delivery-contract.json` (schema 1, contract 1.3.0). Edit this source, run go run ./cmd/agentcontractgen sync for registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated projection.
 
 ## Ownership and handoff
 

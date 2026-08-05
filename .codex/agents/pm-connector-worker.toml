@@ -4,12 +4,12 @@
 name = 'pm-connector-worker'
 description = 'Apply the same delivery state machine with connector-specific evidence inserted around implementation.'
 developer_instructions = """
-<!-- BEGIN POLYMETRICS CANONICAL AGENT CONTRACT role=pm-connector-worker version=1.2.0; DO NOT EDIT -->
+<!-- BEGIN POLYMETRICS CANONICAL AGENT CONTRACT role=pm-connector-worker version=1.3.0; DO NOT EDIT -->
 # pm-connector-worker
 
 Apply the same delivery state machine with connector-specific evidence inserted around implementation.
 
-Canonical source: `.agents/agentic-delivery/canonical/delivery-contract.json` (schema 1, contract 1.2.0). Edit this source, run go run ./cmd/agentcontractgen sync for registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated projection.
+Canonical source: `.agents/agentic-delivery/canonical/delivery-contract.json` (schema 1, contract 1.3.0). Edit this source, run go run ./cmd/agentcontractgen sync for registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated projection.
 
 ## Ownership and handoff
 
