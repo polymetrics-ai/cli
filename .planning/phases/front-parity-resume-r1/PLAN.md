@@ -45,6 +45,11 @@ composition. Current main cannot evaluate that composition, so final record-driv
 the completion claim remain paused until the shared normalized-schema composition lane lands. This
 lane must not add a private evaluator or modify shared validation/runtime files.
 
+The current review correction keeps that ownership boundary: align template-array cardinality and
+call-field nullability in both connector contracts, prohibit Twilio-only secrets in the custom
+channel branch, exercise the empty-array template form in the write fixture, and synchronize CLI
+help plus cited generated surfaces without changing shared code.
+
 ## GSD / skills
 
 Loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`,

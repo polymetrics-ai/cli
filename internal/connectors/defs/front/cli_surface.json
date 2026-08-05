@@ -8573,7 +8573,7 @@
     },
     {
       "path": "sync-application-message-template",
-      "summary": "Sync application message template through Front reverse ETL.",
+      "summary": "Sync a Front application template with one variable mapping.",
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "sync_application_message_template",
@@ -8671,7 +8671,7 @@
       ],
       "risk": "high: fixed Front PUT /channels/{channel_id}/application_message_templates mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Front requires external-id, name, blurb, is-disabled, status-name, at least one complete variable mapping, and template-preview; channel-id supplies the fixed path.",
+      "notes": "This is the one-mapping CLI variant: variable-uid, variable-name, and variable-type build one documented mapping item. Front requires the variable-mappings array but permits it to be empty; use the record-driven action for a static template with no variables. Front also requires external-id, name, blurb, is-disabled, status-name, and template-preview; channel-id supplies the fixed path.",
       "examples": [
         "pm front sync-application-message-template --channel-id cha_fixture_1 --external-id tpl_fixture_1 --name 'Fixture template' --blurb 'Fixture blurb' --is-disabled false --status-name APPROVED --variable-uid var_fixture_1 --variable-name customer_name --variable-type string --template-preview 'Hello {{customer_name}}' --preview --json"
       ]

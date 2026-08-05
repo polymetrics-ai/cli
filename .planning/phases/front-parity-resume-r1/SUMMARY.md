@@ -18,6 +18,12 @@ variants, merge cardinality, provider-valid fixtures, and non-batchable human-in
 draft-07 rules live in the connector-owned `schemas/request_contracts.json`; fixed typed commands
 construct every documented branch without a raw-body escape.
 
+The provider-schema correction round removes the invented template-array minimum while retaining
+required mapping-item fields, tightens the required parent call ID to a non-null string, and rejects
+Twilio-only SID/auth-token fields in the composed custom-channel branch. The static-template write
+fixture now proves the provider-valid empty-array form, while CLI help labels its fixed one-mapping
+shape accurately.
+
 Final record-driven composition enforcement remains paused on the in-flight shared normalized-schema
 composition support. Current main's minimal compiler cannot evaluate `oneOf`, `allOf`, `if`/`then`,
 `not`, or `anyOf`, and this connector lane intentionally did not change shared validation/runtime.
