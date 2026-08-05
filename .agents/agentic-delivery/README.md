@@ -58,17 +58,15 @@ The `.agents/agentic-delivery/` directory holds shared contracts, conventions, a
 Specialized agent families can live beside it under `.agents/<functional-area>/` while reusing the
 same schema and issue-to-PR contract.
 
-Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are thin
-activation adapters. The six `pm-delivery-worker` and `pm-connector-worker` targets registered in
-`canonical/delivery-contract.json` remain optional until their owning harness wave adds each
-wrapper. Once present, they project marked blocks from the canonical source and must not copy
-GSD/TDD, review, or human-gate policy by hand.
+Harness-specific files are generated projections of `canonical/delivery-contract.json`. The two
+Claude targets are required full-file projections. The four Codex and Pi targets remain optional
+until their owning harness waves add each wrapper; once present, their marked blocks are generated
+from the same source. No projection may copy GSD/TDD, review, or human-gate policy by hand.
 
 ## Design principles
 
 - `canonical/delivery-contract.json` is the sole owner of the canonical roles, ordered delivery
   states, tracker gates, GSD/no-mistakes topology, authority boundary, and projection registry.
-- Agent definitions are declarative YAML, but runtime-specific adapters stay optional.
 - Issues remain the unit of work. PRs must reference issues.
 - Large goals use parent issues with sub-issues. A sub-PR may advance to completed parent-branch
   integration without human approval only when all automated gates pass and no human gate is

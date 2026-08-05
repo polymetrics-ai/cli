@@ -7,7 +7,7 @@ export GOTOOLCHAIN ?= auto
 
 .PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary
 
-# Packages covered by `lint`: the declarative connector architecture packages.
+# Packages covered by `lint`: declarative connector and canonical agent-contract tooling.
 # Paths are filtered to existing directories so optional local trees do not
 # hard-fail golangci-lint's arg parsing.
 LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify internal/connectors/boundary internal/agentcontract cmd/connectorgen cmd/agentcontractgen
@@ -73,8 +73,8 @@ lint:
 	@command -v golangci-lint >/dev/null || (echo "golangci-lint not found — brew install golangci-lint" && exit 1)
 	golangci-lint run $(LINT_PKGS)
 
-# Validates the singular delivery source, every referenced GSD command, and any
-# harness projection already registered by its owning wave.
+# Validates the canonical delivery source, every referenced GSD command, and each
+# required or present registered harness projection.
 agent-contract-check:
 	go run ./cmd/agentcontractgen check
 
