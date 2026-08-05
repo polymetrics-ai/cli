@@ -14,5 +14,8 @@
 - 2026-08-06: #3809 read in full with `gh-axi issue view 3809 --full`; it specifies the reproduction, no-goals, required collision diagnostic, generator-only registry update, and guarantees to preserve.
 - 2026-08-06: `gh-axi issue subissue list 3809` returned no sub-issues.
 - 2026-08-06: Pre-edit code audit found the fatal URL comparison in `cmd/iconregistrygen/main.go:257-259`, before curated rows are processed at `cmd/iconregistrygen/main.go:163-186`. The current `customer-io` canonical row is bare and implemented at `internal/connectors/icon_data.json:1070`.
-- Pending red-test evidence: add and run the curated-conflict regression before production code.
-- Pending green evidence: focused generator tests, public-artifact regeneration, coverage/website checks, scoped verification, and review.
+- 2026-08-06: RED `go test ./cmd/iconregistrygen -run TestBuildIconEntriesAllowsCuratedRowToResolveConflictingSourceURLs -count=1` failed before production code with `ambiguous source/destination icon collapse for "demo": conflicting source URLs`.
+- 2026-08-06: GREEN `go test ./cmd/iconregistrygen -count=1` passed after the curated-key index became authoritative and the unresolved diagnostic gained raw upstream record identity and an operator-curated-key remedy.
+- 2026-08-06: The required public-artifact regeneration initially passed `customer-io` and reached the independent shared path guard for `facebook-marketing`/`facebook-pages`. Treating the existing canonical registry as authored authority (rather than only special-review rows) lets both established registry rows settle that upstream disagreement while retaining the no-curated shared-path rejection test.
+- 2026-08-06: GREEN `PM_ICON_REGISTRY_SOURCE='https://connectors.airbyte.com/files/registries/v0/oss_registry.json' make icons-generate` completed: `generated 554 connector icon entries and 5 SVG assets`. A key-sorted JSON comparison against the pre-generation registry had no semantic data changes; the generated file changes only its canonical field ordering.
+- Pending green evidence: runtime coverage/website checks, scoped verification, and review.

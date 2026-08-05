@@ -25,7 +25,7 @@
 ## Locked implementation decisions
 
 1. Index every supplied curated registry entry by its bare connector key before processing upstream records, rejecting duplicate keys and orphan entries exactly as today.
-2. When upstream source/destination records collapse to a connector that already has a curated row, bypass the upstream merge for that connector and retain the authored row as the final entry. This applies even when its provenance is `upstream_registry`/`upstream_seeded`: provenance describes source, not whether the row is authored registry state.
+2. Index every supplied curated registry row before processing upstream records and make that authored row authoritative for its bare connector. Skip raw upstream records for any existing curated key, then add the curated rows to the final registry. This applies even when its provenance is `upstream_registry`/`upstream_seeded`: provenance describes source, not whether the row is authored registry state. This lets the same authored authority settle both a prefix-collapse disagreement and the current shared-asset disagreement without selecting either conflicting upstream URL.
 3. Keep an upstream-only collision fatal. Preserve the existing ID/path conflict rule and enhance a conflicting-URL error to name both upstream record identifiers, both URLs, and the bare curated key an operator can author to resolve it. Never select a URL by order.
 4. Keep final shared-asset validation unchanged: different connectors sharing one path still require identical non-empty source URLs.
 5. Regenerate `internal/connectors/icon_data.json` by invoking `make icons-generate` with the public upstream registry source; no hand edits to that file are permitted.
