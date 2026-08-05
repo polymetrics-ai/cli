@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -30,6 +31,7 @@ func TestFlowYieldsRealBrowserSessionCredential(t *testing.T) {
 		_, _ = w.Write([]byte("<html><body>fake login page</body></html>"))
 	}))
 	defer server.Close()
+	origin := "https://" + strings.TrimPrefix(server.URL, "http://")
 
 	ctx := t.Context()
 	flow, err := driver.NewFlow(driver.FlowConfig{
@@ -39,10 +41,7 @@ func TestFlowYieldsRealBrowserSessionCredential(t *testing.T) {
 			Headless:        true,
 			Timeout:         30 * time.Second,
 		},
-		// The fake login page is intentionally local HTTP, while production
-		// sessions are pinned to a provider HTTPS origin. The test exercises
-		// browser capture rather than a provider's TLS policy.
-		Origin: "https://provider.example",
+		Origin: origin,
 	})
 	if err != nil {
 		t.Fatalf("NewFlow() error = %v", err)
@@ -60,5 +59,8 @@ func TestFlowYieldsRealBrowserSessionCredential(t *testing.T) {
 	}
 	if cred.Session.FingerprintRef == "" {
 		t.Fatal("session credential is missing the capturing browser fingerprint")
+	}
+	if cred.Session.Origin != origin {
+		t.Fatalf("session origin = %q, want %q", cred.Session.Origin, origin)
 	}
 }

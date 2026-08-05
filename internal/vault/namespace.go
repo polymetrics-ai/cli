@@ -27,10 +27,15 @@ func (n Namespace) validate() error {
 	if err := validateNamespaceComponent("connector", n.Connector); err != nil {
 		return err
 	}
-	if err := validateNamespaceComponent("profile", n.Profile); err != nil {
+	if err := ValidateProfile(n.Profile); err != nil {
 		return err
 	}
 	return validateNamespaceComponent("kind", n.Kind)
+}
+
+// ValidateProfile applies the vault namespace profile grammar.
+func ValidateProfile(profile string) error {
+	return validateNamespaceComponent("profile", profile)
 }
 
 func validateNamespaceComponent(label, v string) error {
@@ -224,7 +229,7 @@ func (v *Vault) DeleteAll(ctx context.Context, connector, profile string) (int, 
 	if err := validateNamespaceComponent("connector", connector); err != nil {
 		return 0, err
 	}
-	if err := validateNamespaceComponent("profile", profile); err != nil {
+	if err := ValidateProfile(profile); err != nil {
 		return 0, err
 	}
 	dir := filepath.Join(v.dir, "ns", connector, profile)

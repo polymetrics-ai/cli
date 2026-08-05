@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -216,5 +218,37 @@ func TestLogoutWithNoRevokeFunc(t *testing.T) {
 	}
 	if _, err := s.LoadSession(ctx, "twitter-web", "default"); !errors.Is(err, os.ErrNotExist) {
 		t.Fatalf("LoadSession() after Logout() error = %v, want os.ErrNotExist", err)
+	}
+}
+
+func TestLogoutReportsUnreadableCredentialAfterLocalDeletion(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	v, err := vault.InitWithProtector(root, fakeProtector{})
+	if err != nil {
+		t.Fatalf("InitWithProtector() error = %v", err)
+	}
+	s := store.New(v)
+	if err := s.SaveOAuth(ctx, "reddit", "default", browserauth.OAuthCredential{AccessToken: "token"}); err != nil {
+		t.Fatalf("SaveOAuth() error = %v", err)
+	}
+	path := filepath.Join(root, "vault", "ns", "reddit", "default", "oauth.enc")
+	if err := os.WriteFile(path, []byte("corrupt"), 0o600); err != nil {
+		t.Fatalf("corrupt OAuth credential: %v", err)
+	}
+
+	called := false
+	err = s.Logout(ctx, "reddit", "default", func(context.Context, browserauth.Credential) error {
+		called = true
+		return nil
+	})
+	if err == nil || !strings.Contains(err.Error(), "provider revoke could not be attempted") {
+		t.Fatalf("Logout() error = %v, want failed credential-load report", err)
+	}
+	if called {
+		t.Fatal("Logout() called revoke with an unreadable credential")
+	}
+	if _, err := s.LoadOAuth(ctx, "reddit", "default"); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("LoadOAuth() after Logout() error = %v, want os.ErrNotExist", err)
 	}
 }

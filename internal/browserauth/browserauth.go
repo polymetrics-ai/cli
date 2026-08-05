@@ -22,7 +22,36 @@ import (
 	"time"
 )
 
-const reauthenticationSafetyMargin = 30 * time.Second
+const (
+	reauthenticationSafetyMargin = 30 * time.Second
+	providerOAuthErrorCode       = "provider_error"
+)
+
+// SafeOAuthErrorCode returns a recognized OAuth error code or a generic code.
+func SafeOAuthErrorCode(raw string) string {
+	switch raw {
+	case "invalid_request",
+		"invalid_client",
+		"invalid_grant",
+		"invalid_scope",
+		"unauthorized_client",
+		"unsupported_grant_type",
+		"unsupported_response_type",
+		"authorization_pending",
+		"slow_down",
+		"access_denied",
+		"expired_token",
+		"server_error",
+		"temporarily_unavailable",
+		"interaction_required",
+		"login_required",
+		"consent_required",
+		"account_selection_required":
+		return raw
+	default:
+		return providerOAuthErrorCode
+	}
+}
 
 // Credential is the result of a successful Login: exactly one of OAuth or
 // Session is set, matching which Flow produced it.

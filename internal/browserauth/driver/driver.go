@@ -102,6 +102,16 @@ func (cfg Config) validate() error {
 	if len(cfg.RequiredCookies) == 0 {
 		return errors.New("driver: required_cookies must name at least one cookie (never capture \"everything on the domain\")")
 	}
+	seen := make(map[string]struct{}, len(cfg.RequiredCookies))
+	for _, name := range cfg.RequiredCookies {
+		if strings.TrimSpace(name) == "" {
+			return errors.New("driver: required_cookies cannot contain an empty cookie name")
+		}
+		if _, ok := seen[name]; ok {
+			return fmt.Errorf("driver: required_cookies contains duplicate cookie %q", name)
+		}
+		seen[name] = struct{}{}
+	}
 	return nil
 }
 
@@ -313,6 +323,10 @@ func New(ctx context.Context, cfg Config) (Session, error) {
 }
 
 func newSession(ctx context.Context, cfg Config) (Session, Resolution, error) {
+	return newSessionForOrigin(ctx, cfg, "")
+}
+
+func newSessionForOrigin(ctx context.Context, cfg Config, cookieOrigin string) (Session, Resolution, error) {
 	if err := cfg.validate(); err != nil {
 		return nil, Resolution{}, err
 	}
@@ -359,11 +373,15 @@ func newSession(ctx context.Context, cfg Config) (Session, Resolution, error) {
 	}
 
 	return &rodSession{
-		launcher:   l,
-		browser:    browser,
-		page:       page,
-		names:      names,
-		resolution: res,
+		launcher:     l,
+		browser:      browser,
+		page:         page,
+		names:        names,
+		resolution:   res,
+		cookieOrigin: cookieOrigin,
+		cookieReader: func(ctx context.Context, urls []string) ([]*proto.NetworkCookie, error) {
+			return page.Context(ctx).Cookies(urls)
+		},
 	}, res, nil
 }
 
@@ -374,7 +392,7 @@ func (f *Flow) Name() string { return "browser_session_capture" }
 // closed after capture or failure; subsequent connector execution reuses only
 // the encrypted local credential, never the browser process.
 func (f *Flow) Login(ctx context.Context) (browserauth.Credential, error) {
-	session, resolution, err := newSession(ctx, f.cfg.Browser)
+	session, resolution, err := newSessionForOrigin(ctx, f.cfg.Browser, f.origin)
 	if err != nil {
 		return browserauth.Credential{}, err
 	}
@@ -439,17 +457,26 @@ func requiredCookiesReady(required []string) func(Snapshot) bool {
 }
 
 func selectRequiredCookies(cookies []browserauth.Cookie, required []string) ([]browserauth.Cookie, error) {
-	byName := make(map[string]browserauth.Cookie, len(cookies))
+	requiredNames := make(map[string]struct{}, len(required))
+	for _, name := range required {
+		requiredNames[name] = struct{}{}
+	}
+	byName := make(map[string][]browserauth.Cookie, len(required))
 	for _, cookie := range cookies {
-		byName[cookie.Name] = cookie
+		if _, ok := requiredNames[cookie.Name]; ok {
+			byName[cookie.Name] = append(byName[cookie.Name], cookie)
+		}
 	}
 	minimum := make([]browserauth.Cookie, 0, len(required))
 	for _, name := range required {
-		cookie, ok := byName[name]
-		if !ok || strings.TrimSpace(cookie.Value) == "" {
+		matches := byName[name]
+		if len(matches) == 0 || strings.TrimSpace(matches[0].Value) == "" {
 			return nil, fmt.Errorf("driver: required session cookie %q was not captured", name)
 		}
-		minimum = append(minimum, cookie)
+		if len(matches) > 1 {
+			return nil, fmt.Errorf("driver: required session cookie %q is ambiguous", name)
+		}
+		minimum = append(minimum, matches[0])
 	}
 	return minimum, nil
 }
@@ -469,11 +496,13 @@ func earliestCookieExpiry(cookies []browserauth.Cookie) *time.Time {
 }
 
 type rodSession struct {
-	launcher   *launcher.Launcher
-	browser    *rod.Browser
-	page       *rod.Page
-	names      map[string]bool
-	resolution Resolution
+	launcher     *launcher.Launcher
+	browser      *rod.Browser
+	page         *rod.Page
+	names        map[string]bool
+	resolution   Resolution
+	cookieOrigin string
+	cookieReader func(context.Context, []string) ([]*proto.NetworkCookie, error)
 
 	closeOnce sync.Once
 }
@@ -528,7 +557,14 @@ func (s *rodSession) snapshot(ctx context.Context) (Snapshot, error) {
 // GetCookies returns only cookies whose name is in Config.RequiredCookies —
 // the named minimum, never the full jar (report §3.4).
 func (s *rodSession) GetCookies(ctx context.Context) ([]browserauth.Cookie, error) {
-	raw, err := s.page.Context(ctx).Cookies(nil)
+	if s.cookieReader == nil {
+		return nil, errors.New("driver: cookie reader is unavailable")
+	}
+	urls := []string(nil)
+	if s.cookieOrigin != "" {
+		urls = []string{s.cookieOrigin}
+	}
+	raw, err := s.cookieReader(ctx, urls)
 	if err != nil {
 		return nil, fmt.Errorf("driver: get cookies: %w", err)
 	}

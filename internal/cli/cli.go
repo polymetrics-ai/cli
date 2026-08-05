@@ -21,6 +21,7 @@ import (
 	"polymetrics.ai/internal/perf"
 	"polymetrics.ai/internal/runtimecheck"
 	"polymetrics.ai/internal/safety"
+	"polymetrics.ai/internal/vault"
 )
 
 type envelope map[string]any
@@ -298,6 +299,9 @@ func runConnectorEnable(ctx context.Context, root string, registry *connectors.R
 	profile := flags.first("profile")
 	if profile == "" {
 		profile = "default"
+	}
+	if err := vault.ValidateProfile(profile); err != nil {
+		return validationErrorf("%v", err)
 	}
 	warning := connectorRiskWarning(def)
 	hash := browserauthstore.HashWarning(warning)

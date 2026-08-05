@@ -79,13 +79,12 @@ type deviceAuthResponse struct {
 }
 
 type tokenResponse struct {
-	AccessToken      string `json:"access_token"`
-	RefreshToken     string `json:"refresh_token"`
-	TokenType        string `json:"token_type"`
-	ExpiresIn        int64  `json:"expires_in"`
-	Scope            string `json:"scope"`
-	Error            string `json:"error"`
-	ErrorDescription string `json:"error_description"`
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+	TokenType    string `json:"token_type"`
+	ExpiresIn    int64  `json:"expires_in"`
+	Scope        string `json:"scope"`
+	Error        string `json:"error"`
 }
 
 // RFC 8628 §3.5 error codes for the token polling loop.
@@ -174,7 +173,7 @@ func (f *Flow) requestDeviceAuth(ctx context.Context) (*deviceAuthResponse, erro
 		return nil, fmt.Errorf("device: read device authorization response: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("device: device authorization request failed: status %d: %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("device: device authorization request failed: status %d", resp.StatusCode)
 	}
 
 	var parsed deviceAuthResponse
@@ -236,7 +235,7 @@ func (f *Flow) pollToken(ctx context.Context, deviceCode string) (*browserauth.O
 	case errExpiredToken:
 		return nil, errors.New("device: device code expired before the user completed verification")
 	default:
-		return nil, fmt.Errorf("device: token poll failed: %s: %s", parsed.Error, parsed.ErrorDescription)
+		return nil, fmt.Errorf("device: token poll failed: %s", browserauth.SafeOAuthErrorCode(parsed.Error))
 	}
 
 	if parsed.AccessToken == "" {

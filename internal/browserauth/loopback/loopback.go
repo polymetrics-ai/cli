@@ -244,9 +244,9 @@ func (f *Flow) callbackHandler(path, wantState string, resultCh chan<- result) h
 			q := r.URL.Query()
 			switch {
 			case q.Get("error") != "":
-				errCode, desc := q.Get("error"), q.Get("error_description")
+				errCode := browserauth.SafeOAuthErrorCode(q.Get("error"))
 				writeCallbackPage(w, false)
-				resultCh <- result{err: fmt.Errorf("loopback: authorization denied: %s: %s", errCode, desc)}
+				resultCh <- result{err: fmt.Errorf("loopback: authorization denied: %s", errCode)}
 			case q.Get("state") != wantState:
 				writeCallbackPage(w, false)
 				resultCh <- result{err: errors.New("loopback: state mismatch on redirect (possible CSRF)")}
@@ -281,13 +281,12 @@ func writeCallbackPage(w http.ResponseWriter, ok bool) {
 // error shape (§5.2) tolerated in the same struct since providers vary in
 // which fields they send alongside an error.
 type tokenResponse struct {
-	AccessToken      string `json:"access_token"`
-	RefreshToken     string `json:"refresh_token"`
-	TokenType        string `json:"token_type"`
-	ExpiresIn        int64  `json:"expires_in"`
-	Scope            string `json:"scope"`
-	Error            string `json:"error"`
-	ErrorDescription string `json:"error_description"`
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+	TokenType    string `json:"token_type"`
+	ExpiresIn    int64  `json:"expires_in"`
+	Scope        string `json:"scope"`
+	Error        string `json:"error"`
 }
 
 func (f *Flow) exchangeCode(ctx context.Context, code, verifier, redirectURI string) (*browserauth.OAuthCredential, error) {
@@ -324,7 +323,7 @@ func (f *Flow) exchangeCode(ctx context.Context, code, verifier, redirectURI str
 		return nil, fmt.Errorf("loopback: decode token response (status %d): %w", resp.StatusCode, err)
 	}
 	if parsed.Error != "" {
-		return nil, fmt.Errorf("loopback: token exchange failed: %s: %s", parsed.Error, parsed.ErrorDescription)
+		return nil, fmt.Errorf("loopback: token exchange failed: %s", browserauth.SafeOAuthErrorCode(parsed.Error))
 	}
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("loopback: token exchange failed: status %d", resp.StatusCode)

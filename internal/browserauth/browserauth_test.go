@@ -58,6 +58,23 @@ func TestCredentialNeedsReauthentication(t *testing.T) {
 	}
 }
 
+func TestSafeOAuthErrorCode(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		raw  string
+		want string
+	}{
+		{name: "standard OAuth code", raw: "access_denied", want: "access_denied"},
+		{name: "untrusted provider value", raw: "redaction-sentinel", want: "provider_error"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := SafeOAuthErrorCode(tc.raw); got != tc.want {
+				t.Fatalf("SafeOAuthErrorCode(%q) = %q, want %q", tc.raw, got, tc.want)
+			}
+		})
+	}
+}
+
 type staticFlow struct {
 	credential Credential
 }

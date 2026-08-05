@@ -149,6 +149,21 @@ func TestConnectorEnableFlow(t *testing.T) {
 	}
 }
 
+func TestConnectorEnableRejectsUnsafeProfileBeforeRenderingReinvoke(t *testing.T) {
+	def := fakeWebSessionDefinition("acme-web")
+	registry := connectors.NewEmptyRegistry()
+	registry.Register(fakeWebConnector{name: "acme-web", def: def})
+
+	var stdout bytes.Buffer
+	err := runConnectorEnable(context.Background(), "", registry, []string{"acme-web", "--profile", "$(redaction-sentinel)"}, &stdout, false)
+	if err == nil || !strings.Contains(err.Error(), "invalid namespace profile") {
+		t.Fatalf("runConnectorEnable() error = %v, want invalid profile", err)
+	}
+	if stdout.Len() != 0 {
+		t.Fatalf("runConnectorEnable() rendered a re-invocation for an invalid profile: %s", stdout.String())
+	}
+}
+
 func TestConnectorEnableUnknownConnector(t *testing.T) {
 	root := t.TempDir()
 	if err := app.InitProject(root); err != nil {

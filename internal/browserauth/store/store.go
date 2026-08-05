@@ -125,13 +125,21 @@ func (s *Store) DeleteSession(ctx context.Context, connector, profile string) er
 // provider-side revocation without the caller needing to know which kind a
 // given connector uses.
 func (s *Store) Load(ctx context.Context, connector, profile string) (browserauth.Credential, error) {
-	if oauth, err := s.LoadOAuth(ctx, connector, profile); err == nil {
+	oauth, err := s.LoadOAuth(ctx, connector, profile)
+	if err == nil {
 		return browserauth.Credential{OAuth: &oauth}, nil
 	}
-	if session, err := s.LoadSession(ctx, connector, profile); err == nil {
+	if !errors.Is(err, os.ErrNotExist) {
+		return browserauth.Credential{}, fmt.Errorf("load OAuth credential: %w", err)
+	}
+	session, err := s.LoadSession(ctx, connector, profile)
+	if err == nil {
 		return browserauth.Credential{Session: &session}, nil
 	}
-	return browserauth.Credential{}, fmt.Errorf("no credential stored for %s/%s", connector, profile)
+	if !errors.Is(err, os.ErrNotExist) {
+		return browserauth.Credential{}, fmt.Errorf("load session credential: %w", err)
+	}
+	return browserauth.Credential{}, fmt.Errorf("no credential stored for %s/%s: %w", connector, profile, os.ErrNotExist)
 }
 
 // RiskAcceptance records that a user read and accepted a -web connector's
@@ -237,15 +245,22 @@ type RevokeFunc func(ctx context.Context, cred browserauth.Credential) error
 func (s *Store) Logout(ctx context.Context, connector, profile string, revoke RevokeFunc) error {
 	var revokeErr error
 	if revoke != nil {
-		if cred, err := s.Load(ctx, connector, profile); err == nil {
-			revokeErr = revoke(ctx, cred)
+		cred, err := s.Load(ctx, connector, profile)
+		switch {
+		case err == nil:
+			if err := revoke(ctx, cred); err != nil {
+				revokeErr = fmt.Errorf("provider revoke failed: %w", err)
+			}
+		case errors.Is(err, os.ErrNotExist):
+		default:
+			revokeErr = fmt.Errorf("provider revoke could not be attempted: %w", err)
 		}
 	}
 	if _, err := s.vault.DeleteAll(ctx, connector, profile); err != nil {
 		return fmt.Errorf("logout %s/%s: %w", connector, profile, err)
 	}
 	if revokeErr != nil {
-		return fmt.Errorf("logout %s/%s: local state deleted, but provider revoke failed: %w", connector, profile, revokeErr)
+		return fmt.Errorf("logout %s/%s: local state deleted, but %w", connector, profile, revokeErr)
 	}
 	return nil
 }
