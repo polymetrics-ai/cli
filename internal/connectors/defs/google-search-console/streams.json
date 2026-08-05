@@ -3,7 +3,7 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "custom", "hook": "google-search-console", "token": "{{ secrets.access_token }}" }
+      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
     ],
     "check": { "method": "GET", "path": "/webmasters/v3/sites" },
     "error_map": [

@@ -29,8 +29,8 @@ Connection fields:
 - `base_url` (optional, string); default `https://searchconsole.googleapis.com`; format `uri`;
   Search Console API root URL override for tests or proxies. Use the root form `https://host` with
   no path, query, fragment, or user info; `http://host[:port]` is also accepted for local test
-  proxies. The connection schema and connector auth preflight reject non-root values before any
-  provider request. The connector appends the official `/webmasters/v3` and `/v1` prefixes.
+  proxies. The connector specification rejects non-root values during configuration. The
+  connector appends the official `/webmasters/v3` and `/v1` prefixes.
 - `site_urls` (optional, string); comma- or newline-separated Search Console site properties (for
   example `https://example.com/` or `sc-domain:example.com`) to fan out over for `sitemaps` and
   `search_analytics_*` streams.

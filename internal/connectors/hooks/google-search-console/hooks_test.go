@@ -31,67 +31,19 @@ func TestInit_RegistersHooks(t *testing.T) {
 	if _, ok := h.(engine.StreamHook); !ok {
 		t.Fatal("registered hooks do not implement StreamHook")
 	}
-	if _, ok := h.(engine.AuthHook); !ok {
-		t.Fatal("registered hooks do not implement AuthHook")
-	}
 }
 
-func TestAuthenticatorValidatesRootBaseURL(t *testing.T) {
-	spec := engine.AuthSpec{
-		Mode:  "custom",
-		Hook:  "google-search-console",
-		Token: "{{ secrets.access_token }}",
+func TestBundleUsesDeclarativeBearerAuth(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "google-search-console")
+	if err != nil {
+		t.Fatalf("load bundle: %v", err)
 	}
-	h := &Hooks{}
-
-	accepted := []string{
-		"https://searchconsole.googleapis.com",
-		"https://searchconsole.googleapis.com/",
-		"http://127.0.0.1:8080",
-		"http://localhost:8080/",
+	if len(bundle.HTTP.Auth) != 1 {
+		t.Fatalf("auth specs = %d, want 1", len(bundle.HTTP.Auth))
 	}
-	for _, baseURL := range accepted {
-		t.Run("accept_"+baseURL, func(t *testing.T) {
-			auth, err := h.Authenticator(context.Background(), connectors.RuntimeConfig{
-				Config:  map[string]string{"base_url": baseURL},
-				Secrets: map[string]string{"access_token": "fixture"},
-			}, spec)
-			if err != nil {
-				t.Fatalf("Authenticator(%q): %v", baseURL, err)
-			}
-			req, err := http.NewRequest(http.MethodGet, "https://example.test", nil)
-			if err != nil {
-				t.Fatalf("new request: %v", err)
-			}
-			if err := auth.Apply(context.Background(), req); err != nil {
-				t.Fatalf("apply auth: %v", err)
-			}
-			if got := req.Header.Get("Authorization"); got != "Bearer fixture" {
-				t.Fatalf("Authorization = %q, want Bearer fixture", got)
-			}
-		})
-	}
-
-	rejected := []string{
-		"https://www.googleapis.com/webmasters/v3",
-		"https://proxy.example.test/api",
-		"https://proxy.example.test/?tenant=one",
-		"https://proxy.example.test/#fragment",
-		"https://user@example.test",
-	}
-	for _, baseURL := range rejected {
-		t.Run("reject_"+baseURL, func(t *testing.T) {
-			_, err := h.Authenticator(context.Background(), connectors.RuntimeConfig{
-				Config:  map[string]string{"base_url": baseURL},
-				Secrets: map[string]string{"access_token": "fixture"},
-			}, spec)
-			if err == nil {
-				t.Fatalf("Authenticator(%q): want error", baseURL)
-			}
-			if !strings.Contains(err.Error(), "root form https://host") {
-				t.Fatalf("Authenticator(%q): error = %q, want actionable root form", baseURL, err)
-			}
-		})
+	auth := bundle.HTTP.Auth[0]
+	if auth.Mode != "bearer" || auth.Token != "{{ secrets.access_token }}" || auth.Hook != "" {
+		t.Fatalf("auth spec = %+v, want declarative access-token bearer auth", auth)
 	}
 }
 

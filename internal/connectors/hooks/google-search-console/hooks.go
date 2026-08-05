@@ -1,5 +1,5 @@
 // Package googlesearchconsole implements the google-search-console bundle's
-// AuthHook and StreamHook (docs.md "Overview"): the Search Console v3 `searchAnalytics.query`
+// StreamHook (docs.md "Overview"): the Search Console v3 `searchAnalytics.query`
 // endpoint is a POST whose JSON request body carries
 // startDate/endDate/dimensions/type/dataState/rowLimit/startRow, and whose
 // pagination state (startRow, advanced by the number of rows returned each
@@ -42,47 +42,11 @@ func init() {
 // New returns a fresh google-search-console Hooks value as engine.Hooks.
 func New() engine.Hooks { return &Hooks{} }
 
-// Hooks is the google-search-console hook set. It implements engine.AuthHook
-// and engine.StreamHook.
+// Hooks is the google-search-console hook set. It implements
+// engine.StreamHook only.
 type Hooks struct{}
 
 func (h *Hooks) ConnectorName() string { return "google-search-console" }
-
-// Authenticator validates connector configuration and returns bearer auth.
-func (*Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec engine.AuthSpec) (connsdk.Authenticator, error) {
-	if err := ctx.Err(); err != nil {
-		return nil, err
-	}
-	if err := validateGSCBaseURL(cfg.Config["base_url"]); err != nil {
-		return nil, err
-	}
-	token, err := engine.Interpolate(spec.Token, engine.Vars{Config: cfg.Config, Secrets: cfg.Secrets})
-	if err != nil {
-		return nil, fmt.Errorf("google-search-console auth: resolve access_token: %w", err)
-	}
-	if strings.TrimSpace(token) == "" {
-		return nil, fmt.Errorf("google-search-console auth: access_token is required")
-	}
-	return connsdk.Bearer(token), nil
-}
-
-func validateGSCBaseURL(raw string) error {
-	const requirement = "google-search-console base_url must use root form https://host with no path, query, fragment, or user info (http://host[:port] is allowed for local test proxies)"
-	if raw == "" || raw != strings.TrimSpace(raw) {
-		return fmt.Errorf("%s", requirement)
-	}
-	parsed, err := url.Parse(raw)
-	if err != nil {
-		return fmt.Errorf("%s: %w", requirement, err)
-	}
-	if (parsed.Scheme != "https" && parsed.Scheme != "http") || parsed.Hostname() == "" || parsed.User != nil || parsed.Opaque != "" {
-		return fmt.Errorf("%s", requirement)
-	}
-	if (parsed.Path != "" && parsed.Path != "/") || parsed.RawQuery != "" || parsed.ForceQuery || parsed.Fragment != "" {
-		return fmt.Errorf("%s", requirement)
-	}
-	return nil
-}
 
 // analyticsDimensions is the per-stream fixed searchAnalytics
 // dimension set, mirroring legacy streams.go's gscStreamDefs routing table.
