@@ -10,6 +10,7 @@ a spawned parent-orchestrator role.
 Sub-issue:
 Parent issue:
 Canonical worker:
+Canonical state:
 Branch:
 Sub-PR:
 Parent PR:

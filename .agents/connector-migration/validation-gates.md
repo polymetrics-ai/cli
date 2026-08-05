@@ -1,8 +1,8 @@
 # Connector Rollout Validation Gates
 
 These gates are mandatory for every connector rollout slice. A slice is not integrated until all
-applicable gates pass. The coordinator owns merge validation; workers report gate evidence in the
-handoff.
+applicable gates pass. The active canonical worker owns merge validation and records gate evidence
+in the durable handoff and PR body.
 
 ## JSON parse gate
 

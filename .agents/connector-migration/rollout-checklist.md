@@ -52,7 +52,8 @@ connector's slice is considered integrated.
 - [ ] no-mistakes guidance was followed: connector PRs do not auto-absorb generic shared runtime/tooling or unrelated connector changes; stop/ask for a foundation split instead.
 - [ ] Sub-PR targets the parent branch with `Refs #<sub-issue>` and `Refs #44` (no closing keywords).
 - [ ] Claude review threads dispositioned before merge (or parent-PR review coverage recorded when Claude skips the sub-PR).
-- [ ] Shared/generated files remain coordinator-owned; the worker did not commit generated files unless authorized.
+- [ ] Shared/generated parent-job files stayed outside the connector issue diff unless explicitly
+  authorized; the active canonical worker owns any required regeneration and records its evidence.
 
 ## 7. Human gates (stop)
 

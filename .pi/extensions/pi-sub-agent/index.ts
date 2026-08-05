@@ -45,7 +45,6 @@ const MAX_PARALLEL_TASKS = 8;
 const MAX_CHAIN_STEPS = 8;
 const MAX_CONCURRENCY = 4;
 const COLLAPSED_ITEM_COUNT = 10;
-const SUBAGENT_TOOL_NAME = "subagent";
 const AGENT_NAME_DESCRIPTION = "Name of the agent to invoke. The clean-project default exposes only pm-delivery-worker and pm-connector-worker.";
 
 interface UsageStats {

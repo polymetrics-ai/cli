@@ -1,8 +1,8 @@
 # Next Connector Rollout Batches
 
 Sequenced candidate connectors for rolling out the GitHub pilot's CLI parity shape beyond GitHub.
-Ordered by provider API maturity, parity value, and isolation (each batch is a set of disjoint
-connector dirs so workers can run in parallel without shared-file collisions).
+Ordered by provider API maturity, parity value, and isolation; each batch uses disjoint connector
+directories so its issue branches do not create shared-file collisions.
 
 ## Selection criteria
 
@@ -41,12 +41,13 @@ connector dirs so workers can run in parallel without shared-file collisions).
 ## Sequencing rules
 
 - One parent issue per batch (mirrors #44), with per-connector sub-issues.
-- Batch 1 connectors are disjoint from each other and from GitHub — safe to fan out up to the
-  runtime concurrency cap (Pi: 8 tasks / 4 concurrent).
+- Batch 1 connectors are disjoint from each other and from GitHub. The canonical parent job still
+  processes one ready connector sub-issue at a time and persists the remaining order in parent
+  state.
 - Start each connector from `templates/connector-rollout-prompt.md` and follow
   `rollout-checklist.md` + `validation-gates.md`.
 - Do not start a batch until the previous batch's shared-schema changes (if any) are merged, so
-  in-flight workers do not collide on `internal/connectors/engine/**`.
+  in-flight issue branches do not collide on `internal/connectors/engine/**`.
 
 ## Out of scope until human-gated
 

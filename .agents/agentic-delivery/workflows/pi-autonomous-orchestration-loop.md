@@ -1,5 +1,10 @@
 # Pi Autonomous Orchestration Loop
 
+Compatibility status: legacy multi-worker procedure retained for its cleanup wave. It is available
+only through an explicitly selected compatibility flow and is not the canonical clean-project
+default; current issue-first policy lives in
+`.agents/agentic-delivery/canonical/delivery-contract.json`.
+
 Fully automated, resumable, multi-model delivery loop. Given one prompt describing any problem
 (connector or implementation), the loop plans, creates issues, implements, verifies, reviews,
 corrects, and integrates — with Claude planning/verifying/reviewing and Codex implementing — and
@@ -158,9 +163,9 @@ The stage machine, durable state, and reconciler above are runtime-agnostic. Two
 
 - **Codex-only + Shepherd validator** (`scripts/pi-shepherd-loop.sh` + `.pi/prompts/pm-auto-loop.md`
   or `/pm-connector-loop`): every role — orchestrator, subagents, validator — runs on Codex via
-  `pi` (`openai-codex/*`, your ChatGPT subscription). Requires `pi install npm:pi-sub-agent` once.
-  The role tags above map to the pi orchestrator session; models come from `.pi/agents/*`
-  frontmatter (all `openai-codex/*`).
+  `pi` (`openai-codex/*`, your ChatGPT subscription). The project-local extension is loaded from
+  `.pi/extensions/pi-sub-agent/` by `.pi/settings.json`. The role tags above map to the pi
+  orchestrator session; models come from `.pi/agents/*` frontmatter (all `openai-codex/*`).
 
 Billing hard rule for BOTH drivers: never route any role through OpenRouter or another
 pay-per-token gateway. Claude roles (when used) stay on the first-party `claude` CLI; Codex roles
