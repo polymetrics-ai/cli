@@ -51,3 +51,16 @@ After the loader/schema implementation:
 $ go test ./internal/connectors/engine -run 'TestBundleLoad(ParsesProviderCitedRateLimits|RejectsUncitedOrMalformedRateLimits)' -count=1
 ok      polymetrics.ai/internal/connectors/engine    0.497s
 ```
+
+The requester-contract tests were then added before any requester production change. They fail to
+compile against the old public shape, which has no admission/observation/error/jitter seam:
+
+```text
+$ go test ./internal/connectors/connsdk -run 'TestRequester(HonorsProviderRetryAfterBeyondFallbackCap|FallbackRetryUsesBoundedFullJitter|AdmissionPreventsEveryTransportSend|ReturnsTypedRateLimitErrorAndObservation)' -count=1
+# polymetrics.ai/internal/connectors/connsdk [polymetrics.ai/internal/connectors/connsdk.test]
+internal/connectors/connsdk/http_test.go:96:3: unknown field Jitter in struct literal of type Requester
+internal/connectors/connsdk/http_test.go:119:51: undefined: RateLimitRequest
+internal/connectors/connsdk/http_test.go:125:50: undefined: RateLimitObservation
+internal/connectors/connsdk/http_test.go:181:3: unknown field Admission in struct literal of type Requester
+FAIL    polymetrics.ai/internal/connectors/connsdk [build failed]
+```

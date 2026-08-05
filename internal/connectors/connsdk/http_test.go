@@ -4,10 +4,14 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
+	"slices"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -84,10 +88,15 @@ func TestRequesterHonorsProviderRetryAfterBeyondFallbackCap(t *testing.T) {
 	defer srv.Close()
 
 	var waits []time.Duration
+	var jitterCalls int
 	r := &Requester{
 		BaseURL:    srv.URL,
 		MaxRetries: 1,
 		MaxBackoff: 30 * time.Second,
+		Jitter: func(time.Duration) time.Duration {
+			jitterCalls++
+			return 0
+		},
 		Sleep: func(_ context.Context, d time.Duration) error {
 			waits = append(waits, d)
 			return nil
@@ -101,6 +110,193 @@ func TestRequesterHonorsProviderRetryAfterBeyondFallbackCap(t *testing.T) {
 	}
 	if got, want := waits[0], 90*time.Second; got != want {
 		t.Fatalf("provider Retry-After wait = %v, want exact %v", got, want)
+	}
+	if jitterCalls != 0 {
+		t.Fatalf("provider Retry-After invoked fallback jitter %d times", jitterCalls)
+	}
+}
+
+type rateLimitAdmissionFunc func(context.Context, RateLimitRequest) error
+
+func (f rateLimitAdmissionFunc) Admit(ctx context.Context, request RateLimitRequest) error {
+	return f(ctx, request)
+}
+
+type rateLimitObserverFunc func(context.Context, RateLimitObservation)
+
+func (f rateLimitObserverFunc) Observe(ctx context.Context, observation RateLimitObservation) {
+	f(ctx, observation)
+}
+
+func TestRequesterFallbackRetryUsesBoundedFullJitter(t *testing.T) {
+	var calls int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if atomic.AddInt32(&calls, 1) == 1 {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	var jitterCaps []time.Duration
+	var waits []time.Duration
+	r := &Requester{
+		BaseURL:     srv.URL,
+		MaxRetries:  1,
+		BaseBackoff: time.Second,
+		MaxBackoff:  30 * time.Second,
+		Jitter: func(cap time.Duration) time.Duration {
+			jitterCaps = append(jitterCaps, cap)
+			return cap + time.Second // requester must clamp an untrusted implementation.
+		},
+		Sleep: func(_ context.Context, d time.Duration) error {
+			waits = append(waits, d)
+			return nil
+		},
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/x", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if got, want := jitterCaps, []time.Duration{time.Second}; !slices.Equal(got, want) {
+		t.Fatalf("jitter caps = %v, want %v", got, want)
+	}
+	if got, want := waits, []time.Duration{time.Second}; !slices.Equal(got, want) {
+		t.Fatalf("fallback waits = %v, want bounded full-jitter wait %v", got, want)
+	}
+}
+
+func TestRequesterAdmissionPreventsEveryTransportSend(t *testing.T) {
+	var hits int32
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		atomic.AddInt32(&hits, 1)
+	}))
+	defer srv.Close()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	var admissions []RateLimitRequest
+	r := &Requester{
+		BaseURL: srv.URL,
+		Admission: rateLimitAdmissionFunc(func(ctx context.Context, request RateLimitRequest) error {
+			admissions = append(admissions, request)
+			return ctx.Err()
+		}),
+	}
+	tests := []struct {
+		name string
+		run  func() error
+	}{
+		{
+			name: "json",
+			run: func() error {
+				_, err := r.Do(ctx, http.MethodPost, "/json", nil, map[string]string{"name": "widget"})
+				return err
+			},
+		},
+		{
+			name: "form",
+			run: func() error {
+				_, err := r.DoForm(ctx, http.MethodPost, "/form", nil, url.Values{"name": {"widget"}})
+				return err
+			},
+		},
+		{
+			name: "multipart",
+			run: func() error {
+				_, err := r.DoMultipart(ctx, http.MethodPost, "/multipart", nil, MultipartForm{Fields: map[string]string{"name": "widget"}})
+				return err
+			},
+		},
+		{
+			name: "stream",
+			run: func() error {
+				_, err := r.DoStream(ctx, http.MethodGet, "/stream", nil, StreamOptions{})
+				return err
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := tt.run(); !errors.Is(err, context.Canceled) {
+				t.Fatalf("request error = %v, want context cancellation", err)
+			}
+		})
+	}
+	if got, want := atomic.LoadInt32(&hits), int32(0); got != want {
+		t.Fatalf("HTTP sends = %d, want %d", got, want)
+	}
+	if got, want := len(admissions), len(tests); got != want {
+		t.Fatalf("admissions = %d, want %d", got, want)
+	}
+	for _, admission := range admissions {
+		if admission.Attempt != 1 {
+			t.Fatalf("admission attempt = %d, want 1", admission.Attempt)
+		}
+	}
+}
+
+func TestRequesterReturnsTypedRateLimitErrorAndObservation(t *testing.T) {
+	const fixtureSecret = "fixture-rate-limit-secret"
+	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Retry-After", "90")
+		w.Header().Set("RateLimit-Limit", "100")
+		w.Header().Set("RateLimit-Remaining", "0")
+		w.WriteHeader(http.StatusTooManyRequests)
+		_, _ = w.Write([]byte(`{"error":"` + fixtureSecret + `"}`))
+	}))
+	defer srv.Close()
+
+	var observations []RateLimitObservation
+	r := &Requester{
+		BaseURL:        srv.URL,
+		DisableRetries: true,
+		Now:            func() time.Time { return now },
+		Observer: rateLimitObserverFunc(func(_ context.Context, observation RateLimitObservation) {
+			observations = append(observations, observation)
+		}),
+	}
+	_, err := r.Do(context.Background(), http.MethodGet, "/limited", nil, nil)
+	if err == nil {
+		t.Fatal("Do: expected rate-limit error")
+	}
+	var rateLimitErr *RateLimitError
+	if !errors.As(err, &rateLimitErr) {
+		t.Fatalf("error type = %T, want *RateLimitError", err)
+	}
+	if got, want := rateLimitErr.ResetAt, now.Add(90*time.Second); !got.Equal(want) {
+		t.Fatalf("RateLimitError reset = %v, want %v", got, want)
+	}
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || httpErr.Status != http.StatusTooManyRequests {
+		t.Fatalf("wrapped HTTPError = %v, want status 429", httpErr)
+	}
+	if strings.Contains(err.Error(), fixtureSecret) {
+		t.Fatalf("RateLimitError output leaked fixture secret: %q", err)
+	}
+	if got, want := len(observations), 1; got != want {
+		t.Fatalf("observations = %d, want %d", got, want)
+	}
+	observation := observations[0]
+	if observation.Source != RateLimitObservationSourceRetryAfter || !observation.Attempted || observation.Attempt != 1 || observation.Status != http.StatusTooManyRequests {
+		t.Fatalf("observation = %+v, want attempted Retry-After 429", observation)
+	}
+	if got, want := observation.ResetAt, now.Add(90*time.Second); !got.Equal(want) {
+		t.Fatalf("observation reset = %v, want %v", got, want)
+	}
+	if got, want := observation.RetryAfter, 90*time.Second; got != want {
+		t.Fatalf("observation RetryAfter = %v, want %v", got, want)
+	}
+	if got, want := observation.Limit, int64(100); got != want {
+		t.Fatalf("observation Limit = %d, want %d", got, want)
+	}
+	if got, want := observation.Remaining, int64(0); got != want {
+		t.Fatalf("observation Remaining = %d, want %d", got, want)
+	}
+	if output := fmt.Sprintf("%+v", observation); strings.Contains(output, fixtureSecret) {
+		t.Fatalf("observation output leaked fixture secret: %q", output)
 	}
 }
 
