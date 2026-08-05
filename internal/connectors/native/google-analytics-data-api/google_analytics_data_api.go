@@ -9,8 +9,9 @@
 // and return rows. Each published "stream" is a canned report spec (see
 // streams.go); a row is flattened to a record by projecting
 // dimensionHeaders/metricHeaders onto the row's dimensionValues/metricValues.
-// Bounded GET direct reads cover property metadata and audience-export metadata
-// without exposing arbitrary method, URL, or body input.
+// Bounded GET direct reads cover v1beta property/audience-export metadata plus
+// v1alpha quota, audience-list, recurring-audience-list, and report-task
+// metadata without exposing arbitrary method, URL, or body input.
 //
 // The connector is read-only: the GA4 Data API surface exposed here has no safe
 // reverse-ETL writes, so Capabilities.Write is false.
@@ -100,8 +101,11 @@ func (c *Connector) Manifest() connectors.Manifest {
 		Metadata: c.Metadata(),
 		ConfigFields: []connectors.ConfigField{
 			{Name: "property_ids", Description: "Comma, space, or newline separated GA4 numeric property IDs; native reads use the first property ID per read call.", Required: true},
-			{Name: "property_id", Description: "Optional single GA4 numeric property ID for direct metadata/audience-export commands; defaults to the first property_ids value."},
+			{Name: "property_id", Description: "Optional single GA4 numeric property ID for direct metadata commands; defaults to the first property_ids value."},
 			{Name: "audience_export_id", Description: "Audience export ID used by the get audience export direct command."},
+			{Name: "audience_list_id", Description: "Audience list ID used by the v1alpha audience-list get direct command."},
+			{Name: "recurring_audience_list_id", Description: "Recurring audience list ID used by the v1alpha recurring-audience-list get direct command."},
+			{Name: "report_task_id", Description: "Report task ID used by the v1alpha report-task get direct command."},
 			{Name: "base_url", Description: "Analytics Data API base URL override for local fixture tests only.", Default: gaDefaultBaseURL},
 			{Name: "date_ranges_start_date", Description: "GA4 report start date, either YYYY-MM-DD or a GA4 relative token such as 30daysAgo.", Default: gaDefaultStartDate},
 			{Name: "date_ranges_end_date", Description: "GA4 report end date, either YYYY-MM-DD or a GA4 relative token such as today or yesterday.", Default: gaDefaultEndDate},
@@ -139,10 +143,10 @@ func (c *Connector) Manifest() connectors.Manifest {
 			DefaultLimit:   strconv.Itoa(gaDefaultPageSize),
 		},
 		Risk: connectors.RiskSpec{
-			Read:     "external Google Analytics Data API reads for configured properties; direct reads are fixed-target, bounded, and JSON-redacted",
-			Write:    "unsupported",
+			Read:     "external Google Analytics Data API reads for configured properties; 10 direct reads are fixed-target, bounded, and JSON-redacted, while runReport is available through five bounded presets",
+			Write:    "unsupported; four provider-side creates are typed as planned operations but have no executable reverse-ETL action",
 			Mutation: "none",
-			Approval: "none for read-only operations; future audience-export creation would require plan, preview, explicit approval, and execute before being advertised",
+			Approval: "none for read-only operations; future provider-side creates require plan, preview, explicit approval, execute, redaction, and operation/idempotency handling before being advertised",
 		},
 	}
 }

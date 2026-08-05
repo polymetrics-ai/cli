@@ -64,10 +64,10 @@
       "id": "google-analytics-data-api.run_report",
       "kind": "rest_read",
       "summary": "Run report",
-      "description": "Typed operation metadata for a GA4 POST read/query endpoint. It remains blocked/planned in CLI/API surface until the provider-query foundation and connector-owned POST-read fixtures can advertise it truthfully.",
+      "description": "Typed metadata for the GA4 POST report operation. Five fixed native preset streams execute this provider operation; an arbitrary direct POST report form remains deliberately unavailable until the provider-query foundation can expose bounded closed inputs and fixtures without a raw body escape hatch.",
       "source_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
       "risk": "medium",
-      "approval": "none: read-only POST query planned, not executable in this slice",
+      "approval": "none for fixed native report presets; arbitrary direct POST report query remains planned",
       "output_policy": "json_redacted",
       "auth_scopes": [
         "https://www.googleapis.com/auth/analytics.readonly",
@@ -815,6 +815,279 @@
         "method": "GET",
         "path": "/v1alpha/properties/{property_id}/reportTasks/{report_task_id}",
         "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "google-analytics-data-api.run_funnel_report",
+      "kind": "rest_read",
+      "summary": "Run funnel report",
+      "description": "Typed metadata for the v1alpha POST funnel-report read. It is planned until shared provider-query support #2985 can expose its recursive filter and funnel request model through bounded, closed CLI inputs and sanitized fixtures without a raw body escape hatch.",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.runFunnelReport",
+      "risk": "medium",
+      "approval": "none: read-only POST query planned, not executable in this slice",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/v1alpha/properties/{property_id}:runFunnelReport",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "dateRanges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": { "type": "string" },
+                  "startDate": { "type": "string" },
+                  "endDate": { "type": "string" }
+                },
+                "required": ["startDate", "endDate"]
+              }
+            },
+            "funnel": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "isOpenFunnel": { "type": "boolean" },
+                "steps": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "name": { "type": "string" },
+                      "isDirectlyFollowedBy": { "type": "boolean" },
+                      "withinDurationFromPriorStep": { "type": "string" }
+                    }
+                  }
+                }
+              },
+              "required": ["steps"]
+            },
+            "funnelVisualizationType": {
+              "type": "string",
+              "enum": ["STANDARD_FUNNEL", "TRENDED_FUNNEL"]
+            },
+            "limit": { "type": "string" },
+            "returnPropertyQuota": { "type": "boolean" }
+          },
+          "required": ["funnel"]
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.create_audience_list",
+      "kind": "rest_write",
+      "summary": "Create audience list",
+      "description": "Typed metadata for creating a provider-side asynchronous audience list. It remains planned until the connector owns a closed reverse-ETL action with redaction, idempotency/operation handling, sanitized fixtures, and plan -> preview -> explicit approval -> execute.",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.audienceLists.create",
+      "risk": "high",
+      "approval": "reverse ETL writes require plan, preview, explicit approval, and execute before any provider-side audience-list creation",
+      "output_policy": "write_result_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1alpha/properties/{property_id}/audienceLists",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "audience": { "type": "string" },
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "dimensionName": { "type": "string" }
+                }
+              }
+            }
+          },
+          "required": ["audience", "dimensions"]
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.query_audience_list",
+      "kind": "rest_read",
+      "summary": "Query audience list users",
+      "description": "Typed metadata for the v1alpha POST audience-list query. It remains planned pending shared provider-query/redaction support #2985 because the response contains audience user rows.",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.audienceLists.query",
+      "risk": "high",
+      "approval": "none: read-only POST query planned, not executable in this slice",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/v1alpha/properties/{property_id}/audienceLists/{audience_list_id}:query",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "offset": { "type": "string" },
+            "limit": { "type": "string" }
+          }
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.create_recurring_audience_list",
+      "kind": "rest_write",
+      "summary": "Create recurring audience list",
+      "description": "Typed metadata for creating a recurring provider-side audience list. It remains planned until the connector owns a closed reverse-ETL action with redaction, idempotency/operation handling, sanitized fixtures, and plan -> preview -> explicit approval -> execute.",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.recurringAudienceLists.create",
+      "risk": "high",
+      "approval": "reverse ETL writes require plan, preview, explicit approval, and execute before any provider-side recurring audience-list creation",
+      "output_policy": "write_result_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1alpha/properties/{property_id}/recurringAudienceLists",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "audience": { "type": "string" },
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "dimensionName": { "type": "string" }
+                }
+              }
+            },
+            "activeDaysRemaining": { "type": "integer" }
+          },
+          "required": ["audience", "dimensions"]
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.create_report_task",
+      "kind": "rest_write",
+      "summary": "Create report task",
+      "description": "Typed metadata for creating an asynchronous report task. It remains planned until the connector owns a closed reverse-ETL action with redaction, idempotency/operation handling, sanitized fixtures, and plan -> preview -> explicit approval -> execute.",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.reportTasks.create",
+      "risk": "high",
+      "approval": "reverse ETL writes require plan, preview, explicit approval, and execute before any provider-side report-task creation",
+      "output_policy": "write_result_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1alpha/properties/{property_id}/reportTasks",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "reportDefinition": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "dateRanges": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "name": { "type": "string" },
+                      "startDate": { "type": "string" },
+                      "endDate": { "type": "string" }
+                    },
+                    "required": ["startDate", "endDate"]
+                  }
+                },
+                "dimensions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": { "name": { "type": "string" } },
+                    "required": ["name"]
+                  }
+                },
+                "metrics": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": { "name": { "type": "string" } },
+                    "required": ["name"]
+                  }
+                },
+                "offset": { "type": "string" },
+                "limit": { "type": "string" },
+                "keepEmptyRows": { "type": "boolean" },
+                "currencyCode": { "type": "string" }
+              }
+            }
+          },
+          "required": ["reportDefinition"]
+        }
+      }
+    },
+    {
+      "id": "google-analytics-data-api.query_report_task",
+      "kind": "rest_read",
+      "summary": "Query report task content",
+      "description": "Typed metadata for the v1alpha POST report-task query. It remains planned until shared provider-query/redaction support #2985 can provide bounded query inputs and sanitized fixtures without a raw body escape hatch.",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.reportTasks.query",
+      "risk": "medium",
+      "approval": "none: read-only POST query planned, not executable in this slice",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/analytics.readonly",
+        "https://www.googleapis.com/auth/analytics"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/v1alpha/properties/{property_id}/reportTasks/{report_task_id}:query",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "offset": { "type": "string" },
+            "limit": { "type": "string" }
+          }
+        }
       }
     }
   ]

@@ -64418,7 +64418,7 @@
   {
     "slug": "google-analytics-data-api",
     "name": "Google Analytics 4 (GA4)",
-    "description": "Reads Google Analytics 4 report presets and bounded metadata/audience-export resources from the Google Analytics Data API v1beta. Read-only; POST report/query operations that require a shared provider-query foundation remain planned rather than exposed as raw API calls.",
+    "description": "Reads Google Analytics 4 report presets plus bounded v1beta/v1alpha metadata resources from the Google Analytics Data API. The provider-derived inventory contains 24 semantic operations (20 reads, 4 writes): 11 are executable read operations and 13 remain planned behind the shared provider-query or closed reverse-ETL foundations; no raw API access is exposed.",
     "docs_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
     "integration_type": "api",
     "release_stage": "alpha",
@@ -64486,12 +64486,12 @@
     ],
     "write_actions": [],
     "cli_surface": {
-      "tagline": "Read GA4 report presets and bounded Analytics Data API metadata without exposing raw API access.",
-      "usage": "pm google-analytics-data-api <reports|metadata|audience-exports> <command> [flags]",
+      "tagline": "Read GA4 report presets and bounded v1beta/v1alpha Analytics Data API metadata without exposing raw API access.",
+      "usage": "pm google-analytics-data-api <reports|metadata|audience-exports|property-quotas|audience-lists|recurring-audience-lists|report-tasks> <command> [flags]",
       "source_cli": {
         "name": "Google Analytics Data API",
         "docs": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
-        "reference": "v1beta discovery revision 20260729",
+        "reference": "v1beta + v1alpha discovery revision 20260803, retrieved 2026-08-05",
         "source": "provider_api"
       },
       "groups": [
@@ -64514,6 +64514,34 @@
           "title": "Audience export metadata and planned user export operations",
           "commands": [
             "audience-exports"
+          ]
+        },
+        {
+          "id": "property-quotas",
+          "title": "v1alpha property quota snapshot",
+          "commands": [
+            "property-quotas"
+          ]
+        },
+        {
+          "id": "audience-lists",
+          "title": "v1alpha audience-list metadata",
+          "commands": [
+            "audience-lists"
+          ]
+        },
+        {
+          "id": "recurring-audience-lists",
+          "title": "v1alpha recurring-audience-list metadata",
+          "commands": [
+            "recurring-audience-lists"
+          ]
+        },
+        {
+          "id": "report-tasks",
+          "title": "v1alpha report-task metadata",
+          "commands": [
+            "report-tasks"
           ]
         }
       ],
@@ -64724,6 +64752,429 @@
           "notes": "Fixed GET metadata endpoint for an audience export; does not query user rows."
         },
         {
+          "path": "property-quotas get",
+          "summary": "Get the v1alpha GA4 property quota snapshot.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.get_property_quotas_snapshot",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.getPropertyQuotasSnapshot",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "low",
+          "approval": "none",
+          "notes": "Fixed v1alpha GET quota endpoint; no raw method, path, or body flags."
+        },
+        {
+          "path": "audience-lists list",
+          "summary": "List v1alpha GA4 audience-list metadata for one property.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.list_audience_lists",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.audienceLists.list",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "Optional pageSize query parameter, bounded by the provider response limit.",
+              "values": [],
+              "maps_to": "query.pageSize"
+            },
+            {
+              "name": "page-token",
+              "type": "string",
+              "summary": "Optional pageToken from a prior list response.",
+              "values": [],
+              "maps_to": "query.pageToken",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "medium",
+          "approval": "none",
+          "notes": "Fixed v1alpha GET list endpoint; it returns metadata only, not audience user rows."
+        },
+        {
+          "path": "audience-lists get",
+          "summary": "Get one v1alpha GA4 audience-list metadata resource.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.get_audience_list",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.audienceLists.get",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            },
+            {
+              "name": "audience-list-id",
+              "type": "string",
+              "summary": "Audience list ID from a list/create response.",
+              "values": [],
+              "maps_to": "path.audience_list_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "medium",
+          "approval": "none",
+          "notes": "Fixed v1alpha GET metadata endpoint; it does not query audience user rows."
+        },
+        {
+          "path": "recurring-audience-lists list",
+          "summary": "List v1alpha GA4 recurring-audience-list metadata for one property.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.list_recurring_audience_lists",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.recurringAudienceLists.list",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "Optional pageSize query parameter, bounded by the provider response limit.",
+              "values": [],
+              "maps_to": "query.pageSize"
+            },
+            {
+              "name": "page-token",
+              "type": "string",
+              "summary": "Optional pageToken from a prior list response.",
+              "values": [],
+              "maps_to": "query.pageToken",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "medium",
+          "approval": "none",
+          "notes": "Fixed v1alpha GET list endpoint; it returns metadata only."
+        },
+        {
+          "path": "recurring-audience-lists get",
+          "summary": "Get one v1alpha GA4 recurring-audience-list metadata resource.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.get_recurring_audience_list",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.recurringAudienceLists.get",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            },
+            {
+              "name": "recurring-audience-list-id",
+              "type": "string",
+              "summary": "Recurring audience list ID from a list/create response.",
+              "values": [],
+              "maps_to": "path.recurring_audience_list_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "medium",
+          "approval": "none",
+          "notes": "Fixed v1alpha GET metadata endpoint; it does not query audience user rows."
+        },
+        {
+          "path": "report-tasks list",
+          "summary": "List v1alpha GA4 report-task metadata for one property.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.list_report_tasks",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.reportTasks.list",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "Optional pageSize query parameter, bounded by the provider response limit.",
+              "values": [],
+              "maps_to": "query.pageSize"
+            },
+            {
+              "name": "page-token",
+              "type": "string",
+              "summary": "Optional pageToken from a prior list response.",
+              "values": [],
+              "maps_to": "query.pageToken",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "medium",
+          "approval": "none",
+          "notes": "Fixed v1alpha GET list endpoint; it returns task metadata, not report task content."
+        },
+        {
+          "path": "report-tasks get",
+          "summary": "Get one v1alpha GA4 report-task metadata resource.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.get_report_task",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.reportTasks.get",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            },
+            {
+              "name": "report-task-id",
+              "type": "string",
+              "summary": "Report task ID from a list/create response.",
+              "values": [],
+              "maps_to": "path.report_task_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "medium",
+          "approval": "none",
+          "notes": "Fixed v1alpha GET metadata endpoint; it does not query report task content."
+        },
+        {
+          "path": "reports run-funnel",
+          "summary": "Planned typed v1alpha funnel-report operation; not executable in this slice.",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.run_funnel_report",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.runFunnelReport",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "medium",
+          "approval": "none: planned read-only POST query",
+          "notes": "Blocked by shared provider-query foundation #2985; no generic raw method, path, or body flags are exposed."
+        },
+        {
+          "path": "audience-lists create",
+          "summary": "Planned typed audience-list creation; not executable in this slice.",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.create_audience_list",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.audienceLists.create",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "high",
+          "approval": "planned reverse ETL support would require plan, preview, explicit approval, execute, redaction, and operation/idempotency evidence",
+          "notes": "Blocked planned write; no generic raw method, path, or body flags are exposed."
+        },
+        {
+          "path": "audience-lists query",
+          "summary": "Planned typed audience-list query; not executable in this slice.",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.query_audience_list",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.audienceLists.query",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            },
+            {
+              "name": "audience-list-id",
+              "type": "string",
+              "summary": "Audience list ID from a list/create response.",
+              "values": [],
+              "maps_to": "path.audience_list_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "high",
+          "approval": "none: planned read-only POST query",
+          "notes": "Blocked by shared provider-query/redaction foundation #2985; no generic raw method, path, or body flags are exposed."
+        },
+        {
+          "path": "recurring-audience-lists create",
+          "summary": "Planned typed recurring audience-list creation; not executable in this slice.",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.create_recurring_audience_list",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.recurringAudienceLists.create",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "high",
+          "approval": "planned reverse ETL support would require plan, preview, explicit approval, execute, redaction, and operation/idempotency evidence",
+          "notes": "Blocked planned write; no generic raw method, path, or body flags are exposed."
+        },
+        {
+          "path": "report-tasks create",
+          "summary": "Planned typed report-task creation; not executable in this slice.",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.create_report_task",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.reportTasks.create",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "high",
+          "approval": "planned reverse ETL support would require plan, preview, explicit approval, execute, redaction, and operation/idempotency evidence",
+          "notes": "Blocked planned write; no generic raw method, path, or body flags are exposed."
+        },
+        {
+          "path": "report-tasks query",
+          "summary": "Planned typed report-task query; not executable in this slice.",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "operation": "google-analytics-data-api.query_report_task",
+          "source_cli_path": "",
+          "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.reportTasks.query",
+          "flags": [
+            {
+              "name": "property-id",
+              "type": "string",
+              "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+              "values": [],
+              "maps_to": "path.property_id",
+              "allow_empty": false
+            },
+            {
+              "name": "report-task-id",
+              "type": "string",
+              "summary": "Report task ID from a list/create response.",
+              "values": [],
+              "maps_to": "path.report_task_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "medium",
+          "approval": "none: planned read-only POST query",
+          "notes": "Blocked by shared provider-query foundation #2985; no generic raw method, path, or body flags are exposed."
+        },
+        {
           "path": "reports run-realtime",
           "summary": "Planned typed GA4 operation; not executable in this slice.",
           "intent": "direct_read",
@@ -64925,7 +65376,7 @@
         }
       ]
     },
-    "docs_md": "# Overview\n\nGoogle Analytics 4 (GA4) reads are backed by the Google Analytics Data API v1beta. The current official discovery audit (revision `20260729`) lists 11 operations. This connector exposes five native `runReport` preset streams and three bounded GET direct reads for metadata and audience-export metadata. Other POST report/query/check operations remain blocked/planned rather than exposed as raw API calls.\n\nReadable streams: `daily_active_users`, `website_overview`, `traffic_sources`, `devices`, `pages`.\n\nExecutable direct reads: `metadata get`, `audience-exports list`, and `audience-exports get`.\n\nOfficial source evidence: https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta and https://developers.google.com/analytics/devguides/reporting/data/v1/rest.\n\n## Auth setup\n\nUse a GA4 OAuth2 bearer access token with Analytics Data API read access. Add it through credential storage from an environment variable or stdin, never in prompt text, docs, shell history, or committed fixtures. The connector accepts `access_token`, legacy `credentials`, and the older flattened `credentials.access_token` secret key forms.\n\nRequired config: `property_ids` (one or more numeric GA4 property IDs). Direct commands may also use `property_id`; if omitted, native code falls back to the first `property_ids` entry. `base_url` defaults to `https://analyticsdata.googleapis.com` and should only be overridden for local fixture tests.\n\n## Streams notes\n\nThe five stream commands are fixed GA4 `runReport` presets implemented by the native connector. GA4 report requests use POST on the wire, but the streams emit warehouse records rather than exposing a raw POST body. Native pagination uses `offset`/`limit`, defaults to page size `10000`, caps page size at `250000`, and honors `max_pages` when set. Date-dimensioned streams carry `date` as their cursor and use client-side cursor filtering in this native slice.\n\n- `daily_active_users`: date, active users, new users, sessions.\n- `website_overview`: date-level active users, new users, sessions, page views, average session duration, and bounce rate.\n- `traffic_sources`: date/source/medium sessions and users.\n- `devices`: date/device category/OS/browser users and sessions.\n- `pages`: date/page path/page title page views and engagement.\n\nBounded direct reads use fixed endpoint metadata, required path variables, byte caps, and `json_redacted` output policy. They do not accept method, URL, or arbitrary body flags.\n\n## Write actions & risks\n\nNo reverse-ETL write actions are declared. The official `audienceExports.create` operation initiates a provider-side asynchronous export and remains blocked/planned until it has a named action, closed schema, redaction, idempotency or operation polling evidence, fixture coverage, and plan -> preview -> explicit approval -> execute support. There are no destructive delete operations in the audited v1beta Data API surface.\n\n## Known limits\n\n- Current official inventory: 11 operations. Truthful post-change disposition: 4 official operations executable (`runReport` via five preset streams plus GET `getMetadata`, `audienceExports.list`, and `audienceExports.get`), 4 official operations fixture-tested locally, 7 blocked/planned, 0 excluded/not-applicable, 0 certified.\n- POST report/query/check operations (`runRealtimeReport`, `runPivotReport`, `batchRunReports`, `batchRunPivotReports`, `checkCompatibility`, and `audienceExports.query`) are blocked pending shared provider search/query foundation #2985 and connector-owned POST-read fixtures/redaction evidence.\n- `audienceExports.create` is blocked as a future typed reverse-ETL-style create operation; it is not advertised as executable in this slice.\n- Conformance dynamic replay is intentionally skipped for this native-backed bundle because the real stream behavior is native POST body construction. Connector-owned native tests and sanitized fixtures are the substitute proof.\n- No live provider behavior is certified by these fixtures or docs.\n",
+    "docs_md": "# Overview\n\nGoogle Analytics 4 (GA4) reads are backed by the Google Analytics Data API v1beta and v1alpha. The provider-derived audit retrieved on 2026-08-05 uses Google's published discovery artifacts (both revision `20260803`): 11 v1beta methods plus 15 v1alpha methods, with equivalent `getMetadata` and `runReport` methods counted once under the programme counting policy. The resulting semantic inventory is 24 operations: 20 reads and 4 writes, not the prior invalid 10-row hook-only baseline.\n\nReadable streams: `daily_active_users`, `website_overview`, `traffic_sources`, `devices`, `pages`.\n\nExecutable operations: `runReport` through five native presets plus 10 bounded direct GET reads: `metadata get`, `audience-exports list`, `audience-exports get`, `property-quotas get`, `audience-lists list`, `audience-lists get`, `recurring-audience-lists list`, `recurring-audience-lists get`, `report-tasks list`, and `report-tasks get`.\n\nOfficial source evidence: https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta, https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha, and https://developers.google.com/analytics/devguides/reporting/data/v1/rest. The connector ledger records the retrieval date, revisions, semantic de-duplication, operation mapping, and each blocker in `api_surface.json`.\n\n## Auth setup\n\nUse a GA4 OAuth2 bearer access token with Analytics Data API read access. Add it through credential storage from an environment variable or stdin, never in prompt text, docs, shell history, or committed fixtures. The connector accepts `access_token`, legacy `credentials`, and the older flattened `credentials.access_token` secret key forms.\n\nRequired config: `property_ids` (one or more numeric GA4 property IDs). Direct commands may also use `property_id`; if omitted, native code falls back to the first `property_ids` entry. `base_url` defaults to `https://analyticsdata.googleapis.com` and should only be overridden for local fixture tests.\n\n## Streams notes\n\nThe five stream commands are fixed GA4 `runReport` presets implemented by the native connector. GA4 report requests use POST on the wire, but the streams emit warehouse records rather than exposing a raw POST body. Native pagination uses `offset`/`limit`, defaults to page size `10000`, caps page size at `250000`, and honors `max_pages` when set. Date-dimensioned streams carry `date` as their cursor and use client-side cursor filtering in this native slice.\n\n- `daily_active_users`: date, active users, new users, sessions.\n- `website_overview`: date-level active users, new users, sessions, page views, average session duration, and bounce rate.\n- `traffic_sources`: date/source/medium sessions and users.\n- `devices`: date/device category/OS/browser users and sessions.\n- `pages`: date/page path/page title page views and engagement.\n\nBounded direct reads use fixed endpoint metadata, required path variables, byte caps, and `json_redacted` output policy. They do not accept method, URL, or arbitrary body flags.\n\n## Write actions & risks\n\nNo reverse-ETL write actions are executable. The four official creates — `audienceExports.create`, `audienceLists.create`, `recurringAudienceLists.create`, and `reportTasks.create` — are typed as planned operations because each initiates provider-side work and needs a connector-owned closed action schema, redaction, idempotency or operation handling, sanitized fixtures, and plan -> preview -> explicit approval -> execute evidence before it can be advertised. There are no destructive delete operations in the audited v1beta/v1alpha Data API surface.\n\n## Known limits\n\n- Current provider-derived inventory: 24 semantic operations (20 reads, 4 writes). Truthful disposition: 11 executable read operations (`runReport` through five presets plus 10 direct GET operations), 13 blocked/planned (9 POST reads and 4 creates), 0 excluded/not-applicable, 0 certified. The old 10-row baseline was not provider-derived and is superseded.\n- The 9 blocked POST reads are `batchRunReports`, `runPivotReport`, `batchRunPivotReports`, `runRealtimeReport`, `checkCompatibility`, `audienceExports.query`, `runFunnelReport`, `audienceLists.query`, and `reportTasks.query`. They require the precise shared provider-query/redaction dependency #2985 and connector-owned bounded closed schemas plus fixtures; none is exposed through generic raw API flags.\n- All four creates remain blocked as future typed reverse-ETL operations, not as executable commands. They require the lifecycle and operation/idempotency evidence described above.\n- Sanitized fixture coverage covers all 11 executable operations: five `runReport` stream fixtures and ten direct-read fixtures. The direct-read fixture tests assert the exact fixed GET path against a local `httptest` server.\n- Conformance dynamic replay is intentionally skipped for this native-backed bundle because the real stream behavior is native POST body construction. Connector-owned native tests and sanitized fixtures are the substitute proof.\n- No live provider behavior is certified by these fixtures or docs.\n",
     "icon": {
       "id": "google-analytics",
       "path": "icons/google-analytics.svg",

@@ -30,6 +30,12 @@ The v1alpha `getMetadata` and `runReport` operations are semantically equivalent
 5. **Parity surfaces** — regenerate/update connector docs, catalogs, website generated data, help/golden data, and the parent plus seven child issue addenda with final truthful counts. No generic HTTP, SQL, shell, or raw-body surface is added.
 6. **Verification and delivery** — execute targeted gates, required local gates, `git diff --check`, code review, no-mistakes PR/CI path, then report the PR when CI first passes. Never merge.
 
+## Execution record
+
+- The provider-ledger-only checkpoint is commit `7c550c075`; it is deliberately separate from all implementation commits.
+- The fixed v1alpha metadata-read slice is commit `6daf9e150`. The current implementation checkpoint extends it with the remaining six typed v1alpha operation declarations, provider-ledger count regression coverage, generated manuals/catalog/website data, and GA command golden transcripts.
+- The manual GSD fallback was used after rendering the `execute-phase`, `verify-work`, and `code-review` prompts. Pi has no compatible isolated GSD worker runtime and repository policy forbids role spawning; execution, verification, and review evidence are therefore recorded in these phase artifacts and the PR body.
+
 ## TDD and safety rules
 
 - Every new executable direct-read operation starts with a failing native connector test, then fixture and live-`httptest` green evidence. No Google credential or provider call is made.

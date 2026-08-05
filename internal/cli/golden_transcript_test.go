@@ -121,6 +121,9 @@ var goldenTranscriptInputs = []struct {
 	{Name: "help_missing_topic", Args: []string{"help", "nosuchtopic"}},
 	{Name: "dynamic_connector_bare_json", Args: []string{"github", "--json"}},
 	{Name: "dynamic_connector_unknown_path_json", Args: []string{"github", "definitely-not-command", "--json"}},
+	{Name: "google_analytics_data_api_bare_help", Args: []string{"google-analytics-data-api"}},
+	{Name: "google_analytics_data_api_audience_lists_help", Args: []string{"google-analytics-data-api", "audience-lists"}},
+	{Name: "google_analytics_data_api_report_tasks_get_help", Args: []string{"google-analytics-data-api", "report-tasks", "get", "--help"}},
 	{Name: "hidden_extract_help_json", Args: []string{"extract", "--help", "--json"}},
 	{Name: "hidden_worker_help_json", Args: []string{"worker", "--help", "--json"}},
 }

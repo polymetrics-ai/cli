@@ -62171,7 +62171,7 @@
   {
     "name": "google-analytics-data-api",
     "display_name": "Google Analytics 4 (GA4)",
-    "description": "Reads Google Analytics 4 report presets and bounded metadata/audience-export resources from the Google Analytics Data API v1beta. Read-only; POST report/query operations that require a shared provider-query foundation remain planned rather than exposed as raw API calls.",
+    "description": "Reads Google Analytics 4 report presets plus bounded v1beta/v1alpha metadata resources from the Google Analytics Data API. The provider-derived inventory contains 24 semantic operations (20 reads, 4 writes): 11 are executable read operations and 13 remain planned behind the shared provider-query or closed reverse-ETL foundations; no raw API access is exposed.",
     "integration_type": "api",
     "docs_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
     "release_stage": "alpha",
@@ -62201,6 +62201,18 @@
         "audience_export_id": {
           "type": "string",
           "description": "Audience export identifier used by the get audience export direct command."
+        },
+        "audience_list_id": {
+          "type": "string",
+          "description": "Audience list identifier used by the v1alpha audience-list get direct command."
+        },
+        "recurring_audience_list_id": {
+          "type": "string",
+          "description": "Recurring audience list identifier used by the v1alpha recurring-audience-list get direct command."
+        },
+        "report_task_id": {
+          "type": "string",
+          "description": "Report task identifier used by the v1alpha report-task get direct command."
         },
         "access_token": {
           "type": "string",
@@ -62349,9 +62361,9 @@
       }
     ],
     "risk": {
-      "read": "external Google Analytics Data API reads for configured properties; direct reads are fixed-target, bounded, and JSON-redacted",
-      "write": "unsupported; no reverse-ETL write actions are declared for GA4 data exports in this slice",
-      "approval": "none for read-only operations; future audience-export creation would require plan, preview, explicit approval, and execute before being advertised"
+      "read": "external Google Analytics Data API reads for configured properties; 10 direct reads are fixed-target, bounded, and JSON-redacted, while runReport is available through five bounded presets",
+      "write": "unsupported; four provider-side creates are typed as planned operations but have no executable reverse-ETL action",
+      "approval": "none for read-only operations; future provider-side creates require plan, preview, explicit approval, execute, redaction, and operation/idempotency handling before being advertised"
     },
     "icon": {
       "id": "google-analytics",

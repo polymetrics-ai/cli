@@ -1,10 +1,10 @@
 {
-  "tagline": "Read GA4 report presets and bounded Analytics Data API metadata without exposing raw API access.",
-  "usage": "pm google-analytics-data-api <reports|metadata|audience-exports> <command> [flags]",
+  "tagline": "Read GA4 report presets and bounded v1beta/v1alpha Analytics Data API metadata without exposing raw API access.",
+  "usage": "pm google-analytics-data-api <reports|metadata|audience-exports|property-quotas|audience-lists|recurring-audience-lists|report-tasks> <command> [flags]",
   "source_cli": {
     "name": "Google Analytics Data API",
     "docs": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
-    "reference": "v1beta discovery revision 20260729",
+    "reference": "v1beta + v1alpha discovery revision 20260803, retrieved 2026-08-05",
     "source": "provider_api"
   },
   "groups": [
@@ -513,6 +513,182 @@
       "risk": "medium",
       "approval": "none",
       "notes": "Fixed v1alpha GET metadata endpoint; it does not query report task content."
+    },
+    {
+      "path": "reports run-funnel",
+      "summary": "Planned typed v1alpha funnel-report operation; not executable in this slice.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "google-analytics-data-api.run_funnel_report",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.runFunnelReport",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1alpha/properties/{property_id}:runFunnelReport"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "approval": "none: planned read-only POST query",
+      "notes": "Blocked by shared provider-query foundation #2985; no generic raw method, path, or body flags are exposed."
+    },
+    {
+      "path": "audience-lists create",
+      "summary": "Planned typed audience-list creation; not executable in this slice.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "google-analytics-data-api.create_audience_list",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.audienceLists.create",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1alpha/properties/{property_id}/audienceLists"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "high",
+      "approval": "planned reverse ETL support would require plan, preview, explicit approval, execute, redaction, and operation/idempotency evidence",
+      "notes": "Blocked planned write; no generic raw method, path, or body flags are exposed."
+    },
+    {
+      "path": "audience-lists query",
+      "summary": "Planned typed audience-list query; not executable in this slice.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "google-analytics-data-api.query_audience_list",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.audienceLists.query",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        },
+        {
+          "name": "audience-list-id",
+          "type": "string",
+          "summary": "Audience list ID from a list/create response.",
+          "maps_to": "path.audience_list_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1alpha/properties/{property_id}/audienceLists/{audience_list_id}:query"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "high",
+      "approval": "none: planned read-only POST query",
+      "notes": "Blocked by shared provider-query/redaction foundation #2985; no generic raw method, path, or body flags are exposed."
+    },
+    {
+      "path": "recurring-audience-lists create",
+      "summary": "Planned typed recurring audience-list creation; not executable in this slice.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "google-analytics-data-api.create_recurring_audience_list",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.recurringAudienceLists.create",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1alpha/properties/{property_id}/recurringAudienceLists"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "high",
+      "approval": "planned reverse ETL support would require plan, preview, explicit approval, execute, redaction, and operation/idempotency evidence",
+      "notes": "Blocked planned write; no generic raw method, path, or body flags are exposed."
+    },
+    {
+      "path": "report-tasks create",
+      "summary": "Planned typed report-task creation; not executable in this slice.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "operation": "google-analytics-data-api.create_report_task",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.reportTasks.create",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1alpha/properties/{property_id}/reportTasks"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "high",
+      "approval": "planned reverse ETL support would require plan, preview, explicit approval, execute, redaction, and operation/idempotency evidence",
+      "notes": "Blocked planned write; no generic raw method, path, or body flags are exposed."
+    },
+    {
+      "path": "report-tasks query",
+      "summary": "Planned typed report-task query; not executable in this slice.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "google-analytics-data-api.query_report_task",
+      "source_url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1alpha#analyticsdata.properties.reportTasks.query",
+      "flags": [
+        {
+          "name": "property-id",
+          "type": "string",
+          "summary": "GA4 numeric property ID. Defaults to the first property_ids config value when omitted.",
+          "maps_to": "path.property_id",
+          "allow_empty": false
+        },
+        {
+          "name": "report-task-id",
+          "type": "string",
+          "summary": "Report task ID from a list/create response.",
+          "maps_to": "path.report_task_id",
+          "allow_empty": false
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1alpha/properties/{property_id}/reportTasks/{report_task_id}:query"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "medium",
+      "approval": "none: planned read-only POST query",
+      "notes": "Blocked by shared provider-query foundation #2985; no generic raw method, path, or body flags are exposed."
     },
     {
       "path": "reports run-realtime",

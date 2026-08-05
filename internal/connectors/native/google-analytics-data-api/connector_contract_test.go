@@ -5,14 +5,49 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestConnectorContract(t *testing.T) {
 	assertConnectorContract(t, New(), "google-analytics-data-api")
+}
+
+func TestProviderDerivedOperationLedger(t *testing.T) {
+	bundle, err := engine.Load(os.DirFS("../../defs"), connectorName)
+	if err != nil {
+		t.Fatalf("load on-disk provider ledger: %v", err)
+	}
+	if bundle.Surface == nil {
+		t.Fatal("api_surface is nil")
+	}
+	if bundle.Surface.ReviewedAt != "2026-08-05" || !strings.Contains(bundle.Surface.Scope, "revision 20260803") {
+		t.Fatalf("provider source provenance = reviewed_at %q scope %q", bundle.Surface.ReviewedAt, bundle.Surface.Scope)
+	}
+	if got := len(bundle.Operations); got != 24 {
+		t.Fatalf("provider-derived operation count = %d, want 24", got)
+	}
+	reads, writes := 0, 0
+	for _, operation := range bundle.Operations {
+		switch operation.Kind {
+		case "rest_read":
+			reads++
+		case "rest_write":
+			writes++
+		default:
+			t.Fatalf("operation %q has unexpected kind %q", operation.ID, operation.Kind)
+		}
+	}
+	if reads != 20 || writes != 4 {
+		t.Fatalf("provider-derived operation split = %d reads, %d writes; want 20 reads, 4 writes", reads, writes)
+	}
+	if got := len(bundle.Surface.Endpoints); got != 28 {
+		t.Fatalf("ledger endpoint coverage rows = %d, want 28 (24 semantic operations with runReport mapped to five streams)", got)
+	}
 }
 
 func TestReadFixtureCoversEveryStream(t *testing.T) {
