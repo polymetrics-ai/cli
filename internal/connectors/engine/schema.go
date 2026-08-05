@@ -209,25 +209,7 @@ func (s *Schema) ValidateRequestBodyInput(pointer string, input RequestBodyInput
 		}
 		return fmt.Errorf("request mapping %q input type %q is incompatible with schema types %v", pointer, input.Type, info.Types)
 	}
-	if input.Type == "string_array" && !containsSchemaType(info.Types, "any") {
-		namespace, tokens, err := parseRequestFieldPointer(pointer)
-		if err != nil {
-			return err
-		}
-		itemInfo, err := s.RequestFieldPointerInfo(requestFieldPointer(namespace, append(tokens, "0")...))
-		if err != nil {
-			return fmt.Errorf("string_array mapping %q has no addressable item schema: %w", pointer, err)
-		}
-		for _, itemType := range itemInfo.Types {
-			if itemType == "string" || itemType == "any" {
-				break
-			}
-		}
-		if !containsSchemaType(itemInfo.Types, "string") && !containsSchemaType(itemInfo.Types, "any") {
-			return fmt.Errorf("string_array mapping %q requires string items, schema accepts %v", pointer, itemInfo.Types)
-		}
-	}
-	_, tokens, err := parseRequestFieldPointer(pointer)
+	namespace, tokens, err := parseRequestFieldPointer(pointer)
 	if err != nil {
 		return err
 	}
@@ -235,13 +217,33 @@ func (s *Schema) ValidateRequestBodyInput(pointer string, input RequestBodyInput
 	if err != nil {
 		return err
 	}
-	if input.Type == "enum" {
-		if err := node.validateRequestInputEnum(pointer, input.Values); err != nil {
+	var itemNode *schemaNode
+	var itemPointer string
+	if input.Type == "string_array" && !containsSchemaType(info.Types, "any") {
+		itemTokens := append(append([]string(nil), tokens...), "0")
+		itemPointer = requestFieldPointer(namespace, itemTokens...)
+		itemInfo, err := s.RequestFieldPointerInfo(itemPointer)
+		if err != nil {
+			return fmt.Errorf("string_array mapping %q has no addressable item schema: %w", pointer, err)
+		}
+		if !containsSchemaType(itemInfo.Types, "string") && !containsSchemaType(itemInfo.Types, "any") {
+			return fmt.Errorf("string_array mapping %q requires string items, schema accepts %v", pointer, itemInfo.Types)
+		}
+		itemNode, _, err = s.requestMappingNode(itemTokens, itemPointer)
+		if err != nil {
 			return err
 		}
 	}
 	if input.Type == "string_array" {
 		if err := node.validateRequestInputCardinality(pointer, input.MinItems, input.MaxItems); err != nil {
+			return err
+		}
+	}
+	if err := node.validateRequestInputEnumDomain(pointer, input); err != nil {
+		return err
+	}
+	if itemNode != nil {
+		if err := itemNode.validateRequestInputEnumDomain(itemPointer, RequestBodyInput{Type: "string"}); err != nil {
 			return err
 		}
 	}
@@ -276,27 +278,59 @@ func inputTypeAccepted(info SchemaPathInfo, inputType string) bool {
 	}
 }
 
-func (n *schemaNode) validateRequestInputEnum(pointer string, values []string) error {
-	if len(values) == 0 {
+func (n *schemaNode) validateRequestInputEnumDomain(pointer string, input RequestBodyInput) error {
+	if input.Type == "enum" && len(input.Values) == 0 {
 		return fmt.Errorf("enum mapping %q has no declared input values", pointer)
 	}
-	candidates := append([]string(nil), values...)
-	for _, constraint := range n.mappingEnumConstraints() {
-		accepted := candidates[:0]
-		for _, candidate := range candidates {
-			for _, want := range constraint {
-				if enumEquals(candidate, want) {
-					accepted = append(accepted, candidate)
-					break
-				}
-			}
+	constraints := n.mappingEnumConstraints()
+	if len(constraints) == 0 {
+		return nil
+	}
+	for _, candidate := range constraints[0] {
+		if !requestInputDomainAcceptsValue(input, candidate) {
+			continue
 		}
-		candidates = accepted
-		if len(candidates) == 0 {
-			return fmt.Errorf("enum mapping %q has no values accepted by the schema", pointer)
+		if err := n.validate(candidate, ""); err == nil {
+			return nil
 		}
 	}
-	return nil
+	return fmt.Errorf("request mapping %q input domain has no values accepted by schema enum constraints", pointer)
+}
+
+func requestInputDomainAcceptsValue(input RequestBodyInput, value any) bool {
+	switch input.Type {
+	case "", "string":
+		_, ok := value.(string)
+		return ok
+	case "enum":
+		candidate, ok := value.(string)
+		if !ok {
+			return false
+		}
+		for _, accepted := range input.Values {
+			if candidate == accepted {
+				return true
+			}
+		}
+		return false
+	case "integer":
+		return typeMatches(value, []string{"integer"})
+	case "boolean":
+		return typeMatches(value, []string{"boolean"})
+	case "string_array":
+		elements, ok := arrayElements(value)
+		if !ok || input.MinItems > 0 && len(elements) < input.MinItems || input.MaxItems > 0 && len(elements) > input.MaxItems {
+			return false
+		}
+		for _, element := range elements {
+			if _, ok := element.(string); !ok {
+				return false
+			}
+		}
+		return true
+	default:
+		return false
+	}
 }
 
 func (n *schemaNode) mappingEnumConstraints() [][]any {
@@ -875,7 +909,8 @@ func (n *schemaNode) mappingIsObject() bool {
 }
 
 func (n *schemaNode) mappingIsArray() bool {
-	return containsSchemaType(n.mappingTypeSet().types, "array") || n.items != nil
+	_, hasItems := n.mappingItems()
+	return containsSchemaType(n.mappingTypeSet().types, "array") || hasItems
 }
 
 func (s *Schema) canonicalRequestMappingTokens(tokens []string) ([]string, error) {

@@ -392,20 +392,27 @@ func operationRequestBodyContract(connector connectors.Connector, cmd connectors
 			break
 		}
 	}
-	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
-	if method != http.MethodPost {
+	provider, ok := connector.(operationRequestBodyContractProvider)
+	if !ok {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read validation requires the operation method, body schema and static body contract"}
+	}
+	contract, err := provider.OperationRequestBodyContract(cmd.Operation)
+	if err != nil {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read contract is unavailable: %v", err)}
+	}
+	operationMethod := strings.ToUpper(strings.TrimSpace(contract.Method))
+	if operationMethod != http.MethodGet && operationMethod != http.MethodPost {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read operation requires GET or POST, got %s", operationMethod)}
+	}
+	surfaceMethod := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
+	if surfaceMethod != operationMethod {
+		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("api_surface method %s does not match operation method %s", surfaceMethod, operationMethod)}
+	}
+	if operationMethod != http.MethodPost {
 		if hasBodyMapping {
 			return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read body mappings require POST"}
 		}
 		return nil, nil
-	}
-	provider, ok := connector.(operationRequestBodyContractProvider)
-	if !ok {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "operation direct_read POST validation requires the operation body schema and static body contract"}
-	}
-	contract, err := provider.OperationRequestBodyContract(cmd.Operation)
-	if err != nil {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read body contract is unavailable: %v", err)}
 	}
 	return &contract, nil
 }

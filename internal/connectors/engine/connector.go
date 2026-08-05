@@ -225,6 +225,7 @@ func (b Base) OperationRequestBodyContract(operation string) (OperationRequestBo
 }
 
 type OperationRequestBodyContract struct {
+	Method string
 	Schema *Schema
 	Static map[string]any
 	None   bool
@@ -256,14 +257,20 @@ func operationRequestBodyContract(bundle Bundle, operation string) (OperationReq
 	if err != nil {
 		return OperationRequestBodyContract{}, err
 	}
-	if op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodPost {
-		return OperationRequestBodyContract{}, nil
+	if op.REST == nil {
+		return OperationRequestBodyContract{}, fmt.Errorf("operation %q has no REST request contract", operation)
+	}
+	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+	contract := OperationRequestBodyContract{Method: method}
+	if method != http.MethodPost {
+		return contract, nil
 	}
 	if op.REST.Body != nil && op.REST.Body.None {
-		return OperationRequestBodyContract{None: true}, nil
+		contract.None = true
+		return contract, nil
 	}
 	if len(op.REST.BodySchema) == 0 {
-		return OperationRequestBodyContract{}, nil
+		return contract, nil
 	}
 	schema, err := CompileSchema(op.REST.BodySchema)
 	if err != nil {
@@ -273,7 +280,9 @@ func operationRequestBodyContract(bundle Bundle, operation string) (OperationReq
 	if op.REST.Body != nil {
 		static = cloneAnyMap(op.REST.Body.Fields)
 	}
-	return OperationRequestBodyContract{Schema: schema, Static: static}, nil
+	contract.Schema = schema
+	contract.Static = static
+	return contract, nil
 }
 
 // synthesizeMetadata is the single source of truth for bundle -> Metadata,

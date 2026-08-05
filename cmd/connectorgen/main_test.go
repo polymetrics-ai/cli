@@ -838,6 +838,13 @@ func TestCLISurfaceOperationBodyMappingsUseEffectiveRuntimeShape(t *testing.T) {
 			wantFindings: true,
 		},
 		{
+			name:         "integer domain excludes fractional number enum",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"count":{"type":"number","enum":[1.5]}}}`,
+			flags:        []engine.CLIFlag{{Name: "count", Type: "integer", MapsTo: "/body/count"}},
+			wantFinding:  "input domain has no values accepted",
+			wantFindings: true,
+		},
+		{
 			name:         "incompatible string-array cardinality",
 			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"ids":{"type":"array","minItems":2,"items":{"type":"string"}}}}`,
 			flags:        []engine.CLIFlag{{Name: "ids", Type: "string_array", MaxItems: 1, MapsTo: "/body/ids"}},
