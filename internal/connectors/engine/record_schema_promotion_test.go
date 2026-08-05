@@ -50,6 +50,47 @@ func TestInspectRecordSchemaPreservesWrapperFieldsWhileExpandingArms(t *testing.
 	}
 }
 
+func TestMergeRecordSchemaRequiredPreservesStableUnionOrder(t *testing.T) {
+	merged, ok := mergeRecordSchemaRequired(
+		json.RawMessage(`[
+			"account_id",
+			"shared"
+		]`),
+		json.RawMessage(`[
+			"ticket",
+			"account_id",
+			"batch",
+			"ticket"
+		]`),
+	)
+	if !ok {
+		t.Fatal("mergeRecordSchemaRequired returned false")
+	}
+	var got []string
+	if err := json.Unmarshal(merged, &got); err != nil {
+		t.Fatalf("unmarshal merged required fields: %v", err)
+	}
+	want := []string{"account_id", "shared", "ticket", "batch"}
+	if len(got) != len(want) {
+		t.Fatalf("merged required = %v, want %v", got, want)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("merged required = %v, want %v", got, want)
+		}
+	}
+}
+
+func TestMergeRecordSchemaRequiredKeepsAnEmptyRequiredArray(t *testing.T) {
+	merged, ok := mergeRecordSchemaRequired(json.RawMessage(`[]`), json.RawMessage(`[]`))
+	if !ok {
+		t.Fatal("mergeRecordSchemaRequired returned false")
+	}
+	if got, want := string(merged), `[]`; got != want {
+		t.Fatalf("merged required = %s, want %s", got, want)
+	}
+}
+
 func TestValidatePromotableRecordSchemaRejectsOnlyEmptyObject(t *testing.T) {
 	err := ValidatePromotableRecordSchema(json.RawMessage(`{"type":"object","properties":{},"additionalProperties":false}`))
 	if err == nil || !strings.Contains(err.Error(), "only an empty object") {

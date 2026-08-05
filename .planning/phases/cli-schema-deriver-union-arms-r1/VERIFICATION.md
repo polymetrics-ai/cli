@@ -1,8 +1,8 @@
 # Local Verification
 
-CI detected: no. Repository-wide `go test ./...` / `make verify` were intentionally
-not run locally because their duration exceeds the per-command window; the scoped
-packages and individual `make verify` gates below were run instead.
+CI is active on PR #3737. Repository-wide `go test ./...` / `make verify` were
+intentionally not run locally because their duration exceeds the per-command window;
+the scoped packages and individual `make verify` gates below were run instead.
 
 | Check | Status | Command / evidence |
 | --- | --- | --- |
@@ -19,6 +19,7 @@ packages and individual `make verify` gates below were run instead.
 | CLI help parity | pass | `pm help zendesk-support`; bare `pm zendesk-support`; `pm zendesk-support operations update_permission_policy --help` |
 | Generated docs / website data | pass | `pm docs generate --dir docs/cli`; `website: npm run gen:website-data`; generated Zendesk manual/skill and catalog checked by grep |
 | Website TypeScript check | not run | Local `website/node_modules` lacks `tsc`; generated-data script requires only Node built-ins and passed. CI owns the dependency-installed typecheck. |
+| CodeQL remediation | pass locally; CI rerun pending | `go test ./internal/connectors/engine -run '^Test(MergeRecordSchemaRequired|InspectRecordSchema|ValidatePromotableRecordSchema)' -count=1`; commandrunner promotion tests; `go vet ./internal/connectors/engine ./internal/connectors/commandrunner`; the PR's next CodeQL result is authoritative for the eliminated capacity-overflow finding. |
 
 Sweep note: connectorgen's initial whole-defs pass revealed Amazon SQS native
 empty-record queue actions, which are intentionally handled by its Tier-3 native

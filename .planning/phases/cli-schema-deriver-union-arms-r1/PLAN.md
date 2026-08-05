@@ -16,11 +16,16 @@
    surface synchronizer, then sweep every implemented bundle for a hollow schema.
 5. Run focused Go tests and each non-full-suite verification gate, update evidence,
    commit the completed work on `fm/cli-schema-deriver-union-arms-r1`.
+6. Respond to the PR CodeQL finding without broadening behavior: remove the
+   user-derived length addition used solely for map/slice preallocation in
+   `mergeRecordSchemaRequired`, preserve order-preserving deduplication, and
+   rerun the focused engine test plus the PR security check.
 
 ## Delivery controls
 
-- Manual GSD fallback is in use because `scripts/gsd prompt programming-loop` is
-  unavailable in this adapter; the fallback artifacts live in this directory.
+- Manual GSD fallback is in use because `scripts/gsd prompt programming-loop`
+  returns `unknown GSD command: programming-loop` even though `scripts/gsd doctor`
+  passes; the fallback artifacts live in this directory.
 - `local_critical_path`: one worker owns the coupled engine, validator, and Zendesk
   bundle changes in this disposable worktree. Splitting mutations would create
   collision risk without reducing the sequential OAS derivation work.

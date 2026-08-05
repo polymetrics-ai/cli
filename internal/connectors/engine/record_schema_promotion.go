@@ -176,14 +176,19 @@ func mergeRecordSchemaRequired(base, arm json.RawMessage) (json.RawMessage, bool
 	if err := json.Unmarshal(arm, &armRequired); err != nil {
 		return nil, false
 	}
-	seen := make(map[string]struct{}, len(baseRequired)+len(armRequired))
-	mergedRequired := make([]string, 0, len(baseRequired)+len(armRequired))
-	for _, name := range append(baseRequired, armRequired...) {
-		if _, exists := seen[name]; exists {
-			continue
+	// Required-field arrays originate in provider schemas. Let Go grow these
+	// collections as needed rather than combining untrusted lengths for an
+	// allocation capacity.
+	seen := make(map[string]struct{})
+	mergedRequired := make([]string, 0)
+	for _, required := range [][]string{baseRequired, armRequired} {
+		for _, name := range required {
+			if _, exists := seen[name]; exists {
+				continue
+			}
+			seen[name] = struct{}{}
+			mergedRequired = append(mergedRequired, name)
 		}
-		seen[name] = struct{}{}
-		mergedRequired = append(mergedRequired, name)
 	}
 	merged, err := json.Marshal(mergedRequired)
 	if err != nil {

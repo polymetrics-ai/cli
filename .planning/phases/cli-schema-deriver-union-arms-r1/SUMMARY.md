@@ -21,6 +21,9 @@ Scope ruling: `bulk-batch-split-scope` (2026-08-05)
   `UserMergeInput` arm permits the OAS id/email/external-id identifier variants
   without inventing an external-id-only requirement.
 - Regenerated connector manuals/catalog data and website connector data.
+- Removed the CodeQL-reported provider-schema length arithmetic from required
+  field merging while preserving its stable de-duplication and empty-array JSON
+  contract; the focused engine and runtime-preflight checks are green.
 
 ## Explicitly deferred, not faked
 
