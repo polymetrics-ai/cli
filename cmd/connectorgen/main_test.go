@@ -873,6 +873,27 @@ func TestCLISurfaceOperationBodyMappingsUseEffectiveRuntimeShape(t *testing.T) {
 			wantFindings: true,
 		},
 		{
+			name:         "required string-array excludes schema maximum zero",
+			rawSchema:    `{"type":"object","additionalProperties":false,"required":["ids"],"properties":{"ids":{"type":"array","maxItems":0,"items":{"type":"string"}}}}`,
+			flags:        []engine.CLIFlag{{Name: "ids", Type: "string_array", MapsTo: "/body/ids", Required: true}},
+			wantFinding:  "cardinality",
+			wantFindings: true,
+		},
+		{
+			name:         "finite enum excludes schema pattern",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"state":{"type":"string","pattern":"^open$"}}}`,
+			flags:        []engine.CLIFlag{{Name: "state", Type: "enum", Values: []string{"closed"}, MapsTo: "/body/state"}},
+			wantFinding:  "no values accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "string-array excludes unsafe root enum item",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"labels":{"type":"array","enum":[["line\nbreak"]],"items":{"type":"string"}}}}`,
+			flags:        []engine.CLIFlag{{Name: "labels", Type: "string_array", MapsTo: "/body/labels"}},
+			wantFinding:  "no values accepted",
+			wantFindings: true,
+		},
+		{
 			name:         "dynamic array replaces static siblings",
 			rawSchema:    `{"type":"object","additionalProperties":false,"required":["items"],"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["name","kind"],"properties":{"name":{"type":"string"},"kind":{"type":"string"}}}}}}`,
 			static:       map[string]any{"items": []any{map[string]any{"name": "static", "kind": "widget"}}},

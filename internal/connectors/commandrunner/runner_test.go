@@ -1722,6 +1722,24 @@ func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
 			want:      "cardinality",
 		},
 		{
+			name:      "required string-array excludes schema maximum zero",
+			rawSchema: `{"type":"object","required":["ids"],"properties":{"ids":{"type":"array","maxItems":0,"items":{"type":"string"}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "ids", Type: "string_array", MapsTo: "/body/ids", Required: true}},
+			want:      "cardinality",
+		},
+		{
+			name:      "finite enum excludes schema pattern",
+			rawSchema: `{"type":"object","properties":{"state":{"type":"string","pattern":"^open$"}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "state", Type: "enum", Values: []string{"closed"}, MapsTo: "/body/state"}},
+			want:      "no values accepted",
+		},
+		{
+			name:      "string-array excludes unsafe root enum item",
+			rawSchema: `{"type":"object","properties":{"labels":{"type":"array","enum":[["line\nbreak"]],"items":{"type":"string"}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "labels", Type: "string_array", MapsTo: "/body/labels"}},
+			want:      "no values accepted",
+		},
+		{
 			name:      "array item type mismatch",
 			rawSchema: `{"type":"object","properties":{"ids":{"type":"array","items":{"type":"integer"}}}}`,
 			flags:     []connectors.CommandSurfaceFlag{{Name: "ids", Type: "string_array", MapsTo: "/body/ids"}},

@@ -242,7 +242,7 @@ func (s *Schema) ValidateRequestBodyInput(pointer string, input RequestBodyInput
 		}
 	}
 	if input.Type == "string_array" {
-		if err := node.validateRequestInputCardinality(pointer, input.MinItems, input.MaxItems); err != nil {
+		if err := node.validateRequestInputCardinality(pointer, input); err != nil {
 			return err
 		}
 	}
@@ -292,14 +292,18 @@ func (n *schemaNode) validateRequestInputEnumDomain(pointer string, input Reques
 	if input.Type == "enum" {
 		hasEmittableValue := false
 		for _, candidate := range input.Values {
-			if requestInputDomainAcceptsValue(input, candidate) {
-				hasEmittableValue = true
-				break
+			if !requestInputDomainAcceptsValue(input, candidate) {
+				continue
+			}
+			hasEmittableValue = true
+			if err := n.validate(candidate, ""); err == nil {
+				return nil
 			}
 		}
 		if !hasEmittableValue {
 			return fmt.Errorf("enum mapping %q has no values the CLI can emit", pointer)
 		}
+		return fmt.Errorf("request mapping %q input domain has no values accepted by schema constraints", pointer)
 	}
 	constraints := n.mappingEnumConstraints()
 	if len(constraints) == 0 {
@@ -354,7 +358,7 @@ func requestInputDomainAcceptsValue(input RequestBodyInput, value any) bool {
 }
 
 func requestInputStringAcceptsValue(input RequestBodyInput, value string) bool {
-	if safety.RejectDangerousChars(value, "request input") != nil {
+	if !commandInputStringSafe(value) {
 		return false
 	}
 	if input.arrayItem && !stringArrayItemEmittable(value) {
@@ -371,8 +375,15 @@ func requestInputStringAcceptsValue(input RequestBodyInput, value string) bool {
 }
 
 func stringArrayItemEmittable(value string) bool {
+	if !commandInputStringSafe(value) {
+		return false
+	}
 	items := ParseStringArrayInput([]string{value})
 	return len(items) == 1 && items[0] == value
+}
+
+func commandInputStringSafe(value string) bool {
+	return safety.RejectDangerousChars(value, "flag value") == nil
 }
 
 func ParseStringArrayInput(values []string) []string {
@@ -428,9 +439,14 @@ func (n *schemaNode) mappingEnumConstraints() [][]any {
 	return out
 }
 
-func (n *schemaNode) validateRequestInputCardinality(pointer string, inputMin, inputMax int) error {
+func (n *schemaNode) validateRequestInputCardinality(pointer string, input RequestBodyInput) error {
+	inputMin := input.MinItems
+	inputMax := input.MaxItems
 	if inputMin < 0 || inputMax < 0 || inputMax > 0 && inputMin > inputMax {
 		return fmt.Errorf("string_array mapping %q has invalid input cardinality %d..%d", pointer, inputMin, inputMax)
+	}
+	if input.Required && inputMin < 1 {
+		inputMin = 1
 	}
 	lower := inputMin
 	upper := inputMax

@@ -519,8 +519,11 @@ func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
 			"whole":{"type":"number","enum":[1]},
 			"fractional":{"type":"number","enum":[1.5]},
 			"ids":{"type":"array","minItems":2,"maxItems":4,"items":{"type":"string"}},
+			"required_empty":{"type":"array","maxItems":0,"items":{"type":"string"}},
+			"patterned_state":{"type":"string","pattern":"^open$"},
 			"labels":{"type":"array","items":{"type":"string","enum":["alpha"]}},
 			"delimited_labels":{"type":"array","items":{"type":"string","enum":["a,b"]}},
+			"unsafe_labels":{"type":"array","enum":[["line\nbreak"]],"items":{"type":"string"}},
 			"numeric_labels":{"type":"array","items":{"enum":[1]}},
 			"composed_numeric_labels":{"allOf":[{"items":{"enum":[1]}}]}
 		}
@@ -543,8 +546,12 @@ func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
 		{name: "compatible array bounds", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MinItems: 1, MaxItems: 3}},
 		{name: "cli maximum below schema minimum", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MaxItems: 1}, wantErr: true},
 		{name: "cli minimum above schema maximum", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MinItems: 5}, wantErr: true},
+		{name: "required string array excludes schema maximum zero", pointer: "/body/required_empty", input: RequestBodyInput{Type: "string_array", Required: true}, wantErr: true},
+		{name: "finite enum satisfies schema pattern", pointer: "/body/patterned_state", input: RequestBodyInput{Type: "enum", Values: []string{"closed", "open"}, Required: true}},
+		{name: "finite enum excludes schema pattern", pointer: "/body/patterned_state", input: RequestBodyInput{Type: "enum", Values: []string{"closed"}, Required: true}, wantErr: true},
 		{name: "string array intersects item enum", pointer: "/body/labels", input: RequestBodyInput{Type: "string_array"}},
 		{name: "string array excludes delimited item enum", pointer: "/body/delimited_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
+		{name: "string array excludes unsafe root enum item", pointer: "/body/unsafe_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
 		{name: "string array excludes numeric item enum", pointer: "/body/numeric_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
 		{name: "string array excludes composed numeric item enum", pointer: "/body/composed_numeric_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
 	}
