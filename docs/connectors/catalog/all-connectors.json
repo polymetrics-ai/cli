@@ -65498,8 +65498,9 @@
         "base_url": {
           "type": "string",
           "format": "uri",
+          "pattern": "^https?://[^/?#@[:space:]]+/?$",
           "default": "https://searchconsole.googleapis.com",
-          "description": "Search Console API base URL override for tests or proxies. The connector appends the official /webmasters/v3 and /v1 endpoint prefixes and avoids duplicating /webmasters/v3 when a legacy base URL already includes it."
+          "description": "Search Console API root URL override for tests or proxies. Use the root form https://host with no path, query, fragment, or user info; http://host[:port] is also accepted for local test proxies. The connector appends the official /webmasters/v3 and /v1 endpoint prefixes. Migrate legacy pathful values such as https://www.googleapis.com/webmasters/v3 to the default https://searchconsole.googleapis.com or another origin-only root."
         },
         "site_urls": {
           "type": "string",

@@ -27,9 +27,10 @@ Connection fields:
   3-legged consent/acquisition and refresh-token-exchange dance is out of scope for this connector
   (credentials layer already owns it).
 - `base_url` (optional, string); default `https://searchconsole.googleapis.com`; format `uri`;
-  Search Console API base URL override for tests or proxies. The connector appends the official
-  `/webmasters/v3` and `/v1` endpoint prefixes and avoids duplicating `/webmasters/v3` when a
-  legacy base URL already includes it.
+  Search Console API root URL override for tests or proxies. Use the root form `https://host` with
+  no path, query, fragment, or user info; `http://host[:port]` is also accepted for local test
+  proxies. The connection schema and connector auth preflight reject non-root values before any
+  provider request. The connector appends the official `/webmasters/v3` and `/v1` prefixes.
 - `site_urls` (optional, string); comma- or newline-separated Search Console site properties (for
   example `https://example.com/` or `sc-domain:example.com`) to fan out over for `sitemaps` and
   `search_analytics_*` streams.
@@ -65,8 +66,12 @@ because the official operation is a POST whose cursor (`startRow`) lives inside 
 - `sitemaps`: GET `/webmasters/v3/sites/{{ fanout.id }}/sitemaps` - records path `sitemap`; fans
   out over `site_urls` and falls back to `site_url` in the hook.
 - `sitemap_details`: GET `/webmasters/v3/sites/{{ config.site_url }}/sitemaps/{{ config.feedpath }}`.
-- `search_analytics_by_*`: POST `/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query` with
-  fixed stream dimensions (`date`, `country`, `device`, `page`, or `query`).
+- `search_analytics_by_date`: POST `/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query`
+  with the fixed `date` dimension.
+- `search_analytics_by_country`, `search_analytics_by_device`, `search_analytics_by_page`, and
+  `search_analytics_by_query`: the same POST with `date` plus the named dimension. Each record is
+  therefore grouped per date and dimension value; `date` remains the incremental cursor and part
+  of the primary key.
 
 ## Typed direct reads
 
@@ -102,6 +107,10 @@ operations also require typed confirmation. No write action accepts a raw body.
 
 - Fixture and local validation only in this wave; this file does not claim live provider
   certification.
+- Migrate a legacy pathful `base_url` such as `https://www.googleapis.com/webmasters/v3` to
+  `https://searchconsole.googleapis.com` or another origin-only root. Path, query, fragment, and
+  user-info components are rejected so every typed executor appends its own declared API prefix
+  consistently.
 - API coverage is 11/11 unique provider-published operations: five operations are reachable via
   ETL streams, four via typed reverse-ETL writes, and two additional operations via typed bounded
   direct reads. Search Analytics has five dimension-specific ETL conveniences over its single

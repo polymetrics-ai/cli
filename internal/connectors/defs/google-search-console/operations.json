@@ -35,7 +35,7 @@
       "kind": "rest_read",
       "summary": "Run a bounded Mobile Friendly Test for one URL.",
       "description": "Typed Mobile Friendly Test direct read for the official searchconsole.urlTestingTools.mobileFriendlyTest.run operation. The request body is closed to url and optional requestScreenshot.",
-      "source_url": "https://developers.google.com/webmaster-tools/v1/urlTestingTools.mobileFriendlyTest/run",
+      "source_url": "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
       "risk": "low",
       "approval": "not_required",
       "output_policy": "json_redacted",

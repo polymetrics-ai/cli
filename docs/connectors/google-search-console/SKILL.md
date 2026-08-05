@@ -136,10 +136,10 @@ Reads Google Search Console sites, sitemaps, and Search Analytics performance re
   - sitemaps delete - Plan deleting a sitemap URL from a Search Console site property through destructive reverse ETL. [intent=reverse_etl availability=implemented write=delete_sitemap]; approval: Use reverse ETL plan -> preview -> approval -> typed destructive confirmation -> execute. Missing provider records are idempotent for HTTP 404.; risk: high: deletes a sitemap from a Search Console site property; requires reverse ETL plan, approval, and destructive confirmation; flags: --site-url, --feedpath
 - Search Analytics
   - search-analytics by-date - Read Search Analytics rows grouped by date. [intent=etl availability=implemented stream=search_analytics_by_date]
-  - search-analytics by-country - Read Search Analytics rows grouped by country. [intent=etl availability=implemented stream=search_analytics_by_country]
-  - search-analytics by-device - Read Search Analytics rows grouped by device. [intent=etl availability=implemented stream=search_analytics_by_device]
-  - search-analytics by-page - Read Search Analytics rows grouped by page. [intent=etl availability=implemented stream=search_analytics_by_page]
-  - search-analytics by-query - Read Search Analytics rows grouped by query. [intent=etl availability=implemented stream=search_analytics_by_query]
+  - search-analytics by-country - Read Search Analytics rows grouped by date and country. [intent=etl availability=implemented stream=search_analytics_by_country]
+  - search-analytics by-device - Read Search Analytics rows grouped by date and device. [intent=etl availability=implemented stream=search_analytics_by_device]
+  - search-analytics by-page - Read Search Analytics rows grouped by date and page. [intent=etl availability=implemented stream=search_analytics_by_page]
+  - search-analytics by-query - Read Search Analytics rows grouped by date and query. [intent=etl availability=implemented stream=search_analytics_by_query]
 - Typed Direct Reads
   - direct url-inspection inspect - Run the official URL Inspection operation as a typed bounded direct read. [intent=direct_read availability=implemented operation=google-search-console.urlinspection_index_inspect]; risk: low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL-shaped fields; flags: --inspection-url (required), --site-url (required), --language-code
   - direct mobile-friendly-test run - Run the official Mobile Friendly Test operation as a typed bounded direct read. [intent=direct_read availability=implemented operation=google-search-console.mobile_friendly_test_run]; risk: low: bounded Search Console JSON read; fixed endpoint, closed request body schema, 1 MiB response cap, and redacted URL/screenshot-shaped fields; flags: --url (required), --request-screenshot

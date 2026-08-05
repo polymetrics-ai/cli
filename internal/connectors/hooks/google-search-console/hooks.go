@@ -1,5 +1,5 @@
 // Package googlesearchconsole implements the google-search-console bundle's
-// StreamHook (docs.md "Overview"): the Search Console v3 `searchAnalytics.query`
+// AuthHook and StreamHook (docs.md "Overview"): the Search Console v3 `searchAnalytics.query`
 // endpoint is a POST whose JSON request body carries
 // startDate/endDate/dimensions/type/dataState/rowLimit/startRow, and whose
 // pagination state (startRow, advanced by the number of rows returned each
@@ -42,20 +42,56 @@ func init() {
 // New returns a fresh google-search-console Hooks value as engine.Hooks.
 func New() engine.Hooks { return &Hooks{} }
 
-// Hooks is the google-search-console hook set. It implements
-// engine.StreamHook only.
+// Hooks is the google-search-console hook set. It implements engine.AuthHook
+// and engine.StreamHook.
 type Hooks struct{}
 
 func (h *Hooks) ConnectorName() string { return "google-search-console" }
 
-// analyticsDimensions is the per-stream fixed one-dimension searchAnalytics
+// Authenticator validates connector configuration and returns bearer auth.
+func (*Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec engine.AuthSpec) (connsdk.Authenticator, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	if err := validateGSCBaseURL(cfg.Config["base_url"]); err != nil {
+		return nil, err
+	}
+	token, err := engine.Interpolate(spec.Token, engine.Vars{Config: cfg.Config, Secrets: cfg.Secrets})
+	if err != nil {
+		return nil, fmt.Errorf("google-search-console auth: resolve access_token: %w", err)
+	}
+	if strings.TrimSpace(token) == "" {
+		return nil, fmt.Errorf("google-search-console auth: access_token is required")
+	}
+	return connsdk.Bearer(token), nil
+}
+
+func validateGSCBaseURL(raw string) error {
+	const requirement = "google-search-console base_url must use root form https://host with no path, query, fragment, or user info (http://host[:port] is allowed for local test proxies)"
+	if raw == "" || raw != strings.TrimSpace(raw) {
+		return fmt.Errorf("%s", requirement)
+	}
+	parsed, err := url.Parse(raw)
+	if err != nil {
+		return fmt.Errorf("%s: %w", requirement, err)
+	}
+	if (parsed.Scheme != "https" && parsed.Scheme != "http") || parsed.Hostname() == "" || parsed.User != nil || parsed.Opaque != "" {
+		return fmt.Errorf("%s", requirement)
+	}
+	if (parsed.Path != "" && parsed.Path != "/") || parsed.RawQuery != "" || parsed.ForceQuery || parsed.Fragment != "" {
+		return fmt.Errorf("%s", requirement)
+	}
+	return nil
+}
+
+// analyticsDimensions is the per-stream fixed searchAnalytics
 // dimension set, mirroring legacy streams.go's gscStreamDefs routing table.
 var analyticsDimensions = map[string][]string{
 	"search_analytics_by_date":    {"date"},
-	"search_analytics_by_country": {"country"},
-	"search_analytics_by_device":  {"device"},
-	"search_analytics_by_page":    {"page"},
-	"search_analytics_by_query":   {"query"},
+	"search_analytics_by_country": {"date", "country"},
+	"search_analytics_by_device":  {"date", "device"},
+	"search_analytics_by_page":    {"date", "page"},
+	"search_analytics_by_query":   {"date", "query"},
 }
 
 // ReadStream implements engine.StreamHook. It handles sitemaps plus every
@@ -93,7 +129,7 @@ func (h *Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req co
 		if err := ctx.Err(); err != nil {
 			return true, err
 		}
-		if err := h.readAnalyticsForSite(ctx, rt.Requester, req.Config, site, dims, startDate, endDate, searchType, dataState, pageSize, maxPages, emit); err != nil {
+		if err := h.readAnalyticsForSite(ctx, rt.Requester, site, dims, startDate, endDate, searchType, dataState, pageSize, maxPages, emit); err != nil {
 			return true, err
 		}
 	}
@@ -105,7 +141,7 @@ func (h *Hooks) readSitemaps(ctx context.Context, r *connsdk.Requester, cfg conn
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		path := gscEndpointPath(cfg, "/sites/"+url.PathEscape(site)+"/sitemaps")
+		path := gscAPIPrefix + "/sites/" + url.PathEscape(site) + "/sitemaps"
 		resp, err := r.Do(ctx, http.MethodGet, path, nil, nil)
 		if err != nil {
 			return fmt.Errorf("read google-search-console sitemaps for %s: %w", site, err)
@@ -127,14 +163,6 @@ func (h *Hooks) readSitemaps(ctx context.Context, r *connsdk.Requester, cfg conn
 }
 
 const gscAPIPrefix = "/webmasters/v3"
-
-func gscEndpointPath(cfg connectors.RuntimeConfig, suffix string) string {
-	base, err := url.Parse(strings.TrimSpace(cfg.Config["base_url"]))
-	if err == nil && strings.TrimRight(base.EscapedPath(), "/") == gscAPIPrefix {
-		return suffix
-	}
-	return gscAPIPrefix + suffix
-}
 
 func sitemapRecord(site string, item map[string]any) connectors.Record {
 	return connectors.Record{
@@ -178,8 +206,8 @@ type analyticsRequestBody struct {
 // (google_search_console.go:207-263): the next page is requested by
 // advancing startRow by the number of rows received, until a short (or
 // empty) page is returned, or maxPages (0 = unbounded) is reached.
-func (h *Hooks) readAnalyticsForSite(ctx context.Context, r *connsdk.Requester, cfg connectors.RuntimeConfig, site string, dims []string, startDate, endDate, searchType, dataState string, pageSize, maxPages int, emit func(connectors.Record) error) error {
-	path := gscEndpointPath(cfg, "/sites/"+url.PathEscape(site)+"/searchAnalytics/query")
+func (h *Hooks) readAnalyticsForSite(ctx context.Context, r *connsdk.Requester, site string, dims []string, startDate, endDate, searchType, dataState string, pageSize, maxPages int, emit func(connectors.Record) error) error {
+	path := gscAPIPrefix + "/sites/" + url.PathEscape(site) + "/searchAnalytics/query"
 	startRow := 0
 	for page := 0; maxPages == 0 || page < maxPages; page++ {
 		if err := ctx.Err(); err != nil {

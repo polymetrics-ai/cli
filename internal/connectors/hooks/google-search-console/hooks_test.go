@@ -10,6 +10,7 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -30,6 +31,68 @@ func TestInit_RegistersHooks(t *testing.T) {
 	if _, ok := h.(engine.StreamHook); !ok {
 		t.Fatal("registered hooks do not implement StreamHook")
 	}
+	if _, ok := h.(engine.AuthHook); !ok {
+		t.Fatal("registered hooks do not implement AuthHook")
+	}
+}
+
+func TestAuthenticatorValidatesRootBaseURL(t *testing.T) {
+	spec := engine.AuthSpec{
+		Mode:  "custom",
+		Hook:  "google-search-console",
+		Token: "{{ secrets.access_token }}",
+	}
+	h := &Hooks{}
+
+	accepted := []string{
+		"https://searchconsole.googleapis.com",
+		"https://searchconsole.googleapis.com/",
+		"http://127.0.0.1:8080",
+		"http://localhost:8080/",
+	}
+	for _, baseURL := range accepted {
+		t.Run("accept_"+baseURL, func(t *testing.T) {
+			auth, err := h.Authenticator(context.Background(), connectors.RuntimeConfig{
+				Config:  map[string]string{"base_url": baseURL},
+				Secrets: map[string]string{"access_token": "fixture"},
+			}, spec)
+			if err != nil {
+				t.Fatalf("Authenticator(%q): %v", baseURL, err)
+			}
+			req, err := http.NewRequest(http.MethodGet, "https://example.test", nil)
+			if err != nil {
+				t.Fatalf("new request: %v", err)
+			}
+			if err := auth.Apply(context.Background(), req); err != nil {
+				t.Fatalf("apply auth: %v", err)
+			}
+			if got := req.Header.Get("Authorization"); got != "Bearer fixture" {
+				t.Fatalf("Authorization = %q, want Bearer fixture", got)
+			}
+		})
+	}
+
+	rejected := []string{
+		"https://www.googleapis.com/webmasters/v3",
+		"https://proxy.example.test/api",
+		"https://proxy.example.test/?tenant=one",
+		"https://proxy.example.test/#fragment",
+		"https://user@example.test",
+	}
+	for _, baseURL := range rejected {
+		t.Run("reject_"+baseURL, func(t *testing.T) {
+			_, err := h.Authenticator(context.Background(), connectors.RuntimeConfig{
+				Config:  map[string]string{"base_url": baseURL},
+				Secrets: map[string]string{"access_token": "fixture"},
+			}, spec)
+			if err == nil {
+				t.Fatalf("Authenticator(%q): want error", baseURL)
+			}
+			if !strings.Contains(err.Error(), "root form https://host") {
+				t.Fatalf("Authenticator(%q): error = %q, want actionable root form", baseURL, err)
+			}
+		})
+	}
 }
 
 // --- ReadStream dispatch ---
@@ -44,6 +107,30 @@ func TestReadStream_UnknownStreamFallsBackToDeclarative(t *testing.T) {
 		if handled {
 			t.Fatalf("ReadStream(%q) handled = true, want false (declarative fallback)", name)
 		}
+	}
+}
+
+func TestAnalyticsDimensionsPreserveDateCursor(t *testing.T) {
+	cases := []struct {
+		stream string
+		want   string
+	}{
+		{"search_analytics_by_date", "date"},
+		{"search_analytics_by_country", "date,country"},
+		{"search_analytics_by_device", "date,device"},
+		{"search_analytics_by_page", "date,page"},
+		{"search_analytics_by_query", "date,query"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.stream, func(t *testing.T) {
+			got, ok := analyticsDimensions[tc.stream]
+			if !ok {
+				t.Fatalf("analyticsDimensions[%q] is missing", tc.stream)
+			}
+			if joined := strings.Join(got, ","); joined != tc.want {
+				t.Fatalf("analyticsDimensions[%q] = %q, want %q", tc.stream, joined, tc.want)
+			}
+		})
 	}
 }
 
@@ -98,7 +185,7 @@ func TestReadStream_SitemapsUsesSingleSiteFallbackAndStringifiesCounts(t *testin
 // TestReadStream_PaginatesAndAuthenticates is the red-first test: it asserts
 // the search-analytics stream pages through two responses via startRow
 // offset carried inside the POST body, and that rows are flattened into
-// records keyed by the requested dimension. Auth is applied by rt.Requester
+// records keyed by the requested dimensions. Auth is applied by rt.Requester
 // (built by the engine, exercised here directly), not by the hook itself.
 func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 	var sawAuth string
@@ -133,12 +220,12 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 		switch body.StartRow {
 		case 0:
 			_, _ = w.Write([]byte(`{"rows":[
-				{"keys":["2026-06-01"],"clicks":10,"impressions":100,"ctr":0.1,"position":3.2},
-				{"keys":["2026-06-02"],"clicks":5,"impressions":50,"ctr":0.1,"position":4.5}
+				{"keys":["2026-06-01","USA"],"clicks":10,"impressions":100,"ctr":0.1,"position":3.2},
+				{"keys":["2026-06-02","GBR"],"clicks":5,"impressions":50,"ctr":0.1,"position":4.5}
 			]}`))
 		case 2:
 			_, _ = w.Write([]byte(`{"rows":[
-				{"keys":["2026-06-03"],"clicks":1,"impressions":20,"ctr":0.05,"position":7.0}
+				{"keys":["2026-06-03","IND"],"clicks":1,"impressions":20,"ctr":0.05,"position":7.0}
 			]}`))
 		default:
 			t.Errorf("unexpected startRow=%v", body.StartRow)
@@ -149,7 +236,7 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 
 	rt := &engine.Runtime{Requester: &connsdk.Requester{BaseURL: srv.URL, Auth: connsdk.Bearer("ya29.test_token")}}
 	req := connectors.ReadRequest{
-		Stream: "search_analytics_by_date",
+		Stream: "search_analytics_by_country",
 		Config: connectors.RuntimeConfig{
 			Config: map[string]string{
 				"site_urls":  "https://example.com/",
@@ -162,7 +249,7 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 
 	h := &Hooks{}
 	var got []connectors.Record
-	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "search_analytics_by_date"}, req, rt, func(rec connectors.Record) error {
+	handled, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "search_analytics_by_country"}, req, rt, func(rec connectors.Record) error {
 		got = append(got, rec)
 		return nil
 	})
@@ -170,13 +257,13 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 		t.Fatalf("ReadStream: %v", err)
 	}
 	if !handled {
-		t.Fatal("handled = false, want true for search_analytics_by_date")
+		t.Fatal("handled = false, want true for search_analytics_by_country")
 	}
 	if sawAuth != "Bearer ya29.test_token" {
 		t.Fatalf("Authorization = %q, want Bearer ya29.test_token", sawAuth)
 	}
-	if len(sawDimensions) != 1 || sawDimensions[0] != "date" {
-		t.Fatalf("dimensions = %v, want [date]", sawDimensions)
+	if len(sawDimensions) != 2 || sawDimensions[0] != "date" || sawDimensions[1] != "country" {
+		t.Fatalf("dimensions = %v, want [date country]", sawDimensions)
 	}
 	if len(sawStartRows) != 2 || sawStartRows[0] != 0 || sawStartRows[1] != 2 {
 		t.Fatalf("startRows = %v, want [0 2]", sawStartRows)
@@ -185,8 +272,8 @@ func TestReadStream_PaginatesAndAuthenticates(t *testing.T) {
 		t.Fatalf("records = %d, want 3 (2 pages)", len(got))
 	}
 	for _, rec := range got {
-		if rec["date"] == nil || rec["clicks"] == nil {
-			t.Fatalf("record missing date/clicks: %+v", rec)
+		if rec["date"] == nil || rec["country"] == nil || rec["clicks"] == nil {
+			t.Fatalf("record missing date/country/clicks: %+v", rec)
 		}
 		if rec["site_url"] != "https://example.com/" {
 			t.Fatalf("record site_url = %v, want https://example.com/", rec["site_url"])
@@ -231,26 +318,42 @@ func TestReadStream_MultipleSitesFanOut(t *testing.T) {
 	}
 }
 
-func TestReadStream_AvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t *testing.T) {
-	var sawPath string
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sawPath = r.URL.Path
-		_, _ = w.Write([]byte(`{"rows":[]}`))
-	}))
-	defer srv.Close()
-
-	rt := &engine.Runtime{Requester: &connsdk.Requester{BaseURL: srv.URL + "/webmasters/v3"}}
-	req := connectors.ReadRequest{Config: connectors.RuntimeConfig{Config: map[string]string{
-		"base_url":  srv.URL + "/webmasters/v3",
-		"site_urls": "https://example.com/",
-	}}}
-	h := &Hooks{}
-	_, err := h.ReadStream(context.Background(), engine.StreamSpec{Name: "search_analytics_by_query"}, req, rt, func(connectors.Record) error { return nil })
+func TestBundleSpecRequiresRootBaseURL(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "google-search-console")
 	if err != nil {
-		t.Fatalf("ReadStream: %v", err)
+		t.Fatalf("load bundle: %v", err)
 	}
-	if strings.Contains(sawPath, "/webmasters/v3/webmasters/v3/") {
-		t.Fatalf("path = %q, want no duplicated Search Console API prefix", sawPath)
+
+	accepted := []string{
+		"https://searchconsole.googleapis.com",
+		"https://searchconsole.googleapis.com/",
+		"http://127.0.0.1:8080",
+		"http://localhost:8080/",
+	}
+	for _, baseURL := range accepted {
+		t.Run("accept_"+baseURL, func(t *testing.T) {
+			if err := bundle.Spec.Validate(map[string]any{"access_token": "fixture", "base_url": baseURL}); err != nil {
+				t.Fatalf("validate root base URL %q: %v", baseURL, err)
+			}
+		})
+	}
+
+	rejected := []string{
+		"https://www.googleapis.com/webmasters/v3",
+		"https://proxy.example.test/api",
+		"https://proxy.example.test/?tenant=one",
+		"https://proxy.example.test/#fragment",
+	}
+	for _, baseURL := range rejected {
+		t.Run("reject_"+baseURL, func(t *testing.T) {
+			err := bundle.Spec.Validate(map[string]any{"access_token": "fixture", "base_url": baseURL})
+			if err == nil {
+				t.Fatalf("validate pathful base URL %q: want error", baseURL)
+			}
+			if !strings.Contains(err.Error(), "/base_url") {
+				t.Fatalf("validate pathful base URL %q: error %q does not identify base_url", baseURL, err)
+			}
+		})
 	}
 }
 

@@ -3,7 +3,7 @@
   "docs": "https://developers.google.com/webmaster-tools/v1/api_reference_index",
   "reviewed_at": "2026-08-05",
   "operation_ledger_version": 1,
-  "scope": "Google's current Discovery document has 11 unique published operations: five read operations reach ETL streams, four record-shaped mutations reach typed reverse-ETL writes, and URL Inspection plus Mobile-Friendly Test reach typed bounded direct reads. Search Analytics reaches five dimension-specific ETL stream conveniences over its single documented POST. There are no binary, CDC, generic raw HTTP/body/query, excluded, or planned operations.",
+  "scope": "Google's current Discovery document has 11 unique published operations: five read operations reach ETL streams, four record-shaped mutations reach typed reverse-ETL writes, and URL Inspection plus Mobile-Friendly Test reach typed bounded direct reads. Search Analytics reaches five ETL stream conveniences over its single documented POST: by-date groups on date, while country/device/page/query group on date plus the named dimension and preserve date as the cursor. There are no binary, CDC, generic raw HTTP/body/query, excluded, or planned operations.",
   "endpoints": [
     {
       "method": "GET",
