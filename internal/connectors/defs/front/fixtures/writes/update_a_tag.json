@@ -1,10 +1,14 @@
 {
   "record": {
-    "tag_id": "fixture_tag_id"
+    "tag_id": "fixture_tag_id",
+    "parent_tag_id": null
   },
   "expect": {
     "method": "PATCH",
-    "path": "/tags/fixture_tag_id"
+    "path": "/tags/fixture_tag_id",
+    "body": {
+      "parent_tag_id": null
+    }
   },
   "response": {
     "status": 200,

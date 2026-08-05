@@ -56453,6 +56453,7 @@
             "add-conversation-tag",
             "delete-conversation",
             "update-conversation",
+            "update-conversation-status-id",
             "create-conversation",
             "create-teammate-discussion",
             "create-inbox-task",
@@ -59611,7 +59612,7 @@
             {
               "name": "name",
               "type": "string",
-              "summary": "Maps to record.name.",
+              "summary": "Tag name, at most 64 characters.",
               "values": [],
               "maps_to": "record.name",
               "allow_empty": false
@@ -59644,7 +59645,7 @@
             {
               "name": "contact-ids",
               "type": "string_array",
-              "summary": "Maps to record.contact_ids.",
+              "summary": "Contact IDs to remove; Front accepts at most 50.",
               "values": [],
               "maps_to": "record.contact_ids"
             }
@@ -59758,7 +59759,7 @@
             {
               "name": "contact-ids",
               "type": "string_array",
-              "summary": "Maps to record.contact_ids.",
+              "summary": "Contact IDs to remove; Front accepts at most 50.",
               "values": [],
               "maps_to": "record.contact_ids"
             }
@@ -60282,7 +60283,7 @@
             {
               "name": "teammate-ids",
               "type": "string_array",
-              "summary": "Maps to record.teammate_ids.",
+              "summary": "Follower teammate IDs; Front accepts at most 50.",
               "values": [],
               "maps_to": "record.teammate_ids"
             }
@@ -60314,7 +60315,7 @@
             {
               "name": "teammate-ids",
               "type": "string_array",
-              "summary": "Maps to record.teammate_ids.",
+              "summary": "Follower teammate IDs; Front accepts at most 50.",
               "values": [],
               "maps_to": "record.teammate_ids"
             }
@@ -60346,7 +60347,7 @@
             {
               "name": "link-ids",
               "type": "string_array",
-              "summary": "Maps to record.link_ids.",
+              "summary": "Conversation link IDs; Front accepts at most 10.",
               "values": [],
               "maps_to": "record.link_ids"
             }
@@ -60607,14 +60608,67 @@
               "summary": "Maps to record.conversation_id.",
               "values": [],
               "maps_to": "record.conversation_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "status",
+              "type": "enum",
+              "summary": "Built-in status selector; mutually exclusive with status-id.",
+              "values": [
+                "archived",
+                "open",
+                "deleted",
+                "spam"
+              ],
+              "maps_to": "record.status",
+              "required": true
             }
           ],
-          "examples": [],
+          "examples": [
+            "pm front update-conversation --conversation-id cnv_fixture_1 --status open --preview --json"
+          ],
           "output_policy": "",
           "risk": "high: fixed Front PATCH /conversations/{conversation_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
           "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-          "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+          "notes": "Fixed built-in-status variant. Front permits status or status_id, never both; use update-conversation-status-id for a custom ticket status. No raw method/path/body passthrough."
+        },
+        {
+          "path": "update-conversation-status-id",
+          "summary": "Update a conversation to one custom ticket status.",
+          "intent": "reverse_etl",
+          "availability": "implemented",
+          "stream": "",
+          "write": "update_conversation",
+          "source_cli_path": "",
+          "source_url": "https://dev.frontapp.com/reference/update-conversation.md",
+          "flags": [
+            {
+              "name": "conversation-id",
+              "type": "string",
+              "summary": "Maps to record.conversation_id.",
+              "values": [],
+              "maps_to": "record.conversation_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "status-id",
+              "type": "string",
+              "summary": "Custom ticket status selector; mutually exclusive with status.",
+              "values": [],
+              "maps_to": "record.status_id",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [
+            "pm front update-conversation-status-id --conversation-id cnv_fixture_1 --status-id sts_fixture_1 --preview --json"
+          ],
+          "output_policy": "",
+          "risk": "high: fixed Front PATCH /conversations/{conversation_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+          "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+          "notes": "Fixed custom-ticket-status variant. Front permits status_id or status, never both; use update-conversation for a built-in status. No raw method/path/body passthrough."
         },
         {
           "path": "create-conversation",
@@ -60784,7 +60838,7 @@
             {
               "name": "description",
               "type": "string",
-              "summary": "Optional task description.",
+              "summary": "Optional task description, at most 65535 characters.",
               "values": [],
               "maps_to": "record.description",
               "allow_empty": false
@@ -60845,7 +60899,7 @@
             {
               "name": "description",
               "type": "string",
-              "summary": "Optional task description.",
+              "summary": "Optional task description, at most 65535 characters.",
               "values": [],
               "maps_to": "record.description",
               "allow_empty": false
@@ -62425,7 +62479,7 @@
             {
               "name": "name",
               "type": "string",
-              "summary": "Maps to record.name.",
+              "summary": "Tag name, at most 64 characters.",
               "values": [],
               "maps_to": "record.name",
               "allow_empty": false
@@ -62500,7 +62554,7 @@
             {
               "name": "name",
               "type": "string",
-              "summary": "Maps to record.name.",
+              "summary": "Tag name, at most 64 characters.",
               "values": [],
               "maps_to": "record.name",
               "allow_empty": false
@@ -63065,7 +63119,7 @@
             {
               "name": "name",
               "type": "string",
-              "summary": "Maps to record.name.",
+              "summary": "Tag name, at most 64 characters.",
               "values": [],
               "maps_to": "record.name",
               "allow_empty": false
@@ -63517,7 +63571,7 @@
             {
               "name": "name",
               "type": "string",
-              "summary": "Maps to record.name.",
+              "summary": "Tag name, at most 64 characters.",
               "values": [],
               "maps_to": "record.name",
               "allow_empty": false
@@ -64260,17 +64314,69 @@
             {
               "name": "metrics",
               "type": "string_array",
-              "summary": "Maps to request body metrics.",
+              "summary": "Documented Front analytics metric names.",
               "values": [],
               "maps_to": "body.metrics",
               "required": true
+            },
+            {
+              "name": "timezone",
+              "type": "string",
+              "summary": "Optional IANA timezone name.",
+              "values": [],
+              "maps_to": "body.timezone",
+              "allow_empty": false
+            },
+            {
+              "name": "filter-tag-ids",
+              "type": "string_array",
+              "summary": "Optional Front tag IDs filter.",
+              "values": [],
+              "maps_to": "body.filters.tag_ids"
+            },
+            {
+              "name": "filter-teammate-ids",
+              "type": "string_array",
+              "summary": "Optional Front teammate IDs filter.",
+              "values": [],
+              "maps_to": "body.filters.teammate_ids"
+            },
+            {
+              "name": "filter-channel-ids",
+              "type": "string_array",
+              "summary": "Optional Front channel IDs filter.",
+              "values": [],
+              "maps_to": "body.filters.channel_ids"
+            },
+            {
+              "name": "filter-inbox-ids",
+              "type": "string_array",
+              "summary": "Optional Front inbox IDs filter.",
+              "values": [],
+              "maps_to": "body.filters.inbox_ids"
+            },
+            {
+              "name": "filter-team-ids",
+              "type": "string_array",
+              "summary": "Optional Front team IDs filter.",
+              "values": [],
+              "maps_to": "body.filters.team_ids"
+            },
+            {
+              "name": "filter-account-ids",
+              "type": "string_array",
+              "summary": "Optional Front account IDs filter.",
+              "values": [],
+              "maps_to": "body.filters.account_ids"
             }
           ],
-          "examples": [],
+          "examples": [
+            "pm front analytics reports create --start 1893456000 --end 1893542400 --metrics num_messages_received --filter-inbox-ids inb_fixture_1 --timezone UTC --json"
+          ],
           "output_policy": "json_redacted",
           "risk": "high: analytics report/export metadata may expose operational content; output is bounded and redacted",
           "approval": "none for read/query; no provider write execution is performed by these direct-read commands",
-          "notes": "Fixed provider search/query endpoint; distinct from warehouse pm query."
+          "notes": "Filters are optional. When filters are supplied, at least one documented filter family is present; different families use AND and IDs within one family use OR. No raw request body is accepted."
         },
         {
           "path": "analytics reports get",
@@ -64945,7 +65051,7 @@
             {
               "name": "content",
               "type": "string",
-              "summary": "Maps to record.content.",
+              "summary": "Non-empty call summary content.",
               "values": [],
               "maps_to": "record.content",
               "allow_empty": false,
@@ -65214,7 +65320,7 @@
             {
               "name": "metadata-external-id",
               "type": "string",
-              "summary": "Maps to record.metadata.external_id.",
+              "summary": "External message ID, at most 200 characters.",
               "values": [],
               "maps_to": "record.metadata.external_id",
               "allow_empty": false,
@@ -65223,7 +65329,7 @@
             {
               "name": "metadata-external-conversation-id",
               "type": "string",
-              "summary": "Maps to record.metadata.external_conversation_id.",
+              "summary": "External conversation ID, at most 200 characters.",
               "values": [],
               "maps_to": "record.metadata.external_conversation_id",
               "allow_empty": false,
@@ -65276,7 +65382,7 @@
             {
               "name": "metadata-external-id",
               "type": "string",
-              "summary": "Maps to record.metadata.external_id.",
+              "summary": "External message ID, at most 200 characters.",
               "values": [],
               "maps_to": "record.metadata.external_id",
               "allow_empty": false,
@@ -65285,7 +65391,7 @@
             {
               "name": "metadata-external-conversation-id",
               "type": "string",
-              "summary": "Maps to record.metadata.external_conversation_id.",
+              "summary": "External conversation ID, at most 200 characters.",
               "values": [],
               "maps_to": "record.metadata.external_conversation_id",
               "allow_empty": false,
@@ -65364,7 +65470,7 @@
         }
       ]
     },
-    "docs_md": "# Overview\n\nFront is modeled as a definition-owned connector bundle for the documented Front Platform API sources listed in `https://dev.frontapp.com/llms.txt` and the linked `reference/*.md` pages. This worker parsed the embedded OpenAPI snippets from those reference pages and reconciled 255 documented operation pages (254 unique method/path pairs; `PATCH /channels/{channel_id}` is documented twice and one row is retained as a duplicate ledger entry for count reconciliation).\n\nImplemented read streams cover 115 fixed Front GET/changefeed surfaces. Implemented reverse ETL metadata covers 129 documented Core REST and Channels API write operations (118 Core REST writes, 1 application event trigger surface, and 10 custom-channel call/message sync writes: create/update call, call recording/summary/transcript, application message template sync/update, inbound/outbound message sync, and external message status update). Direct/provider search metadata covers 5 bounded JSON operations. Five attachment downloads are implemented as fixed `binary_download` operations with project-relative output containment and per-operation byte limits. The duplicate `PATCH /channels/{channel_id}` documentation row is recorded once for count reconciliation; its executable behavior is covered by the single `update_channel` write action.\n\nService API documentation: https://dev.frontapp.com/llms.txt.\n\n## Auth setup\n\nConnection fields:\n\n- `api_key` (required, secret, string): Front API token, sent as `Authorization: Bearer <api_key>`. Never log or store token values in fixtures.\n- `base_url` (optional, string): default `https://api2.frontapp.com`.\n- `page_limit` (optional, string): default `50`; sent as `limit` on paginated list streams.\n- Optional path-parameter config fields such as `account_id`, `conversation_id`, `inbox_id`, and `team_id` are used only by parameterized streams. A parameterized stream fails closed if its required config value is absent.\n\nConnection checks call `GET /inboxes` with bearer authentication.\n\n## Streams notes\n\nThe bundle declares 115 Front read streams. List streams read records from `_results` and follow `_pagination.next`; single-resource streams use a single-object projection. Projection is `passthrough` for generated full-surface streams so the connector does not silently drop Front fields before a future schema-tightening pass.\n\nThe legacy fixture-backed streams remain available with their original names: `contacts`, `conversations`, `inboxes`, `tags`, `teammates`, and `channels`. Event/changefeed GET surfaces are represented as read streams; the mutating application event trigger is a fixed reverse-ETL action rather than a CDC reader claim. `metadata.capabilities.cdc` remains false because there is no streaming CDC implementation.\n\n## Write actions & risks\n\n`writes.json` declares fixed Front write actions only; there is no generic method/path/body escape hatch. Every action has a record schema, path field list where applicable, risk text, and `confirm: \"destructive\"` so execution stays behind the existing reverse ETL plan → preview → explicit approval → execute path plus typed destructive confirmation. DELETE actions declare idempotent 404 handling through `missing_ok_status: [404]`.\n\nCustom-channel call and message sync actions (`create_call`, `update_call`, `add_call_summary`, `add_call_transcript`, `sync_application_message_template`, `update_application_message_template`, `sync_inbound_message`, `sync_outbound_message`, `update_external_message_status`) use the same fixed-endpoint reverse ETL path as every other write; they operate against channels this connector's own `create_a_channel`/`update_channel`/`validate_channel` actions can create and manage, not a Front Marketplace-partner-only surface. `add_call_recording` uses the engine's typed multipart write support (`body_type: \"multipart\"`) to upload a bounded, project-relative local audio file path as the call recording attachment, matching the pattern already used by the `gong` connector's `upload_call_media`/`upload_crm_entities` actions; like those, it has no `fixtures/writes/` dynamic-replay fixture (multipart write-shape conformance is not yet exercised by any bundle in this repo) and its coverage rests on `connectorgen validate`'s static schema/CLI-mapping checks plus `go build`/`go vet`.\n\nDirect/provider-search commands for analytics exports/reports and conversation search are fixed, bounded, JSON-redacted direct reads. The five attachment download commands use the engine's implemented `binary_download` contract, fixed Front endpoints, project-relative destinations, and explicit maximum response sizes.\n\n## Conditional request contracts\n\n`schemas/request_contracts.json` preserves Front's draft-07 composed request rules for analytics export discriminators, composed draft/template requiredness, exclusive link and conversation destinations, channel/call variants, and merge cardinality. The CLI exposes fixed typed commands for each provider-valid branch: message, fixed-event, parameterized-event, and Smart QA exports; both conversation-link and link selectors; inbox/teammate discussion/task destinations; custom/SMTP/Twilio channels; inbound/outbound calls; and both merge forms. Each command's help states its branch-specific requirements and never accepts a raw body.\n\nFront's [application-template schema](https://dev.frontapp.com/reference/sync-application-message-template.md) requires the `variable_mappings` property but declares no minimum array length, so record-driven sync accepts an empty array for a static template; when a mapping is present, its `uid`, `name`, and `type` fields are required. The CLI command deliberately constructs one complete mapping and identifies itself as the one-mapping variant. Front's [call schema](https://dev.frontapp.com/reference/create-call.md) requires a non-null string `parent_external_call_id` in both direction branches. Front's [channel schema](https://dev.frontapp.com/reference/create-a-channel.md) restricts `settings.sid` and `settings.auth_token` to Twilio channels, and the composed custom branch rejects both fields.\n\nCurrent main's minimal schema compiler does not evaluate `oneOf`, `allOf`, `if`/`then`, `not`, or `anyOf`, so the executable `record_schema`/`body_schema` copies retain only the compatible typed field and cardinality subset. Full record-driven enforcement depends on the in-flight shared normalized-schema composition support; this connector does not implement a private composition evaluator or weaken shared validation. The fixed CLI variants and fixtures are provider-valid while that shared dependency is pending.\n\nOutbound message sends, message replies, and `mark_message_seen` are explicitly non-batchable. Their single-record commands remain available, and seen-state changes must represent a real end-user action.\n\n## Deferred multipart fields\n\nThe following optional provider file fields are deliberately absent from the JSON write schemas because Front requires multipart form data when they are supplied:\n\n- `attachments` on [`create_draft`](https://dev.frontapp.com/reference/create-draft.md), [`receive_custom_messages`](https://dev.frontapp.com/reference/receive-custom-messages.md), [`create_message`](https://dev.frontapp.com/reference/create-message.md), [`add_comment_reply`](https://dev.frontapp.com/reference/add-comment-reply.md), [`add_comment`](https://dev.frontapp.com/reference/add-comment.md), [`create_draft_reply`](https://dev.frontapp.com/reference/create-draft-reply.md), [`create_message_reply`](https://dev.frontapp.com/reference/create-message-reply.md), [`create_conversation.comment`](https://dev.frontapp.com/reference/create-conversation.md), [`edit_draft`](https://dev.frontapp.com/reference/edit-draft.md), [`import_inbox_message`](https://dev.frontapp.com/reference/import-inbox-message.md), [`create_message_template`](https://dev.frontapp.com/reference/create-message-template.md), [`create_team_message_template`](https://dev.frontapp.com/reference/create-team-message-template.md), [`sync_inbound_message`](https://dev.frontapp.com/reference/sync-inbound-message.md), and [`sync_outbound_message`](https://dev.frontapp.com/reference/sync-outbound-message.md).\n- `avatar` on [`update_a_contact`](https://dev.frontapp.com/reference/update-a-contact.md), [`create_contact`](https://dev.frontapp.com/reference/create-contact.md), [`create_teammate_contact`](https://dev.frontapp.com/reference/create-teammate-contact.md), and [`create_team_contact`](https://dev.frontapp.com/reference/create-team-contact.md).\n\nSupporting these fields requires an array-aware extension to the typed multipart contract: repeated bounded file parts (including `attachments[]`), repeated scalar parts for array-valued form fields, deterministic encoding for nested object fields, project-root containment, approved payload digests, media-type checks, and per-file plus aggregate byte limits. The existing flat declared-part contract already expresses `add_call_recording`, so that action remains implemented without exposing a generic multipart or raw-body path.\n\n## Known limits\n\n- No live Front credentials or provider calls were used; this bundle is fixture/conformance backed and remains uncertified for live behavior.\n- The generated stream schemas are intentionally permissive (`projection: passthrough`, `additionalProperties: true`) pending a future field-tightening pass; they preserve records rather than dropping undocumented fields.\n- Parameterized streams require the corresponding config values and are not safe as an all-stream default sync without operator selection.\n- File-valued `attachments` and `avatar` request fields remain deferred exactly as listed above; supplying them requires the bounded array-aware multipart extension described there.\n- `add_call_recording` is a multipart file-upload write with no dynamic conformance fixture (see Write actions & risks); its correctness rests on static schema/CLI-mapping validation and `go vet`/`go build`, the same bar the repo's only other multipart-write connector (`gong`) is held to.\n- Record-driven enforcement of the composed contracts in `schemas/request_contracts.json` remains paused on the shared normalized-schema composition dependency; fixed CLI variants already construct provider-valid branches without a generic body escape.\n- The duplicate `PATCH /channels/{channel_id}` docs row is recorded as a duplicate operation row; the executable Core API write action is declared once.\n",
+    "docs_md": "# Overview\n\nFront is modeled as a definition-owned connector bundle for the documented Front Platform API sources listed in `https://dev.frontapp.com/llms.txt` and the linked `reference/*.md` pages. This worker parsed the embedded OpenAPI snippets from those reference pages and reconciled 255 documented operation pages (254 unique method/path pairs; `PATCH /channels/{channel_id}` is documented twice and one row is retained as a duplicate ledger entry for count reconciliation).\n\nImplemented read streams cover 115 fixed Front GET/changefeed surfaces. Implemented reverse ETL metadata covers 129 documented Core REST and Channels API write operations (118 Core REST writes, 1 application event trigger surface, and 10 custom-channel call/message sync writes: create/update call, call recording/summary/transcript, application message template sync/update, inbound/outbound message sync, and external message status update). Direct/provider search metadata covers 5 bounded JSON operations. Five attachment downloads are implemented as fixed `binary_download` operations with project-relative output containment and per-operation byte limits. The duplicate `PATCH /channels/{channel_id}` documentation row is recorded once for count reconciliation; its executable behavior is covered by the single `update_channel` write action.\n\nService API documentation: https://dev.frontapp.com/llms.txt.\n\n## Auth setup\n\nConnection fields:\n\n- `api_key` (required, secret, string): Front API token, sent as `Authorization: Bearer <api_key>`. Never log or store token values in fixtures.\n- `base_url` (optional, string): default `https://api2.frontapp.com`.\n- `page_limit` (optional, string): default `50`; sent as `limit` on paginated list streams.\n- Optional path-parameter config fields such as `account_id`, `conversation_id`, `inbox_id`, and `team_id` are used only by parameterized streams. A parameterized stream fails closed if its required config value is absent.\n\nConnection checks call `GET /inboxes` with bearer authentication.\n\n## Streams notes\n\nThe bundle declares 115 Front read streams. List streams read records from `_results` and follow `_pagination.next`; single-resource streams use a single-object projection. Projection is `passthrough` for generated full-surface streams so the connector does not silently drop Front fields before a future schema-tightening pass.\n\nThe legacy fixture-backed streams remain available with their original names: `contacts`, `conversations`, `inboxes`, `tags`, `teammates`, and `channels`. Event/changefeed GET surfaces are represented as read streams; the mutating application event trigger is a fixed reverse-ETL action rather than a CDC reader claim. `metadata.capabilities.cdc` remains false because there is no streaming CDC implementation.\n\n## Write actions & risks\n\n`writes.json` declares fixed Front write actions only; there is no generic method/path/body escape hatch. Every action has a record schema, path field list where applicable, risk text, and `confirm: \"destructive\"` so execution stays behind the existing reverse ETL plan → preview → explicit approval → execute path plus typed destructive confirmation. DELETE actions declare idempotent 404 handling through `missing_ok_status: [404]`.\n\nCustom-channel call and message sync actions (`create_call`, `update_call`, `add_call_summary`, `add_call_transcript`, `sync_application_message_template`, `update_application_message_template`, `sync_inbound_message`, `sync_outbound_message`, `update_external_message_status`) use the same fixed-endpoint reverse ETL path as every other write; they operate against channels this connector's own `create_a_channel`/`update_channel`/`validate_channel` actions can create and manage, not a Front Marketplace-partner-only surface. `add_call_recording` uses the engine's typed multipart write support (`body_type: \"multipart\"`) to upload a bounded, project-relative local audio file path as the call recording attachment, matching the pattern already used by the `gong` connector's `upload_call_media`/`upload_crm_entities` actions; like those, it has no `fixtures/writes/` dynamic-replay fixture (multipart write-shape conformance is not yet exercised by any bundle in this repo) and its coverage rests on `connectorgen validate`'s static schema/CLI-mapping checks plus `go build`/`go vet`.\n\nDirect/provider-search commands for analytics exports/reports and conversation search are fixed, bounded, JSON-redacted direct reads. The five attachment download commands use the engine's implemented `binary_download` contract, fixed Front endpoints, project-relative destinations, and explicit maximum response sizes.\n\n## Conditional request contracts\n\n`schemas/request_contracts.json` preserves Front's draft-07 composed request rules for analytics export discriminators, analytics report filter alternatives, composed draft/template requiredness, exclusive link and conversation destinations, mutually exclusive conversation status selectors, channel/call variants, and merge cardinality. The CLI exposes fixed typed commands for each provider-valid branch: message, fixed-event, parameterized-event, and Smart QA exports; all six analytics report filter families; both conversation-link and link selectors; built-in and custom conversation statuses; inbox/teammate discussion/task destinations; custom/SMTP/Twilio channels; inbound/outbound calls; and both merge forms. Each command's help states its branch-specific requirements and never accepts a raw body.\n\nFront's [application-template schema](https://dev.frontapp.com/reference/sync-application-message-template.md) requires the `variable_mappings` property but declares no minimum array length, so record-driven sync accepts an empty array for a static template; when a mapping is present, its `uid`, `name`, and `type` fields are required. The CLI command deliberately constructs one complete mapping and identifies itself as the one-mapping variant. Front's [call schema](https://dev.frontapp.com/reference/create-call.md) requires a non-null string `parent_external_call_id` in both direction branches. Front's [channel schema](https://dev.frontapp.com/reference/create-a-channel.md) restricts `settings.sid` and `settings.auth_token` to Twilio channels, and the composed custom branch rejects both fields.\n\nThe executable schemas preserve Front's documented nullable transitions for unassignment, reminder cancellation, signature removal, root-folder moves, unrestricted template inboxes, unrestricted signature channels, and root-tag moves. Provider-declared `maxItems` bounds are enforced for contact, follower, and link arrays. Front's tag-name, conversation-description, call-summary, and Channel API external-ID string bounds are preserved in `schemas/request_contracts.json`; executable enforcement is blocked because `internal/connectors/engine/schema.go` currently rejects draft-07 `minLength` and `maxLength` as unknown keywords, and this connector-owned lane does not change shared validation. Analytics columns, analytics filter arrays, contact handles, and outbound recipients remain required where Front requires the property, but no local `minItems` is invented when Front declares none.\n\nCurrent main's minimal schema compiler does not evaluate `oneOf`, `allOf`, `if`/`then`, `not`, or `anyOf`, so the executable `record_schema`/`body_schema` copies retain only the compatible typed field and cardinality subset. Full record-driven enforcement depends on the in-flight shared normalized-schema composition support; this connector does not implement a private composition evaluator or weaken shared validation. The fixed CLI variants and fixtures are provider-valid while that shared dependency is pending.\n\nOutbound message sends, message replies, and `mark_message_seen` are explicitly non-batchable. Their single-record commands remain available, and seen-state changes must represent a real end-user action.\n\n## Deferred multipart fields\n\nThe following optional provider file fields are deliberately absent from the JSON write schemas because Front requires multipart form data when they are supplied:\n\n- `attachments` on [`create_draft`](https://dev.frontapp.com/reference/create-draft.md), [`receive_custom_messages`](https://dev.frontapp.com/reference/receive-custom-messages.md), [`create_message`](https://dev.frontapp.com/reference/create-message.md), [`add_comment_reply`](https://dev.frontapp.com/reference/add-comment-reply.md), [`add_comment`](https://dev.frontapp.com/reference/add-comment.md), [`create_draft_reply`](https://dev.frontapp.com/reference/create-draft-reply.md), [`create_message_reply`](https://dev.frontapp.com/reference/create-message-reply.md), [`create_conversation.comment`](https://dev.frontapp.com/reference/create-conversation.md), [`edit_draft`](https://dev.frontapp.com/reference/edit-draft.md), [`import_inbox_message`](https://dev.frontapp.com/reference/import-inbox-message.md), [`create_message_template`](https://dev.frontapp.com/reference/create-message-template.md), [`create_team_message_template`](https://dev.frontapp.com/reference/create-team-message-template.md), [`sync_inbound_message`](https://dev.frontapp.com/reference/sync-inbound-message.md), and [`sync_outbound_message`](https://dev.frontapp.com/reference/sync-outbound-message.md).\n- `avatar` on [`update_a_contact`](https://dev.frontapp.com/reference/update-a-contact.md), [`create_contact`](https://dev.frontapp.com/reference/create-contact.md), [`create_teammate_contact`](https://dev.frontapp.com/reference/create-teammate-contact.md), and [`create_team_contact`](https://dev.frontapp.com/reference/create-team-contact.md).\n\nSupporting these fields requires an array-aware extension to the typed multipart contract: repeated bounded file parts (including `attachments[]`), repeated scalar parts for array-valued form fields, deterministic encoding for nested object fields, project-root containment, approved payload digests, media-type checks, and per-file plus aggregate byte limits. The existing flat declared-part contract already expresses `add_call_recording`, so that action remains implemented without exposing a generic multipart or raw-body path.\n\n## Known limits\n\n- No live Front credentials or provider calls were used; this bundle is fixture/conformance backed and remains uncertified for live behavior.\n- The generated stream schemas are intentionally permissive (`projection: passthrough`, `additionalProperties: true`) pending a future field-tightening pass; they preserve records rather than dropping undocumented fields.\n- Parameterized streams require the corresponding config values and are not safe as an all-stream default sync without operator selection.\n- File-valued `attachments` and `avatar` request fields remain deferred exactly as listed above; supplying them requires the bounded array-aware multipart extension described there.\n- `add_call_recording` is a multipart file-upload write with no dynamic conformance fixture (see Write actions & risks); its correctness rests on static schema/CLI-mapping validation and `go vet`/`go build`, the same bar the repo's only other multipart-write connector (`gong`) is held to.\n- Record-driven enforcement of the composed contracts in `schemas/request_contracts.json` remains paused on the shared normalized-schema composition dependency; fixed CLI variants already construct provider-valid branches without a generic body escape.\n- The duplicate `PATCH /channels/{channel_id}` docs row is recorded as a duplicate operation row; the executable Core API write action is declared once.\n",
     "icon": {
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",

@@ -1,14 +1,16 @@
 {
   "record": {
     "name": "fixture_name",
-    "body": "fixture_body"
+    "body": "fixture_body",
+    "inbox_ids": null
   },
   "expect": {
     "method": "POST",
     "path": "/message_templates",
     "body": {
       "name": "fixture_name",
-      "body": "fixture_body"
+      "body": "fixture_body",
+      "inbox_ids": null
     }
   },
   "response": {
