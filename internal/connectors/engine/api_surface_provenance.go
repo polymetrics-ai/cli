@@ -57,7 +57,12 @@ func ValidateSurfaceProvenance(surface *APISurface) SurfaceProvenanceValidation 
 	result.LedgerVersion = surface.OperationLedgerVersion
 	result.ArtifactCount = len(surface.Artifacts)
 	result.EndpointCount = len(surface.Endpoints)
-	if surface.OperationLedgerVersion < 2 {
+	switch surface.OperationLedgerVersion {
+	case 0, 1:
+		return result
+	case 2:
+	default:
+		result.addIssue("operation_ledger_version", fmt.Sprintf("%d is unsupported; expected 1 or 2", surface.OperationLedgerVersion))
 		return result
 	}
 
