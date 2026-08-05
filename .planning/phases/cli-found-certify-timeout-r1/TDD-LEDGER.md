@@ -95,3 +95,32 @@ tests. The cold focused route run now makes 61 real calls and passes the exact
 $ go test -count=1 -run '^TestCertifyCLI' ./internal/cli
 ok      polymetrics.ai/internal/cli    43.128s
 ```
+
+### #3806 — RED/GREEN cold timing parser and Verify visibility
+
+The parser test file was added before its implementation. The first command
+failed to compile because `Target`, `ParseTarget`, `Run`, `GoTestArgs`, and
+`Report` did not exist; that red checkpoint is retained in
+`internal/certifytiming/timing_test.go`. The resulting parser rejects malformed
+events, missing package completions, and failed package events; it also proves
+a controlled duplicate fixture exceeds the duration backstop without sleeping.
+
+```text
+$ go test -count=1 ./internal/certifytiming ./cmd/certifytiming
+ok      polymetrics.ai/internal/certifytiming    0.144s
+?       polymetrics.ai/cmd/certifytiming [no test files]
+
+$ make certify-timing
+... raw go test -count=1 -json events ...
+certify timing summary
+  certify-harness package=polymetrics.ai/internal/connectors/certify elapsed=57.745s
+    slow_test=TestFullSweepSourceStagesAgainstSample elapsed=49.160s
+  certify-cli package=polymetrics.ai/internal/cli elapsed=42.359s
+    slow_test=TestCertifyCLISingleConnectorPassExitsZero elapsed=27.150s
+  total elapsed=100.104s
+```
+
+The local sample is diagnostic only; it cannot establish #3807's fixed
+threshold. `.github/workflows/verify.yml` now runs `make certify-timing`
+before the unchanged aggregate `make verify` step, so the next two
+GitHub-hosted runs provide the required evidence.

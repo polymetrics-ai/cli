@@ -34,6 +34,9 @@ jobs:
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
           "$(go env GOPATH)/bin/golangci-lint" --version
 
+      - name: Certify harness timing
+        run: make certify-timing
+
       - name: Verify
         run: make verify
 
