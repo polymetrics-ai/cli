@@ -275702,8 +275702,151 @@
       }
     ],
     "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads Zoom users, meetings, and webinars through the Zoom REST API.\n\nReadable streams: `users`, `meetings`, `webinars`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://developers.zoom.us/docs/api/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Zoom OAuth access token, sent as a Bearer token\n  (Authorization: Bearer <access_token>). Never logged.\n- `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL\n  override for tests or proxies.\n- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust\n  the stream.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; Records per page (1-300); sent as the 'page_size'\n  query param.\n- `user_id` (optional, string); Zoom user id or email the 'meetings' and 'webinars' streams are\n  scoped to (required for those streams; substituted into the user-scoped path).\n\nSecret fields are redacted in logs and write previews: `access_token`.\n\nDefault configuration values: `base_url=https://api.zoom.us/v2`, `max_pages=0`, `page_size=100`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/users` with query `page_size`=`1`.\n\n## Streams notes\n\nDefault pagination: cursor pagination; cursor parameter `next_page_token`; next token from\n`next_page_token`.\n\n- `users`: GET `/users` - records path `users`; query `page_size`=`{{ config.page_size }}`; cursor\n  pagination; cursor parameter `next_page_token`; next token from `next_page_token`; computed output\n  fields `name`, `updated_at`; emits passthrough records.\n- `meetings`: GET `/users/{{ config.user_id }}/meetings` - records path `meetings`; query\n  `page_size`=`{{ config.page_size }}`; cursor pagination; cursor parameter `next_page_token`; next\n  token from `next_page_token`; computed output fields `id`, `name`, `updated_at`; emits passthrough\n  records.\n- `webinars`: GET `/users/{{ config.user_id }}/webinars` - records path `webinars`; query\n  `page_size`=`{{ config.page_size }}`; cursor pagination; cursor parameter `next_page_token`; next\n  token from `next_page_token`; computed output fields `id`, `name`, `updated_at`; emits passthrough\n  records.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external Zoom API read of user, meeting, and webinar\ndata.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage includes 3 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  out_of_scope=4.\n",
+    "cli_surface": {
+      "tagline": "Read the currently stream-backed Zoom users, meetings, and webinars API routes.",
+      "usage": "pm zoom <users|meetings|webinars> list [flags]",
+      "source_cli": {
+        "name": "Zoom API reference",
+        "docs": "https://developers.zoom.us/docs/api/",
+        "reference": "OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05",
+        "source": "provider_api"
+      },
+      "groups": [
+        {
+          "id": "users",
+          "title": "Users",
+          "commands": [
+            "users"
+          ]
+        },
+        {
+          "id": "meetings",
+          "title": "Meetings and webinars",
+          "commands": [
+            "meetings",
+            "webinars"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential name to use for the Zoom request.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Credential name alias used only when --credential is omitted; does not resolve pm connections.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value; never pass secret values here.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum records to emit from a stream command.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "users list",
+          "summary": "Read Zoom users through the declared ETL stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "users",
+          "write": "",
+          "source_cli_path": "GET /v2/users",
+          "source_url": "https://developers.zoom.us/docs/api/users.md",
+          "flags": [],
+          "examples": [
+            "pm zoom users list --credential zoom-fixture --limit 25 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "meetings list",
+          "summary": "Read meetings for one Zoom user through the declared ETL stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "meetings",
+          "write": "",
+          "source_cli_path": "GET /v2/users/{userId}/meetings",
+          "source_url": "https://developers.zoom.us/docs/api/meetings.md",
+          "flags": [
+            {
+              "name": "user-id",
+              "type": "string",
+              "summary": "Zoom user ID or email; overrides credential config user_id for this request.",
+              "values": [],
+              "maps_to": "config.user_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm zoom meetings list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "webinars list",
+          "summary": "Read webinars for one Zoom user through the declared ETL stream.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "webinars",
+          "write": "",
+          "source_cli_path": "GET /v2/users/{userId}/webinars",
+          "source_url": "https://developers.zoom.us/docs/api/meetings.md",
+          "flags": [
+            {
+              "name": "user-id",
+              "type": "string",
+              "summary": "Zoom user ID or email; overrides credential config user_id for this request.",
+              "values": [],
+              "maps_to": "config.user_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm zoom webinars list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "provider-inventory",
+          "summary": "The Zoom provider ledger tracks 1,913 documented REST operations; Wave 1 executes only these three existing stream-backed reads."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nReads Zoom users, meetings, and webinars through the Zoom REST API.\n\nThe provider-owned inventory contains 1,913 callable REST operations from Zoom's OpenAPI 3.1.1\nreference corpus (881 reads and 1,032 writes), retrieved on 2026-08-05 from the docs static build\n`2026-08-03T14-58-19-06-00`. Wave 1 exposes only the three existing stream-backed reads:\n`pm zoom users list`, `pm zoom meetings list`, and `pm zoom webinars list`.\n\nNo Zoom write action is implemented in this slice. The remaining provider operations stay explicitly\ndisposed in `api_surface.json`; the ledger is not a claim that those operations are executable.\n\nService API documentation: https://developers.zoom.us/docs/api/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Zoom OAuth access token, sent as a Bearer token\n  (Authorization: Bearer `<access_token>`). Never logged.\n- `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL\n  override for tests or proxies.\n- `max_pages` (optional, string); default `0`; Maximum pages; use `0`, `all`, or `unlimited` to\n  exhaust the stream.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; records per page (1-300); sent as the `page_size`\n  query parameter.\n- `user_id` (optional, string); Zoom user ID or email that scopes the `meetings` and `webinars`\n  streams. Set it in credential configuration or override it with `--user-id` for either command.\n\nSecret fields are redacted in logs and write previews: `access_token`.\n\nDefault configuration values: `base_url=https://api.zoom.us/v2`, `max_pages=0`, `page_size=100`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/users` with query `page_size`=`1`.\n\n## Streams notes\n\nDefault pagination is cursor pagination: send `next_page_token` and take the next token from\n`next_page_token`. The stream command `--limit` bounds emitted records (default 100).\n\n- `users`: `pm zoom users list` reads GET `/v2/users` through stream `users`. Records are at\n  `users`; query `page_size`=`{{ config.page_size }}`; computed output fields are `name` and\n  `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/users.md.\n- `meetings`: `pm zoom meetings list` reads GET `/v2/users/{userId}/meetings` through stream\n  `meetings`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `meetings`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n- `webinars`: `pm zoom webinars list` reads GET `/v2/users/{userId}/webinars` through stream\n  `webinars`. Supply `--user-id` or configure `user_id` in the credential. Records are at\n  `webinars`; query `page_size`=`{{ config.page_size }}`; computed output fields are `id`, `name`,\n  and `updated_at`; emits passthrough records. Provider reference:\n  https://developers.zoom.us/docs/api/meetings.md.\n\n## Write actions & risks\n\nThis Wave 1 connector surface is read-only. Read behavior: external Zoom API read of user,\nmeeting, and webinar data.\n\nThe provider inventory records 1,032 documented writes, but none is a declared Zoom write action.\nThe 997 write operations classified as implementable now remain blocked on connector-local typed\nrequest contracts, safety/approval evidence, and fixtures; that is not a shared runtime blocker.\nThe 12 provider-restricted writes remain unavailable pending the corresponding Zoom account\nentitlement. Future writes must use the existing plan → preview → explicit approval → execute path;\ndestructive operations additionally require the typed confirmation gate.\n\n## Known limits\n\n- Batch default: `read_page_size=100`.\n- Provider inventory: 1,913 operations across 35 published modules (881 reads, 1,032 writes).\n- Executable today: 3 stream-backed GET operations (`users`, `meetings`, `webinars`).\n- Pending connector-local delivery: 1,839 operations (842 reads and 997 writes) have no shared\n  foundation blocker, but still need bounded Zoom-specific contracts, schemas, safety evidence, and\n  fixtures before they can become commands.\n- Provider-side restrictions: 17 operations (five Information Barriers, seven Chat migration, one\n  Meeting audit trail, and four Phone blocked-list routes) remain blocked until Zoom enables the\n  corresponding product/account capability.\n- Justified exclusions: 54 provider-deprecated operations remain recorded as `deprecated` ledger\n  evidence and are not implemented.\n",
     "icon": {
       "id": "zoom",
       "path": "icons/zoom.svg",
