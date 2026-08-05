@@ -80,7 +80,7 @@ func (c *fixtureModeEngineConnector) Check(ctx context.Context, cfg connectors.R
 
 func (c *fixtureModeEngineConnector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	if fixtureMode(req.Config) {
-		return c.Connector.ReadFixture(ctx, req, emit)
+		return c.ReadFixture(ctx, req, emit)
 	}
 	return c.Connector.Read(ctx, req, emit)
 }
@@ -149,11 +149,6 @@ func loadPromotedBundle(name string) engine.Bundle {
 func withBundleDefinition(name string, c connectors.Connector) connectors.Connector {
 	bundle := loadPromotedBundle(name)
 	return definitionConnector{Connector: c, base: engine.NewBase(bundle)}
-}
-
-func withEngineBundle(name string) *engine.Connector {
-	bundle := loadPromotedBundle(name)
-	return engine.New(bundle, engine.HooksFor(name))
 }
 
 func withFixtureModeEngineBundle(name string, fixture connectors.Connector, fixtures fs.FS) connectors.Connector {

@@ -154,12 +154,13 @@ func withReplayURL(b engine.Bundle, baseURL string) engine.Bundle {
 }
 
 // runtimeConfigForEngine builds a minimal connectors.RuntimeConfig for
-// dynamic checks: every spec-declared property gets a synthetic non-secret
-// value (so required-field / interpolation resolution doesn't fail for want
-// of a config value), and every x-secret property gets a synthetic secret
-// value. Values are deliberately synthetic/non-realistic (never derived
-// from real credentials) per THREAT-MODEL §4 — conformance never touches
-// live secrets.
+// dynamic checks. ProjectDir carries the reserved conformance-fixture sentinel
+// used by custom auth hooks to avoid token exchanges; every spec-declared
+// property gets a synthetic non-secret value (so required-field/interpolation
+// resolution does not fail for want of config), and every x-secret property
+// gets a synthetic secret value. Values are deliberately synthetic and never
+// derived from real credentials per THREAT-MODEL §4 — conformance never
+// touches live secrets or provider endpoints.
 func runtimeConfigForEngine(b engine.Bundle) connectors.RuntimeConfig {
 	cfg := connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__", Config: map[string]string{}, Secrets: map[string]string{}}
 	if b.Spec == nil {

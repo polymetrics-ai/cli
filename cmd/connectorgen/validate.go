@@ -2071,9 +2071,10 @@ func checkIncrementalPolicies(b engine.Bundle) []Finding {
 // all-digits value IS the correct, intended shape (no misinterpretation risk
 // at all), and rfc3339 never attempts digit parsing in the first place
 // (verbatim passthrough). Reads spec.json's per-property "format" directly from
-// b.RawSpec (F5, REVIEW.md) since the compiled *engine.Schema does not
-// expose annotation keywords like "format" through any accessor (schema.go:
-// "format" is accepted-but-only-preserved, never structurally enforced).
+// b.RawSpec (F5, REVIEW.md) since the compiled *engine.Schema does not expose
+// annotation keywords like "format" through any accessor. Schema validation
+// enforces format:uri, but date and date-time remain annotations, so this
+// validator still has to inspect the raw property declaration.
 func checkIncrementalStartDateFormat(b engine.Bundle) []Finding {
 	if len(b.RawSpec) == 0 {
 		return nil
