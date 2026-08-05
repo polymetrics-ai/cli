@@ -3,6 +3,7 @@
   "parentIssue": 3795,
   "subIssues": [3798, 3801, 3805, 3806, 3807],
   "branch": "fm/cli-found-certify-timeout-r1",
+  "parentDraftPR": "https://github.com/polymetrics-ai/cli/pull/3808",
   "status": "planning",
   "workflow": {
     "tddMode": true,
