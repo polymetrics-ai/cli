@@ -251,6 +251,69 @@ func TestSchemaMappingRequirementsUseCompiledComposition(t *testing.T) {
 		}
 	})
 
+	t.Run("number and integer intersect as integer", func(t *testing.T) {
+		schema, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"additionalProperties":false,
+			"required":["value"],
+			"properties":{"value":{"allOf":[{"type":"number"},{"type":"integer"}]}}
+		}`))
+		if err != nil {
+			t.Fatalf("CompileSchema: %v", err)
+		}
+		info, err := schema.MappingPath("value")
+		if err != nil {
+			t.Fatalf("MappingPath(value): %v", err)
+		}
+		if !reflect.DeepEqual(info.Types, []string{"integer"}) {
+			t.Fatalf("MappingPath(value).Types = %v, want [integer]", info.Types)
+		}
+	})
+
+	t.Run("incompatible closed allOf objects fail compilation", func(t *testing.T) {
+		_, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"allOf":[
+				{"type":"object","additionalProperties":false,"properties":{"first":{"type":"string"}}},
+				{"type":"object","additionalProperties":false,"properties":{"last":{"type":"string"}}}
+			]
+		}`))
+		if err == nil || !strings.Contains(err.Error(), "incompatible closed-object allOf") {
+			t.Fatalf("CompileSchema error = %v, want incompatible closed-object allOf", err)
+		}
+	})
+
+	t.Run("request pointers preserve literal dotted properties", func(t *testing.T) {
+		schema, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"additionalProperties":false,
+			"required":["a.b","a"],
+			"properties":{
+				"a.b":{"type":"string"},
+				"a":{"type":"object","additionalProperties":false,"required":["b"],"properties":{"b":{"type":"string"}}}
+			}
+		}`))
+		if err != nil {
+			t.Fatalf("CompileSchema: %v", err)
+		}
+		paths, err := schema.RequiredRequestBodyPointers()
+		if err != nil {
+			t.Fatalf("RequiredRequestBodyPointers: %v", err)
+		}
+		if !reflect.DeepEqual(paths, []string{"/body/a.b", "/body/a/b"}) {
+			t.Fatalf("RequiredRequestBodyPointers = %v", paths)
+		}
+		for _, pointer := range paths {
+			got, err := CanonicalRequestFieldPointer(pointer, schema)
+			if err != nil {
+				t.Fatalf("CanonicalRequestFieldPointer(%q): %v", pointer, err)
+			}
+			if got != pointer {
+				t.Fatalf("CanonicalRequestFieldPointer(%q) = %q", pointer, got)
+			}
+		}
+	})
+
 	for _, keyword := range []string{"anyOf", "oneOf"} {
 		t.Run(keyword+" is explicit", func(t *testing.T) {
 			schema, err := CompileSchema(json.RawMessage(fmt.Sprintf(`{

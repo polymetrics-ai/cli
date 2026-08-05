@@ -3,6 +3,7 @@ package engine
 import (
 	"fmt"
 	"strings"
+	"unicode"
 )
 
 func requestFieldPointer(namespace string, tokens ...string) string {
@@ -46,9 +47,21 @@ func parseRequestFieldPointer(pointer string) (string, []string, error) {
 		if token == "" {
 			return "", nil, fmt.Errorf("contains an empty field token")
 		}
+		for _, r := range token {
+			if unicode.IsControl(r) {
+				return "", nil, fmt.Errorf("contains control character %q", r)
+			}
+		}
 		tokens = append(tokens, token)
 	}
+	if namespace != "body" && len(tokens) != 1 {
+		return "", nil, fmt.Errorf("%s namespace requires exactly one field token", namespace)
+	}
 	return namespace, tokens, nil
+}
+
+func ParseRequestFieldPointer(pointer string) (string, []string, error) {
+	return parseRequestFieldPointer(pointer)
 }
 
 func unescapeRequestFieldPointerToken(token string) (string, error) {
@@ -85,25 +98,19 @@ func requestContractFieldNamespace(path string) string {
 }
 
 func CanonicalRequestFieldPointer(mapping string, bodySchema *Schema) (string, error) {
-	mapping = strings.TrimSpace(mapping)
-	for _, namespace := range []string{"path", "query"} {
-		if name, ok := strings.CutPrefix(mapping, namespace+"."); ok {
-			if name == "" {
-				return "", fmt.Errorf("%s mapping has an empty field name", namespace)
-			}
-			return requestFieldPointer(namespace, name), nil
-		}
+	namespace, tokens, err := parseRequestFieldPointer(mapping)
+	if err != nil {
+		return "", fmt.Errorf("unsupported request mapping %q: %w", mapping, err)
 	}
-	bodyPath, ok := strings.CutPrefix(mapping, "body.")
-	if !ok || bodyPath == "" {
-		return "", fmt.Errorf("unsupported request mapping %q", mapping)
+	if namespace != "body" {
+		return requestFieldPointer(namespace, tokens...), nil
 	}
 	if bodySchema == nil || bodySchema.node == nil {
 		return "", fmt.Errorf("body mapping requires body_schema")
 	}
-	tokens, err := bodySchema.canonicalMappingTokens(bodyPath)
+	tokens, err = bodySchema.canonicalRequestMappingTokens(tokens)
 	if err != nil {
 		return "", err
 	}
-	return requestFieldPointer("body", tokens...), nil
+	return requestFieldPointer(namespace, tokens...), nil
 }

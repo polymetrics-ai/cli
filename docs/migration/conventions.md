@@ -263,11 +263,14 @@ not a full override by default.
   `/path/<path_fields entry>`, `/query/<outgoing query key>`, or `/body/<outgoing body field>`; values
   name the cited `request_contract.fields[].path` on the retained operation. The loader derives the
   complete input set for each supported body type and rejects missing or stale mappings, mappings
-  across namespaces, and mappings to uncited request fields. This explicit map is required even
-  when names happen to match, so a promotion cannot silently pair an empty operation contract with
-  a body-bearing write action. For path inputs, every `record.*` expression in the write template
-  must have an exact `path_fields` entry and every declared path field must be used; the loader
-  rejects either direction of drift before deriving the map.
+  across namespaces, mappings to uncited request fields, and non-injective mappings that reuse one
+  citation for distinct write inputs. This explicit map is required even when names happen to
+  match, so a promotion cannot silently pair an empty operation contract with a body-bearing write
+  action. Body and query targets are always one-to-one. Path alternatives are allowed only when a
+  future representation identifies them explicitly as alternatives for one template slot; the
+  loader never infers aliases from matching values or names. For path inputs, every `record.*`
+  expression in the write template must have an exact `path_fields` entry and every declared path
+  field must be used; the loader rejects either direction of drift before deriving the map.
 
   REST path placeholders use the shared validation/runtime grammar
   `[A-Za-z_][A-Za-z0-9_.-]*`. The loader rejects unmatched braces and unsupported placeholder
@@ -284,10 +287,23 @@ not a full override by default.
   use `body: "none"`; omission and `{}` are invalid empty-body spellings.
 
   Required CLI body mappings are derived from the engine's compiled schema semantics. `allOf`
-  requirements are combined. An operation-backed command using `anyOf` or `oneOf` is deferred
-  because current CLI metadata cannot express alternative or exclusive required-flag groups; the
-  validator rejects it rather than silently ignoring an arm. Every cited path and query parameter
-  must map to a command flag for body-bearing and empty-body operations alike.
+  requirements are combined. Closed-object `allOf` branches must expose compatible property sets;
+  incompatible branches are rejected during shared schema compilation instead of producing flags
+  for a body runtime can never accept. Type intersections preserve JSON Schema subtyping, including
+  `number` intersected with `integer` producing `integer`. An operation-backed command using
+  `anyOf` or `oneOf` is deferred because current CLI metadata cannot express alternative or
+  exclusive required-flag groups; the validator rejects it rather than silently ignoring an arm.
+  Every cited path and query parameter must map to a command flag for body-bearing and empty-body
+  operations alike.
+
+  Operation-backed CLI `maps_to` values use the same escaped JSON Pointer format as citations:
+  `/path/id`, `/query/filter`, `/body/a.b`, and `/body/a/b`. Dot-delimited request mappings are not
+  accepted on this surface. Runtime consumes the decoded pointer tokens directly, so a literal
+  property named `a.b` is transmitted as `a.b` while `/body/a/b` builds a nested object. Concrete
+  array indices are allowed in CLI mappings and canonicalize to the citation element token `0` for
+  evidence checks. When a static body supplies a required array element field, every supplied
+  element must contain that field; validating only the first element is insufficient because
+  runtime validates the complete array.
 
   Write actions using `json_array` require an exclusively array-rooted schema and map the outgoing
   root-array element and its fields, not the source record's `body_field`. GraphQL variables map
@@ -299,6 +315,10 @@ not a full override by default.
   or owned by effective connector write dispatch, cannot be linked until its effective dynamic or
   hook-generated request has an operation-side representation with complete citations. This checks
   actual execution ownership rather than optional `writes.json` marker fields.
+
+  The governing review lesson is: verify a fix at the layer that performs the action, not only at
+  the layer where metadata or validation changed. Citation collection, authoring validation, CLI
+  assembly, and effective write dispatch must agree on the same decoded request shape.
 
   `docs/migration/request-contract-coverage.json` is the machine-readable rollout inventory, sorted
   by each connector's remaining citation/link gap count and then connector slug. The accompanying

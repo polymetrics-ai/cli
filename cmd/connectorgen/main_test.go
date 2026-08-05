@@ -668,8 +668,8 @@ func TestValidate_CLISurfaceNoBodyRequestContractRequiresFlags(t *testing.T) {
 				"api_surface": [{"method":"POST","path":"/widgets/{id}:refresh"}],
 				"output_policy": "json_redacted",
 				"flags": [
-					{"name":"id","type":"string","maps_to":"path.id","required":true},
-					{"name":"force","type":"boolean","maps_to":"query.force"}
+					{"name":"id","type":"string","maps_to":"/path/id","required":true},
+					{"name":"force","type":"boolean","maps_to":"/query/force"}
 				]
 			}
 		]
@@ -695,7 +695,7 @@ func TestValidate_CLISurfaceNoBodyRequestContractRequiresFlags(t *testing.T) {
 	}
 
 	missingFlag := strings.Replace(cliSurface, `,
-					{"name":"force","type":"boolean","maps_to":"query.force"}`, "", 1)
+					{"name":"force","type":"boolean","maps_to":"/query/force"}`, "", 1)
 	fsys = cliSurfaceBundleFS(missingFlag)
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
 	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
@@ -718,7 +718,7 @@ func TestValidate_CLISurfaceRequestContractFlagsApplyToAllOperations(t *testing.
 			"operation": "cli-surface.widgets.list",
 			"api_surface": [{"method":"GET","path":"/widgets"}],
 			"output_policy": "json_redacted",
-			"flags": [{"name":"debug","type":"boolean","maps_to":"query.debug"}]
+			"flags": [{"name":"debug","type":"boolean","maps_to":"/query/debug"}]
 		}]
 	}`
 	operations := `{
@@ -776,15 +776,18 @@ func TestCLISurfaceRequestContractCanonicalizesArrayIndices(t *testing.T) {
 		},
 		REST: &engine.RESTOperationSpec{BodySchema: schema},
 	}
-	cmd := engine.CLICommand{Path: "widget preview", Flags: []engine.CLIFlag{{Name: "name", MapsTo: "body.items.0.name", Required: true}}}
+	cmd := engine.CLICommand{Path: "widget preview", Flags: []engine.CLIFlag{{Name: "name", MapsTo: "/body/items/0/name", Required: true}}}
 	if findings := checkCLISurfaceRequestContractFlags(engine.Bundle{Name: "acme"}, 0, cmd, op); len(findings) != 0 {
 		t.Fatalf("array-index citation findings = %+v, want none", findings)
 	}
 	if findings := checkCLISurfaceOperationBodyMappings(engine.Bundle{Name: "acme"}, 0, cmd, op); len(findings) != 0 {
 		t.Fatalf("array-index required-mapping findings = %+v, want none", findings)
 	}
-	if !operationStaticBodyProvidesPath(map[string]any{"items": []any{map[string]any{"name": "fixed"}}}, "items.0.name") {
-		t.Fatal("operationStaticBodyProvidesPath did not traverse a static array")
+	if !operationStaticBodyProvidesPointer(map[string]any{"items": []any{map[string]any{"name": "first"}, map[string]any{"name": "second"}}}, "/body/items/0/name") {
+		t.Fatal("operationStaticBodyProvidesPointer did not validate every complete static array element")
+	}
+	if operationStaticBodyProvidesPointer(map[string]any{"items": []any{map[string]any{"name": "first"}, map[string]any{}}}, "/body/items/0/name") {
+		t.Fatal("operationStaticBodyProvidesPointer accepted an incomplete later static array element")
 	}
 }
 
@@ -875,7 +878,7 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 				],
 				"output_policy": "json_redacted",
 				"flags": [
-					{ "name": "payload", "type": "string", "maps_to": "body.payload" }
+					{ "name": "payload", "type": "string", "maps_to": "/body/payload" }
 				],
 				"examples": ["pm cli-surface widget preview --payload fixture --json"]
 			}
@@ -932,7 +935,7 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 	}
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 
-	fixed := strings.Replace(cliSurface, `"maps_to": "body.payload"`, `"maps_to": "body.payload", "required": true`, 1)
+	fixed := strings.Replace(cliSurface, `"maps_to": "/body/payload"`, `"maps_to": "/body/payload", "required": true`, 1)
 	fsys = cliSurfaceBundleFS(fixed)
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
 	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(withWriteEvidenceOperation(operations))}
@@ -1970,7 +1973,7 @@ func validOperationCLISurfaceJSON() string {
 				],
 				"output_policy": "json_redacted",
 				"source_cli_path": "clis widget view",
-				"flags": [{"name":"id","type":"string","maps_to":"path.id","required":true}],
+				"flags": [{"name":"id","type":"string","maps_to":"/path/id","required":true}],
 				"examples": ["pm cli-surface widget view --id w_1 --json"]
 			}
 		]

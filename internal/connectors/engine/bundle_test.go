@@ -934,6 +934,56 @@ func TestBundleLoadValidatesWriteActionClaims(t *testing.T) {
 	}
 }
 
+func TestWriteRequestContractMappingsAreInjective(t *testing.T) {
+	recordSchema := json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["first","last"],
+		"properties":{"first":{"type":"string"},"last":{"type":"string"}}
+	}`)
+	tests := []struct {
+		name     string
+		action   WriteAction
+		fields   []RequestContractField
+		fieldMap map[string]string
+	}{
+		{
+			name: "body targets",
+			action: WriteAction{
+				Name: "create_widget", Kind: "create", Method: "POST", Path: "/widgets",
+				BodyFields: []string{"first", "last"}, RecordSchema: recordSchema,
+			},
+			fields:   []RequestContractField{{Path: "/body/name"}},
+			fieldMap: map[string]string{"/body/first": "/body/name", "/body/last": "/body/name"},
+		},
+		{
+			name: "query targets",
+			action: WriteAction{
+				Name: "create_widget", Kind: "create", Method: "POST", Path: "/widgets", BodyType: "none",
+				Query: map[string]QueryParam{"first": {Template: "{{ record.first }}"}, "last": {Template: "{{ record.last }}"}}, RecordSchema: recordSchema,
+			},
+			fields:   []RequestContractField{{Path: "/query/name"}},
+			fieldMap: map[string]string{"/query/first": "/query/name", "/query/last": "/query/name"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateWriteRequestContractLinks("acme", []WriteAction{tt.action}, []OperationSpec{{
+				ID:   "acme.widgets.create",
+				Kind: "rest_write",
+				RequestContract: &RequestContractSpec{
+					WriteAction:   tt.action.Name,
+					WriteFieldMap: tt.fieldMap,
+					Fields:        tt.fields,
+				},
+			}})
+			if err == nil || !strings.Contains(err.Error(), "write_field_map is not injective") {
+				t.Fatalf("validateWriteRequestContractLinks error = %v, want injectivity error", err)
+			}
+		})
+	}
+}
+
 func TestBundleLoadResolvesRequestBodySchemaReferencesAndComposition(t *testing.T) {
 	fsys := operationsBundleFS(t, `{
 		"operations": [{

@@ -144,6 +144,43 @@ func (s *Schema) RequiredMappingPaths() ([]string, error) {
 	return out, nil
 }
 
+func (s *Schema) RequiredRequestBodyPointers() ([]string, error) {
+	if s == nil || s.node == nil {
+		return nil, fmt.Errorf("schema is nil")
+	}
+	if err := s.node.rejectAlternativeRequestMappings("/body"); err != nil {
+		return nil, err
+	}
+	paths := map[string]bool{}
+	if err := s.node.collectRequiredRequestMappings("/body", paths, s.node); err != nil {
+		return nil, err
+	}
+	out := make([]string, 0, len(paths))
+	for path := range paths {
+		out = append(out, path)
+	}
+	sort.Strings(out)
+	return out, nil
+}
+
+func (s *Schema) RequestFieldPointerInfo(pointer string) (SchemaPathInfo, error) {
+	if s == nil || s.node == nil {
+		return SchemaPathInfo{}, fmt.Errorf("schema is nil")
+	}
+	namespace, tokens, err := parseRequestFieldPointer(pointer)
+	if err != nil {
+		return SchemaPathInfo{}, err
+	}
+	if namespace != "body" {
+		return SchemaPathInfo{}, fmt.Errorf("request field pointer %q is not body-scoped", pointer)
+	}
+	node, _, err := s.requestMappingNode(tokens, pointer)
+	if err != nil {
+		return SchemaPathInfo{}, err
+	}
+	return node.mappingPathInfo()
+}
+
 func (s *Schema) MappingPath(path string) (SchemaPathInfo, error) {
 	if s == nil || s.node == nil {
 		return SchemaPathInfo{}, fmt.Errorf("schema is nil")
@@ -211,6 +248,39 @@ func (n *schemaNode) rejectAlternativeMappings(path string) error {
 	return nil
 }
 
+func (n *schemaNode) rejectAlternativeRequestMappings(pointer string) error {
+	if err := n.mappingConstraintError(pointer); err != nil {
+		return err
+	}
+	if len(n.anyOf) > 0 {
+		return fmt.Errorf("schema %s uses anyOf alternatives that required CLI flags cannot express", pointer)
+	}
+	if len(n.oneOf) > 0 {
+		return fmt.Errorf("schema %s uses oneOf alternatives that required CLI flags cannot express", pointer)
+	}
+	names := make([]string, 0, len(n.properties))
+	for name := range n.properties {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		if err := n.properties[name].rejectAlternativeRequestMappings(appendRequestFieldPointer(pointer, name)); err != nil {
+			return err
+		}
+	}
+	if n.items != nil {
+		if err := n.items.rejectAlternativeRequestMappings(appendRequestFieldPointer(pointer, "0")); err != nil {
+			return err
+		}
+	}
+	for _, branch := range n.allOf {
+		if err := branch.rejectAlternativeRequestMappings(pointer); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (n *schemaNode) collectRequiredMappingPaths(prefix string, paths map[string]bool) error {
 	return n.collectRequiredMappingPathsWithScope(prefix, paths, n)
 }
@@ -240,6 +310,46 @@ func (n *schemaNode) collectRequiredMappingPathsWithScope(prefix string, paths m
 		}
 	}
 	return nil
+}
+
+func (n *schemaNode) collectRequiredRequestMappings(prefix string, paths map[string]bool, scope *schemaNode) error {
+	for _, name := range n.required {
+		path := appendRequestFieldPointer(prefix, name)
+		child, ok := scope.mappingProperty(name)
+		if !ok {
+			return fmt.Errorf("schema required property %q is not declared", path)
+		}
+		nested := map[string]bool{}
+		if err := child.collectRequiredRequestNodeMappings(path, nested); err != nil {
+			return err
+		}
+		if len(nested) == 0 {
+			paths[path] = true
+			continue
+		}
+		for nestedPath := range nested {
+			paths[nestedPath] = true
+		}
+	}
+	for _, branch := range n.allOf {
+		if err := branch.collectRequiredRequestMappings(prefix, paths, scope); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (n *schemaNode) collectRequiredRequestNodeMappings(prefix string, paths map[string]bool) error {
+	if n.mappingIsArray() {
+		if n.items == nil {
+			return nil
+		}
+		return n.items.collectRequiredRequestNodeMappings(appendRequestFieldPointer(prefix, "0"), paths)
+	}
+	if !n.mappingIsObject() {
+		return nil
+	}
+	return n.collectRequiredRequestMappings(prefix, paths, n)
 }
 
 func (n *schemaNode) collectRequiredNodeMappingPaths(prefix string, paths map[string]bool) error {
@@ -318,11 +428,7 @@ func (n *schemaNode) mappingTypeSet() schemaMappingTypeSet {
 			constrained = candidate
 			return
 		}
-		for typ := range constrained {
-			if !candidate[typ] {
-				delete(constrained, typ)
-			}
-		}
+		constrained = intersectSchemaMappingTypes(constrained, candidate)
 		if len(constrained) == 0 {
 			unsatisfiable = true
 		}
@@ -337,6 +443,19 @@ func (n *schemaNode) mappingTypeSet() schemaMappingTypeSet {
 	}
 	sort.Strings(out)
 	return schemaMappingTypeSet{types: out, constrained: constrained != nil, unsatisfiable: unsatisfiable}
+}
+
+func intersectSchemaMappingTypes(left, right map[string]bool) map[string]bool {
+	out := make(map[string]bool)
+	for typ := range left {
+		if right[typ] {
+			out[typ] = true
+		}
+	}
+	if left["number"] && right["integer"] || left["integer"] && right["number"] {
+		out["integer"] = true
+	}
+	return out
 }
 
 func (n *schemaNode) mappingConstraintError(path string) error {
@@ -366,41 +485,43 @@ func (n *schemaNode) mappingIsArray() bool {
 	return containsSchemaType(n.mappingTypeSet().types, "array") || n.items != nil
 }
 
-func (s *Schema) canonicalMappingTokens(path string) ([]string, error) {
+func (s *Schema) canonicalRequestMappingTokens(tokens []string) ([]string, error) {
 	if s == nil || s.node == nil {
 		return nil, fmt.Errorf("schema is nil")
 	}
+	_, canonical, err := s.requestMappingNode(tokens, requestFieldPointer("body", tokens...))
+	return canonical, err
+}
+
+func (s *Schema) requestMappingNode(tokens []string, pointer string) (*schemaNode, []string, error) {
 	current := s.node
-	tokens := make([]string, 0, strings.Count(path, ".")+1)
-	for _, part := range strings.Split(path, ".") {
-		if part == "" {
-			return nil, fmt.Errorf("empty path segment")
-		}
-		if err := current.mappingConstraintError(path); err != nil {
-			return nil, err
+	canonical := make([]string, 0, len(tokens))
+	for _, part := range tokens {
+		if err := current.mappingConstraintError(pointer); err != nil {
+			return nil, nil, err
 		}
 		if current.mappingIsArray() {
 			if err := validateMappingArrayIndex(part); err != nil {
-				return nil, err
+				return nil, nil, err
 			}
 			if current.items == nil {
-				return nil, fmt.Errorf("array segment %q has no item schema", part)
+				return nil, nil, fmt.Errorf("array segment %q has no item schema", part)
 			}
-			tokens = append(tokens, "0")
+			canonical = append(canonical, "0")
 			current = current.items
 			continue
 		}
 		child, ok := current.mappingProperty(part)
 		if !ok {
-			return nil, fmt.Errorf("record field %q is not declared", part)
+			return nil, nil, fmt.Errorf("record field %q is not declared", part)
 		}
-		tokens = append(tokens, part)
+		canonical = append(canonical, part)
 		current = child
 	}
-	if err := current.mappingConstraintError(path); err != nil {
-		return nil, err
+	if err := current.mappingConstraintError(pointer); err != nil {
+		return nil, nil, err
 	}
-	return tokens, nil
+	return current, canonical, nil
 }
 
 func containsSchemaType(types []string, target string) bool {
@@ -586,8 +707,61 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		}
 		n.cursorField = cf
 	}
+	if err := n.validateClosedAllOfCompatibility(); err != nil {
+		return nil, err
+	}
 
 	return n, nil
+}
+
+func (n *schemaNode) validateClosedAllOfCompatibility() error {
+	sets := n.closedAllOfPropertySets(nil)
+	if len(sets) < 2 {
+		return nil
+	}
+	first := sets[0]
+	for _, candidate := range sets[1:] {
+		if equalStringSets(first, candidate) {
+			continue
+		}
+		return fmt.Errorf("compile schema: incompatible closed-object allOf property sets %v and %v", sortedStringSet(first), sortedStringSet(candidate))
+	}
+	return nil
+}
+
+func (n *schemaNode) closedAllOfPropertySets(sets []map[string]bool) []map[string]bool {
+	if n.hasAdditionalProps && !n.additionalProperties {
+		properties := make(map[string]bool, len(n.properties))
+		for name := range n.properties {
+			properties[name] = true
+		}
+		sets = append(sets, properties)
+	}
+	for _, branch := range n.allOf {
+		sets = branch.closedAllOfPropertySets(sets)
+	}
+	return sets
+}
+
+func equalStringSets(left, right map[string]bool) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for value := range left {
+		if !right[value] {
+			return false
+		}
+	}
+	return true
+}
+
+func sortedStringSet(values map[string]bool) []string {
+	out := make([]string, 0, len(values))
+	for value := range values {
+		out = append(out, value)
+	}
+	sort.Strings(out)
+	return out
 }
 
 func compileSchemaBranches(m map[string]json.RawMessage, keyword string) ([]*schemaNode, error) {

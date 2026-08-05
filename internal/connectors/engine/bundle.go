@@ -2177,6 +2177,7 @@ func validateWriteRequestContractLinks(connector string, writes []WriteAction, o
 			citations[strings.TrimSpace(field.Path)] = true
 		}
 		writeInputs := make(map[string]bool, len(writeFields))
+		mappedTargets := make(map[string]string, len(writeFields))
 		for _, writeField := range writeFields {
 			writeInputs[writeField] = true
 			requestField, ok := op.RequestContract.WriteFieldMap[writeField]
@@ -2195,6 +2196,10 @@ func validateWriteRequestContractLinks(connector string, writes []WriteAction, o
 			if !citations[requestField] {
 				return fmt.Errorf("operations.json operation %q request_contract write_field_map maps %q to uncited request field %q", op.ID, writeField, requestField)
 			}
+			if previous := mappedTargets[requestField]; previous != "" {
+				return fmt.Errorf("operations.json operation %q request_contract write_field_map is not injective: %q and %q both map to %q", op.ID, previous, writeField, requestField)
+			}
+			mappedTargets[requestField] = writeField
 		}
 		for writeField := range op.RequestContract.WriteFieldMap {
 			if !writeInputs[writeField] {

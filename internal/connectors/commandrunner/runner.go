@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/safety"
 )
 
@@ -650,6 +651,21 @@ func validationValueWithFallback(primary, fallback string, cfg connectors.Runtim
 
 func validationTargetValue(target string, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) (string, bool, string, error) {
 	switch {
+	case strings.HasPrefix(target, "/"):
+		namespace, tokens, err := engine.ParseRequestFieldPointer(target)
+		if err != nil {
+			return "", false, target, &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("invalid command validation target %q: %v", target, err)}
+		}
+		switch namespace {
+		case "query":
+			value, present := inputs.Query[tokens[0]]
+			return strings.TrimSpace(value), present, target, nil
+		case "body":
+			value, present := nestedBodyPointerValue(inputs.Body, tokens)
+			return strings.TrimSpace(fmt.Sprint(value)), present, target, nil
+		default:
+			return "", false, target, &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command validation target %q", target)}
+		}
 	case strings.HasPrefix(target, "query."):
 		key := strings.TrimPrefix(target, "query.")
 		value, present := inputs.Query[key]
@@ -683,6 +699,32 @@ func nestedBodyValue(body map[string]any, path string) (any, bool) {
 		}
 	}
 	return cur, true
+}
+
+func nestedBodyPointerValue(body map[string]any, tokens []string) (any, bool) {
+	if body == nil || len(tokens) == 0 {
+		return nil, false
+	}
+	var current any = body
+	for _, token := range tokens {
+		switch value := current.(type) {
+		case map[string]any:
+			var ok bool
+			current, ok = value[token]
+			if !ok || current == nil {
+				return nil, false
+			}
+		case []any:
+			index, ok, err := pathArrayIndex(token)
+			if err != nil || !ok || index >= len(value) {
+				return nil, false
+			}
+			current = value[index]
+		default:
+			return nil, false
+		}
+	}
+	return current, true
 }
 
 func parseDateTimeValue(value, label string) (time.Time, error) {
@@ -855,7 +897,20 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 	pathParams := map[string]string{}
 	query := map[string]string{}
 	body := map[string]any{}
-	for name, values := range flags {
+	names := make([]string, 0, len(flags))
+	for name := range flags {
+		names = append(names, name)
+	}
+	sort.Slice(names, func(i, j int) bool {
+		left := allowed[names[i]].MapsTo
+		right := allowed[names[j]].MapsTo
+		if left == right {
+			return names[i] < names[j]
+		}
+		return left < right
+	})
+	for _, name := range names {
+		values := flags[name]
 		if len(values) == 0 {
 			continue
 		}
@@ -870,29 +925,27 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 		if err != nil {
 			return nil, nil, nil, err
 		}
-		switch {
-		case strings.HasPrefix(flag.MapsTo, "path."):
-			target := strings.TrimPrefix(flag.MapsTo, "path.")
-			if err := safety.ValidateIdentifier(target, "path parameter"); err != nil {
-				return nil, nil, nil, err
-			}
-			pathParams[target] = stringifyCommandValue(value)
-		case strings.HasPrefix(flag.MapsTo, "query."):
-			target := strings.TrimPrefix(flag.MapsTo, "query.")
-			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
-				return nil, nil, nil, err
-			}
-			query[target] = stringifyCommandValue(value)
-		case strings.HasPrefix(flag.MapsTo, "body."):
-			target := strings.TrimPrefix(flag.MapsTo, "body.")
-			if err := setBodyValue(body, target, value); err != nil {
-				return nil, nil, nil, err
-			}
-		default:
+		namespace, tokens, err := engine.ParseRequestFieldPointer(flag.MapsTo)
+		if err != nil {
 			return nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo)}
+		}
+		switch namespace {
+		case "path":
+			pathParams[tokens[0]] = stringifyCommandValue(value)
+		case "query":
+			query[tokens[0]] = stringifyCommandValue(value)
+		case "body":
+			if err := setRequestBodyValue(body, tokens, flag.MapsTo, value); err != nil {
+				return nil, nil, nil, err
+			}
 		}
 	}
 	return pathParams, query, body, nil
+}
+
+func setRequestBodyValue(body map[string]any, tokens []string, pointer string, value any) error {
+	_, err := setDottedValue(body, tokens, value, pointer)
+	return err
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {

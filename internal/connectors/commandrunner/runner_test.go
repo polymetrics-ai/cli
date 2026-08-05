@@ -1577,7 +1577,7 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 				},
 				OutputPolicy: "json_redacted",
 				Flags: []connectors.CommandSurfaceFlag{
-					{Name: "email", Type: "string_array", MapsTo: "body.emails"},
+					{Name: "email", Type: "string_array", MapsTo: "/body/emails"},
 				},
 			},
 		},
@@ -1608,6 +1608,57 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunOperationDirectReadUsesEscapedRequestPointers(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "widgets preview",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "acme.widgets.preview",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/widgets:preview"}},
+		OutputPolicy: "json_redacted",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "literal", Type: "string", MapsTo: "/body/a.b"},
+			{Name: "nested", Type: "string", MapsTo: "/body/a/b"},
+			{Name: "slash", Type: "string", MapsTo: "/body/x~1y"},
+			{Name: "tilde", Type: "string", MapsTo: "/body/m~0n"},
+			{Name: "first", Type: "string", MapsTo: "/body/items/0/name"},
+			{Name: "second", Type: "string", MapsTo: "/body/items/1/name"},
+		},
+	}}}}
+	_, err := Run(context.Background(), connector, Request{
+		Path: []string{"widgets", "preview"},
+		Flags: map[string][]string{
+			"literal": {"literal-value"},
+			"nested":  {"nested-value"},
+			"slash":   {"slash-value"},
+			"tilde":   {"tilde-value"},
+			"first":   {"first-value"},
+			"second":  {"second-value"},
+		},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct read")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	body := connector.operationDirectReadReq.Body
+	if body["a.b"] != "literal-value" {
+		t.Fatalf("literal dotted body property = %#v", body["a.b"])
+	}
+	nested, _ := body["a"].(map[string]any)
+	if nested["b"] != "nested-value" {
+		t.Fatalf("nested body property = %#v", body["a"])
+	}
+	if body["x/y"] != "slash-value" || body["m~n"] != "tilde-value" {
+		t.Fatalf("escaped body properties = %#v", body)
+	}
+	items, _ := body["items"].([]any)
+	if len(items) != 2 || items[1].(map[string]any)["name"] != "second-value" {
+		t.Fatalf("array body property = %#v", body["items"])
+	}
+}
+
 func TestRunOperationDirectReadRequiredQueryFlags(t *testing.T) {
 	command := connectors.CommandSurfaceCommand{
 		Path:         "customers invoices list",
@@ -1619,9 +1670,9 @@ func TestRunOperationDirectReadRequiredQueryFlags(t *testing.T) {
 		},
 		OutputPolicy: "json_redacted",
 		Flags: []connectors.CommandSurfaceFlag{
-			{Name: "billing-setup", Type: "string", MapsTo: "query.billingSetup", Required: true},
-			{Name: "issue-month", Type: "enum", Values: []string{"JANUARY", "FEBRUARY"}, MapsTo: "query.issueMonth", Required: true},
-			{Name: "issue-year", Type: "string", MapsTo: "query.issueYear", Required: true},
+			{Name: "billing-setup", Type: "string", MapsTo: "/query/billingSetup", Required: true},
+			{Name: "issue-month", Type: "enum", Values: []string{"JANUARY", "FEBRUARY"}, MapsTo: "/query/issueMonth", Required: true},
+			{Name: "issue-year", Type: "string", MapsTo: "/query/issueYear", Required: true},
 		},
 	}
 
@@ -1754,7 +1805,7 @@ func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
 				Operation:    "gong.meetings_integration_status",
 				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
 				OutputPolicy: "json_redacted",
-				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "/body/emails"}},
 			},
 			flags: map[string][]string{"body": {`{"emails":["ada@example.com"]}`}},
 			want:  "unknown flag",
@@ -1767,10 +1818,24 @@ func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
 				Availability: "implemented",
 				Operation:    "gong.meetings_integration_status",
 				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
-				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "/body/emails"}},
 			},
 			flags: map[string][]string{"email": {"ada@example.com"}},
 			want:  "output_policy",
+		},
+		{
+			name: "legacy dot mapping is rejected",
+			command: connectors.CommandSurfaceCommand{
+				Path:         "meetings integration-status",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "gong.meetings_integration_status",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
+				OutputPolicy: "json_redacted",
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+			},
+			flags: map[string][]string{"email": {"ada@example.com"}},
+			want:  "unsupported target",
 		},
 	}
 	for _, tt := range tests {
