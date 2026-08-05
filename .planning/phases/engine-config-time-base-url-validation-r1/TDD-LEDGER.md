@@ -17,4 +17,21 @@ production edit.
 
 ## Run log
 
-Pending R1. This ledger is created before the red test and production work.
+### R1 — real configuration boundary reproduction
+
+Status: red-confirmed
+
+No production code had been edited when this test was added and run:
+
+```text
+$ go test ./internal/app -run '^TestAddCredentialRejectsInvalidGitHubBaseURLAtConfigurationTime$' -count=1
+--- FAIL: TestAddCredentialRejectsInvalidGitHubBaseURLAtConfigurationTime (0.76s)
+    app_test.go:153: AddCredential() accepted GitHub base_url that violates spec format uri
+FAIL
+FAIL    polymetrics.ai/internal/app    1.230s
+FAIL
+```
+
+The red test uses the real bundled GitHub definition, whose `base_url` has
+`"format": "uri"`; it confirms the failure happens at `AddCredential`, before
+any runtime request exists.

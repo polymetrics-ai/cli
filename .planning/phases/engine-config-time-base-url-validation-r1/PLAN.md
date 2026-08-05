@@ -82,6 +82,11 @@ is recorded in `TDD-LEDGER.md`.
 6. **Refactor and verify.** Run focused app/engine/connectors tests, the
    executable configuration-time path, and the repo-required scoped gates.
 
+## TDD gate tracking
+
+- [ ] Task: R1 type: tdd — reject a declared configuration constraint before
+  credential persistence, beginning with the real GitHub `base_url` URI case.
+
 ## Constraint and compatibility principles
 
 - Connector definitions are the only source of policy. No hard-coded provider

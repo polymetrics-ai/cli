@@ -132,6 +132,34 @@ func TestLocalETLAndReverseETLWorkflow(t *testing.T) {
 	}
 }
 
+func TestAddCredentialRejectsInvalidGitHubBaseURLAtConfigurationTime(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+
+	_, err = a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "github-invalid-base-url",
+		Connector: "github",
+		Config:    map[string]string{"base_url": "not-a-uri"},
+	})
+	if err == nil {
+		t.Fatal("AddCredential() accepted GitHub base_url that violates spec format uri")
+	}
+	if !strings.Contains(err.Error(), "base_url") || !strings.Contains(err.Error(), "format") {
+		t.Fatalf("AddCredential() error = %q, want base_url and format", err)
+	}
+	if credentials := a.ListCredentials(); len(credentials) != 0 {
+		t.Fatalf("ListCredentials() = %#v, want no persisted credential after validation failure", credentials)
+	}
+}
+
 func TestBitbucketReverseETLClosedSchemasDoNotReceiveInternalPlanFields(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()
