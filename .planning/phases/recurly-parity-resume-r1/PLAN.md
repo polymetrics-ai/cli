@@ -2,10 +2,11 @@
 
 ## Scope and ownership
 
-Own only `internal/connectors/defs/recurly/**`, Recurly-only generated documentation/data, this
-phase's GSD artifacts, and required generated CLI transcript coverage. The recovered commit
-`6b3224e7f` is a source snapshot, not a branch to resurrect. Do not modify shared
-engine/schema/validator files, other connector bundles, or legacy connector Go.
+Own `internal/connectors/defs/recurly/**`, Recurly-only generated documentation/data, this phase's
+GSD artifacts, and required generated CLI transcript coverage. The recovered commit `6b3224e7f`
+is a source snapshot, not a branch to resurrect. Review fixes may also change the smallest shared
+runtime boundaries required for provider-neutral decimal flags, declarative-write retry safety,
+and fixture response-header replay. Do not modify other connector bundles or legacy connector Go.
 
 ## Manual-GSD fallback
 
@@ -32,8 +33,9 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
    `unit_amount`, and `currency` for gift-card preview.
 3. Use Recurly's provider-owned v2021-02-25 OpenAPI YAML as the field research source. Build a raw
    provider-field research matrix for every path/query/body/form/file input, preserving operation
-   URL/section, evidence tier, confidence, requiredness source, and Tier-5 deferrals. Do not
-   invent the in-flight citation convention; rebase onto its landed form before final validation.
+   URL/section, evidence tier, confidence, requiredness source, and Tier-5 deferrals. Preserve
+   those files as raw research and do not invent, modify, or integrate the shared citation
+   convention in this phase.
 4. Promote and execute-test the three bounded binary download operations now supported by current
    commandrunner. Retire stale blocker wording only after execution evidence exists.
 5. Reconcile every operation in the provider OpenAPI with the bundle. Map record-shaped mutations
@@ -46,6 +48,15 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
    `origin/main` with the recovered definition. Preserve the five legacy streams' query defaults,
    schema primary/cursor/required metadata, typed fields, computed projections, and representative
    fixture records; add a connector-local regression test for that recovery invariant.
+8. Reconcile review findings against the pinned provider OAS, then regenerate affected Recurly
+   request schemas, write fixtures, non-legacy response schemas, and stream fixtures from that
+   source. Preserve the five current-main legacy stream contracts and the raw provider-research
+   artifacts byte-for-byte.
+9. Add provider-neutral decimal flag coercion, stable per-record idempotency headers for actions
+   that declare provider support, fail-safe single-attempt execution otherwise, and response-header
+   replay for link-pagination fixtures. Document the billing-write retry policy explicitly.
+10. Remove Recurly's newly introduced hard runtime limiter because the provider documents different
+    sandbox and production/GET limits; retain only evidence-backed informational metadata.
 
 ## TDD checkpoints
 
@@ -56,6 +67,9 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
   against a bounded fixture/replay path afterward.
 - Red/green: a recovery-preservation test must demonstrate the legacy-stream metadata loss before
   restoring it from current `origin/main`, then prove the restored metadata stays present.
+- Red/green: focused regression tests must fail before decimal coercion, idempotency-bound retries,
+  response-header replay, and the selected Recurly OAS-shape corrections, then pass together after
+  the complete review-fix round.
 
 ## Verification plan
 

@@ -10,8 +10,11 @@
   "response": {
     "status": 200,
     "body": {
-      "object": "recurly_write_fixture",
-      "id": "synthetic-write-response"
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "state": "active",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
     }
   }
 }

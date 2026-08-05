@@ -8,3 +8,6 @@
 4. Build `pm`, inspect generated help, and run representative safe commands with synthetic config.
 5. Regenerate and verify only Recurly-owned documentation/website surfaces after command metadata
    stabilizes.
+6. For the review-fix round, add focused regressions for decimal command coercion, declarative-write
+   retry/idempotency behavior, replayed response headers, and selected OAS contract invariants.
+   Apply all fixes before running one final focused `go test` command over only the touched packages.

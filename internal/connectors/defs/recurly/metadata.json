@@ -23,6 +23,6 @@
   "risk": {
     "read": "external Recurly API reads can expose account, billing, invoice, subscription, usage, and transaction data; direct preview reads are fixed-path and redacted",
     "write": "typed Recurly reverse ETL mutations for accounts, billing, subscriptions, invoices, catalog, usage, coupons, exports, and related lifecycle resources",
-    "approval": "reverse ETL writes require plan, preview, explicit approval, execute; destructive lifecycle actions require destructive confirmation; Recurly supports provider idempotency for POST, PUT, PATCH, and DELETE through Idempotency-Key"
+    "approval": "reverse ETL writes require plan, preview, explicit approval, execute; destructive lifecycle actions require destructive confirmation; each Recurly mutation receives a stable per-record Idempotency-Key across automatic retries"
   }
 }

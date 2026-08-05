@@ -2,7 +2,13 @@
   "record": {
     "product_code": "fixture_product_code",
     "unit_amount": 12.34,
-    "currency": "USD"
+    "currency": "USD",
+    "delivery": {
+      "method": "email"
+    },
+    "gifter_account": {
+      "code": "fixture_code"
+    }
   },
   "expect": {
     "method": "POST",
@@ -10,14 +16,22 @@
     "body": {
       "product_code": "fixture_product_code",
       "unit_amount": 12.34,
-      "currency": "USD"
+      "currency": "USD",
+      "delivery": {
+        "method": "email"
+      },
+      "gifter_account": {
+        "code": "fixture_code"
+      }
     }
   },
   "response": {
-    "status": 200,
+    "status": 201,
     "body": {
-      "object": "recurly_write_fixture",
-      "id": "synthetic-write-response"
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
     }
   }
 }

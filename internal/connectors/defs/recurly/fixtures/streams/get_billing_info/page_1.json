@@ -7,15 +7,15 @@
   "response": {
     "status": 200,
     "headers": {
-      "Content-Type": "application/json"
+      "Content-Type": [
+        "application/json"
+      ]
     },
     "body": {
-      "id": "get_billing_info_fixture_1",
-      "object": "get_billing_info",
-      "code": "get_billing_info_code_1",
-      "state": "active",
-      "created_at": "2026-01-01T00:00:00Z",
-      "updated_at": "2026-01-02T00:00:00Z"
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
     }
   }
 }

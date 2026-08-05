@@ -13,7 +13,8 @@
       "Accept": "application/vnd.recurly.v2021-02-25"
     },
     "pagination": {
-      "type": "link_header"
+      "type": "link_header",
+      "page_size": 200
     },
     "check": {
       "method": "GET",
@@ -36,10 +37,7 @@
         "class": "rate_limited",
         "hint": "recurly rate limit exceeded; retry after the provider reset window"
       }
-    ],
-    "rate_limit": {
-      "requests_per_minute": 1000
-    }
+    ]
   },
   "streams": [
     {
@@ -48,7 +46,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_sites.json"
     },
     {
@@ -58,7 +56,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_site.json",
       "pagination": {
         "type": "none"
@@ -90,7 +88,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_account.json",
       "pagination": {
         "type": "none"
@@ -103,7 +101,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_account_acquisition.json",
       "pagination": {
         "type": "none"
@@ -116,10 +114,13 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_account_balance.json",
       "pagination": {
         "type": "none"
+      },
+      "computed_fields": {
+        "account_id": "{{ record.account.id }}"
       }
     },
     {
@@ -129,7 +130,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_billing_info.json",
       "pagination": {
         "type": "none"
@@ -141,7 +142,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_billing_infos.json"
     },
     {
@@ -151,7 +152,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_a_billing_info.json",
       "pagination": {
         "type": "none"
@@ -163,7 +164,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_coupon_redemptions.json"
     },
     {
@@ -172,7 +173,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_active_coupon_redemptions.json"
     },
     {
@@ -182,7 +183,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_coupon_redemption.json",
       "pagination": {
         "type": "none"
@@ -194,7 +195,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_credit_payments.json"
     },
     {
@@ -203,7 +204,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_external_account.json"
     },
     {
@@ -213,7 +214,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_account_external_account.json",
       "pagination": {
         "type": "none"
@@ -225,7 +226,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_external_invoices.json"
     },
     {
@@ -234,7 +235,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_invoices.json"
     },
     {
@@ -243,7 +244,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_line_items.json"
     },
     {
@@ -252,7 +253,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_notes.json"
     },
     {
@@ -262,7 +263,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_account_note.json",
       "pagination": {
         "type": "none"
@@ -274,7 +275,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_shipping_addresses.json"
     },
     {
@@ -284,7 +285,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_shipping_address.json",
       "pagination": {
         "type": "none"
@@ -296,7 +297,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_subscriptions.json"
     },
     {
@@ -305,7 +306,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_transactions.json"
     },
     {
@@ -314,7 +315,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_child_accounts.json"
     },
     {
@@ -323,7 +324,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_acquisition.json"
     },
     {
@@ -332,7 +333,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_coupons.json"
     },
     {
@@ -342,7 +343,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_coupon.json",
       "pagination": {
         "type": "none"
@@ -354,7 +355,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_unique_coupon_codes.json"
     },
     {
@@ -363,7 +364,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_credit_payments.json"
     },
     {
@@ -373,7 +374,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_credit_payment.json",
       "pagination": {
         "type": "none"
@@ -385,7 +386,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_custom_field_definitions.json"
     },
     {
@@ -395,7 +396,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_custom_field_definition.json",
       "pagination": {
         "type": "none"
@@ -407,7 +408,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_general_ledger_accounts.json"
     },
     {
@@ -417,7 +418,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_general_ledger_account.json",
       "pagination": {
         "type": "none"
@@ -430,7 +431,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_performance_obligation.json",
       "pagination": {
         "type": "none"
@@ -440,14 +441,10 @@
       "name": "get_performance_obligations",
       "path": "/performance_obligations",
       "records": {
-        "path": ".",
-        "single_object": true
+        "path": "data"
       },
-      "projection": "passthrough",
-      "schema": "schemas/get_performance_obligations.json",
-      "pagination": {
-        "type": "none"
-      }
+      "projection": "schema",
+      "schema": "schemas/get_performance_obligations.json"
     },
     {
       "name": "list_invoice_template_accounts",
@@ -455,7 +452,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_invoice_template_accounts.json"
     },
     {
@@ -464,7 +461,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_items.json"
     },
     {
@@ -474,7 +471,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_item.json",
       "pagination": {
         "type": "none"
@@ -486,7 +483,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_measured_unit.json"
     },
     {
@@ -496,7 +493,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_measured_unit.json",
       "pagination": {
         "type": "none"
@@ -508,7 +505,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_external_products.json"
     },
     {
@@ -518,7 +515,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_external_product.json",
       "pagination": {
         "type": "none"
@@ -530,7 +527,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_external_product_external_product_references.json"
     },
     {
@@ -540,7 +537,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_external_product_external_product_reference.json",
       "pagination": {
         "type": "none"
@@ -552,7 +549,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_external_subscriptions.json"
     },
     {
@@ -562,7 +559,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_external_subscription.json",
       "pagination": {
         "type": "none"
@@ -574,7 +571,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_external_subscription_external_invoices.json"
     },
     {
@@ -602,7 +599,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_invoice.json",
       "pagination": {
         "type": "none"
@@ -614,7 +611,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_invoice_line_items.json"
     },
     {
@@ -623,7 +620,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_invoice_coupon_redemptions.json"
     },
     {
@@ -632,7 +629,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_related_invoices.json"
     },
     {
@@ -641,7 +638,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_line_items.json"
     },
     {
@@ -651,7 +648,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_line_item.json",
       "pagination": {
         "type": "none"
@@ -682,7 +679,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_plan.json",
       "pagination": {
         "type": "none"
@@ -694,7 +691,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_plan_add_ons.json"
     },
     {
@@ -704,7 +701,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_plan_add_on.json",
       "pagination": {
         "type": "none"
@@ -716,7 +713,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_price_segments.json"
     },
     {
@@ -726,7 +723,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_price_segment.json",
       "pagination": {
         "type": "none"
@@ -738,7 +735,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_add_ons.json"
     },
     {
@@ -748,7 +745,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_add_on.json",
       "pagination": {
         "type": "none"
@@ -760,7 +757,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_shipping_methods.json"
     },
     {
@@ -770,7 +767,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_shipping_method.json",
       "pagination": {
         "type": "none"
@@ -802,7 +799,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_subscription.json",
       "pagination": {
         "type": "none"
@@ -815,7 +812,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_subscription_change.json",
       "pagination": {
         "type": "none"
@@ -827,7 +824,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_subscription_invoices.json"
     },
     {
@@ -836,7 +833,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_subscription_line_items.json"
     },
     {
@@ -845,7 +842,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_subscription_coupon_redemptions.json"
     },
     {
@@ -855,7 +852,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_subscription_coupon_redemption.json",
       "pagination": {
         "type": "none"
@@ -867,7 +864,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_usage.json"
     },
     {
@@ -877,7 +874,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_usage.json",
       "pagination": {
         "type": "none"
@@ -908,7 +905,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_transaction.json",
       "pagination": {
         "type": "none"
@@ -921,7 +918,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_unique_coupon_code.json",
       "pagination": {
         "type": "none"
@@ -933,7 +930,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_dunning_campaigns.json"
     },
     {
@@ -943,7 +940,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_dunning_campaign.json",
       "pagination": {
         "type": "none"
@@ -955,7 +952,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_invoice_templates.json"
     },
     {
@@ -965,7 +962,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_invoice_template.json",
       "pagination": {
         "type": "none"
@@ -977,7 +974,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_external_invoices.json"
     },
     {
@@ -987,7 +984,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/show_external_invoice.json",
       "pagination": {
         "type": "none"
@@ -999,7 +996,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_external_subscription_external_payment_phases.json"
     },
     {
@@ -1009,7 +1006,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_external_subscription_external_payment_phase.json",
       "pagination": {
         "type": "none"
@@ -1021,8 +1018,11 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
-      "schema": "schemas/list_entitlements.json"
+      "projection": "schema",
+      "schema": "schemas/list_entitlements.json",
+      "computed_fields": {
+        "customer_permission_id": "{{ record.customer_permission.id }}"
+      }
     },
     {
       "name": "list_account_external_subscriptions",
@@ -1030,7 +1030,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_account_external_subscriptions.json"
     },
     {
@@ -1040,7 +1040,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_business_entity.json",
       "pagination": {
         "type": "none"
@@ -1052,7 +1052,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_business_entities.json"
     },
     {
@@ -1061,7 +1061,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_gift_cards.json"
     },
     {
@@ -1071,7 +1071,7 @@
         "path": ".",
         "single_object": true
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/get_gift_card.json",
       "pagination": {
         "type": "none"
@@ -1083,7 +1083,7 @@
       "records": {
         "path": "data"
       },
-      "projection": "passthrough",
+      "projection": "schema",
       "schema": "schemas/list_business_entity_invoices.json"
     }
   ]

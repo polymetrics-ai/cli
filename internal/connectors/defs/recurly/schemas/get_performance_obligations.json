@@ -1,49 +1,33 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "get_performance_obligations",
+  "title": "Recurly get_performance_obligations record",
   "type": "object",
   "x-primary-key": [
     "id"
   ],
   "properties": {
     "id": {
-      "type": [
-        "string",
-        "integer"
-      ]
+      "type": "string",
+      "title": "Performance Obligation ID",
+      "description": "The ID of a performance obligation. Performance obligations are\nonly accessible as a part of the Recurly RevRec Standard and\nRecurly RevRec Advanced features.\n"
     },
-    "object": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "code": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "state": {
-      "type": [
-        "string",
-        "null"
-      ]
+    "name": {
+      "type": "string",
+      "title": "Performance Obligation Name"
     },
     "created_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
     },
     "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
+      "type": "string",
+      "format": "date-time",
+      "title": "Last updated at"
     }
   },
-  "additionalProperties": true
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
 }

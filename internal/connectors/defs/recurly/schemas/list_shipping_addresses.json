@@ -1,49 +1,82 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "list_shipping_addresses",
+  "title": "Recurly list_shipping_addresses record",
   "type": "object",
   "x-primary-key": [
     "id"
   ],
   "properties": {
     "id": {
-      "type": [
-        "string",
-        "integer"
-      ]
+      "type": "string",
+      "title": "Shipping Address ID"
     },
     "object": {
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": "string",
+      "title": "Object type"
     },
-    "code": {
-      "type": [
-        "string",
-        "null"
-      ]
+    "account_id": {
+      "type": "string",
+      "title": "Account ID"
     },
-    "state": {
-      "type": [
-        "string",
-        "null"
-      ]
+    "nickname": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "vat_number": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "street1": {
+      "type": "string"
+    },
+    "street2": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string",
+      "description": "State or province."
+    },
+    "postal_code": {
+      "type": "string",
+      "description": "Zip or postal code."
+    },
+    "country": {
+      "type": "string",
+      "description": "Country, 2-letter ISO 3166-1 alpha-2 code."
+    },
+    "geo_code": {
+      "type": "string",
+      "description": "Code that represents a geographic entity (location or object). Only returned when Vertex or Avalara for Communications is enabled."
     },
     "created_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
+      "type": "string",
+      "format": "date-time",
+      "title": "Created at"
     },
     "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated at"
     }
   },
-  "additionalProperties": true
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
 }

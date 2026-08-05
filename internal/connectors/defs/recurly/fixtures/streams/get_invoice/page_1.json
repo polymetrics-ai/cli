@@ -7,15 +7,16 @@
   "response": {
     "status": 200,
     "headers": {
-      "Content-Type": "application/json"
+      "Content-Type": [
+        "application/json"
+      ]
     },
     "body": {
-      "id": "get_invoice_fixture_1",
-      "object": "get_invoice",
-      "code": "get_invoice_code_1",
-      "state": "active",
-      "created_at": "2026-01-01T00:00:00Z",
-      "updated_at": "2026-01-02T00:00:00Z"
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "state": "open",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
     }
   }
 }

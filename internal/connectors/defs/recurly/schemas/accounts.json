@@ -35,8 +35,7 @@
       "type": [
         "string",
         "null"
-      ],
-      "format": "date-time"
+      ]
     },
     "updated_at": {
       "type": [

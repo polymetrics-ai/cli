@@ -7,24 +7,15 @@
   "response": {
     "status": 200,
     "headers": {
-      "Content-Type": "application/json"
+      "Content-Type": [
+        "application/json"
+      ]
     },
     "body": {
-      "object": "account_balance",
       "account": {
-        "id": "fixture-account-id-1",
-        "object": "account",
-        "code": "fixture_account_code"
+        "id": "fixture_id"
       },
-      "past_due": false,
-      "balances": [
-        {
-          "currency": "USD",
-          "amount": 0.0,
-          "processing_prepayment_amount": 0.0,
-          "available_credit_amount": 0.0
-        }
-      ]
+      "object": "fixture_object"
     }
   }
 }

@@ -3,9 +3,9 @@
     "external_subscription_id": "fixture_external_subscription_id",
     "external_id": "fixture_external_id",
     "state": "paid",
-    "total": "fixture_total",
+    "total": "12.34",
     "currency": "USD",
-    "purchased_at": "2026-01-01T00:00:00Z"
+    "purchased_at": "2026-01-02T03:04:05Z"
   },
   "expect": {
     "method": "POST",
@@ -13,16 +13,19 @@
     "body": {
       "external_id": "fixture_external_id",
       "state": "paid",
-      "total": "fixture_total",
+      "total": "12.34",
       "currency": "USD",
-      "purchased_at": "2026-01-01T00:00:00Z"
+      "purchased_at": "2026-01-02T03:04:05Z"
     }
   },
   "response": {
-    "status": 200,
+    "status": 201,
     "body": {
-      "object": "recurly_write_fixture",
-      "id": "synthetic-write-response"
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "state": "paid",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
     }
   }
 }

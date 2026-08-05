@@ -7,21 +7,20 @@
   "response": {
     "status": 200,
     "headers": {
-      "Content-Type": "application/json"
+      "Content-Type": [
+        "application/json"
+      ]
     },
     "body": {
-      "object": "list",
       "data": [
         {
-          "id": "list_account_line_items_fixture_1",
-          "object": "list_account_line_items",
-          "code": "list_account_line_items_code_1",
-          "state": "active",
-          "created_at": "2026-01-01T00:00:00Z",
-          "updated_at": "2026-01-02T00:00:00Z"
+          "id": "fixture_id",
+          "object": "fixture_object",
+          "state": "invoiced",
+          "created_at": "2026-01-02T03:04:05Z",
+          "updated_at": "2026-01-02T03:04:05Z"
         }
-      ],
-      "has_more": false
+      ]
     }
   }
 }

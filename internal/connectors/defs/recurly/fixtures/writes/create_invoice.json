@@ -11,10 +11,9 @@
     }
   },
   "response": {
-    "status": 200,
+    "status": 201,
     "body": {
-      "object": "recurly_write_fixture",
-      "id": "synthetic-write-response"
+      "object": "fixture_object"
     }
   }
 }

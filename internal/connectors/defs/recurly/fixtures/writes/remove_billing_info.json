@@ -8,9 +8,6 @@
   },
   "response": {
     "status": 200,
-    "body": {
-      "object": "recurly_write_fixture",
-      "id": "synthetic-write-response"
-    }
+    "body": {}
   }
 }

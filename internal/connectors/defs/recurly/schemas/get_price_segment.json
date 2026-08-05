@@ -1,49 +1,27 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "get_price_segment",
+  "title": "Recurly get_price_segment record",
   "type": "object",
   "x-primary-key": [
     "id"
   ],
   "properties": {
-    "id": {
-      "type": [
-        "string",
-        "integer"
-      ]
-    },
     "object": {
-      "type": [
-        "string",
-        "null"
-      ]
+      "type": "string",
+      "title": "Object type"
+    },
+    "id": {
+      "type": "string",
+      "description": "The price segment ID, e.g. `e28zov4fw0v2`."
     },
     "code": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "state": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "created_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
-    },
-    "updated_at": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "format": "date-time"
+      "type": "string",
+      "description": "The price segment code, e.g. `my-price-segment`.",
+      "pattern": "^[a-z0-9_+-]+$"
     }
   },
-  "additionalProperties": true
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
 }
