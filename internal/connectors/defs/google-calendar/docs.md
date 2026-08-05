@@ -12,6 +12,8 @@ Use OAuth2 refresh-token credentials from environment variables, stdin, or the c
 
 Required secret keys are `client_id`, `client_refresh_token_2`, and `client_secret`. The `calendarid` configuration value scopes calendar streams; use `primary` for the authenticated user's primary calendar.
 
+Set `mode=fixture` for credential-free deterministic replay of all 11 bundled read streams. Fixture mode performs no external requests and rejects reads without a bundled fixture; write validation, previews, execution, direct reads, and binary downloads fail closed.
+
 ## Streams notes
 
 The stream-backed GET operations are:

@@ -283,12 +283,14 @@ func TestWriteActionProviderConstraints(t *testing.T) {
 		},
 	}
 	invalidAddresses := []struct {
-		name    string
-		address string
+		name        string
+		address     string
+		wantErrText string
 	}{
-		{name: "non-HTTPS scheme", address: "http://example.invalid/hook"},
-		{name: "missing host", address: "https://"},
-		{name: "whitespace in authority", address: "https://not a URL"},
+		{name: "non-HTTPS scheme", address: "http://example.invalid/hook", wantErrText: "pattern"},
+		{name: "missing host", address: "https://", wantErrText: "pattern"},
+		{name: "whitespace in authority", address: "https://not a URL", wantErrText: "pattern"},
+		{name: "malformed URI escape", address: "https://example.invalid/%ZZ", wantErrText: "format"},
 	}
 	recordWithAddress := func(source connectors.Record, address string) connectors.Record {
 		record := make(connectors.Record, len(source)+1)
@@ -306,8 +308,8 @@ func TestWriteActionProviderConstraints(t *testing.T) {
 					if err == nil {
 						t.Fatalf("ValidateWrite(%s) accepted %q", action.action, invalid.address)
 					}
-					if !strings.Contains(err.Error(), "pattern") {
-						t.Fatalf("ValidateWrite(%s) error = %q, want pattern validation", action.action, err)
+					if !strings.Contains(err.Error(), invalid.wantErrText) {
+						t.Fatalf("ValidateWrite(%s) error = %q, want %s validation", action.action, err, invalid.wantErrText)
 					}
 				})
 			}

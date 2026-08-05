@@ -4,7 +4,7 @@
 
 - Branch: `fm/cli-google-calendar-parity-resume-r1`, rebased from PR #3554 onto `origin/main` at `36b431cf1`.
 - Own `internal/connectors/defs/google-calendar/**`, `internal/connectors/hooks/google-calendar/**`, this phase's artifacts, and generated Google Calendar catalogs/manuals/website data. The recovered PR's minimal `native/nativeset` promotion wiring, conformance fixture sentinel, and POST direct-read surface-classification correction are included because the legacy native registration otherwise shadows the bundle, fixture replay would otherwise attempt a token exchange, and `freeBusy.query` must not advertise write capability merely because it uses POST.
-- Do not change shared engine schemas, the hook generator, or any other connector. Shared validator and conformance edits are limited to the Google Calendar activation regressions above; other shared paths are owned by parallel foundation lanes.
+- Do not change the hook generator or any other connector. Shared engine work is limited to the user-directed bundle-fixture replay seam and `format: uri` validation needed by Google Calendar; other shared paths are owned by parallel foundation lanes.
 
 ## GSD and skills
 
@@ -24,6 +24,7 @@ Google's current Calendar v3 Discovery document (`revision=20260731`) lists 38 o
 4. **Citations and generated surfaces:** record provider-owned evidence for every declared request field in the phase research matrix, including each write path/query/body field and a per-mutation `writes.json` determination. Current main has no shared machine citation schema, so preserve convention-neutral evidence and regenerate only Google Calendar outputs.
 5. **Verification and handoff:** run the contract's focused gates on current main, build `pm`, verify help and representative read and write-plan commands without credentials, update phase records, commit the green slice, then hand branch custody to no-mistakes.
 6. **Review remediation:** preserve unfiltered fresh event reads, retain legacy list-stream projection contracts, paginate settings, add connector-owned regressions, and refresh generated surfaces before one final focused package test.
+7. **Fixture and validation remediation:** replay every advertised Google Calendar stream from its bundle fixture without external I/O, restore the typed fixture-mode configuration property and generated surfaces, and enforce malformed URI rejection in the shared schema validator.
 
 ## Safety and non-goals
 

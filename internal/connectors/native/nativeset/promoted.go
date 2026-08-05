@@ -3,6 +3,7 @@ package nativeset
 import (
 	"context"
 	"fmt"
+	"io/fs"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
@@ -38,6 +39,7 @@ import (
 	yahoofinanceprice "polymetrics.ai/internal/connectors/native/yahoo-finance-price"
 
 	"polymetrics.ai/internal/connectors/defs"
+	googlecalendardefs "polymetrics.ai/internal/connectors/defs/google-calendar"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -78,7 +80,7 @@ func (c *fixtureModeEngineConnector) Check(ctx context.Context, cfg connectors.R
 
 func (c *fixtureModeEngineConnector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	if fixtureMode(req.Config) {
-		return c.fixture.Read(ctx, req, emit)
+		return c.Connector.ReadFixture(ctx, req, emit)
 	}
 	return c.Connector.Read(ctx, req, emit)
 }
@@ -154,8 +156,10 @@ func withEngineBundle(name string) *engine.Connector {
 	return engine.New(bundle, engine.HooksFor(name))
 }
 
-func withFixtureModeEngineBundle(name string, fixture connectors.Connector) connectors.Connector {
-	return &fixtureModeEngineConnector{Connector: withEngineBundle(name), fixture: fixture}
+func withFixtureModeEngineBundle(name string, fixture connectors.Connector, fixtures fs.FS) connectors.Connector {
+	bundle := loadPromotedBundle(name)
+	bundle.Fixtures = fixtures
+	return &fixtureModeEngineConnector{Connector: engine.New(bundle, engine.HooksFor(name)), fixture: fixture}
 }
 
 func promotedFactories() []Factory {
@@ -180,7 +184,11 @@ func promotedFactories() []Factory {
 			return withBundleDefinition("google-analytics-data-api", googleanalyticsdataapi.New())
 		}},
 		{Name: "google-calendar", New: func() connectors.Connector {
-			return withFixtureModeEngineBundle("google-calendar", googlecalendar.New())
+			fixtures, err := googlecalendardefs.Fixtures()
+			if err != nil {
+				panic("native/google-calendar: failed to load embedded fixtures: " + err.Error())
+			}
+			return withFixtureModeEngineBundle("google-calendar", googlecalendar.New(), fixtures)
 		}},
 		{Name: "google-classroom", New: func() connectors.Connector { return withBundleDefinition("google-classroom", googleclassroom.New()) }},
 		{Name: "google-pagespeed-insights", New: func() connectors.Connector {

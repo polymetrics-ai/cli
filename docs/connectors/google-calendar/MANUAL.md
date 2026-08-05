@@ -35,6 +35,7 @@ AUTHENTICATION
 CONFIGURATION
   calendarid
   event_id
+  mode
   rule_id
   setting
   start_date
