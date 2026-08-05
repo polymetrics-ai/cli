@@ -128,35 +128,40 @@ type PayloadIdentity struct {
 }
 
 type ReversePlan struct {
-	ID                     string                         `json:"id"`
-	Name                   string                         `json:"name"`
-	Status                 string                         `json:"status"`
-	Mode                   string                         `json:"mode,omitempty"`
-	SourceTable            string                         `json:"source_table"`
-	DestinationConnector   string                         `json:"destination_connector"`
-	DestinationCredential  string                         `json:"destination_credential"`
-	DestinationConfig      map[string]string              `json:"destination_config,omitempty"`
-	Action                 string                         `json:"action"`
-	Mappings               map[string]string              `json:"mappings"`
-	ConnectorCommand       string                         `json:"connector_command,omitempty"`
-	ConnectorCommandPath   []string                       `json:"connector_command_path,omitempty"`
-	ConnectorCommandRecord connectors.Record              `json:"connector_command_record,omitempty"`
-	PayloadIdentity        []PayloadIdentity              `json:"payload_identity,omitempty"`
-	ConfirmationChallenge  string                         `json:"confirmation_challenge,omitempty"`
-	ConfirmationPolicy     connectors.WriteConfirmation   `json:"confirmation,omitempty"`
-	RedactFields           []string                       `json:"redact_fields,omitempty"`
-	RecordCount            int                            `json:"record_count"`
-	Sample                 []connectors.Record            `json:"sample,omitempty"`
-	PlanHash               string                         `json:"plan_hash"`
-	PlanSeal               *connectors.WritePlanSeal      `json:"plan_seal,omitempty"`
-	PreviewDigest          string                         `json:"preview_digest,omitempty"`
-	PreviewedAt            time.Time                      `json:"previewed_at,omitempty"`
-	ApprovalTokenHash      string                         `json:"approval_token_hash,omitempty"`
-	ApprovalGrant          *connectors.WriteApprovalGrant `json:"approval_grant,omitempty"`
-	ApprovalToken          string                         `json:"approval_token,omitempty"`
-	ApprovalConsumedAt     time.Time                      `json:"approval_consumed_at,omitempty"`
-	CreatedAt              time.Time                      `json:"created_at"`
-	ExpiresAt              time.Time                      `json:"expires_at"`
+	ID                    string            `json:"id"`
+	Name                  string            `json:"name"`
+	Status                string            `json:"status"`
+	Mode                  string            `json:"mode,omitempty"`
+	SourceTable           string            `json:"source_table"`
+	DestinationConnector  string            `json:"destination_connector"`
+	DestinationCredential string            `json:"destination_credential"`
+	DestinationConfig     map[string]string `json:"destination_config,omitempty"`
+	Action                string            `json:"action"`
+	Mappings              map[string]string `json:"mappings"`
+	ConnectorCommand      string            `json:"connector_command,omitempty"`
+	ConnectorCommandPath  []string          `json:"connector_command_path,omitempty"`
+	// ConnectorCommandOperation identifies a direct_write operation. When it is
+	// empty, the plan retains the existing writes.json action path.
+	ConnectorCommandOperation  string                         `json:"connector_command_operation,omitempty"`
+	ConnectorCommandPathParams map[string]string              `json:"connector_command_path_params,omitempty"`
+	ConnectorCommandQuery      map[string]string              `json:"connector_command_query,omitempty"`
+	ConnectorCommandRecord     connectors.Record              `json:"connector_command_record,omitempty"`
+	PayloadIdentity            []PayloadIdentity              `json:"payload_identity,omitempty"`
+	ConfirmationChallenge      string                         `json:"confirmation_challenge,omitempty"`
+	ConfirmationPolicy         connectors.WriteConfirmation   `json:"confirmation,omitempty"`
+	RedactFields               []string                       `json:"redact_fields,omitempty"`
+	RecordCount                int                            `json:"record_count"`
+	Sample                     []connectors.Record            `json:"sample,omitempty"`
+	PlanHash                   string                         `json:"plan_hash"`
+	PlanSeal                   *connectors.WritePlanSeal      `json:"plan_seal,omitempty"`
+	PreviewDigest              string                         `json:"preview_digest,omitempty"`
+	PreviewedAt                time.Time                      `json:"previewed_at,omitempty"`
+	ApprovalTokenHash          string                         `json:"approval_token_hash,omitempty"`
+	ApprovalGrant              *connectors.WriteApprovalGrant `json:"approval_grant,omitempty"`
+	ApprovalToken              string                         `json:"approval_token,omitempty"`
+	ApprovalConsumedAt         time.Time                      `json:"approval_consumed_at,omitempty"`
+	CreatedAt                  time.Time                      `json:"created_at"`
+	ExpiresAt                  time.Time                      `json:"expires_at"`
 }
 
 type RunReverseETLRequest struct {
@@ -166,13 +171,16 @@ type RunReverseETLRequest struct {
 }
 
 type ReverseRun struct {
-	ID               string    `json:"id"`
-	PlanID           string    `json:"plan_id"`
-	Status           string    `json:"status"`
-	RecordsStaged    int       `json:"records_staged"`
-	RecordsSucceeded int       `json:"records_succeeded"`
-	RecordsFailed    int       `json:"records_failed"`
-	Error            string    `json:"error,omitempty"`
-	StartedAt        time.Time `json:"started_at"`
-	CompletedAt      time.Time `json:"completed_at,omitempty"`
+	ID               string `json:"id"`
+	PlanID           string `json:"plan_id"`
+	Status           string `json:"status"`
+	RecordsStaged    int    `json:"records_staged"`
+	RecordsSucceeded int    `json:"records_succeeded"`
+	RecordsFailed    int    `json:"records_failed"`
+	Error            string `json:"error,omitempty"`
+	// OperationDirectWrite is populated only for a successful direct_write
+	// command. Its body is decoded according to the operation output policy.
+	OperationDirectWrite *connectors.OperationDirectWriteResult `json:"operation_direct_write,omitempty"`
+	StartedAt            time.Time                              `json:"started_at"`
+	CompletedAt          time.Time                              `json:"completed_at,omitempty"`
 }

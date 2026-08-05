@@ -116,6 +116,18 @@ func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.Oper
 	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
 }
 
+func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
+	return PreviewOperationDirectWrite(ctx, c.bundle, req, c.hooks)
+}
+
+func (c *Connector) OperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.OperationDirectWriteResult, error) {
+	return OperationDirectWrite(ctx, c.bundle, req, c.hooks)
+}
+
+func (c *Connector) OperationDirectWriteMetadata(operation string) (connectors.OperationDirectWriteMetadata, error) {
+	return OperationDirectWriteMetadata(c.bundle, operation)
+}
+
 // OperationBinaryDownload satisfies connectors.OperationBinaryDownloader by
 // delegating to the package-level executor. The engine-local request type stays
 // the executor's own contract; this adapter is the seam that lets a CLI command

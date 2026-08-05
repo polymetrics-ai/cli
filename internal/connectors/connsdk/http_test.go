@@ -16,6 +16,12 @@ import (
 
 func noSleep(_ context.Context, _ time.Duration) error { return nil }
 
+type roundTripperFunc func(*http.Request) (*http.Response, error)
+
+func (f roundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return f(req)
+}
+
 func TestRequesterDoJSONDecodesSuccess(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if got := r.Header.Get("Accept"); got != "application/json" {
@@ -62,6 +68,39 @@ func TestRequesterRetriesOn429ThenSucceeds(t *testing.T) {
 	}
 	if got := atomic.LoadInt32(&calls); got != 2 {
 		t.Fatalf("calls = %d, want 2", got)
+	}
+}
+
+// net/http treats a request carrying Idempotency-Key as replayable after some
+// transport failures. DisableRetries is the no-retry contract used by
+// rest_write, so it must remove that implicit retry signal as well as its own
+// retry loop and 401 refresh path.
+func TestRequesterDisableRetriesMakesMutationNonReplayable(t *testing.T) {
+	var sawGetBody bool
+	var sawIdempotencyKey string
+	r := &Requester{
+		BaseURL:        "https://example.invalid",
+		DisableRetries: true,
+		DefaultHeaders: map[string]string{"Idempotency-Key": "configured-key"},
+		Client: &http.Client{Transport: roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+			sawGetBody = req.GetBody != nil
+			sawIdempotencyKey = req.Header.Get("Idempotency-Key")
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Header:     make(http.Header),
+				Body:       io.NopCloser(strings.NewReader(`{"ok":true}`)),
+			}, nil
+		})},
+	}
+
+	if _, err := r.Do(context.Background(), http.MethodPost, "/widgets", nil, map[string]string{"name": "widget"}); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if sawGetBody {
+		t.Fatal("DisableRetries left Request.GetBody available for transport replay")
+	}
+	if sawIdempotencyKey != "" {
+		t.Fatalf("DisableRetries left Idempotency-Key=%q on a no-retry request", sawIdempotencyKey)
 	}
 }
 

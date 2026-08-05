@@ -150,7 +150,9 @@ type Requester struct {
 	// MaxRetries is the number of additional attempts after the first (default 4).
 	MaxRetries int
 	// DisableRetries prevents every automatic replay, including transient-status,
-	// transport-error, and 401 reauthentication retries. The first attempt still runs.
+	// transport-error, and 401 reauthentication retries. The first attempt still
+	// runs. The strict rest_write executor sets this explicitly; ordinary reads
+	// retain the default policy.
 	DisableRetries bool
 	// BaseBackoff and MaxBackoff bound exponential backoff (defaults 500ms / 30s).
 	BaseBackoff time.Duration
@@ -301,6 +303,20 @@ func (r *Requester) DoForm(ctx context.Context, method, path string, query, form
 		contentType = "application/x-www-form-urlencoded"
 	}
 	return r.do(ctx, method, path, query, payload, contentType, defaultMaxResponseBody)
+}
+
+// DoFormLimited performs DoForm while bounding the captured successful
+// response body to maxBodyBytes+1. It is the form counterpart to DoLimited so
+// a declared form write does not trade typed request shaping for an unbounded
+// response buffer.
+func (r *Requester) DoFormLimited(ctx context.Context, method, path string, query, form url.Values, maxBodyBytes int) (*Response, error) {
+	var payload []byte
+	contentType := ""
+	if len(form) > 0 {
+		payload = []byte(form.Encode())
+		contentType = "application/x-www-form-urlencoded"
+	}
+	return r.do(ctx, method, path, query, payload, contentType, maxBodyBytes+1)
 }
 
 // DoMultipart performs an HTTP request with a multipart/form-data body. File
@@ -666,6 +682,9 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	}
 
 	attempts := r.maxRetries() + 1
+	if r.DisableRetries {
+		attempts = 1
+	}
 	var lastErr error
 	// reauthAttempted bounds the 401-refresh path to ONCE per request. It is
 	// set before the refresh is attempted (see below), so a provider that keeps
@@ -697,6 +716,16 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 				cleanupRequestBody(body)
 				return nil, fmt.Errorf("apply auth: %w", err)
 			}
+		}
+		if r.DisableRetries {
+			// net/http's transport may replay a request with GetBody or an
+			// Idempotency-Key after a reused-connection failure. This mode is
+			// the executor's strict single-attempt contract, not an opt-in
+			// idempotent retry policy, so remove both replay signals before the
+			// transport sees the request.
+			req.GetBody = nil
+			req.Header.Del("Idempotency-Key")
+			req.Header.Del("X-Idempotency-Key")
 		}
 
 		resp, err := r.clientFor(ctx).Do(req)
@@ -733,7 +762,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		// Authenticators that do not implement AuthRefresher — every mode that
 		// predates the refresh-token grant — never enter this branch, so their
 		// 401 behaviour is byte-for-byte unchanged.
-		if resp.StatusCode == http.StatusUnauthorized && !reauthAttempted && !r.DisableRetries {
+		if !r.DisableRetries && resp.StatusCode == http.StatusUnauthorized && !reauthAttempted {
 			if refresher, ok := r.Auth.(AuthRefresher); ok {
 				// Set before the attempt: a refresh that itself errors must not
 				// buy a second one.
@@ -752,7 +781,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			}
 		}
 
-		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
+		if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
 			if werr := r.sleep(ctx, r.backoff(attempt, resp.Header.Get("Retry-After"))); werr != nil {
 				return nil, werr
