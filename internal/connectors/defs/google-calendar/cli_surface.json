@@ -112,7 +112,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "event",
-      "examples": ["pm google-calendar events get --json"]
+      "examples": ["pm google-calendar events get --config event_id=event123 --json"]
     },
     {
       "path": "events instances",
@@ -120,7 +120,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "event_instances",
-      "examples": ["pm google-calendar events instances --json"]
+      "examples": ["pm google-calendar events instances --config event_id=event123 --json"]
     },
     {
       "path": "settings list",
@@ -136,7 +136,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "setting",
-      "examples": ["pm google-calendar settings get --json"]
+      "examples": ["pm google-calendar settings get --config setting=timezone --json"]
     },
     {
       "path": "acl list",
@@ -152,7 +152,7 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "acl_rule",
-      "examples": ["pm google-calendar acl get --json"]
+      "examples": ["pm google-calendar acl get --config rule_id=default --json"]
     },
     {
       "path": "freebusy query",

@@ -76419,7 +76419,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm google-calendar events get --json"
+            "pm google-calendar events get --config event_id=event123 --json"
           ],
           "output_policy": "",
           "risk": "",
@@ -76437,7 +76437,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm google-calendar events instances --json"
+            "pm google-calendar events instances --config event_id=event123 --json"
           ],
           "output_policy": "",
           "risk": "",
@@ -76473,7 +76473,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm google-calendar settings get --json"
+            "pm google-calendar settings get --config setting=timezone --json"
           ],
           "output_policy": "",
           "risk": "",
@@ -76509,7 +76509,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm google-calendar acl get --json"
+            "pm google-calendar acl get --config rule_id=default --json"
           ],
           "output_policy": "",
           "risk": "",
