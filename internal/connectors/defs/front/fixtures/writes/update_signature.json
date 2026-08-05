@@ -1,10 +1,14 @@
 {
   "record": {
-    "signature_id": "fixture_signature_id"
+    "signature_id": "fixture_signature_id",
+    "channel_ids": null
   },
   "expect": {
     "method": "PATCH",
-    "path": "/signatures/fixture_signature_id"
+    "path": "/signatures/fixture_signature_id",
+    "body": {
+      "channel_ids": null
+    }
   },
   "response": {
     "status": 200,

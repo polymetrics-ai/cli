@@ -283,7 +283,10 @@
             ]
           },
           "signature_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "should_add_default_signature": {
             "type": "boolean"
@@ -437,7 +440,10 @@
             "additionalProperties": false
           },
           "signature_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "should_add_default_signature": {
             "type": "boolean"
@@ -657,6 +663,7 @@
           },
           "contact_ids": {
             "type": "array",
+            "maxItems": 50,
             "items": {
               "type": "string"
             }
@@ -781,6 +788,7 @@
           },
           "contact_ids": {
             "type": "array",
+            "maxItems": 50,
             "items": {
               "type": "string"
             }
@@ -1193,8 +1201,7 @@
                 "source"
               ],
               "additionalProperties": false
-            },
-            "minItems": 1
+            }
           }
         },
         "additionalProperties": false,
@@ -1223,7 +1230,10 @@
             "type": "string"
           },
           "assignee_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "additionalProperties": false,
@@ -1326,7 +1336,10 @@
             ]
           },
           "signature_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "should_add_default_signature": {
             "type": "boolean"
@@ -1364,6 +1377,7 @@
           },
           "teammate_ids": {
             "type": "array",
+            "maxItems": 50,
             "items": {
               "type": "string"
             }
@@ -1403,6 +1417,7 @@
           },
           "teammate_ids": {
             "type": "array",
+            "maxItems": 50,
             "items": {
               "type": "string"
             }
@@ -1436,6 +1451,7 @@
           },
           "link_ids": {
             "type": "array",
+            "maxItems": 10,
             "items": {
               "type": "string"
             }
@@ -1570,7 +1586,10 @@
             "additionalProperties": false
           },
           "signature_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "should_add_default_signature": {
             "type": "boolean"
@@ -1607,7 +1626,10 @@
             "type": "string"
           },
           "scheduled_at": {
-            "type": "number"
+            "type": [
+              "number",
+              "null"
+            ]
           },
           "status_id": {
             "type": "string"
@@ -1745,7 +1767,10 @@
             "type": "string"
           },
           "assignee_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "inbox_id": {
             "type": "string"
@@ -1948,7 +1973,10 @@
             ]
           },
           "signature_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "should_add_default_signature": {
             "type": "boolean"
@@ -2887,7 +2915,10 @@
             "type": "string"
           },
           "inbox_ids": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
             }
@@ -2956,7 +2987,10 @@
             "type": "string"
           },
           "parent_folder_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "additionalProperties": false,
@@ -2979,7 +3013,10 @@
             "type": "string"
           },
           "parent_folder_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "additionalProperties": false,
@@ -3069,7 +3106,10 @@
             "type": "string"
           },
           "inbox_ids": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
             }
@@ -3585,7 +3625,10 @@
             "type": "boolean"
           },
           "channel_ids": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
             }
@@ -3719,7 +3762,10 @@
             ]
           },
           "parent_tag_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "is_visible_in_conversation_lists": {
             "type": "boolean"
@@ -4268,8 +4314,7 @@
                 "source"
               ],
               "additionalProperties": false
-            },
-            "minItems": 1
+            }
           }
         },
         "additionalProperties": false,
@@ -4302,7 +4347,10 @@
             "type": "string"
           },
           "parent_folder_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "additionalProperties": false,
@@ -4419,7 +4467,10 @@
             "type": "boolean"
           },
           "channel_ids": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
             }
@@ -4721,8 +4772,7 @@
                 "source"
               ],
               "additionalProperties": false
-            },
-            "minItems": 1
+            }
           }
         },
         "additionalProperties": false,
@@ -4799,7 +4849,10 @@
             "type": "string"
           },
           "parent_folder_id": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "additionalProperties": false,
@@ -4841,7 +4894,10 @@
             "type": "string"
           },
           "inbox_ids": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
             }
@@ -5066,7 +5122,10 @@
             "type": "boolean"
           },
           "channel_ids": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
             }
@@ -6032,8 +6091,7 @@
                 }
               },
               "additionalProperties": false
-            },
-            "minItems": 1
+            }
           },
           "subject": {
             "type": "string"

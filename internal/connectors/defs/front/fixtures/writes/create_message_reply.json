@@ -1,13 +1,15 @@
 {
   "record": {
     "conversation_id": "fixture_conversation_id",
-    "body": "fixture_body"
+    "body": "fixture_body",
+    "signature_id": null
   },
   "expect": {
     "method": "POST",
     "path": "/conversations/fixture_conversation_id/messages",
     "body": {
-      "body": "fixture_body"
+      "body": "fixture_body",
+      "signature_id": null
     }
   },
   "response": {

@@ -1,10 +1,16 @@
 {
   "record": {
-    "conversation_id": "fixture_conversation_id"
+    "conversation_id": "fixture_conversation_id",
+    "assignee_id": null,
+    "status": "open"
   },
   "expect": {
     "method": "PATCH",
-    "path": "/conversations/fixture_conversation_id"
+    "path": "/conversations/fixture_conversation_id",
+    "body": {
+      "assignee_id": null,
+      "status": "open"
+    }
   },
   "response": {
     "status": 200,

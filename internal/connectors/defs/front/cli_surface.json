@@ -196,6 +196,7 @@
         "add-conversation-tag",
         "delete-conversation",
         "update-conversation",
+        "update-conversation-status-id",
         "create-conversation",
         "create-teammate-discussion",
         "create-inbox-task",
@@ -3265,7 +3266,7 @@
         {
           "name": "name",
           "type": "string",
-          "summary": "Maps to record.name.",
+          "summary": "Tag name, at most 64 characters.",
           "maps_to": "record.name",
           "allow_empty": false
         }
@@ -3298,8 +3299,9 @@
         {
           "name": "contact-ids",
           "type": "string_array",
-          "summary": "Maps to record.contact_ids.",
-          "maps_to": "record.contact_ids"
+          "summary": "Contact IDs to remove; Front accepts at most 50.",
+          "maps_to": "record.contact_ids",
+          "max_items": 50
         }
       ],
       "api_surface": [
@@ -3414,8 +3416,9 @@
         {
           "name": "contact-ids",
           "type": "string_array",
-          "summary": "Maps to record.contact_ids.",
-          "maps_to": "record.contact_ids"
+          "summary": "Contact IDs to remove; Front accepts at most 50.",
+          "maps_to": "record.contact_ids",
+          "max_items": 50
         }
       ],
       "api_surface": [
@@ -3949,8 +3952,9 @@
         {
           "name": "teammate-ids",
           "type": "string_array",
-          "summary": "Maps to record.teammate_ids.",
-          "maps_to": "record.teammate_ids"
+          "summary": "Follower teammate IDs; Front accepts at most 50.",
+          "maps_to": "record.teammate_ids",
+          "max_items": 50
         }
       ],
       "api_surface": [
@@ -3981,8 +3985,9 @@
         {
           "name": "teammate-ids",
           "type": "string_array",
-          "summary": "Maps to record.teammate_ids.",
-          "maps_to": "record.teammate_ids"
+          "summary": "Follower teammate IDs; Front accepts at most 50.",
+          "maps_to": "record.teammate_ids",
+          "max_items": 50
         }
       ],
       "api_surface": [
@@ -4013,8 +4018,9 @@
         {
           "name": "link-ids",
           "type": "string_array",
-          "summary": "Maps to record.link_ids.",
-          "maps_to": "record.link_ids"
+          "summary": "Conversation link IDs; Front accepts at most 10.",
+          "maps_to": "record.link_ids",
+          "max_items": 10
         }
       ],
       "api_surface": [
@@ -4280,7 +4286,21 @@
           "type": "string",
           "summary": "Maps to record.conversation_id.",
           "maps_to": "record.conversation_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "summary": "Built-in status selector; mutually exclusive with status-id.",
+          "maps_to": "record.status",
+          "values": [
+            "archived",
+            "open",
+            "deleted",
+            "spam"
+          ],
+          "required": true
         }
       ],
       "api_surface": [
@@ -4291,7 +4311,48 @@
       ],
       "risk": "high: fixed Front PATCH /conversations/{conversation_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
       "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
-      "notes": "Fixed Front endpoint; no raw method/path/body passthrough."
+      "notes": "Fixed built-in-status variant. Front permits status or status_id, never both; use update-conversation-status-id for a custom ticket status. No raw method/path/body passthrough.",
+      "examples": [
+        "pm front update-conversation --conversation-id cnv_fixture_1 --status open --preview --json"
+      ]
+    },
+    {
+      "path": "update-conversation-status-id",
+      "summary": "Update a conversation to one custom ticket status.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_conversation",
+      "source_url": "https://dev.frontapp.com/reference/update-conversation.md",
+      "flags": [
+        {
+          "name": "conversation-id",
+          "type": "string",
+          "summary": "Maps to record.conversation_id.",
+          "maps_to": "record.conversation_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "status-id",
+          "type": "string",
+          "summary": "Custom ticket status selector; mutually exclusive with status.",
+          "maps_to": "record.status_id",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/conversations/{conversation_id}"
+        }
+      ],
+      "risk": "high: fixed Front PATCH /conversations/{conversation_id} mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; typed destructive confirmation required by the action metadata",
+      "notes": "Fixed custom-ticket-status variant. Front permits status_id or status, never both; use update-conversation for a built-in status. No raw method/path/body passthrough.",
+      "examples": [
+        "pm front update-conversation-status-id --conversation-id cnv_fixture_1 --status-id sts_fixture_1 --preview --json"
+      ]
     },
     {
       "path": "create-conversation",
@@ -4456,7 +4517,7 @@
         {
           "name": "description",
           "type": "string",
-          "summary": "Optional task description.",
+          "summary": "Optional task description, at most 65535 characters.",
           "maps_to": "record.description",
           "allow_empty": false
         },
@@ -4517,7 +4578,7 @@
         {
           "name": "description",
           "type": "string",
-          "summary": "Optional task description.",
+          "summary": "Optional task description, at most 65535 characters.",
           "maps_to": "record.description",
           "allow_empty": false
         },
@@ -6087,7 +6148,7 @@
         {
           "name": "name",
           "type": "string",
-          "summary": "Maps to record.name.",
+          "summary": "Tag name, at most 64 characters.",
           "maps_to": "record.name",
           "allow_empty": false
         }
@@ -6165,7 +6226,7 @@
         {
           "name": "name",
           "type": "string",
-          "summary": "Maps to record.name.",
+          "summary": "Tag name, at most 64 characters.",
           "maps_to": "record.name",
           "allow_empty": false
         }
@@ -6731,7 +6792,7 @@
         {
           "name": "name",
           "type": "string",
-          "summary": "Maps to record.name.",
+          "summary": "Tag name, at most 64 characters.",
           "maps_to": "record.name",
           "allow_empty": false
         }
@@ -7177,7 +7238,7 @@
         {
           "name": "name",
           "type": "string",
-          "summary": "Maps to record.name.",
+          "summary": "Tag name, at most 64 characters.",
           "maps_to": "record.name",
           "allow_empty": false
         }
@@ -7418,7 +7479,6 @@
           "type": "string_array",
           "summary": "One or more documented message export columns.",
           "maps_to": "body.columns",
-          "min_items": 1,
           "required": true
         },
         {
@@ -7456,43 +7516,37 @@
           "name": "filter-tag-ids",
           "type": "string_array",
           "summary": "Optional Front tag IDs filter.",
-          "maps_to": "body.filters.tag_ids",
-          "min_items": 1
+          "maps_to": "body.filters.tag_ids"
         },
         {
           "name": "filter-teammate-ids",
           "type": "string_array",
           "summary": "Optional Front teammate IDs filter.",
-          "maps_to": "body.filters.teammate_ids",
-          "min_items": 1
+          "maps_to": "body.filters.teammate_ids"
         },
         {
           "name": "filter-channel-ids",
           "type": "string_array",
           "summary": "Optional Front channel IDs filter.",
-          "maps_to": "body.filters.channel_ids",
-          "min_items": 1
+          "maps_to": "body.filters.channel_ids"
         },
         {
           "name": "filter-inbox-ids",
           "type": "string_array",
           "summary": "Optional Front inbox IDs filter.",
-          "maps_to": "body.filters.inbox_ids",
-          "min_items": 1
+          "maps_to": "body.filters.inbox_ids"
         },
         {
           "name": "filter-team-ids",
           "type": "string_array",
           "summary": "Optional Front team IDs filter.",
-          "maps_to": "body.filters.team_ids",
-          "min_items": 1
+          "maps_to": "body.filters.team_ids"
         },
         {
           "name": "filter-account-ids",
           "type": "string_array",
           "summary": "Optional Front account IDs filter.",
-          "maps_to": "body.filters.account_ids",
-          "min_items": 1
+          "maps_to": "body.filters.account_ids"
         }
       ],
       "output_policy": "json_redacted",
@@ -7523,7 +7577,6 @@
           "type": "string_array",
           "summary": "One or more documented fixed event export columns.",
           "maps_to": "body.columns",
-          "min_items": 1,
           "required": true
         },
         {
@@ -7561,43 +7614,37 @@
           "name": "filter-tag-ids",
           "type": "string_array",
           "summary": "Optional Front tag IDs filter.",
-          "maps_to": "body.filters.tag_ids",
-          "min_items": 1
+          "maps_to": "body.filters.tag_ids"
         },
         {
           "name": "filter-teammate-ids",
           "type": "string_array",
           "summary": "Optional Front teammate IDs filter.",
-          "maps_to": "body.filters.teammate_ids",
-          "min_items": 1
+          "maps_to": "body.filters.teammate_ids"
         },
         {
           "name": "filter-channel-ids",
           "type": "string_array",
           "summary": "Optional Front channel IDs filter.",
-          "maps_to": "body.filters.channel_ids",
-          "min_items": 1
+          "maps_to": "body.filters.channel_ids"
         },
         {
           "name": "filter-inbox-ids",
           "type": "string_array",
           "summary": "Optional Front inbox IDs filter.",
-          "maps_to": "body.filters.inbox_ids",
-          "min_items": 1
+          "maps_to": "body.filters.inbox_ids"
         },
         {
           "name": "filter-team-ids",
           "type": "string_array",
           "summary": "Optional Front team IDs filter.",
-          "maps_to": "body.filters.team_ids",
-          "min_items": 1
+          "maps_to": "body.filters.team_ids"
         },
         {
           "name": "filter-account-ids",
           "type": "string_array",
           "summary": "Optional Front account IDs filter.",
-          "maps_to": "body.filters.account_ids",
-          "min_items": 1
+          "maps_to": "body.filters.account_ids"
         }
       ],
       "output_policy": "json_redacted",
@@ -7679,43 +7726,37 @@
           "name": "filter-tag-ids",
           "type": "string_array",
           "summary": "Optional Front tag IDs filter.",
-          "maps_to": "body.filters.tag_ids",
-          "min_items": 1
+          "maps_to": "body.filters.tag_ids"
         },
         {
           "name": "filter-teammate-ids",
           "type": "string_array",
           "summary": "Optional Front teammate IDs filter.",
-          "maps_to": "body.filters.teammate_ids",
-          "min_items": 1
+          "maps_to": "body.filters.teammate_ids"
         },
         {
           "name": "filter-channel-ids",
           "type": "string_array",
           "summary": "Optional Front channel IDs filter.",
-          "maps_to": "body.filters.channel_ids",
-          "min_items": 1
+          "maps_to": "body.filters.channel_ids"
         },
         {
           "name": "filter-inbox-ids",
           "type": "string_array",
           "summary": "Optional Front inbox IDs filter.",
-          "maps_to": "body.filters.inbox_ids",
-          "min_items": 1
+          "maps_to": "body.filters.inbox_ids"
         },
         {
           "name": "filter-team-ids",
           "type": "string_array",
           "summary": "Optional Front team IDs filter.",
-          "maps_to": "body.filters.team_ids",
-          "min_items": 1
+          "maps_to": "body.filters.team_ids"
         },
         {
           "name": "filter-account-ids",
           "type": "string_array",
           "summary": "Optional Front account IDs filter.",
-          "maps_to": "body.filters.account_ids",
-          "min_items": 1
+          "maps_to": "body.filters.account_ids"
         }
       ],
       "output_policy": "json_redacted",
@@ -7818,43 +7859,37 @@
           "name": "filter-tag-ids",
           "type": "string_array",
           "summary": "Optional Front tag IDs filter.",
-          "maps_to": "body.filters.tag_ids",
-          "min_items": 1
+          "maps_to": "body.filters.tag_ids"
         },
         {
           "name": "filter-teammate-ids",
           "type": "string_array",
           "summary": "Optional Front teammate IDs filter.",
-          "maps_to": "body.filters.teammate_ids",
-          "min_items": 1
+          "maps_to": "body.filters.teammate_ids"
         },
         {
           "name": "filter-channel-ids",
           "type": "string_array",
           "summary": "Optional Front channel IDs filter.",
-          "maps_to": "body.filters.channel_ids",
-          "min_items": 1
+          "maps_to": "body.filters.channel_ids"
         },
         {
           "name": "filter-inbox-ids",
           "type": "string_array",
           "summary": "Optional Front inbox IDs filter.",
-          "maps_to": "body.filters.inbox_ids",
-          "min_items": 1
+          "maps_to": "body.filters.inbox_ids"
         },
         {
           "name": "filter-team-ids",
           "type": "string_array",
           "summary": "Optional Front team IDs filter.",
-          "maps_to": "body.filters.team_ids",
-          "min_items": 1
+          "maps_to": "body.filters.team_ids"
         },
         {
           "name": "filter-account-ids",
           "type": "string_array",
           "summary": "Optional Front account IDs filter.",
-          "maps_to": "body.filters.account_ids",
-          "min_items": 1
+          "maps_to": "body.filters.account_ids"
         }
       ],
       "output_policy": "json_redacted",
@@ -7925,9 +7960,52 @@
         {
           "name": "metrics",
           "type": "string_array",
-          "summary": "Maps to request body metrics.",
+          "summary": "Documented Front analytics metric names.",
           "maps_to": "body.metrics",
           "required": true
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "summary": "Optional IANA timezone name.",
+          "maps_to": "body.timezone",
+          "allow_empty": false
+        },
+        {
+          "name": "filter-tag-ids",
+          "type": "string_array",
+          "summary": "Optional Front tag IDs filter.",
+          "maps_to": "body.filters.tag_ids"
+        },
+        {
+          "name": "filter-teammate-ids",
+          "type": "string_array",
+          "summary": "Optional Front teammate IDs filter.",
+          "maps_to": "body.filters.teammate_ids"
+        },
+        {
+          "name": "filter-channel-ids",
+          "type": "string_array",
+          "summary": "Optional Front channel IDs filter.",
+          "maps_to": "body.filters.channel_ids"
+        },
+        {
+          "name": "filter-inbox-ids",
+          "type": "string_array",
+          "summary": "Optional Front inbox IDs filter.",
+          "maps_to": "body.filters.inbox_ids"
+        },
+        {
+          "name": "filter-team-ids",
+          "type": "string_array",
+          "summary": "Optional Front team IDs filter.",
+          "maps_to": "body.filters.team_ids"
+        },
+        {
+          "name": "filter-account-ids",
+          "type": "string_array",
+          "summary": "Optional Front account IDs filter.",
+          "maps_to": "body.filters.account_ids"
         }
       ],
       "output_policy": "json_redacted",
@@ -7940,7 +8018,10 @@
       ],
       "risk": "high: analytics report/export metadata may expose operational content; output is bounded and redacted",
       "approval": "none for read/query; no provider write execution is performed by these direct-read commands",
-      "notes": "Fixed provider search/query endpoint; distinct from warehouse pm query."
+      "notes": "Filters are optional. When filters are supplied, at least one documented filter family is present; different families use AND and IDs within one family use OR. No raw request body is accepted.",
+      "examples": [
+        "pm front analytics reports create --start 1893456000 --end 1893542400 --metrics num_messages_received --filter-inbox-ids inb_fixture_1 --timezone UTC --json"
+      ]
     },
     {
       "path": "analytics reports get",
@@ -8486,7 +8567,7 @@
         {
           "name": "content",
           "type": "string",
-          "summary": "Maps to record.content.",
+          "summary": "Non-empty call summary content.",
           "maps_to": "record.content",
           "allow_empty": false,
           "required": true
@@ -8744,7 +8825,7 @@
         {
           "name": "metadata-external-id",
           "type": "string",
-          "summary": "Maps to record.metadata.external_id.",
+          "summary": "External message ID, at most 200 characters.",
           "maps_to": "record.metadata.external_id",
           "allow_empty": false,
           "required": true
@@ -8752,7 +8833,7 @@
         {
           "name": "metadata-external-conversation-id",
           "type": "string",
-          "summary": "Maps to record.metadata.external_conversation_id.",
+          "summary": "External conversation ID, at most 200 characters.",
           "maps_to": "record.metadata.external_conversation_id",
           "allow_empty": false,
           "required": true
@@ -8803,7 +8884,7 @@
         {
           "name": "metadata-external-id",
           "type": "string",
-          "summary": "Maps to record.metadata.external_id.",
+          "summary": "External message ID, at most 200 characters.",
           "maps_to": "record.metadata.external_id",
           "allow_empty": false,
           "required": true
@@ -8811,7 +8892,7 @@
         {
           "name": "metadata-external-conversation-id",
           "type": "string",
-          "summary": "Maps to record.metadata.external_conversation_id.",
+          "summary": "External conversation ID, at most 200 characters.",
           "maps_to": "record.metadata.external_conversation_id",
           "allow_empty": false,
           "required": true

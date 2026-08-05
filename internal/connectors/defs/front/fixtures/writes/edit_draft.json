@@ -2,14 +2,16 @@
   "record": {
     "message_id": "fixture_message_id",
     "channel_id": "fixture_channel_id",
-    "body": "fixture_body"
+    "body": "fixture_body",
+    "signature_id": null
   },
   "expect": {
     "method": "PATCH",
     "path": "/drafts/fixture_message_id/",
     "body": {
       "channel_id": "fixture_channel_id",
-      "body": "fixture_body"
+      "body": "fixture_body",
+      "signature_id": null
     }
   },
   "response": {

@@ -2,14 +2,16 @@
   "record": {
     "message_template_folder_id": "fixture_message_template_folder_id",
     "name": "fixture_name",
-    "body": "fixture_body"
+    "body": "fixture_body",
+    "inbox_ids": null
   },
   "expect": {
     "method": "POST",
     "path": "/message_template_folders/fixture_message_template_folder_id/message_templates",
     "body": {
       "name": "fixture_name",
-      "body": "fixture_body"
+      "body": "fixture_body",
+      "inbox_ids": null
     }
   },
   "response": {

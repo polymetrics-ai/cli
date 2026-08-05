@@ -4,7 +4,8 @@
     "to": [
       "fixture_to"
     ],
-    "body": "fixture_body"
+    "body": "fixture_body",
+    "signature_id": null
   },
   "expect": {
     "method": "POST",
@@ -13,7 +14,8 @@
       "to": [
         "fixture_to"
       ],
-      "body": "fixture_body"
+      "body": "fixture_body",
+      "signature_id": null
     }
   },
   "response": {

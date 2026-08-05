@@ -1,10 +1,14 @@
 {
   "record": {
-    "message_template_folder_id": "fixture_message_template_folder_id"
+    "message_template_folder_id": "fixture_message_template_folder_id",
+    "parent_folder_id": null
   },
   "expect": {
     "method": "PATCH",
-    "path": "/message_template_folders/fixture_message_template_folder_id"
+    "path": "/message_template_folders/fixture_message_template_folder_id",
+    "body": {
+      "parent_folder_id": null
+    }
   },
   "response": {
     "status": 200,

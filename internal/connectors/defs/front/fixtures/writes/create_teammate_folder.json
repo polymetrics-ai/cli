@@ -1,13 +1,15 @@
 {
   "record": {
     "teammate_id": "fixture_teammate_id",
-    "name": "fixture_name"
+    "name": "fixture_name",
+    "parent_folder_id": null
   },
   "expect": {
     "method": "POST",
     "path": "/teammates/fixture_teammate_id/message_template_folders",
     "body": {
-      "name": "fixture_name"
+      "name": "fixture_name",
+      "parent_folder_id": null
     }
   },
   "response": {

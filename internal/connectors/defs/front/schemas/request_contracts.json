@@ -16,8 +16,7 @@
       "additionalProperties": false,
       "properties": {
         "columns": {
-          "type": "array",
-          "minItems": 1
+          "type": "array"
         },
         "type": {
           "type": "string",
@@ -41,42 +40,36 @@
           "properties": {
             "tag_ids": {
               "type": "array",
-              "minItems": 1,
               "items": {
                 "type": "string"
               }
             },
             "teammate_ids": {
               "type": "array",
-              "minItems": 1,
               "items": {
                 "type": "string"
               }
             },
             "channel_ids": {
               "type": "array",
-              "minItems": 1,
               "items": {
                 "type": "string"
               }
             },
             "inbox_ids": {
               "type": "array",
-              "minItems": 1,
               "items": {
                 "type": "string"
               }
             },
             "team_ids": {
               "type": "array",
-              "minItems": 1,
               "items": {
                 "type": "string"
               }
             },
             "account_ids": {
               "type": "array",
-              "minItems": 1,
               "items": {
                 "type": "string"
               }
@@ -334,6 +327,133 @@
         }
       ]
     },
+    "front.create_analytics_report": {
+      "type": "object",
+      "required": [
+        "start",
+        "end",
+        "metrics"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "type": "number"
+        },
+        "end": {
+          "type": "number"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "filters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tag_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "teammate_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "channel_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "inbox_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "team_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "account_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "tag_ids"
+              ]
+            },
+            {
+              "required": [
+                "teammate_ids"
+              ]
+            },
+            {
+              "required": [
+                "channel_ids"
+              ]
+            },
+            {
+              "required": [
+                "inbox_ids"
+              ]
+            },
+            {
+              "required": [
+                "team_ids"
+              ]
+            },
+            {
+              "required": [
+                "account_ids"
+              ]
+            }
+          ]
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "avg_csat_survey_response",
+              "avg_first_response_time",
+              "avg_handle_time",
+              "avg_replies_to_resolution",
+              "avg_resolution_time",
+              "avg_response_time",
+              "avg_sla_breach_time",
+              "avg_total_reply_time",
+              "new_segments_count",
+              "num_active_segments_full",
+              "num_archived_segments",
+              "num_archived_segments_with_reply",
+              "num_csat_survey_response",
+              "num_messages_received",
+              "num_messages_sent",
+              "num_sla_breach",
+              "pct_csat_survey_satisfaction",
+              "pct_resolved_on_first_reply",
+              "pct_tagged_conversations",
+              "num_closed_segments",
+              "num_open_segments_start",
+              "num_open_segments_end",
+              "num_resolved_segments",
+              "num_unresolved_active_segments",
+              "num_workload_segments"
+            ]
+          }
+        }
+      }
+    },
     "sync_application_message_template": {
       "type": "object",
       "required": [
@@ -446,7 +566,10 @@
           ]
         },
         "signature_id": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "should_add_default_signature": {
           "type": "boolean"
@@ -512,7 +635,10 @@
           ]
         },
         "signature_id": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "should_add_default_signature": {
           "type": "boolean"
@@ -735,6 +861,68 @@
           }
         }
       ]
+    },
+    "update_conversation": {
+      "type": "object",
+      "required": [
+        "conversation_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "conversation_id": {
+          "type": "string"
+        },
+        "assignee_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "inbox_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "archived",
+            "open",
+            "deleted",
+            "spam"
+          ]
+        },
+        "status_id": {
+          "type": "string"
+        },
+        "tag_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 65535
+        },
+        "due_at": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "custom_fields": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "not": {
+        "required": [
+          "status",
+          "status_id"
+        ]
+      }
     },
     "create_a_channel": {
       "type": "object",
@@ -1030,6 +1218,383 @@
           ]
         }
       ]
+    },
+    "create_company_tag": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string"
+        },
+        "highlight": {
+          "type": "string",
+          "enum": [
+            "grey",
+            "pink",
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "light-blue",
+            "blue",
+            "purple"
+          ]
+        },
+        "is_visible_in_conversation_lists": {
+          "type": "boolean"
+        }
+      }
+    },
+    "create_child_tag": {
+      "type": "object",
+      "required": [
+        "tag_id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "tag_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string"
+        },
+        "highlight": {
+          "type": "string",
+          "enum": [
+            "grey",
+            "pink",
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "light-blue",
+            "blue",
+            "purple"
+          ]
+        },
+        "is_visible_in_conversation_lists": {
+          "type": "boolean"
+        }
+      }
+    },
+    "update_a_tag": {
+      "type": "object",
+      "required": [
+        "tag_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "tag_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string"
+        },
+        "highlight": {
+          "type": "string",
+          "enum": [
+            "grey",
+            "pink",
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "light-blue",
+            "blue",
+            "purple"
+          ]
+        },
+        "parent_tag_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_visible_in_conversation_lists": {
+          "type": "boolean"
+        }
+      }
+    },
+    "create_tag": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string"
+        },
+        "highlight": {
+          "type": "string",
+          "enum": [
+            "grey",
+            "pink",
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "light-blue",
+            "blue",
+            "purple"
+          ]
+        },
+        "is_visible_in_conversation_lists": {
+          "type": "boolean"
+        }
+      }
+    },
+    "create_teammate_tag": {
+      "type": "object",
+      "required": [
+        "teammate_id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "teammate_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string"
+        },
+        "highlight": {
+          "type": "string",
+          "enum": [
+            "grey",
+            "pink",
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "light-blue",
+            "blue",
+            "purple"
+          ]
+        },
+        "is_visible_in_conversation_lists": {
+          "type": "boolean"
+        }
+      }
+    },
+    "create_team_tag": {
+      "type": "object",
+      "required": [
+        "team_id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "team_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string"
+        },
+        "highlight": {
+          "type": "string",
+          "enum": [
+            "grey",
+            "pink",
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "light-blue",
+            "blue",
+            "purple"
+          ]
+        },
+        "is_visible_in_conversation_lists": {
+          "type": "boolean"
+        }
+      }
+    },
+    "add_call_summary": {
+      "type": "object",
+      "required": [
+        "channel_id",
+        "external_call_id",
+        "content"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "channel_id": {
+          "type": "string"
+        },
+        "external_call_id": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "sync_inbound_message": {
+      "type": "object",
+      "required": [
+        "channel_id",
+        "sender",
+        "body",
+        "metadata"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "channel_id": {
+          "type": "string"
+        },
+        "sender": {
+          "type": "object",
+          "required": [
+            "handle"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "handle": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "subject": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "external_id",
+            "external_conversation_id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "external_id": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "external_conversation_id": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "referenced_message_external_id": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "delivered_at": {
+          "type": "integer"
+        }
+      }
+    },
+    "sync_outbound_message": {
+      "type": "object",
+      "required": [
+        "channel_id",
+        "to",
+        "body",
+        "metadata"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "channel_id": {
+          "type": "string"
+        },
+        "sender_name": {
+          "type": "string"
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "handle"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "handle": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "subject": {
+          "type": "string"
+        },
+        "author_id": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "external_id",
+            "external_conversation_id"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "external_id": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "external_conversation_id": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "referenced_message_external_id": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "delivered_at": {
+          "type": "integer"
+        }
+      }
     },
     "merge_contacts": {
       "description": "The target-present branch assumes target_contact_id is omitted from contact_ids; the CLI exposes that provider-valid form explicitly.",

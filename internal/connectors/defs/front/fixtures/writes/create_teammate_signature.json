@@ -2,14 +2,16 @@
   "record": {
     "teammate_id": "fixture_teammate_id",
     "name": "fixture_name",
-    "body": "fixture_body"
+    "body": "fixture_body",
+    "channel_ids": null
   },
   "expect": {
     "method": "POST",
     "path": "/teammates/fixture_teammate_id/signatures",
     "body": {
       "name": "fixture_name",
-      "body": "fixture_body"
+      "body": "fixture_body",
+      "channel_ids": null
     }
   },
   "response": {

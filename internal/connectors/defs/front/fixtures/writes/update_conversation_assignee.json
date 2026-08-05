@@ -1,13 +1,13 @@
 {
   "record": {
     "conversation_id": "fixture_conversation_id",
-    "assignee_id": "fixture_assignee_id"
+    "assignee_id": null
   },
   "expect": {
     "method": "PUT",
     "path": "/conversations/fixture_conversation_id/assignee",
     "body": {
-      "assignee_id": "fixture_assignee_id"
+      "assignee_id": null
     }
   },
   "response": {

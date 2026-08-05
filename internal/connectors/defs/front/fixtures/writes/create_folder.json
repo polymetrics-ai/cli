@@ -1,12 +1,14 @@
 {
   "record": {
-    "name": "fixture_name"
+    "name": "fixture_name",
+    "parent_folder_id": null
   },
   "expect": {
     "method": "POST",
     "path": "/message_template_folders",
     "body": {
-      "name": "fixture_name"
+      "name": "fixture_name",
+      "parent_folder_id": null
     }
   },
   "response": {
