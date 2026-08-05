@@ -755,7 +755,8 @@ func TestBundleLoadAcceptsRuntimeSupportedNonRedactingDirectWriteJSONPolicy(t *t
 			"intent": "direct_write",
 			"availability": "implemented",
 			"operation": "acme.widgets.create",
-			"output_policy": "json"
+			"output_policy": "json",
+			"api_surface": [{"method": "POST", "path": "/widgets"}]
 		}]
 	}`)}
 

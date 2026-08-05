@@ -10,7 +10,12 @@ Issue: #3852. Branch: `fm/cli-found-output-policy-declaration-r1`.
 - `go run ./cmd/agentcontractgen check`: passed.
 - Discuss prompt: `scripts/gsd prompt discuss-phase issue-3852-output-policy-declaration-r1 --auto`.
 - Plan prompt: `scripts/gsd prompt plan-phase issue-3852-output-policy-declaration-r1 --tdd --skip-research`.
-- Execute, verify, and review prompts will be generated and followed inline after the TDD slices.
+- Execute prompt: `scripts/gsd prompt execute-phase issue-3852-output-policy-declaration-r1`; the
+  three TDD slices were executed inline.
+- Verify prompt: `scripts/gsd prompt verify-work issue-3852-output-policy-declaration-r1`; automated
+  UAT is recorded in `UAT.md`.
+- Review prompt: `scripts/gsd prompt code-review issue-3852-output-policy-declaration-r1
+  --depth=standard --files=...`; its inline standard review is recorded in `REVIEW.md`.
 - Inline/manual fallback is required because the issue contract forbids role spawning.
 
 ## Required skills loaded
