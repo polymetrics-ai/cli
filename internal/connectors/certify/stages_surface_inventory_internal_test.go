@@ -144,6 +144,36 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 			wantEndpoints:    1,
 			wantReasonSubstr: "operation_ledger_version: 3 is unsupported; expected 1 or 2",
 		},
+		{
+			name: "explicit_zero_ledger_version_fails",
+			raw: `{
+				"operation_ledger_version": 0,
+				"endpoints": [{
+					"method": "GET",
+					"path": "/widgets",
+					"covered_by": {"stream": "widgets"}
+				}]
+			}`,
+			wantResult:       "fail",
+			wantStatus:       "invalid",
+			wantEndpoints:    1,
+			wantReasonSubstr: "operation_ledger_version: must be omitted or be 1 or 2",
+		},
+		{
+			name: "null_ledger_version_fails",
+			raw: `{
+				"operation_ledger_version": null,
+				"endpoints": [{
+					"method": "GET",
+					"path": "/widgets",
+					"covered_by": {"stream": "widgets"}
+				}]
+			}`,
+			wantResult:       "fail",
+			wantStatus:       "invalid",
+			wantEndpoints:    1,
+			wantReasonSubstr: "operation_ledger_version: must be omitted or be 1 or 2",
+		},
 	}
 
 	for _, tc := range tests {

@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 )
@@ -229,6 +230,60 @@ func TestValidateSurfaceProvenance(t *testing.T) {
 			}
 			if !strings.Contains(strings.Join(issues, "\n"), tc.wantIssue) {
 				t.Fatalf("Issues = %q, want one containing %q", issues, tc.wantIssue)
+			}
+		})
+	}
+}
+
+func TestValidateSurfaceProvenanceLedgerVersionPresence(t *testing.T) {
+	tests := []struct {
+		name       string
+		raw        string
+		wantStatus string
+		wantIssue  string
+	}{
+		{
+			name:       "pre_ledger_is_legacy_unverified",
+			raw:        `{"endpoints": []}`,
+			wantStatus: SurfaceProvenanceLegacyUnverified,
+		},
+		{
+			name:       "v1_is_legacy_unverified",
+			raw:        `{"operation_ledger_version": 1, "endpoints": []}`,
+			wantStatus: SurfaceProvenanceLegacyUnverified,
+		},
+		{
+			name:       "explicit_zero_is_invalid",
+			raw:        `{"operation_ledger_version": 0, "endpoints": []}`,
+			wantStatus: SurfaceProvenanceInvalid,
+			wantIssue:  "operation_ledger_version: must be omitted or be 1 or 2",
+		},
+		{
+			name:       "null_is_invalid",
+			raw:        `{"operation_ledger_version": null, "endpoints": []}`,
+			wantStatus: SurfaceProvenanceInvalid,
+			wantIssue:  "operation_ledger_version: must be omitted or be 1 or 2",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			var surface APISurface
+			if err := json.Unmarshal([]byte(tc.raw), &surface); err != nil {
+				t.Fatalf("unmarshal surface: %v", err)
+			}
+			got := ValidateSurfaceProvenance(&surface)
+			if got.Status != tc.wantStatus {
+				t.Fatalf("Status = %q, want %q; issues = %v", got.Status, tc.wantStatus, got.Issues)
+			}
+			if tc.wantIssue == "" {
+				if len(got.Issues) != 0 {
+					t.Fatalf("Issues = %v, want none", got.Issues)
+				}
+				return
+			}
+			if len(got.Issues) == 0 || !strings.Contains(got.Issues[0].Error(), tc.wantIssue) {
+				t.Fatalf("Issues = %v, want one containing %q", got.Issues, tc.wantIssue)
 			}
 		})
 	}
