@@ -22,7 +22,7 @@ Reverse ETL actions are generated from official POST, PUT, and DELETE operations
 
 Recurly documents `Idempotency-Key` for POST, PUT, PATCH, and DELETE. The runtime generates one fresh key for each approved record and reuses that key only across automatic attempts for the same record. A declarative action without a documented provider idempotency header is executed once: transport failures and retryable provider responses are surfaced without replaying the mutation. Reconcile an ambiguous result with Recurly before creating a new approval; never blindly rerun a billing write.
 
-The pinned operation descriptions do not independently declare any DELETE operation intrinsically idempotent, so the connector does not assume that every DELETE can be retried without a key. `deactivate_account` requires an explicit `redact` choice, and `terminate_subscription` requires an explicit `refund` choice while also exposing the optional `charge` control; the connector does not silently select Recurly's refund or account-redaction defaults for the caller.
+The pinned operation descriptions do not independently declare any DELETE operation intrinsically idempotent, so the connector does not assume that every DELETE can be retried without a key. `deactivate_account` requires an explicit `redact` choice, and `terminate_subscription` requires explicit `refund` and `charge` choices; the connector does not silently select Recurly's refund, usage-charge, or account-redaction defaults for the caller.
 
 ## Known limits
 

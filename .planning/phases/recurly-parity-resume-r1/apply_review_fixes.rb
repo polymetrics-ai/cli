@@ -23,7 +23,7 @@ REMOVED_GENERATED_CLI_MAPPINGS = {
 }.freeze
 CALLER_DECISION_QUERY_FIELDS = {
   "deactivate_account" => %w[redact],
-  "terminate_subscription" => %w[refund]
+  "terminate_subscription" => %w[refund charge]
 }.freeze
 MUTATION_QUERY_FIXTURE_VALUES = {
   "deactivate_account" => {"redact" => true},

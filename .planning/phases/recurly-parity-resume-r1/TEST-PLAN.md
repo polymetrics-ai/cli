@@ -15,3 +15,6 @@
    unmarked delete's single-attempt behavior, write-fixture query matching, typed Recurly query
    schemas and flags, explicit refund/redaction choices, raw operation evidence, and query-bearing
    fixtures in that same final focused command.
+8. For the termination-charge round, prove an omitted charge is rejected by validation and preview,
+   require the generated boolean query/CLI/evidence contract, and include connector validation plus
+   the focused Recurly contract tests in one end-of-round command.

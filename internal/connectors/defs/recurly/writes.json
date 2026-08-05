@@ -10019,7 +10019,8 @@
         },
         "required": [
           "subscription_id",
-          "refund"
+          "refund",
+          "charge"
         ],
         "additionalProperties": false
       },
@@ -10028,10 +10029,7 @@
       "idempotency_key_header": "Idempotency-Key",
       "query": {
         "refund": "{{ record.refund }}",
-        "charge": {
-          "template": "{{ record.charge }}",
-          "omit_when_absent": true
-        }
+        "charge": "{{ record.charge }}"
       }
     },
     {

@@ -1,6 +1,7 @@
 package recurly
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -9,6 +10,10 @@ import (
 	"sort"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors"
+	connectorDefs "polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 type reviewWriteAction struct {
@@ -198,7 +203,7 @@ func TestReviewMutationQueryControls(t *testing.T) {
 
 	terminate := requireReviewAction(t, actions, "terminate_subscription")
 	assertReviewQuery(t, terminate, "refund", "{{ record.refund }}", false)
-	assertReviewQuery(t, terminate, "charge", "{{ record.charge }}", true)
+	assertReviewQuery(t, terminate, "charge", "{{ record.charge }}", false)
 	terminateSchema := reviewSchemaObject(t, terminate.RecordSchema)
 	refund := reviewProperty(t, terminateSchema, "refund")
 	if !reviewSchemaHasType(refund, "string") || !reflect.DeepEqual(reviewStringSlice(refund["enum"]), []string{"full", "none", "partial"}) {
@@ -207,7 +212,7 @@ func TestReviewMutationQueryControls(t *testing.T) {
 	if !reviewSchemaHasType(reviewProperty(t, terminateSchema, "charge"), "boolean") {
 		t.Errorf("terminate_subscription.charge is not boolean")
 	}
-	requireReviewFields(t, terminateSchema, "refund")
+	requireReviewFields(t, terminateSchema, "refund", "charge")
 
 	var cliDocument struct {
 		Commands []reviewCLICommand `json:"commands"`
@@ -224,12 +229,35 @@ func TestReviewMutationQueryControls(t *testing.T) {
 		t.Errorf("terminate refund flag = %#v", refundFlag)
 	}
 	chargeFlag := requireReviewFlag(t, terminateCommand, "record.charge")
-	if chargeFlag.Type != "boolean" || chargeFlag.Required {
+	if chargeFlag.Type != "boolean" || !chargeFlag.Required {
 		t.Errorf("terminate charge flag = %#v", chargeFlag)
 	}
 
 	assertReviewWriteFixtureQuery(t, "deactivate_account", map[string]string{"redact": "true"})
 	assertReviewWriteFixtureQuery(t, "terminate_subscription", map[string]string{"refund": "partial", "charge": "false"})
+}
+
+func TestReviewTerminateSubscriptionRequiresChargeBeforePreview(t *testing.T) {
+	bundle, err := engine.Load(connectorDefs.FS, "recurly")
+	if err != nil {
+		t.Fatalf("load Recurly bundle: %v", err)
+	}
+	req := connectors.WriteRequest{Action: "terminate_subscription"}
+	withoutCharge := connectors.Record{"subscription_id": "fixture_subscription_id", "refund": "none"}
+	if err := engine.ValidateWrite(context.Background(), bundle, req, []connectors.Record{withoutCharge}); err == nil {
+		t.Fatal("terminate_subscription validation accepted a record without charge")
+	}
+	if _, err := engine.DryRunWrite(context.Background(), bundle, req, []connectors.Record{withoutCharge}, nil); err == nil {
+		t.Fatal("terminate_subscription preview accepted a record without charge")
+	}
+
+	withCharge := connectors.Record{"subscription_id": "fixture_subscription_id", "refund": "none", "charge": false}
+	if err := engine.ValidateWrite(context.Background(), bundle, req, []connectors.Record{withCharge}); err != nil {
+		t.Fatalf("terminate_subscription validation with charge: %v", err)
+	}
+	if _, err := engine.DryRunWrite(context.Background(), bundle, req, []connectors.Record{withCharge}, nil); err != nil {
+		t.Fatalf("terminate_subscription preview with charge: %v", err)
+	}
 }
 
 func TestReviewDeleteRetryEvidenceIsOperationScoped(t *testing.T) {
@@ -303,7 +331,7 @@ func TestReviewDeleteRetryEvidenceIsOperationScoped(t *testing.T) {
 	wantControls := map[string]bool{
 		"deactivate_account.query.redact":     true,
 		"terminate_subscription.query.refund": true,
-		"terminate_subscription.query.charge": false,
+		"terminate_subscription.query.charge": true,
 	}
 	if len(evidence.MutationQueryControls) != len(wantControls) {
 		t.Errorf("mutation query evidence count = %d, want %d", len(evidence.MutationQueryControls), len(wantControls))
@@ -320,6 +348,12 @@ func TestReviewDeleteRetryEvidenceIsOperationScoped(t *testing.T) {
 		}
 		if control.ProviderRequired {
 			t.Errorf("mutation query evidence %q unexpectedly marks provider-required", key)
+		}
+		if key == "terminate_subscription.query.charge" {
+			description, _ := control.Schema["description"].(string)
+			if control.Schema["type"] != "boolean" || control.Schema["default"] != true || !strings.Contains(description, "If true") || !strings.Contains(description, "If false") {
+				t.Errorf("charge evidence does not preserve Recurly's documented boolean values: %#v", control.Schema)
+			}
 		}
 	}
 }

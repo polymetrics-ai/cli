@@ -4576,7 +4576,8 @@
           "name": "charge",
           "type": "boolean",
           "summary": "Typed Recurly request field `charge`.",
-          "maps_to": "record.charge"
+          "maps_to": "record.charge",
+          "required": true
         }
       ],
       "api_surface": [

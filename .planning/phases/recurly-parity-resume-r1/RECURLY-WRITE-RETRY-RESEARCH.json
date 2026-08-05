@@ -355,7 +355,7 @@
       "field": "query.charge",
       "local_source_path": "writes.terminate_subscription.query.charge",
       "provider_required": false,
-      "local_required": false,
+      "local_required": true,
       "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/terminate_subscription",
       "evidence_type": "openapi.parameter",
       "evidence_path": "paths./subscriptions/{subscription_id}.delete.parameters.2",

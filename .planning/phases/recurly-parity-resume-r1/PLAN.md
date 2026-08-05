@@ -62,6 +62,10 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
     mutation-query boundary from the pinned OAS, require callers to choose refund and account
     redaction behavior, and record connector-local raw retry evidence without changing the shared
     citation convention.
+12. Treat subscription termination `charge` as a required caller decision at the Recurly generator
+    boundary, alongside `refund`. Regenerate its closed record schema, plain query mapping, CLI
+    flag, fixture, raw evidence, manual, and website data without changing shared query omission
+    behavior.
 
 ## TDD checkpoints
 
@@ -78,6 +82,9 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
 - Red/green: reasoned pre-fix inspection proves explicitly idempotent deletes are forced to one
   attempt and all three Recurly mutation query controls are absent. Add focused regressions before
   production edits, apply the whole fix round, then run one focused test command at the end.
+- Red/green: call-path inspection proves optional `record.charge` passes schema and preview but
+  cannot trigger shared `omit_when_absent` handling. Require it in the generated contract and add
+  a focused preview-validation regression before the single end-of-round verification.
 
 ## Verification plan
 
