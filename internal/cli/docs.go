@@ -286,6 +286,7 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
+  pm connectors certify <connector> [--full] [--json]
 
 DESCRIPTION
   pm ships with runnable connector definitions compiled into the binary. Most
@@ -376,6 +377,15 @@ ACTIONS
   help <name>
     Alias for the human connector manual.
 
+  certify <connector>
+    Runs connector certification. With --full --json, the report includes the
+    API-surface inventory and provider-artifact provenance evidence separately
+    from endpoint coverage and connector capabilities. Version-1 ledgers remain
+    legacy_unverified during the staged migration. A complete version-2 ledger
+    reports its ledger version, artifact count, endpoint count, and cited
+    endpoint count; invalid version-2 provenance fails certification without
+    enabling or changing any connector capability.
+
 EXAMPLES
   pm connectors
   pm connectors --json
@@ -384,6 +394,7 @@ EXAMPLES
   pm connectors catalog --capability write --stage generally_available --json
   pm connectors inspect github
   pm connectors inspect github --json
+  pm connectors certify sample --full --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem

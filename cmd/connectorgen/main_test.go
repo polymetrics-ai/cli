@@ -928,6 +928,82 @@ func TestValidate_APISurfaceOperationLedgerValidRowsPassCleanly(t *testing.T) {
 	}
 }
 
+func TestValidate_APISurfaceV2ProvenanceUsesSharedValidation(t *testing.T) {
+	tests := []struct {
+		name          string
+		apiSurface    string
+		wantRule      string
+		wantMessage   string
+		wantCleanPass bool
+	}{
+		{
+			name:          "complete_v2",
+			apiSurface:    validV2ProvenanceAPISurface(),
+			wantCleanPass: true,
+		},
+		{
+			name:        "missing_endpoint_citation",
+			apiSurface:  strings.Replace(validV2ProvenanceAPISurface(), `"source_url": "https://docs.acme.test/api/widgets#sensitive"`, `"source_url": ""`, 1),
+			wantRule:    ruleSurfaceProvenance,
+			wantMessage: "provenance.source_url is required",
+		},
+		{
+			name:        "unknown_artifact",
+			apiSurface:  strings.Replace(validV2ProvenanceAPISurface(), `"artifact": "acme-openapi-2026-08-06"`, `"artifact": "unknown-artifact"`, 1),
+			wantRule:    ruleSurfaceProvenance,
+			wantMessage: `resolves to 0 artifacts`,
+		},
+		{
+			name: "duplicate_artifact_id",
+			apiSurface: strings.Replace(validV2ProvenanceAPISurface(), `"artifacts": [`, `"artifacts": [{
+				"id": "acme-openapi-2026-08-06",
+				"url": "https://docs.acme.test/openapi-copy.yaml",
+				"retrieved_at": "2026-08-06"
+			},`, 1),
+			wantRule:    ruleSurfaceProvenance,
+			wantMessage: `resolves to 2 artifacts`,
+		},
+		{
+			name:        "non_https_endpoint_citation",
+			apiSurface:  strings.Replace(validV2ProvenanceAPISurface(), `"source_url": "https://docs.acme.test/api/widgets#sensitive"`, `"source_url": "http://docs.acme.test/api/widgets#sensitive"`, 1),
+			wantRule:    ruleSurfaceProvenance,
+			wantMessage: "provenance.source_url must be an absolute HTTPS URL",
+		},
+		{
+			name:        "invalid_artifact_date",
+			apiSurface:  strings.Replace(validV2ProvenanceAPISurface(), `"retrieved_at": "2026-08-06"`, `"retrieved_at": "2026-08-06T12:00:00Z"`, 1),
+			wantRule:    ruleSurfaceProvenance,
+			wantMessage: "retrieved_at must be an ISO-8601 full-date",
+		},
+		{
+			name:          "v1_is_legacy_compatible",
+			apiSurface:    validOperationLedgerAPISurface(),
+			wantCleanPass: true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			report, err := validateDir(operationLedgerBundleFS(tc.apiSurface))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			if tc.wantCleanPass {
+				if len(report.Findings) != 0 {
+					t.Fatalf("findings = %+v, want none", report.Findings)
+				}
+				return
+			}
+			for _, finding := range report.Findings {
+				if finding.Connector == "cli-surface" && finding.File == "api_surface.json" && finding.Rule == tc.wantRule && strings.Contains(finding.Message, tc.wantMessage) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want %s containing %q", report.Findings, tc.wantRule, tc.wantMessage)
+		})
+	}
+}
+
 func TestValidate_APISurfaceOperationLedgerRejectsLegacyExclusion(t *testing.T) {
 	report, err := validateDir(operationLedgerBundleFS(`{
 		"api": "test API v1",
@@ -1999,6 +2075,56 @@ func validOperationLedgerAPISurface() string {
 					"blocked_by_default": true,
 					"reason": "point lookup candidate, not yet modeled as a stream",
 					"source_url": "https://example.invalid/rest/widgets"
+				}
+			}
+		]
+	}`
+}
+
+func validV2ProvenanceAPISurface() string {
+	return `{
+		"api": "test API v2",
+		"operation_ledger_version": 2,
+		"artifacts": [
+			{
+				"id": "acme-openapi-2026-08-06",
+				"url": "https://docs.acme.test/openapi.yaml",
+				"retrieved_at": "2026-08-06",
+				"sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+			}
+		],
+		"endpoints": [
+			{
+				"method": "GET",
+				"path": "/widgets",
+				"provenance": {
+					"artifact": "acme-openapi-2026-08-06",
+					"source_url": "https://docs.acme.test/api/widgets"
+				},
+				"covered_by": { "stream": "widgets" }
+			},
+			{
+				"method": "POST",
+				"path": "/widgets",
+				"provenance": {
+					"artifact": "acme-openapi-2026-08-06",
+					"source_url": "https://docs.acme.test/api/widgets#create"
+				},
+				"covered_by": { "write": "create_widget" }
+			},
+			{
+				"method": "POST",
+				"path": "/widgets/sensitive",
+				"provenance": {
+					"artifact": "acme-openapi-2026-08-06",
+					"source_url": "https://docs.acme.test/api/widgets#sensitive"
+				},
+				"operation": {
+					"model": "sensitive_reverse_etl",
+					"status": "blocked",
+					"risk": "high",
+					"blocked_by_default": true,
+					"reason": "requires sensitive-data safeguards"
 				}
 			}
 		]
