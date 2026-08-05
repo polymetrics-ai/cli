@@ -27,7 +27,7 @@ Promotable total: **222**. Method mix contains **zero DELETE** rows
 
 | Connector | n | Reason variant | Disposition |
 |---|---:|---|---|
-| zendesk-support | 88 | `In scope, but blocked by default until represented by a typed action with confirm:"destructive"...` | **Stays blocked** — destructive (77 DELETE, 8 PUT, 3 POST). Gated on `cli-delete-confirmation-foundation-r1`. |
+| zendesk-support | 88 | `In scope, but blocked by default until represented by a typed action with confirm:"destructive"...` | **Stays blocked** — destructive (77 DELETE, 8 PUT, 3 POST). The shared gate now exists; connector-local typed action, command, and fixture authoring remains. |
 | zendesk-support | 9 | `...typed action implements non-inline credential input where required, credential redaction...` | **Stays blocked** — OAuth client/token creation and password set/change. Promoting means accepting a secret as a CLI flag value, i.e. inline credential input, which the reason forbids and `AGENTS.md` forbids. |
 | zendesk-support | 5 | `File or multipart upload needs a bounded file-transfer foundation...` | **Stays blocked** — needs the file-transfer foundation; an engine concern outside this lane's file boundary. |
 | asana | 34 | `planned destructive reverse-ETL action...` | **Stays blocked** — destructive (17 DELETE, 17 POST). |

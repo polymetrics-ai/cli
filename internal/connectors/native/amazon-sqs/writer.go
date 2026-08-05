@@ -9,12 +9,14 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"net/http"
 	"net/url"
 	"sort"
 	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 const sqsBatchLimit = 10
@@ -121,86 +123,195 @@ func (c Connector) ValidateWrite(ctx context.Context, req connectors.WriteReques
 }
 
 func (c Connector) DryRunWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
-	if err := ctx.Err(); err != nil {
-		return connectors.WritePreview{}, err
-	}
-	def, action, err := lookupSQSWriteAction(req.Action)
+	prepared, err := c.prepareSQSWrite(ctx, req, records)
 	if err != nil {
 		return connectors.WritePreview{}, err
 	}
+	return engine.PreviewPreparedWrite(prepared.shared)
+}
+
+func (c Connector) writeSQS(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
+	prepared, err := c.prepareSQSWrite(ctx, req, records)
+	if err != nil {
+		return connectors.WriteResult{RecordsFailed: len(records)}, err
+	}
+	preview, err := engine.PreviewPreparedWrite(prepared.shared)
+	if err != nil {
+		return connectors.WriteResult{RecordsFailed: len(records)}, err
+	}
+	var result connectors.WriteResult
+	err = engine.ExecutePreparedWrite(ctx, prepared.shared, req.Approval, preview.Digest, func(executeCtx context.Context) error {
+		var executeErr error
+		result, executeErr = c.executePreparedSQSWrite(executeCtx, prepared)
+		return executeErr
+	})
+	if err != nil && result.RecordsWritten == 0 && result.RecordsFailed == 0 {
+		result.RecordsFailed = len(prepared.normalized)
+	}
+	return result, err
+}
+
+type preparedSQSRequest struct {
+	endpoint string
+	form     url.Values
+	entryIDs []string
+	count    int
+}
+
+type preparedSQSWrite struct {
+	shared     engine.PreparedWrite
+	definition writeActionDef
+	connection sqsConfig
+	normalized []connectors.Record
+	requests   []preparedSQSRequest
+}
+
+type sqsWriteDefinition struct {
+	Name        string     `json:"name"`
+	Method      string     `json:"method"`
+	Path        string     `json:"path"`
+	Kind        string     `json:"kind"`
+	Required    []string   `json:"required,omitempty"`
+	RequiredAny [][]string `json:"required_any,omitempty"`
+	Allowed     []string   `json:"allowed,omitempty"`
+	Redact      []string   `json:"redact,omitempty"`
+	Risk        string     `json:"risk,omitempty"`
+	Confirm     string     `json:"confirm,omitempty"`
+	Batch       bool       `json:"batch"`
+	Queue       bool       `json:"queue"`
+	Service     bool       `json:"service"`
+}
+
+func (c Connector) prepareSQSWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (preparedSQSWrite, error) {
+	if err := ctx.Err(); err != nil {
+		return preparedSQSWrite{}, err
+	}
+	def, action, err := lookupSQSWriteAction(req.Action)
+	if err != nil {
+		return preparedSQSWrite{}, err
+	}
 	normalized := normalizedWriteRecords(records)
 	if err := validateSQSRecords(def, normalized); err != nil {
-		return connectors.WritePreview{}, err
+		return preparedSQSWrite{}, err
 	}
-	staged := len(normalized)
+	connection, err := resolveConnConfig(req.Config)
+	if err != nil {
+		return preparedSQSWrite{}, err
+	}
+	requests := make([]preparedSQSRequest, 0, len(normalized))
+	if def.batch {
+		for start := 0; start < len(normalized); start += sqsBatchLimit {
+			end := min(start+sqsBatchLimit, len(normalized))
+			chunk := normalized[start:end]
+			form := baseActionForm(actionName(def.path))
+			form.Set("QueueUrl", connection.queueURL)
+			entryIDs := make([]string, 0, len(chunk))
+			for index, record := range chunk {
+				entryIDs = append(entryIDs, entryID(record, index+1))
+				if err := def.execute(form, record, index+1); err != nil {
+					return preparedSQSWrite{}, err
+				}
+			}
+			requests = append(requests, preparedSQSRequest{endpoint: connection.endpointURL, form: form, entryIDs: entryIDs, count: len(chunk)})
+		}
+	} else {
+		for index, record := range normalized {
+			form := baseActionForm(actionName(def.path))
+			if def.queue {
+				form.Set("QueueUrl", connection.queueURL)
+			}
+			if err := def.execute(form, record, index+1); err != nil {
+				return preparedSQSWrite{}, err
+			}
+			requests = append(requests, preparedSQSRequest{endpoint: connection.endpointURL, form: form, count: 1})
+		}
+	}
+	canonical := make([]engine.PreparedRequest, 0, len(requests))
+	for _, request := range requests {
+		target := request.endpoint
+		if queueURL := request.form.Get("QueueUrl"); queueURL != "" {
+			target = queueURL
+		}
+		canonical = append(canonical, engine.PreparedRequest{
+			Method:      http.MethodPost,
+			URL:         request.endpoint,
+			Target:      target,
+			ContentType: "application/x-www-form-urlencoded",
+			BodyFormat:  "form",
+			Body:        request.form.Encode(),
+			Headers: map[string]string{
+				"Accept":     "text/xml",
+				"User-Agent": userAgent,
+				"Signing":    "aws-sigv4/sqs/" + connection.region,
+			},
+		})
+	}
 	warnings := []string{"amazon-sqs writes require reverse ETL plan -> preview -> explicit approval -> execute"}
 	if def.confirm == "destructive" {
 		warnings = append(warnings, "destructive confirmation required")
 	}
-	return connectors.WritePreview{RecordsStaged: staged, Action: action, Warnings: warnings}, nil
+	confirmation := connectors.ConfirmationKind(strings.TrimSpace(def.confirm))
+	return preparedSQSWrite{
+		shared: engine.PreparedWrite{
+			Target: engine.DestructiveTarget{
+				Connector:     c.Name(),
+				Operation:     action,
+				Method:        def.method,
+				MutationClass: def.kind,
+				Confirmation:  confirmation,
+			},
+			CredentialRevision:  req.Config.CredentialRevision,
+			ConfigurationDigest: req.Config.ConfigurationDigest,
+			ApprovalScope:       req.Config.WriteApprovalScope,
+			Batchable:           true,
+			RecordsStaged:       len(normalized),
+			Action:              action,
+			Warnings:            warnings,
+			Definition: sqsWriteDefinition{
+				Name: def.name, Method: def.method, Path: def.path, Kind: def.kind,
+				Required: append([]string(nil), def.required...), RequiredAny: append([][]string(nil), def.requiredAny...),
+				Allowed: append([]string(nil), def.allowed...), Redact: append([]string(nil), def.redact...),
+				Risk: def.risk, Confirm: def.confirm, Batch: def.batch, Queue: def.queue, Service: def.service,
+			},
+			HookIdentity: "amazon-sqs-query-api-v1",
+			Requests:     canonical,
+		},
+		definition: def,
+		connection: connection,
+		normalized: normalized,
+		requests:   requests,
+	}, nil
 }
 
-func (c Connector) writeSQS(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
-	if err := ctx.Err(); err != nil {
-		return connectors.WriteResult{RecordsFailed: len(records)}, err
-	}
-	def, _, err := lookupSQSWriteAction(req.Action)
-	if err != nil {
-		return connectors.WriteResult{RecordsFailed: len(records)}, err
-	}
-	normalized := normalizedWriteRecords(records)
-	if err := validateSQSRecords(def, normalized); err != nil {
-		return connectors.WriteResult{RecordsFailed: len(records)}, err
-	}
+func (c Connector) executePreparedSQSWrite(ctx context.Context, prepared preparedSQSWrite) (connectors.WriteResult, error) {
 	written := 0
-	if def.batch {
-		for start := 0; start < len(normalized); start += sqsBatchLimit {
-			end := start + sqsBatchLimit
-			if end > len(normalized) {
-				end = len(normalized)
-			}
-			chunk := normalized[start:end]
-			chunkEntryIDs := make([]string, 0, len(chunk))
-			form := baseActionForm(actionName(def.path))
-			addConfiguredQueueURL(form, req.Config)
-			for i, rec := range chunk {
-				chunkEntryIDs = append(chunkEntryIDs, entryID(rec, i+1))
-				if err := def.execute(form, rec, i+1); err != nil {
-					return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, err
-				}
-			}
-			resp, err := c.doService(ctx, req.Config, form, 16<<20)
+	if prepared.definition.batch {
+		for _, request := range prepared.requests {
+			resp, err := c.doEndpoint(ctx, prepared.connection, request.endpoint, cloneValues(request.form), 16<<20)
 			if err != nil {
-				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, err
+				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(prepared.normalized) - written}, err
 			}
 			batchIDs, err := parseBatchResultIDs(resp.body)
 			if err != nil {
-				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response parse failed: %w", def.name, err)
+				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(prepared.normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response parse failed: %w", prepared.definition.name, err)
 			}
-			successes, failures, err := verifyBatchResultIDs(batchIDs, chunkEntryIDs)
+			successes, failures, err := verifyBatchResultIDs(batchIDs, request.entryIDs)
 			if err != nil {
-				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response %w", def.name, err)
+				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(prepared.normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response %w", prepared.definition.name, err)
 			}
 			written += successes
 			if failures > 0 {
-				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response reported %d failed entries", def.name, failures)
+				return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(prepared.normalized) - written}, fmt.Errorf("amazon-sqs action %s batch response reported %d failed entries", prepared.definition.name, failures)
 			}
 		}
 		return connectors.WriteResult{RecordsWritten: written}, nil
 	}
-	for i, rec := range normalized {
-		form := baseActionForm(actionName(def.path))
-		if def.queue {
-			addConfiguredQueueURL(form, req.Config)
-		}
-		if err := def.execute(form, rec, i+1); err != nil {
-			return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, err
-		}
-		_, err := c.doService(ctx, req.Config, form, 16<<20)
+	for _, request := range prepared.requests {
+		_, err := c.doEndpoint(ctx, prepared.connection, request.endpoint, cloneValues(request.form), 16<<20)
 		if err != nil {
-			return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(normalized) - written}, err
+			return connectors.WriteResult{RecordsWritten: written, RecordsFailed: len(prepared.normalized) - written}, err
 		}
-		written++
+		written += request.count
 	}
 	return connectors.WriteResult{RecordsWritten: written}, nil
 }

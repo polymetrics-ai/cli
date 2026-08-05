@@ -100,6 +100,9 @@ type RuntimeConfig struct {
 	ProjectDir            string            `json:"-"`
 	Config                map[string]string `json:"config"`
 	Secrets               map[string]string `json:"-"`
+	CredentialRevision    string            `json:"-"`
+	ConfigurationDigest   string            `json:"-"`
+	WriteApprovalScope    string            `json:"-"`
 	ApprovedPayloadSHA256 map[string]string `json:"-"`
 	// SecretStore, when set, persists a provider-rotated secret back to the
 	// caller's encrypted credential store. Optional; see SecretStore.
@@ -246,6 +249,32 @@ type WriteRequest struct {
 	Overwrite  bool
 	Config     RuntimeConfig
 	PrimaryKey []string
+	Approval   *WriteApprovalEvidence
+}
+
+// ConfirmationKind is the closed runtime vocabulary for an explicit write
+// confirmation. It is deliberately not a caller-defined prompt.
+type ConfirmationKind string
+
+const ConfirmationKindDestructive ConfirmationKind = "destructive"
+
+// WriteConfirmation is the typed, closed confirmation attached to an
+// explicitly approved write request.
+type WriteConfirmation struct {
+	Kind ConfirmationKind `json:"kind"`
+}
+
+// ParseWriteConfirmation maps CLI and persisted values into the closed
+// confirmation vocabulary.
+func ParseWriteConfirmation(raw string) (WriteConfirmation, error) {
+	switch ConfirmationKind(strings.TrimSpace(raw)) {
+	case "":
+		return WriteConfirmation{}, nil
+	case ConfirmationKindDestructive:
+		return WriteConfirmation{Kind: ConfirmationKindDestructive}, nil
+	default:
+		return WriteConfirmation{}, fmt.Errorf("unsupported confirmation kind %q", strings.TrimSpace(raw))
+	}
 }
 
 type WriteResult struct {
@@ -265,9 +294,11 @@ type QueryResult struct {
 }
 
 type WritePreview struct {
-	RecordsStaged int      `json:"records_staged"`
-	Action        string   `json:"action"`
-	Warnings      []string `json:"warnings,omitempty"`
+	RecordsStaged  int                 `json:"records_staged"`
+	Action         string              `json:"action"`
+	Warnings       []string            `json:"warnings,omitempty"`
+	Digest         string              `json:"digest,omitempty"`
+	ApprovalTarget WriteApprovalTarget `json:"approval_target,omitempty"`
 }
 
 type CDCReadRequest struct {

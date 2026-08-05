@@ -1,0 +1,55 @@
+{
+  "operations": [
+    {
+      "id": "reports_query",
+      "kind": "rest_read",
+      "summary": "Query ad-hoc YouTube Analytics metrics and dimensions.",
+      "description": "Official youtubeAnalytics.reports.query (GET /v2/reports). Kept planned solely until typed provider-query foundation issue #2985 can provide bounded query fields without a raw-query escape hatch.",
+      "source_url": "https://developers.google.com/youtube/analytics/reference/reports/query",
+      "risk": "low",
+      "approval": "planned on issue #2985; no live provider call is made by this connector operation definition",
+      "output_policy": "json_redacted",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/youtube",
+        "https://www.googleapis.com/auth/youtube.readonly",
+        "https://www.googleapis.com/auth/youtubepartner",
+        "https://www.googleapis.com/auth/yt-analytics-monetary.readonly",
+        "https://www.googleapis.com/auth/yt-analytics.readonly"
+      ],
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "https://youtubeanalytics.googleapis.com/v2/reports",
+        "max_bytes": 1048576,
+        "query": {
+          "ids": "channel==MINE|contentOwner==OWNER_NAME",
+          "startDate": "YYYY-MM-DD",
+          "endDate": "YYYY-MM-DD",
+          "metrics": "comma-separated metrics"
+        }
+      }
+    },
+    {
+      "id": "download_report",
+      "kind": "binary_download",
+      "summary": "Download generated YouTube Reporting report bytes.",
+      "description": "Official youtubereporting.media.download. The provider's resourceName path field is mapped to the runtime's safe multi-segment {path} placeholder, preserving the documented GET /v1/media/{+resourceName}?alt=media request without accepting an arbitrary absolute download URL.",
+      "source_url": "https://developers.google.com/youtube/reporting/v1/reports#step-6-download-the-report",
+      "risk": "medium",
+      "approval": "read-only download; requires an explicit destination root and is bounded to 100 MiB with a SHA-256 receipt",
+      "output_policy": "bounded_binary_file",
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/yt-analytics-monetary.readonly",
+        "https://www.googleapis.com/auth/yt-analytics.readonly"
+      ],
+      "mutation_class": "none",
+      "binary": {
+        "method": "GET",
+        "path": "/v1/media/{path}?alt=media",
+        "max_bytes": 104857600,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    }
+  ]
+}

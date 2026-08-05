@@ -1,0 +1,32 @@
+{
+  "record": {
+    "groupId": "group_fixture_1",
+    "resource": {
+      "kind": "youtubePartner#asset",
+      "id": "asset_fixture_1"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/v2/groupItems",
+    "body": {
+      "groupId": "group_fixture_1",
+      "resource": {
+        "kind": "youtubePartner#asset",
+        "id": "asset_fixture_1"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "kind": "youtube#groupItem",
+      "id": "group_item_fixture_created",
+      "groupId": "group_fixture_1",
+      "resource": {
+        "kind": "youtubePartner#asset",
+        "id": "asset_fixture_1"
+      }
+    }
+  }
+}

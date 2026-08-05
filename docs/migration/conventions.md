@@ -40,8 +40,9 @@ Stripe's `starting_after`/`has_more` convention), a `check` request, and an `err
 `incremental.cursor_field: created`, `param_format: unix_seconds`) — copy this shape for any
 list-endpoint API with a uniform envelope. `writes.json` declares `create_customer` and
 `update_customer` as approval-gated form writes plus `delete_customer` as a destructive no-body
-write with `confirm: "destructive"` and idempotent 404 handling; both mutating customer-by-id
-actions carry `path_fields: ["id"]`. `fixtures/streams/customers/{page_1,page_2}.json` is the
+write with the legacy `confirm: "destructive"` declaration (normalized by the shared typed gate)
+and idempotent 404 handling; both mutating customer-by-id actions carry `path_fields: ["id"]`.
+`fixtures/streams/customers/{page_1,page_2}.json` is the
 **required 2-page fixture** for a paginated stream (§4). `docs.md` documents the `minProperties: 1`
 parity deviation (§5, item 1) inline as well as in this ledger.
 
@@ -809,6 +810,13 @@ sample fields, `DryRunWrite` replaces those path values in the resolved request 
 redacts raw and URL-encoded literal forms from returned write errors while preserving typed error
 wrapping.
 
+`confirmation` is the closed confirmation declaration for new actions:
+`"confirmation": {"kind": "destructive"}`. The writes and operations schemas are authoritative;
+existing `confirm: "destructive"` bundles remain compatible, but do not copy that legacy spelling
+into new authoring. See the architecture design's [write semantics](../architecture/connector-architecture-v2-design.md#b5-write-path-enginewritego)
+for fail-closed normalization and preview-bound execution. Declaring confirmation in
+`operations.json` does not make an operation executable or create a command binding.
+
 `batchable` declares whether the action may run from a **bulk** reverse ETL plan — the
 `pm reverse plan --source-table ...` shape that fans one action out over many warehouse rows under
 a single approval. It defaults to `true`; omit it unless you mean to restrict the action. Declaring
@@ -820,9 +828,9 @@ record at a time.
 
 Declare it for operations that must never be bulk-automated — moderation actions, irreversible
 sends, rate-sensitive endpoints, and anything governed by a provider rule about human intent. Do
-**not** reach for it as a severity signal: that is `confirm`'s job, and the two are independent. An
-action can be non-batchable without being destructive (casting a vote) or destructive without being
-non-batchable (a bulk delete), so neither one implies the other.
+**not** reach for it as a severity signal: that is `confirmation`'s job, and the two are
+independent. An action can be non-batchable without being destructive (casting a vote) or
+destructive without being non-batchable (a bulk delete), so neither one implies the other.
 
 **Delete semantics**: `kind: "delete"` + `delete.missing_ok_status: [404, ...]` means those HTTP
 statuses on the delete request count as **written, not failed** (idempotent delete) — any other

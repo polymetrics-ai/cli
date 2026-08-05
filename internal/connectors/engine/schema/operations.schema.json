@@ -53,6 +53,14 @@
             "enum": ["none", "create", "update", "delete", "admin", "destructive", "secret"]
           },
           "destructive": { "type": "boolean" },
+          "confirmation": {
+            "type": "object",
+            "required": ["kind"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["destructive"] }
+            }
+          },
           "secret_sensitive": { "type": "boolean" },
           "sensitive_policy": {
             "type": "object",

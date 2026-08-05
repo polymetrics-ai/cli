@@ -669,7 +669,7 @@ func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Value
 		}
 	}
 
-	vars := requestVars(req.Config, nil, "")
+	vars := requestVars(req.Config, nil, "", req.Query)
 	vars.IncrementalLowerBound = formattedLower
 	q, err := resolveQueryParams(stream.Query, vars)
 	if err != nil {

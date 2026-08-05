@@ -90,8 +90,10 @@ Connection checks call GET `/repos/{{ config.owner }}/{{ config.repo }}`.
 ## Connector command writes
 
 Mapped `reverse_etl` commands never mutate GitHub directly from a plain command invocation. The
-provider-style command creates a stored reverse plan with an approval token, optional preview uses
-the connector write dry-run path, and execution requires the same stored plan plus `--approve`.
+provider-style command creates a stored reverse plan. Non-destructive plans return an approval
+token immediately; destructive plans return it only after the connector's no-network preview
+succeeds and additionally require `--confirm destructive`. Execution requires the same stored plan
+plus `--approve`; `docs/cli/reverse.md` owns the full lifecycle contract.
 
 Example:
 
@@ -101,9 +103,8 @@ pm github issue close --plan <plan-id> --preview --json
 pm github issue close --plan <plan-id> --approve <approval-token> --json
 ```
 
-JSON plan and preview output redacts approval tokens, approval token hashes, and raw command payload
-records. Commands without explicit `record.*` flag mappings remain blocked until their input model is
-declared.
+JSON plan and preview output redacts raw approval tokens and raw command payload records. Commands
+without explicit `record.*` flag mappings remain blocked until their input model is declared.
 
 ## Streams notes
 

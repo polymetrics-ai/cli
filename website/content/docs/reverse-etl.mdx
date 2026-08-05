@@ -3,14 +3,14 @@ title: Reverse ETL
 description: Write data back to any destination using the plan-preview-approve-run gate that keeps humans and agents in control.
 ---
 
-Reverse ETL in pm follows a strict four-step gate: **plan, preview, approve, run**. No connector action executes until an approval token is explicitly presented at run time. This design makes reverse-ETL safe to delegate to an AI agent without the risk of silent mutations.
+Reverse ETL in pm follows a strict four-step gate: **plan, preview, approve, run**. Destructive operations cannot receive an approval token until their no-network preview is persisted, and no connector action executes until an approval token is explicitly presented at run time.
 
 ## The four-step gate
 
 ```bash
-pm reverse plan <name> [flags]             # generate a plan and approval token
-pm reverse preview <plan-id> [--json]      # inspect exactly what will change
-pm reverse run <plan-id> --approve <token> [--json]   # execute
+pm reverse plan <name> [flags]                       # generate a typed plan
+pm reverse preview <plan-id>                         # inspect; destructive plans issue their token here
+pm reverse run <plan-id> --approve <token> [--confirm destructive] [--json]
 ```
 
 <Callout type="warn">
@@ -31,7 +31,7 @@ pm reverse plan sync \
   --json
 ```
 
-The `plan` subcommand reads from the named table, maps columns to action fields, and returns a plan ID and an approval token. Newly created plans persist the destination write action's `redact_fields` metadata and mask those fields in plan samples.
+The `plan` subcommand reads from the named table, maps columns to action fields, and returns a plan ID. Non-destructive plans also return an approval token in plain-text mode. Destructive plans deliberately do not: their token is issued only after preview succeeds. Newly created plans persist the destination write action's `redact_fields` metadata and mask those fields in plan samples.
 
 JSON output:
 
@@ -42,7 +42,7 @@ JSON output:
   "plan": {
     "id": "plan_abc123",
     "name": "sync",
-    "status": "pending",
+    "status": "planned",
     "record_count": 5,
     "expires_at": "2026-01-15T11:00:00Z"
   },
@@ -51,26 +51,28 @@ JSON output:
 ```
 
 <Callout type="info">
-  The approval token is printed in plain-text mode but is **omitted from the JSON output** for security. Retrieve it from the plain-text run or your vault. Tokens are time-bounded and single-use.
+  Approval tokens are printed only in plain-text mode and are **omitted from JSON output**. For destructive plans, run preview without `--json` to receive the token after inspecting the output. Tokens are time-bounded and single-use.
 </Callout>
 
 ### 2. Preview the plan
 
 ```bash
-pm reverse preview plan_abc123 --json
+pm reverse preview plan_abc123          # destructive plans issue the token here
+pm reverse preview plan_abc123 --json   # machine-readable output redacts the token
 ```
 
-The preview returns the plan metadata and mapped sample rows before execution. Plans created with persisted connector-declared `redact_fields` keep those fields masked in preview output; hydrating saved pre-upgrade plans that lack that metadata is a shared runtime dependency.
+Preview returns the plan metadata and mapped sample rows. For destructive plans it also runs the destination's real no-network dry-run path, returns resolved warnings, persists a digest that binds the complete staged request set and its execution identity, changes the plan status to `previewed`, and issues the approval token in plain-text output. Plans created with persisted connector-declared `redact_fields` keep those fields masked. The non-destructive `create_issue` example below remains `planned`; a destructive preview reports `previewed`.
 
 ```json
 {
   "kind": "ReversePlanPreview",
   "plan": {
     "id": "plan_abc123",
-    "status": "pending",
+    "status": "planned",
     "record_count": 5,
-    "actions": [
-      { "action": "create_issue", "title": "Fix login bug", "body": "Steps to reproduce..." }
+    "action": "create_issue",
+    "sample": [
+      { "title": "Fix login bug", "body": "Steps to reproduce..." }
     ]
   }
 }
@@ -80,6 +82,7 @@ The preview returns the plan metadata and mapped sample rows before execution. P
 
 ```bash
 pm reverse run plan_abc123 --approve tk_xyz789 --json
+# Destructive plans additionally require: --confirm destructive
 ```
 
 JSON output:
@@ -110,12 +113,15 @@ Returns all plans and their associated runs.
 
 | Guarantee | Detail |
 |---|---|
-| **Approval tokens are time-bounded** | A token expires after a configurable window. Expired tokens are rejected. |
+| **Approval tokens are time-bounded** | Stored plans and destructive approval grants expire; expired approvals are rejected. |
 | **Tokens are single-use** | Replaying a token returns exit code `7` (policy / approval needed). |
+| **Destructive tokens follow preview** | DELETE and declared destructive operations receive no token until a no-network preview digest is persisted. |
+| **Preview identity is revalidated** | The app recomputes the digest immediately before dispatch; the shared engine gate compares it again. |
+| **Confirmation is closed and typed** | Destructive execution accepts `--confirm destructive`, not caller-defined confirmation text. |
 | **Secrets are never printed** | Only secret field names appear in plan manifests; newly created plans with persisted `redact_fields` mask connector-declared sensitive sample fields. |
 | **Agents get a diff first** | An agent can run `plan` and `preview` autonomously; it must present an approval token for `run`. |
 
-This design lets you delegate reverse-ETL to an AI agent with confidence: the agent proposes changes, a human (or an explicitly trusted policy) issues the token, and only then does data move.
+This design lets you delegate reverse-ETL to an AI agent with confidence: the agent proposes changes, the app issues a token at the allowed lifecycle point, and a human (or an explicitly trusted policy) authorizes its use before data moves.
 
 ## Exit codes
 
@@ -123,7 +129,7 @@ This design lets you delegate reverse-ETL to an AI agent with confidence: the ag
 |---:|---|---|
 | `0` | Success | Continue. |
 | `4` | Auth error | Surface to a human to update credentials. |
-| `7` | Approval required | Obtain an approval token from the plan step, then retry. |
+| `7` | Approval required | Obtain the token from human-readable plan output, or from preview output for a destructive plan, then retry. |
 | `1` | Internal error | File a bug report. |
 
 ## Where to go next

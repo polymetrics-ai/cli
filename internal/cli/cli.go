@@ -1201,7 +1201,12 @@ func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, cr
 		}
 		return writeJSON(stdout, env)
 	}
-	_, _ = fmt.Fprintf(stdout, "Created connector command plan %s for %s\nApproval token: %s\n", plan.ID, plan.ConnectorCommand, plan.ApprovalToken)
+	_, _ = fmt.Fprintf(stdout, "Created connector command plan %s for %s\n", plan.ID, plan.ConnectorCommand)
+	if plan.ApprovalToken == "" {
+		_, _ = fmt.Fprintln(stdout, "Preview required before an approval token is issued.")
+	} else {
+		_, _ = fmt.Fprintf(stdout, "Approval token: %s\n", plan.ApprovalToken)
+	}
 	if plan.ConfirmationChallenge != "" {
 		_, _ = fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
 	}
@@ -1222,7 +1227,11 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 		return err
 	}
 	if approvalToken != "" {
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: flags.first("confirm")})
+		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
+		if err != nil {
+			return validationErrorf("invalid --confirm: %v", err)
+		}
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: approvalToken, Confirmation: confirmation})
 		if err != nil {
 			return err
 		}
@@ -1247,6 +1256,9 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 		_, _ = fmt.Fprintf(stdout, "Reverse plan %s previews %s via %s\n", plan.ID, plan.ConnectorCommand, plan.Action)
 		for _, warning := range writePreview.Warnings {
 			_, _ = fmt.Fprintf(stdout, "- %s\n", warning)
+		}
+		if plan.ApprovalToken != "" {
+			_, _ = fmt.Fprintf(stdout, "Approval token: %s\n", plan.ApprovalToken)
 		}
 		return nil
 	}
@@ -1466,7 +1478,12 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "ReversePlan", "plan": safeReversePlanForOutput(plan), "approval_required": true})
 		}
-		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s with %d records\nApproval token: %s\n", plan.ID, plan.RecordCount, plan.ApprovalToken)
+		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s with %d records\n", plan.ID, plan.RecordCount)
+		if plan.ApprovalToken == "" {
+			_, _ = fmt.Fprintln(stdout, "Preview required before an approval token is issued.")
+		} else {
+			_, _ = fmt.Fprintf(stdout, "Approval token: %s\n", plan.ApprovalToken)
+		}
 		if plan.ConfirmationChallenge != "" {
 			_, _ = fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
 		}
@@ -1479,27 +1496,43 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if err != nil {
 			return err
 		}
+		var writePreview *connectors.WritePreview
+		if plan.ConnectorCommand != "" || plan.ConfirmationPolicy.Kind != "" || plan.ConfirmationChallenge != "" {
+			previewedPlan, preview, err := a.PreviewReversePlan(ctx, args[1])
+			if err != nil {
+				return err
+			}
+			plan = previewedPlan
+			writePreview = &preview
+		}
 		if jsonOut {
 			env := envelope{"kind": "ReversePlanPreview", "plan": safeReversePlanForOutput(plan)}
-			if plan.ConnectorCommand != "" {
-				safePlan, writePreview, err := a.PreviewConnectorCommandPlan(ctx, args[1])
-				if err != nil {
-					return err
-				}
-				env["plan"] = safeReversePlanForOutput(safePlan)
+			if writePreview != nil {
 				env["write_preview"] = writePreview
 			}
 			return writeJSON(stdout, env)
 		}
 		b, _ := json.MarshalIndent(safeReversePlanForOutput(plan), "", "  ")
 		_, _ = fmt.Fprintln(stdout, string(b))
+		if writePreview != nil {
+			for _, warning := range writePreview.Warnings {
+				_, _ = fmt.Fprintf(stdout, "- %s\n", warning)
+			}
+		}
+		if plan.ApprovalToken != "" {
+			_, _ = fmt.Fprintf(stdout, "Approval token: %s\n", plan.ApprovalToken)
+		}
 		return nil
 	case "run":
 		if len(args) < 2 {
 			return errUsage
 		}
 		flags := parseFlags(args[2:])
-		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: flags.first("confirm")})
+		confirmation, err := connectors.ParseWriteConfirmation(flags.first("confirm"))
+		if err != nil {
+			return validationErrorf("invalid --confirm: %v", err)
+		}
+		run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: args[1], ApprovalToken: flags.first("approve"), Confirmation: confirmation})
 		if err != nil {
 			return err
 		}

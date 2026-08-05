@@ -237,6 +237,15 @@ func (h *Hooks) ExecuteWrite(ctx context.Context, action engine.WriteAction, rec
 	}
 }
 
+func (h *Hooks) HandlesWriteAction(action engine.WriteAction) bool {
+	switch action.Name {
+	case "close_issue", "close_pull_request", "reopen_issue", "reopen_pull_request", "create_pull_request", "update_pull_request", "create_label", "update_label":
+		return true
+	default:
+		return false
+	}
+}
+
 // createLabel/updateLabel reproduce githubCreateLabelPayload/
 // githubUpdateLabelPayload: a leading "#" on color is stripped
 // (github.go:1120,1133; ledger G3 — update_label's fields are all optional).

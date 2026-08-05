@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/transportpolicy"
 )
 
 const (
@@ -218,6 +219,7 @@ func (c Connector) doEndpoint(ctx context.Context, conn sqsConfig, endpoint stri
 	if client == nil {
 		client = &http.Client{Timeout: 60 * time.Second}
 	}
+	client = transportpolicy.HTTPClient(ctx, client)
 	resp, err := client.Do(req)
 	if err != nil {
 		return sqsHTTPResponse{}, fmt.Errorf("send sqs request: %w", err)

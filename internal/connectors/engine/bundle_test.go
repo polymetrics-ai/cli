@@ -1680,6 +1680,112 @@ func TestBundleLoadRejectsUnknownWritesActionKey(t *testing.T) {
 	}
 }
 
+func TestBundleLoadAcceptsClosedDestructiveWriteConfirmation(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [
+			{
+				"name": "delete_widget",
+				"kind": "delete",
+				"method": "DELETE",
+				"path": "/widgets/{{ record.id }}",
+				"path_fields": ["id"],
+				"record_schema": {
+					"type": "object",
+					"required": ["id"],
+					"additionalProperties": false,
+					"properties": {"id": {"type": "string"}}
+				},
+				"risk": "high",
+				"confirmation": {"kind": "destructive"}
+			}
+		]
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load closed destructive write confirmation: %v", err)
+	}
+	if got := bundle.Writes[0].Confirmation; got == nil || got.Kind != "destructive" {
+		t.Fatalf("confirmation = %+v, want typed destructive policy", got)
+	}
+}
+
+func TestBundleLoadAcceptsClosedDestructiveOperationConfirmation(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.delete",
+				"kind": "rest_write",
+				"summary": "Delete one widget",
+				"risk": "high",
+				"approval": "plan, preview, approval, execute",
+				"output_policy": "json",
+				"mutation_class": "delete",
+				"confirmation": {"kind": "destructive"},
+				"rest": {"method": "DELETE", "path": "/widgets/{id}"}
+			}
+		]
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load closed destructive operation confirmation: %v", err)
+	}
+	if got := bundle.Operations[0].Confirmation; got == nil || got.Kind != "destructive" {
+		t.Fatalf("confirmation = %+v, want typed destructive policy", got)
+	}
+}
+
+func TestBundleLoadRejectsOpenDestructiveConfirmation(t *testing.T) {
+	for _, confirmation := range []string{
+		`{"kind":"type-anything"}`,
+		`{"kind":"destructive","prompt":"please type yes"}`,
+	} {
+		t.Run(confirmation, func(t *testing.T) {
+			t.Run("writes", func(t *testing.T) {
+				fsys := fullValidBundleFS("acme")
+				fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{
+					"actions": [{
+						"name": "delete_widget",
+						"kind": "delete",
+						"method": "DELETE",
+						"path": "/widgets/{{ record.id }}",
+						"record_schema": {"type": "object", "properties": {}},
+						"risk": "high",
+						"confirmation": ` + confirmation + `
+					}]
+				}`)}
+
+				if _, err := Load(fsys, "acme"); err == nil {
+					t.Fatal("Load: expected open writes confirmation shape to be rejected")
+				}
+			})
+			t.Run("operations", func(t *testing.T) {
+				fsys := fullValidBundleFS("acme")
+				fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+					"operations": [{
+						"id": "acme.widgets.delete",
+						"kind": "rest_write",
+						"summary": "Delete one widget",
+						"risk": "high",
+						"approval": "plan, preview, approval, execute",
+						"output_policy": "json",
+						"mutation_class": "delete",
+						"confirmation": ` + confirmation + `,
+						"rest": {"method": "DELETE", "path": "/widgets/{id}"}
+					}]
+				}`)}
+
+				if _, err := Load(fsys, "acme"); err == nil {
+					t.Fatal("Load: expected open operations confirmation shape to be rejected")
+				}
+			})
+		})
+	}
+}
+
 func TestBundleLoadRejectsUnknownAPISurfaceEndpointKey(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
