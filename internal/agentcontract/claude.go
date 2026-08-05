@@ -13,10 +13,11 @@ import (
 const claudeMarkdownYAMLFrontmatter = "markdown_yaml_frontmatter"
 
 type claudeFrontmatter struct {
-	Name           string   `yaml:"name"`
-	Description    string   `yaml:"description"`
-	Tools          []string `yaml:"tools"`
-	PermissionMode string   `yaml:"permissionMode"`
+	Name            string   `yaml:"name"`
+	Description     string   `yaml:"description"`
+	Tools           []string `yaml:"tools"`
+	DisallowedTools []string `yaml:"disallowedTools"`
+	PermissionMode  string   `yaml:"permissionMode"`
 }
 
 // RenderProjection renders a registered harness-native projection. Harnesses without a native
@@ -47,10 +48,11 @@ func renderClaudeProjection(contract *Contract, target ProjectionTarget, policy 
 		return nil, fmt.Errorf("canonical contract: %s cannot use Claude frontmatter", target.Harness)
 	}
 	frontmatter := claudeFrontmatter{
-		Name:           target.Role,
-		Description:    roleSummary(contract, target.Role),
-		Tools:          policy.Tools,
-		PermissionMode: policy.PermissionMode,
+		Name:            target.Role,
+		Description:     roleSummary(contract, target.Role),
+		Tools:           claudeProjectionTools(policy),
+		DisallowedTools: policy.DisallowedTools,
+		PermissionMode:  policy.PermissionMode,
 	}
 	encodedFrontmatter, err := yaml.Marshal(frontmatter)
 	if err != nil {
@@ -70,8 +72,11 @@ func renderClaudeProjection(contract *Contract, target ProjectionTarget, policy 
 	fmt.Fprintf(&output, "Official behavior: %s\n\n", policy.DocumentationURL)
 	fmt.Fprintf(&output, "Discovery: %s\n\n", policy.ProjectDiscovery)
 	fmt.Fprintf(&output, "Precedence (highest first): %s. Managed definitions and CLI `--agents` remain higher-precedence caveats.\n\n", joinNatural(policy.Precedence))
+	fmt.Fprintf(&output, "Skill behavior: %s\n\n", policy.SkillsDocumentationURL)
+	fmt.Fprintf(&output, "Skill boundary: %s\n\n", policy.SkillBoundary)
+	fmt.Fprintf(&output, "Reachable skill names: %s.\n\n", joinInlineCode(policy.ReachableSkills))
 	fmt.Fprintf(&output, "Isolation: %s\n\n", policy.DelegationGuarantee)
-	fmt.Fprintf(&output, "Trusted-project smoke: %s\n\n", strings.ReplaceAll(policy.SmokeProcedure, "<role>", target.Role))
+	fmt.Fprintf(&output, "Required clean-home smoke (not generation evidence): %s\n\n", strings.ReplaceAll(policy.SmokeProcedure, "<role>", target.Role))
 	output.Write(block)
 
 	result := output.Bytes()
@@ -112,11 +117,30 @@ func parseClaudeFrontmatter(content []byte) (claudeFrontmatter, error) {
 
 func validateClaudeFrontmatter(frontmatter claudeFrontmatter, target ProjectionTarget, policy HarnessPolicy) error {
 	if frontmatter.Name != target.Role || strings.TrimSpace(frontmatter.Description) == "" ||
-		!slices.Equal(frontmatter.Tools, policy.Tools) || frontmatter.PermissionMode != policy.PermissionMode {
+		!slices.Equal(frontmatter.Tools, claudeProjectionTools(policy)) ||
+		!slices.Equal(frontmatter.DisallowedTools, policy.DisallowedTools) ||
+		frontmatter.PermissionMode != policy.PermissionMode {
 		return fmt.Errorf("claude projection frontmatter does not match the canonical %s policy", target.Harness)
 	}
-	if slices.Contains(frontmatter.Tools, policy.DelegationTool) {
-		return fmt.Errorf("claude projection frontmatter must omit %s from its tools allowlist", policy.DelegationTool)
+	if slices.Contains(frontmatter.Tools, policy.DelegationTool) || slices.Contains(frontmatter.Tools, policy.SkillTool) ||
+		!slices.Contains(frontmatter.DisallowedTools, policy.DelegationTool) {
+		return fmt.Errorf("claude projection frontmatter must scope Skill and deny %s", policy.DelegationTool)
 	}
 	return nil
+}
+
+func claudeProjectionTools(policy HarnessPolicy) []string {
+	tools := slices.Clone(policy.Tools)
+	for _, skill := range policy.ReachableSkills {
+		tools = append(tools, fmt.Sprintf("%s(%s)", policy.SkillTool, skill))
+	}
+	return tools
+}
+
+func joinInlineCode(values []string) string {
+	formatted := make([]string, len(values))
+	for index, value := range values {
+		formatted[index] = "`" + value + "`"
+	}
+	return joinNatural(formatted)
 }

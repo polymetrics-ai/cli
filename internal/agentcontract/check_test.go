@@ -100,6 +100,12 @@ func TestProjectionDriftCheckAndSync(t *testing.T) {
 	if slices.Contains(frontmatter.Tools, "Agent") {
 		t.Fatalf("sync did not remove Agent from the canonical tools allowlist: %#v", frontmatter.Tools)
 	}
+	if slices.Contains(frontmatter.Tools, "Skill") {
+		t.Fatalf("sync restored bare Skill instead of scoped skill rules: %#v", frontmatter.Tools)
+	}
+	if !slices.Equal(frontmatter.DisallowedTools, []string{"Agent", "Task"}) {
+		t.Fatalf("sync did not restore the canonical Agent/Task denylist: %#v", frontmatter.DisallowedTools)
+	}
 }
 
 func TestOptionalWaveProjectionMayBeAbsent(t *testing.T) {
