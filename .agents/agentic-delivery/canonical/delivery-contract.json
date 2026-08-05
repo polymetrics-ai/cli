@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "contract_version": "1.0.0",
+  "contract_version": "1.1.0",
   "source_id": "pm-issue-first-delivery",
   "ownership": {
     "source_path": ".agents/agentic-delivery/canonical/delivery-contract.json",
     "owner": "The one active canonical worker owns the assigned job and its parent GitHub state inline.",
-    "update_rule": "Edit this source, run go run ./cmd/agentcontractgen sync for existing registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated block."
+    "update_rule": "Edit this source, run go run ./cmd/agentcontractgen sync for registered projections, then run go run ./cmd/agentcontractgen check. Never hand-edit a generated projection."
   },
   "base_role": {
     "name": "pm-delivery-worker",
@@ -121,6 +121,28 @@
         "instruction": "Refresh generated website data and run its drift check."
       }
     ]
+  },
+  "codex": {
+    "project_agent_directory": ".codex/agents",
+    "file_format": "standalone_toml",
+    "required_fields": [
+      "name",
+      "description",
+      "developer_instructions"
+    ],
+    "tool_access": {
+      "setting": "agents.enabled",
+      "value": false,
+      "effect": "Set agents.enabled = false to disable Codex multi-agent tools, preventing this worker from delegating to built-in or ambient custom agents."
+    },
+    "discovery": "Codex discovers project-scoped custom agents as standalone TOML files under .codex/agents; the name field is the source of truth.",
+    "project_trust_requirement": "Codex loads project .codex layers only after this repository is trusted. When untrusted, these project-local workers are unavailable by design; trust the project in the Codex client before selecting either worker.",
+    "configuration_precedence": "For general configuration, trusted project config layers take precedence over user config, subject to CLI flags and explicit overrides.",
+    "collision_behavior": "Official documentation does not state how identical user and project standalone agent filenames collide. Do not rely on undocumented collision precedence.",
+    "documentation": {
+      "subagents": "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+      "config_basics": "https://developers.openai.com/codex/config-basic/"
+    }
   },
   "tracker": {
     "draft_parent_before_production": true,
@@ -347,36 +369,42 @@
       "harness": "claude",
       "role": "pm-delivery-worker",
       "path": ".claude/agents/pm-delivery-worker.md",
+      "render_mode": "markdown_block",
       "required": false
     },
     {
       "harness": "claude",
       "role": "pm-connector-worker",
       "path": ".claude/agents/pm-connector-worker.md",
+      "render_mode": "markdown_block",
       "required": false
     },
     {
       "harness": "codex",
       "role": "pm-delivery-worker",
       "path": ".codex/agents/pm-delivery-worker.toml",
-      "required": false
+      "render_mode": "standalone_toml",
+      "required": true
     },
     {
       "harness": "codex",
       "role": "pm-connector-worker",
       "path": ".codex/agents/pm-connector-worker.toml",
-      "required": false
+      "render_mode": "standalone_toml",
+      "required": true
     },
     {
       "harness": "pi",
       "role": "pm-delivery-worker",
       "path": ".pi/agents/pm-delivery-worker.md",
+      "render_mode": "markdown_block",
       "required": false
     },
     {
       "harness": "pi",
       "role": "pm-connector-worker",
       "path": ".pi/agents/pm-connector-worker.md",
+      "render_mode": "markdown_block",
       "required": false
     }
   ]

@@ -61,8 +61,16 @@ same schema and issue-to-PR contract.
 Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are thin
 activation adapters. The six `pm-delivery-worker` and `pm-connector-worker` targets registered in
 `canonical/delivery-contract.json` remain optional until their owning harness wave adds each
-wrapper. Once present, they project marked blocks from the canonical source and must not copy
-GSD/TDD, review, or human-gate policy by hand.
+wrapper. Markdown adapters project marked blocks; the Codex Wave 3 adapters are complete
+standalone TOML files. All are generated from the canonical source and must not copy GSD/TDD,
+review, or human-gate policy by hand.
+
+Codex loads the project-local `.codex` configuration layer only when the repository is trusted.
+The generated Codex workers therefore fail closed for project-local selection in an untrusted
+repository: trust it in Codex before selecting either worker. Their generated
+`agents.enabled = false` setting disables further Codex multi-agent delegation; see the canonical
+`codex` section for the official documentation links and the explicitly documented limits around
+user/project standalone-agent filename collisions.
 
 ## Design principles
 
