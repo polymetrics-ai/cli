@@ -1,6 +1,10 @@
 package nativeset
 
 import (
+	"context"
+	"fmt"
+	"strings"
+
 	"polymetrics.ai/internal/connectors"
 	alphavantage "polymetrics.ai/internal/connectors/native/alpha-vantage"
 	apifydataset "polymetrics.ai/internal/connectors/native/apify-dataset"
@@ -17,6 +21,7 @@ import (
 	freeagentconnector "polymetrics.ai/internal/connectors/native/free-agent-connector"
 	"polymetrics.ai/internal/connectors/native/freightview"
 	googleanalyticsdataapi "polymetrics.ai/internal/connectors/native/google-analytics-data-api"
+	googlecalendar "polymetrics.ai/internal/connectors/native/google-calendar"
 	googleclassroom "polymetrics.ai/internal/connectors/native/google-classroom"
 	googlepagespeedinsights "polymetrics.ai/internal/connectors/native/google-pagespeed-insights"
 	lessannoyingcrm "polymetrics.ai/internal/connectors/native/less-annoying-crm"
@@ -41,6 +46,11 @@ type definitionConnector struct {
 	base engine.Base
 }
 
+type fixtureModeEngineConnector struct {
+	*engine.Connector
+	fixture connectors.Connector
+}
+
 func (c definitionConnector) Definition() connectors.Definition {
 	return c.base.Definition()
 }
@@ -59,6 +69,73 @@ func (c definitionConnector) ValidateConfiguration(config map[string]string) err
 	return c.base.ValidateConfiguration(config)
 }
 
+func (c *fixtureModeEngineConnector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
+	if fixtureMode(cfg) {
+		return c.fixture.Check(ctx, cfg)
+	}
+	return c.Connector.Check(ctx, cfg)
+}
+
+func (c *fixtureModeEngineConnector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	if fixtureMode(req.Config) {
+		return c.fixture.Read(ctx, req, emit)
+	}
+	return c.Connector.Read(ctx, req, emit)
+}
+
+func (c *fixtureModeEngineConnector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
+	if fixtureMode(req.Config) {
+		return connectors.WriteResult{RecordsFailed: len(records)}, fixtureModeUnsupported(ctx, c.Name(), "writes")
+	}
+	return c.Connector.Write(ctx, req, records)
+}
+
+func (c *fixtureModeEngineConnector) ValidateWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) error {
+	if fixtureMode(req.Config) {
+		return fixtureModeUnsupported(ctx, c.Name(), "write validation")
+	}
+	return c.Connector.ValidateWrite(ctx, req, records)
+}
+
+func (c *fixtureModeEngineConnector) DryRunWrite(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WritePreview, error) {
+	if fixtureMode(req.Config) {
+		return connectors.WritePreview{}, fixtureModeUnsupported(ctx, c.Name(), "write previews")
+	}
+	return c.Connector.DryRunWrite(ctx, req, records)
+}
+
+func (c *fixtureModeEngineConnector) DirectRead(ctx context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
+	if fixtureMode(req.Config) {
+		return connectors.DirectReadResult{}, fixtureModeUnsupported(ctx, c.Name(), "direct reads")
+	}
+	return c.Connector.DirectRead(ctx, req)
+}
+
+func (c *fixtureModeEngineConnector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	if fixtureMode(req.Config) {
+		return connectors.DirectReadResult{}, fixtureModeUnsupported(ctx, c.Name(), "operation direct reads")
+	}
+	return c.Connector.OperationDirectRead(ctx, req)
+}
+
+func (c *fixtureModeEngineConnector) OperationBinaryDownload(ctx context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
+	if fixtureMode(req.Config) {
+		return connectors.OperationBinaryDownloadResult{}, fixtureModeUnsupported(ctx, c.Name(), "binary downloads")
+	}
+	return c.Connector.OperationBinaryDownload(ctx, req)
+}
+
+func fixtureMode(cfg connectors.RuntimeConfig) bool {
+	return strings.EqualFold(strings.TrimSpace(cfg.Config["mode"]), "fixture")
+}
+
+func fixtureModeUnsupported(ctx context.Context, name, operation string) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	return fmt.Errorf("%s fixture mode does not support %s: %w", name, operation, connectors.ErrUnsupportedOperation)
+}
+
 func loadPromotedBundle(name string) engine.Bundle {
 	bundle, err := engine.Load(defs.FS, name)
 	if err != nil {
@@ -72,9 +149,13 @@ func withBundleDefinition(name string, c connectors.Connector) connectors.Connec
 	return definitionConnector{Connector: c, base: engine.NewBase(bundle)}
 }
 
-func withEngineBundle(name string) connectors.Connector {
+func withEngineBundle(name string) *engine.Connector {
 	bundle := loadPromotedBundle(name)
 	return engine.New(bundle, engine.HooksFor(name))
+}
+
+func withFixtureModeEngineBundle(name string, fixture connectors.Connector) connectors.Connector {
+	return &fixtureModeEngineConnector{Connector: withEngineBundle(name), fixture: fixture}
 }
 
 func promotedFactories() []Factory {
@@ -98,7 +179,9 @@ func promotedFactories() []Factory {
 		{Name: "google-analytics-data-api", New: func() connectors.Connector {
 			return withBundleDefinition("google-analytics-data-api", googleanalyticsdataapi.New())
 		}},
-		{Name: "google-calendar", New: func() connectors.Connector { return withEngineBundle("google-calendar") }},
+		{Name: "google-calendar", New: func() connectors.Connector {
+			return withFixtureModeEngineBundle("google-calendar", googlecalendar.New())
+		}},
 		{Name: "google-classroom", New: func() connectors.Connector { return withBundleDefinition("google-classroom", googleclassroom.New()) }},
 		{Name: "google-pagespeed-insights", New: func() connectors.Connector {
 			return withBundleDefinition("google-pagespeed-insights", googlepagespeedinsights.New())

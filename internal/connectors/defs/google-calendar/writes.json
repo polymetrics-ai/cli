@@ -105,7 +105,7 @@
           "calendar_id": {"type": "string"},
           "id": {"type": "string"},
           "type": {"type": "string", "enum": ["web_hook"]},
-          "address": {"type": "string", "format": "uri", "pattern": "^https://"},
+          "address": {"type": "string", "format": "uri", "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9A-Fa-f:.]+\\])(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?$"},
           "token": {"type": "string"}
         }
       },
@@ -197,7 +197,7 @@
         "type": "object",
         "required": ["id", "type", "address"],
         "additionalProperties": false,
-        "properties": {"id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://"}, "token": {"type": "string"}}
+        "properties": {"id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9A-Fa-f:.]+\\])(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?$"}, "token": {"type": "string"}}
       },
       "risk": "external mutation; creates a calendar-list notification channel; requires reverse-ETL plan, preview, and explicit approval",
       "batchable": false
@@ -493,7 +493,7 @@
         "type": "object",
         "required": ["calendar_id", "id", "type", "address"],
         "additionalProperties": false,
-        "properties": {"calendar_id": {"type": "string"}, "id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://"}, "token": {"type": "string"}}
+        "properties": {"calendar_id": {"type": "string"}, "id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9A-Fa-f:.]+\\])(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?$"}, "token": {"type": "string"}}
       },
       "risk": "external mutation; creates an event notification channel; requires reverse-ETL plan, preview, and explicit approval",
       "batchable": false
@@ -510,7 +510,7 @@
         "type": "object",
         "required": ["id", "type", "address"],
         "additionalProperties": false,
-        "properties": {"id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://"}, "token": {"type": "string"}}
+        "properties": {"id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9A-Fa-f:.]+\\])(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?$"}, "token": {"type": "string"}}
       },
       "risk": "external mutation; creates a settings notification channel; requires reverse-ETL plan, preview, and explicit approval",
       "batchable": false

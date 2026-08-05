@@ -1,12 +1,119 @@
 package nativeset
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
+	"net/http"
+	"net/http/httptest"
+	"sync/atomic"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
+	googlecalendar "polymetrics.ai/internal/connectors/native/google-calendar"
 )
+
+func TestFixtureModeEngineConnectorIsNetworkFree(t *testing.T) {
+	var requests atomic.Int64
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests.Add(1)
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer srv.Close()
+
+	bundle := loadPromotedBundle("google-calendar")
+	bundle.HTTP.URL = srv.URL
+	bundle.HTTP.Auth = nil
+	connector := &fixtureModeEngineConnector{
+		Connector: engine.New(bundle, nil),
+		fixture:   googlecalendar.New(),
+	}
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
+
+	if err := connector.Check(context.Background(), cfg); err != nil {
+		t.Fatalf("Check(fixture): %v", err)
+	}
+	var records []connectors.Record
+	err := connector.Read(context.Background(), connectors.ReadRequest{Stream: "events", Config: cfg}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Read(fixture): %v", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("Read(fixture) records = %d, want 2", len(records))
+	}
+
+	writeRequest := connectors.WriteRequest{Action: "insert_calendar", Config: cfg}
+	writeRecords := []connectors.Record{{"summary": "Fixture calendar"}}
+	if err := connector.ValidateWrite(context.Background(), writeRequest, writeRecords); !errors.Is(err, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("ValidateWrite(fixture) error = %v, want ErrUnsupportedOperation", err)
+	}
+	if _, err := connector.DryRunWrite(context.Background(), writeRequest, writeRecords); !errors.Is(err, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("DryRunWrite(fixture) error = %v, want ErrUnsupportedOperation", err)
+	}
+	result, err := connector.Write(context.Background(), writeRequest, writeRecords)
+	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("Write(fixture) error = %v, want ErrUnsupportedOperation", err)
+	}
+	if result.RecordsFailed != len(writeRecords) {
+		t.Fatalf("Write(fixture) failed records = %d, want %d", result.RecordsFailed, len(writeRecords))
+	}
+
+	_, err = connector.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "google-calendar.freebusy.query",
+		Config:    cfg,
+		Body: map[string]any{
+			"timeMin": "2030-01-01T00:00:00Z",
+			"timeMax": "2030-01-02T00:00:00Z",
+			"items":   []any{map[string]any{"id": "primary"}},
+		},
+	})
+	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("OperationDirectRead(fixture) error = %v, want ErrUnsupportedOperation", err)
+	}
+	if got := requests.Load(); got != 0 {
+		t.Fatalf("fixture mode made %d network request(s)", got)
+	}
+}
+
+func TestGoogleCalendarFactoryPreservesFixtureMode(t *testing.T) {
+	var connector connectors.Connector
+	for _, factory := range Factories() {
+		if factory.Name == "google-calendar" {
+			connector = factory.New()
+			break
+		}
+	}
+	if connector == nil {
+		t.Fatal("google-calendar factory not found")
+	}
+
+	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
+	if err := connector.Check(context.Background(), cfg); err != nil {
+		t.Fatalf("factory Check(fixture): %v", err)
+	}
+	var records []connectors.Record
+	err := connector.Read(context.Background(), connectors.ReadRequest{Stream: "events", Config: cfg}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("factory Read(fixture): %v", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("factory Read(fixture) records = %d, want 2", len(records))
+	}
+	result, err := connector.Write(context.Background(), connectors.WriteRequest{Action: "insert_calendar", Config: cfg}, []connectors.Record{{"summary": "Fixture calendar"}})
+	if !errors.Is(err, connectors.ErrUnsupportedOperation) {
+		t.Fatalf("factory Write(fixture) error = %v, want ErrUnsupportedOperation", err)
+	}
+	if result.RecordsFailed != 1 {
+		t.Fatalf("factory Write(fixture) failed records = %d, want 1", result.RecordsFailed)
+	}
+}
 
 func TestFactoriesExposeDefinitions(t *testing.T) {
 	want := map[string]bool{

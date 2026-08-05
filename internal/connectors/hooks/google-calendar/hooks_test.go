@@ -243,30 +243,6 @@ func TestWriteActionProviderConstraints(t *testing.T) {
 			},
 			wantErrText: "enum",
 		},
-		{
-			name:        "ACL watch requires HTTPS",
-			action:      "watch_acl",
-			record:      connectors.Record{"calendar_id": "calendar-fixture", "id": "channel-fixture", "type": "web_hook", "address": "http://example.invalid/hook"},
-			wantErrText: "pattern",
-		},
-		{
-			name:        "calendar list watch requires HTTPS",
-			action:      "watch_calendar_list",
-			record:      connectors.Record{"id": "channel-fixture", "type": "web_hook", "address": "http://example.invalid/hook"},
-			wantErrText: "pattern",
-		},
-		{
-			name:        "event watch requires HTTPS",
-			action:      "watch_events",
-			record:      connectors.Record{"calendar_id": "calendar-fixture", "id": "channel-fixture", "type": "web_hook", "address": "http://example.invalid/hook"},
-			wantErrText: "pattern",
-		},
-		{
-			name:        "settings watch requires HTTPS",
-			action:      "watch_settings",
-			record:      connectors.Record{"id": "channel-fixture", "type": "web_hook", "address": "http://example.invalid/hook"},
-			wantErrText: "pattern",
-		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -276,6 +252,68 @@ func TestWriteActionProviderConstraints(t *testing.T) {
 			}
 			if !strings.Contains(err.Error(), tc.wantErrText) {
 				t.Fatalf("ValidateWrite(%s) error = %q, want %q", tc.action, err, tc.wantErrText)
+			}
+		})
+	}
+
+	watchActions := []struct {
+		name   string
+		action string
+		record connectors.Record
+	}{
+		{
+			name:   "ACL watch",
+			action: "watch_acl",
+			record: connectors.Record{"calendar_id": "calendar-fixture", "id": "channel-fixture", "type": "web_hook"},
+		},
+		{
+			name:   "calendar list watch",
+			action: "watch_calendar_list",
+			record: connectors.Record{"id": "channel-fixture", "type": "web_hook"},
+		},
+		{
+			name:   "event watch",
+			action: "watch_events",
+			record: connectors.Record{"calendar_id": "calendar-fixture", "id": "channel-fixture", "type": "web_hook"},
+		},
+		{
+			name:   "settings watch",
+			action: "watch_settings",
+			record: connectors.Record{"id": "channel-fixture", "type": "web_hook"},
+		},
+	}
+	invalidAddresses := []struct {
+		name    string
+		address string
+	}{
+		{name: "non-HTTPS scheme", address: "http://example.invalid/hook"},
+		{name: "missing host", address: "https://"},
+		{name: "whitespace in authority", address: "https://not a URL"},
+	}
+	recordWithAddress := func(source connectors.Record, address string) connectors.Record {
+		record := make(connectors.Record, len(source)+1)
+		for key, value := range source {
+			record[key] = value
+		}
+		record["address"] = address
+		return record
+	}
+	for _, action := range watchActions {
+		t.Run(action.name, func(t *testing.T) {
+			for _, invalid := range invalidAddresses {
+				t.Run(invalid.name, func(t *testing.T) {
+					err := conn.ValidateWrite(context.Background(), connectors.WriteRequest{Action: action.action}, []connectors.Record{recordWithAddress(action.record, invalid.address)})
+					if err == nil {
+						t.Fatalf("ValidateWrite(%s) accepted %q", action.action, invalid.address)
+					}
+					if !strings.Contains(err.Error(), "pattern") {
+						t.Fatalf("ValidateWrite(%s) error = %q, want pattern validation", action.action, err)
+					}
+				})
+			}
+			err := conn.ValidateWrite(context.Background(), connectors.WriteRequest{Action: action.action}, []connectors.Record{recordWithAddress(action.record, "https://example.invalid/calendar-hook")})
+			if err != nil {
+				t.Fatalf("ValidateWrite(%s) rejected valid HTTPS callback: %v", action.action, err)
 			}
 		})
 	}
