@@ -73,3 +73,15 @@ Issue: #3714. Parent PR: #3723. Active branch:
 2. Reconciliation + regeneration checkpoint after focused validation.
 3. Review-fix checkpoint only if the code-review or no-mistakes pipeline applies an in-scope fix.
 
+## Refresh cycle — 2026-08-05
+
+`origin/main` advanced to `4871df2f8` (Recurly parity) after the prior clean parent
+integration. The new change set is outside the canonical delivery contract and all generated
+Codex, Claude, and Pi projections, but the parent is deliberately refreshed again rather than
+claiming stale ancestry.
+
+1. **RED:** `git merge-base --is-ancestor origin/main HEAD` exited nonzero at
+   `554235545`.
+2. **GREEN:** merge `origin/main` into this same parent branch without rewriting its history.
+3. **REFACTOR:** regenerate with `agentcontractgen sync`; use its drift check and the clean Pi
+   agent check to prove all registered projections remain source-derived and complete.

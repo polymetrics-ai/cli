@@ -1,6 +1,6 @@
 {
   "phase": "issue-3714-parent-readiness",
-  "status": "awaiting_parent_ci",
+  "status": "refreshing_parent_main",
   "verificationPassed": false,
   "verificationNote": "Focused local validation passed. verificationPassed remains false until the full CI verify gate succeeds.",
   "orchestrationDecisions": [
@@ -28,6 +28,11 @@
       "cycle": "review",
       "decision": "local_critical_path",
       "reason": "No local conflict resolution changed code or generated projections; the review artifact records the clean merge and pending automated parent review route."
+    },
+    {
+      "cycle": "main-refresh",
+      "decision": "local_critical_path",
+      "reason": "origin/main advanced to 4871df2f8 after the prior parent merge, so this same parent branch is being refreshed, regenerated, and sent through a brand-new validation run without rewriting history."
     }
   ]
 }

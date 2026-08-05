@@ -1,10 +1,12 @@
 # VERIFICATION — issue #3714 parent readiness
 
-Status: local validation passed; remote parent CI and readiness transition are pending.
+Status: a new `origin/main` refresh is in progress. Prior local validation passed; refreshed
+local validation, remote parent CI, and the readiness transition remain pending.
 
 ## Checklist
 
-- [x] Existing parent branch contains current `origin/main` (`fc99e1836`).
+- [x] The prior parent refresh contained then-current `origin/main` (`fc99e1836`).
+- [ ] Existing parent branch contains newly current `origin/main` (`4871df2f8`).
 - [x] The merge had no conflicts, so #3730's destructive-write confirmation gate landed unchanged.
 - [x] Canonical source retains complete Codex, Claude, and Pi policy/projection metadata.
 - [x] Generated projections were regenerated through `agentcontractgen sync`, not hand-edited (0 changes).
