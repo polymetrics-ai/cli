@@ -24,24 +24,25 @@ var httpHeaderNamePattern = regexp.MustCompile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
-	Name             string
-	Metadata         Metadata
-	Changefeed       *connectors.ChangefeedDescriptor // changefeed.json; nil when a connector has not been surveyed
-	Spec             *Schema                          // compiled spec.json; SecretKeys() from x-secret
-	RawSpec          json.RawMessage                  // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
-	HTTP             HTTPBase                         // streams.json "base"; zero value when no streams.json
-	Streams          []StreamSpec                     // streams.json "streams"
-	Writes           []WriteAction                    // writes.json "actions"; nil when writes.json absent
-	Operations       []OperationSpec                  // operations.json "operations"; nil when operations.json absent
-	RawOperations    json.RawMessage                  // verbatim operations.json bytes for validation/audit scanning
-	Schemas          map[string]*StreamSchema         // stream name -> compiled schema + PK/cursor
-	Surface          *APISurface                      // api_surface.json
-	CLISurface       *CLISurface                      // cli_surface.json
-	RawCLISurface    json.RawMessage                  // verbatim cli_surface.json bytes; nil when absent
-	Certification    *CertificationSpec               // certification.json; nil when absent
-	RawCertification json.RawMessage                  // verbatim certification.json bytes; nil when absent
-	Docs             string                           // docs.md
-	Fixtures         fs.FS                            // fixtures/ subtree; nil when absent
+	Name               string
+	Metadata           Metadata
+	Changefeed         *connectors.ChangefeedDescriptor // changefeed.json; nil when a connector has not been surveyed
+	Spec               *Schema                          // compiled spec.json; SecretKeys() from x-secret
+	RawSpec            json.RawMessage                  // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
+	HTTP               HTTPBase                         // streams.json "base"; zero value when no streams.json
+	Streams            []StreamSpec                     // streams.json "streams"
+	Writes             []WriteAction                    // writes.json "actions"; nil when writes.json absent
+	Operations         []OperationSpec                  // operations.json "operations"; nil when operations.json absent
+	RawOperations      json.RawMessage                  // verbatim operations.json bytes for validation/audit scanning
+	Schemas            map[string]*StreamSchema         // stream name -> compiled schema + PK/cursor
+	Surface            *APISurface                      // api_surface.json
+	directWriteSurface *APISurface
+	CLISurface         *CLISurface        // cli_surface.json
+	RawCLISurface      json.RawMessage    // verbatim cli_surface.json bytes; nil when absent
+	Certification      *CertificationSpec // certification.json; nil when absent
+	RawCertification   json.RawMessage    // verbatim certification.json bytes; nil when absent
+	Docs               string             // docs.md
+	Fixtures           fs.FS              // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -1155,6 +1156,7 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	if err != nil {
 		return Bundle{}, err
 	}
+	directWriteSurface := deriveDirectWriteSurface(operations)
 
 	schemas, err := loadStreamSchemas(sub, dirName, streams)
 	if err != nil {
@@ -1184,25 +1186,44 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	fixtures := loadFixtures(sub)
 
 	return Bundle{
-		Name:             dirName,
-		Metadata:         metadata,
-		Changefeed:       changefeed,
-		Spec:             spec,
-		RawSpec:          rawSpec,
-		HTTP:             httpBase,
-		Streams:          streams,
-		Writes:           writes,
-		Operations:       operations,
-		RawOperations:    rawOperations,
-		Schemas:          schemas,
-		Surface:          surface,
-		CLISurface:       cliSurface,
-		RawCLISurface:    rawCLISurface,
-		Certification:    certification,
-		RawCertification: rawCertification,
-		Docs:             docs,
-		Fixtures:         fixtures,
+		Name:               dirName,
+		Metadata:           metadata,
+		Changefeed:         changefeed,
+		Spec:               spec,
+		RawSpec:            rawSpec,
+		HTTP:               httpBase,
+		Streams:            streams,
+		Writes:             writes,
+		Operations:         operations,
+		RawOperations:      rawOperations,
+		Schemas:            schemas,
+		Surface:            surface,
+		directWriteSurface: directWriteSurface,
+		CLISurface:         cliSurface,
+		RawCLISurface:      rawCLISurface,
+		Certification:      certification,
+		RawCertification:   rawCertification,
+		Docs:               docs,
+		Fixtures:           fixtures,
 	}, nil
+}
+
+func deriveDirectWriteSurface(operations []OperationSpec) *APISurface {
+	endpoints := make([]SurfaceEndpoint, 0)
+	for _, op := range operations {
+		if op.Kind != "rest_write" || op.REST == nil {
+			continue
+		}
+		endpoints = append(endpoints, SurfaceEndpoint{
+			Method:    strings.ToUpper(strings.TrimSpace(op.REST.Method)),
+			Path:      op.REST.Path,
+			Operation: &SurfaceOperation{},
+		})
+	}
+	if len(endpoints) == 0 {
+		return nil
+	}
+	return &APISurface{Endpoints: endpoints}
 }
 
 func loadMetadata(sub fs.FS, dirName string) (Metadata, error) {

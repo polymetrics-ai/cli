@@ -386,10 +386,14 @@ func isOperationDirectWriteMethod(method string) bool {
 }
 
 func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath string) error {
-	if b.Surface == nil {
+	surface := b.Surface
+	if surface == nil {
+		surface = b.directWriteSurface
+	}
+	if surface == nil {
 		return fmt.Errorf("api_surface is required for direct-write endpoint %s %s", method, endpointPath)
 	}
-	for _, endpoint := range b.Surface.Endpoints {
+	for _, endpoint := range surface.Endpoints {
 		if strings.EqualFold(endpoint.Method, method) && endpoint.Path == endpointPath {
 			if endpoint.Operation == nil {
 				return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation", method, endpointPath)
