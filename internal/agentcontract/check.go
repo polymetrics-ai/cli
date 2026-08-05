@@ -6,9 +6,12 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"io/fs"
 	"os"
 	"os/exec"
+	pathpkg "path"
 	"path/filepath"
+	"slices"
 	"strings"
 )
 
@@ -29,9 +32,13 @@ func CheckGSDCommands(ctx context.Context, root string, commands []string) error
 	if err != nil {
 		return fmt.Errorf("resolve GSD repository root: %w", err)
 	}
+	node, err := exec.LookPath("node")
+	if err != nil {
+		return fmt.Errorf("resolve Node executable for GSD adapter: %w", err)
+	}
 	script := filepath.Join(absoluteRoot, "scripts", "gsd")
 	for _, command := range commands {
-		invocation := exec.CommandContext(ctx, script, "sources", command)
+		invocation := exec.CommandContext(ctx, node, script, "sources", command)
 		invocation.Dir = absoluteRoot
 		output, err := invocation.CombinedOutput()
 		if err != nil {
@@ -51,6 +58,9 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 			returnErr = fmt.Errorf("close projection root: %w", err)
 		}
 	}()
+	if err := checkClaudeAgentInventory(projectionRoot, contract); err != nil {
+		return err
+	}
 
 	for _, target := range contract.Projections {
 		path, err := projectionPath(target.Path)
@@ -90,6 +100,85 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 		}
 		if err := CheckProjection(expected, actual); err != nil {
 			return fmt.Errorf("check projection %s: %w", target.Path, err)
+		}
+	}
+	return nil
+}
+
+func checkClaudeAgentInventory(projectionRoot *os.Root, contract *Contract) error {
+	const agentDirectory = ".claude/agents"
+	expected := make(map[string]string)
+	expectedPaths := make([]string, 0, 2)
+	for _, target := range contract.Projections {
+		if target.Harness != "claude" {
+			continue
+		}
+		expected[target.Path] = target.Role
+		expectedPaths = append(expectedPaths, target.Path)
+	}
+	slices.Sort(expectedPaths)
+
+	for _, directory := range []string{".claude", agentDirectory} {
+		info, err := projectionRoot.Lstat(filepath.FromSlash(directory))
+		if err != nil {
+			return fmt.Errorf("inspect Claude project agent inventory: %w", err)
+		}
+		if info.Mode()&os.ModeSymlink != 0 || !info.IsDir() {
+			return fmt.Errorf("inspect Claude project agent inventory: %s must be a directory, not a symlink or special file", directory)
+		}
+	}
+
+	found := make(map[string]bool, len(expected))
+	seenNames := make(map[string]string, len(expected))
+	unexpected := make([]string, 0)
+	walkErr := fs.WalkDir(projectionRoot.FS(), agentDirectory, func(agentPath string, entry fs.DirEntry, visitErr error) error {
+		if visitErr != nil {
+			return visitErr
+		}
+		if agentPath == agentDirectory {
+			return nil
+		}
+		if entry.Type()&fs.ModeSymlink != 0 {
+			return fmt.Errorf("claude project agent inventory contains symlink %s", agentPath)
+		}
+		if entry.IsDir() || !strings.EqualFold(pathpkg.Ext(agentPath), ".md") {
+			return nil
+		}
+		if !entry.Type().IsRegular() {
+			return fmt.Errorf("claude project agent definition %s is not a regular file", agentPath)
+		}
+		content, err := fs.ReadFile(projectionRoot.FS(), agentPath)
+		if err != nil {
+			return fmt.Errorf("read claude project agent definition %s: %w", agentPath, err)
+		}
+		frontmatter, err := parseClaudeFrontmatter(content)
+		if err != nil {
+			return fmt.Errorf("parse claude project agent definition %s: %w", agentPath, err)
+		}
+		if previous, ok := seenNames[frontmatter.Name]; ok {
+			return fmt.Errorf("duplicate claude project agent name %q at %s and %s", frontmatter.Name, previous, agentPath)
+		}
+		seenNames[frontmatter.Name] = agentPath
+		role, ok := expected[agentPath]
+		if !ok {
+			unexpected = append(unexpected, agentPath)
+			return nil
+		}
+		if frontmatter.Name != role {
+			return fmt.Errorf("claude project agent definition %s declares name %q, want %q", agentPath, frontmatter.Name, role)
+		}
+		found[agentPath] = true
+		return nil
+	})
+	if walkErr != nil {
+		return fmt.Errorf("inspect Claude project agent inventory: %w", walkErr)
+	}
+	if len(unexpected) != 0 {
+		return fmt.Errorf("inspect Claude project agent inventory: unexpected definitions %s; only %s are permitted", strings.Join(unexpected, ", "), strings.Join(expectedPaths, ", "))
+	}
+	for _, expectedPath := range expectedPaths {
+		if !found[expectedPath] {
+			return fmt.Errorf("inspect Claude project agent inventory: missing required definition %s", expectedPath)
 		}
 	}
 	return nil

@@ -30,8 +30,8 @@ func TestCheckGSDCommandsRunsFromSelectedRoot(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(root, ".selected-root"), nil, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	contents := []byte("#!/bin/sh\n[ -f .selected-root ]\n")
-	if err := os.WriteFile(script, contents, 0o755); err != nil {
+	contents := []byte("const fs = require(\"node:fs\");\nif (!fs.existsSync(\".selected-root\")) process.exit(1);\nif (process.argv[2] !== \"sources\" || process.argv[3] !== \"discuss-phase\") process.exit(1);\n")
+	if err := os.WriteFile(script, contents, 0o644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -113,10 +113,66 @@ func TestProjectionDriftCheckAndSync(t *testing.T) {
 		t.Fatalf("sync did not remove Agent from the canonical tools allowlist: %#v", frontmatter.Tools)
 	}
 	if slices.Contains(frontmatter.Tools, "Skill") {
-		t.Fatalf("sync restored bare Skill instead of scoped skill rules: %#v", frontmatter.Tools)
+		t.Fatalf("sync restored Skill instead of trusted preloads: %#v", frontmatter.Tools)
 	}
-	if !slices.Equal(frontmatter.DisallowedTools, []string{"Agent", "Task"}) {
-		t.Fatalf("sync did not restore the canonical Agent/Task denylist: %#v", frontmatter.DisallowedTools)
+	policy, ok := contract.ProjectionFor("claude")
+	if !ok {
+		t.Fatal("canonical contract does not define a Claude harness policy")
+	}
+	if !slices.Equal(frontmatter.Skills, policy.PreloadedSkills) {
+		t.Fatalf("sync did not restore trusted skill preloads: %#v", frontmatter.Skills)
+	}
+	if !slices.Equal(frontmatter.DisallowedTools, []string{"Agent", "Task", "Skill"}) {
+		t.Fatalf("sync did not restore the canonical Agent/Task/Skill denylist: %#v", frontmatter.DisallowedTools)
+	}
+}
+
+func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	target := contract.Projections[0]
+	projection, err := RenderProjection(contract, target)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	tests := []struct {
+		name      string
+		path      string
+		content   []byte
+		wantError string
+	}{
+		{
+			name:      "duplicate canonical name",
+			path:      ".claude/agents/shadow/pm-delivery-worker.md",
+			content:   projection,
+			wantError: "duplicate claude project agent name",
+		},
+		{
+			name:      "unexpected definition",
+			path:      ".claude/agents/shadow/unexpected-worker.md",
+			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
+			wantError: "unexpected definitions",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			if _, err := SyncProjections(root, contract); err != nil {
+				t.Fatalf("SyncProjections creates required Claude projections: %v", err)
+			}
+			extraPath := filepath.Join(root, filepath.FromSlash(test.path))
+			if err := os.MkdirAll(filepath.Dir(extraPath), 0o755); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(extraPath, test.content, 0o644); err != nil {
+				t.Fatal(err)
+			}
+			err := CheckProjections(root, contract)
+			if err == nil || !strings.Contains(err.Error(), test.wantError) {
+				t.Fatalf("CheckProjections error = %v, want substring %q", err, test.wantError)
+			}
+		})
 	}
 }
 

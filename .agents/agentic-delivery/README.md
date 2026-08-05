@@ -71,9 +71,10 @@ repository: trust it in Codex before selecting either worker. Their generated
 `codex` section owns this isolation contract, its official documentation links, and the caveat that
 same-filename user/project standalone-agent precedence is undocumented.
 
-Claude workers use required project-local YAML-frontmatter projections. Their canonical policy owns
-the explicit tool allowlist, scoped skill rules, Agent/Task denylist, official documentation, and
-the required clean-home smoke procedure.
+The Claude check inventories `.claude/agents` recursively and permits exactly the two registered
+regular Markdown definitions. Claude workers preload only plugin-qualified trusted skills and omit
+and deny the runtime `Skill` tool; any repository-routed skill without a trusted namespace is documented as
+unavailable rather than exposed through a collision-prone name.
 
 ## Design principles
 

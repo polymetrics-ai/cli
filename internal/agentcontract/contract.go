@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
-	"path/filepath"
+	"path"
 	"slices"
 	"strings"
 	"unicode"
@@ -56,7 +57,9 @@ type HarnessPolicy struct {
 	Precedence             []string `json:"precedence"`
 	Tools                  []string `json:"tools"`
 	SkillTool              string   `json:"skill_tool"`
-	ReachableSkills        []string `json:"reachable_skills"`
+	PreloadedSkills        []string `json:"preloaded_skills"`
+	UnavailableSkills      []string `json:"unavailable_skills"`
+	UnavailableSkillCost   string   `json:"unavailable_skill_cost"`
 	SkillsDocumentationURL string   `json:"skills_documentation_url"`
 	SkillBoundary          string   `json:"skill_boundary"`
 	DisallowedTools        []string `json:"disallowed_tools"`
@@ -347,10 +350,12 @@ func validateHarnessPolicies(policies []HarnessPolicy) error {
 	const claudeFormat = "markdown_yaml_frontmatter"
 	const claudeDocumentationURL = "https://code.claude.com/docs/en/sub-agents"
 	const claudeSkillsDocumentationURL = "https://code.claude.com/docs/en/slash-commands"
+	const claudeUnavailableSkillCost = "Website and docs UI work requiring these design skills cannot satisfy repository skill routing in this Claude worker; preserve state and hand off to a captain-approved harness with trusted plugin packaging."
 	if claude.Format != claudeFormat || claude.DocumentationURL != claudeDocumentationURL ||
 		claude.SkillsDocumentationURL != claudeSkillsDocumentationURL ||
 		strings.TrimSpace(claude.ProjectDiscovery) == "" || strings.TrimSpace(claude.DelegationGuarantee) == "" ||
 		strings.TrimSpace(claude.SkillBoundary) == "" || !strings.Contains(claude.SkillBoundary, "context: fork") ||
+		claude.UnavailableSkillCost != claudeUnavailableSkillCost ||
 		strings.TrimSpace(claude.SmokeProcedure) == "" || !strings.Contains(claude.SmokeProcedure, "<role>") ||
 		claude.PermissionMode != "default" || claude.DelegationTool != "Agent" || claude.SkillTool != "Skill" {
 		return fmt.Errorf("canonical contract: Claude format, documentation, discovery, delegation, permission, and smoke policy are required")
@@ -360,33 +365,20 @@ func validateHarnessPolicies(policies []HarnessPolicy) error {
 		return fmt.Errorf("canonical contract: Claude precedence must match the documented managed, CLI, project, user, plugin order")
 	}
 	wantTools := []string{"Bash", "Edit", "Glob", "Grep", "Read", "Write"}
-	wantDisallowedTools := []string{"Agent", "Task"}
-	if !slices.Equal(claude.Tools, wantTools) || !slices.Equal(claude.ReachableSkills, claudeReachableSkills()) ||
+	wantDisallowedTools := []string{"Agent", "Task", "Skill"}
+	if !slices.Equal(claude.Tools, wantTools) || !slices.Equal(claude.PreloadedSkills, claudePreloadedSkills()) ||
+		!slices.Equal(claude.UnavailableSkills, claudeUnavailableSkills()) ||
 		!slices.Equal(claude.DisallowedTools, wantDisallowedTools) ||
-		slices.Contains(claude.Tools, claude.DelegationTool) || slices.Contains(claude.Tools, claude.SkillTool) {
-		return fmt.Errorf("canonical contract: Claude tools must use the minimal base allowlist, scoped required skills, and Agent/Task denylist")
+		slices.Contains(claude.Tools, claude.DelegationTool) || slices.Contains(claude.Tools, claude.SkillTool) ||
+		!slices.Contains(claude.DisallowedTools, claude.DelegationTool) ||
+		!slices.Contains(claude.DisallowedTools, claude.SkillTool) {
+		return fmt.Errorf("canonical contract: Claude tools must use the minimal base allowlist, trusted preloaded skills, and Agent/Task/Skill denylist")
 	}
 	return nil
 }
 
-func claudeReachableSkills() []string {
+func claudePreloadedSkills() []string {
 	return []string{
-		"golang-cli",
-		"golang-concurrency",
-		"golang-context",
-		"golang-database",
-		"golang-design-patterns",
-		"golang-documentation",
-		"golang-error-handling",
-		"golang-graphql",
-		"golang-how-to",
-		"golang-lint",
-		"golang-safety",
-		"golang-security",
-		"golang-spf13-cobra",
-		"golang-spf13-viper",
-		"golang-structs-interfaces",
-		"golang-testing",
 		"cc-skills-golang:golang-cli",
 		"cc-skills-golang:golang-concurrency",
 		"cc-skills-golang:golang-context",
@@ -403,8 +395,12 @@ func claudeReachableSkills() []string {
 		"cc-skills-golang:golang-spf13-viper",
 		"cc-skills-golang:golang-structs-interfaces",
 		"cc-skills-golang:golang-testing",
-		"frontend-design",
 		"frontend-design:frontend-design",
+	}
+}
+
+func claudeUnavailableSkills() []string {
+	return []string{
 		"vercel-composition-patterns",
 		"vercel-react-best-practices",
 		"web-design-guidelines",
@@ -513,7 +509,8 @@ func validateProjections(targets []ProjectionTarget) error {
 	for _, target := range targets {
 		key := target.Harness + "/" + target.Role
 		want, ok := expected[key]
-		if !ok || target.Path != want.path || target.RenderMode != want.renderMode || target.Required != want.required || filepath.Clean(target.Path) != target.Path || filepath.IsAbs(target.Path) || seen[key] {
+		if !ok || target.Path != want.path || target.RenderMode != want.renderMode || target.Required != want.required ||
+			!fs.ValidPath(target.Path) || path.Clean(target.Path) != target.Path || seen[key] {
 			return fmt.Errorf("canonical contract: invalid projection target %q at %q", key, target.Path)
 		}
 		seen[key] = true

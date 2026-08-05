@@ -41,23 +41,35 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 			},
 		},
 		{
-			name: "Claude required skill removed",
+			name: "Claude trusted preload removed",
 			mutate: func(value *Contract) {
 				policy := &value.HarnessPolicies[0]
-				policy.ReachableSkills = policy.ReachableSkills[:len(policy.ReachableSkills)-1]
+				policy.PreloadedSkills = policy.PreloadedSkills[:len(policy.PreloadedSkills)-1]
 			},
 		},
 		{
-			name: "Claude fork-capable skill added",
+			name: "Claude unqualified skill added",
 			mutate: func(value *Contract) {
 				policy := &value.HarnessPolicies[0]
-				policy.ReachableSkills = append(policy.ReachableSkills, "gsd-programming-loop")
+				policy.PreloadedSkills = append(policy.PreloadedSkills, "gsd-programming-loop")
 			},
 		},
 		{
 			name: "Claude Task alias not denied",
 			mutate: func(value *Contract) {
-				value.HarnessPolicies[0].DisallowedTools = []string{"Agent"}
+				value.HarnessPolicies[0].DisallowedTools = []string{"Agent", "Skill"}
+			},
+		},
+		{
+			name: "Claude Skill tool not denied",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].DisallowedTools = []string{"Agent", "Task"}
+			},
+		},
+		{
+			name: "Claude unavailable skill cost removed",
+			mutate: func(value *Contract) {
+				value.HarnessPolicies[0].UnavailableSkillCost = ""
 			},
 		},
 		{

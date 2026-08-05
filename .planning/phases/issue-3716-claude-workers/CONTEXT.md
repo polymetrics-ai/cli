@@ -16,18 +16,24 @@ coverage gap visible without retrofitting coverage or blocking Wave 2.
   is modeled there and rendered by `cmd/agentcontractgen`; generated files are never hand-edited.
 - Claude Code project definitions use Markdown with YAML frontmatter. `name` and `description` are
   required; an explicit `tools` allowlist and `permissionMode: default` are rendered.
-- The base allowlist contains `Bash`, `Edit`, `Glob`, `Grep`, `Read`, and `Write`, plus scoped
-  `Skill(name)` entries for the Go and design skills required by
-  `required-skills-routing.md`. Bare `Skill`, MCP tools, and every other unneeded built-in tool are
-  omitted. `disallowedTools` denies `Agent` and its legacy `Task` alias.
+- The base allowlist contains only `Bash`, `Edit`, `Glob`, `Grep`, `Read`, and `Write`. Claude's
+  documented `skills` frontmatter preloads the required Go guidance through
+  `cc-skills-golang:*` and frontend guidance through `frontend-design:frontend-design`; every
+  preload is plugin-qualified. `Skill`, MCP tools, and every other unneeded built-in tool are
+  omitted. `disallowedTools` denies `Agent`, its legacy `Task` alias, and `Skill`.
 - The official Claude Code subagent documentation states that omitting `Agent` from a tools
-  allowlist blocks spawning through that tool. The official skills documentation also states that
-  bare `Skill` reaches project, user, plugin, and bundled skills, and that `context: fork` runs a
-  skill in a subagent. The policy therefore grants only named skill rules and excludes unrelated
-  fork-capable skills. The test must enforce this policy and prove sync restores drift.
+  allowlist blocks spawning through that tool and recommends the `skills` field for preloading.
+  The official skills documentation states that plugin namespaces cannot collide with personal or
+  project skill names and that `context: fork` runs only when a skill is invoked. The policy denies
+  runtime `Skill` access, validates every qualified preload, and proves sync restores drift.
+- `vercel-composition-patterns`, `vercel-react-best-practices`, and `web-design-guidelines` have no
+  trusted plugin-qualified source in the reviewed Claude environment. They remain unavailable to
+  this worker; website/docs UI jobs requiring them must preserve state and hand off to a
+  captain-approved harness with trusted plugin packaging.
 - Claude project definitions are discovered from `.claude/agents/` while walking upward from the
-  current working directory. They outrank same-name user and plugin definitions, but managed
-  definitions and CLI `--agents` remain higher-precedence caveats.
+  current working directory, and each tree is scanned recursively. The canonical check must reject
+  extra files, duplicate names, and symlinks. Project definitions outrank same-name user and plugin
+  definitions, but managed definitions and CLI `--agents` remain higher-precedence caveats.
 - The two files must be exact full-file projections so frontmatter changes also fail the drift
   check. The existing bounded/symlink-safe projection writer remains the only writer.
 

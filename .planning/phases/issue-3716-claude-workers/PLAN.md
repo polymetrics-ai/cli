@@ -36,8 +36,8 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
 ### Slice 1 — RED: Claude projection and isolation contract
 
 1. Add a focused test describing both Claude projections as required full files with parseable YAML
-   frontmatter, exact base tools plus scoped required skills, `permissionMode: default`, and no
-   `Agent` capability.
+   frontmatter, exact base tools plus trusted plugin-qualified skill preloads,
+   `permissionMode: default`, and no `Agent` or runtime `Skill` capability.
 2. Model an unrelated ambient agent in the test fixture and make the assertion fail against the
    current generator, which has no Claude frontmatter projection and therefore cannot prove that
    the ambient agent is unreachable.
@@ -54,8 +54,9 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
    root-contained atomic writer, and compare full files for drift.
 3. Make the two Claude projection targets required, generate them with
    `go run ./cmd/agentcontractgen sync`, and rerun the focused tests plus the canonical check.
-4. Add regression coverage that adding `Agent` or bare `Skill`, removing a required skill, or
-   weakening the `Agent`/`Task` denylist is rejected, while sync restores the no-delegation file.
+4. Add regression coverage that adding `Agent` or `Skill`, removing a trusted preload, or
+   weakening the `Agent`/`Task`/`Skill` denylist is rejected, while sync restores the
+   no-delegation file.
 
 ### Slice 3 — REFACTOR: runtime smoke, documentation, and scope audit
 
@@ -64,11 +65,28 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
    clean trusted home containing unrelated global definitions; do not substitute static evidence
    for that runtime criterion.
 2. Document the exact official behavior and caveats in generated projection metadata and phase
-   verification: managed settings and CLI `--agents` override project definitions, scoped skills
-   exclude unrelated `context: fork` routes, and `Agent` omission plus the denylist blocks direct
-   invocation without erasing ambient definitions from their own scopes.
+   verification: managed settings and CLI `--agents` override project definitions,
+   plugin-qualified preloads avoid personal/project skill collisions, runtime `Skill` omission
+   excludes `context: fork` routes, and `Agent` omission plus the denylist blocks direct invocation
+   without erasing ambient definitions from their own scopes.
 3. Run review, validation, diff, and path-scope checks. Do not touch installed plugins or any home
    directory.
+
+### Slice 4 — REVIEW FIX: trusted skill origins, inventory, and portability
+
+1. Replace collision-prone `Skill(name)` tool entries with Claude's documented `skills`
+   frontmatter, using only plugin-qualified `cc-skills-golang:*` and
+   `frontend-design:frontend-design` identifiers. Omit and deny the runtime `Skill` tool alongside
+   `Agent` and `Task`; record the three repository-routed design skills that cannot be safely
+   qualified and the website-work cost.
+2. Inventory `.claude/agents` recursively during the canonical check, reject symlinks, unexpected
+   Markdown definitions, duplicate names, and missing canonical paths before comparing generated
+   content.
+3. Validate slash-separated canonical paths with `io/fs` and `path`, and invoke the extensionless
+   JavaScript GSD adapter through Node so checks remain executable on Windows.
+4. Preserve the captain-authorized clean-home runtime smoke as **NOT PERFORMED**. Distinguish the
+   official namespace guarantee and static generated-file checks from authenticated runtime
+   discovery, source-version pinning, and managed/CLI override behavior.
 
 ## Verification
 
