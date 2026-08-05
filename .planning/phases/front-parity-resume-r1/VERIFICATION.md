@@ -48,3 +48,8 @@ Review-remediation evidence: `connectorgen validate` reported zero Front finding
 `surface-sync --check` reported zero drift, Front conformance passed in 1.661s, and the real
 implemented-command runtime preflight passed in 1.362s. JSON parsing covered the Front API surface,
 operations, writes, CLI surface, draft-07 request contracts, and run state.
+
+Provider-schema correction evidence: `git diff --check` and JSON parsing passed; focused assertions
+confirmed the removed template minimum, non-null parent call ID, custom-channel Twilio-secret
+prohibition, empty-array fixture, and one-mapping CLI help. Front validation reported zero findings,
+surface synchronization reported zero drift, and focused Front conformance passed in 1.626s.

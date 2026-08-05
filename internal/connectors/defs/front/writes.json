@@ -5494,10 +5494,7 @@
             ]
           },
           "parent_external_call_id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "started_at": {
             "type": "number"
@@ -5806,7 +5803,6 @@
           },
           "variable_mappings": {
             "type": "array",
-            "minItems": 1,
             "items": {
               "type": "object",
               "required": [

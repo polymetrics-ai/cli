@@ -2,36 +2,24 @@
   "record": {
     "channel_id": "fixture_channel_id",
     "external_id": "fixture_template_1",
-    "name": "Fixture Template",
-    "blurb": "Fixture preview blurb.",
+    "name": "Static Fixture Template",
+    "blurb": "Static template without variables.",
     "is_disabled": false,
     "status_name": "APPROVED",
-    "variable_mappings": [
-      {
-        "uid": "1",
-        "name": "customer_name",
-        "type": "string"
-      }
-    ],
-    "template_preview": "Hello {{customer_name}}"
+    "variable_mappings": [],
+    "template_preview": "Hello from Front"
   },
   "expect": {
     "method": "PUT",
     "path": "/channels/fixture_channel_id/application_message_templates",
     "body": {
       "external_id": "fixture_template_1",
-      "name": "Fixture Template",
-      "blurb": "Fixture preview blurb.",
+      "name": "Static Fixture Template",
+      "blurb": "Static template without variables.",
       "is_disabled": false,
       "status_name": "APPROVED",
-      "variable_mappings": [
-        {
-          "uid": "1",
-          "name": "customer_name",
-          "type": "string"
-        }
-      ],
-      "template_preview": "Hello {{customer_name}}"
+      "variable_mappings": [],
+      "template_preview": "Hello from Front"
     }
   },
   "response": {
