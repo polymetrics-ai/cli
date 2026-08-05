@@ -12,7 +12,7 @@
   docs.
 - [x] No definition bundles, credentials, live calls, redaction code, executors, or approval paths
   changed.
-- [ ] Rebased on current `main` before final delivery; no sibling-foundation base used.
+- [x] Rebased on current `main` before final delivery; no sibling-foundation base used.
 
 ## Completed pre-rebase evidence
 
@@ -30,7 +30,21 @@
 - Runtime help checks: `pm help connectors`, bare `pm connectors`, and
   `pm connectors certify --help` all exit successfully and describe v2 provenance.
 
-The same focused test matrix and relevant gates are rerun after the required rebase on `main`.
+## Post-rebase evidence
+
+The implementation commit was rebased onto `origin/main` `7d34a07949146d2b099667d8214209312f9166d2`
+and is now `6ab5f8bab`. No sibling foundation branch was used. The following all passed afterward:
+
+- `go test ./internal/connectors/engine -count=1`
+- `go test ./internal/connectors/conformance -count=1`
+- `go test ./cmd/connectorgen -count=1`
+- `go test ./internal/connectors/certify -count=1`
+- Scoped CLI provenance/help tests, `go vet ./...`, and `go build ./cmd/pm`
+- `make tidy-check`, `make lint`, `make docs-check`, `make smoke-no-build`
+- `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-surface-sync`,
+  `make connector-boundary`, and `make release-workflow-check`
+- Website-aware docs validation through `go run ./cmd/pm docs validate --dir docs/cli
+  --connectors-dir docs/connectors --website-dir website/content/docs`
 
 ## Required local gates
 

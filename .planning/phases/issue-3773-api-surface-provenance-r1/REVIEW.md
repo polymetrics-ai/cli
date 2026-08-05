@@ -24,5 +24,6 @@ No actionable finding.
 
 ## Follow-up review route
 
-After the final main rebase and push, the repository's Claude-first PR review route remains the
+The implementation was rebased onto current `origin/main` `7d34a0794` and its focused matrix was
+rerun. After the branch is pushed, the repository's Claude-first PR review route remains the
 primary automated review gate. Human approval remains required.
