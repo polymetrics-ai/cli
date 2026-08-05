@@ -4,7 +4,7 @@
   "subIssues": [3798, 3801, 3805, 3806, 3807],
   "branch": "fm/cli-found-certify-timeout-r1",
   "parentDraftPR": "https://github.com/polymetrics-ai/cli/pull/3808",
-  "status": "executing",
+  "status": "rebased_validated",
   "workflow": {
     "tddMode": true,
     "adapter": "inline_manual_fallback",
@@ -97,6 +97,26 @@
       "cliRealCLIInvocations": 61,
       "allowedDuration": "4m15s",
       "aggregateVerify": "success"
+    },
+    "rebaseValidation": {
+      "base": "origin/main b0cd6cbcd",
+      "timingWallElapsedSeconds": 119.492,
+      "certifyRealCLIInvocations": 85,
+      "cliRealCLIInvocations": 61,
+      "cliPackageElapsedSeconds": 363.575,
+      "nonSuiteGates": [
+        "go vet ./...",
+        "go build ./cmd/pm",
+        "make tidy-check",
+        "make lint",
+        "make docs-check",
+        "make smoke-no-build",
+        "make agent-contract-check",
+        "make connectorgen-validate",
+        "make connectorgen-surface-sync",
+        "make connector-boundary",
+        "make release-workflow-check"
+      ]
     }
   },
   "verificationPassed": false
