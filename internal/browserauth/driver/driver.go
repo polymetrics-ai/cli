@@ -29,6 +29,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -92,8 +93,8 @@ type Config struct {
 	// page may set this true.
 	Headless bool
 
-	// Timeout bounds Session.Launch and is the default for WaitFor when its
-	// own timeout argument is <= 0.
+	// Timeout is the default readiness timeout used by Flow. A caller that
+	// uses Session directly can still supply a more specific WaitFor timeout.
 	Timeout time.Duration
 }
 
@@ -102,6 +103,71 @@ func (cfg Config) validate() error {
 		return errors.New("driver: required_cookies must name at least one cookie (never capture \"everything on the domain\")")
 	}
 	return nil
+}
+
+// FlowConfig binds the controlled browser session to the credential it may
+// produce. It is deliberately static connector configuration, not a generic
+// browser scripting surface: the user completes the provider's login in the
+// visible page and Flow waits only for the declared minimum cookies.
+type FlowConfig struct {
+	Browser Config
+
+	// Origin is the HTTPS provider origin that may consume the captured
+	// session. It contains no path, query, fragment, or user info, so a later
+	// native connector transport can pin requests to one origin.
+	Origin string
+
+	// CSRFHeader and CSRFValueCookie are either both empty or both set. When
+	// set, Flow copies the value of that already-declared minimum cookie into
+	// SessionCredential.CSRFValue for the connector's typed transport.
+	CSRFHeader      string
+	CSRFValueCookie string
+}
+
+// Flow is browserauth's browser-session credential outcome. It launches a
+// real, user-visible browser through Config, waits for a user-completed login,
+// captures only Config.RequiredCookies, and closes the controlled browser.
+// It never inspects or enters a password.
+type Flow struct {
+	cfg    FlowConfig
+	origin string
+}
+
+// NewFlow validates one browser-session credential flow. Browser availability
+// is resolved only at Login time, so validating connector metadata does not
+// spawn a browser or download Chromium.
+func NewFlow(cfg FlowConfig) (*Flow, error) {
+	if err := cfg.Browser.validate(); err != nil {
+		return nil, err
+	}
+	origin, err := normalizeOrigin(cfg.Origin)
+	if err != nil {
+		return nil, err
+	}
+	if (cfg.CSRFHeader == "") != (cfg.CSRFValueCookie == "") {
+		return nil, errors.New("driver: csrf_header and csrf_value_cookie must be set together")
+	}
+	if cfg.CSRFValueCookie != "" && !containsCookie(cfg.Browser.RequiredCookies, cfg.CSRFValueCookie) {
+		return nil, fmt.Errorf("driver: csrf_value_cookie %q must be declared in required_cookies", cfg.CSRFValueCookie)
+	}
+	return &Flow{cfg: cfg, origin: origin}, nil
+}
+
+func normalizeOrigin(raw string) (string, error) {
+	u, err := url.Parse(strings.TrimSpace(raw))
+	if err != nil || u.Scheme != "https" || u.Host == "" || u.User != nil || (u.Path != "" && u.Path != "/") || u.RawQuery != "" || u.Fragment != "" {
+		return "", fmt.Errorf("driver: origin must be an HTTPS origin without path, query, fragment, or user info: %q", raw)
+	}
+	return "https://" + u.Host, nil
+}
+
+func containsCookie(names []string, want string) bool {
+	for _, name := range names {
+		if name == want {
+			return true
+		}
+	}
+	return false
 }
 
 // lookInstalledBrowser is a package variable (not a direct launcher.LookPath
@@ -235,17 +301,24 @@ type Session interface {
 	Close() error
 }
 
+const defaultSessionWaitTimeout = 2 * time.Minute
+
 // New resolves a browser per cfg, launches it (leakless disabled — see the
 // package doc comment), opens one page, and returns a Session bound to it.
 // The caller owns Close()ing the returned Session, which also terminates the
 // launched browser process.
 func New(ctx context.Context, cfg Config) (Session, error) {
+	session, _, err := newSession(ctx, cfg)
+	return session, err
+}
+
+func newSession(ctx context.Context, cfg Config) (Session, Resolution, error) {
 	if err := cfg.validate(); err != nil {
-		return nil, err
+		return nil, Resolution{}, err
 	}
 	res, err := Resolve(cfg)
 	if err != nil {
-		return nil, err
+		return nil, Resolution{}, err
 	}
 
 	l := launcher.New().
@@ -256,27 +329,27 @@ func New(ctx context.Context, cfg Config) (Session, error) {
 
 	controlURL, err := l.Launch()
 	if err != nil {
-		return nil, fmt.Errorf("driver: launch browser: %w", err)
+		return nil, Resolution{}, fmt.Errorf("driver: launch browser: %w", err)
 	}
 
 	browser := rod.New().Context(ctx).ControlURL(controlURL)
 	if err := browser.Connect(); err != nil {
 		l.Kill()
-		return nil, fmt.Errorf("driver: connect to browser: %w", err)
+		return nil, Resolution{}, fmt.Errorf("driver: connect to browser: %w", err)
 	}
 
 	page, err := browser.Page(proto.TargetCreateTarget{})
 	if err != nil {
 		_ = browser.Close()
 		l.Kill()
-		return nil, fmt.Errorf("driver: open page: %w", err)
+		return nil, Resolution{}, fmt.Errorf("driver: open page: %w", err)
 	}
 
 	if cfg.LoginURL != "" {
 		if err := page.Context(ctx).Navigate(cfg.LoginURL); err != nil {
 			_ = browser.Close()
 			l.Kill()
-			return nil, fmt.Errorf("driver: navigate to login URL: %w", err)
+			return nil, Resolution{}, fmt.Errorf("driver: navigate to login URL: %w", err)
 		}
 	}
 
@@ -291,7 +364,108 @@ func New(ctx context.Context, cfg Config) (Session, error) {
 		page:       page,
 		names:      names,
 		resolution: res,
-	}, nil
+	}, res, nil
+}
+
+func (f *Flow) Name() string { return "browser_session_capture" }
+
+// Login launches a controlled real browser, lets the user authenticate in it,
+// and returns the resulting browser session credential. The browser is always
+// closed after capture or failure; subsequent connector execution reuses only
+// the encrypted local credential, never the browser process.
+func (f *Flow) Login(ctx context.Context) (browserauth.Credential, error) {
+	session, resolution, err := newSession(ctx, f.cfg.Browser)
+	if err != nil {
+		return browserauth.Credential{}, err
+	}
+	return f.loginWithSession(ctx, session, resolution)
+}
+
+func (f *Flow) loginWithSession(ctx context.Context, session Session, resolution Resolution) (credential browserauth.Credential, err error) {
+	defer func() {
+		if closeErr := session.Close(); closeErr != nil && err == nil {
+			credential = browserauth.Credential{}
+			err = fmt.Errorf("driver: close browser after session capture: %w", closeErr)
+		}
+	}()
+
+	timeout := f.cfg.Browser.Timeout
+	if timeout <= 0 {
+		timeout = defaultSessionWaitTimeout
+	}
+	if err := session.WaitFor(ctx, timeout, requiredCookiesReady(f.cfg.Browser.RequiredCookies)); err != nil {
+		return browserauth.Credential{}, err
+	}
+	cookies, err := session.GetCookies(ctx)
+	if err != nil {
+		return browserauth.Credential{}, err
+	}
+	minimum, err := selectRequiredCookies(cookies, f.cfg.Browser.RequiredCookies)
+	if err != nil {
+		return browserauth.Credential{}, err
+	}
+
+	csrfValue := ""
+	if f.cfg.CSRFValueCookie != "" {
+		for _, cookie := range minimum {
+			if cookie.Name == f.cfg.CSRFValueCookie {
+				csrfValue = cookie.Value
+				break
+			}
+		}
+	}
+
+	capturedAt := time.Now().UTC()
+	return browserauth.Credential{Session: &browserauth.SessionCredential{
+		Cookies:        minimum,
+		CSRFHeader:     f.cfg.CSRFHeader,
+		CSRFValue:      csrfValue,
+		Origin:         f.origin,
+		FingerprintRef: resolution.Version,
+		CapturedAt:     capturedAt,
+		ExpiresHint:    earliestCookieExpiry(minimum),
+	}}, nil
+}
+
+func requiredCookiesReady(required []string) func(Snapshot) bool {
+	return func(snapshot Snapshot) bool {
+		for _, name := range required {
+			if strings.TrimSpace(snapshot.Cookies[name]) == "" {
+				return false
+			}
+		}
+		return true
+	}
+}
+
+func selectRequiredCookies(cookies []browserauth.Cookie, required []string) ([]browserauth.Cookie, error) {
+	byName := make(map[string]browserauth.Cookie, len(cookies))
+	for _, cookie := range cookies {
+		byName[cookie.Name] = cookie
+	}
+	minimum := make([]browserauth.Cookie, 0, len(required))
+	for _, name := range required {
+		cookie, ok := byName[name]
+		if !ok || strings.TrimSpace(cookie.Value) == "" {
+			return nil, fmt.Errorf("driver: required session cookie %q was not captured", name)
+		}
+		minimum = append(minimum, cookie)
+	}
+	return minimum, nil
+}
+
+func earliestCookieExpiry(cookies []browserauth.Cookie) *time.Time {
+	var earliest *time.Time
+	for _, cookie := range cookies {
+		if cookie.Expires == nil {
+			continue
+		}
+		if earliest == nil || cookie.Expires.Before(*earliest) {
+			expires := *cookie.Expires
+			earliest = &expires
+		}
+	}
+	return earliest
 }
 
 type rodSession struct {
@@ -313,7 +487,7 @@ func (s *rodSession) Navigate(ctx context.Context, url string) error {
 
 func (s *rodSession) WaitFor(ctx context.Context, timeout time.Duration, ready func(Snapshot) bool) error {
 	if timeout <= 0 {
-		timeout = 2 * time.Minute
+		timeout = defaultSessionWaitTimeout
 	}
 	deadline := time.Now().Add(timeout)
 	for {

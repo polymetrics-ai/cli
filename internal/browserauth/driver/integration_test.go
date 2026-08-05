@@ -7,18 +7,19 @@ import (
 	"testing"
 	"time"
 
+	"polymetrics.ai/internal/browserauth"
 	"polymetrics.ai/internal/browserauth/driver"
 )
 
-// TestSessionCapturesRealBrowserCookies proves the DoD claim "the package
-// authenticates through a real browser and yields ... credential[s]" against
-// an actual local Chrome/Chromium/Edge install — not a mock. It is opt-in
-// (POLYMETRICS_BROWSER_INTEGRATION=1) and skipped by default, mirroring this
-// repo's existing POLYMETRICS_INTEGRATION convention for runtime-backed
+// TestFlowYieldsRealBrowserSessionCredential proves the DoD claim "the
+// package authenticates through a real browser and yields ... credential[s]"
+// against an actual local Chrome/Chromium/Edge install — not a mock. It is
+// opt-in (POLYMETRICS_BROWSER_INTEGRATION=1) and skipped by default, mirroring
+// this repo's existing POLYMETRICS_INTEGRATION convention for runtime-backed
 // tests (AGENTS.md "Verification"): CI and a plain `go test ./...` must not
-// depend on a browser being installed, but the capability itself is real and
+// depend on a browser being installed, but the public Flow outcome is real and
 // exercised here, not merely asserted.
-func TestSessionCapturesRealBrowserCookies(t *testing.T) {
+func TestFlowYieldsRealBrowserSessionCredential(t *testing.T) {
 	if os.Getenv("POLYMETRICS_BROWSER_INTEGRATION") != "1" {
 		t.Skip("set POLYMETRICS_BROWSER_INTEGRATION=1 to run against a real local browser")
 	}
@@ -31,29 +32,33 @@ func TestSessionCapturesRealBrowserCookies(t *testing.T) {
 	defer server.Close()
 
 	ctx := t.Context()
-	session, err := driver.New(ctx, driver.Config{
-		LoginURL:        server.URL,
-		RequiredCookies: []string{"session_token"},
-		Headless:        true,
-		Timeout:         30 * time.Second,
+	flow, err := driver.NewFlow(driver.FlowConfig{
+		Browser: driver.Config{
+			LoginURL:        server.URL,
+			RequiredCookies: []string{"session_token"},
+			Headless:        true,
+			Timeout:         30 * time.Second,
+		},
+		// The fake login page is intentionally local HTTP, while production
+		// sessions are pinned to a provider HTTPS origin. The test exercises
+		// browser capture rather than a provider's TLS policy.
+		Origin: "https://provider.example",
 	})
 	if err != nil {
-		t.Fatalf("New() error = %v", err)
-	}
-	defer func() { _ = session.Close() }()
-
-	// No explicit Navigate: New navigates to Config.LoginURL itself.
-	if err := session.WaitFor(ctx, 10*time.Second, func(snap driver.Snapshot) bool {
-		return snap.Cookies["session_token"] != ""
-	}); err != nil {
-		t.Fatalf("WaitFor() error = %v", err)
+		t.Fatalf("NewFlow() error = %v", err)
 	}
 
-	cookies, err := session.GetCookies(ctx)
+	cred, err := browserauth.Login(ctx, flow)
 	if err != nil {
-		t.Fatalf("GetCookies() error = %v", err)
+		t.Fatalf("browserauth.Login() error = %v", err)
 	}
-	if len(cookies) != 1 || cookies[0].Name != "session_token" || cookies[0].Value != "captured-by-real-browser" {
-		t.Fatalf("GetCookies() = %+v, want exactly session_token=captured-by-real-browser", cookies)
+	if cred.OAuth != nil || cred.Session == nil {
+		t.Fatalf("credential = %+v, want exactly a session credential", cred)
+	}
+	if len(cred.Session.Cookies) != 1 || cred.Session.Cookies[0].Name != "session_token" || cred.Session.Cookies[0].Value != "captured-by-real-browser" {
+		t.Fatalf("captured cookies = %+v, want exactly session_token=captured-by-real-browser", cred.Session.Cookies)
+	}
+	if cred.Session.FingerprintRef == "" {
+		t.Fatal("session credential is missing the capturing browser fingerprint")
 	}
 }

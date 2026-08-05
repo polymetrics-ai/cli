@@ -89,6 +89,19 @@ func mechanismSection(manifest Manifest) GuideSection {
 	if mech.OptInRequired {
 		lines = append(lines, "opt_in_required: true — disabled until explicitly enabled and the risk warning is accepted")
 	}
+	if mech.UpstreamPin != nil {
+		line := "upstream_pin: " + mech.UpstreamPin.Repo + "@" + mech.UpstreamPin.SHA
+		if mech.UpstreamPin.VerifiedAt != "" {
+			line += " (verified_at: " + mech.UpstreamPin.VerifiedAt + ")"
+		}
+		lines = append(lines, line)
+	}
+	if mech.BreakageReviewCadenceDays > 0 {
+		lines = append(lines, fmt.Sprintf("breakage_review_cadence_days: %d", mech.BreakageReviewCadenceDays))
+	}
+	if mech.DisabledReason != "" {
+		lines = append(lines, "disabled_reason: "+mech.DisabledReason)
+	}
 	return GuideSection{Title: "Mechanism", Lines: lines}
 }
 
