@@ -1,29 +1,10 @@
-# TDD ledger: Google Analytics Data API parity wave03 r1
+# TDD ledger: Google Analytics Data API 24-operation parity
 
-## Red/green slices
-
-| Slice | Red evidence | Green evidence | Notes |
+| Slice | Red evidence | Green evidence | Commit |
 | --- | --- | --- | --- |
-| Single-bundle validate gate | Baseline command `go run ./cmd/connectorgen validate internal/connectors/defs/google-analytics-data-api` fails because `fixtures/` and `schemas/` are treated as connector dirs. Add focused connectorgen test before tooling fix. | `go test ./cmd/connectorgen -run TestValidate_AcceptsSingleBundleDir -count=1`; required single-bundle validate gate passed. | Required by task gate; tooling now recognizes a root `metadata.json` bundle dir. |
-| POST-backed read stream surface | GA `runReport` is an official POST read endpoint, but shared surface checks previously treated any executable POST as a write and forced an untruthful GET workaround. | `go test ./cmd/connectorgen -run TestValidate_APISurfaceAllowsPOSTBackedReadStreamWhenWriteFalse -count=1`; `go test ./internal/connectors/conformance -run TestCheckSurfaceComplete_AllowsPOSTBackedReadStreamWhenWriteFalse -count=1`; GA conformance passed with official POST stream rows. | Validation/conformance now distinguish POST-backed read streams/direct reads from write actions. |
-| Stream fixture coverage | Existing conformance has one stream fixture only; add fixture/test coverage for all declared streams. | `go test ./internal/connectors/native/google-analytics-data-api -count=1`; required GA conformance passed. | Fixture-only; no provider calls. |
-| Official operation ledger | Existing `api_surface.json` has 5 HOOK rows and no official operation ledger. | `go run ./cmd/connectorgen validate internal/connectors/defs/google-analytics-data-api` passed with 11-method ledger. | Re-audit found 11 current v1beta methods: 4 executable official methods, 7 blocked/planned. |
-| Native/direct operation behavior | Existing native connector has no typed direct operation tests and no operation ledger. | `TestOperationDirectReadFixtureCoversImplementedOperations` and `TestOperationDirectReadLiveUsesFixedGETEndpoints` passed. | Implemented fixed GET direct reads only: metadata get, audience-exports list/get. |
-| Docs/generated surfaces | Existing MANUAL/SKILL describe quarantine/no auth and stale API coverage. | `make verify`; `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1`; generated JSON diff entry checks. | Regenerated selectively; broad docs/skills generator churn was reverted. |
+| Provider inventory | Official Google reference lists 11 v1beta + 15 v1alpha methods; the existing HOOK ledger contains a non-provider-derived 10/11-method narrative. | `api_surface.json` records exactly 24 semantic operations, their provider method/path, version/revision, retrieval date, and 20-read/4-write split. | Ledger-only checkpoint |
+| v1alpha fixed GET reads | Table-driven tests for every added property quota, audience-list, recurring-audience-list, and report-task GET operation fail before dispatch/fixture support exists. | Fixture and `httptest` tests show only fixed GET paths, normalized property IDs, bounded/redacted JSON output, and no secret leakage. | Alpha direct-read checkpoint |
+| POST/read and write policy | Operation/CLI validation fails when an official operation has no classifier or uses an executable command inconsistent with its API surface. | Every semantic provider operation has a closed-schema executable mapping or a specific #2985 / reverse-ETL gate; no raw request surface is present. | Operation-policy checkpoint |
+| Docs and generated surfaces | Golden/catalog/manual data does not state the 24-operation inventory. | Connector docs/catalog/website/help data agree with final counts and fixture-only, uncertified status. | Parity checkpoint |
 
-## Baseline commands captured
-
-```bash
-# Failed before edits; required command currently validates subdirectories as bundles.
-go run ./cmd/connectorgen validate internal/connectors/defs/google-analytics-data-api
-
-# Passed before edits.
-go test ./internal/connectors/conformance -run 'TestConformance/google-analytics-data-api' -count=1
-```
-
-## Safety evidence to preserve
-
-- All tests use fixture mode or local `httptest`.
-- Secret placeholders must not match token scanners.
-- No live provider API, credential, write, certification, push, PR, or merge.
-- Accidental generator inventory found no `*_gen.go` diffs; broad docs/skills churn was reverted, preserving only GA docs/catalog/website generated entries.
+All tests remain connector-owned fixtures or local `httptest`; no credentialed checks, live writes, or certification are allowed.
