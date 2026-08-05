@@ -16,23 +16,23 @@ func main() {
 	maxDuration := flag.String("max-duration", "", "optional total package elapsed duration budget, for example 3m30s")
 	flag.Parse()
 	if flag.NArg() != 0 {
-		fmt.Fprintln(os.Stderr, "usage: certifytiming [--max-duration <duration>]")
+		_, _ = fmt.Fprintln(os.Stderr, "usage: certifytiming [--max-duration <duration>]")
 		os.Exit(2)
 	}
 
 	allowed, err := parseDuration(*maxDuration)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}
 
 	report, err := certifytiming.Run(context.Background(), certifytiming.DefaultTargets(), certifytiming.ExecuteGoTest, os.Stdout)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 	if err := certifytiming.CheckDurationBudget(report, allowed); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }

@@ -95,13 +95,13 @@ func (s *scriptedCLI) install(t *testing.T) {
 func (s *scriptedCLI) run(args []string, stdout, stderr io.Writer) int {
 	args, root, ok := s.withoutRoot(args)
 	if !ok {
-		fmt.Fprintln(stderr, "scripted certify CLI: missing or inconsistent --root")
+		_, _ = fmt.Fprintln(stderr, "scripted certify CLI: missing or inconsistent --root")
 		return 1
 	}
 	s.calls = append(s.calls, append([]string(nil), args...))
 
 	if len(args) == 0 {
-		fmt.Fprintln(stderr, "scripted certify CLI: empty command")
+		_, _ = fmt.Fprintln(stderr, "scripted certify CLI: empty command")
 		return 1
 	}
 

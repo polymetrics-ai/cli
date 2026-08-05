@@ -202,18 +202,18 @@ func Run(ctx context.Context, targets []Target, execute ExecuteTarget, output io
 
 // RenderSummary prints target totals and their five slowest completed tests.
 func RenderSummary(output io.Writer, report Report) {
-	fmt.Fprintln(output, "certify timing summary")
+	_, _ = fmt.Fprintln(output, "certify timing summary")
 	for _, target := range report.Targets {
-		fmt.Fprintf(output, "  %s package=%s elapsed=%s\n", target.Name, target.Package, formatDuration(target.Elapsed))
+		_, _ = fmt.Fprintf(output, "  %s package=%s elapsed=%s\n", target.Name, target.Package, formatDuration(target.Elapsed))
 		limit := len(target.SlowTests)
 		if limit > 5 {
 			limit = 5
 		}
 		for _, test := range target.SlowTests[:limit] {
-			fmt.Fprintf(output, "    slow_test=%s elapsed=%s\n", test.Name, formatDuration(test.Elapsed))
+			_, _ = fmt.Fprintf(output, "    slow_test=%s elapsed=%s\n", test.Name, formatDuration(test.Elapsed))
 		}
 	}
-	fmt.Fprintf(output, "  total elapsed=%s\n", formatDuration(report.TotalElapsed()))
+	_, _ = fmt.Fprintf(output, "  total elapsed=%s\n", formatDuration(report.TotalElapsed()))
 }
 
 // CheckDurationBudget enforces the secondary measured duration backstop. A
