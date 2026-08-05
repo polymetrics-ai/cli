@@ -107,7 +107,7 @@ func RenderProjection(contract *Contract, target ProjectionTarget) ([]byte, erro
 		if target.Harness != "claude" {
 			return nil, fmt.Errorf("canonical contract: markdown_yaml_frontmatter render mode requires the Claude harness")
 		}
-		policy, ok := contract.HarnessPolicyFor(target.Harness)
+		policy, ok := contract.ProjectionFor(target.Harness)
 		if !ok {
 			return nil, fmt.Errorf("canonical contract: Claude harness policy is missing")
 		}
