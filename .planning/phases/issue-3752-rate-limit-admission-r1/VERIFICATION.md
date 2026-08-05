@@ -44,6 +44,15 @@ Status: **scoped local verification complete; full CI/no-mistakes remains firstm
 - [x] Changed-path audit confirms no connector migration, `commandrunner`, or deferred #3753/#3754/
   #3755 read/write/direct-operation/CLI activation edit.
 
+## Rebase verification
+
+- [x] Rebased the completed slice onto `origin/main` at `d215d9636` without a merge commit; the
+  only conflict was the independently landed `Changefeed` bundle field, and both that field and
+  this slice's `RateLimits` loader remain present.
+- [x] Re-ran changed-package tests, focused `-race` requester/loader suites, targeted `go vet`,
+  `go build ./cmd/pm`, all individual non-full-suite gates, and
+  `scripts/verify-gsd-workflow origin/main` after the rebase.
+
 ## Deliberately not applicable in this slice
 
 - CLI help/manual/website parity: #3755 owns the first operator-visible rate-limit surface. This

@@ -8,7 +8,7 @@
   "status": "local_verification_complete",
   "verificationPassed": false,
   "verificationBlocked": false,
-  "verificationNote": "Scoped gates passed. Full connsdk -race is not green because unchanged multipart_bounds_test.go contains a test-data race; focused new rate-limit and loader race suites passed. Full CI/no-mistakes remains firstmate-gated.",
+  "verificationNote": "Scoped gates passed, including a rebase onto origin/main d215d9636 and post-rebase reruns. Full connsdk -race is not green because unchanged multipart_bounds_test.go contains a test-data race; focused new rate-limit and loader race suites passed. Full CI/no-mistakes remains firstmate-gated.",
   "humanGated": false,
   "gsd": {
     "doctor": "passed",
@@ -53,6 +53,7 @@
     {"command": "go vet ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors/bundleregistry ./cmd/connectorgen", "result": "passed"},
     {"command": "go build ./cmd/pm", "result": "passed"},
     {"command": "make tidy-check lint docs-check-no-build smoke-no-build agent-contract-check connectorgen-validate connectorgen-surface-sync connector-boundary release-workflow-check", "result": "passed individually"},
-    {"command": "scripts/verify-gsd-workflow origin/main", "result": "passed"}
+    {"command": "scripts/verify-gsd-workflow origin/main", "result": "passed"},
+    {"command": "git rebase origin/main at d215d9636; rerun changed-package, focused-race, vet/build, and individual project gates", "result": "passed"}
   ]
 }

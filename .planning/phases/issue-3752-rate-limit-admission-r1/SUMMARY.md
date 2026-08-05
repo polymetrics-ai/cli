@@ -13,4 +13,6 @@ remain intentionally deferred.
 The local manual-GSD fallback recorded `UAT.md` and `REVIEW.md`. Scoped package, schema, build,
 lint, docs, smoke, contract, boundary, and release checks passed. A full connsdk race run reports
 an unchanged multipart test-data race outside this slice; focused new rate-limit and loader race
-tests pass.
+tests pass. The branch was then rebased onto `origin/main` at `d215d9636` and those scoped gates
+were re-run; the independently landed `Changefeed` bundle field and this slice's `RateLimits`
+loader are both retained.
