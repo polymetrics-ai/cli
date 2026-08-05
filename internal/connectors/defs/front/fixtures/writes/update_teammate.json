@@ -1,10 +1,14 @@
 {
   "record": {
-    "teammate_id": "fixture_teammate_id"
+    "teammate_id": "fixture_teammate_id",
+    "username": "fixture_user_1"
   },
   "expect": {
     "method": "PATCH",
-    "path": "/teammates/fixture_teammate_id"
+    "path": "/teammates/fixture_teammate_id",
+    "body": {
+      "username": "fixture_user_1"
+    }
   },
   "response": {
     "status": 200,

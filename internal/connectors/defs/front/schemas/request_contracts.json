@@ -1596,6 +1596,359 @@
         }
       }
     },
+    "import_inbox_message": {
+      "type": "object",
+      "required": [
+        "inbox_id",
+        "sender",
+        "to",
+        "body",
+        "external_id",
+        "created_at",
+        "metadata"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "inbox_id": {
+          "type": "string"
+        },
+        "sender": {
+          "type": "object",
+          "required": [
+            "handle"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "author_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "handle": {
+              "type": "string"
+            }
+          }
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cc": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bcc": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "subject": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "body_format": {
+          "type": "string",
+          "enum": [
+            "html",
+            "markdown"
+          ]
+        },
+        "external_id": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "email",
+            "sms",
+            "intercom",
+            "custom"
+          ]
+        },
+        "assignee_id": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "conversation_id": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "is_inbound"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "thread_ref": {
+              "type": "string"
+            },
+            "is_inbound": {
+              "type": "boolean"
+            },
+            "is_archived": {
+              "type": "boolean"
+            },
+            "should_skip_rules": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "sms",
+                  "intercom",
+                  "custom"
+                ]
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "required": [
+                "body_format"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "update_a_company_teammate_group": {
+      "type": "object",
+      "required": [
+        "teammate_group_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "teammate_group_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "contacts": {
+              "type": "object",
+              "required": [
+                "access"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "access": {
+                  "type": "string",
+                  "enum": [
+                    "all",
+                    "contact_groups",
+                    "contact_lists",
+                    "none"
+                  ]
+                },
+                "contact_group_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "contact_list_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "oneOf": [
+                {
+                  "properties": {
+                    "access": {
+                      "enum": [
+                        "contact_groups"
+                      ]
+                    }
+                  },
+                  "not": {
+                    "required": [
+                      "contact_list_ids"
+                    ]
+                  }
+                },
+                {
+                  "properties": {
+                    "access": {
+                      "enum": [
+                        "contact_lists"
+                      ]
+                    }
+                  },
+                  "not": {
+                    "required": [
+                      "contact_group_ids"
+                    ]
+                  }
+                },
+                {
+                  "properties": {
+                    "access": {
+                      "enum": [
+                        "all",
+                        "none"
+                      ]
+                    }
+                  },
+                  "not": {
+                    "anyOf": [
+                      {
+                        "required": [
+                          "contact_group_ids"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "contact_list_ids"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "create_company_teammate_group": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "contacts": {
+              "type": "object",
+              "required": [
+                "access"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "access": {
+                  "type": "string",
+                  "enum": [
+                    "all",
+                    "contact_groups",
+                    "contact_lists",
+                    "none"
+                  ]
+                },
+                "contact_group_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "contact_list_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "oneOf": [
+                {
+                  "properties": {
+                    "access": {
+                      "enum": [
+                        "contact_groups"
+                      ]
+                    }
+                  },
+                  "not": {
+                    "required": [
+                      "contact_list_ids"
+                    ]
+                  }
+                },
+                {
+                  "properties": {
+                    "access": {
+                      "enum": [
+                        "contact_lists"
+                      ]
+                    }
+                  },
+                  "not": {
+                    "required": [
+                      "contact_group_ids"
+                    ]
+                  }
+                },
+                {
+                  "properties": {
+                    "access": {
+                      "enum": [
+                        "all",
+                        "none"
+                      ]
+                    }
+                  },
+                  "not": {
+                    "anyOf": [
+                      {
+                        "required": [
+                          "contact_group_ids"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "contact_list_ids"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
     "merge_contacts": {
       "description": "The target-present branch assumes target_contact_id is omitted from contact_ids; the CLI exposes that provider-valid form explicitly.",
       "type": "object",

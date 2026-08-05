@@ -8,6 +8,8 @@
       "fixture_to"
     ],
     "body": "fixture_body",
+    "type": "email",
+    "body_format": "markdown",
     "external_id": "fixture_external_id",
     "created_at": 1,
     "metadata": {
@@ -25,6 +27,8 @@
         "fixture_to"
       ],
       "body": "fixture_body",
+      "type": "email",
+      "body_format": "markdown",
       "external_id": "fixture_external_id",
       "created_at": 1,
       "metadata": {
