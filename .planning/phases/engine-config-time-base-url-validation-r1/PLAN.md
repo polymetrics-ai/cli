@@ -59,8 +59,50 @@ is recorded in `TDD-LEDGER.md`.
 | `AddCredential` validates only a local `path` special case before `vault.Put` and state save | `internal/app/app.go` |
 | The declarative engine compiles `spec.json` but `newRuntime` only materializes defaults/interpolates | `internal/connectors/engine/{bundle,read}.go` |
 | `format` is currently accepted as an annotation, not evaluated by `Schema.Validate` | `internal/connectors/engine/schema.go` |
-| Current `spec.json` declarations contain URI/date/date-time formats, 2 patterns, and 16 enums | read-only inventory over `internal/connectors/defs/*/spec.json` |
-| No current `spec.json` declares numeric/string bound keywords (`minimum`, `maximum`, `minLength`, `maxLength`) | same inventory |
+| Current `spec.json` declarations contain 554 URI, 81 date-time, and 20 date formats; 2 patterns; and 16 enums | read-only inventory over every `internal/connectors/defs/*/spec.json` root property |
+| No constrained property is a secret | same inventory (`x-secret: true` count: 0) |
+| No current spec, including nested nodes, declares a numeric, string, array, or object bound keyword | recursive read-only inventory over every `spec.json` (`minimum`, `maximum`, `exclusive*`, `minLength`, `maxLength`, `multipleOf`, `minItems`, `maxItems`, `minProperties`, `maxProperties`: 0) |
+
+## Post-red survey and selected seam
+
+The complete currently declared, credential-map-compatible constraint set is:
+
+| Family | Declarations | Examples used by tests |
+| --- | ---: | --- |
+| `format: uri` | 554 | `github.base_url` |
+| `format: date-time` | 81 | `github.since` |
+| `format: date` | 20 | `google-search-console.start_date` |
+| `pattern` | 2 | `agilecrm.domain`, `dockerhub.docker_username` |
+| `enum` | 16 | `coin-api.environment`, `postgres.mode` |
+
+`postgres.mode` is deliberately included because Postgres is a Tier-3 native
+that embeds `engine.Base`; this proves the seam applies to both declarative
+and Base-backed connectors rather than only `engine.Connector`.
+
+The selected design is deliberately targeted rather than a call to the
+existing full-instance `Schema.Validate`:
+
+1. Compile and retain each property's declared `format`, alongside the
+   already compiled pattern and enum.
+2. Add a `Schema` configuration validator that visits only supplied top-level
+   `map[string]string` fields with a declared `format`, pattern, or enum.
+   It sorts keys for deterministic first errors and returns an error that
+   names the field and the actual declared constraint without echoing input.
+3. Add an optional connector contract whose `HasConfigurationConstraints`
+   signal distinguishes a real declaration from an unconditional no-op. The
+   app invokes the validator only when that signal is true. `engine.Connector`
+   and `engine.Base` both expose the contract from the same compiled schema.
+4. Invoke that contract in `App.AddCredential` after existing local-path
+   safety checks and before ID generation, vault writes, or state mutation.
+
+This intentionally does **not** enforce `required`, types, unknown fields,
+defaults, or secret values: the accepted credential configuration is a flat
+string map today, and those would alter existing behavior or cross the
+storage/secret ownership boundary. Bounds are also deliberately omitted:
+there are zero such declarations in every current `spec.json`, and the only
+already-supported bounds (`minItems`/`maxItems`) describe JSON array instances,
+not scalar credential-map strings. A future declaration requires a dedicated,
+typed configuration representation and a test before it can claim support.
 
 ## Planned sequence
 
@@ -69,10 +111,11 @@ is recorded in `TDD-LEDGER.md`.
 2. **Survey — establish the actual declared constraint set.** Record every
    constraint family and whether it is configuration-shaped. Do not invent
    validation rules for keywords absent from connector specs.
-3. **Design after red evidence.** Reuse the loaded engine schema rather than
-   duplicate connector-specific rules. The selected seam must let a connector
-   with no declared configuration constraint remain genuinely unconstrained;
-   it must not make a no-op forwarder look like validation coverage.
+3. **Design after red evidence — complete.** Reuse the loaded engine schema
+   rather than duplicate connector-specific rules. The optional validator
+   advertises actual declarations through `HasConfigurationConstraints`, so a
+   constraint-free connector remains genuinely unconstrained rather than
+   looking auto-satisfied by a no-op forwarder.
 4. **Green — enforce only the surveyed declarative constraints at
    `AddCredential`, before the vault or state mutation.** Errors must be
    field/constraint-specific and must never echo values.

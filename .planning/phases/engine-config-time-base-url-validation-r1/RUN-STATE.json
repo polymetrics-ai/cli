@@ -1,7 +1,7 @@
 {
   "phase": "engine-config-time-base-url-validation-r1",
   "branch": "fm/cli-engine-config-time-base-url-validation-r1",
-  "status": "planning",
+  "status": "red-expanded",
   "adapter": "pi-project-local",
   "runtime_fallback": "manual GSD universal loop; programming-loop command is unavailable in the adapter",
   "owned_paths": [

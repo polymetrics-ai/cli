@@ -160,6 +160,125 @@ func TestAddCredentialRejectsInvalidGitHubBaseURLAtConfigurationTime(t *testing.
 	}
 }
 
+func TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+
+	tests := []struct {
+		name      string
+		connector string
+		field     string
+		value     string
+		want      []string
+	}{
+		{
+			name:      "date-time",
+			connector: "github",
+			field:     "since",
+			value:     "not-a-date-time",
+			want:      []string{"since", `format "date-time"`},
+		},
+		{
+			name:      "date",
+			connector: "google-search-console",
+			field:     "start_date",
+			value:     "2026-02-30",
+			want:      []string{"start_date", `format "date"`},
+		},
+		{
+			name:      "agilecrm pattern",
+			connector: "agilecrm",
+			field:     "domain",
+			value:     "not.allowed",
+			want:      []string{"domain", "pattern"},
+		},
+		{
+			name:      "docker hub pattern",
+			connector: "dockerhub",
+			field:     "docker_username",
+			value:     "Uppercase",
+			want:      []string{"docker_username", "pattern"},
+		},
+		{
+			name:      "engine connector enum",
+			connector: "coin-api",
+			field:     "environment",
+			value:     "preview",
+			want:      []string{"environment", "enum"},
+		},
+		{
+			name:      "tier three base enum",
+			connector: "postgres",
+			field:     "mode",
+			value:     "preview",
+			want:      []string{"mode", "enum"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := a.AddCredential(ctx, app.AddCredentialRequest{
+				Name:      "invalid-" + strings.ReplaceAll(tt.name, " ", "-"),
+				Connector: tt.connector,
+				Config:    map[string]string{tt.field: tt.value},
+			})
+			if err == nil {
+				t.Fatalf("AddCredential(%s.%s) accepted %q", tt.connector, tt.field, tt.value)
+			}
+			for _, want := range tt.want {
+				if !strings.Contains(err.Error(), want) {
+					t.Fatalf("AddCredential(%s.%s) error = %q, want %q", tt.connector, tt.field, err, want)
+				}
+			}
+			if strings.Contains(err.Error(), tt.value) {
+				t.Fatalf("AddCredential(%s.%s) error unexpectedly echoes configuration value: %q", tt.connector, tt.field, err)
+			}
+			if credentials := a.ListCredentials(); len(credentials) != 0 {
+				t.Fatalf("ListCredentials() = %#v, want no persisted credentials after validation failure", credentials)
+			}
+		})
+	}
+}
+
+func TestAddCredentialLeavesConstraintFreeConnectorUnconstrained(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+
+	credential, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "faker-unconstrained",
+		Connector: "faker",
+		Config: map[string]string{
+			"count":     "not-a-number",
+			"extra_key": "still accepted",
+		},
+	})
+	if err != nil {
+		t.Fatalf("AddCredential(faker) error = %v, want existing unconstrained behavior", err)
+	}
+	if credential.Connector != "faker" {
+		t.Fatalf("AddCredential(faker).Connector = %q, want faker", credential.Connector)
+	}
+	if credentials := a.ListCredentials(); len(credentials) != 1 || credentials[0].Name != "faker-unconstrained" {
+		t.Fatalf("ListCredentials() = %#v, want one unconstrained faker credential", credentials)
+	}
+}
+
 func TestBitbucketReverseETLClosedSchemasDoNotReceiveInternalPlanFields(t *testing.T) {
 	ctx := context.Background()
 	root := t.TempDir()

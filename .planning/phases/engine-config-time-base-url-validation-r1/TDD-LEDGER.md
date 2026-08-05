@@ -35,3 +35,50 @@ FAIL
 The red test uses the real bundled GitHub definition, whose `base_url` has
 `"format": "uri"`; it confirms the failure happens at `AddCredential`, before
 any runtime request exists.
+
+### Constraint survey after R1
+
+The read-only inventory found 673 top-level constrained configuration fields:
+554 `uri`, 81 `date-time`, 20 `date`, 2 patterns, and 16 enums. All constrained
+fields are non-secret. The recursive inventory found no declared numeric,
+string, array, or object bounds anywhere in the current connector specs.
+
+The next red test group will use real bundle fields for every supported family:
+GitHub `base_url` (URI) and `since` (date-time), Google Search Console
+`start_date` (date), AgileCRM `domain` and Docker Hub `docker_username`
+(patterns), CoinAPI `environment` and Tier-3 Postgres `mode` (enums). It will
+also prove an unconstrained GitHub field remains accepted despite unrelated
+`required` declarations, guarding against accidentally calling full-schema
+validation on the flat credential map.
+
+### R2–R6 — surveyed constraint families and compatibility guard
+
+Status: red-confirmed
+
+Before production edits, the focused app test showed every currently declared
+constraint family was accepted at the credential boundary. The focused engine
+test did not compile because the deliberately absent configuration-validation
+API was named by the tests first.
+
+```text
+$ go test ./internal/connectors/engine -run '^(TestSchemaValidateConfigurationAppliesDeclaredConstraintsOnly|TestSchemaWithoutConfigurationConstraintsIsNotAdvertised)$' -count=1
+# polymetrics.ai/internal/connectors/engine [polymetrics.ai/internal/connectors/engine.test]
+configuration_validation_test.go:25:10: sch.HasConfigurationConstraints undefined
+configuration_validation_test.go:55:15: sch.ValidateConfiguration undefined
+FAIL    polymetrics.ai/internal/connectors/engine [build failed]
+
+$ go test ./internal/app -run '^(TestAddCredentialRejectsInvalidGitHubBaseURLAtConfigurationTime|TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime|TestAddCredentialLeavesConstraintFreeConnectorUnconstrained)$' -count=1
+--- FAIL: TestAddCredentialRejectsInvalidGitHubBaseURLAtConfigurationTime
+    AddCredential() accepted GitHub base_url that violates spec format uri
+--- FAIL: TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime
+    date-time: AddCredential(github.since) accepted "not-a-date-time"
+    date: AddCredential(google-search-console.start_date) accepted "2026-02-30"
+    agilecrm pattern: AddCredential(agilecrm.domain) accepted "not.allowed"
+    docker hub pattern: AddCredential(dockerhub.docker_username) accepted "Uppercase"
+    engine connector enum: AddCredential(coin-api.environment) accepted "preview"
+    tier three base enum: AddCredential(postgres.mode) accepted "preview"
+FAIL    polymetrics.ai/internal/app
+```
+
+`TestAddCredentialLeavesConstraintFreeConnectorUnconstrained` was green in
+the same run, preserving the control case before the new engine seam exists.
