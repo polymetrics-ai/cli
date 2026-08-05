@@ -385,11 +385,12 @@ func TestBundleMetadataMatchesExecutableSurface(t *testing.T) {
 
 func TestWriteActionsSendDeclaredRecordQueries(t *testing.T) {
 	tests := []struct {
-		name      string
-		action    string
-		record    connectors.Record
-		wantPath  string
-		wantQuery map[string]string
+		name             string
+		action           string
+		record           connectors.Record
+		requiresApproval bool
+		wantPath         string
+		wantQuery        map[string]string
 	}{
 		{
 			name:   "transfer calendar ownership",
@@ -399,7 +400,8 @@ func TestWriteActionsSendDeclaredRecordQueries(t *testing.T) {
 				"new_data_owner":   "owner@example.invalid",
 				"use_admin_access": true,
 			},
-			wantPath: "/calendar/v3/calendars/calendar-fixture/transferOwnership",
+			requiresApproval: true,
+			wantPath:         "/calendar/v3/calendars/calendar-fixture/transferOwnership",
 			wantQuery: map[string]string{
 				"newDataOwner":   "owner@example.invalid",
 				"useAdminAccess": "true",
@@ -446,10 +448,15 @@ func TestWriteActionsSendDeclaredRecordQueries(t *testing.T) {
 			}))
 			defer closeServer()
 
-			result, err := conn.Write(context.Background(), connectors.WriteRequest{
+			records := []connectors.Record{tt.record}
+			req := connectors.WriteRequest{
 				Action: tt.action,
 				Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
-			}, []connectors.Record{tt.record})
+			}
+			if tt.requiresApproval {
+				req = approvedFixtureWriteRequest(t, conn, req, records)
+			}
+			result, err := conn.Write(context.Background(), req, records)
 			if err != nil {
 				t.Fatalf("Write: %v", err)
 			}
@@ -458,6 +465,53 @@ func TestWriteActionsSendDeclaredRecordQueries(t *testing.T) {
 			}
 		})
 	}
+}
+
+func approvedFixtureWriteRequest(t *testing.T, conn *engine.Connector, req connectors.WriteRequest, records []connectors.Record) connectors.WriteRequest {
+	t.Helper()
+	authority, err := connectors.NewFixtureWriteApprovalAuthority()
+	if err != nil {
+		t.Fatalf("NewFixtureWriteApprovalAuthority: %v", err)
+	}
+	req.Config.CredentialRevision, err = authority.CredentialRevision("google-calendar-query-shape-fixture", req.Config.Secrets)
+	if err != nil {
+		t.Fatalf("CredentialRevision: %v", err)
+	}
+	req.Config.ConfigurationDigest, err = authority.ConfigurationDigest("google-calendar-query-shape-fixture", req.Config.Config)
+	if err != nil {
+		t.Fatalf("ConfigurationDigest: %v", err)
+	}
+	req.Config.WriteApprovalScope = connectors.WriteApprovalScopeFixture
+
+	preview, err := conn.DryRunWrite(context.Background(), req, records)
+	if err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	const approvalToken = "google-calendar-query-shape-approval"
+	confirmation := connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+	grant, err := authority.IssueWriteGrant(connectors.WriteApprovalGrantRequest{
+		PlanID:        "rplan_google_calendar_query_shape_fixture",
+		PlanHash:      strings.Repeat("a", 64),
+		PreviewDigest: preview.Digest,
+		ApprovalToken: approvalToken,
+		Target:        preview.ApprovalTarget,
+		Confirmation:  confirmation,
+	})
+	if err != nil {
+		t.Fatalf("IssueWriteGrant: %v", err)
+	}
+	req.Approval, err = authority.VerifyWriteGrant(grant, connectors.WriteApprovalExpectation{
+		PlanID:        grant.PlanID,
+		PlanHash:      grant.PlanHash,
+		PreviewDigest: grant.PreviewDigest,
+		ApprovalToken: approvalToken,
+		Target:        grant.Target,
+		Confirmation:  grant.Confirmation,
+	})
+	if err != nil {
+		t.Fatalf("VerifyWriteGrant: %v", err)
+	}
+	return req
 }
 
 func TestEventsInitialReadDoesNotApplyImplicitCutoff(t *testing.T) {
