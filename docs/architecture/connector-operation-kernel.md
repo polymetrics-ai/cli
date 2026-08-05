@@ -24,7 +24,8 @@ metadata use `covered_by.direct_read` or `covered_by.direct_reads`. Blocked
 allowlist.
 
 Operation execution is opt-in per intent, not blanket-enabled: an operation runs
-only through an intent whose executor exists. Direct reads and bounded binary
+only through an intent whose executor exists. Direct reads, direct writes that
+traverse the plan → preview → approval → execute lifecycle, and bounded binary
 downloads have executors today; GraphQL, XML, local git, local file, browser,
 and composite operations do not, and remain blocked.
 
@@ -76,6 +77,11 @@ decides before any network or filesystem access:
 
 - `intent:"direct_read"` with `availability:"implemented"` executes as a bounded
   REST read under the command's `output_policy`.
+- `intent:"direct_write"` with `availability:"implemented"` executes one bounded
+  `rest_write` only through the connector-command plan → preview → approval →
+  execute lifecycle. The command and operation must declare matching, explicit
+  output policies; their intent-specific choices are defined in the
+  [connector authoring conventions](../migration/conventions.md#2-authoring-rules).
 - `intent:"binary_download"` with `availability:"implemented"` executes through
   `connectors.OperationBinaryDownloader`, which the declarative engine satisfies
   with `engine.OperationBinaryDownload`. The endpoint must be a single

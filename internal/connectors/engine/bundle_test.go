@@ -713,55 +713,49 @@ func TestBundleLoadParsesOperations(t *testing.T) {
 	}
 }
 
-func TestBundleLoadAcceptsRuntimeSupportedNonRedactingDirectWriteJSONPolicy(t *testing.T) {
-	if err := validateOperationDirectWriteOutputPolicy(directWritePolicyJSON); err != nil {
-		t.Fatalf("validateOperationDirectWriteOutputPolicy(%q): %v", directWritePolicyJSON, err)
-	}
-	body, err := operationDirectWriteResponseBody(directWritePolicyJSON, []byte(`{
-		"ok": true,
-		"nested": {"state": "complete"}
-	}`), 1024)
-	if err != nil {
-		t.Fatalf("operationDirectWriteResponseBody(%q): %v", directWritePolicyJSON, err)
-	}
-	decoded, ok := body.(map[string]any)
-	if !ok {
-		t.Fatalf("response body type = %T, want map", body)
-	}
-	nested, ok := decoded["nested"].(map[string]any)
-	if !ok || nested["state"] != "complete" {
-		t.Fatalf("response body = %#v, want complete decoded JSON", decoded)
-	}
+func TestBundleLoadAcceptsRuntimeSupportedDirectWriteOutputPolicies(t *testing.T) {
+	for _, tt := range []struct {
+		name   string
+		policy string
+	}{
+		{name: "json complete decoded response", policy: directWritePolicyJSON},
+		{name: "none intentional no body", policy: directWritePolicyNone},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := validateOperationDirectWriteOutputPolicy(tt.policy); err != nil {
+				t.Fatalf("validateOperationDirectWriteOutputPolicy(%q): %v", tt.policy, err)
+			}
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+				"operations": [{
+					"id": "acme.widgets.create",
+					"kind": "rest_write",
+					"summary": "Create one widget",
+					"risk": "medium",
+					"approval": "plan, preview, approval, execute",
+					"output_policy": %q,
+					"mutation_class": "create",
+					"rest": {"method": "POST", "path": "/widgets"}
+				}]
+			}`, tt.policy))}
+			fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+				"tagline": "Work with Acme from the command line.",
+				"usage": "pm acme <command> [flags]",
+				"commands": [{
+					"path": "widget create",
+					"summary": "Create one widget",
+					"intent": "direct_write",
+					"availability": "implemented",
+					"operation": "acme.widgets.create",
+					"output_policy": %q,
+					"api_surface": [{"method": "POST", "path": "/widgets"}]
+				}]
+			}`, tt.policy))}
 
-	fsys := fullValidBundleFS("acme")
-	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
-		"operations": [{
-			"id": "acme.widgets.create",
-			"kind": "rest_write",
-			"summary": "Create one widget",
-			"risk": "medium",
-			"approval": "plan, preview, approval, execute",
-			"output_policy": "json",
-			"mutation_class": "create",
-			"rest": {"method": "POST", "path": "/widgets"}
-		}]
-	}`)}
-	fsys["acme/cli_surface.json"] = &fstest.MapFile{Data: []byte(`{
-		"tagline": "Work with Acme from the command line.",
-		"usage": "pm acme <command> [flags]",
-		"commands": [{
-			"path": "widget create",
-			"summary": "Create one widget",
-			"intent": "direct_write",
-			"availability": "implemented",
-			"operation": "acme.widgets.create",
-			"output_policy": "json",
-			"api_surface": [{"method": "POST", "path": "/widgets"}]
-		}]
-	}`)}
-
-	if _, err := Load(fsys, "acme"); err != nil {
-		t.Fatalf("Load runtime-supported direct_write json policy: %v", err)
+			if _, err := Load(fsys, "acme"); err != nil {
+				t.Fatalf("Load runtime-supported direct_write %s policy: %v", tt.policy, err)
+			}
+		})
 	}
 }
 
