@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"regexp/syntax"
 	"sort"
 	"strconv"
 	"strings"
@@ -35,6 +36,7 @@ type schemaNode struct {
 	oneOf                []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
+	patternDomain        regexpStringDomain
 	minProperties        int
 	hasMinProperties     bool
 	additionalProperties bool // true unless explicitly set to false
@@ -142,6 +144,11 @@ type RequestBodyInput struct {
 
 type dynamicRequestBodyValue struct{}
 
+type regexpStringDomain struct {
+	acceptsEmpty      bool
+	mayAcceptNonempty bool
+}
+
 func (s *Schema) RequiredMappingPaths() ([]string, error) {
 	if s == nil || s.node == nil {
 		return nil, fmt.Errorf("schema is nil")
@@ -246,11 +253,11 @@ func (s *Schema) ValidateRequestBodyInput(pointer string, input RequestBodyInput
 			return err
 		}
 	}
-	if err := node.validateRequestInputEnumDomain(pointer, input); err != nil {
+	if err := node.validateRequestInputDomain(pointer, input); err != nil {
 		return err
 	}
 	if itemNode != nil {
-		if err := itemNode.validateRequestInputEnumDomain(itemPointer, RequestBodyInput{Type: "string", Required: input.Required, arrayItem: true}); err != nil {
+		if err := itemNode.validateRequestInputDomain(itemPointer, RequestBodyInput{Type: "string", Required: input.Required, arrayItem: true}); err != nil {
 			return err
 		}
 	}
@@ -285,7 +292,7 @@ func inputTypeAccepted(info SchemaPathInfo, inputType string) bool {
 	}
 }
 
-func (n *schemaNode) validateRequestInputEnumDomain(pointer string, input RequestBodyInput) error {
+func (n *schemaNode) validateRequestInputDomain(pointer string, input RequestBodyInput) error {
 	if input.Type == "enum" && len(input.Values) == 0 {
 		return fmt.Errorf("enum mapping %q has no declared input values", pointer)
 	}
@@ -306,18 +313,27 @@ func (n *schemaNode) validateRequestInputEnumDomain(pointer string, input Reques
 		return nil
 	}
 	constraints := n.mappingEnumConstraints()
-	if len(constraints) == 0 {
+	if len(constraints) > 0 {
+		for _, candidate := range constraints[0] {
+			if !requestInputDomainAcceptsValue(input, candidate) {
+				continue
+			}
+			if err := n.validate(candidate, ""); err == nil {
+				return nil
+			}
+		}
+		return fmt.Errorf("request mapping %q input domain has no values accepted by schema enum constraints", pointer)
+	}
+	if input.Type != "" && input.Type != "string" {
 		return nil
 	}
-	for _, candidate := range constraints[0] {
-		if !requestInputDomainAcceptsValue(input, candidate) {
+	for _, domain := range n.mappingPatternDomains() {
+		if domain.mayAcceptNonempty || domain.acceptsEmpty && requestInputDomainAcceptsValue(input, "") {
 			continue
 		}
-		if err := n.validate(candidate, ""); err == nil {
-			return nil
-		}
+		return fmt.Errorf("request mapping %q input domain has no values accepted by schema pattern constraints", pointer)
 	}
-	return fmt.Errorf("request mapping %q input domain has no values accepted by schema enum constraints", pointer)
+	return nil
 }
 
 func requestInputDomainAcceptsValue(input RequestBodyInput, value any) bool {
@@ -437,6 +453,77 @@ func (n *schemaNode) mappingEnumConstraints() [][]any {
 		out = append(out, branch.mappingEnumConstraints()...)
 	}
 	return out
+}
+
+func (n *schemaNode) mappingPatternDomains() []regexpStringDomain {
+	var out []regexpStringDomain
+	if n.pattern != nil {
+		out = append(out, n.patternDomain)
+	}
+	for _, branch := range n.allOf {
+		out = append(out, branch.mappingPatternDomains()...)
+	}
+	return out
+}
+
+func compileRegexpStringDomain(pattern string, compiled *regexp.Regexp) (regexpStringDomain, error) {
+	expr, err := syntax.Parse(pattern, syntax.Perl)
+	if err != nil {
+		return regexpStringDomain{}, err
+	}
+	program, err := syntax.Compile(expr.Simplify())
+	if err != nil {
+		return regexpStringDomain{}, err
+	}
+	domain := regexpStringDomain{acceptsEmpty: compiled.MatchString("")}
+	type pathState struct {
+		pc         uint32
+		consumed   bool
+		conditions syntax.EmptyOp
+	}
+	stack := []pathState{{pc: uint32(program.Start)}}
+	seen := map[pathState]bool{}
+	for len(stack) > 0 {
+		state := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		if seen[state] || int(state.pc) >= len(program.Inst) {
+			continue
+		}
+		seen[state] = true
+		instruction := program.Inst[state.pc]
+		switch instruction.Op {
+		case syntax.InstAlt, syntax.InstAltMatch:
+			stack = append(stack,
+				pathState{pc: instruction.Out, consumed: state.consumed, conditions: state.conditions},
+				pathState{pc: instruction.Arg, consumed: state.consumed, conditions: state.conditions},
+			)
+		case syntax.InstCapture, syntax.InstNop:
+			stack = append(stack, pathState{pc: instruction.Out, consumed: state.consumed, conditions: state.conditions})
+		case syntax.InstEmptyWidth:
+			stack = append(stack, pathState{pc: instruction.Out, consumed: state.consumed, conditions: state.conditions | syntax.EmptyOp(instruction.Arg)})
+		case syntax.InstRune, syntax.InstRune1, syntax.InstRuneAny, syntax.InstRuneAnyNotNL:
+			stack = append(stack, pathState{pc: instruction.Out, consumed: true, conditions: state.conditions})
+		case syntax.InstMatch:
+			if state.consumed || emptyRegexpMatchMayOccurInNonemptyInput(state.conditions) {
+				domain.mayAcceptNonempty = true
+				return domain, nil
+			}
+		case syntax.InstFail:
+		default:
+			domain.mayAcceptNonempty = true
+			return domain, nil
+		}
+	}
+	return domain, nil
+}
+
+func emptyRegexpMatchMayOccurInNonemptyInput(conditions syntax.EmptyOp) bool {
+	if conditions&syntax.EmptyWordBoundary != 0 && conditions&syntax.EmptyNoWordBoundary != 0 {
+		return false
+	}
+	requiresStart := conditions&(syntax.EmptyBeginLine|syntax.EmptyBeginText) != 0
+	requiresEnd := conditions&(syntax.EmptyEndLine|syntax.EmptyEndText) != 0
+	return !requiresStart || !requiresEnd
 }
 
 func (n *schemaNode) validateRequestInputCardinality(pointer string, input RequestBodyInput) error {
@@ -1177,7 +1264,12 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		if err != nil {
 			return nil, fmt.Errorf("compile schema: pattern %q: %w", pat, err)
 		}
+		domain, err := compileRegexpStringDomain(pat, re)
+		if err != nil {
+			return nil, fmt.Errorf("compile schema: pattern %q: %w", pat, err)
+		}
 		n.pattern = re
+		n.patternDomain = domain
 	}
 
 	if raw, ok := m["minProperties"]; ok {
