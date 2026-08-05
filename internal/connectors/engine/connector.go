@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 
 	"polymetrics.ai/internal/connectors"
 )
@@ -253,19 +252,15 @@ func operationRequestBodySchema(bundle Bundle, operation string) (*Schema, error
 }
 
 func operationRequestBodyContract(bundle Bundle, operation string) (OperationRequestBodyContract, error) {
-	op, err := findOperation(bundle, operation)
+	op, method, noBody, err := operationDirectReadSpec(bundle, operation)
 	if err != nil {
 		return OperationRequestBodyContract{}, err
 	}
-	if op.REST == nil {
-		return OperationRequestBodyContract{}, fmt.Errorf("operation %q has no REST request contract", operation)
-	}
-	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
 	contract := OperationRequestBodyContract{Method: method}
 	if method != http.MethodPost {
 		return contract, nil
 	}
-	if op.REST.Body != nil && op.REST.Body.None {
+	if noBody {
 		contract.None = true
 		return contract, nil
 	}

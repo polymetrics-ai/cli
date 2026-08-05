@@ -1626,7 +1626,7 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 
 	result, err := Run(context.Background(), connector, Request{
 		Path:  []string{"meetings", "integration-status"},
-		Flags: map[string][]string{"email": {"ada@example.com", "grace@example.com"}},
+		Flags: map[string][]string{"email": {"ada@example.com, grace@example.com"}},
 	}, func(connectors.Record) error {
 		t.Fatal("emit called for operation direct-read command")
 		return nil
@@ -1695,6 +1695,24 @@ func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
 			name:      "integer domain excludes fractional number enum",
 			rawSchema: `{"type":"object","properties":{"count":{"type":"number","enum":[1.5]}}}`,
 			flags:     []connectors.CommandSurfaceFlag{{Name: "count", Type: "integer", MapsTo: "/body/count"}},
+			want:      "input domain has no values accepted",
+		},
+		{
+			name:      "required string domain excludes empty enum",
+			rawSchema: `{"type":"object","required":["name"],"properties":{"name":{"type":"string","enum":[""]}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "/body/name", Required: true}},
+			want:      "input domain has no values accepted",
+		},
+		{
+			name:      "date-time format excludes invalid enum",
+			rawSchema: `{"type":"object","properties":{"timestamp":{"type":"string","enum":["not-a-date"]}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "timestamp", Type: "string", Format: "date-time", MapsTo: "/body/timestamp"}},
+			want:      "input domain has no values accepted",
+		},
+		{
+			name:      "string array cannot emit delimited enum item",
+			rawSchema: `{"type":"object","properties":{"labels":{"type":"array","items":{"type":"string","enum":["a,b"]}}}}`,
+			flags:     []connectors.CommandSurfaceFlag{{Name: "labels", Type: "string_array", MapsTo: "/body/labels"}},
 			want:      "input domain has no values accepted",
 		},
 		{
@@ -1776,6 +1794,38 @@ func TestPreflightValidatesOperationBodyMappings(t *testing.T) {
 				t.Fatalf("Preflight() error = %v, want containing %q", err, tt.want)
 			}
 		})
+	}
+}
+
+func TestPreflightRejectsOperationDirectReadDispatchKind(t *testing.T) {
+	const operation = "acme.widgets.create"
+	connector := engine.New(engine.Bundle{
+		Name: "acme",
+		Operations: []engine.OperationSpec{{
+			ID:           operation,
+			Kind:         "rest_write",
+			OutputPolicy: "json_redacted",
+			REST: &engine.RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/widgets",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{}}`),
+			},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "widgets create",
+			Intent:       "direct_read",
+			Availability: "implemented",
+			Operation:    operation,
+			APISurface:   []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: "/widgets"}},
+			OutputPolicy: "json_redacted",
+		}}},
+	}, nil)
+
+	err := Preflight(connector, []string{"widgets", "create"})
+	if err == nil || !strings.Contains(err.Error(), `got "rest_write"`) {
+		t.Fatalf("Preflight() error = %v, want rest_write dispatch rejection", err)
 	}
 }
 

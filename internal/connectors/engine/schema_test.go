@@ -514,10 +514,13 @@ func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
 		"additionalProperties":false,
 		"properties":{
 			"state":{"type":"string","enum":["open","paused"]},
+			"empty_only":{"type":"string","enum":[""]},
+			"timestamp":{"type":"string","enum":["not-a-date"]},
 			"whole":{"type":"number","enum":[1]},
 			"fractional":{"type":"number","enum":[1.5]},
 			"ids":{"type":"array","minItems":2,"maxItems":4,"items":{"type":"string"}},
 			"labels":{"type":"array","items":{"type":"string","enum":["alpha"]}},
+			"delimited_labels":{"type":"array","items":{"type":"string","enum":["a,b"]}},
 			"numeric_labels":{"type":"array","items":{"enum":[1]}},
 			"composed_numeric_labels":{"allOf":[{"items":{"enum":[1]}}]}
 		}
@@ -533,12 +536,15 @@ func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
 	}{
 		{name: "overlapping enum", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"closed", "open"}}},
 		{name: "disjoint enum", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"closed"}}, wantErr: true},
+		{name: "required string excludes empty enum", pointer: "/body/empty_only", input: RequestBodyInput{Type: "string", Required: true}, wantErr: true},
+		{name: "date-time format excludes invalid enum", pointer: "/body/timestamp", input: RequestBodyInput{Type: "string", Format: "date-time"}, wantErr: true},
 		{name: "integer intersects whole number enum", pointer: "/body/whole", input: RequestBodyInput{Type: "integer"}},
 		{name: "integer excludes fractional number enum", pointer: "/body/fractional", input: RequestBodyInput{Type: "integer"}, wantErr: true},
 		{name: "compatible array bounds", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MinItems: 1, MaxItems: 3}},
 		{name: "cli maximum below schema minimum", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MaxItems: 1}, wantErr: true},
 		{name: "cli minimum above schema maximum", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MinItems: 5}, wantErr: true},
 		{name: "string array intersects item enum", pointer: "/body/labels", input: RequestBodyInput{Type: "string_array"}},
+		{name: "string array excludes delimited item enum", pointer: "/body/delimited_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
 		{name: "string array excludes numeric item enum", pointer: "/body/numeric_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
 		{name: "string array excludes composed numeric item enum", pointer: "/body/composed_numeric_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
 	}

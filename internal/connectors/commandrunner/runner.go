@@ -401,9 +401,6 @@ func operationRequestBodyContract(connector connectors.Connector, cmd connectors
 		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read contract is unavailable: %v", err)}
 	}
 	operationMethod := strings.ToUpper(strings.TrimSpace(contract.Method))
-	if operationMethod != http.MethodGet && operationMethod != http.MethodPost {
-		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct_read operation requires GET or POST, got %s", operationMethod)}
-	}
 	surfaceMethod := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
 	if surfaceMethod != operationMethod {
 		return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("api_surface method %s does not match operation method %s", surfaceMethod, operationMethod)}
@@ -509,7 +506,15 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 			continue
 		}
 		if bodyContract.Schema != nil {
-			input := engine.RequestBodyInput{Type: flag.Type, Values: flag.Values, MinItems: flag.MinItems, MaxItems: flag.MaxItems}
+			input := engine.RequestBodyInput{
+				Type:       flag.Type,
+				Values:     flag.Values,
+				Format:     flag.Format,
+				AllowEmpty: flag.AllowEmpty,
+				Required:   flag.Required,
+				MinItems:   flag.MinItems,
+				MaxItems:   flag.MaxItems,
+			}
 			if err := bodyContract.Schema.ValidateRequestBodyInput(flag.MapsTo, input); err != nil {
 				return nil, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("flag --%s: %v", flag.Name, err)}
 			}
@@ -825,24 +830,11 @@ func validateRequiredCommandFlags(cmd connectors.CommandSurfaceCommand, flags ma
 		if err != nil {
 			return err
 		}
-		if commandValueEmpty(value) {
+		if engine.CommandInputValueEmpty(value) {
 			return missingRequiredFlagError(cmd, flag.Name)
 		}
 	}
 	return nil
-}
-
-func commandValueEmpty(value any) bool {
-	switch typed := value.(type) {
-	case nil:
-		return true
-	case string:
-		return strings.TrimSpace(typed) == ""
-	case []string:
-		return len(typed) == 0
-	default:
-		return false
-	}
 }
 
 func missingRequiredFlagError(cmd connectors.CommandSurfaceCommand, name string) error {
@@ -883,20 +875,16 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 }
 
 func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error {
-	switch flag.Format {
-	case "":
-		return nil
-	case "date-time":
-		if _, err := time.Parse(time.RFC3339, value); err != nil {
-			return fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flag.Name, value)
-		}
-		return nil
-	default:
+	if !engine.CommandInputFormatSupported(flag.Format) {
 		return &BlockedCommandError{
 			Command: "unknown",
 			Reason:  fmt.Sprintf("flag --%s has unsupported format %q", flag.Name, flag.Format),
 		}
 	}
+	if engine.CommandInputFormatAccepts(flag.Format, value) {
+		return nil
+	}
+	return fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flag.Name, value)
 }
 
 func directReadOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]string) (map[string]string, map[string]string, error) {
@@ -1279,15 +1267,7 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 		}
 		return parsed, nil
 	case "string_array":
-		var out []string
-		for _, raw := range clean {
-			for _, item := range strings.Split(raw, ",") {
-				item = strings.TrimSpace(item)
-				if item != "" {
-					out = append(out, item)
-				}
-			}
-		}
+		out := engine.ParseStringArrayInput(clean)
 		// Bounded here as well as in the body schema: the schema fires on the
 		// assembled body, this fires on the flag the user typed, so the error can
 		// name it.

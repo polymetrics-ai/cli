@@ -845,6 +845,27 @@ func TestCLISurfaceOperationBodyMappingsUseEffectiveRuntimeShape(t *testing.T) {
 			wantFindings: true,
 		},
 		{
+			name:         "required string domain excludes empty enum",
+			rawSchema:    `{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string","enum":[""]}}}`,
+			flags:        []engine.CLIFlag{{Name: "name", Type: "string", MapsTo: "/body/name", Required: true}},
+			wantFinding:  "input domain has no values accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "date-time format excludes invalid enum",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"timestamp":{"type":"string","enum":["not-a-date"]}}}`,
+			flags:        []engine.CLIFlag{{Name: "timestamp", Type: "string", Format: "date-time", MapsTo: "/body/timestamp"}},
+			wantFinding:  "input domain has no values accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "string array cannot emit delimited enum item",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"labels":{"type":"array","items":{"type":"string","enum":["a,b"]}}}}`,
+			flags:        []engine.CLIFlag{{Name: "labels", Type: "string_array", MapsTo: "/body/labels"}},
+			wantFinding:  "input domain has no values accepted",
+			wantFindings: true,
+		},
+		{
 			name:         "incompatible string-array cardinality",
 			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"ids":{"type":"array","minItems":2,"items":{"type":"string"}}}}`,
 			flags:        []engine.CLIFlag{{Name: "ids", Type: "string_array", MaxItems: 1, MapsTo: "/body/ids"}},

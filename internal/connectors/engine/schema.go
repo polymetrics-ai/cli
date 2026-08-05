@@ -8,6 +8,9 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
+
+	"polymetrics.ai/internal/safety"
 )
 
 // Schema is a compiled instance of the engine's minimal draft-07 subset. It is
@@ -127,10 +130,14 @@ type SchemaPathInfo struct {
 }
 
 type RequestBodyInput struct {
-	Type     string
-	Values   []string
-	MinItems int
-	MaxItems int
+	Type       string
+	Values     []string
+	Format     string
+	AllowEmpty *bool
+	Required   bool
+	MinItems   int
+	MaxItems   int
+	arrayItem  bool
 }
 
 type dynamicRequestBodyValue struct{}
@@ -243,7 +250,7 @@ func (s *Schema) ValidateRequestBodyInput(pointer string, input RequestBodyInput
 		return err
 	}
 	if itemNode != nil {
-		if err := itemNode.validateRequestInputEnumDomain(itemPointer, RequestBodyInput{Type: "string"}); err != nil {
+		if err := itemNode.validateRequestInputEnumDomain(itemPointer, RequestBodyInput{Type: "string", Required: input.Required, arrayItem: true}); err != nil {
 			return err
 		}
 	}
@@ -282,6 +289,18 @@ func (n *schemaNode) validateRequestInputEnumDomain(pointer string, input Reques
 	if input.Type == "enum" && len(input.Values) == 0 {
 		return fmt.Errorf("enum mapping %q has no declared input values", pointer)
 	}
+	if input.Type == "enum" {
+		hasEmittableValue := false
+		for _, candidate := range input.Values {
+			if requestInputDomainAcceptsValue(input, candidate) {
+				hasEmittableValue = true
+				break
+			}
+		}
+		if !hasEmittableValue {
+			return fmt.Errorf("enum mapping %q has no values the CLI can emit", pointer)
+		}
+	}
 	constraints := n.mappingEnumConstraints()
 	if len(constraints) == 0 {
 		return nil
@@ -300,11 +319,11 @@ func (n *schemaNode) validateRequestInputEnumDomain(pointer string, input Reques
 func requestInputDomainAcceptsValue(input RequestBodyInput, value any) bool {
 	switch input.Type {
 	case "", "string":
-		_, ok := value.(string)
-		return ok
+		candidate, ok := value.(string)
+		return ok && requestInputStringAcceptsValue(input, candidate)
 	case "enum":
 		candidate, ok := value.(string)
-		if !ok {
+		if !ok || !requestInputStringAcceptsValue(input, candidate) {
 			return false
 		}
 		for _, accepted := range input.Values {
@@ -314,20 +333,85 @@ func requestInputDomainAcceptsValue(input RequestBodyInput, value any) bool {
 		}
 		return false
 	case "integer":
-		return typeMatches(value, []string{"integer"})
+		return input.Format == "" && typeMatches(value, []string{"integer"})
 	case "boolean":
-		return typeMatches(value, []string{"boolean"})
+		return input.Format == "" && typeMatches(value, []string{"boolean"})
 	case "string_array":
 		elements, ok := arrayElements(value)
-		if !ok || input.MinItems > 0 && len(elements) < input.MinItems || input.MaxItems > 0 && len(elements) > input.MaxItems {
+		if !ok || input.Required && len(elements) == 0 || input.MinItems > 0 && len(elements) < input.MinItems || input.MaxItems > 0 && len(elements) > input.MaxItems {
 			return false
 		}
 		for _, element := range elements {
-			if _, ok := element.(string); !ok {
+			candidate, ok := element.(string)
+			if !ok || !stringArrayItemEmittable(candidate) {
 				return false
 			}
 		}
 		return true
+	default:
+		return false
+	}
+}
+
+func requestInputStringAcceptsValue(input RequestBodyInput, value string) bool {
+	if safety.RejectDangerousChars(value, "request input") != nil {
+		return false
+	}
+	if input.arrayItem && !stringArrayItemEmittable(value) {
+		return false
+	}
+	empty := CommandInputValueEmpty(value)
+	if input.Required && empty {
+		return false
+	}
+	if input.AllowEmpty != nil && empty {
+		return *input.AllowEmpty
+	}
+	return CommandInputFormatAccepts(input.Format, value)
+}
+
+func stringArrayItemEmittable(value string) bool {
+	items := ParseStringArrayInput([]string{value})
+	return len(items) == 1 && items[0] == value
+}
+
+func ParseStringArrayInput(values []string) []string {
+	var out []string
+	for _, raw := range values {
+		for _, item := range strings.Split(raw, ",") {
+			item = strings.TrimSpace(item)
+			if item != "" {
+				out = append(out, item)
+			}
+		}
+	}
+	return out
+}
+
+func CommandInputValueEmpty(value any) bool {
+	switch typed := value.(type) {
+	case nil:
+		return true
+	case string:
+		return strings.TrimSpace(typed) == ""
+	case []string:
+		return len(typed) == 0
+	default:
+		return false
+	}
+}
+
+func CommandInputFormatSupported(format string) bool {
+	return format == "" || format == "date-time"
+}
+
+func CommandInputFormatAccepts(format, value string) bool {
+	switch format {
+	case "":
+		return true
+	case "date-time":
+		_, err := time.Parse(time.RFC3339, strings.TrimSpace(value))
+		return err == nil
 	default:
 		return false
 	}

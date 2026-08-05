@@ -30,38 +30,12 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err := ctx.Err(); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	op, err := findOperation(b, req.Operation)
-	if err != nil {
-		return connectors.DirectReadResult{}, err
-	}
 	// provider_search shares this executor deliberately: its response bounding,
 	// clamping, redaction and output-policy handling are the same as any other
 	// bounded read. What differs is the stricter front half, which is enforced at
 	// bundle load (validateProviderSearchSemantics), not here.
-	if (op.Kind != "rest_read" && op.Kind != "provider_search") || op.REST == nil {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
-	}
-	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
-	if method != http.MethodGet && method != http.MethodPost {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
-	}
-	if op.Kind == "provider_search" && method != http.MethodPost {
-		return connectors.DirectReadResult{}, fmt.Errorf("provider search requires POST, got %s", method)
-	}
-	if isAbsoluteHTTPURL(op.REST.Path) {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
-	}
-	noBody := op.REST.Body != nil && op.REST.Body.None
-	if method == http.MethodPost && !noBody && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST requires application/json content_type")
-	}
-	if method == http.MethodPost && !noBody && len(op.REST.BodySchema) == 0 {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST requires body_schema")
-	}
-	if op.REST.MaxBytes <= 0 {
-		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires positive max_bytes")
-	}
-	if err := requireOperationDirectReadEndpoint(b, method, op.REST.Path); err != nil {
+	op, method, _, err := operationDirectReadSpec(b, req.Operation)
+	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	cfg := materializeConfigDefaults(b, req.Config)
@@ -217,6 +191,40 @@ func findOperation(b Bundle, id string) (OperationSpec, error) {
 		}
 	}
 	return OperationSpec{}, fmt.Errorf("operation %q not found in bundle %q", id, b.Name)
+}
+
+func operationDirectReadSpec(b Bundle, operation string) (OperationSpec, string, bool, error) {
+	op, err := findOperation(b, operation)
+	if err != nil {
+		return OperationSpec{}, "", false, err
+	}
+	if (op.Kind != "rest_read" && op.Kind != "provider_search") || op.REST == nil {
+		return OperationSpec{}, "", false, fmt.Errorf("operation direct read requires rest_read or provider_search operation, got %q", op.Kind)
+	}
+	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+	if method != http.MethodGet && method != http.MethodPost {
+		return OperationSpec{}, "", false, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
+	}
+	if op.Kind == "provider_search" && method != http.MethodPost {
+		return OperationSpec{}, "", false, fmt.Errorf("provider search requires POST, got %s", method)
+	}
+	if isAbsoluteHTTPURL(op.REST.Path) {
+		return OperationSpec{}, "", false, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
+	}
+	noBody := op.REST.Body != nil && op.REST.Body.None
+	if method == http.MethodPost && !noBody && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+		return OperationSpec{}, "", false, fmt.Errorf("operation direct read POST requires application/json content_type")
+	}
+	if method == http.MethodPost && !noBody && len(op.REST.BodySchema) == 0 {
+		return OperationSpec{}, "", false, fmt.Errorf("operation direct read POST requires body_schema")
+	}
+	if op.REST.MaxBytes <= 0 {
+		return OperationSpec{}, "", false, fmt.Errorf("operation direct read requires positive max_bytes")
+	}
+	if err := requireOperationDirectReadEndpoint(b, method, op.REST.Path); err != nil {
+		return OperationSpec{}, "", false, err
+	}
+	return op, method, noBody, nil
 }
 
 func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath string) error {
