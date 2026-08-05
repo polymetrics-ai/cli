@@ -1,0 +1,18 @@
+{
+  "record": {
+    "inventory_item_id": 808950810,
+    "location_id": 655441491
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/admin/api/latest/inventory_levels.json",
+    "query": {
+      "inventory_item_id": "808950810",
+      "location_id": "655441491"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

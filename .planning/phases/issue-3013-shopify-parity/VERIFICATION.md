@@ -24,11 +24,11 @@ git diff --check
 # public documentation parity audit (no credentials/provider API calls)
 # re-fetches Shopify Admin GraphQL full index and REST latest resource pages,
 # then compares fresh operation keys to internal/connectors/defs/shopify/api_surface.json
-# Result: officialDocsTotal=1166, ledgerTotal=1166, missing=0, stale=0,
-# deleteRows=44, coveredDelete=42, blockedDelete=2, noncanonicalDeleteRows=0
+# Historical result below is superseded by the 2026-08-06 published-reference
+# rebuild checklist; do not use the former 1,166-row aggregate as evidence.
 ```
 
-Results:
+Historical results before the current published-reference rebuild (not evidence for the regenerated bundle unless repeated below):
 
 - `no-mistakes doctor`: passed with existing daemon running.
 - Focused temp-root validation: `connectorgen validate: 1 connector(s) checked, 0 findings`.
@@ -40,7 +40,7 @@ Results:
 - `go build ./cmd/pm`: passed.
 - `make connector-boundary`: clean, with only pre-existing documented exceptions.
 - `git diff --check`: passed.
-- Public-doc parity re-audit: GraphQL full index and 67 REST resource pages matched the ledger exactly: 1166 official rows, 1166 ledger rows, 0 missing, 0 stale, 0 non-canonical DELETE paths.
+- Historical public-doc parity re-audit: superseded. The 2026-08-06 fresh Markdown inventory found 1,098 current published rows, not 1,166.
 - CLI parity smoke: `./pm help connectors`, `./pm connectors`, `./pm shopify --help`, and `./pm connectors inspect shopify --json` passed. Shopify help exposes `ledger`, `shop`, `delete`, and `graphql` groups; inspect shows stream `shop` and 42 write actions.
 - Website parity grep: no textual website connector-count docs required updates; website connector pages use dynamic `pm connectors inspect ${connector.slug}` examples.
 
@@ -70,3 +70,16 @@ iconregistrygen: ambiguous source/destination icon collapse for "customer-io": c
 ```
 
 The public source currently supplies distinct source and destination `customer-io` asset URLs that canonicalize to the same bare connector key. No registry JSON or icon output was hand-edited. Because Shopify still lacks its required generated registry row, app initialization panics at icon-coverage validation and both the app-level credential-boundary test and generated-doc command remain blocked. A shared generator ambiguity fix or a reviewed compatible pinned source is required.
+
+## Published-reference rebuild checklist (2026-08-06)
+
+- [x] Red/preflight: fetch Shopify's current Admin GraphQL full-index Markdown and the 67 Admin REST latest resource-page Markdown artifacts from the public sitemap. The extraction yields 287 queries, 518 mutations, 152 GET, 73 POST, 35 PUT, and 33 DELETE rows: 1,098 total. The AccessScope resource page already includes the access-scope GET endpoint and is counted once.
+- [x] Rebuilt `api_surface.json`, `source_inventory.json`, `operations.json`, and `cli_surface.json` from those artifacts: 1,098 rows, one citation and `2026-08-06` retrieval date per row, and no stale/duplicate AccessScope count.
+- [x] Validated 33 current typed destructive REST DELETE declarations, including inventory-level identifiers, through connector-local metadata/fixture tests. Each has `confirmation.kind: "destructive"`, `mutation_class: "destructive"`, `batchable: false`, and a 1 MiB bound.
+- [x] Focused connector-local gates passed: `go test ./internal/connectors/defs/shopify -count=1`; `go run ./cmd/connectorgen validate internal/connectors/defs` (`551 connector(s) checked, 0 findings`); `go run ./cmd/connectorgen surface-sync internal/connectors/defs --check`; `go test ./internal/connectors/conformance -run 'TestConformance/shopify' -count=1`; `go vet ./internal/connectors/defs/shopify`; and `git diff --check`.
+- [x] Attempted the icon-dependent global preflight once after connector-local completion. `go test ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight -count=1` panicked at `internal/connectors/icons.go:250` because Shopify has no generated icon entry. Per the user direction, #3809 owns that shared generator/registry repair; this lane did not rerun `icons-generate` or hand-edit registry output.
+
+## Remaining shared dependencies
+
+- `internal/connectors/engine/schema/cli_surface.schema.json` excludes the captain-required non-redacting `json` direct-write `output_policy`, although the declared `rest_write` executor and command runner support it. The 33 fixed typed delete commands are therefore deliberately `planned` with exact static `source_cli_path` mappings. Promoting them to `implemented` requires the shared schema owner to admit `json` and then running `connectorgen surface-sync`; no shared schema/runtime file was edited in this lane.
+- #3809 must make `make icons-generate` succeed and produce Shopify's explicit registry row before app initialization, generated manuals/catalogs, and the global command-runner preflight can load the bundle.

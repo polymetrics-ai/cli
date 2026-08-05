@@ -1,0 +1,697 @@
+{
+  "operations": [
+    {
+      "id": "shopify.delete_blogs_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/blogs/{blog_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/blog.md#delete-blogs-blog-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/blogs/{blog_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_blogs_id_articles_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/blogs/{blog_id}/articles/{article_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/article.md#delete-blogs-blog-id-articles-article-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/blogs/{blog_id}/articles/{article_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_blogs_id_metafields_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/blogs/{blog_id}/metafields/{metafield_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield.md#delete-blogs-blog-id-metafields-metafield-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/blogs/{blog_id}/metafields/{metafield_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_carrier_services_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/carrier_services/{carrier_service_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/carrierservice.md#delete-carrier-services-carrier-service-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/carrier_services/{carrier_service_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_collection_listings_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/collection_listings/{collection_listing_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/collectionlisting.md#delete-collection-listings-collection-listing-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/collection_listings/{collection_listing_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_collects_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/collects/{collect_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/collect.md#delete-collects-collect-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/collects/{collect_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_countries_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/countries/{country_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/country.md#delete-countries-country-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/countries/{country_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_custom_collections_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/custom_collections/{custom_collection_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customcollection.md#delete-custom-collections-custom-collection-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/custom_collections/{custom_collection_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_customers_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/customers/{customer_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customer.md#delete-customers-customer-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/customers/{customer_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_customers_id_addresses_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/customers/{customer_id}/addresses/{address_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customer-address.md#delete-customers-customer-id-addresses-address-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/customers/{customer_id}/addresses/{address_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_draft_orders_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/draft_orders/{draft_order_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/draftorder.md#delete-draft-orders-draft-order-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/draft_orders/{draft_order_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_fulfillment_services_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/fulfillment_services/{fulfillment_service_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentservice.md#delete-fulfillment-services-fulfillment-service-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/fulfillment_services/{fulfillment_service_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_inventory_levels",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/inventory_levels.json?inventory_item_id={inventory_item_id}&location_id={location_id} endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/inventorylevel.md#delete-inventory-levels?inventory-item-id=808950810&location-id=655441491",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/inventory_levels.json?inventory_item_id={inventory_item_id}&location_id={location_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_marketing_events_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/marketing_events/{marketing_event_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/marketingevent.md#delete-marketing-events-marketing-event-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/marketing_events/{marketing_event_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_mobile_platform_applications_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/mobile_platform_applications/{mobile_platform_application_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/mobileplatformapplication.md#delete-mobile-platform-applications-mobile-platform-application-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/mobile_platform_applications/{mobile_platform_application_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_orders_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/orders/{order_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order.md#delete-orders-order-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/orders/{order_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_orders_id_fulfillments_id_events_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/orders/{order_id}/fulfillments/{fulfillment_id}/events/{event_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentevent.md#delete-orders-order-id-fulfillments-fulfillment-id-events-event-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/orders/{order_id}/fulfillments/{fulfillment_id}/events/{event_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_orders_id_risks_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/orders/{order_id}/risks/{risk_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order-risk.md#delete-orders-order-id-risks-risk-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/orders/{order_id}/risks/{risk_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_pages_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/pages/{page_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/page.md#delete-pages-page-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/pages/{page_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_price_rules_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/price_rules/{price_rule_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/pricerule.md#delete-price-rules-price-rule-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/price_rules/{price_rule_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_price_rules_id_discount_codes_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/price_rules/{price_rule_id}/discount_codes/{discount_code_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/discountcode.md#delete-price-rules-price-rule-id-discount-codes-discount-code-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/price_rules/{price_rule_id}/discount_codes/{discount_code_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_product_listings_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/product_listings/{product_listing_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/productlisting.md#delete-product-listings-product-listing-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/product_listings/{product_listing_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_products_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/products/{product_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product.md#delete-products-product-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/products/{product_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_products_id_images_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/products/{product_id}/images/{image_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product-image.md#delete-products-product-id-images-image-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/products/{product_id}/images/{image_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_products_id_variants_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/products/{product_id}/variants/{variant_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product-variant.md#delete-products-product-id-variants-variant-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/products/{product_id}/variants/{variant_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_recurring_application_charges_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/recurring_application_charges/{recurring_application_charge_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/recurringapplicationcharge.md#delete-recurring-application-charges-recurring-application-charge-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/recurring_application_charges/{recurring_application_charge_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_redirects_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/redirects/{redirect_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/redirect.md#delete-redirects-redirect-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/redirects/{redirect_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_script_tags_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/script_tags/{script_tag_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/scripttag.md#delete-script-tags-script-tag-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/script_tags/{script_tag_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_shopify_payments_disputes_id_dispute_file_uploads_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/shopify_payments/disputes/{dispute_id}/dispute_file_uploads/{dispute_file_upload_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/dispute-file-upload.md#delete-shopify-payments-disputes-dispute-id-dispute-file-uploads-dispute-file-upload-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/shopify_payments/disputes/{dispute_id}/dispute_file_uploads/{dispute_file_upload_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_smart_collections_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/smart_collections/{smart_collection_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/smartcollection.md#delete-smart-collections-smart-collection-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/smart_collections/{smart_collection_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_storefront_access_tokens_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/storefront_access_tokens/{storefront_access_token_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/storefrontaccesstoken.md#delete-storefront-access-tokens-storefront-access-token-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/storefront_access_tokens/{storefront_access_token_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_themes_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/themes/{theme_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/theme.md#delete-themes-theme-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/themes/{theme_id}.json",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "shopify.delete_webhooks_id",
+      "kind": "rest_write",
+      "summary": "Delete one Shopify Admin REST resource through the fixed /admin/api/latest/webhooks/{webhook_id}.json endpoint.",
+      "description": "A connector-owned typed destructive DELETE. It accepts only its named identifier flags and never exposes an arbitrary REST path, query, or body.",
+      "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/webhook.md#delete-webhooks-webhook-id",
+      "risk": "high",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "rest": {
+        "method": "DELETE",
+        "path": "/admin/api/latest/webhooks/{webhook_id}.json",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

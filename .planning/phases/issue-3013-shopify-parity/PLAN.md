@@ -67,12 +67,20 @@ Do not edit shared runtime, engine, CLI dispatcher, hook/native registries, depe
    - Change only the connector-owned `shop_domain` declaration to `^[a-z0-9][a-z0-9-]*\\.myshopify\\.com$`; do not add a custom-domain allow-list, a scheme/path/port exception, or shared-runtime code.
    - Add a green acceptance test for `fixture-shop.myshopify.com`, then regenerate Shopify manual/skill docs so the restriction is visible to operators.
 
+7. **2026-08-06 published-reference rebuild and typed direct operations**
+   - Rebuild the ledger from the current Shopify Admin GraphQL latest full-index Markdown and the 67 Admin REST latest resource-page Markdown artifacts discovered through Shopify's public sitemap; do not reuse the prior aggregate count as source evidence.
+   - Record one canonical citation URL and the `2026-08-06` retrieval date for every ledger row in the connector-local source inventory. The rebuilt reference set is 287 GraphQL queries, 518 GraphQL mutations, and 293 REST operations (152 GET, 73 POST, 35 PUT, 33 DELETE): 1,098 rows total. The AccessScope resource page already contains the access-scope endpoint, so it must be represented once rather than double-counted from the usage guide.
+   - Replace the legacy reverse-ETL DELETE declarations that overlap the current reference with connector-owned fixed `rest_write` operations and individually named `direct_write` commands. Each must use `mutation_class: "destructive"`, typed `confirmation.kind: "destructive"`, bounded output, and the existing plan -> preview -> explicit approval -> execute path.
+   - Leave the remaining published operations individually represented by static command declarations with truthful `planned` availability. Do not expose generic GraphQL, HTTP, path, query, or body passthrough.
+   - Do not edit or regenerate the shared icon registry. Generated catalog/manual/app validation remains deferred until #3809 repairs `icons-generate`.
+
 ## TDD/validation approach
 
 - Red/preflight: prove Shopify bundle is absent or invalid before scaffold; capture `connectorgen validate internal/connectors/defs/shopify` failure.
 - Green: generate connector-local bundle and pass focused validation/conformance as far as shared foundations allow.
 - Refactor: format/generated JSON deterministic order; keep docs and counts synchronized.
 - Resume host restriction: red credential-boundary test -> spec pattern/description -> green rejection and canonical-host acceptance tests -> generated docs -> focused app, conformance, connector validation, CLI/help, and boundary checks.
+- Published-reference rebuild: preserve the red evidence that the former 1,166-row REST/GraphQL claim differs from Shopify's current public Markdown (1,098 rows), then validate the regenerated ledger, source provenance, typed direct-write preflight, and conformance without invoking the icon-dependent app/docs paths.
 
 ## Safety notes
 
