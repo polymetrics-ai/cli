@@ -1,13 +1,19 @@
 {
   "phase": "front-parity-resume-r1",
   "branch": "fm/cli-front-parity-resume-r1",
-  "status": "ready_for_no_mistakes",
-  "verificationPassed": true,
-  "verificationNote": "All declared local current-main gates pass. The first full CLI run exposed stale root goldens; deterministic regeneration fixed them and the full CLI rerun passed in 418.708s. Fresh origin/main remains the branch base.",
+  "status": "paused_for_shared_normalized_schema_composition",
+  "verificationPassed": false,
+  "verificationNote": "The conditional-contract review's focused JSON, Front validator, surface-sync, conformance, and runtime-preflight checks pass. Full record-driven composition enforcement still awaits the shared normalized-schema lane.",
   "gsd": {
     "doctor": "passed",
     "programmingLoopAvailable": false,
     "fallback": "manual GSD lifecycle; adapter command and local helper script unavailable"
+  },
+  "externalDependency": {
+    "name": "shared normalized-schema draft-07 composition support",
+    "status": "in flight and not present on the current base",
+    "resumeAction": "integrate the landed shared composition convention, bind Front schemas/request_contracts.json through that canonical mechanism, then rerun focused connector gates",
+    "prohibitedLocalWorkaround": "do not add a Front-private evaluator or change shared validation/runtime files from this lane"
   },
   "orchestrationDecisions": [
     {
@@ -54,6 +60,11 @@
       "command": "pm docs generate/validate, website pnpm run gen:website-data, built pm Front help/inspect smoke",
       "result": "pass",
       "notes": "Front generated docs/catalog and runtime help are synchronized; safe smoke stops before any credential or provider request."
+    },
+    {
+      "command": "jq Front JSON contracts && connectorgen validate/surface-sync --check && focused Front conformance/runtime preflight",
+      "result": "pass",
+      "notes": "Review remediation: Front validation had zero findings, surface sync had zero drift, focused conformance passed in 1.661s, and runtime preflight passed in 1.362s."
     }
   ]
 }

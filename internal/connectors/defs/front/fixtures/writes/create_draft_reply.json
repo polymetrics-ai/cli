@@ -1,12 +1,14 @@
 {
   "record": {
     "conversation_id": "fixture_conversation_id",
+    "channel_id": "fixture_channel_id",
     "body": "fixture_body"
   },
   "expect": {
     "method": "POST",
     "path": "/conversations/fixture_conversation_id/drafts",
     "body": {
+      "channel_id": "fixture_channel_id",
       "body": "fixture_body"
     }
   },

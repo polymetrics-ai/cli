@@ -1,14 +1,22 @@
 {
   "record": {
     "type": "discussion",
-    "subject": "fixture_subject"
+    "inbox_id": "fixture_inbox_id",
+    "subject": "fixture_subject",
+    "comment": {
+      "body": "fixture_comment_body"
+    }
   },
   "expect": {
     "method": "POST",
     "path": "/conversations",
     "body": {
       "type": "discussion",
-      "subject": "fixture_subject"
+      "inbox_id": "fixture_inbox_id",
+      "subject": "fixture_subject",
+      "comment": {
+        "body": "fixture_comment_body"
+      }
     }
   },
   "response": {

@@ -31,6 +31,14 @@ Custom-channel call and message sync actions (`create_call`, `update_call`, `add
 
 Direct/provider-search commands for analytics exports/reports and conversation search are fixed, bounded, JSON-redacted direct reads. The five attachment download commands use the engine's implemented `binary_download` contract, fixed Front endpoints, project-relative destinations, and explicit maximum response sizes.
 
+## Conditional request contracts
+
+`schemas/request_contracts.json` preserves Front's draft-07 composed request rules for analytics export discriminators, composed draft/template requiredness, exclusive link and conversation destinations, channel/call variants, and merge cardinality. The CLI exposes fixed typed commands for each provider-valid branch: message, fixed-event, parameterized-event, and Smart QA exports; both conversation-link and link selectors; inbox/teammate discussion/task destinations; custom/SMTP/Twilio channels; inbound/outbound calls; and both merge forms. Each command's help states its branch-specific requirements and never accepts a raw body.
+
+Current main's minimal schema compiler does not evaluate `oneOf`, `allOf`, `if`/`then`, `not`, or `anyOf`, so the executable `record_schema`/`body_schema` copies retain only the compatible typed field and cardinality subset. Full record-driven enforcement depends on the in-flight shared normalized-schema composition support; this connector does not implement a private composition evaluator or weaken shared validation. The fixed CLI variants and fixtures are provider-valid while that shared dependency is pending.
+
+Outbound message sends, message replies, and `mark_message_seen` are explicitly non-batchable. Their single-record commands remain available, and seen-state changes must represent a real end-user action.
+
 ## Deferred multipart fields
 
 The following optional provider file fields are deliberately absent from the JSON write schemas because Front requires multipart form data when they are supplied:
@@ -47,4 +55,5 @@ Supporting these fields requires an array-aware extension to the typed multipart
 - Parameterized streams require the corresponding config values and are not safe as an all-stream default sync without operator selection.
 - File-valued `attachments` and `avatar` request fields remain deferred exactly as listed above; supplying them requires the bounded array-aware multipart extension described there.
 - `add_call_recording` is a multipart file-upload write with no dynamic conformance fixture (see Write actions & risks); its correctness rests on static schema/CLI-mapping validation and `go vet`/`go build`, the same bar the repo's only other multipart-write connector (`gong`) is held to.
+- Record-driven enforcement of the composed contracts in `schemas/request_contracts.json` remains paused on the shared normalized-schema composition dependency; fixed CLI variants already construct provider-valid branches without a generic body escape.
 - The duplicate `PATCH /channels/{channel_id}` docs row is recorded as a duplicate operation row; the executable Core API write action is declared once.

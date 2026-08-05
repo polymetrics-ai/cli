@@ -37,6 +37,14 @@ Do not describe the connector as complete while any operation remains `planned`.
    and live help/command smoke checks.
 5. Update phase evidence, commit coherent green slices, then hand off to no-mistakes.
 
+## Review remediation dependency
+
+Provider-valid fixed command variants and fixtures are owned by this Front lane. Exact conditional
+rules are preserved in `internal/connectors/defs/front/schemas/request_contracts.json` as draft-07
+composition. Current main cannot evaluate that composition, so final record-driven enforcement and
+the completion claim remain paused until the shared normalized-schema composition lane lands. This
+lane must not add a private evaluator or modify shared validation/runtime files.
+
 ## GSD / skills
 
 Loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`,

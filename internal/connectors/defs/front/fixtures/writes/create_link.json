@@ -1,8 +1,13 @@
 {
-  "record": {},
+  "record": {
+    "external_url": "https://example.invalid/front/fixture-link"
+  },
   "expect": {
     "method": "POST",
-    "path": "/links"
+    "path": "/links",
+    "body": {
+      "external_url": "https://example.invalid/front/fixture-link"
+    }
   },
   "response": {
     "status": 201,

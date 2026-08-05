@@ -1661,7 +1661,12 @@
       "method": "POST",
       "path": "/analytics/exports",
       "covered_by": {
-        "direct_read": "analytics exports create"
+        "direct_reads": [
+          "analytics exports create",
+          "analytics exports create-events",
+          "analytics exports create-parameterized-event",
+          "analytics exports create-smart-qa-event"
+        ]
       }
     },
     {
