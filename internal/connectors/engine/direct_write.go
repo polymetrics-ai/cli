@@ -99,6 +99,22 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			response, err = requester.DoFormLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.form, prepared.maxBytes)
 		case "json", "none":
 			response, err = requester.DoLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, prepared.body, prepared.maxBytes)
+		case "multipart":
+			root, rootErr := openMultipartRoot(prepared.cfg.ProjectDir)
+			if rootErr != nil {
+				return fmt.Errorf("operation %q open multipart project root: %w", prepared.op.ID, rootErr)
+			}
+			defer func() { _ = root.Close() }()
+			// buildMultipartPayload is the established writes.json transport
+			// builder. A tiny synthetic action carries only the already-validated
+			// shared part declaration, keeping root confinement, regular-file,
+			// aggregate-cap, and approved-digest behavior exactly in one place.
+			action := WriteAction{Name: prepared.op.ID, Multipart: prepared.op.REST.Multipart}
+			multipart, buildErr := buildMultipartPayload(action, connectors.Record(prepared.body), 0, prepared.cfg, root)
+			if buildErr != nil {
+				return buildErr
+			}
+			response, err = requester.DoMultipartLimited(requestCtx, prepared.method, prepared.requestPath, prepared.query, multipart, prepared.maxBytes)
 		default:
 			return fmt.Errorf("operation %q has unsupported prepared body format %q", prepared.op.ID, prepared.format)
 		}
@@ -229,9 +245,23 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		return preparedOperationDirectWrite{}, err
 	}
 	maxBytes := clampOperationDirectWriteMaxBytes(op.REST.MaxBytes)
-	form, encodedBody, err := operationDirectWritePreparedBody(op, body, format, maxBytes)
-	if err != nil {
-		return preparedOperationDirectWrite{}, err
+	var form url.Values
+	var encodedBody string
+	if format == "multipart" {
+		canonical, canonicalErr := prepareCanonicalOperationMultipart(op, connectors.Record(body), 0, cfg, true)
+		if canonicalErr != nil {
+			return preparedOperationDirectWrite{}, canonicalErr
+		}
+		raw, marshalErr := json.Marshal(canonical)
+		if marshalErr != nil {
+			return preparedOperationDirectWrite{}, fmt.Errorf("operation %q: encode canonical multipart request: %w", op.ID, marshalErr)
+		}
+		encodedBody = string(raw)
+	} else {
+		form, encodedBody, err = operationDirectWritePreparedBody(op, body, format, maxBytes)
+		if err != nil {
+			return preparedOperationDirectWrite{}, err
+		}
 	}
 	baseURL, err := operationDirectWriteBaseURL(b, cfg)
 	if err != nil {
@@ -247,6 +277,18 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		return preparedOperationDirectWrite{}, err
 	}
 	target := DestructiveTargetForOperation(b.Name, op)
+	definition := map[string]any{
+		"kind":          op.Kind,
+		"operation":     op.ID,
+		"content_type":  contentType,
+		"output_policy": policy,
+	}
+	if format == "multipart" {
+		// Bind the whole fixed upload declaration, including absent optional
+		// parts and their limits, rather than only the values present in this
+		// invocation's canonical body.
+		definition["multipart"] = op.REST.Multipart
+	}
 	prepared := PreparedWrite{
 		Target:              target,
 		CredentialRevision:  cfg.CredentialRevision,
@@ -256,12 +298,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 		RecordsStaged:       1,
 		Action:              op.ID,
 		Warnings:            []string{fmt.Sprintf("prepared rest_write operation %q (%s)", op.ID, method)},
-		Definition: map[string]any{
-			"kind":          op.Kind,
-			"operation":     op.ID,
-			"content_type":  contentType,
-			"output_policy": policy,
-		},
+		Definition:          definition,
 		Requests: []PreparedRequest{{
 			Method:      method,
 			URL:         targetURL,
@@ -357,7 +394,16 @@ func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]
 }
 
 func operationDirectWriteContentType(op OperationSpec, body map[string]any) (contentType, format string, err error) {
+	if op.REST == nil {
+		return "", "", fmt.Errorf("operation %q has no rest declaration", op.ID)
+	}
 	declared := strings.TrimSpace(op.REST.ContentType)
+	if op.REST.Multipart != nil {
+		if op.REST.ContentType != "multipart/form-data" {
+			return "", "", fmt.Errorf("operation %q rest.multipart requires literal content_type multipart/form-data", op.ID)
+		}
+		return "multipart/form-data", "multipart", nil
+	}
 	if declared == "" {
 		if len(body) == 0 {
 			return "", "none", nil

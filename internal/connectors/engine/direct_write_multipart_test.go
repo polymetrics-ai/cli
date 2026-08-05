@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -111,6 +112,15 @@ func TestOperationDirectWriteMultipartPreviewBindsEveryApprovedPayload(t *testin
 	if calls != 0 {
 		t.Fatalf("stale preview calls = %d, want 0", calls)
 	}
+
+	changedPath.PreviewDigest = preview.Digest
+	changedPath.Approval = approvedEvidenceForPreview(t, preview)
+	if _, err := OperationDirectWrite(context.Background(), bundle, changedPath, nil); err == nil || !strings.Contains(err.Error(), "no longer matches") {
+		t.Fatalf("OperationDirectWrite with stale source path = %v, want preview mismatch", err)
+	}
+	if calls != 0 {
+		t.Fatalf("stale source-path calls = %d, want 0", calls)
+	}
 }
 
 func TestOperationDirectWriteMultipartRequiresApprovalAndDispatchesOnce(t *testing.T) {
@@ -206,13 +216,14 @@ func TestOperationDirectWriteMultipartRequiresApprovalAndDispatchesOnce(t *testi
 
 func TestOperationDirectWriteMultipartRejectsUnsafeSourcesBeforeNetwork(t *testing.T) {
 	tests := []struct {
-		name    string
-		prepare func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest)
-		wantErr string
+		name          string
+		beforePreview func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest)
+		afterPreview  func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest)
+		wantErr       string
 	}{
 		{
 			name: "file changed after preview",
-			prepare: func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest) {
+			afterPreview: func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest) {
 				t.Helper()
 				if err := os.WriteFile(filepath.Join(dir, "media.txt"), []byte("changed multipart payload"), 0o600); err != nil {
 					t.Fatalf("WriteFile changed source: %v", err)
@@ -222,7 +233,7 @@ func TestOperationDirectWriteMultipartRejectsUnsafeSourcesBeforeNetwork(t *testi
 		},
 		{
 			name: "source removed after preview",
-			prepare: func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest) {
+			afterPreview: func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest) {
 				t.Helper()
 				if err := os.Remove(filepath.Join(dir, "media.txt")); err != nil {
 					t.Fatalf("Remove source: %v", err)
@@ -232,7 +243,7 @@ func TestOperationDirectWriteMultipartRejectsUnsafeSourcesBeforeNetwork(t *testi
 		},
 		{
 			name: "source escapes project root",
-			prepare: func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest) {
+			beforePreview: func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest) {
 				t.Helper()
 				outside := filepath.Join(filepath.Dir(dir), "outside-media.txt")
 				payload := []byte("typed multipart payload")
@@ -244,11 +255,11 @@ func TestOperationDirectWriteMultipartRejectsUnsafeSourcesBeforeNetwork(t *testi
 				digest := sha256.Sum256(payload)
 				req.Config.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(0, "media_file_path")] = hex.EncodeToString(digest[:])
 			},
-			wantErr: "escapes project root",
+			wantErr: "outside the project root",
 		},
 		{
 			name: "per file cap is enforced",
-			prepare: func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest) {
+			beforePreview: func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest) {
 				t.Helper()
 				payload := []byte(strings.Repeat("x", 2048))
 				if err := os.WriteFile(filepath.Join(dir, "media.txt"), payload, 0o600); err != nil {
@@ -261,7 +272,7 @@ func TestOperationDirectWriteMultipartRejectsUnsafeSourcesBeforeNetwork(t *testi
 		},
 		{
 			name: "media type allow list is enforced",
-			prepare: func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest) {
+			beforePreview: func(t *testing.T, dir string, req *connectors.OperationDirectWriteRequest) {
 				t.Helper()
 				payload := []byte{0, 1, 2, 3, 4, 5}
 				if err := os.WriteFile(filepath.Join(dir, "media.txt"), payload, 0o600); err != nil {
@@ -270,7 +281,7 @@ func TestOperationDirectWriteMultipartRejectsUnsafeSourcesBeforeNetwork(t *testi
 				digest := sha256.Sum256(payload)
 				req.Config.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(0, "media_file_path")] = hex.EncodeToString(digest[:])
 			},
-			wantErr: "not allowed",
+			wantErr: "allowed media types",
 		},
 	}
 
@@ -287,11 +298,16 @@ func TestOperationDirectWriteMultipartRejectsUnsafeSourcesBeforeNetwork(t *testi
 			path := writeMultipartOperationSource(t, dir, "media.txt", payload)
 			bundle := multipartOperationBundle(t, server.URL)
 			req := multipartOperationRequest(dir, path, payload)
+			if tt.beforePreview != nil {
+				tt.beforePreview(t, dir, &req)
+			}
 			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
 			if err != nil {
 				t.Fatalf("PreviewOperationDirectWrite: %v", err)
 			}
-			tt.prepare(t, dir, &req)
+			if tt.afterPreview != nil {
+				tt.afterPreview(t, dir, &req)
+			}
 			req.PreviewDigest = preview.Digest
 			req.Approval = approvedEvidenceForPreview(t, preview)
 			if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(strings.ToLower(err.Error()), strings.ToLower(tt.wantErr)) {
@@ -301,6 +317,81 @@ func TestOperationDirectWriteMultipartRejectsUnsafeSourcesBeforeNetwork(t *testi
 				t.Fatalf("unsafe source calls = %d, want 0", calls)
 			}
 		})
+	}
+}
+
+func TestOperationDirectWriteMultipartRejectsAggregateOverflowBeforeNetwork(t *testing.T) {
+	var calls int
+	server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		calls++
+	}))
+	defer server.Close()
+
+	dir := t.TempDir()
+	firstPayload := []byte("1234")
+	secondPayload := []byte("5678")
+	firstPath := writeMultipartOperationSource(t, dir, "first.txt", firstPayload)
+	secondPath := writeMultipartOperationSource(t, dir, "second.txt", secondPayload)
+	bundle := multipartOperationBundle(t, server.URL)
+	op := &bundle.Operations[0]
+	op.REST.BodySchema = json.RawMessage(`{
+		"type": "object",
+		"additionalProperties": false,
+		"required": ["message", "media_file_path", "second_file_path"],
+		"properties": {
+			"message": {"type": "string"},
+			"media_file_path": {"type": "string"},
+			"second_file_path": {"type": "string"}
+		}
+	}`)
+	op.REST.Multipart = &MultipartSpec{MaxBytes: 5, Parts: []MultipartPartSpec{
+		{Name: "message", Type: "field", Field: "message", Required: true},
+		{Name: "attachment", Type: "file", Field: "media_file_path", Required: true, MaxBytes: 4, ContentType: "text/plain", AllowedMediaTypes: []string{"text/plain"}},
+		{Name: "second_attachment", Type: "file", Field: "second_file_path", Required: true, MaxBytes: 4, ContentType: "text/plain", AllowedMediaTypes: []string{"text/plain"}},
+	}}
+	req := multipartOperationRequest(dir, firstPath, firstPayload)
+	secondDigest := sha256.Sum256(secondPayload)
+	req.Body["second_file_path"] = secondPath
+	req.Config.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(0, "second_file_path")] = hex.EncodeToString(secondDigest[:])
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(err.Error(), "multipart payload too large") {
+		t.Fatalf("OperationDirectWrite aggregate overflow error = %v, want aggregate rejection", err)
+	}
+	if calls != 0 {
+		t.Fatalf("aggregate overflow calls = %d, want 0", calls)
+	}
+}
+
+func TestOperationDirectWriteMultipartBoundsResponseCapture(t *testing.T) {
+	var calls int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		_, _ = w.Write([]byte("response beyond the declared cap"))
+	}))
+	defer server.Close()
+
+	dir := t.TempDir()
+	payload := []byte("typed multipart payload")
+	path := writeMultipartOperationSource(t, dir, "media.txt", payload)
+	bundle := multipartOperationBundle(t, server.URL)
+	bundle.Operations[0].REST.MaxBytes = 4
+	req := multipartOperationRequest(dir, path, payload)
+	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
+	if err != nil {
+		t.Fatalf("PreviewOperationDirectWrite: %v", err)
+	}
+	req.PreviewDigest = preview.Digest
+	req.Approval = approvedEvidenceForPreview(t, preview)
+	if _, err := OperationDirectWrite(context.Background(), bundle, req, nil); err == nil || !strings.Contains(err.Error(), "response too large") {
+		t.Fatalf("OperationDirectWrite over-cap response error = %v, want response cap rejection", err)
+	}
+	if calls != 1 {
+		t.Fatalf("over-cap response calls = %d, want 1", calls)
 	}
 }
 

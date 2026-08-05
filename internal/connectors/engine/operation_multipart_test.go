@@ -242,11 +242,13 @@ func TestBundleLoadRejectsUnsafeMultipartRestWriteContracts(t *testing.T) {
 			kind: "rest_write",
 			rest: strings.Replace(
 				validMultipartRestWrite,
-				`"max_bytes": 1024,`,
-				`"max_bytes": 0,`,
-				2,
+				`"max_bytes": 1024,
+				"content_type": "text/plain"`,
+				`"max_bytes": 0,
+				"content_type": "text/plain"`,
+				1,
 			),
-			wantErr: "positive",
+			wantErr: "file part",
 		},
 		{
 			name:    "legacy file upload does not become an operation executor",
