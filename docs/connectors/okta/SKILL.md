@@ -2554,6 +2554,11 @@ Reads and writes documented Okta Admin Management API resources through the Okta
 - approval: required for every write action; deletes and lifecycle actions are high risk
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

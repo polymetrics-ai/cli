@@ -66,6 +66,11 @@ Reads Omnisend contacts, campaigns, carts, orders, and products through the Omni
 - read risk: external Omnisend API read of contact, campaign, and ecommerce order data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

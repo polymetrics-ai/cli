@@ -169,6 +169,11 @@ Reads customers, suppliers, products, invoices, orders, quotes, departments, pay
 - approval: read: none; write: required for every action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

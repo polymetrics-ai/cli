@@ -137,6 +137,11 @@ Reads projects, sections, tasks, comments, labels, and project collaborators, an
 - approval: reverse ETL plan approval required before writes; delete actions on projects/sections/tasks/comments/labels are irreversible
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -61,6 +61,11 @@ Reads latest news, cryptocurrency news, and news sources from the NewsData.io RE
 - read risk: external NewsData.io API read of article and source metadata
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

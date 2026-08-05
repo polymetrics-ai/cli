@@ -124,6 +124,10 @@ SECURITY
   approval: read: none, read-only sync surface. write: required for all mutating actions (create/update/delete of customer-success records visible to the vendor's CS team).
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect vitally

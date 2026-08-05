@@ -109,6 +109,11 @@ Reads SendPulse address books, campaigns, senders, per-book emails, and the acco
 - approval: reverse ETL plan approval required before writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

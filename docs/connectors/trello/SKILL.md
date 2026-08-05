@@ -55,6 +55,11 @@ Reads Trello boards, lists, and checklists through the Trello REST API. Cards an
 - approval: none; read-only, no obviously-safe reverse-ETL writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

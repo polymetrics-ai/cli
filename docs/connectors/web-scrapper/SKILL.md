@@ -89,6 +89,11 @@ Reads sitemap, scraping job, account, and problematic-URL metadata, and writes s
 - approval: required for create_scraping_job (consumes billable page credits and issues real outbound requests to a third-party site) and for delete_sitemap/delete_scraping_job (irreversible); create_sitemap/update_sitemap are low-risk (configuration only, no outbound scraping)
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

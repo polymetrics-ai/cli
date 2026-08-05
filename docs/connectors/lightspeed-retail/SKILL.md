@@ -64,6 +64,11 @@ Reads Lightspeed Retail (X-Series) products, customers, sales, outlets, and regi
 - read risk: external Lightspeed Retail API read of product, customer, and sales data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

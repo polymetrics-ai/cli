@@ -109,6 +109,11 @@ Reads and writes Dremio catalog entries, reflections, sources, users, and roles 
 - approval: required for create/update/delete user, role, and reflection actions and PAT lifecycle actions; refresh_reflection is low-risk and does not require approval
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

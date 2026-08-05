@@ -5,6 +5,7 @@ package engine
 import (
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/fs"
 	"mime"
@@ -56,6 +57,56 @@ type Metadata struct {
 	RateLimit       RateLimitSpec      `json:"rate_limit,omitempty"`
 	Risk            RiskSpec           `json:"risk,omitempty"`
 	Conformance     *ConformanceMarker `json:"conformance,omitempty"`
+	Mechanism       *MechanismSpec     `json:"mechanism,omitempty"`
+}
+
+// Mechanism kind values (dual-mechanism connector foundations, P0):
+// declared in metadata.json, never inferred at runtime. See
+// normalizeAndValidateMechanism for the invariants each kind requires.
+const (
+	MechanismOfficialAPI = "official_api"
+	MechanismWebSession  = "web_session"
+)
+
+// MechanismSpec declares how a connector reaches its provider — an approved
+// official API, or a captured browser session — and is the single source
+// every renderer (`pm connectors list`/`inspect`, `pm <connector> --help`,
+// docs, website) reads to decide official-vs-unofficial labelling, rather
+// than each duplicating that judgment or a string per connector.
+type MechanismSpec struct {
+	Kind                 string `json:"kind"` // official_api | web_session
+	Label                string `json:"label,omitempty"`
+	SanctionedByProvider bool   `json:"sanctioned_by_provider"`
+	ProviderTermsURL     string `json:"provider_terms_url,omitempty"`
+	AuthFlow             string `json:"auth_flow,omitempty"`
+
+	// OptInRequired, when true, means this connector ships present but
+	// disabled: reachable only after an explicit enable step that shows the
+	// plain-language risk warning (browserauth/store.RiskAcceptance is the
+	// mechanism that records a user's acceptance of that warning).
+	OptInRequired bool `json:"opt_in_required,omitempty"`
+
+	// UpstreamPin records the exact reverse-engineered reference a
+	// web_session mechanism's routes/identifiers were verified against —
+	// required for that kind so a stale mechanism has a named source to
+	// diff against, never a runtime scrape.
+	UpstreamPin *MechanismUpstreamPin `json:"upstream_pin,omitempty"`
+
+	BreakageReviewCadenceDays int `json:"breakage_review_cadence_days,omitempty"`
+
+	// DisabledReason is the kill switch: non-empty means Load refuses to
+	// construct this connector at all (ErrMechanismDisabled), not merely
+	// mark it unavailable. Set it, ship a patch release — no network call,
+	// no remote flag.
+	DisabledReason string `json:"disabled_reason,omitempty"`
+}
+
+// MechanismUpstreamPin names the exact upstream reference a web_session
+// mechanism's routes/identifiers were verified against.
+type MechanismUpstreamPin struct {
+	Repo       string `json:"repo"`
+	SHA        string `json:"sha"`
+	VerifiedAt string `json:"verified_at,omitempty"`
 }
 
 // ConformanceMarker is an OPTIONAL, explicit opt-out from
@@ -1214,7 +1265,79 @@ func loadMetadata(sub fs.FS, dirName string) (Metadata, error) {
 		return Metadata{}, fmt.Errorf("load bundle %s: directory name %q does not match metadata.json name %q", dirName, dirName, m.Name)
 	}
 
+	if err := normalizeAndValidateMechanism(dirName, &m); err != nil {
+		return Metadata{}, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+
 	return m, nil
+}
+
+// webNameSuffixPattern is the -web$ consistency guard (design report §4.3):
+// naming and mechanism metadata can never drift apart, and nothing is
+// inferred at runtime — a bundle whose name matches this must declare
+// web_session, and vice versa.
+var webNameSuffixPattern = regexp.MustCompile(`-web$`)
+
+// ErrMechanismDisabled is returned (wrapped) by Load when a bundle declares
+// mechanism.disabled_reason — the kill switch: setting that field and
+// shipping a patch release is enough to stop the loader from constructing
+// the connector at all, with no network call and no remote flag.
+var ErrMechanismDisabled = errors.New("mechanism disabled")
+
+// normalizeAndValidateMechanism fills m.Mechanism with the conservative
+// official_api default when metadata.json declares none — required would
+// force a mechanical edit across every existing bundle, and official_api is
+// the safe default — then enforces the invariants that keep a bundle's
+// mechanism metadata honest: an internally consistent kind, the -web$
+// naming guard, web_session's stricter requirements (report §4.3), and the
+// disabled_reason kill switch.
+func normalizeAndValidateMechanism(dirName string, m *Metadata) error {
+	if m.Mechanism == nil {
+		m.Mechanism = &MechanismSpec{Kind: MechanismOfficialAPI, SanctionedByProvider: true}
+	}
+	mech := m.Mechanism
+
+	switch mech.Kind {
+	case MechanismOfficialAPI, MechanismWebSession:
+	default:
+		return fmt.Errorf("metadata.json: mechanism.kind %q must be %q or %q", mech.Kind, MechanismOfficialAPI, MechanismWebSession)
+	}
+
+	isWebName := webNameSuffixPattern.MatchString(dirName)
+	if isWebName && mech.Kind != MechanismWebSession {
+		return fmt.Errorf("metadata.json: connector name %q ends in \"-web\" but mechanism.kind is %q, want %q", dirName, mech.Kind, MechanismWebSession)
+	}
+	if !isWebName && mech.Kind == MechanismWebSession {
+		return fmt.Errorf("metadata.json: mechanism.kind is %q but connector name %q does not end in \"-web\"", MechanismWebSession, dirName)
+	}
+
+	if mech.Kind == MechanismOfficialAPI && !mech.SanctionedByProvider {
+		return fmt.Errorf("metadata.json: mechanism.kind %q requires sanctioned_by_provider=true", MechanismOfficialAPI)
+	}
+
+	if mech.Kind == MechanismWebSession {
+		if mech.SanctionedByProvider {
+			return fmt.Errorf("metadata.json: mechanism.kind %q requires sanctioned_by_provider=false", MechanismWebSession)
+		}
+		if !mech.OptInRequired {
+			return fmt.Errorf("metadata.json: mechanism.kind %q requires opt_in_required=true", MechanismWebSession)
+		}
+		if m.ReleaseStage != "alpha" {
+			return fmt.Errorf("metadata.json: mechanism.kind %q requires release_stage \"alpha\", got %q", MechanismWebSession, m.ReleaseStage)
+		}
+		if strings.TrimSpace(m.Risk.Approval) == "" {
+			return fmt.Errorf("metadata.json: mechanism.kind %q requires a non-empty risk.approval", MechanismWebSession)
+		}
+		if mech.UpstreamPin == nil || strings.TrimSpace(mech.UpstreamPin.Repo) == "" || strings.TrimSpace(mech.UpstreamPin.SHA) == "" {
+			return fmt.Errorf("metadata.json: mechanism.kind %q requires upstream_pin.repo and upstream_pin.sha", MechanismWebSession)
+		}
+	}
+
+	if strings.TrimSpace(mech.DisabledReason) != "" {
+		return fmt.Errorf("%w: %s", ErrMechanismDisabled, mech.DisabledReason)
+	}
+
+	return nil
 }
 
 // loadSpec returns both the compiled *Schema (used for runtime interpolation

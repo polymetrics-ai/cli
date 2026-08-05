@@ -694,6 +694,10 @@ COMMAND SURFACE
     operation-ledger - The pinned OpenAPI ledger has 249 operations: 111 ETL/read, 125 reverse-ETL write, 3 direct/search, 1 file-upload input, 8 changefeed, and 1 disallowed batch wrapper.
     shared-foundations - Provider search/query #2985 and CDC/changefeed #2986/#2988 remain blocked dependencies for planned commands.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect asana

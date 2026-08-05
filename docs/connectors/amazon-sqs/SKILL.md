@@ -163,6 +163,11 @@ Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue
 - Help topics:
   - safety - Amazon SQS write commands always use reverse ETL plan, preview, approval, and execute; destructive commands require typed confirmation.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

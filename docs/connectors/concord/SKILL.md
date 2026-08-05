@@ -200,6 +200,11 @@ Reads and writes Concord contract lifecycle management data: agreements (and the
 - approval: required for delete_folder/delete_report/delete_clause/delete_approval (destructive); create/update actions are lower risk but still mutate shared organization configuration
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

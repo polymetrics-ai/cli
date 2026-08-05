@@ -86,6 +86,11 @@ Reads public SpaceX launch, rocket, core, capsule, crew, Dragon, history, payloa
 - approval: none; read-only public API, no credentials
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

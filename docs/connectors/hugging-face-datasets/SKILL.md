@@ -59,6 +59,11 @@ Reads dataset splits and per-split sizes from the Hugging Face dataset-viewer RE
 - approval: none; read-only, no obviously-safe reverse-ETL writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

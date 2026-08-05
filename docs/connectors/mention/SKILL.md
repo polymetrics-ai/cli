@@ -71,6 +71,11 @@ Reads Mention app metadata, accounts, alerts, mentions, alert tags, alert shares
 - read risk: external Mention API read of app metadata, account, alert, mention, tag, share, preference, and task data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

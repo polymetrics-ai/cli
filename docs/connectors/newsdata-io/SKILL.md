@@ -67,6 +67,11 @@ Reads latest, crypto, and archived news articles plus available news sources fro
 - read risk: external NewsData.io API read of news articles and sources
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

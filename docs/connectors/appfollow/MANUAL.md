@@ -128,6 +128,10 @@ SECURITY
   approval: required for every write action; each is flagged high-visibility (public review reply) or irreversible (collection/app/user removal) in writes.json's per-action risk field
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect appfollow

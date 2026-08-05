@@ -181,6 +181,10 @@ SECURITY
   approval: required for update_lead/update_note/update_filter/update_activity_type/update_lead_label/delete_lead/delete_note/delete_filter/delete_activity_type/delete_lead_label/delete_webhook; create_lead/create_note/create_filter/create_activity_type/create_lead_label/create_webhook require no approval (low-risk, non-destructive)
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect pipedrive

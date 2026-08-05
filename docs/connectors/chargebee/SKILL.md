@@ -308,6 +308,11 @@ Reads and writes Chargebee subscription billing data (customers, subscriptions, 
 - write risk: external mutation of Chargebee billing data (customers, subscriptions, invoices, credit notes, orders, coupons, payment sources); several actions have direct financial/billing side effects and require approval
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

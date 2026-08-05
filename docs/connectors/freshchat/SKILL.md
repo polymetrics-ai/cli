@@ -257,6 +257,11 @@ Reads Freshchat account, user, conversation, agent, group, channel, role, outbou
   - provider-search - Freshchat POST /users/fetch remains planned/blocked on #2985 and is not exposed as a raw query/body command.
   - binary-uploads - Freshchat file/image uploads remain planned/blocked until a typed binary/multipart safety contract exists.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -58,6 +58,11 @@ Reads GoLogin browser profiles, folders, tags, and account information through t
 - read risk: external GoLogin API read of browser profile and account data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

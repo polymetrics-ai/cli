@@ -91,6 +91,11 @@ Reads and writes Zendesk Sunshine legacy custom object types, objects, relations
 - approval: required for all write actions; read access uses a read-only Basic-auth API token with no approval needed
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

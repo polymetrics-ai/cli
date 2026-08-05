@@ -1186,6 +1186,11 @@ Reads and writes allow-listed Zendesk Support resources and carries a complete b
   - zendesk-support safety - Writes use plan -> preview -> explicit approval -> execute; destructive and credential-sensitive operations require typed confirmation.
   - zendesk-support operations - Official Support API operations not yet executable remain blocked typed metadata, never raw API passthrough.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

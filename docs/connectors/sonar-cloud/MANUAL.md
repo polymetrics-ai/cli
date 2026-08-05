@@ -118,6 +118,10 @@ SECURITY
   approval: required for all write actions; each is an external, user-visible mutation on a connected SonarCloud organization or project
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect sonar-cloud

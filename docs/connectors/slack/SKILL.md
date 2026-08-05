@@ -57,6 +57,11 @@ Reads Slack workspace users, channels, and channel messages through the Slack We
 - approval: none; read-only, no reverse-ETL write surface
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

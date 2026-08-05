@@ -20,6 +20,7 @@ type Definition struct {
 	WriteActions    []WriteActionInfo `json:"write_actions,omitempty"`
 	Risk            RiskSpec          `json:"risk"`
 	Icon            *ConnectorIcon    `json:"icon,omitempty"`
+	Mechanism       *MechanismSpec    `json:"mechanism,omitempty"`
 }
 
 // StreamSummary is one Definition.Streams entry. SyncModes is always DERIVED

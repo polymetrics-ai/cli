@@ -293,6 +293,11 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
   - gong-writes - Gong mutations are typed reverse-ETL actions with plan, preview, approval, execute gates.
   - gong-direct-read - Gong direct reads are bounded JSON GET or typed POST operations with redaction for secret/download/content-shaped fields; call transcripts support a 16 MiB cap.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

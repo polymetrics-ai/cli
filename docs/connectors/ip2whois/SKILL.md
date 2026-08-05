@@ -62,6 +62,11 @@ Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing a f
 - approval: none; read-only, no reverse-ETL write surface
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

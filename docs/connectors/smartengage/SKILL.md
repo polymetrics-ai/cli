@@ -100,6 +100,11 @@ Reads SmartEngage avatars, tags, custom fields, sequences, and subscribers; crea
 - approval: required for all 9 write actions; read is unapproved
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -51,6 +51,10 @@ SECURITY
   read risk: external Qonto API read of bank transaction and account data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect qonto

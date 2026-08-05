@@ -52,6 +52,11 @@ Reads Klaus (Zendesk QA) users and rating categories through the Klaus public RE
 - read risk: external Klaus API read of user and quality-review configuration data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -62,6 +62,11 @@ Reads Gorgias helpdesk tickets, customers, messages, and satisfaction surveys th
 - read risk: external Gorgias API read of helpdesk tickets, customers, messages, and satisfaction surveys
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

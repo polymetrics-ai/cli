@@ -108,6 +108,11 @@ Reads and writes Yousign signature requests, contacts, documents, webhooks, temp
 - approval: required for all write actions; cancel_signature_request, delete_contact, and delete_webhook require explicit destructive confirmation
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

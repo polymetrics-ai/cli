@@ -61,6 +61,11 @@ Reads Zendesk Talk phone numbers, greetings, greeting categories, IVRs, and agen
 - read risk: external Zendesk Talk API read of phone number, greeting, and agent activity data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

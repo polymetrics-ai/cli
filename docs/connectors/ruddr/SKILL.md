@@ -54,6 +54,11 @@ Reads Ruddr clients, projects, and time entries through the Ruddr API. Read-only
 - read risk: external Ruddr API read of client, project, and time-entry data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

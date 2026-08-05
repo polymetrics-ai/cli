@@ -65,6 +65,11 @@ Reads Fleetio fleet management data: vehicles, contacts, fuel entries, issues, a
 - read risk: external Fleetio API read of vehicle, contact, fuel entry, issue, and service entry data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

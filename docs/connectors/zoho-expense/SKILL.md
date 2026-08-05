@@ -486,6 +486,11 @@ Reads and writes Zoho Expense API v1 resources through the declarative connector
 - approval: writes require explicit operator approval through the reverse ETL approval flow
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

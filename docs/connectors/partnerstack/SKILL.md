@@ -62,6 +62,11 @@ Reads PartnerStack partnerships, customers, transactions, and groups through the
 - read risk: external PartnerStack API read of partnership and referral-customer data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

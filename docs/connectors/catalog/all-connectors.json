@@ -196,6 +196,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -1649,6 +1653,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -1832,6 +1840,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developers.activecampaign.com/reference/overview"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -2016,6 +2028,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -2100,6 +2116,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://dev.adjust.com/en/api/rs-api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -2319,6 +2339,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -2528,6 +2552,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -2685,6 +2713,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://www.aha.io/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -2979,6 +3011,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.aircall.io/api-references/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -3187,6 +3223,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://airtable.com/developers/web/api/changelog"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -3452,6 +3492,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -3610,6 +3654,10 @@
       "review_url": "https://simpleicons.org/?q=Algolia",
       "match": "exact-name-or-slug",
       "matched_by": "algolia"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -3791,6 +3839,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -3935,6 +3987,10 @@
       "path": "icons/alpha-vantage.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -4093,6 +4149,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://advertising.amazon.com/API/docs/en-us/release-notes/deprecations"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -6778,6 +6838,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer-docs.amazon.com/sp-api/docs/sp-api-deprecations"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -7018,6 +7082,10 @@
       "path": "icons/amazon-sqs.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -7284,6 +7352,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.docs.developers.amplitude.com/analytics/apis/http-v2-api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -7377,6 +7449,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.apify.com/api/v2"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -7855,6 +7931,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -8142,6 +8222,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -8441,6 +8525,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://appfollow.docs.apiary.io/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -8579,6 +8667,10 @@
       "review_url": "https://simpleicons.org/?q=Apple",
       "match": "curated-alias",
       "matched_by": "apple"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -8663,6 +8755,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://dev.appsflyer.com/hc/reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -8773,6 +8869,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -9492,6 +9592,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.asana.com/reference/rest-api-reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -11059,6 +11163,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.ashbyhq.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -11231,6 +11339,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -11435,6 +11547,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://auth0.com/docs/api/management/v2"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -11546,6 +11662,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -11698,6 +11818,10 @@
       "path": "icons/avni.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -11845,6 +11969,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -11971,6 +12099,10 @@
       "path": "icons/aws-cloudtrail.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -12113,6 +12245,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://api.babelforce.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -12399,6 +12535,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -14229,6 +14369,10 @@
       "path": "icons/bamboohr.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -14347,6 +14491,10 @@
       "review_url": "https://simpleicons.org/?q=Basecamp",
       "match": "exact-name-or-slug",
       "matched_by": "basecamp"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -14597,6 +14745,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -15019,6 +15171,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -15180,6 +15336,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://learn.microsoft.com/en-us/advertising/guides/release-notes"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -17312,6 +17472,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -17610,6 +17774,10 @@
       "review_url": "https://simpleicons.org/?q=Bitly",
       "match": "exact-name-or-slug",
       "matched_by": "bitly"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -17761,6 +17929,10 @@
       "review_url": "https://simpleicons.org/?q=Blogger",
       "match": "exact-name-or-slug",
       "matched_by": "blogger"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -18031,6 +18203,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -18282,6 +18458,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -18576,6 +18756,10 @@
       "review_url": "https://simpleicons.org/?q=Box",
       "match": "exact-name-or-slug",
       "matched_by": "box"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -18693,6 +18877,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -18872,6 +19060,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.paypal.com/braintree/docs/reference/general/server-sdk-deprecation-policy"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -19406,6 +19598,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.braze.com/docs/api/home"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -19627,6 +19823,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.breezometer.com/api-documentation/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -19830,6 +20030,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -20120,6 +20324,10 @@
       "review_url": "https://simpleicons.org/?q=Brevo",
       "match": "exact-name-or-slug",
       "matched_by": "brevo"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -20479,6 +20687,10 @@
       "review_url": "https://simpleicons.org/?q=Brex",
       "match": "exact-name-or-slug",
       "matched_by": "brex"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -20616,6 +20828,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -20880,6 +21096,10 @@
       "review_url": "https://simpleicons.org/?q=Buildkite",
       "match": "exact-name-or-slug",
       "matched_by": "buildkite"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -21010,6 +21230,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -21105,6 +21329,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -21317,6 +21545,10 @@
       "review_url": "https://simpleicons.org/?q=Cal.com",
       "match": "curated-alias",
       "matched_by": "caldotcom"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -21615,6 +21847,10 @@
       "review_url": "https://simpleicons.org/?q=Calendly",
       "match": "exact-name-or-slug",
       "matched_by": "calendly"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -22091,6 +22327,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://apidocs.callrail.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -22414,6 +22654,10 @@
       "review_url": "https://simpleicons.org/?q=Campaign%20Monitor",
       "match": "exact-name-or-slug",
       "matched_by": "campaign-monitor"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -22554,6 +22798,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -22677,6 +22925,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -22979,6 +23231,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -23098,6 +23354,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.captaindata.co/api-documentation"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -23184,6 +23444,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -23286,6 +23550,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.cart.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -23669,6 +23937,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -23938,6 +24210,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -24679,6 +24955,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://apidocs.chargebee.com/docs/api/versioning"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -24919,6 +25199,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -25190,6 +25474,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.chargify.com/docs/api-docs/YXBpOjE0MTA4MjYx-chargify-api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -25356,6 +25644,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://dev.chartmogul.com/reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -25548,6 +25840,10 @@
       "review_url": "https://simpleicons.org/?q=Chatwoot",
       "match": "exact-name-or-slug",
       "matched_by": "chatwoot"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -25709,6 +26005,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://docs.chift.eu/docs/introduction/welcome"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -25807,6 +26107,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -25890,6 +26194,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -26223,6 +26531,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -26483,6 +26795,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://docs.circa.co/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -26727,6 +27043,10 @@
       "review_url": "https://simpleicons.org/?q=CircleCI",
       "match": "exact-name-or-slug",
       "matched_by": "circleci"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -27012,6 +27332,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -27167,6 +27491,10 @@
       "review_url": "https://simpleicons.org/?q=Clarifai",
       "match": "curated-alias",
       "matched_by": "clarifai"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -27408,6 +27736,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://clazar.io/api-docs"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -27725,6 +28057,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://clickup.com/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -28012,6 +28348,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.clockify.me/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -28379,6 +28719,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -28678,6 +29022,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.close.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -29210,6 +29558,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -29482,6 +29834,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -29683,6 +30039,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://coda.io/developers/apis/v1"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -29936,6 +30296,10 @@
       "review_url": "https://simpleicons.org/?q=Codefresh",
       "match": "exact-name-or-slug",
       "matched_by": "codefresh"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -30128,6 +30492,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.coinapi.io/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -30209,6 +30577,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.coingecko.com/en/api/documentation"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -30403,6 +30775,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://coinmarketcap.com/api/documentation/v1/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -31137,6 +31513,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://confluence.dimagi.com/display/commcarepublic/CommCare+HQ+APIs"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -31242,6 +31622,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.commercetools.com/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -31766,6 +32150,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -32263,6 +32651,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://api.configcat.com/docs/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -32466,6 +32858,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.atlassian.com/cloud/confluence/rest/v2/intro/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -32728,6 +33124,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.convertkit.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -32807,6 +33207,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://docs.convex.dev/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -32935,6 +33339,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.copper.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -33064,6 +33472,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -33241,6 +33653,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developers.criteo.com/marketing-solutions/reference/getting-started"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -33570,6 +33986,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://customer.io/docs/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -33733,6 +34153,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -34161,6 +34585,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.datadoghq.com/api/latest/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -34357,6 +34785,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://app.mydatascope.com/api/external/docs/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -34625,6 +35057,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -34781,6 +35217,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -34912,6 +35352,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://delighted.com/docs/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -35176,6 +35620,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -35739,6 +36187,10 @@
       "path": "icons/devin-ai.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -35916,6 +36368,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -36013,6 +36469,10 @@
       "review_url": "https://simpleicons.org/?q=Discord",
       "match": "exact-name-or-slug",
       "matched_by": "discord"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -36131,6 +36591,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.dixa.io/openapi/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -36250,6 +36714,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.docker.com/docker-hub/api/latest/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -36403,6 +36871,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -36744,6 +37216,10 @@
       "review_url": "https://simpleicons.org/?q=Dolibarr",
       "match": "exact-name-or-slug",
       "matched_by": "dolibarr"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -36937,6 +37413,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.dremio.com/software/rest-api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -37134,6 +37614,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://devdocs.drift.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -37380,6 +37864,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -37582,6 +38070,10 @@
       "review_url": "https://simpleicons.org/?q=Dropbox",
       "match": "curated-alias",
       "matched_by": "dropbox"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -37795,6 +38287,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -37893,6 +38389,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -38196,6 +38696,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -38791,6 +39295,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -38914,6 +39422,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -39025,6 +39537,10 @@
       "review_url": "https://simpleicons.org/?q=eBay",
       "match": "curated-alias",
       "matched_by": "ebay"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -39166,6 +39682,10 @@
       "review_url": "https://simpleicons.org/?q=eBay",
       "match": "curated-alias",
       "matched_by": "ebay"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -39582,6 +40102,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -39684,6 +40208,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://www.elastic.co/docs/reference/elasticsearch"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -39892,6 +40420,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://emailoctopus.com/api-documentation"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -40853,6 +41385,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -40957,6 +41493,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -41083,6 +41623,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -41444,6 +41988,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -41580,6 +42128,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://www.eventzilla.net/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -41882,6 +42434,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://everhour.docs.apiary.io/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -42022,6 +42578,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://exchangeratesapi.io/documentation/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -42242,6 +42802,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -42396,6 +42960,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.facebook.com/docs/marketing-api/marketing-api-changelog"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -42480,6 +43048,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.facebook.com/docs/pages/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -42594,6 +43166,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -42645,6 +43221,10 @@
       "review_url": "https://simpleicons.org/?q=Faker",
       "match": "exact-name-or-slug",
       "matched_by": "faker"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -42758,6 +43338,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://apidocs.fastbill.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -42878,6 +43462,10 @@
       "review_url": "https://simpleicons.org/?q=Fastly",
       "match": "exact-name-or-slug",
       "matched_by": "fastly"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -42990,6 +43578,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-overview"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -43126,6 +43718,10 @@
       "review_url": "https://simpleicons.org/?q=Fillout",
       "match": "exact-name-or-slug",
       "matched_by": "fillout"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -43282,6 +43878,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -43534,6 +44134,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -43646,6 +44250,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -43763,6 +44371,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -47308,6 +47920,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -47427,6 +48043,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -47545,6 +48165,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -47939,6 +48563,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.flexport.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -48052,6 +48680,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -48171,6 +48803,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -48502,6 +49138,10 @@
       "review_url": "https://simpleicons.org/?q=Formbricks",
       "match": "exact-name-or-slug",
       "matched_by": "formbricks"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -48640,6 +49280,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -48730,6 +49374,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -48857,6 +49505,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -48964,6 +49616,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.freshcaller.com/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -49478,6 +50134,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -49607,6 +50267,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.freshdesk.com/api/#change_log"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -49717,6 +50381,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.freshworks.com/crm/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -54194,6 +54862,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://api.freshservice.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -54316,6 +54988,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -54438,6 +55114,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -54585,6 +55265,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.fullstory.com/reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -54691,6 +55375,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://support.gainsight.com/PX/API_for_Developers/02Usage_of_Different_APIs"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -54814,6 +55502,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.genesys.cloud/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -55693,6 +56385,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -55816,6 +56512,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://doc.getlago.com/api-reference/intro"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -55945,6 +56645,10 @@
       "review_url": "https://simpleicons.org/?q=GIPHY",
       "match": "exact-name-or-slug",
       "matched_by": "giphy"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -59478,6 +60182,10 @@
       "review_url": "https://simpleicons.org/?q=GitBook",
       "match": "exact-name-or-slug",
       "matched_by": "gitbook"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -61720,6 +62428,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.github.com/en/rest/about-the-rest-api/breaking-changes"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -61830,6 +62542,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.gitlab.com/ee/api/rest/deprecations.html"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -61934,6 +62650,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -62403,6 +63123,10 @@
       "review_url": "https://simpleicons.org/?q=Gmail",
       "match": "exact-name-or-slug",
       "matched_by": "gmail"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -62536,6 +63260,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://gnews.io/docs/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -63974,6 +64702,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.gocardless.com/api-reference/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -64078,6 +64810,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.goldcast.io/api-docs"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -64180,6 +64916,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -64557,6 +65297,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://us-66463.app.gong.io/settings/api/documentation"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -64725,6 +65469,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.google.com/google-ads/api/docs/release-notes"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -64895,6 +65643,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -65014,6 +65766,10 @@
       "review_url": "https://simpleicons.org/?q=Google%20Calendar",
       "match": "exact-name-or-slug",
       "matched_by": "google-calendar"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -65148,6 +65904,10 @@
       "review_url": "https://simpleicons.org/?q=Google%20Classroom",
       "match": "exact-name-or-slug",
       "matched_by": "google-classroom"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -65259,6 +66019,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.google.com/admin-sdk/directory/reference/rest"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -65387,6 +66151,10 @@
       "review_url": "https://simpleicons.org/?q=Google%20Forms",
       "match": "exact-name-or-slug",
       "matched_by": "google-forms"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -65466,6 +66234,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.google.com/speed/docs/insights/v5/get-started"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -65721,6 +66493,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.google.com/search/news"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -65812,6 +66588,10 @@
       "review_url": "https://simpleicons.org/?q=Google%20Tasks",
       "match": "exact-name-or-slug",
       "matched_by": "google-tasks"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -65944,6 +66724,10 @@
       "path": "icons/googleworkpace.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -66054,6 +66838,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -66161,6 +66949,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -66249,6 +67041,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.granola.ai/introduction"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -67323,6 +68119,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.greenhouse.io/harvest.html"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -67424,6 +68224,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://www.gridly.com/docs/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -67536,6 +68340,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -67656,6 +68464,10 @@
       "path": "icons/source-gutendex.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -67773,6 +68585,10 @@
       "path": "icons/harness.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -68048,6 +68864,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.harveststatus.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -68156,6 +68976,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -68276,6 +69100,10 @@
       "path": "icons/hellobaton.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -68396,6 +69224,10 @@
       "review_url": "https://simpleicons.org/?q=Help%20Scout",
       "match": "exact-name-or-slug",
       "matched_by": "help-scout"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -68483,6 +69315,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://apidocs.hibob.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -68600,6 +69436,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -68701,6 +69541,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://api.hoorayhr.io/swagger.json"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -69422,6 +70266,10 @@
       "path": "icons/hubplanner.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -69473,6 +70321,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.hubspot.com/docs/api/overview"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -69568,6 +70420,10 @@
       "review_url": "https://simpleicons.org/?q=Hugging%20Face",
       "match": "curated-alias",
       "matched_by": "huggingface"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -69686,6 +70542,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -69795,6 +70655,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -70419,6 +71283,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -70514,6 +71382,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -70631,6 +71503,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -70750,6 +71626,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -70856,6 +71736,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -70980,6 +71864,10 @@
       "path": "icons/insightly.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -71073,6 +71961,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.facebook.com/docs/instagram-platform/changelog"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -71947,6 +72839,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://instatus.com/help/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -72063,6 +72959,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -72180,6 +73080,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -72287,6 +73191,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developers.intruder.io/docs/welcome"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -73383,6 +74291,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -73507,6 +74419,10 @@
       "review_url": "https://simpleicons.org/?q=Invoice%20Ninja",
       "match": "exact-name-or-slug",
       "matched_by": "invoiceninja"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -73625,6 +74541,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.ip2whois.com/developers-api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -73712,6 +74632,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://api.iterable.com/api/docs"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -73824,6 +74748,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -73912,6 +74840,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.atlassian.com/changelog/#"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -74021,6 +74953,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -74128,6 +75064,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -74601,6 +75541,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -74675,6 +75619,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -74776,6 +75724,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -74866,6 +75818,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://k6.io/docs/cloud/cloud-reference/cloud-rest-api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -74994,6 +75950,10 @@
       "review_url": "https://simpleicons.org/?q=Katana",
       "match": "exact-name-or-slug",
       "matched_by": "katana"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -75975,6 +76935,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -76093,6 +77057,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -76209,6 +77177,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://support.kissmetrics.io/reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -76341,6 +77313,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.klarna.com/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -76424,6 +77400,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://help.klausapp.com/en/articles/2911907-klaus-api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -76553,6 +77533,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.klaviyo.com/en/docs/api_versioning_and_deprecation_policy"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -76663,6 +77647,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.kyriba.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -76763,6 +77751,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -76875,6 +77867,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://apidocs.launchdarkly.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -76985,6 +77981,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -77250,6 +78250,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.lemlist.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -77368,6 +78372,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://www.lessannoyingcrm.com/help/topic/API"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -77481,6 +78489,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -77592,6 +78604,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -77725,6 +78741,10 @@
       "review_url": "https://simpleicons.org/?q=Linear",
       "match": "exact-name-or-slug",
       "matched_by": "linear"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -77840,6 +78860,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2024-10"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -77947,6 +78971,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/community-management/organizations"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -78062,6 +79090,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -78194,6 +79226,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -78313,6 +79349,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.lokalise.com/reference/api-introduction"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -78435,6 +79475,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://cloud.google.com/looker/docs/reference/looker-api/latest"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -79076,6 +80120,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -79193,6 +80241,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://mailchimp.com/developer/release-notes/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -79306,6 +80358,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.mailerlite.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -79559,6 +80615,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.mailersend.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -79668,6 +80728,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://documentation.mailgun.com/en/latest/api_reference.html"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -79786,6 +80850,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://dev.mailjet.com/email/reference/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -79927,6 +80995,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://dev.mailjet.com/sms/reference/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -80033,6 +81105,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -80135,6 +81211,10 @@
       "review_url": "https://simpleicons.org/?q=Mailtrap",
       "match": "exact-name-or-slug",
       "matched_by": "mailtrap"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -82699,6 +83779,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -82798,6 +83882,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.marketo.com/rest-api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -82922,6 +84010,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -83060,6 +84152,10 @@
       "review_url": "https://simpleicons.org/?q=Mendeley",
       "match": "exact-name-or-slug",
       "matched_by": "mendeley"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -83212,6 +84308,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -83367,6 +84467,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -83519,6 +84623,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.merge.dev/api-reference/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -83639,6 +84747,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.metabase.com/docs/latest/api-documentation"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -83763,6 +84875,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -83905,6 +85021,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -84046,6 +85166,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -84188,6 +85312,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -84315,6 +85443,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -86075,6 +87207,10 @@
       "review_url": "https://simpleicons.org/?q=Miro",
       "match": "exact-name-or-slug",
       "matched_by": "miro"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -86183,6 +87319,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -86292,6 +87432,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -86509,6 +87653,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.mixpanel.com/reference/overview"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -86642,6 +87790,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -86768,6 +87920,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.monday.com/api-reference/docs"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -86873,6 +88029,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -86998,6 +88158,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://myhours.com/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -87610,6 +88774,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.n8n.io/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -87740,6 +88908,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://api.nasa.gov/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -87859,6 +89031,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -88336,6 +89512,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -88470,6 +89650,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1540391670.html"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -88601,6 +89785,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://newsapi.org/docs"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -88712,6 +89900,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://newsdata.io/documentation"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -88844,6 +90036,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -88968,6 +90164,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -89062,6 +90262,10 @@
       "path": "icons/nexus-datasets.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -89175,6 +90379,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -89865,6 +91073,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -89958,6 +91170,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -90053,6 +91269,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.notion.com/reference/changes-by-version"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -91188,6 +92408,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -91305,6 +92529,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -91398,6 +92626,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.nytimes.com/apis"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -97655,6 +98887,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developer.okta.com/docs/reference/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -97777,6 +99013,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -97903,6 +99143,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -99480,6 +100724,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -99544,6 +100792,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://documentation.onesignal.com/reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -99660,6 +100912,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -99753,6 +101009,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -99817,6 +101077,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.openexchangerates.org/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -99929,6 +101193,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://docs.openaq.org/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -100206,6 +101474,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -100334,6 +101606,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://openweathermap.org/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -100416,6 +101692,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -100522,6 +101802,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.opsgenie.com/docs/api-overview"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -100616,6 +101900,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -100740,6 +102028,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.withorb.com/reference/api-reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -101201,6 +102493,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://cloud.ouraring.com/docs/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -101361,6 +102657,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -101485,6 +102785,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -103988,6 +105292,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://api.outreach.io/api/v2/docs"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -104080,6 +105388,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -104347,6 +105659,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -104448,6 +105764,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developer.paddle.com/api-reference/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -104549,6 +105869,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.pagerduty.com/api-reference/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -105460,6 +106784,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -105541,6 +106869,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -105632,6 +106964,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -107170,6 +108506,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.salesforce.com/docs/marketing/pardot/overview"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -107267,6 +108607,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -107377,6 +108721,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.partnerstack.com/docs/api-overview"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -107752,6 +109100,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -107875,6 +109227,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.paypal.com/api/rest/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -108012,6 +109368,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://paystack.com/docs/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -108609,6 +109969,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://engageapi.pendo.io/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -108841,6 +110205,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -108993,6 +110361,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -109125,6 +110497,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -109381,6 +110757,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://persistiq.com/api-docs/index.html"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -109590,6 +110970,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -109745,6 +111129,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.pexels.com/api/documentation/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -110017,6 +111405,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -110690,6 +112082,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://picqer.com/en/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -110931,6 +112327,10 @@
       "review_url": "https://simpleicons.org/?q=Pingdom",
       "match": "exact-name-or-slug",
       "matched_by": "pingdom"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -111065,6 +112465,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.pinterest.com/docs/changelog/changelog/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -111491,6 +112895,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.pipedrive.com/docs/api/v1"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -111599,6 +113007,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -111694,6 +113106,10 @@
       "path": "icons/pivotal-tracker.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -112789,6 +114205,10 @@
       "review_url": "https://simpleicons.org/?q=Matomo",
       "match": "curated-alias",
       "matched_by": "matomo"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -112885,6 +114305,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://plaid.com/docs/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -112984,6 +114408,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -113111,6 +114539,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://plausible.io/docs/stats-api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -113219,6 +114651,10 @@
       "path": "icons/pocket.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -114523,6 +115959,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://pokeapi.co/docs/v2"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -114652,6 +116092,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://polygon.io/docs/stocks/getting-started"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -114726,6 +116170,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -114817,6 +116265,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.postgresql.org/docs/current/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -114906,6 +116358,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://posthog.com/docs/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -115450,6 +116906,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://postmarkapp.com/developer"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -115583,6 +117043,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://devdocs.prestashop-project.org/9/webservice/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -115684,6 +117148,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -115789,6 +117257,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.primetric.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -116258,6 +117730,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developers.printify.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -116356,6 +117832,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -116465,6 +117945,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developer.productive.io/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -116521,6 +118005,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://github.com/public-apis/public-apis"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -117823,6 +119311,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -117882,6 +119374,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://warehouse.pypa.io/api-reference/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -117974,6 +119470,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://api-doc.qonto.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -118074,6 +119574,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://help.qualaroo.com/hc/en-us/articles/201969438-The-Qualaroo-API"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -118221,6 +119725,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -118332,6 +119840,10 @@
       "path": "icons/railz.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -118675,6 +120187,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developers.rdstation.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -118766,6 +120282,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://docs.getrecharge.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -118871,6 +120391,10 @@
       "path": "icons/recreation.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -118981,6 +120505,10 @@
       "path": "icons/recruitee.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -120902,6 +122430,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.recurly.com/api/v2021-02-25/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -120986,6 +122518,10 @@
       "review_url": "https://simpleicons.org/?q=Reddit",
       "match": "exact-name-or-slug",
       "matched_by": "reddit"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -121418,6 +122954,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -121561,6 +123101,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -121681,6 +123225,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -124125,6 +125673,10 @@
       "path": "icons/reply-io.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -124260,6 +125812,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -124372,6 +125928,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.retently.com/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -125388,6 +126948,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://www.revenuecat.com/docs/api-v1"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -125500,6 +127064,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developer.revolut.com/docs/guides/merchant/reference/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -125625,6 +127193,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -126002,6 +127574,10 @@
       "path": "icons/rki.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -126136,6 +127712,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developer.rocket.chat/apidocs"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -126264,6 +127844,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -126927,6 +128511,10 @@
       "review_url": "https://simpleicons.org/?q=Rollbar",
       "match": "exact-name-or-slug",
       "matched_by": "rollbar"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -127016,6 +128604,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -127082,6 +128674,10 @@
       "path": "icons/rss.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -127172,6 +128768,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -127257,6 +128857,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -127533,6 +129137,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -127904,6 +129512,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -128005,6 +129617,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -128166,6 +129782,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developers.salesloft.com/docs/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -128309,6 +129929,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://api.sap.com/package/SAPFieldglass/rest"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -128508,6 +130132,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -128576,6 +130204,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -128652,6 +130284,10 @@
       "source": "official_site",
       "review_status": "manual_override",
       "review_url": "https://docs.searxng.org/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -128745,6 +130381,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://docs.secoda.co/api.md"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -128827,6 +130467,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -128922,6 +130566,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.sendgrid.com/api-reference/how-to-use-the-sendgrid-v3-api/authentication"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -129017,6 +130665,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.brevo.com/reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -129247,6 +130899,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -129448,6 +131104,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://sendpulse.com/integrations/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -129512,6 +131172,10 @@
       "path": "icons/senseforce.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -129626,6 +131290,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.sentry.io/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -129728,6 +131396,10 @@
       "path": "icons/serpstat.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -129867,6 +131539,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -130009,6 +131685,10 @@
       "path": "icons/microsoft-sharepoint.svg",
       "source": "upstream_registry",
       "review_status": "upstream_seeded"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -130255,6 +131935,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -130351,6 +132035,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -130453,6 +132141,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://www.shipstation.com/docs/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -132501,6 +134193,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -132601,6 +134297,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developer.shortcut.com/api/rest/v3"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -132677,6 +134377,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.short.io/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -133564,6 +135268,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -133664,6 +135372,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -133754,6 +135466,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -133972,6 +135688,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -134045,6 +135765,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -134210,6 +135934,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -134308,6 +136036,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://api.slack.com/changelog"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -134510,6 +136242,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://smaily.com/help/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -134684,6 +136420,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://smartengage.com/docs/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -134898,6 +136638,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -136300,6 +138044,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://smartsheet.redoc.ly/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -136459,6 +138207,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -136594,6 +138346,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.snap.com/api/marketing-api/Ads-API/announcements"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -137089,6 +138845,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -137350,6 +139110,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://sonarcloud.io/web_api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -137549,6 +139313,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://github.com/r-spacex/SpaceX-API/tree/master/docs"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -137961,6 +139729,10 @@
       "review_url": "https://simpleicons.org/?q=SparkPost",
       "match": "exact-name-or-slug",
       "matched_by": "sparkpost"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -138142,6 +139914,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -138288,6 +140064,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -138420,6 +140200,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -138538,6 +140322,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.squareup.com/reference/square"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -138701,6 +140489,10 @@
       "review_url": "https://simpleicons.org/?q=Squarespace",
       "match": "exact-name-or-slug",
       "matched_by": "squarespace"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -139033,6 +140825,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -139199,6 +140995,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.statuspage.io/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -139292,6 +141092,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -139580,6 +141384,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://www.stockdata.org/documentation"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -139695,6 +141503,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.strava.com/docs/reference/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -139862,6 +141674,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://stripe.com/docs/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -140405,6 +142221,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.surveysparrow.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -140596,6 +142416,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.surveycto.com/05-exporting-and-publishing-data/02-api-access/01.api-access.html"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -142019,6 +143843,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.surveymonkey.com/api/v3/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -142103,6 +143931,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developers.survicate.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -142355,6 +144187,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -142577,6 +144413,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -142663,6 +144503,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -142835,6 +144679,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -142913,6 +144761,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -143190,6 +145042,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -143429,6 +145285,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -143641,6 +145501,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -143749,6 +145613,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://apidocs.tempo.io/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -144028,6 +145896,10 @@
       "review_url": "https://simpleicons.org/?q=TestRail",
       "match": "exact-name-or-slug",
       "matched_by": "testrail"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -144141,6 +146013,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://open-platform.theguardian.com/documentation/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -144559,6 +146435,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developers.thinkific.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -145395,6 +147275,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developers.thinkific.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -145636,6 +147520,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -145740,6 +147628,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -146169,6 +148061,10 @@
       "review_url": "https://simpleicons.org/?q=Ticket%20Tailor",
       "match": "exact-name-or-slug",
       "matched_by": "tickettailor"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -146283,6 +148179,10 @@
       "review_url": "https://simpleicons.org/?q=TickTick",
       "match": "exact-name-or-slug",
       "matched_by": "ticktick"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -146388,6 +148288,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -146523,6 +148427,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://dev.timelyapp.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -146615,6 +148523,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -148234,6 +150146,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.themoviedb.org/reference/intro/getting-started"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -148488,6 +150404,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.todoist.com/rest/v2/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -148750,6 +150670,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.track.toggl.com/docs/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -148926,6 +150850,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -149018,6 +150946,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.atlassian.com/cloud/trello/rest/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -149227,6 +151159,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -149326,6 +151262,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.trustpilot.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -149400,6 +151340,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.tvmaze.com/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -149510,6 +151454,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -151478,6 +153426,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.twilio.com/docs/usage/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -151593,6 +153545,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.twilio.com/docs/taskrouter/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -151693,6 +153649,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.twitter.com/en/docs/twitter-api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -151798,6 +153758,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://api.tyntec.com/reference/messaging"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -151914,6 +153878,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.typeform.com/developers/changelog/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -152095,6 +154063,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -152194,6 +154166,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.getunleash.io/reference/api/unleash"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -152412,6 +154388,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -152623,6 +154603,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -152703,6 +154687,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.census.gov/data/developers/data-sets.html"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -152944,6 +154932,10 @@
       "review_url": "https://simpleicons.org/?q=UserVoice",
       "match": "exact-name-or-slug",
       "matched_by": "uservoice"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -153718,6 +155710,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://docs.vantage.sh/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -154048,6 +156044,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://developers.veeqo.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -154349,6 +156349,10 @@
       "review_url": "https://simpleicons.org/?q=Vercel",
       "match": "exact-name-or-slug",
       "matched_by": "vercel"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -154733,6 +156737,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://restdocs.e-conomic.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -154970,6 +156978,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -155107,6 +157119,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -155245,6 +157261,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://waiteraid.com/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -155363,6 +157383,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -155596,6 +157620,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -155741,6 +157769,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://weatherstack.com/documentation"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -155909,6 +157941,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://webscraper.io/documentation/api"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -156236,6 +158272,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.webflow.com/data/reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -156649,6 +158689,10 @@
       "review_url": "https://simpleicons.org/?q=When%20I%20Work",
       "match": "exact-name-or-slug",
       "matched_by": "when-i-work"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -156771,6 +158815,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://whiskyhunter.net/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -156882,6 +158930,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -157006,6 +159058,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -157342,6 +159398,10 @@
       "review_url": "https://simpleicons.org/?q=WordPress",
       "match": "exact-name-or-slug",
       "matched_by": "wordpress"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -158167,6 +160227,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://workable.readme.io/reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -158263,6 +160327,10 @@
       "source": "official",
       "review_status": "official_verified",
       "review_url": "https://community.workday.com/sites/default/files/file-hosting/productionapi/index.html"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -158353,6 +160421,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -158501,6 +160573,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -158661,6 +160737,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.workramp.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -158759,6 +160839,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.wrike.com/api/v4/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -158948,6 +161032,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -160856,6 +162944,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.xero.com/documentation/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -160922,6 +163014,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://xkcd.com/json.html"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -161103,6 +163199,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -161176,6 +163276,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://www.yahoofinanceapi.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -161495,6 +163599,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://apidocs.yotpo.com/reference"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -161732,6 +163840,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -161914,6 +164026,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.younium.com/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -162115,6 +164231,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -162363,6 +164483,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.google.com/youtube/analytics"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -162543,6 +164667,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -162641,6 +164769,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://help.zapier.com/hc/en-us/articles/8496293271053-Save-and-retrieve-data-from-Zaps"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -162796,6 +164928,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -162906,6 +165042,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://support.zendesk.com/hc/en-us/sections/4405298889242-Developer-updates"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -163068,6 +165208,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.zendesk.com/api-reference/custom-data/custom-objects-api/introduction/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -164147,6 +166291,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developer.zendesk.com/api-reference/ticketing/introduction/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -164260,6 +166408,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://support.zendesk.com/hc/en-us/sections/4405298889242-Developer-updates"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -164452,6 +166604,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -164664,6 +166820,10 @@
       "review_url": "https://simpleicons.org/?q=Zoho",
       "match": "curated-alias",
       "matched_by": "zoho"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -164930,6 +167090,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -165024,6 +167188,10 @@
       "review_url": "https://simpleicons.org/?q=Zoho",
       "match": "curated-alias",
       "matched_by": "zoho"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -171568,6 +173736,10 @@
       "review_url": "https://simpleicons.org/?q=Zoho",
       "match": "curated-alias",
       "matched_by": "zoho"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -171673,6 +173845,10 @@
       "review_url": "https://simpleicons.org/?q=Zoho",
       "match": "curated-alias",
       "matched_by": "zoho"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -171782,6 +173958,10 @@
       "review_url": "https://simpleicons.org/?q=Zoho",
       "match": "curated-alias",
       "matched_by": "zoho"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -172843,6 +175023,10 @@
       "review_url": "https://simpleicons.org/?q=Zoho",
       "match": "curated-alias",
       "matched_by": "zoho"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -172952,6 +175136,10 @@
       "review_url": "https://simpleicons.org/?q=Zoho",
       "match": "curated-alias",
       "matched_by": "zoho"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -173061,6 +175249,10 @@
       "review_url": "https://simpleicons.org/?q=Zoho",
       "match": "curated-alias",
       "matched_by": "zoho"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -173440,6 +175632,10 @@
       "source": "polymetrics",
       "review_status": "polymetrics",
       "review_url": "https://github.com/polymetrics-ai/cli"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   },
   {
@@ -173540,6 +175736,10 @@
       "source": "upstream_registry",
       "review_status": "upstream_seeded",
       "review_url": "https://developers.zoom.us/docs/api/"
+    },
+    "mechanism": {
+      "kind": "official_api",
+      "sanctioned_by_provider": true
     }
   }
 ]

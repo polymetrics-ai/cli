@@ -205,6 +205,11 @@ Reads and writes events, orders, issued tickets, event series, holds, discounts,
 - approval: required for delete_event_series (confirm: destructive); other writes are low-risk additive/idempotent mutations, no approval required
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

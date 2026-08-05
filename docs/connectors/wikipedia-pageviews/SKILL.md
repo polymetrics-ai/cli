@@ -59,6 +59,11 @@ Reads Wikimedia pageview metrics for articles and top-article reports through th
 - read risk: external Wikimedia public API read of aggregate pageview metrics; no authentication, no PII
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

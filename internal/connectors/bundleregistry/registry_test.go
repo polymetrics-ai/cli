@@ -1,8 +1,12 @@
 package bundleregistry
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/fs"
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
@@ -108,4 +112,104 @@ func TestGitHubGuideIncludesCLISurfaceHelp(t *testing.T) {
 			t.Fatalf("GitHub manual missing %q:\n%s", want, manual)
 		}
 	}
+}
+
+// TestNewOmitsUnloadableBundlesInsteadOfPanicking proves the kill switch
+// disables one connector rather than the whole CLI: a bundle whose metadata
+// declares mechanism.disabled_reason fails engine.Load, and New must drop
+// just that connector from the catalog while every other bundle still
+// registers — never panic, which would abort every pm invocation.
+func TestNewOmitsUnloadableBundlesInsteadOfPanicking(t *testing.T) {
+	fixture := fstest.MapFS{}
+	copyBundleForTest(t, fixture, "github")
+	copyBundleForTest(t, fixture, "akeneo")
+	disableBundleForTest(t, fixture, "akeneo", "upstream routes rotated; pending re-verification")
+	useDefinitionsFSForTest(t, fixture)
+	warnings := captureWarningsForTest(t)
+
+	registry := newWithoutPanicking(t)
+
+	if _, ok := registry.Get("akeneo"); ok {
+		t.Fatal("registry contains akeneo; a bundle with mechanism.disabled_reason must be omitted from the catalog")
+	}
+	if _, ok := registry.Get("github"); !ok {
+		t.Fatal("registry missing github; bundles that loaded successfully must still register")
+	}
+
+	got := warnings.String()
+	for _, want := range []string{"akeneo", "upstream routes rotated"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("warning output %q does not name %q; an omitted connector must be reported", got, want)
+		}
+	}
+}
+
+func captureWarningsForTest(t *testing.T) *strings.Builder {
+	t.Helper()
+	var sb strings.Builder
+	prev := warnf
+	warnf = func(format string, a ...any) { fmt.Fprintf(&sb, format, a...) }
+	t.Cleanup(func() { warnf = prev })
+	return &sb
+}
+
+func newWithoutPanicking(t *testing.T) *connectors.Registry {
+	t.Helper()
+	defer func() {
+		if r := recover(); r != nil {
+			t.Fatalf("New() panicked on an unloadable bundle: %v", r)
+		}
+	}()
+	return New()
+}
+
+func useDefinitionsFSForTest(t *testing.T, fsys fs.FS) {
+	t.Helper()
+	prev := definitionsFS
+	definitionsFS = fsys
+	t.Cleanup(func() { definitionsFS = prev })
+}
+
+func copyBundleForTest(t *testing.T, dst fstest.MapFS, name string) {
+	t.Helper()
+	err := fs.WalkDir(defs.FS, name, func(path string, d fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if d.IsDir() {
+			return nil
+		}
+		raw, err := fs.ReadFile(defs.FS, path)
+		if err != nil {
+			return err
+		}
+		dst[path] = &fstest.MapFile{Data: raw}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("copy bundle %s: %v", name, err)
+	}
+}
+
+func disableBundleForTest(t *testing.T, fsys fstest.MapFS, name, reason string) {
+	t.Helper()
+	path := name + "/metadata.json"
+	file, ok := fsys[path]
+	if !ok {
+		t.Fatalf("fixture is missing %s", path)
+	}
+	var meta map[string]any
+	if err := json.Unmarshal(file.Data, &meta); err != nil {
+		t.Fatalf("decode %s: %v", path, err)
+	}
+	meta["mechanism"] = map[string]any{
+		"kind":                   "official_api",
+		"sanctioned_by_provider": true,
+		"disabled_reason":        reason,
+	}
+	raw, err := json.Marshal(meta)
+	if err != nil {
+		t.Fatalf("encode %s: %v", path, err)
+	}
+	fsys[path] = &fstest.MapFile{Data: raw}
 }

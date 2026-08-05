@@ -279,6 +279,11 @@ Reads and writes EasyPost shipping resources including shipments, trackers, addr
 - approval: reverse ETL plan preview and approval required for every write action; charge-bearing/destructive actions are flagged in writes.json
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

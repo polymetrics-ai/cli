@@ -206,6 +206,11 @@ Reads and writes BigMailer brands, account users, and brand-scoped contacts, lis
 - approval: required for every write action; see writes.json risk field per action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

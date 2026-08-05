@@ -329,6 +329,11 @@ Reads and writes the documented Keka HRMS REST API surface for Core HR, document
 - approval: reverse ETL writes require plan, preview, and approval token before live Keka mutations execute
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -55,6 +55,11 @@ Reads District of Columbia Master Address Repository (MAR 2) locations, units, a
 - read risk: external Open Data DC (MAR 2) API read of public address/parcel data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -61,6 +61,10 @@ SECURITY
   read risk: external News API read of article and source metadata
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect news-api

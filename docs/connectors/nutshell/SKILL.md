@@ -414,6 +414,11 @@ Reads and writes documented Nutshell CRM REST resources through the Nutshell RES
 - approval: required for write actions; destructive delete actions carry destructive confirmation metadata
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

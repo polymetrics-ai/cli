@@ -69,6 +69,11 @@ Reads Google Web Fonts families (default, popular, trending, newest, and alphabe
 - approval: none; read-only public font catalog API
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

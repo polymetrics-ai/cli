@@ -67,6 +67,11 @@ Reads Lago customers, invoices, subscriptions, plans, and billable metrics throu
 - approval: none; read-only source connector
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

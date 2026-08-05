@@ -114,6 +114,10 @@ SECURITY
   approval: required for update_account/update_webhook/disconnect_account/delete_webhook; create_user/create_webhook require no approval (low-risk, non-destructive)
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect phyllo

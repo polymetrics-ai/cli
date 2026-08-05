@@ -157,6 +157,10 @@ COMMAND SURFACE
   Help topics:
     safety - Amazon SQS write commands always use reverse ETL plan, preview, approval, and execute; destructive commands require typed confirmation.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect amazon-sqs

@@ -118,6 +118,10 @@ SECURITY
   write risk: external mutation of Dwolla customers, funding sources, transfers (cancel only, never create/send), webhook subscriptions, and beneficial owners; several actions are destructive/not reversible (remove_funding_source, cancel_transfer, delete_webhook_subscription, remove_beneficial_owner) and beneficial-owner actions carry SSN/PII; approval required
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect dwolla

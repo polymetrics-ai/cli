@@ -712,6 +712,11 @@ Reads and writes documented Miro Platform, Enterprise, SCIM, and experimental RE
 - approval: required for every write action; destructive deletes require destructive confirmation
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

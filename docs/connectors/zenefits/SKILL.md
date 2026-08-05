@@ -83,6 +83,11 @@ Reads Zenefits people, companies, departments, locations, employments, custom fi
 - approval: none; read-only bearer token access. The entire documented Zenefits API is read-only (no write endpoint exists), so there is no write risk to assess
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

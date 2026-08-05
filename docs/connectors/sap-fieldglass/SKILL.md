@@ -53,6 +53,11 @@ Reads SAP Fieldglass workers, job postings, and time sheets through the SAP Fiel
 - read risk: external SAP Fieldglass API read of worker, job posting, and time sheet data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

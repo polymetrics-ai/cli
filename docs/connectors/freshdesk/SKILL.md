@@ -67,6 +67,11 @@ Reads Freshdesk tickets, contacts, companies, agents, and groups through the Fre
 - read risk: external Freshdesk API read of support tickets, contacts, companies, agents, and groups
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -69,6 +69,11 @@ Reads GIFs, stickers, and clips from the Giphy search and trending REST endpoint
 - approval: none; read-only public media source connector
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

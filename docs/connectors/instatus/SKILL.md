@@ -389,6 +389,11 @@ Reads and manages Instatus status pages, components, incidents, maintenances, te
 - approval: required for write actions; destructive delete actions are marked destructive
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

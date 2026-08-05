@@ -238,6 +238,11 @@ Reads Braze campaigns, Canvases, segments (list + per-id details/analytics-summa
 - approval: required for destructive actions (delete_users, remove_user_external_ids, delete_catalog, delete_catalog_item, create_email_blocklist) and for any live send (send_message, trigger_campaign_send, trigger_canvas_send); catalog/content-block/template/preference-center create-update and compliance-list removals are lower-risk but still externally visible
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

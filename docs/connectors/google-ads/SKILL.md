@@ -117,6 +117,11 @@ Declarative Google Ads connector for v22 customer, campaign, ad group, direct-re
   - v22 list-plannable-user-interests - Read Google Ads v22.listPlannableUserInterests. [intent=direct_read availability=implemented operation=google_ads.v22.list.plannable.user.interests]; approval: none; risk: Bounded JSON direct read; response fields with secret-like names are redacted.; flags: --customer-id (required), --name-query, --path-query, --user-interest-taxonomy-types
   - v22 list-plannable-user-lists - Read Google Ads v22.listPlannableUserLists. [intent=direct_read availability=implemented operation=google_ads.v22.list.plannable.user.lists]; approval: none; risk: Bounded JSON direct read; response fields with secret-like names are redacted.; flags: --customer-id (required), --customer-reach-group
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

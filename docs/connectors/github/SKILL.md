@@ -1545,6 +1545,11 @@ Reads GitHub repository, issue, pull request, code, release, collaboration, Acti
   - local-workflows - Commands that depend on local git, browser, shell completion, extensions, or gh config are documented but not connector-dispatched.
   - known-gaps - Projects, Discussions, Search, direct reads, and sensitive/admin surfaces are planned follow-up slices.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

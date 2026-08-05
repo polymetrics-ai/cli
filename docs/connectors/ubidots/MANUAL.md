@@ -93,6 +93,10 @@ SECURITY
   approval: required for delete_device/delete_variable; other writes are low-risk external mutations
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect ubidots

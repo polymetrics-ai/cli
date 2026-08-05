@@ -93,6 +93,11 @@ Reads and writes ZapSign documents, signers, templates, and webhooks.
 - approval: required for all write actions; read access uses a read-only API token with no approval needed
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

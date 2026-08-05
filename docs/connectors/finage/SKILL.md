@@ -71,6 +71,11 @@ Reads Finage US market data: most active stocks, top gainers and losers, sector 
 - read risk: external Finage API read of market data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

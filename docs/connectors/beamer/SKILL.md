@@ -133,6 +133,11 @@ Reads and writes Beamer NPS survey responses, announcement posts, feature reques
 - approval: required for every write action; see writes.json risk field per action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

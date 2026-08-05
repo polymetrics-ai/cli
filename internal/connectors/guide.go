@@ -47,7 +47,62 @@ func GuideOf(c Connector) ConnectorGuide {
 	if provider, ok := c.(CommandSurfaceProvider); ok {
 		guide = guideWithCommandSurface(guide, provider.CommandSurface())
 	}
+	guide = guideWithMechanism(guide, manifest)
 	return guideWithIcon(guide, manifest)
+}
+
+// guideWithMechanism appends a MECHANISM section reading manifest's
+// mechanism field — never inferred, the same field `pm connectors
+// list`/`inspect --json` render (design report §5.2). A connector with no
+// declared mechanism (a local primitive like Sample/File/Warehouse/Outbox,
+// none of which talk to a third-party provider) gets no section at all.
+func guideWithMechanism(guide ConnectorGuide, manifest Manifest) ConnectorGuide {
+	if manifest.Metadata.Mechanism == nil {
+		return guide
+	}
+	for _, section := range guide.Sections {
+		if strings.EqualFold(section.Title, "mechanism") {
+			return guide
+		}
+	}
+	guide.Sections = append(guide.Sections, mechanismSection(manifest))
+	return guide
+}
+
+func mechanismSection(manifest Manifest) GuideSection {
+	mech := manifest.Metadata.Mechanism
+	lines := []string{"kind: " + mech.Kind}
+	if mech.Label != "" {
+		lines = append(lines, "label: "+mech.Label)
+	}
+	if mech.SanctionedByProvider {
+		lines = append(lines, "sanctioned_by_provider: true (official)")
+	} else {
+		lines = append(lines, "sanctioned_by_provider: false (UNOFFICIAL, experimental — see risk block)")
+	}
+	if mech.AuthFlow != "" {
+		lines = append(lines, "auth_flow: "+mech.AuthFlow)
+	}
+	if mech.ProviderTermsURL != "" {
+		lines = append(lines, "provider_terms_url: "+mech.ProviderTermsURL)
+	}
+	if mech.OptInRequired {
+		lines = append(lines, "opt_in_required: true — disabled until explicitly enabled and the risk warning is accepted")
+	}
+	if mech.UpstreamPin != nil {
+		line := "upstream_pin: " + mech.UpstreamPin.Repo + "@" + mech.UpstreamPin.SHA
+		if mech.UpstreamPin.VerifiedAt != "" {
+			line += " (verified_at: " + mech.UpstreamPin.VerifiedAt + ")"
+		}
+		lines = append(lines, line)
+	}
+	if mech.BreakageReviewCadenceDays > 0 {
+		lines = append(lines, fmt.Sprintf("breakage_review_cadence_days: %d", mech.BreakageReviewCadenceDays))
+	}
+	if mech.DisabledReason != "" {
+		lines = append(lines, "disabled_reason: "+mech.DisabledReason)
+	}
+	return GuideSection{Title: "Mechanism", Lines: lines}
 }
 
 func guideWithIcon(guide ConnectorGuide, manifest Manifest) ConnectorGuide {

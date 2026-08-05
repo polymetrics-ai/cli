@@ -1,5 +1,12 @@
 # AGENTS.md
 
+## Maintaining this file
+
+Keep this file for knowledge useful to almost every future agent session in this project.
+Do not repeat what the codebase already shows; point to the authoritative file or command instead.
+Prefer rewriting or pruning existing entries over appending new ones.
+When updating this file, preserve this bar for all agents and keep entries concise.
+
 ## Active program: connector-architecture-v2
 
 An in-progress rewrite of the connector layer into JSON bundles (`internal/connectors/defs/<name>/`)
@@ -11,6 +18,28 @@ then `docs/migration/conventions.md` (the connector authoring recipe) and
 committed, verified issue/PR branches and open PRs after local gates pass. Never push to `main`;
 the parent PR into `main` remains human-gated. Legacy connector Go under
 `internal/connectors/<name>/*.go` stays until the human-gated wave 6 cutover.
+
+## Dual-mechanism connector foundations
+
+`internal/browserauth/` is the shared package that authenticates through a real browser and yields
+either an official OAuth token (`loopback/` PKCE, `device/` RFC 8628) or a captured browser session
+(`driver.NewFlow`, go-rod-based — its lower-level `Session` interface is deliberately limited to
+Navigate/WaitFor/GetCookies/Close, enforced by a grep guard test, so it can never type a password).
+`store/` persists
+both credential kinds and a risk-acceptance record in the vault. A connector's access mechanism is
+declared, never inferred, via `metadata.json`'s `mechanism` block (`engine.MechanismSpec`,
+`internal/connectors/engine/bundle.go`); a bundle whose name ends `-web` must declare
+`kind: "web_session"` and vice versa, and a `web_session` mechanism must be `alpha`,
+`opt_in_required`, and pinned to an `upstream_pin`. `pm connectors list`/`inspect` render an
+`[UNOFFICIAL]` marker and the mechanism block from that one field. `pm connectors enable <name>`
+implements the opt-in risk-acceptance gate for `web_session` connectors (print-then-reinvoke with
+`--accept-risk <sha256-of-the-warning-text>`, never a bare boolean flag). `internal/vault/` gained an
+OS-keychain key protector that is opt-in only — `vault.Init`/`Open` still default a new vault to the
+pre-existing plaintext file key, and `vault.KeychainProtector{}` is reached solely through an explicit
+`vault.InitWithProtector` (a follow-up hardening PR makes it the default once it fails closed instead
+of re-minting over existing ciphertext) — plus a `connector/profile/kind` namespace for per-account
+isolation (`PutNamespaced`/`PutBlob`/`List`/`DeleteAll`), and `RotateKey`. No connector consumes any
+of this yet.
 
 ## Project
 

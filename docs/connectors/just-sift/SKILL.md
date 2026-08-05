@@ -50,6 +50,11 @@ Reads JustSift people directory profiles and person field definitions through th
 - read risk: external JustSift API read of people directory profiles and field definitions
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

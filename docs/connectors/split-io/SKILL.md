@@ -97,6 +97,11 @@ Reads Split.io workspaces, environments, feature flags, segments, groups, traffi
 - approval: reverse ETL plan approval required before all writes; every write action in this bundle changes production feature-flag or segment-targeting behavior
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

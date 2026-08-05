@@ -353,6 +353,11 @@ Reads Gist contacts, tags, segments, campaigns, forms, teammates, articles, coll
 - approval: reverse ETL writes require plan preview and approval token
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

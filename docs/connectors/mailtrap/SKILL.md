@@ -62,6 +62,11 @@ Reads Mailtrap accounts, inboxes, projects, and sending domains through the Mail
 - read risk: external Mailtrap API read of account-management data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

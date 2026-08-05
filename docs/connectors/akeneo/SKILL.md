@@ -123,6 +123,11 @@ Reads Akeneo PIM products, categories, families, attributes, channels, product m
 - write risk: external Akeneo PIM API upsert (create-or-update, PATCH-based) of products, categories, families, attributes, channels, product models, family variants, attribute groups, and association types; schema-shaping mutations (family/attribute/attribute-group) affect every product referencing them, approval required
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

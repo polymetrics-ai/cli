@@ -101,6 +101,11 @@ Reads Breezy HR positions, hiring pipelines, per-position candidates, department
 - approval: none required by default; review update_position_state (publishes job postings) and move_candidate_stage (may trigger candidate-facing communications) before use in an automated pipeline
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

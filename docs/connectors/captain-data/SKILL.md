@@ -67,6 +67,11 @@ Reads Captain Data workspace, workflows, jobs, and job results, and writes a lau
 - write risk: external mutation; launches a live Captain Data workflow run, consuming account credits and potentially performing external side effects depending on the workflow's own configured steps; approval required
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -152,6 +152,10 @@ SECURITY
   approval: required for destructive actions (delete_bitlink, delete_webhook, delete_qr_code, delete_bitlink_tags) and for webhook URL mutations; creates/updates of bitlinks, campaigns, channels, and QR codes are low-risk
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect bitly

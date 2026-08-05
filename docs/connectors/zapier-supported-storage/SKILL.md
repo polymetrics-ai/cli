@@ -68,6 +68,11 @@ Reads and writes Zapier Storage key/value records.
 - approval: required for write actions; delete_all_records requires explicit destructive confirmation
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

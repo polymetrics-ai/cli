@@ -245,6 +245,37 @@ func synthesizeMetadata(b Bundle) connectors.Metadata {
 			Write:   b.Metadata.Capabilities.Write,
 			Query:   b.Metadata.Capabilities.Query,
 		},
+		Mechanism: synthesizeMechanism(b),
+	}
+}
+
+// synthesizeMechanism converts the bundle's engine.MechanismSpec (the
+// authoring/loader source of truth, always non-nil after Load — see
+// normalizeAndValidateMechanism) to the connectors-facing view. Shared by
+// synthesizeMetadata and synthesizeDefinition so the two never drift.
+func synthesizeMechanism(b Bundle) *connectors.MechanismSpec {
+	m := b.Metadata.Mechanism
+	if m == nil {
+		return nil
+	}
+	var upstreamPin *connectors.MechanismUpstreamPin
+	if m.UpstreamPin != nil {
+		upstreamPin = &connectors.MechanismUpstreamPin{
+			Repo:       m.UpstreamPin.Repo,
+			SHA:        m.UpstreamPin.SHA,
+			VerifiedAt: m.UpstreamPin.VerifiedAt,
+		}
+	}
+	return &connectors.MechanismSpec{
+		Kind:                      m.Kind,
+		Label:                     m.Label,
+		SanctionedByProvider:      m.SanctionedByProvider,
+		ProviderTermsURL:          m.ProviderTermsURL,
+		AuthFlow:                  m.AuthFlow,
+		OptInRequired:             m.OptInRequired,
+		UpstreamPin:               upstreamPin,
+		BreakageReviewCadenceDays: m.BreakageReviewCadenceDays,
+		DisabledReason:            m.DisabledReason,
 	}
 }
 
@@ -406,6 +437,7 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 			Write:    b.Metadata.Risk.Write,
 			Approval: b.Metadata.Risk.Approval,
 		},
+		Mechanism: synthesizeMechanism(b),
 	}
 }
 

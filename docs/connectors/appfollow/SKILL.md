@@ -133,6 +133,11 @@ Reads AppFollow account users, app collections, app lists, reviews, review summa
 - approval: required for every write action; each is flagged high-visibility (public review reply) or irreversible (collection/app/user removal) in writes.json's per-action risk field
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -1053,6 +1053,11 @@ Reads Recurly accounts, subscriptions, invoices, transactions, catalog, usage, e
   - safety - Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.
   - parity - Operation ledger partitions all 197 Recurly v2021-02-25 OpenAPI operations once.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

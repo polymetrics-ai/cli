@@ -1539,6 +1539,10 @@ COMMAND SURFACE
     local-workflows - Commands that depend on local git, browser, shell completion, extensions, or gh config are documented but not connector-dispatched.
     known-gaps - Projects, Discussions, Search, direct reads, and sensitive/admin surfaces are planned follow-up slices.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect github

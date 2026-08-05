@@ -70,6 +70,11 @@ Reads Fillout forms and manages webhooks/submission deletion through the Fillout
 - approval: required for write actions; none for read
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

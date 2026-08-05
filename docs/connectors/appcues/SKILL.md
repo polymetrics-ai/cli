@@ -243,6 +243,11 @@ Reads and manages Appcues in-app guidance experiences (flows, Flows 2.0, pins, m
 - approval: reverse ETL plan approval required before writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

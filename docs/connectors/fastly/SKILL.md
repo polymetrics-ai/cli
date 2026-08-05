@@ -69,6 +69,11 @@ Reads Fastly services, the current user, the current customer (account), and dat
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

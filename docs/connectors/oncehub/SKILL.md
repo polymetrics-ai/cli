@@ -64,6 +64,11 @@ Reads OnceHub bookings, contacts, booking pages, users, and event types through 
 - read risk: external OnceHub API read of scheduling, contact, and user data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

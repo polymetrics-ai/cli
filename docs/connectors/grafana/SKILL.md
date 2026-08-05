@@ -59,6 +59,11 @@ Reads Grafana dashboards, folders, data sources, organization users, and provisi
 - read risk: external Grafana instance API read of dashboards, folders, data sources, org users, and alert rules
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -134,6 +134,11 @@ Reads ConvertKit (Kit) subscribers, forms, sequences, tags, broadcasts, custom f
 - approval: required for all write actions; read-only otherwise
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

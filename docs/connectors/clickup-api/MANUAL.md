@@ -157,6 +157,10 @@ SECURITY
   approval: required for every delete_* action, every update_* action, create_webhook/update_webhook, and set_custom_field_value; create_task/create_task_comment/add_tag_to_task/remove_tag_from_task/create_goal/create_folder/create_list/create_space are low-risk (additive or non-destructive)
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect clickup-api

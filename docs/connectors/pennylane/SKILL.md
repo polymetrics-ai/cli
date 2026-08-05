@@ -120,6 +120,11 @@ Reads Pennylane v2 customers, customer invoices, suppliers, supplier invoices, p
 - approval: approval required before writes
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

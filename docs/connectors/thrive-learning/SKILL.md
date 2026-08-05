@@ -99,6 +99,11 @@ Reads users, content, completions, assignments, audiences, tags, CPD records, an
 - approval: none; read-only, no dialect-expressible write path could be safely conformance-verified for this connector (see docs.md Known limits' write-actions ENGINE_GAP)
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

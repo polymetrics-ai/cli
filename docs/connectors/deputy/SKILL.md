@@ -135,6 +135,11 @@ Reads Deputy locations, employees, departments, timesheets, tasks, leave, roster
 - write risk: external mutation of departments, leave requests (approval status), rosters/shifts (may notify employees), webhook subscriptions, and teams; approval required
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

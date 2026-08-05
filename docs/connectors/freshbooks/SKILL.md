@@ -67,6 +67,11 @@ Reads FreshBooks clients, invoices, expenses, payments, and items through the Fr
 - read risk: external FreshBooks API read of accounting data (clients, invoices, expenses, payments, items)
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

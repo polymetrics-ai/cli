@@ -136,6 +136,10 @@ SECURITY
   approval: publish/duplicate/restore/create/update actions: none; delete_course/delete_collection/delete_client/delete_user/delete_tracking/delete_translation: approval required (irreversible or high-blast-radius)
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect coassemble

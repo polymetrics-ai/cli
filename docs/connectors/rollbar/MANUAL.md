@@ -279,6 +279,10 @@ SECURITY
   write risk: external Rollbar API mutations for items, projects, teams, assignments, invitations, notification settings/rules, service links, occurrences, and session replay deletes; approval required before execution
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect rollbar

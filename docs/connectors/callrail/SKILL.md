@@ -219,6 +219,11 @@ Reads and writes CallRail call tracking data (calls, companies, users, tags, tra
 - approval: required for outbound-communication and account-configuration writes (placing calls, sending texts, disabling companies, deleting users/caller-ids); tag/metadata-only writes are lower risk
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

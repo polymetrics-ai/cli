@@ -55,6 +55,11 @@ Reads Qonto bank transactions, memberships, and accounts through the Qonto REST 
 - read risk: external Qonto API read of bank transaction and account data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

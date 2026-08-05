@@ -81,6 +81,11 @@ Reads and writes Chift consumers, connections, syncs, integrations, datastores, 
 - write risk: external mutation of Chift consumer records (create/update/delete); approval required
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -818,6 +818,10 @@ SECURITY
   approval: reverse ETL writes require plan preview and approval token; destructive deletes and irreversible store changes are flagged destructive
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect shopwired

@@ -135,6 +135,10 @@ SECURITY
   approval: none for master-data CRUD and draft-invoice authoring; book_invoice is irreversible (correction requires a credit note) and should be gated by the caller's own review step before use
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect e-conomic

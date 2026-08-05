@@ -56,6 +56,10 @@ SECURITY
   read risk: external ShipStation API read of order, shipment, product, and customer data
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect shipstation

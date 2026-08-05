@@ -156,6 +156,11 @@ Reads Webflow sites, collections, collection items, pages, forms, form submissio
 - approval: required for all write actions; refund_order and publish_collection_item are high-risk (irreversible financial action / immediate live-site visibility) and should be gated more strictly than the others
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

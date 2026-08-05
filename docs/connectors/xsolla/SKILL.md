@@ -91,6 +91,11 @@ Reads Xsolla merchant transaction search/registry, payouts, payout currency brea
 - approval: required for all write actions (request_refund, request_partial_refund); reads require none
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

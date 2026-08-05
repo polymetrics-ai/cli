@@ -113,6 +113,11 @@ Reads Drift users, accounts, conversations, contacts, and teams, and writes cont
 - approval: required for delete_contact, delete_account, and gdpr_delete; other create/update writes are lower-risk marketing/support-data mutations
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

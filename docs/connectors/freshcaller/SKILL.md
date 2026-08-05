@@ -59,6 +59,11 @@ Reads Freshcaller calls, agents, teams, and phone numbers through the Freshcalle
 - read risk: external Freshcaller API read of call, agent, team, and phone number data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

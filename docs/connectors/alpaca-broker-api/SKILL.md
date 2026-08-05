@@ -78,6 +78,11 @@ Reads Alpaca Broker API accounts, assets, market calendar, clock, country info, 
 - read risk: external Alpaca Broker API read of account/asset/market metadata, plus per-account trading positions, orders, watchlists, and document metadata (financial PII adjacent; no document content is downloaded, only listing metadata)
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

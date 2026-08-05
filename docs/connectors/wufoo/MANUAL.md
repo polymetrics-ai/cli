@@ -88,6 +88,10 @@ SECURITY
   approval: required for all write actions (submit_entry, add_webhook, delete_webhook); reads require none
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect wufoo

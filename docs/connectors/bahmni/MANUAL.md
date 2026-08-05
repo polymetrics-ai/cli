@@ -192,6 +192,10 @@ COMMAND SURFACE
     bahmni-direct-read - Bahmni direct reads are bounded JSON GET-by-uuid, FHIR read-by-id, or a schema-gated typed GET patient search, all with a response byte cap; typed patient search redacts its declared identifier, address, name, birth-date, and death-date fields.
     bahmni-phi - Bahmni reads and writes can include clinical PHI. The current runtime bounds output, redacts secret-shaped fields, configured write path identifiers, and typed patient-search declared sensitive fields; broad clinical PHI field redaction remains a separate engine policy decision.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect bahmni

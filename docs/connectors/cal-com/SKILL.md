@@ -122,6 +122,11 @@ Reads Cal.com bookings, event types, schedules, webhooks, and profile, and manag
 - approval: required for every write action
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

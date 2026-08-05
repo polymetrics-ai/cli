@@ -122,6 +122,11 @@ Reads suggestions, forums, users, categories, statuses, labels, comments, notes,
 - approval: none required; delete_suggestion is UserVoice's own soft-delete/moderation action (reversible via restore_suggestion, not modeled), not an irreversible destructive delete
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

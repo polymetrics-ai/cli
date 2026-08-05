@@ -114,6 +114,10 @@ SECURITY
   approval: required for activate_contract, delete_contact, and create_metering_records (financial/state-transition impact); custom_properties/external_object_associations updates and contact create/update are low-risk
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect clazar

@@ -63,6 +63,10 @@ SECURITY
   approval: read: none, read-only campaign directory sync. write: required for all mutating actions (create/update campaigns).
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+MECHANISM
+  kind: official_api
+  sanctioned_by_provider: true (official)
+
 EXAMPLES
   # Inspect as a manual
   pm connectors inspect vwo

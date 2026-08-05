@@ -158,6 +158,11 @@ Reads Oura API v2 usercollection profile, daily summary, time-series, sleep, tag
 - approval: none; this bundle is read-only and excludes app-level webhook subscription mutations
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

@@ -64,6 +64,11 @@ Reads Plausible Analytics sites and stats reports through the Stats API.
 - approval: none; read-only analytics sync
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

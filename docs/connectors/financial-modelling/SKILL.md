@@ -100,6 +100,11 @@ Reads stock and ETF symbol lists, the stock screener, delisted companies, market
 - read risk: external Financial Modeling Prep API read of market data
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual

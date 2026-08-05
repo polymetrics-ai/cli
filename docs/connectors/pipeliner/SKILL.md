@@ -59,6 +59,11 @@ Reads Pipeliner CRM accounts, contacts, opportunities, and leads through the RES
 - approval: none; read-only CRM sync
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
+## Mechanism
+
+- kind: official_api
+- sanctioned_by_provider: true (official)
+
 ## Commands
 
 ### Inspect as a manual
