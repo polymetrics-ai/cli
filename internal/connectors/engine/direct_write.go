@@ -8,6 +8,7 @@ import (
 	"mime"
 	"net/http"
 	"net/url"
+	"sort"
 	"strings"
 	"time"
 
@@ -196,7 +197,36 @@ func OperationDirectWriteMetadata(b Bundle, operation string) (connectors.Operat
 		ConfirmationChallenge: confirmation,
 		OutputPolicy:          op.OutputPolicy,
 		Batchable:             op.IsBatchable(),
+		PayloadFileFields:     operationDirectWritePayloadFileFields(op),
 	}, nil
+}
+
+// operationDirectWritePayloadFileFields keeps multipart file identity
+// discovery declaration-owned. Returning a non-nil empty slice for a multipart
+// operation distinguishes it from the legacy name-based fallback used by
+// non-multipart direct writes.
+func operationDirectWritePayloadFileFields(op OperationSpec) []string {
+	if op.REST == nil || op.REST.Multipart == nil {
+		return nil
+	}
+	seen := make(map[string]struct{})
+	fields := make([]string, 0, len(op.REST.Multipart.Parts))
+	for _, part := range op.REST.Multipart.Parts {
+		if part.Type != "file" {
+			continue
+		}
+		field := strings.TrimSpace(part.Field)
+		if field == "" {
+			continue
+		}
+		if _, duplicate := seen[field]; duplicate {
+			continue
+		}
+		seen[field] = struct{}{}
+		fields = append(fields, field)
+	}
+	sort.Strings(fields)
+	return fields
 }
 
 func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.OperationDirectWriteRequest, _ Hooks) (preparedOperationDirectWrite, error) {
@@ -357,7 +387,7 @@ func isOperationDirectWriteMethod(method string) bool {
 
 func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath string) error {
 	if b.Surface == nil {
-		return nil
+		return fmt.Errorf("api_surface is required for direct-write endpoint %s %s", method, endpointPath)
 	}
 	for _, endpoint := range b.Surface.Endpoints {
 		if strings.EqualFold(endpoint.Method, method) && endpoint.Path == endpointPath {

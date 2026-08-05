@@ -82,8 +82,12 @@ func TestOperationDirectWriteMetadataRecognizesTypedMultipartRestWrite(t *testin
 	if err != nil {
 		t.Fatalf("Load typed multipart rest_write: %v", err)
 	}
-	if _, err := OperationDirectWriteMetadata(bundle, "acme.attachments.create"); err != nil {
+	metadata, err := OperationDirectWriteMetadata(bundle, "acme.attachments.create")
+	if err != nil {
 		t.Fatalf("OperationDirectWriteMetadata typed multipart rest_write: %v", err)
+	}
+	if len(metadata.PayloadFileFields) != 1 || metadata.PayloadFileFields[0] != "media_file_path" {
+		t.Fatalf("multipart payload file fields = %#v, want the declared source path", metadata.PayloadFileFields)
 	}
 }
 
