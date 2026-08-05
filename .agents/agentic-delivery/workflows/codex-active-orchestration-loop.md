@@ -1,8 +1,5 @@
 # Codex Active Orchestration Loop
 
-Compatibility status: legacy multi-worker adapter retained for its cleanup wave. Canonical jobs use
-`.agents/agentic-delivery/canonical/delivery-contract.json` inline and do not spawn the roles below.
-
 Use this workflow when Codex owns a parent issue with subissues.
 
 ## Why This Exists

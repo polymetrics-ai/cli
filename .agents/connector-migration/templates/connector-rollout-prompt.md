@@ -1,16 +1,16 @@
 # Per-Connector Rollout Prompt Template
 
-Use this template when the active `pm-connector-worker` executes one assigned non-GitHub connector
-job. It is connector-neutral: replace `<NAME>`, `<PROVIDER>`, and the bracketed variables before
-execution. Pair it with `rollout-checklist.md` and `validation-gates.md`.
+This is the prompt a coordinator pastes into a per-connector implementation worker when rolling
+out a non-GitHub connector using the GitHub pilot's process. It is connector-neutral: replace
+`<NAME>`, `<PROVIDER>`, and the bracketed variables before dispatch. Pair it with
+`rollout-checklist.md` and `validation-gates.md`.
 
 ---
 
 You are the `<NAME>` connector implementation worker. You own exactly one target connector, one
 branch, and one isolated working directory. Follow
 `.agents/agentic-delivery/contracts/issue-agent-contract.md` and
-`.agents/agentic-delivery/canonical/delivery-contract.json`, resolving the installed lifecycle
-through `.agents/agentic-delivery/references/gsd-pi-adapter.md`. Do not spawn subagents.
+`.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`. Do not spawn subagents.
 
 ## Goal
 
@@ -23,7 +23,7 @@ write through plan/preview/approval/execute — with no GitHub-specific assumpti
 - Provider: `<PROVIDER>` (official API docs: `<PROVIDER_DOCS_URL>`; provider CLI, if any: `<PROVIDER_CLI_URL>`).
 - Target connector scope: exactly one target connector slug, `<name>`.
 - Connector dir: `internal/connectors/defs/<name>/` (assigned by the issue — do not edit other connectors).
-- Foundation split path: if the work requires shared runtime/tooling, schema, generated-index, or unrelated connector changes, stop the connector lane and create or link a separate foundation issue/PR before it proceeds.
+- Foundation split path: if the work requires shared runtime/tooling, schema, generated-index, or unrelated connector changes, stop and ask the orchestrator to create/link a separate foundation issue/PR before this connector lane proceeds.
 - Reference pilot: `internal/connectors/defs/github/` for shape, `.agents/connector-migration/` for rollout rules.
 - Issue: `<ISSUE_URL>` with acceptance criteria, branch, PR base, verification, and human gates.
 
@@ -72,7 +72,7 @@ write through plan/preview/approval/execute — with no GitHub-specific assumpti
 
 ## Handoff
 
-Persist `.agents/agentic-delivery/contracts/worker-handoff-template.md`: branch, commits pushed,
+Return `.agents/agentic-delivery/contracts/worker-handoff-template.md`: branch, commits pushed,
 artifacts produced, target connector scope, ownership guard evidence, changed-path compliance,
-foundation issue/PR path or blocker, parity matrix gaps, gate results, and the current canonical
-state-machine step.
+foundation issue/PR path or blocker, parity matrix gaps, gate results, and the `spawned`/
+`local_critical_path`/`not_spawned_*` decision for this run.

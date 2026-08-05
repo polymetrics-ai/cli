@@ -1,16 +1,12 @@
 # Pi Active Orchestration Loop
 
-Compatibility status: legacy multi-worker adapter retained for its cleanup wave. Canonical jobs use
-the generated `pm-delivery-worker` or `pm-connector-worker` projection and do not spawn the roles
-below.
-
 Use this workflow when Pi owns a parent issue with subissues.
 
 ## Why This Exists
 
-Pi ships with subagents only when an extension is enabled. This repository loads its local fork
-from `.pi/extensions/pi-sub-agent/` through `.pi/settings.json`; the extension README owns its
-discovery and isolation behavior. This file is the Pi adapter for the runtime-generic contract in
+Pi ships with subagents only when a package such as `pi-sub-agent` is enabled. The project runtime
+adds `npm:pi-sub-agent@0.1.5` and project agents under `.pi/agents/`. This file is the Pi adapter
+for the runtime-generic contract in
 `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` and the parent orchestrator
 contract in `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`.
 

@@ -1,10 +1,5 @@
 # Parent Issue Orchestration Loop
 
-Compatibility status: legacy multi-worker procedure retained for its cleanup wave. Current parent
-jobs use the single-worker ownership contract at
-`.agents/agentic-delivery/contracts/parent-orchestrator-contract.md` and the canonical JSON source;
-do not activate the roles described below for a canonical job.
-
 Use this workflow when a parent issue owns multiple sub-issues and the work must proceed through a
 parent PR plus stacked sub-PRs. The loop is runtime-generic: "spawn" means the active coordinator
 uses the runtime's native worker mechanism, such as Claude Code `Task`, a Codex subagent job, an
