@@ -61,6 +61,14 @@ type WriteCommand struct {
 
 var ErrNotWriteCommand = errors.New("connector command is not a reverse ETL write command")
 
+// declarativeWritePreflighter is implemented by the declarative engine. It
+// lets runtime preflight reject a write schema that the engine could not
+// faithfully expose as typed CLI flags, without giving native connectors a
+// second, hand-maintained schema contract.
+type declarativeWritePreflighter interface {
+	PreflightWriteAction(name string) error
+}
+
 type BlockedCommandError struct {
 	Connector    string
 	Command      string
@@ -280,6 +288,17 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		return cmd, command, nil
 	}
 	if cmd.Intent == "reverse_etl" && cmd.Availability == "implemented" && cmd.Write != "" {
+		if preflighter, ok := connector.(declarativeWritePreflighter); ok {
+			if err := preflighter.PreflightWriteAction(cmd.Write); err != nil {
+				return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
+					Connector:    connector.Name(),
+					Command:      command,
+					Intent:       cmd.Intent,
+					Availability: cmd.Availability,
+					Reason:       fmt.Sprintf("write action %q is not promotable: %v", cmd.Write, err),
+				}
+			}
+		}
 		return cmd, command, nil
 	}
 	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
