@@ -1,0 +1,23 @@
+{
+  "record": {
+    "dunning_campaign_id": "fixture_dunning_campaign_id",
+    "plan_codes": [
+      "fixture_plan_code"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/dunning_campaigns/fixture_dunning_campaign_id/bulk_update",
+    "body": {
+      "plan_codes": [
+        "fixture_plan_code"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "object": "fixture_object"
+    }
+  }
+}

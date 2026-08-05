@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Recurly get_dunning_campaign record",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "object": {
+      "type": "string",
+      "title": "Object type"
+    },
+    "code": {
+      "type": "string",
+      "description": "Campaign code."
+    },
+    "name": {
+      "type": "string",
+      "description": "Campaign name."
+    },
+    "description": {
+      "type": "string",
+      "description": "Campaign description."
+    },
+    "default_campaign": {
+      "type": "boolean",
+      "description": "Whether or not this is the default campaign for accounts or plans without an assigned dunning campaign."
+    },
+    "dunning_cycles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "automatic",
+              "manual",
+              "trial"
+            ],
+            "description": "The type of invoice this cycle applies to."
+          },
+          "applies_to_manual_trial": {
+            "type": "boolean",
+            "description": "Whether the dunning settings will be applied to manual trials. Only applies to trial cycles."
+          },
+          "first_communication_interval": {
+            "type": "integer",
+            "description": "The number of days after a transaction failure before the first dunning email is sent."
+          },
+          "send_immediately_on_hard_decline": {
+            "type": "boolean",
+            "description": "Whether or not to send an extra email immediately to customers whose initial payment attempt fails with either a hard decline or invalid billing info."
+          },
+          "intervals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "days": {
+                  "type": "integer",
+                  "description": "Number of days before sending the next email."
+                },
+                "email_template": {
+                  "type": "string",
+                  "description": "Email template being used."
+                }
+              },
+              "additionalProperties": false
+            },
+            "description": "Dunning intervals."
+          },
+          "expire_subscription": {
+            "type": "boolean",
+            "description": "Whether the subscription(s) should be cancelled at the end of the dunning cycle."
+          },
+          "fail_invoice": {
+            "type": "boolean",
+            "description": "Whether the invoice should be failed at the end of the dunning cycle."
+          },
+          "total_dunning_days": {
+            "type": "integer",
+            "description": "The number of days between the first dunning email being sent and the end of the dunning cycle."
+          },
+          "total_recycling_days": {
+            "type": "integer",
+            "description": "The number of days between a transaction failure and the end of the dunning cycle."
+          },
+          "version": {
+            "type": "integer",
+            "description": "Current campaign version."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the current settings were created in Recurly."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the current settings were updated in Recurly."
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Dunning Cycle settings."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the current campaign was created in Recurly."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the current campaign was updated in Recurly."
+    },
+    "deleted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the current campaign was deleted in Recurly."
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "additionalProperties": false
+}

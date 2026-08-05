@@ -80,6 +80,29 @@ func TestRequesterRefreshesAuthOnceOn401AndRetries(t *testing.T) {
 	}
 }
 
+func TestRequesterDisableRetriesSuppressesAuthReplay(t *testing.T) {
+	var attempts int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		atomic.AddInt32(&attempts, 1)
+		w.WriteHeader(http.StatusUnauthorized)
+	}))
+	defer srv.Close()
+
+	auth := &countingRefresher{}
+	r := &Requester{BaseURL: srv.URL, Auth: auth, DisableRetries: true, Sleep: noSleep}
+
+	_, err := r.Do(context.Background(), http.MethodPost, "/thing", nil, map[string]any{"name": "fixture"})
+	if err == nil {
+		t.Fatal("Do() error = nil, want terminal 401")
+	}
+	if got := atomic.LoadInt32(&attempts); got != 1 {
+		t.Fatalf("upstream attempts = %d, want 1", got)
+	}
+	if got := atomic.LoadInt32(&auth.refreshed); got != 0 {
+		t.Fatalf("refreshes = %d, want 0", got)
+	}
+}
+
 // TestRequesterRefreshesAtMostOncePerRequestOnPersistent401 is the termination
 // proof (issue #3706). A provider that keeps returning 401 — revoked grant,
 // wrong client, disabled app — must not be hammered.

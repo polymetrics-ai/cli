@@ -1,0 +1,19 @@
+{
+  "record": {
+    "external_product_id": "fixture_external_product_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/external_products/fixture_external_product_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "fixture_id",
+      "object": "fixture_object",
+      "name": "fixture_name",
+      "created_at": "2026-01-02T03:04:05Z",
+      "updated_at": "2026-01-02T03:04:05Z"
+    }
+  }
+}
