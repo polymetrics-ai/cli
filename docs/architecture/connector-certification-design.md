@@ -171,6 +171,9 @@ does not orphan existing bundles. Version-2 surfaces require each endpoint citat
 provider artifact with a retrieval date; invalid evidence fails the `surface_inventory` stage. The
 provenance block never changes `covered_by` or enables a command.
 
+`api_surface.json` is intentionally excluded from shipping binaries, so this full inventory runs
+from a source checkout (or a directory below one); otherwise the stage is reported as skipped.
+
 ### Enablement (replacing the manual flip)
 
 1. Curated artifacts committed under `internal/connectors/certifications/<name>.json` (go:embed)
