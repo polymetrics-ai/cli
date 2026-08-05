@@ -58,11 +58,11 @@ The `.agents/agentic-delivery/` directory holds shared contracts, conventions, a
 Specialized agent families can live beside it under `.agents/<functional-area>/` while reusing the
 same schema and issue-to-PR contract.
 
-Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are generated
-activation adapters. `canonical/delivery-contract.json` is the sole owner of each registered
-target's path, render mode, and requiredness. The checked-in Codex adapters are complete standalone
-TOML files; Markdown adapters project marked blocks. Never hand-edit or copy GSD/TDD, review, or
-human-gate policy into an adapter.
+Runtime-specific files, such as `.claude/agents/*.md`, `.codex/agents/*.toml`, and
+`.pi/agents/*.md`, are generated activation adapters. `canonical/delivery-contract.json` is the
+sole owner of each registered target's path, render mode, and requiredness. The checked-in Claude
+and Codex adapters are complete full-file projections; optional Pi adapters project marked blocks.
+Never hand-edit or copy GSD/TDD, review, or human-gate policy into an adapter.
 
 Codex loads the project-local `.codex` configuration layer only when the repository is trusted.
 The generated Codex workers therefore fail closed for project-local selection in an untrusted
@@ -70,6 +70,10 @@ repository: trust it in Codex before selecting either worker. Their generated
 `agents.enabled = false` setting disables further Codex multi-agent delegation. The canonical
 `codex` section owns this isolation contract, its official documentation links, and the caveat that
 same-filename user/project standalone-agent precedence is undocumented.
+
+Claude workers use required project-local YAML-frontmatter projections. Their canonical policy owns
+the explicit tool allowlist, scoped skill rules, Agent/Task denylist, official documentation, and
+the required clean-home smoke procedure.
 
 ## Design principles
 
