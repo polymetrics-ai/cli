@@ -180,8 +180,8 @@ func (f *Flow) requestDeviceAuth(ctx context.Context) (*deviceAuthResponse, erro
 	if err := json.Unmarshal(body, &parsed); err != nil {
 		return nil, fmt.Errorf("device: decode device authorization response: %w", err)
 	}
-	if parsed.DeviceCode == "" || parsed.UserCode == "" {
-		return nil, errors.New("device: device authorization response missing device_code or user_code")
+	if strings.TrimSpace(parsed.DeviceCode) == "" || strings.TrimSpace(parsed.UserCode) == "" || strings.TrimSpace(parsed.VerificationURI) == "" {
+		return nil, errors.New("device: device authorization response missing device_code, user_code, or verification_uri")
 	}
 	return &parsed, nil
 }

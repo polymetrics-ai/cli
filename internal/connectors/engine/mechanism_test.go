@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"errors"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -96,14 +95,11 @@ func TestMechanismWebSessionLoadsWhenValid(t *testing.T) {
 }
 
 func TestMechanismSynthesisPreservesWebGovernanceMetadata(t *testing.T) {
-	b, err := Load(bundleFSWithMetadata("acme-web", validWebSessionMetadata("acme-web")), "acme-web")
+	meta := strings.Replace(validWebSessionMetadata("acme-web"), `"breakage_review_cadence_days": 30`, `"breakage_review_cadence_days": 30, "disabled_reason": "upstream contract changed; awaiting review"`, 1)
+	b, err := Load(bundleFSWithMetadata("acme-web", meta), "acme-web")
 	if err != nil {
 		t.Fatalf("Load: %v", err)
 	}
-	// A disabled bundle is rejected by Load. Set this after the valid load to
-	// prove the public projection itself does not quietly discard the local
-	// kill-switch value when a native caller renders an already-loaded bundle.
-	b.Metadata.Mechanism.DisabledReason = "upstream contract changed; awaiting review"
 	c := New(b, nil)
 
 	for _, tc := range []struct {
@@ -198,14 +194,17 @@ func TestMechanismNonWebNameMustNotDeclareWebSession(t *testing.T) {
 	}
 }
 
-func TestMechanismDisabledReasonRefusesConstruction(t *testing.T) {
+func TestMechanismDisabledReasonIsValidBundleState(t *testing.T) {
 	meta := strings.Replace(validWebSessionMetadata("acme-web"), `"breakage_review_cadence_days": 30`, `"breakage_review_cadence_days": 30, "disabled_reason": "upstream Voyager routes rotated; pending re-verification"`, 1)
-	_, err := Load(bundleFSWithMetadata("acme-web", meta), "acme-web")
-	if err == nil {
-		t.Fatalf("Load with disabled_reason set: want error, got nil")
+	b, err := Load(bundleFSWithMetadata("acme-web", meta), "acme-web")
+	if err != nil {
+		t.Fatalf("Load with disabled_reason set: %v", err)
 	}
-	if !errors.Is(err, ErrMechanismDisabled) {
-		t.Fatalf("Load error = %v, want it to wrap ErrMechanismDisabled", err)
+	if b.Metadata.Mechanism.DisabledReason != "upstream Voyager routes rotated; pending re-verification" {
+		t.Fatalf("DisabledReason = %q", b.Metadata.Mechanism.DisabledReason)
+	}
+	if !b.IsDisabled() {
+		t.Fatal("IsDisabled() = false, want true")
 	}
 }
 

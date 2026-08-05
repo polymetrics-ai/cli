@@ -29,6 +29,9 @@ func Factories() []Factory {
 
 func RegisterInto(registry *connectors.Registry) {
 	for _, factory := range Factories() {
+		if _, ok := registry.Get(factory.Name); !ok {
+			continue
+		}
 		registry.Register(factory.New())
 	}
 }

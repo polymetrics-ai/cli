@@ -82,6 +82,8 @@ func (v *Vault) PutNamespaced(ctx context.Context, ns Namespace, secret map[stri
 	if err := ns.validate(); err != nil {
 		return err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
 	plaintext, err := json.Marshal(secret)
 	if err != nil {
 		return fmt.Errorf("marshal secret bundle: %w", err)
@@ -97,6 +99,8 @@ func (v *Vault) GetNamespaced(ctx context.Context, ns Namespace) (map[string]str
 	if err := ns.validate(); err != nil {
 		return nil, err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
 	plaintext, err := v.readNamespaced(ns, credentialExt)
 	if err != nil {
 		return nil, err
@@ -119,6 +123,8 @@ func (v *Vault) DeleteNamespaced(ctx context.Context, ns Namespace) error {
 	if err := ns.validate(); err != nil {
 		return err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
 	return v.deleteNamespacedFile(ns, credentialExt)
 }
 
@@ -131,6 +137,8 @@ func (v *Vault) PutBlob(ctx context.Context, ns Namespace, blob []byte) error {
 	if err := ns.validate(); err != nil {
 		return err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
 	return v.writeNamespaced(ns, blobExt, blob)
 }
 
@@ -142,6 +150,8 @@ func (v *Vault) GetBlob(ctx context.Context, ns Namespace) ([]byte, error) {
 	if err := ns.validate(); err != nil {
 		return nil, err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
 	return v.readNamespaced(ns, blobExt)
 }
 
@@ -153,6 +163,8 @@ func (v *Vault) DeleteBlob(ctx context.Context, ns Namespace) error {
 	if err := ns.validate(); err != nil {
 		return err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
 	return v.deleteNamespacedFile(ns, blobExt)
 }
 
@@ -168,6 +180,12 @@ func (v *Vault) List(ctx context.Context, connector string) ([]Namespace, error)
 	if err := validateNamespaceComponent("connector", connector); err != nil {
 		return nil, err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
+	return v.listNamespaces(connector)
+}
+
+func (v *Vault) listNamespaces(connector string) ([]Namespace, error) {
 	root := filepath.Join(v.dir, "ns", connector)
 	profiles, err := os.ReadDir(root)
 	if errors.Is(err, os.ErrNotExist) {
@@ -232,6 +250,8 @@ func (v *Vault) DeleteAll(ctx context.Context, connector, profile string) (int, 
 	if err := ValidateProfile(profile); err != nil {
 		return 0, err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
 	dir := filepath.Join(v.dir, "ns", connector, profile)
 	entries, err := os.ReadDir(dir)
 	if errors.Is(err, os.ErrNotExist) {

@@ -217,7 +217,7 @@ func TestLoopbackFlowTimesOut(t *testing.T) {
 	}
 }
 
-func TestLoopbackFlowRejectsStateMismatch(t *testing.T) {
+func TestLoopbackFlowIgnoresStateMismatch(t *testing.T) {
 	flow, err := loopback.New(loopback.Config{
 		AuthURL:  "https://example.invalid/authorize",
 		TokenURL: "https://example.invalid/token",
@@ -238,14 +238,69 @@ func TestLoopbackFlowRejectsStateMismatch(t *testing.T) {
 			}()
 			return nil
 		},
-		Timeout: 5 * time.Second,
+		Timeout: 50 * time.Millisecond,
 	})
 	if err != nil {
 		t.Fatalf("New() error = %v", err)
 	}
 	_, err = flow.Login(context.Background())
-	if err == nil || !strings.Contains(err.Error(), "state mismatch") {
-		t.Fatalf("Login() error = %v, want state mismatch", err)
+	if err == nil || !strings.Contains(err.Error(), "timed out") {
+		t.Fatalf("Login() error = %v, want timeout after ignored state mismatch", err)
+	}
+}
+
+func TestLoopbackFlowIgnoresMismatchedErrorCallback(t *testing.T) {
+	tokenServer := fakeTokenServer(t, "test-auth-code")
+	defer tokenServer.Close()
+
+	flow, err := loopback.New(loopback.Config{
+		AuthURL:  "https://example.invalid/authorize",
+		TokenURL: tokenServer.URL + "/token",
+		ClientID: "client-123",
+		OpenBrowser: func(rawURL string) error {
+			go func() {
+				u, err := url.Parse(rawURL)
+				if err != nil {
+					return
+				}
+				redirectURI := u.Query().Get("redirect_uri")
+				state := u.Query().Get("state")
+				callback, err := url.Parse(redirectURI)
+				if err != nil {
+					return
+				}
+
+				invalid := callback.Query()
+				invalid.Set("state", "wrong-state")
+				invalid.Set("error", "access_denied")
+				callback.RawQuery = invalid.Encode()
+				if resp, err := http.Get(callback.String()); err == nil {
+					_ = resp.Body.Close()
+				}
+
+				valid := callback.Query()
+				valid.Set("state", state)
+				valid.Del("error")
+				valid.Set("code", "test-auth-code")
+				callback.RawQuery = valid.Encode()
+				if resp, err := http.Get(callback.String()); err == nil {
+					_ = resp.Body.Close()
+				}
+			}()
+			return nil
+		},
+		Timeout: 5 * time.Second,
+	})
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+
+	cred, err := flow.Login(context.Background())
+	if err != nil {
+		t.Fatalf("Login() error = %v", err)
+	}
+	if cred.OAuth == nil || cred.OAuth.AccessToken != "test-access-token" {
+		t.Fatalf("Login() credential = %+v", cred)
 	}
 }
 

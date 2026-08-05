@@ -119,6 +119,41 @@ func TestDeviceFlowAccessDenied(t *testing.T) {
 	}
 }
 
+func TestDeviceFlowRejectsMissingVerificationURI(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/device_authorization", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"device_code": "test-device-code",
+			"user_code":   "ABCD-EFGH",
+		})
+	})
+	server := httptest.NewServer(mux)
+	defer server.Close()
+
+	called := false
+	flow, err := device.New(device.Config{
+		DeviceAuthURL: server.URL + "/device_authorization",
+		TokenURL:      server.URL + "/token",
+		ClientID:      "client-123",
+		OnUserCode: func(string, string, string) {
+			called = true
+		},
+		HTTPClient: server.Client(),
+	})
+	if err != nil {
+		t.Fatalf("New() error = %v", err)
+	}
+
+	_, err = flow.Login(context.Background())
+	if err == nil || !strings.Contains(err.Error(), "verification_uri") {
+		t.Fatalf("Login() error = %v, want verification_uri validation failure", err)
+	}
+	if called {
+		t.Fatal("OnUserCode called for an invalid device authorization response")
+	}
+}
+
 func TestDeviceFlowRequiresOnUserCode(t *testing.T) {
 	_, err := device.New(device.Config{
 		DeviceAuthURL: "https://example.invalid/device_authorization",

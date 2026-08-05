@@ -224,40 +224,37 @@ func (f *Flow) buildAuthURL(redirectURI, state, challenge string) (string, error
 // is single-use by design.
 func (f *Flow) callbackHandler(path, wantState string, resultCh chan<- result) http.Handler {
 	mux := http.NewServeMux()
-	var once sync.Once
 	var handled bool
 	var mu sync.Mutex
 	mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
-		mu.Lock()
-		alreadyHandled := handled
-		mu.Unlock()
-		if alreadyHandled {
-			http.NotFound(w, r)
+		q := r.URL.Query()
+		if q.Get("state") != wantState {
+			writeCallbackPage(w, false)
 			return
 		}
 
-		once.Do(func() {
-			mu.Lock()
-			handled = true
+		mu.Lock()
+		alreadyHandled := handled
+		if alreadyHandled {
 			mu.Unlock()
+			http.NotFound(w, r)
+			return
+		}
+		handled = true
+		mu.Unlock()
 
-			q := r.URL.Query()
-			switch {
-			case q.Get("error") != "":
-				errCode := browserauth.SafeOAuthErrorCode(q.Get("error"))
-				writeCallbackPage(w, false)
-				resultCh <- result{err: fmt.Errorf("loopback: authorization denied: %s", errCode)}
-			case q.Get("state") != wantState:
-				writeCallbackPage(w, false)
-				resultCh <- result{err: errors.New("loopback: state mismatch on redirect (possible CSRF)")}
-			case q.Get("code") == "":
-				writeCallbackPage(w, false)
-				resultCh <- result{err: errors.New("loopback: redirect had no authorization code")}
-			default:
-				writeCallbackPage(w, true)
-				resultCh <- result{code: q.Get("code")}
-			}
-		})
+		switch {
+		case q.Get("error") != "":
+			errCode := browserauth.SafeOAuthErrorCode(q.Get("error"))
+			writeCallbackPage(w, false)
+			resultCh <- result{err: fmt.Errorf("loopback: authorization denied: %s", errCode)}
+		case q.Get("code") == "":
+			writeCallbackPage(w, false)
+			resultCh <- result{err: errors.New("loopback: redirect had no authorization code")}
+		default:
+			writeCallbackPage(w, true)
+			resultCh <- result{code: q.Get("code")}
+		}
 	})
 	return mux
 }

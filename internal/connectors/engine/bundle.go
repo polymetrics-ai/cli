@@ -5,7 +5,6 @@ package engine
 import (
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/fs"
 	"mime"
@@ -41,6 +40,11 @@ type Bundle struct {
 	RawCertification json.RawMessage          // verbatim certification.json bytes; nil when absent
 	Docs             string                   // docs.md
 	Fixtures         fs.FS                    // fixtures/ subtree; nil when absent
+}
+
+// IsDisabled reports whether the bundle's declared local kill switch is set.
+func (b Bundle) IsDisabled() bool {
+	return b.Metadata.Mechanism != nil && strings.TrimSpace(b.Metadata.Mechanism.DisabledReason) != ""
 }
 
 // Metadata is the parsed metadata.json.
@@ -93,10 +97,8 @@ type MechanismSpec struct {
 
 	BreakageReviewCadenceDays int `json:"breakage_review_cadence_days,omitempty"`
 
-	// DisabledReason is the kill switch: non-empty means Load refuses to
-	// construct this connector at all (ErrMechanismDisabled), not merely
-	// mark it unavailable. Set it, ship a patch release — no network call,
-	// no remote flag.
+	// DisabledReason is the local kill switch. Registries omit a bundle that
+	// declares it without treating the bundle as malformed.
 	DisabledReason string `json:"disabled_reason,omitempty"`
 }
 
@@ -1259,12 +1261,6 @@ func loadMetadata(sub fs.FS, dirName string) (Metadata, error) {
 // web_session, and vice versa.
 var webNameSuffixPattern = regexp.MustCompile(`-web$`)
 
-// ErrMechanismDisabled is returned (wrapped) by Load when a bundle declares
-// mechanism.disabled_reason — the kill switch: setting that field and
-// shipping a patch release is enough to stop the loader from constructing
-// the connector at all, with no network call and no remote flag.
-var ErrMechanismDisabled = errors.New("mechanism disabled")
-
 // normalizeAndValidateMechanism fills m.Mechanism with the conservative
 // official_api default when metadata.json declares none — required would
 // force a mechanical edit across every existing bundle, and official_api is
@@ -1312,10 +1308,6 @@ func normalizeAndValidateMechanism(dirName string, m *Metadata) error {
 		if mech.UpstreamPin == nil || strings.TrimSpace(mech.UpstreamPin.Repo) == "" || strings.TrimSpace(mech.UpstreamPin.SHA) == "" {
 			return fmt.Errorf("metadata.json: mechanism.kind %q requires upstream_pin.repo and upstream_pin.sha", MechanismWebSession)
 		}
-	}
-
-	if strings.TrimSpace(mech.DisabledReason) != "" {
-		return fmt.Errorf("%w: %s", ErrMechanismDisabled, mech.DisabledReason)
 	}
 
 	return nil

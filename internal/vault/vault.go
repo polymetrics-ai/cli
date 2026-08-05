@@ -22,6 +22,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 )
 
 // Vault is an encrypted local credential store rooted at
@@ -29,6 +30,7 @@ import (
 // (protector.go) — a plaintext on-disk key by default, or the OS keychain
 // when a caller explicitly selects it via InitWithProtector.
 type Vault struct {
+	mu            sync.RWMutex
 	dir           string
 	key           []byte
 	protector     KeyProtector
@@ -55,6 +57,8 @@ func (v *Vault) Put(ctx context.Context, id string, secret map[string]string) er
 	if err := validateID(id); err != nil {
 		return err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
 	plaintext, err := json.Marshal(secret)
 	if err != nil {
 		return fmt.Errorf("marshal secret bundle: %w", err)
@@ -69,6 +73,8 @@ func (v *Vault) Get(ctx context.Context, id string) (map[string]string, error) {
 	if err := validateID(id); err != nil {
 		return nil, err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
 	plaintext, err := v.readFlat(id)
 	if err != nil {
 		return nil, err
@@ -90,6 +96,8 @@ func (v *Vault) Delete(ctx context.Context, id string) error {
 	if err := validateID(id); err != nil {
 		return err
 	}
+	v.mu.RLock()
+	defer v.mu.RUnlock()
 	err := os.Remove(v.path(id))
 	if errors.Is(err, os.ErrNotExist) {
 		return nil

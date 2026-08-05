@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"strings"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
@@ -24,11 +25,8 @@ var definitionsFS fs.FS = defs.FS
 // New builds the default connector registry from the embedded definition
 // bundles.
 //
-// A bundle that fails to load is omitted from the catalog and reported on
-// stderr; it never stops the bundles that did load from registering. That
-// partial-success behavior is what makes mechanism.disabled_reason a usable
-// kill switch: shipping a patch release that disables one connector must
-// make that one connector disappear, not abort every pm invocation.
+// A malformed bundle is omitted from the catalog and reported on stderr; it
+// never stops the bundles that did load from registering.
 func New() *connectors.Registry {
 	bundles, err := engine.LoadAll(definitionsFS)
 	if err != nil {
@@ -38,6 +36,11 @@ func New() *connectors.Registry {
 	registry := connectors.NewEmptyRegistry()
 	registry.RegisterBuiltins()
 	for _, bundle := range bundles {
+		if bundle.IsDisabled() {
+			reason := strings.TrimSpace(bundle.Metadata.Mechanism.DisabledReason)
+			warnf("warning: connector %q disabled: %s\n", bundle.Name, reason)
+			continue
+		}
 		registry.Register(engine.New(bundle, engine.HooksFor(bundle.Name)))
 	}
 	nativeset.RegisterInto(registry)

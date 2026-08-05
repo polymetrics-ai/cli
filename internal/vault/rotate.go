@@ -9,6 +9,16 @@ import (
 	"path/filepath"
 )
 
+var rotateRename = os.Rename
+
+type rotationItem struct {
+	path       string
+	aad        []byte
+	plaintext  []byte
+	ciphertext []byte
+	temporary  string
+}
+
 // RotateKey generates a fresh 32-byte data key, re-encrypts every flat
 // credential, namespaced credential, and blob currently in the vault under
 // the new key, and persists it via the vault's own KeyProtector (F3' gap
@@ -18,25 +28,15 @@ import (
 //
 // Every re-encrypted item is staged to a "<path>.rotate-tmp" file before
 // anything is committed; if staging fails partway, nothing on disk changes
-// and the old key stays authoritative. The new key is persisted once
-// staging succeeds, then every staged file is renamed over its original.
-// Known limitation, stated rather than hidden: the final rename loop is a
-// sequence of per-file atomic renames, not one atomic transaction — a crash
-// after the new key is persisted but before every rename completes can
-// leave a mixed old/new-key state on disk. On a local single-user CLI vault
-// this window is a bounded sequence of fast local renames, not a network
-// operation, so the risk is low; it is not zero.
+// and the old key stays authoritative.
 func (v *Vault) RotateKey(ctx context.Context) error {
 	if err := ctx.Err(); err != nil {
 		return err
 	}
+	v.mu.Lock()
+	defer v.mu.Unlock()
 
-	type item struct {
-		path      string
-		aad       []byte
-		plaintext []byte
-	}
-	var items []item
+	var items []rotationItem
 
 	flatIDs, err := v.listFlatIDs()
 	if err != nil {
@@ -51,7 +51,7 @@ func (v *Vault) RotateKey(ctx context.Context) error {
 		if err != nil {
 			return fmt.Errorf("rotate key: decrypt %s: %w", id, err)
 		}
-		items = append(items, item{path: v.path(id), aad: []byte(id), plaintext: plaintext})
+		items = append(items, rotationItem{path: v.path(id), aad: []byte(id), plaintext: plaintext, ciphertext: ciphertext})
 	}
 
 	connectors, err := v.listConnectors()
@@ -59,7 +59,10 @@ func (v *Vault) RotateKey(ctx context.Context) error {
 		return err
 	}
 	for _, connector := range connectors {
-		namespaces, err := v.List(ctx, connector)
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		namespaces, err := v.listNamespaces(connector)
 		if err != nil {
 			return err
 		}
@@ -77,7 +80,7 @@ func (v *Vault) RotateKey(ctx context.Context) error {
 				if err != nil {
 					return fmt.Errorf("rotate key: decrypt %s: %w", path, err)
 				}
-				items = append(items, item{path: path, aad: ns.aad(), plaintext: plaintext})
+				items = append(items, rotationItem{path: path, aad: ns.aad(), plaintext: plaintext, ciphertext: ciphertext})
 			}
 		}
 	}
@@ -88,33 +91,55 @@ func (v *Vault) RotateKey(ctx context.Context) error {
 	}
 	staging := &Vault{dir: v.dir, key: newKey}
 
-	tmpPaths := make([]string, len(items))
+	defer func() {
+		for _, it := range items {
+			if it.temporary != "" {
+				_ = os.Remove(it.temporary)
+			}
+		}
+	}()
 	for i, it := range items {
 		sealed, err := staging.seal(it.aad, it.plaintext)
 		if err != nil {
 			return fmt.Errorf("rotate key: encrypt %s: %w", it.path, err)
 		}
-		tmp := it.path + ".rotate-tmp"
-		if err := os.WriteFile(tmp, sealed, 0o600); err != nil {
+		items[i].temporary = it.path + ".rotate-tmp"
+		if err := os.WriteFile(items[i].temporary, sealed, 0o600); err != nil {
 			return fmt.Errorf("rotate key: stage %s: %w", it.path, err)
 		}
-		tmpPaths[i] = tmp
 	}
 
 	storer, ok := v.protector.(keyStorer)
 	if !ok {
-		return fmt.Errorf("rotate key: protector %q does not support rotation", v.protector.Name())
-	}
-	if err := storer.StoreKey(v.dir, newKey); err != nil {
-		return fmt.Errorf("rotate key: persist new key: %w", err)
+		return errors.New("rotate key: configured protector does not support rotation")
 	}
 
 	for i, it := range items {
-		if err := os.Rename(tmpPaths[i], it.path); err != nil {
+		if err := rotateRename(it.temporary, it.path); err != nil {
+			if rollbackErr := restoreRotatedFiles(items[:i]); rollbackErr != nil {
+				return errors.Join(fmt.Errorf("rotate key: commit %s: %w", it.path, err), rollbackErr)
+			}
 			return fmt.Errorf("rotate key: commit %s: %w", it.path, err)
 		}
 	}
 
+	if err := storer.StoreKey(v.dir, newKey); err != nil {
+		if rollbackErr := restoreRotatedFiles(items); rollbackErr != nil {
+			return errors.Join(fmt.Errorf("rotate key: persist new key: %w", err), rollbackErr)
+		}
+		return fmt.Errorf("rotate key: persist new key: %w", err)
+	}
+
 	v.key = newKey
 	return nil
+}
+
+func restoreRotatedFiles(items []rotationItem) error {
+	var errs []error
+	for _, it := range items {
+		if err := os.WriteFile(it.path, it.ciphertext, 0o600); err != nil {
+			errs = append(errs, fmt.Errorf("rotate key: restore %s: %w", it.path, err))
+		}
+	}
+	return errors.Join(errs...)
 }

@@ -98,6 +98,9 @@ func TestConformance(t *testing.T) {
 	for _, b := range bundles {
 		b := b
 		t.Run(b.Name, func(t *testing.T) {
+			if b.IsDisabled() {
+				t.Skip("connector disabled")
+			}
 			rep := RunBundle(b)
 			if !rep.Passed {
 				t.Fatalf("conformance failed for %s: %+v", b.Name, rep.Checks)

@@ -114,12 +114,7 @@ func TestGitHubGuideIncludesCLISurfaceHelp(t *testing.T) {
 	}
 }
 
-// TestNewOmitsUnloadableBundlesInsteadOfPanicking proves the kill switch
-// disables one connector rather than the whole CLI: a bundle whose metadata
-// declares mechanism.disabled_reason fails engine.Load, and New must drop
-// just that connector from the catalog while every other bundle still
-// registers — never panic, which would abort every pm invocation.
-func TestNewOmitsUnloadableBundlesInsteadOfPanicking(t *testing.T) {
+func TestNewOmitsDisabledBundles(t *testing.T) {
 	fixture := fstest.MapFS{}
 	copyBundleForTest(t, fixture, "github")
 	copyBundleForTest(t, fixture, "akeneo")

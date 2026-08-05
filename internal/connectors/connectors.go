@@ -425,6 +425,9 @@ func (r *Registry) RegisterBuiltins() {
 }
 
 func (r *Registry) Register(c Connector) {
+	if mechanism := c.Metadata().Mechanism; mechanism != nil && strings.TrimSpace(mechanism.DisabledReason) != "" {
+		return
+	}
 	r.connectors[c.Name()] = c
 	r.iconCoverageValidated = false
 }
