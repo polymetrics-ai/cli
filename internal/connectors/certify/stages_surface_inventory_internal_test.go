@@ -197,6 +197,19 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 			}`,
 			wantParseErr: true,
 		},
+		{
+			name: "trailing_api_surface_is_rejected",
+			raw: `{
+				"api": "test API",
+				"operation_ledger_version": 1,
+				"endpoints": [{
+					"method": "GET",
+					"path": "/widgets",
+					"covered_by": {"stream": "widgets"}
+				}]
+			} {}`,
+			wantParseErr: true,
+		},
 	}
 
 	for _, tc := range tests {

@@ -2201,6 +2201,16 @@ func TestParseAPISurfaceEnforcesLedgerSchema(t *testing.T) {
 			}`,
 			wantErr: true,
 		},
+		{
+			name:    "trailing_json_value_is_rejected",
+			raw:     `{"api":"test API","endpoints":[]}{}`,
+			wantErr: true,
+		},
+		{
+			name:    "trailing_junk_is_rejected",
+			raw:     `{"api":"test API","endpoints":[]} junk`,
+			wantErr: true,
+		},
 	}
 
 	for _, tc := range tests {
