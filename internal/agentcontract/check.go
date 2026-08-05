@@ -70,7 +70,7 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 		}
 		actual := content
 		if projectionRendersWholeFile(contract, target) {
-			policy, ok := contract.HarnessPolicyFor(target.Harness)
+			policy, ok := contract.ProjectionFor(target.Harness)
 			if !ok {
 				return fmt.Errorf("check projection %s: canonical %s policy is missing", target.Path, target.Harness)
 			}

@@ -26,7 +26,7 @@ func RenderProjection(contract *Contract, target ProjectionTarget) ([]byte, erro
 	if err := contract.Validate(); err != nil {
 		return nil, err
 	}
-	policy, ok := contract.HarnessPolicyFor(target.Harness)
+	policy, ok := contract.ProjectionFor(target.Harness)
 	if !ok {
 		return RenderBlock(contract, target.Role)
 	}
@@ -39,7 +39,7 @@ func RenderProjection(contract *Contract, target ProjectionTarget) ([]byte, erro
 }
 
 func projectionRendersWholeFile(contract *Contract, target ProjectionTarget) bool {
-	policy, ok := contract.HarnessPolicyFor(target.Harness)
+	policy, ok := contract.ProjectionFor(target.Harness)
 	return ok && policy.Format == claudeMarkdownYAMLFrontmatter
 }
 

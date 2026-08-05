@@ -84,3 +84,17 @@ captain-approved; Wave 2 does not retrofit coverage or block on it.
 
 These recorded results predate the current review corrections and do not substitute for the outer
 executor's remaining validation phases.
+
+## CI corrective loop
+
+PR #3728 initially failed `connector-boundary` because the neutral
+`HarnessPolicyFor` identifier in `internal/agentcontract` matched the connector lexicon's
+provider-policy heuristic. This was RED evidence for the boundary rule, not a connector-policy
+change. The lookup was renamed to `ProjectionFor` without changing the canonical contract or
+generated output.
+
+After the rename, `go test ./internal/agentcontract ./cmd/agentcontractgen -count=1`,
+`go run ./cmd/agentcontractgen check`, `go vet ./internal/agentcontract ./cmd/agentcontractgen`,
+and `go run ./cmd/connectorgen boundary . --json` passed. The boundary report covered 145 Go files
+and 550 connector definitions with `outcome: clean`; a fresh no-mistakes child pipeline and PR CI
+remain required for the corrected commit.

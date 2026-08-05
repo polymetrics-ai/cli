@@ -11,7 +11,7 @@ import (
 
 func TestRenderClaudeProjectionsIsStableAndSelfContained(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
-	policy, ok := contract.HarnessPolicyFor("claude")
+	policy, ok := contract.ProjectionFor("claude")
 	if !ok {
 		t.Fatal("canonical contract does not define a Claude harness policy")
 	}
@@ -53,7 +53,7 @@ func TestRenderClaudeProjectionsIsStableAndSelfContained(t *testing.T) {
 func TestClaudeProjectWorkersBlockAmbientAgentDelegation(t *testing.T) {
 	root := repositoryRoot(t)
 	contract := loadRepositoryContract(t, root)
-	policy, ok := contract.HarnessPolicyFor("claude")
+	policy, ok := contract.ProjectionFor("claude")
 	if !ok {
 		t.Fatal("canonical contract does not define a Claude harness policy")
 	}

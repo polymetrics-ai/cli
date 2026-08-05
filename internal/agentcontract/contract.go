@@ -272,8 +272,8 @@ func (contract *Contract) Validate() error {
 	return validateProjections(contract.Projections)
 }
 
-// HarnessPolicyFor returns the canonical native projection policy for a harness.
-func (contract *Contract) HarnessPolicyFor(harness string) (HarnessPolicy, bool) {
+// ProjectionFor returns the canonical native projection policy for a harness.
+func (contract *Contract) ProjectionFor(harness string) (HarnessPolicy, bool) {
 	for _, policy := range contract.HarnessPolicies {
 		if policy.Harness == harness {
 			return policy, true
