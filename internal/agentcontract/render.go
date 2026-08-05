@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/pelletier/go-toml/v2"
@@ -90,6 +91,8 @@ func RenderBlock(contract *Contract, role string) ([]byte, error) {
 	return output.Bytes(), nil
 }
 
+// RenderProjection renders either a harness-owned canonical block or a complete generated file,
+// according to the registered projection target.
 func RenderProjection(contract *Contract, target ProjectionTarget) ([]byte, error) {
 	if err := contract.Validate(); err != nil {
 		return nil, err
@@ -112,6 +115,11 @@ func RenderProjection(contract *Contract, target ProjectionTarget) ([]byte, erro
 			return nil, fmt.Errorf("canonical contract: Claude harness policy is missing")
 		}
 		return renderClaudeProjection(contract, target, policy)
+	case "full":
+		if target.Harness != "pi" {
+			return nil, fmt.Errorf("canonical contract: full render mode requires the Pi harness")
+		}
+		return renderPiProjection(contract, target)
 	default:
 		return nil, fmt.Errorf("canonical contract: unknown projection render mode %q", target.RenderMode)
 	}
@@ -153,6 +161,30 @@ func renderCodexDeveloperInstructions(contract *Contract, role string) (string, 
 	output.Write(base)
 	fmt.Fprintf(&output, "\n## Codex project-local configuration\n\n- Format and discovery: %s\n- Tool access: %s\n- Project trust: %s\n- General precedence: %s\n- Filename collisions: %s\n- Official sources: %s and %s\n", contract.Codex.Discovery, contract.Codex.ToolAccess.Effect, contract.Codex.ProjectTrustRequirement, contract.Codex.ConfigurationPrecedence, contract.Codex.CollisionBehavior, contract.Codex.Documentation.Subagents, contract.Codex.Documentation.ConfigBasics)
 	return output.String(), nil
+}
+
+func renderPiProjection(contract *Contract, target ProjectionTarget) ([]byte, error) {
+	block, err := RenderBlock(contract, target.Role)
+	if err != nil {
+		return nil, err
+	}
+
+	var output bytes.Buffer
+	fmt.Fprintln(&output, "---")
+	fmt.Fprintf(&output, "name: %s\n", yamlString(target.Role))
+	fmt.Fprintf(&output, "description: %s\n", yamlString(roleSummary(contract, target.Role)))
+	fmt.Fprintln(&output, "tools:")
+	for _, tool := range contract.PiHarness.ChildTools {
+		fmt.Fprintf(&output, "  - %s\n", yamlString(tool))
+	}
+	fmt.Fprintln(&output, "---")
+	fmt.Fprintln(&output)
+	output.Write(block)
+	return output.Bytes(), nil
+}
+
+func yamlString(value string) string {
+	return strconv.Quote(value)
 }
 
 func roleSummary(contract *Contract, role string) string {

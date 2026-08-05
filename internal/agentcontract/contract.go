@@ -30,6 +30,7 @@ type Contract struct {
 	NoMistakes       NoMistakesContract `json:"no_mistakes"`
 	Authority        AuthorityContract  `json:"authority"`
 	Wayfinder        WayfinderDecision  `json:"wayfinder"`
+	PiHarness        PiHarness          `json:"pi_harness"`
 	Projections      []ProjectionTarget `json:"projections"`
 }
 
@@ -167,6 +168,12 @@ type WayfinderDecision struct {
 	Rationale   []string `json:"rationale"`
 }
 
+type PiHarness struct {
+	CleanProjectScope string   `json:"clean_project_scope"`
+	Roles             []string `json:"roles"`
+	ChildTools        []string `json:"child_tools"`
+}
+
 type ProjectionTarget struct {
 	Harness    string `json:"harness"`
 	Role       string `json:"role"`
@@ -299,6 +306,9 @@ func (contract *Contract) Validate() error {
 	}
 	if contract.Wayfinder.Disposition != "rejected" || contract.Wayfinder.Dependency || len(contract.Wayfinder.Borrowed) != 3 || !allNonEmpty(contract.Wayfinder.Borrowed) || !allNonEmpty(contract.Wayfinder.Rationale) {
 		return fmt.Errorf("canonical contract: Wayfinder rejection and borrowed ideas are required")
+	}
+	if err := validatePiHarness(contract); err != nil {
+		return err
 	}
 	return validateProjections(contract.Projections)
 }
@@ -499,8 +509,8 @@ func validateProjections(targets []ProjectionTarget) error {
 		"claude/pm-connector-worker": {path: ".claude/agents/pm-connector-worker.md", renderMode: "markdown_yaml_frontmatter", required: true},
 		"codex/pm-delivery-worker":   {path: ".codex/agents/pm-delivery-worker.toml", renderMode: "standalone_toml", required: true},
 		"codex/pm-connector-worker":  {path: ".codex/agents/pm-connector-worker.toml", renderMode: "standalone_toml", required: true},
-		"pi/pm-delivery-worker":      {path: ".pi/agents/pm-delivery-worker.md", renderMode: "markdown_block"},
-		"pi/pm-connector-worker":     {path: ".pi/agents/pm-connector-worker.md", renderMode: "markdown_block"},
+		"pi/pm-delivery-worker":      {path: ".pi/agents/pm-delivery-worker.md", renderMode: "full", required: true},
+		"pi/pm-connector-worker":     {path: ".pi/agents/pm-connector-worker.md", renderMode: "full", required: true},
 	}
 	if len(targets) != len(expected) {
 		return fmt.Errorf("canonical contract: exactly six harness projection targets are required")
@@ -514,6 +524,20 @@ func validateProjections(targets []ProjectionTarget) error {
 			return fmt.Errorf("canonical contract: invalid projection target %q at %q", key, target.Path)
 		}
 		seen[key] = true
+	}
+	return nil
+}
+
+func validatePiHarness(contract *Contract) error {
+	if contract.PiHarness.CleanProjectScope != "clean-project" {
+		return fmt.Errorf("canonical contract: Pi clean project scope must be clean-project")
+	}
+	if !slices.Equal(contract.PiHarness.Roles, []string{contract.BaseRole.Name, contract.ConnectorOverlay.Name}) {
+		return fmt.Errorf("canonical contract: Pi clean project roles must be the base and connector workers only")
+	}
+	allowedTools := []string{"read", "grep", "find", "ls", "bash", "edit", "write"}
+	if !slices.Equal(contract.PiHarness.ChildTools, allowedTools) || slices.Contains(contract.PiHarness.ChildTools, "subagent") {
+		return fmt.Errorf("canonical contract: Pi child tools must be the bounded non-delegating allowlist")
 	}
 	return nil
 }

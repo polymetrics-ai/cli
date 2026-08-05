@@ -233,6 +233,24 @@ func TestCanonicalContractRequiredInvariants(t *testing.T) {
 				value.Authority.PauseWhen = value.Authority.PauseWhen[:len(value.Authority.PauseWhen)-1]
 			},
 		},
+		{
+			name: "Pi clean project scope changed",
+			mutate: func(value *Contract) {
+				value.PiHarness.CleanProjectScope = "project"
+			},
+		},
+		{
+			name: "Pi additional role allowed",
+			mutate: func(value *Contract) {
+				value.PiHarness.Roles = append(value.PiHarness.Roles, "ambient-worker")
+			},
+		},
+		{
+			name: "Pi child subagent tool allowed",
+			mutate: func(value *Contract) {
+				value.PiHarness.ChildTools = append(value.PiHarness.ChildTools, "subagent")
+			},
+		},
 	}
 
 	for _, test := range tests {

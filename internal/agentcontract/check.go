@@ -99,6 +99,11 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 			if err := validateClaudeFrontmatter(frontmatter, target, policy); err != nil {
 				return fmt.Errorf("check projection %s: %w", target.Path, err)
 			}
+		case "full":
+			if err := CheckProjection(expected, content); err != nil {
+				return fmt.Errorf("check projection %s: %w", target.Path, err)
+			}
+			continue
 		}
 		if err := CheckProjection(expected, actual); err != nil {
 			return fmt.Errorf("check projection %s: %w", target.Path, err)
@@ -282,9 +287,6 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 				continue
 			}
 			next = expected
-		}
-		if next == nil {
-			continue
 		}
 		info, err := projectionRoot.Stat(path)
 		if err != nil {
