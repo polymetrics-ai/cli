@@ -1,6 +1,7 @@
 # VERIFICATION — issue #3761 multipart `rest_write`
 
-Status: planning complete; implementation evidence pending.
+Status: contract, preview, dispatch, and documentation slices complete; final
+command-preflight integration and full verification remain pending.
 
 ## Scope audit
 
@@ -21,10 +22,19 @@ Status: planning complete; implementation evidence pending.
   slices, with their generated prompts and findings/dispositions added here or
   the final summary.
 
+## Completed focused evidence
+
+- `go test ./internal/connectors/engine -count=1`: passed after the multipart
+  direct-write and existing reverse-ETL test suites ran together.
+- `go test ./internal/connectors/connsdk -count=1`: passed, including the
+  bounded multipart response, root/snapshot, symlink, digest, and media tests.
+- `go vet ./internal/connectors/engine ./internal/connectors/connsdk`: passed.
+- `make docs-check`: passed; `go run ./cmd/connectorgen validate` checked 550
+  connectors with 0 findings.
+
 ## CLI/help/manual/website decision
 
 Not applicable to this foundation. It exposes no provider command, flag, help
 topic, command namespace behavior, manual page, website page, completion, or
 generated manual surface. Connector adoption work must complete that checklist
 before any multipart command becomes `availability: implemented`.
-

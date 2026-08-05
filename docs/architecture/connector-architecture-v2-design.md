@@ -468,6 +468,27 @@ through the provider-neutral gate before dispatch. `Write` returns redacted, typ
 failed). Batch semantics stay one-request-per-record (matches github/stripe today);
 `metadata.json.batch.write_batch_size` is reserved for future bulk endpoints.
 
+### B.5.1 Declared multipart operation writes (engine/direct_write.go)
+
+`operations.json` can opt a `kind: "rest_write"` into the same typed multipart transport with a
+closed `rest.multipart` declaration. This is not a second upload runner and is not a generic HTTP
+write: the bundle fixes the mutating method, connector-relative path, literal
+`multipart/form-data` content type, closed typed body schema, response cap, aggregate/file caps,
+and all form/file-part names. The operation's `source_url` is the connector author's provider
+evidence for those values. A caller can only supply declared `body.*` fields; a file source is a
+required string path, never inline bytes or a caller-selected request shape.
+
+`PreviewOperationDirectWrite` serializes the existing canonical multipart representation, so its
+digest binds the request target/query, fixed declaration, typed fields, source-path identities, and
+plan-approved SHA-256 of every file without a network call. Execution re-prepares and checks that
+same identity before the shared approval gate, then reuses the established root-confined multipart
+snapshot/regular-file/cap/digest/media validation and bounded requester. Direct multipart writes
+remain single-attempt and refuse redirect replay; bounded provider response and error content is
+returned without a new masking path. Existing `writes.json` multipart reverse-ETL actions remain
+their own proven path; legacy `file_upload` operation rows remain non-executable until migrated by
+a connector adoption lane. This shared capability does not itself create a command, manual, or
+website claim.
+
 ### B.6 Sync modes — derived, never declared
 
 Per stream: `full_refresh_append` and `full_refresh_overwrite` always; `*_deduped` variants iff
