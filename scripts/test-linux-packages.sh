@@ -60,16 +60,7 @@ test_deb_package() {
         exit 1
       fi
       export DEBIAN_FRONTEND=noninteractive
-      apt_update_attempt=1
-      until apt-get update >/dev/null; do
-        if [ "$apt_update_attempt" -ge 4 ]; then
-          echo "apt-get update failed after $apt_update_attempt attempts" >&2
-          exit 1
-        fi
-        echo "apt-get update attempt $apt_update_attempt failed; retrying after mirror sync" >&2
-        sleep $((apt_update_attempt * 5))
-        apt_update_attempt=$((apt_update_attempt + 1))
-      done
+      apt-get update >/dev/null
       apt-get install -y --no-install-recommends ca-certificates >/dev/null
       apt-get install -y "$3" >/dev/null
       pm version --json >/tmp/pm-version.json
