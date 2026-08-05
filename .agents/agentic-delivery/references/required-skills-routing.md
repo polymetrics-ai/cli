@@ -98,8 +98,12 @@ For optional runtime services, RLM agent mode, Podman/Docker Compose local runti
 Skill loading does not replace GSD. For implementation or behavior-changing work:
 
 1. Read `.agents/agentic-delivery/references/gsd-pi-adapter.md`.
-2. Run `/gsd-programming-loop ...` in Pi or `scripts/gsd prompt programming-loop ...` from shell.
-3. Record the GSD command path and the skills loaded in the GSD plan, TDD ledger, worker handoff, or PR body.
+2. Resolve and use the installed sequence: `discuss-phase`, `plan-phase --tdd`, `execute-phase`,
+   `verify-work`, gap planning/execution when needed, then `code-review`. In shell, generate each
+   prompt with `scripts/gsd prompt <command> ...`; in Pi, use its `/gsd-*` alias.
+3. Do not invoke `programming-loop`; it is not present in the pinned adapter. Run
+   `go run ./cmd/agentcontractgen check` to verify every command referenced by the canonical flow.
+4. Record the GSD command path and the skills loaded in the GSD plan, TDD ledger, worker handoff, or PR body.
 
 ## PR evidence requirement
 

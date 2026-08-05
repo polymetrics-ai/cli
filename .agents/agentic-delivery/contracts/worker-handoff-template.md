@@ -1,18 +1,20 @@
-# Worker Handoff Template
+# Durable Wave Checkpoint Template
 
-Workers use this template when returning control to a parent issue orchestrator.
+The canonical worker uses this compatibility template to persist one wave checkpoint in an issue,
+PR, or GSD artifact. It is durable resume state for the same worker or a successor, not a handoff to
+a spawned parent-orchestrator role.
 
 ````markdown
-## Worker Handoff
+## Wave Checkpoint
 
 Sub-issue:
 Parent issue:
-Worker agent:
+Canonical worker:
 Branch:
 Sub-PR:
 Parent PR:
 Base branch:
-Worker directory:
+Worktree:
 Head SHA:
 
 ## Scope Delivered
@@ -75,9 +77,9 @@ Result: <pass | fail | blocked>
 - Disposition summary:
 - Unresolved findings:
 
-## Merge Recommendation
+## Integration Recommendation
 
-- Recommended state: <ready_for_merge | provisional_parent_integration | blocked>
+- Recommendation: <integrate | hold | block>
 - Reason:
 - Human gates:
 - Follow-up issues:
@@ -91,5 +93,6 @@ Result: <pass | fail | blocked>
   unambiguous.
 - Do not claim Claude approval from a skipped-review status.
 - Do not claim GitHub Copilot review as approval.
-- Use `provisional_parent_integration` when parent PR fallback coverage is still pending.
+- Use `hold` for a technical parent-branch landing awaiting fallback coverage; do not record the
+  canonical `integrate_sub_pr` state or unblock dependent work until coverage is complete.
 - Name blockers explicitly instead of weakening verification.
