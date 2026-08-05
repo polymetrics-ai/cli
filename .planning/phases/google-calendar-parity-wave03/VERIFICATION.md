@@ -45,6 +45,19 @@
 
 - [x] `go test ./internal/connectors/hooks/google-calendar -count=1` — pass; metadata, fresh event reads, legacy projections, and settings pagination are covered.
 
+## CI batchability remediation
+
+- [x] Red: `go test ./internal/connectors/engine -run '^TestEveryShippedWriteActionIsBatchable$' -count=1` reproduced all ten intentional Google Calendar `batchable:false` failures.
+- [x] `go test ./internal/connectors/engine -run '^TestEveryShippedWriteActionHasExpectedBatchability$' -count=1` — pass.
+- [x] `go test ./internal/connectors/engine -count=1` — pass.
+- [x] `go test ./internal/app -run '^(TestPlanReverseETLRefusesNonBatchableAction|TestRunReverseETLRefusesStoredNonBatchablePlan|TestNonBatchableActionStillExecutesAsConnectorCommand)$' -count=1` — pass.
+- [x] `go test ./internal/connectors/hooks/google-calendar -count=1` — pass.
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/google-calendar' -count=1` — pass.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs/google-calendar` — 1 connector, 0 findings.
+- [x] `make connector-boundary` — clean (550 connectors, 0 findings/warnings).
+- [x] `go vet ./internal/connectors/engine`, `gofmt -l internal/connectors/engine/batchable_test.go`, and `git diff --check` — pass/clean.
+- [ ] Full `make verify` rerun — intentionally left to the outer no-mistakes CI phase owner; focused local evidence is not recorded as full verification.
+
 ## Constraints
 
-No credentialed provider checks and no write execution were run. A representative write preview intentionally stopped before any provider interaction because this disposable worktree has no `.polymetrics` project. Do not claim full `make verify` or `go test ./...`; the shared parity contract requires focused gates because the full suite exceeds bounded command windows.
+No credentialed provider checks and no write execution were run. A representative write preview intentionally stopped before any provider interaction because this disposable worktree has no `.polymetrics` project. Do not claim full `make verify` or `go test ./...`; the shared parity contract requires focused gates because the full suite exceeds bounded command windows, and the outer no-mistakes executor owns the next full CI run.

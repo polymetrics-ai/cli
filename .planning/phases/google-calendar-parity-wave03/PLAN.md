@@ -25,6 +25,7 @@ Google's current Calendar v3 Discovery document (`revision=20260731`) lists 38 o
 5. **Verification and handoff:** run the contract's focused gates on current main, build `pm`, verify help and representative read and write-plan commands without credentials, update phase records, commit the green slice, then hand branch custody to no-mistakes.
 6. **Review remediation:** preserve unfiltered fresh event reads, retain legacy list-stream projection contracts, paginate settings, add connector-owned regressions, and refresh generated surfaces before one final focused package test.
 7. **Fixture and validation remediation:** replay every advertised Google Calendar stream from its bundle fixture without external I/O, restore the typed fixture-mode configuration property and generated surfaces, and enforce malformed URI rejection in the shared schema validator.
+8. **CI batchability remediation:** preserve the ten intentionally non-batchable Google Calendar actions and replace the engine foundation's transitional "no shipped adopter yet" assertion with an exact shipped-policy regression guard. The guard must fail for an unexpected non-batchable action and for any expected safety-sensitive action that becomes batchable or disappears.
 
 ## Safety and non-goals
 

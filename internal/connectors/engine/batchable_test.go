@@ -156,19 +156,46 @@ func TestBatchableManifestDoesNotAliasBundlePointer(t *testing.T) {
 	}
 }
 
-// R3: no shipped bundle declares the field, so every action in defs/ must still
-// report batchable. This is the regression guard that keeps the default honest
-// as bundles are added.
-func TestEveryShippedWriteActionIsBatchable(t *testing.T) {
+// R3 originally guarded the transition where no shipped bundle declared the
+// field. Google Calendar is the first intentional adopter, so lock the exact
+// shipped policy: every other action remains batchable by default, and these
+// safety-sensitive actions cannot silently become batchable.
+func TestEveryShippedWriteActionHasExpectedBatchability(t *testing.T) {
+	expectedNonBatchable := map[string]struct{}{
+		"google-calendar/clear_calendar":              {},
+		"google-calendar/delete_calendar":             {},
+		"google-calendar/move_event":                  {},
+		"google-calendar/quick_add_event":             {},
+		"google-calendar/stop_channel":                {},
+		"google-calendar/transfer_calendar_ownership": {},
+		"google-calendar/watch_acl":                   {},
+		"google-calendar/watch_calendar_list":         {},
+		"google-calendar/watch_events":                {},
+		"google-calendar/watch_settings":              {},
+	}
+	seenNonBatchable := make(map[string]struct{}, len(expectedNonBatchable))
+
 	bundles, err := LoadAll(defs.FS)
 	if err != nil {
 		t.Fatalf("LoadAll(defs): %v", err)
 	}
 	for _, b := range bundles {
 		for _, action := range b.Writes {
-			if !action.IsBatchable() {
-				t.Errorf("bundle %q action %q is non-batchable; no shipped bundle should declare batchable:false yet", b.Name, action.Name)
+			key := b.Name + "/" + action.Name
+			_, wantNonBatchable := expectedNonBatchable[key]
+			wantBatchable := !wantNonBatchable
+			if got := action.IsBatchable(); got != wantBatchable {
+				t.Errorf("bundle %q action %q IsBatchable() = %v, want %v", b.Name, action.Name, got, wantBatchable)
 			}
+			if wantNonBatchable {
+				seenNonBatchable[key] = struct{}{}
+			}
+		}
+	}
+
+	for key := range expectedNonBatchable {
+		if _, ok := seenNonBatchable[key]; !ok {
+			t.Errorf("expected non-batchable shipped action %q was not loaded", key)
 		}
 	}
 }
