@@ -2,6 +2,7 @@ package cli
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -90,6 +91,26 @@ func TestCertifyCLISingleConnectorTextMode(t *testing.T) {
 	if !strings.Contains(stdout, "Certification: sample [PASS]") {
 		t.Errorf("stdout missing human-readable PASS summary: %s", stdout)
 	}
+}
+
+func TestCertifyCLIReportFixtureRendersJSONAndMapsExitCodes(t *testing.T) {
+	rep := completeCertifyReport()
+	var out bytes.Buffer
+	if err := writeCertifyReport(&out, true, rep); err != nil {
+		t.Fatalf("writeCertifyReport() error = %v", err)
+	}
+	if got := out.String(); !strings.Contains(got, `"kind": "ConnectorCertification"`) || !strings.Contains(got, `"connector": "sample"`) {
+		t.Errorf("fixture JSON report = %s, want certification envelope and complete report", got)
+	}
+	assertCertifyExitCode(t, exitForReport(rep), 0)
+
+	failed := rep
+	failed.Passed = false
+	assertCertifyExitCode(t, exitForReport(failed), 2)
+
+	leaked := failed
+	leaked.Leaks = []certify.Leak{{Tag: "pm-cert-sample-fixture", Connector: "sample", Action: "create", Reason: "fixture leak"}}
+	assertCertifyExitCode(t, exitForReport(leaked), 3)
 }
 
 // TestCertifyCLISingleConnectorSavesReport proves the CLI persists the
@@ -185,6 +206,25 @@ func TestCertifyCLIBatchModeTextRendersMatrix(t *testing.T) {
 	if !strings.Contains(stdout, "exit_code: 0") {
 		t.Errorf("stdout missing exit_code summary line: %s", stdout)
 	}
+}
+
+func TestCertifyCLIBatchFixturePreservesMatrixOrderingAndExit(t *testing.T) {
+	batch := completeCertifyBatchReport()
+	batch.Results = []certify.BatchConnectorResult{
+		{Connector: "zeta", Report: completeCertifyReport(), ExitCode: 2},
+		{Connector: "alpha", Report: completeCertifyReport(), ExitCode: 0},
+		{Connector: "resumed", Resumed: true, ExitCode: 0},
+	}
+	batch.ExitCode = 2
+
+	stdout := renderBatchMatrixText(batch)
+	alpha := strings.Index(stdout, "alpha\t")
+	resumed := strings.Index(stdout, "resumed\t")
+	zeta := strings.Index(stdout, "zeta\t")
+	if alpha < 0 || resumed < 0 || zeta < 0 || !(alpha < resumed && resumed < zeta) {
+		t.Errorf("matrix rows are not name-ordered: %s", stdout)
+	}
+	assertCertifyExitCode(t, exitForBatch(batch), 2)
 }
 
 // TestCertifyCLISweepWithoutTargetsIsUsageError proves --sweep with nothing
@@ -296,5 +336,25 @@ func completeCertifyBatchReport() certify.BatchReport {
 			{Connector: "skipped", Skipped: true, SkipReason: "fixture-only connector", ExitCode: 0},
 		},
 		ExitCode: 0,
+	}
+}
+
+func assertCertifyExitCode(t *testing.T, err error, want int) {
+	t.Helper()
+	if want == 0 {
+		if err != nil {
+			t.Fatalf("exit error = %v, want nil for exit 0", err)
+		}
+		return
+	}
+	if err == nil {
+		t.Fatalf("exit error = nil, want exit %d", want)
+	}
+	var cliErr *cliError
+	if !errors.As(err, &cliErr) {
+		t.Fatalf("exit error = %T %v, want *cliError", err, err)
+	}
+	if cliErr.exitOverride == nil || *cliErr.exitOverride != want {
+		t.Errorf("exit override = %v, want %d", cliErr.exitOverride, want)
 	}
 }

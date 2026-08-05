@@ -85,11 +85,15 @@ FAIL
 ```
 
 After conversion, the single real `pm connectors certify sample --json` route
-also proves report persistence. Text rendering, persistence round-trip, and
-JSON/text batch output use complete Report/BatchReport fixtures; batch worker,
-ordering, resume, and exit behavior remain covered by their existing focused
-tests. The cold focused route run now makes 61 real calls and passes the exact
-61-call ceiling:
+also proves report persistence. Complete Report/BatchReport fixtures directly
+exercise JSON/text rendering, persistence round-trip, report exit precedence,
+batch JSON/text output, and matrix ordering without launching another Runner.
+The distinct batch worker, resume, ordering, and exit behavior remains covered
+by `TestRunBatchRunsConnectorsConcurrentlyUpToParallelLimit`,
+`TestRunBatchResumeSkipsConnectorsWithFreshReport`,
+`TestBatchReportSummaryMatrixLeaksRowFirst`, and the focused batch exit tests.
+The cold focused route run now makes 61 real calls and passes the exact 61-call
+ceiling:
 
 ```text
 $ go test -count=1 -run '^TestCertifyCLI' ./internal/cli
@@ -122,5 +126,31 @@ certify timing summary
 
 The local sample is diagnostic only; it cannot establish #3807's fixed
 threshold. `.github/workflows/verify.yml` now runs `make certify-timing`
-before the unchanged aggregate `make verify` step, so the next two
-GitHub-hosted runs provide the required evidence.
+before the unchanged aggregate `make verify` step, so GitHub-hosted runs
+provide the required evidence.
+
+### #3807 — wall-clock measurement and duplicate guards
+
+The duration backstop was made test-first. Before its implementation, the
+controlled fixture referenced `TargetResult.WallElapsed` and
+`Report.TotalWallElapsed`, and the focused test failed to compile because
+both symbols were absent. The green implementation measures the actual wall
+time of each targeted `go test` process (including that command's startup and
+compilation), prints per-target and total `wall_elapsed`, and refuses to
+evaluate a duration budget if any target lacks a measurement.
+
+The deliberate no-sleep duplicate fixtures exercise both independent guards:
+`TestCertifyRealCLIInvocationBudgetRejectsControlledDuplicate` rejects 86
+real harness calls against the 85-call contract, while
+`TestCheckDurationBudgetRejectsControlledDuplicateFixture` rejects two
+4-second wall measurements against a 7-second bound. The fixed production
+wall-time threshold remains intentionally unset until two post-refactor
+GitHub-hosted samples from the new measurement are recorded.
+
+```text
+$ go test -count=1 -run '^TestCertifyRealCLIInvocationBudgetRejectsControlledDuplicate$' ./internal/connectors/certify
+ok      polymetrics.ai/internal/connectors/certify
+
+$ go test -count=1 ./internal/certifytiming ./cmd/certifytiming
+ok      polymetrics.ai/internal/certifytiming
+```
