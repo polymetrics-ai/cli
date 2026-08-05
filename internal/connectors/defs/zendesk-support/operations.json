@@ -1011,7 +1011,7 @@
       "id": "zendesk-support.update_permission_policy",
       "kind": "rest_write",
       "summary": "Update Permission Policy (PATCH /api/v2/custom_objects/{custom_object_key}/permission_policies/{id})",
-      "description": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+      "description": "Pinned OAS PermissionPolicyUpdateRequest is a closed, typed policy envelope. Each field below is cited to the pinned OAS so the executable write definition can be audited without a prose fallback.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
@@ -1025,7 +1025,59 @@
         "body_schema": {
           "type": "object",
           "title": "PermissionPolicyUpdateRequest",
-          "additionalProperties": true
+          "additionalProperties": false,
+          "properties": {
+            "policy": {
+              "type": "object",
+              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy",
+              "additionalProperties": false,
+              "properties": {
+                "records": {
+                  "type": "object",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records",
+                  "additionalProperties": false,
+                  "properties": {
+                    "create": {
+                      "type": "object",
+                      "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/create",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                        "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                      }
+                    },
+                    "read": {
+                      "type": "object",
+                      "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/read",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                        "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                      }
+                    },
+                    "update": {
+                      "type": "object",
+                      "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/update",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                        "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                      }
+                    },
+                    "delete": {
+                      "type": "object",
+                      "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/delete",
+                      "additionalProperties": false,
+                      "properties": {
+                        "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                        "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -4703,7 +4755,7 @@
       "id": "zendesk-support.bulk_set_agent_attribute_values_job",
       "kind": "rest_write",
       "summary": "Bulk Set Agent Attribute Values Jobs (POST /api/v2/routing/agents/instance_values/jobs)",
-      "description": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+      "description": "Pinned OAS BulkSkillBasedRoutingAttributeValuesRequest resolves to a closed typed job envelope; the OAS readOnly annotations on required action/items are retained as an upstream inconsistency, not treated as a missing request contract.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
@@ -4717,7 +4769,38 @@
         "body_schema": {
           "type": "object",
           "title": "BulkSkillBasedRoutingAttributeValuesRequest",
-          "additionalProperties": true
+          "additionalProperties": false,
+          "properties": {
+            "job": {
+              "type": "object",
+              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValuesRequest/properties/job",
+              "required": ["action", "attributes", "items"],
+              "additionalProperties": false,
+              "properties": {
+                "action": { "type": "string", "enum": ["upsert", "update", "delete"], "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/action" },
+                "attributes": {
+                  "type": "object",
+                  "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/attributes",
+                  "additionalProperties": false,
+                  "properties": {
+                    "attribute_values": {
+                      "type": "array",
+                      "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/attributes/properties/attribute_values",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "attribute_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/SkillBasedRoutingAttributeValueObject/properties/attribute_id" },
+                          "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/SkillBasedRoutingAttributeValueObject/properties/name" }
+                        }
+                      }
+                    }
+                  }
+                },
+                "items": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/items", "items": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/items/items" } }
+              }
+            }
+          }
         }
       }
     },
@@ -6453,7 +6536,7 @@
       "id": "zendesk-support.tickets_update_many",
       "kind": "rest_write",
       "summary": "Update Many Tickets (PUT /api/v2/tickets/update_many)",
-      "description": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+      "description": "Pinned OAS TicketsUpdateRequest has two typed oneOf arms. It remains blocked until the shared write surface can bind separate bulk and batch actions to this endpoint and can render the bulk ids array as a query parameter; no executable union-flattened command is exposed.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
@@ -6467,7 +6550,38 @@
         "body_schema": {
           "type": "object",
           "title": "TicketsUpdateRequest",
-          "additionalProperties": true
+          "additionalProperties": false,
+          "oneOf": [
+            { "required": ["ticket"] },
+            { "required": ["tickets"] }
+          ],
+          "properties": {
+            "ticket": {
+              "type": "object",
+              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketsUpdateRequest/oneOf/0/properties/ticket",
+              "additionalProperties": false,
+              "properties": {
+                "status": { "type": "string", "enum": ["new", "open", "pending", "hold", "solved", "closed"], "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/status" },
+                "subject": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/subject" },
+                "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/tags/items" } }
+              }
+            },
+            "tickets": {
+              "type": "array",
+              "maxItems": 100,
+              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketsUpdateRequest/oneOf/1/properties/tickets",
+              "items": {
+                "type": "object",
+                "required": ["id"],
+                "additionalProperties": false,
+                "properties": {
+                  "id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketsUpdateRequest/oneOf/1/properties/tickets/items/allOf/1/properties/id" },
+                  "status": { "type": "string", "enum": ["new", "open", "pending", "hold", "solved", "closed"], "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/status" },
+                  "subject": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/TicketObject/properties/subject" }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -7766,7 +7880,7 @@
       "id": "zendesk-support.create_many_users",
       "kind": "rest_write",
       "summary": "Create Many Users (POST /api/v2/users/create_many)",
-      "description": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+      "description": "Pinned OAS UsersRequest is represented with the closed UserCreateInput arm for this create operation; the OAS operation description bounds the array to 100 users.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
@@ -7780,7 +7894,34 @@
         "body_schema": {
           "type": "object",
           "title": "UsersRequest",
-          "additionalProperties": true
+          "required": ["users"],
+          "additionalProperties": false,
+          "properties": {
+            "users": {
+              "type": "array",
+              "maxItems": 100,
+              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UsersRequest/properties/users and #/paths/~1api~1v2~1users~1create_many/post/description (up to 100 users)",
+              "items": {
+                "type": "object",
+                "required": ["name"],
+                "additionalProperties": false,
+                "properties": {
+                  "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/name" },
+                  "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/email" },
+                  "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/external_id" },
+                  "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/role" },
+                  "alias": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/alias" },
+                  "details": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/details" },
+                  "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/phone" },
+                  "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/organization_id" },
+                  "default_group_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/default_group_id" },
+                  "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/locale" },
+                  "suspended": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/suspended" },
+                  "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags/items" } }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -7897,7 +8038,7 @@
       "id": "zendesk-support.create_or_update_many_users",
       "kind": "rest_write",
       "summary": "Create Or Update Many Users (POST /api/v2/users/create_or_update_many)",
-      "description": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+      "description": "Pinned OAS UsersRequest is represented with the closed UserMergeInput arm for create-or-update semantics; the OAS operation description bounds the array to 100 users.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
@@ -7911,7 +8052,34 @@
         "body_schema": {
           "type": "object",
           "title": "UsersRequest",
-          "additionalProperties": true
+          "required": ["users"],
+          "additionalProperties": false,
+          "properties": {
+            "users": {
+              "type": "array",
+              "maxItems": 100,
+              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UsersRequest/properties/users and #/paths/~1api~1v2~1users~1create_or_update_many/post/description (up to 100 users)",
+              "items": {
+                "type": "object",
+                "minProperties": 1,
+                "additionalProperties": false,
+                "properties": {
+                  "id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/id" },
+                  "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/name" },
+                  "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/email" },
+                  "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/external_id" },
+                  "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/role" },
+                  "alias": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/alias" },
+                  "details": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/details" },
+                  "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/phone" },
+                  "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/organization_id" },
+                  "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/locale" },
+                  "suspended": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/suspended" },
+                  "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags/items" } }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -8050,7 +8218,7 @@
       "id": "zendesk-support.request_user_create",
       "kind": "rest_write",
       "summary": "Request User Create (POST /api/v2/users/request_create)",
-      "description": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+      "description": "Pinned OAS UserRequest is represented with the closed UserCreateInput arm for this create request.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
@@ -8064,7 +8232,26 @@
         "body_schema": {
           "type": "object",
           "title": "UserRequest",
-          "additionalProperties": true
+          "required": ["user"],
+          "additionalProperties": false,
+          "properties": {
+            "user": {
+              "type": "object",
+              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserRequest/properties/user",
+              "required": ["name"],
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/name" },
+                "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/email" },
+                "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/external_id" },
+                "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/role" },
+                "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/phone" },
+                "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/organization_id" },
+                "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/locale" },
+                "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags/items" } }
+              }
+            }
+          }
         }
       }
     },
@@ -8102,7 +8289,7 @@
       "id": "zendesk-support.update_many_users",
       "kind": "rest_write",
       "summary": "Update Many Users (PUT /api/v2/users/update_many)",
-      "description": "Blocked by default until this operation's request body has a bounded, flag-representable shape. https://developer.zendesk.com/zendesk/oas.yaml declares a request contract whose payload is an unbounded or bulk free-form region, so a closed record schema would either be open-ended or unusable from the command surface.",
+      "description": "Pinned OAS UpdateManyUsers has typed bulk and batch oneOf arms. It remains blocked until the shared write surface can bind separate bulk and batch actions to this endpoint and can render bulk record-array selectors as query parameters; no executable union-flattened command is exposed.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "reverse ETL plan, preview, explicit approval, execute",
@@ -8114,19 +8301,41 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
           "oneOf": [
-            {
-              "type": "object",
-              "title": "UserUpdateRequest",
-              "additionalProperties": true
-            },
-            {
-              "type": "object",
-              "title": "UsersRequest",
-              "additionalProperties": true
-            }
+            { "required": ["user"] },
+            { "required": ["users"] }
           ],
-          "additionalProperties": true
+          "properties": {
+            "user": {
+              "type": "object",
+              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateRequest/properties/user",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/name" },
+                "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/email" },
+                "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/external_id" },
+                "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserUpdateInput/properties/tags/items" } }
+              }
+            },
+            "users": {
+              "type": "array",
+              "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UsersRequest/properties/users",
+              "items": {
+                "type": "object",
+                "required": ["id"],
+                "additionalProperties": false,
+                "properties": {
+                  "id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/id" },
+                  "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/name" },
+                  "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/email" },
+                  "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/external_id" },
+                  "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags/items" } }
+                }
+              }
+            }
+          }
         }
       }
     },

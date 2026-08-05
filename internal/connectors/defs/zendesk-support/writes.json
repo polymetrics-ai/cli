@@ -6004,6 +6004,264 @@
         "additionalProperties": false
       },
       "risk": "external mutation; high-risk update against PUT /api/v2/workspaces/reorder; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "update_permission_policy",
+      "kind": "update",
+      "method": "PATCH",
+      "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/permission_policies/{{ record.id }}",
+      "path_fields": [
+        "custom_object_key",
+        "id"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "policy"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "custom_object_key",
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "custom_object_key": {
+            "type": "string",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/paths/~1api~1v2~1custom_objects~1{custom_object_key}~1permission_policies~1{id}/patch"
+          },
+          "id": {
+            "type": "string",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/paths/~1api~1v2~1custom_objects~1{custom_object_key}~1permission_policies~1{id}/patch"
+          },
+          "policy": {
+            "type": "object",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy",
+            "additionalProperties": false,
+            "properties": {
+              "records": {
+                "type": "object",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records",
+                "additionalProperties": false,
+                "properties": {
+                  "create": {
+                    "type": "object",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/create",
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                    }
+                  },
+                  "read": {
+                    "type": "object",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/read",
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                    }
+                  },
+                  "update": {
+                    "type": "object",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/update",
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                    }
+                  },
+                  "delete": {
+                    "type": "object",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionPolicyUpdateRequest/properties/policy/properties/records/properties/delete",
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowed": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/allowed" },
+                      "rule_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/PermissionAction/properties/rule_id" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "risk": "updates a Zendesk custom-object permission policy through a typed, approval-gated request"
+    },
+    {
+      "name": "bulk_set_agent_attribute_values_job",
+      "kind": "update",
+      "method": "POST",
+      "path": "/api/v2/routing/agents/instance_values/jobs",
+      "body_type": "json",
+      "body_fields": [
+        "job"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "job": {
+            "type": "object",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValuesRequest/properties/job",
+            "required": [
+              "action",
+              "attributes",
+              "items"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": ["upsert", "update", "delete"],
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/action"
+              },
+              "attributes": {
+                "type": "object",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/attributes",
+                "additionalProperties": false,
+                "properties": {
+                  "attribute_values": {
+                    "type": "array",
+                    "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/attributes/properties/attribute_values",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "attribute_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/SkillBasedRoutingAttributeValueObject/properties/attribute_id" },
+                        "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/SkillBasedRoutingAttributeValueObject/properties/name" }
+                      }
+                    }
+                  }
+                }
+              },
+              "items": {
+                "type": "array",
+                "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/items",
+                "items": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/BulkSkillBasedRoutingAttributeValueJob/properties/items/items" }
+              }
+            }
+          }
+        }
+      },
+      "risk": "starts a typed Zendesk agent-routing attribute-value job; approval is required"
+    },
+    {
+      "name": "create_many_users",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/create_many",
+      "body_type": "json",
+      "body_fields": ["users"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["users"],
+        "additionalProperties": false,
+        "properties": {
+          "users": {
+            "type": "array",
+            "maxItems": 100,
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UsersRequest/properties/users and #/paths/~1api~1v2~1users~1create_many/post/description (up to 100 users)",
+            "items": {
+              "type": "object",
+              "required": ["name"],
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/name" },
+                "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/email" },
+                "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/external_id" },
+                "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/role" },
+                "alias": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/alias" },
+                "details": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/details" },
+                "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/phone" },
+                "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/organization_id" },
+                "default_group_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/default_group_id" },
+                "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/locale" },
+                "suspended": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/suspended" },
+                "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags/items" } }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates up to 100 typed Zendesk users per request; approval is required"
+    },
+    {
+      "name": "create_or_update_many_users",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/api/v2/users/create_or_update_many",
+      "body_type": "json",
+      "body_fields": ["users"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["users"],
+        "additionalProperties": false,
+        "properties": {
+          "users": {
+            "type": "array",
+            "maxItems": 100,
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UsersRequest/properties/users and #/paths/~1api~1v2~1users~1create_or_update_many/post/description (up to 100 users)",
+            "items": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/id" },
+                "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/name" },
+                "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/email" },
+                "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/external_id" },
+                "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/role" },
+                "alias": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/alias" },
+                "details": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/details" },
+                "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/phone" },
+                "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/organization_id" },
+                "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/locale" },
+                "suspended": { "type": "boolean", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/suspended" },
+                "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserMergeInput/properties/tags/items" } }
+              }
+            }
+          }
+        }
+      },
+      "risk": "creates or updates up to 100 typed Zendesk users per request; approval is required"
+    },
+    {
+      "name": "request_user_create",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v2/users/request_create",
+      "body_type": "json",
+      "body_fields": ["user"],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": ["user"],
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "type": "object",
+            "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserRequest/properties/user",
+            "required": ["name"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/name" },
+              "email": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/email" },
+              "external_id": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/external_id" },
+              "role": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/role" },
+              "phone": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/phone" },
+              "organization_id": { "type": "integer", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/organization_id" },
+              "locale": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/locale" },
+              "tags": { "type": "array", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags", "items": { "type": "string", "description": "Source: https://developer.zendesk.com/zendesk/oas.yaml#/components/schemas/UserCreateInput/properties/tags/items" } }
+            }
+          }
+        }
+      },
+      "risk": "requests a typed Zendesk user creation; approval is required"
     }
   ]
 }

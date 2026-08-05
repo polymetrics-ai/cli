@@ -164099,6 +164099,41 @@
         "method": "PUT",
         "path": "/api/v2/workspaces/reorder",
         "risk": "external mutation; high-risk update against PUT /api/v2/workspaces/reorder; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_permission_policy",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v2/custom_objects/{{ record.custom_object_key }}/permission_policies/{{ record.id }}",
+        "risk": "updates a Zendesk custom-object permission policy through a typed, approval-gated request"
+      },
+      {
+        "name": "bulk_set_agent_attribute_values_job",
+        "kind": "update",
+        "method": "POST",
+        "path": "/api/v2/routing/agents/instance_values/jobs",
+        "risk": "starts a typed Zendesk agent-routing attribute-value job; approval is required"
+      },
+      {
+        "name": "create_many_users",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/users/create_many",
+        "risk": "creates up to 100 typed Zendesk users per request; approval is required"
+      },
+      {
+        "name": "create_or_update_many_users",
+        "kind": "upsert",
+        "method": "POST",
+        "path": "/api/v2/users/create_or_update_many",
+        "risk": "creates or updates up to 100 typed Zendesk users per request; approval is required"
+      },
+      {
+        "name": "request_user_create",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v2/users/request_create",
+        "risk": "requests a typed Zendesk user creation; approval is required"
       }
     ],
     "risk": {
