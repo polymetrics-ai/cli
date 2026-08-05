@@ -72,7 +72,7 @@ func TestRunRetainsRawEventsAndPrintsSummary(t *testing.T) {
 	if !strings.Contains(got, `"Action":"pass"`) {
 		t.Errorf("Run() output omitted raw go test event: %s", got)
 	}
-	if !strings.Contains(got, "certify timing summary") || !strings.Contains(got, "TestSlow") {
+	if !strings.Contains(got, "certify timing summary") || !strings.Contains(got, "TestSlow") || !strings.Contains(got, "wall_elapsed=") {
 		t.Errorf("Run() output omitted timing summary or slow test: %s", got)
 	}
 }
@@ -94,8 +94,8 @@ func TestGoTestArgsAreColdAndTargeted(t *testing.T) {
 
 func TestCheckDurationBudgetRejectsControlledDuplicateFixture(t *testing.T) {
 	report := Report{Targets: []TargetResult{
-		{Name: "certify-harness", Elapsed: 4 * time.Second},
-		{Name: "certify-cli-duplicate", Elapsed: 4 * time.Second},
+		{Name: "certify-harness", Elapsed: 1 * time.Second, WallElapsed: 4 * time.Second},
+		{Name: "certify-cli-duplicate", Elapsed: 1 * time.Second, WallElapsed: 4 * time.Second},
 	}}
 	err := CheckDurationBudget(report, 7*time.Second)
 	if err == nil {
@@ -103,6 +103,24 @@ func TestCheckDurationBudgetRejectsControlledDuplicateFixture(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "observed 8.000s") || !strings.Contains(err.Error(), "allowed 7.000s") {
 		t.Errorf("duration budget error = %v, want observed and allowed values", err)
+	}
+}
+
+func TestReportTotalWallElapsedSumsMeasuredTargets(t *testing.T) {
+	report := Report{Targets: []TargetResult{
+		{Name: "certify-harness", WallElapsed: 4 * time.Second},
+		{Name: "certify-cli", WallElapsed: 5 * time.Second},
+	}}
+	if got := report.TotalWallElapsed(); got != 9*time.Second {
+		t.Errorf("TotalWallElapsed() = %s, want 9s", got)
+	}
+}
+
+func TestCheckDurationBudgetRejectsMissingWallMeasurement(t *testing.T) {
+	report := Report{Targets: []TargetResult{{Name: "certify-harness", Elapsed: time.Second}}}
+	err := CheckDurationBudget(report, 10*time.Second)
+	if err == nil || !strings.Contains(err.Error(), "no measured wall duration") {
+		t.Fatalf("CheckDurationBudget() error = %v, want missing wall measurement", err)
 	}
 }
 

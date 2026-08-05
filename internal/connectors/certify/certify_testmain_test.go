@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"sync/atomic"
 	"testing"
 
@@ -40,10 +41,27 @@ func TestMain(m *testing.M) {
 	certify.SetCLIRunFunc(countedCertifyCLIRun)
 	code := m.Run()
 	got := certifyRealCLIInvocations.Load()
-	fmt.Fprintf(os.Stderr, "certify real CLI invocations: %d (budget %d)\n", got, certifyRealCLIInvocationBudget)
-	if got > certifyRealCLIInvocationBudget {
-		fmt.Fprintf(os.Stderr, "certify real CLI invocation budget exceeded: got %d, allowed %d; retain only the exhaustive real proof and script duplicate stage cases\n", got, certifyRealCLIInvocationBudget)
+	_, _ = fmt.Fprintf(os.Stderr, "certify real CLI invocations: %d (budget %d)\n", got, certifyRealCLIInvocationBudget)
+	if err := certifyInvocationBudgetError(got); err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, err)
 		code = 1
 	}
 	os.Exit(code)
+}
+
+func certifyInvocationBudgetError(got int64) error {
+	if got <= certifyRealCLIInvocationBudget {
+		return nil
+	}
+	return fmt.Errorf("certify real CLI invocation budget exceeded: got %d, allowed %d; retain only the exhaustive real proof and script duplicate stage cases", got, certifyRealCLIInvocationBudget)
+}
+
+func TestCertifyRealCLIInvocationBudgetRejectsControlledDuplicate(t *testing.T) {
+	err := certifyInvocationBudgetError(certifyRealCLIInvocationBudget + 1)
+	if err == nil {
+		t.Fatal("certifyInvocationBudgetError() error = nil, want duplicate invocation failure")
+	}
+	if got, want := err.Error(), "got 86, allowed 85"; !strings.Contains(got, want) {
+		t.Errorf("certifyInvocationBudgetError() = %q, want %q", got, want)
+	}
 }
