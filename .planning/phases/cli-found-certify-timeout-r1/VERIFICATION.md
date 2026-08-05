@@ -42,6 +42,17 @@
   at the subsequently fixed `errcheck` findings, and it does not count toward
   the two wall-clock samples because that field was not yet emitted.
 
+- First measured wall-clock sample: [Verify run 31053373131 / job
+  92465443313](https://github.com/polymetrics-ai/cli/actions/runs/31053373131/job/92465443313)
+  completed successfully on GitHub-hosted Ubuntu 24.04.4 (`ubuntu-24.04`, image
+  version `20260720.247.2`). Its raw `-count=1 -json` stream reports 85/85
+  harness calls, certify package elapsed/wall elapsed 87.621s/124.466s, CLI
+  package elapsed/wall elapsed 66.064s/68.747s, and aggregate
+  elapsed/wall elapsed 153.685s/193.213s. The slowest retained tests were
+  `TestFullSweepSourceStagesAgainstSample` and
+  `TestCertifyCLISingleConnectorPassExitsZero`. This is sample 1 of 2; no
+  threshold is selected yet.
+
 ## Deliberate exclusions
 
 No provider/credential/runtime checks are run. Aggregate `go test ./...` and
