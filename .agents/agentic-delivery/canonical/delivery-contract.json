@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "contract_version": "1.1.0",
+  "contract_version": "1.2.0",
   "source_id": "pm-issue-first-delivery",
   "ownership": {
     "source_path": ".agents/agentic-delivery/canonical/delivery-contract.json",
@@ -48,10 +48,56 @@
         "Read",
         "Write"
       ],
+      "skill_tool": "Skill",
+      "reachable_skills": [
+        "golang-cli",
+        "golang-concurrency",
+        "golang-context",
+        "golang-database",
+        "golang-design-patterns",
+        "golang-documentation",
+        "golang-error-handling",
+        "golang-graphql",
+        "golang-how-to",
+        "golang-lint",
+        "golang-safety",
+        "golang-security",
+        "golang-spf13-cobra",
+        "golang-spf13-viper",
+        "golang-structs-interfaces",
+        "golang-testing",
+        "cc-skills-golang:golang-cli",
+        "cc-skills-golang:golang-concurrency",
+        "cc-skills-golang:golang-context",
+        "cc-skills-golang:golang-database",
+        "cc-skills-golang:golang-design-patterns",
+        "cc-skills-golang:golang-documentation",
+        "cc-skills-golang:golang-error-handling",
+        "cc-skills-golang:golang-graphql",
+        "cc-skills-golang:golang-how-to",
+        "cc-skills-golang:golang-lint",
+        "cc-skills-golang:golang-safety",
+        "cc-skills-golang:golang-security",
+        "cc-skills-golang:golang-spf13-cobra",
+        "cc-skills-golang:golang-spf13-viper",
+        "cc-skills-golang:golang-structs-interfaces",
+        "cc-skills-golang:golang-testing",
+        "frontend-design",
+        "frontend-design:frontend-design",
+        "vercel-composition-patterns",
+        "vercel-react-best-practices",
+        "web-design-guidelines"
+      ],
+      "skills_documentation_url": "https://code.claude.com/docs/en/slash-commands",
+      "skill_boundary": "Only the listed scoped Skill(name) entries are reachable through the Skill tool. Bare Skill is forbidden, so unlisted project, user, plugin, and bundled skills, including skills that use context: fork, cannot be invoked through that tool. Agent and its Task alias are explicitly denied, so an allowed skill's allowed-tools metadata cannot restore delegation.",
+      "disallowed_tools": [
+        "Agent",
+        "Task"
+      ],
       "permission_mode": "default",
       "delegation_tool": "Agent",
-      "delegation_guarantee": "The explicit tools allowlist omits Agent. Claude Code documents that an agent without Agent in its tools list cannot spawn any subagents with the Agent tool.",
-      "smoke_procedure": "From the trusted repository root, run `claude --agent <role> -p 'report the active agent name without modifying files'`; inspect the generated frontmatter and stream output for project discovery while keeping ambient fixture agents non-delegable."
+      "delegation_guarantee": "The explicit tools allowlist omits Agent and bare Skill, while disallowedTools removes Agent and its Task alias. Claude Code documents that an agent without Agent cannot spawn subagents with that tool; scoped Skill(name) rules prevent unrelated fork-capable skills from becoming an alternate route.",
+      "smoke_procedure": "In a real authenticated Claude session using a clean trusted home with unrelated global agent and skill definitions, run `claude --agent <role> -p 'report the active agent name and available scoped skills without modifying files'`; verify the project role is selected, only the scoped skill names are callable, and Agent, Task, and unlisted fork-capable skills are unavailable."
     }
   ],
   "state_machine": {

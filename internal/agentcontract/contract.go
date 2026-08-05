@@ -49,16 +49,21 @@ type Role struct {
 
 // HarnessPolicy contains the native settings required to render a registered harness projection.
 type HarnessPolicy struct {
-	Harness             string   `json:"harness"`
-	Format              string   `json:"format"`
-	DocumentationURL    string   `json:"documentation_url"`
-	ProjectDiscovery    string   `json:"project_discovery"`
-	Precedence          []string `json:"precedence"`
-	Tools               []string `json:"tools"`
-	PermissionMode      string   `json:"permission_mode"`
-	DelegationTool      string   `json:"delegation_tool"`
-	DelegationGuarantee string   `json:"delegation_guarantee"`
-	SmokeProcedure      string   `json:"smoke_procedure"`
+	Harness                string   `json:"harness"`
+	Format                 string   `json:"format"`
+	DocumentationURL       string   `json:"documentation_url"`
+	ProjectDiscovery       string   `json:"project_discovery"`
+	Precedence             []string `json:"precedence"`
+	Tools                  []string `json:"tools"`
+	SkillTool              string   `json:"skill_tool"`
+	ReachableSkills        []string `json:"reachable_skills"`
+	SkillsDocumentationURL string   `json:"skills_documentation_url"`
+	SkillBoundary          string   `json:"skill_boundary"`
+	DisallowedTools        []string `json:"disallowed_tools"`
+	PermissionMode         string   `json:"permission_mode"`
+	DelegationTool         string   `json:"delegation_tool"`
+	DelegationGuarantee    string   `json:"delegation_guarantee"`
+	SmokeProcedure         string   `json:"smoke_procedure"`
 }
 
 type StateMachine struct {
@@ -341,10 +346,13 @@ func validateHarnessPolicies(policies []HarnessPolicy) error {
 
 	const claudeFormat = "markdown_yaml_frontmatter"
 	const claudeDocumentationURL = "https://code.claude.com/docs/en/sub-agents"
+	const claudeSkillsDocumentationURL = "https://code.claude.com/docs/en/slash-commands"
 	if claude.Format != claudeFormat || claude.DocumentationURL != claudeDocumentationURL ||
+		claude.SkillsDocumentationURL != claudeSkillsDocumentationURL ||
 		strings.TrimSpace(claude.ProjectDiscovery) == "" || strings.TrimSpace(claude.DelegationGuarantee) == "" ||
+		strings.TrimSpace(claude.SkillBoundary) == "" || !strings.Contains(claude.SkillBoundary, "context: fork") ||
 		strings.TrimSpace(claude.SmokeProcedure) == "" || !strings.Contains(claude.SmokeProcedure, "<role>") ||
-		claude.PermissionMode != "default" || claude.DelegationTool != "Agent" {
+		claude.PermissionMode != "default" || claude.DelegationTool != "Agent" || claude.SkillTool != "Skill" {
 		return fmt.Errorf("canonical contract: Claude format, documentation, discovery, delegation, permission, and smoke policy are required")
 	}
 	wantPrecedence := []string{"managed definitions", "CLI --agents", "project .claude/agents", "user ~/.claude/agents", "plugins"}
@@ -352,10 +360,55 @@ func validateHarnessPolicies(policies []HarnessPolicy) error {
 		return fmt.Errorf("canonical contract: Claude precedence must match the documented managed, CLI, project, user, plugin order")
 	}
 	wantTools := []string{"Bash", "Edit", "Glob", "Grep", "Read", "Write"}
-	if !slices.Equal(claude.Tools, wantTools) || slices.Contains(claude.Tools, claude.DelegationTool) {
-		return fmt.Errorf("canonical contract: Claude tools must be the minimal explicit allowlist and omit Agent")
+	wantDisallowedTools := []string{"Agent", "Task"}
+	if !slices.Equal(claude.Tools, wantTools) || !slices.Equal(claude.ReachableSkills, claudeReachableSkills()) ||
+		!slices.Equal(claude.DisallowedTools, wantDisallowedTools) ||
+		slices.Contains(claude.Tools, claude.DelegationTool) || slices.Contains(claude.Tools, claude.SkillTool) {
+		return fmt.Errorf("canonical contract: Claude tools must use the minimal base allowlist, scoped required skills, and Agent/Task denylist")
 	}
 	return nil
+}
+
+func claudeReachableSkills() []string {
+	return []string{
+		"golang-cli",
+		"golang-concurrency",
+		"golang-context",
+		"golang-database",
+		"golang-design-patterns",
+		"golang-documentation",
+		"golang-error-handling",
+		"golang-graphql",
+		"golang-how-to",
+		"golang-lint",
+		"golang-safety",
+		"golang-security",
+		"golang-spf13-cobra",
+		"golang-spf13-viper",
+		"golang-structs-interfaces",
+		"golang-testing",
+		"cc-skills-golang:golang-cli",
+		"cc-skills-golang:golang-concurrency",
+		"cc-skills-golang:golang-context",
+		"cc-skills-golang:golang-database",
+		"cc-skills-golang:golang-design-patterns",
+		"cc-skills-golang:golang-documentation",
+		"cc-skills-golang:golang-error-handling",
+		"cc-skills-golang:golang-graphql",
+		"cc-skills-golang:golang-how-to",
+		"cc-skills-golang:golang-lint",
+		"cc-skills-golang:golang-safety",
+		"cc-skills-golang:golang-security",
+		"cc-skills-golang:golang-spf13-cobra",
+		"cc-skills-golang:golang-spf13-viper",
+		"cc-skills-golang:golang-structs-interfaces",
+		"cc-skills-golang:golang-testing",
+		"frontend-design",
+		"frontend-design:frontend-design",
+		"vercel-composition-patterns",
+		"vercel-react-best-practices",
+		"web-design-guidelines",
+	}
 }
 
 func allNonEmpty(values []string) bool {

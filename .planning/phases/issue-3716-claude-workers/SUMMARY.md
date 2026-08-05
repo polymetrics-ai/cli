@@ -13,7 +13,7 @@ coverage:
         status: pass
     human_judgment: false
   - id: D2
-    description: The selected project worker cannot delegate to ambient agents
+    description: The selected project worker omits direct and skill-mediated delegation routes
     verification:
       - kind: unit
         ref: internal/agentcontract/check_test.go TestProjectionDriftCheckAndSync
@@ -52,8 +52,9 @@ coverage:
   two Wave 2 Claude projections required.
 - Added deterministic full-file Markdown/YAML rendering and whole-file drift checking/sync for
   `.claude/agents/pm-delivery-worker.md` and `.claude/agents/pm-connector-worker.md`.
-- Generated both workers from the canonical source. Their explicit allowlist is `Bash`, `Edit`,
-  `Glob`, `Grep`, `Read`, and `Write`; it deliberately omits `Agent` and `Skill`.
+- Generated both workers from the canonical source. Their explicit allowlist contains the six base
+  tools plus scoped `Skill(name)` rules for repository-required Go/design guidance. It omits
+  `Agent` and bare `Skill`, while `disallowedTools` denies `Agent` and `Task`.
 - Added red/green regression coverage for missing project workers, invalid `Agent` drift, atomic
   sync repair, frontmatter requirements, and connector inheritance.
 - Recorded the official Claude Code discovery, precedence, and tool-access rules together with an
@@ -63,21 +64,22 @@ coverage:
 
 RED failed before generation because no project-local workers existed, leaving an ambient
 same-name worker eligible to be selected. GREEN generated required project files with the explicit
-no-`Agent` allowlist, and the drift test demonstrates that injecting `Agent` is rejected and
-repaired by the actual generator. The live Claude Code v2.1.222 smoke then forced an `Agent` call
-against available ambient CLI/plugin fixtures; the selected delivery worker returned
-`AGENT_UNAVAILABLE` without tool use.
+no-`Agent` policy. Review hardening added scoped skill rules and an `Agent`/`Task` denylist so bare
+Skill cannot expose unrelated `context: fork` skills. The drift tests demonstrate that policy is
+canonical and repaired by the actual generator. The prior trusted-home Claude Code v2.1.222 smoke
+forced an `Agent` call against ambient fixtures and returned `AGENT_UNAVAILABLE` without tool use.
 
 ## Isolation boundary
 
-The official source is https://code.claude.com/docs/en/sub-agents. It documents project discovery
-by upward `.claude/agents` search, the managed → CLI `--agents` → project → user → plugin
-precedence order, and that omitting `Agent` prevents a subagent from spawning subagents. The live
-smoke proves that capability is absent from the selected worker. It does not and cannot prevent a
-higher-precedence managed or CLI same-name definition from replacing the selected project role.
+The official sources are https://code.claude.com/docs/en/sub-agents and
+https://code.claude.com/docs/en/slash-commands. They document project agent precedence, `Agent`
+omission, ambient skill discovery, scoped `Skill(name)` rules, and `context: fork`. The generated
+workers allow only the required Go/design names and deny `Agent` plus `Task`. The prior live smoke
+proves direct `Agent` is absent from the selected worker; it does not prove clean-home selection or
+prevent a higher-precedence managed/CLI same-name agent definition.
 
 ## Scope outcome
 
 No installed plugin, global home configuration, `.codex`, `.pi`, legacy worker, connector bundle,
-or connector overlay content changed. The temporary clean-home fixture was removed after its
-unauthenticated result; no credentials were accessed or copied.
+or connector overlay content changed. The clean-home runtime smoke is **NOT PERFORMED**; the
+unauthenticated fixture is not runtime evidence, and no credentials were accessed or copied.

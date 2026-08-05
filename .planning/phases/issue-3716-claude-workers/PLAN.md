@@ -27,7 +27,7 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
 - `golang-cli` — generator command behavior and stdout/stderr boundaries.
 - `golang-error-handling`, `golang-safety`, and `golang-security` — bounded projection paths,
   defensive errors, and no expansion across the repository boundary.
-- `golang-lint` — focused lint/review verification.
+- `golang-lint` and `golang-documentation` — focused review and accurate generated/evidence text.
 - `gsd-programming-loop` was read for its TDD lifecycle, but its absent adapter command is not
   invoked; this phase follows the canonical installed GSD sequence instead.
 
@@ -36,7 +36,8 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
 ### Slice 1 — RED: Claude projection and isolation contract
 
 1. Add a focused test describing both Claude projections as required full files with parseable YAML
-   frontmatter, exact minimal tool list, `permissionMode: default`, and no `Agent` capability.
+   frontmatter, exact base tools plus scoped required skills, `permissionMode: default`, and no
+   `Agent` capability.
 2. Model an unrelated ambient agent in the test fixture and make the assertion fail against the
    current generator, which has no Claude frontmatter projection and therefore cannot prove that
    the ambient agent is unreachable.
@@ -53,18 +54,19 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
    root-contained atomic writer, and compare full files for drift.
 3. Make the two Claude projection targets required, generate them with
    `go run ./cmd/agentcontractgen sync`, and rerun the focused tests plus the canonical check.
-4. Add regression coverage that adding `Agent` to a generated file is rejected as drift and sync
-   restores the no-delegation file.
+4. Add regression coverage that adding `Agent` or bare `Skill`, removing a required skill, or
+   weakening the `Agent`/`Task` denylist is rejected, while sync restores the no-delegation file.
 
 ### Slice 3 — REFACTOR: runtime smoke, documentation, and scope audit
 
-1. Run the installed Claude CLI from a trusted project with each `--agent` name to prove project
-   discovery. Use an isolated temporary home with ambient fixture agents and a bounded,
-   non-mutating prompt that requests delegation; capture that the generated worker exposes no
-   `Agent` tool rather than claiming precedence alone creates isolation.
+1. Preserve the prior trusted-project smoke for direct `Agent` omission. Record the clean-home
+   discovery smoke as **NOT PERFORMED** until a real authenticated Claude session can run from a
+   clean trusted home containing unrelated global definitions; do not substitute static evidence
+   for that runtime criterion.
 2. Document the exact official behavior and caveats in generated projection metadata and phase
-   verification: managed settings and CLI `--agents` override project definitions, and `Agent`
-   omission blocks invocation but does not erase ambient definitions from their own scopes.
+   verification: managed settings and CLI `--agents` override project definitions, scoped skills
+   exclude unrelated `context: fork` routes, and `Agent` omission plus the denylist blocks direct
+   invocation without erasing ambient definitions from their own scopes.
 3. Run review, validation, diff, and path-scope checks. Do not touch installed plugins or any home
    directory.
 
@@ -73,8 +75,9 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
 - RED/GREEN: `go test ./internal/agentcontract ./cmd/agentcontractgen`.
 - Canonical/drift: `go run ./cmd/agentcontractgen sync` and
   `go run ./cmd/agentcontractgen check`.
-- Claude smoke: installed `claude` v2.1.222 in this trusted project for both generated names;
-  temporary ambient fixtures only, never real home/plugin paths.
+- Claude smoke: prior installed `claude` v2.1.222 trusted-project evidence remains bounded to direct
+  `Agent` omission. Clean trusted-home discovery with unrelated global definitions is **NOT
+  PERFORMED** and requires a real authenticated Claude session.
 - Formatting/static: `gofmt -w cmd internal`, `go vet ./internal/agentcontract ./cmd/agentcontractgen`,
   and `make lint`.
 - Repository gates applicable to this scope: `make tidy-check`, `make docs-check-no-build`,
