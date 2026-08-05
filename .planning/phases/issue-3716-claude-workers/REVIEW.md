@@ -79,13 +79,34 @@ the review was performed inline against the parent-branch diff.
 - Action: resolve Node and pass `scripts/gsd` as its script argument; use a portable JavaScript test
   fixture that also checks the selected working directory and argv.
 
+### R9 — nested Claude project scopes
+
+- Severity: error
+- Disposition: fixed
+- Root cause: the first inventory correction walked only the repository-root `.claude/agents`
+  tree, while Claude discovers every nested `.claude/agents` scope between the launch directory
+  and repository root and gives the closest same-name definition precedence.
+- Action: walk the repository once at the shared validation boundary, skip Git metadata, recognize
+  every nested Claude agent scope, and reject scope symlinks, unexpected definitions, and duplicate
+  canonical names before checking registered projections.
+
+### R10 — CRLF projection drift
+
+- Severity: warning
+- Disposition: fixed
+- Root cause: the parser and whole-file comparator required raw LF bytes, so Git's platform EOL
+  conversion could make a canonical Windows checkout fail before semantic validation.
+- Action: normalize CRLF to LF for Claude frontmatter parsing, checking, and no-op sync comparison;
+  retain byte-exact canonical comparison after that line-ending normalization.
+
 ## Final review
 
 No actionable source finding remains. The renderer derives every worker field from the checked-in
 canonical policy; sync is root-contained and only creates the two required Claude target files.
-Recursive inventory plus whole-file exact comparison prevents an extra definition or a locally
-edited tool, preload, or denylist from bypassing the canonical boundary. Official documentation
-demonstrates the plugin-namespace collision rule; generated-file tests demonstrate configured
-qualified identifiers and tool denial. They do not demonstrate authenticated clean-home runtime
-selection, plugin source/version pinning, or immunity to managed/CLI overrides. The clean-home
-smoke and Wave 1 coverage gap remain explicitly recorded under the captain's decisions above.
+Repository-wide nested-scope inventory plus EOL-normalized whole-file comparison prevents an extra
+definition or a locally edited tool, preload, or denylist from bypassing the canonical boundary.
+Official documentation demonstrates the plugin-namespace collision rule; generated-file tests
+demonstrate configured qualified identifiers and tool denial. They do not demonstrate authenticated
+clean-home runtime selection, plugin source/version pinning, or immunity to managed/CLI overrides.
+The clean-home smoke and Wave 1 coverage gap remain explicitly recorded under the captain's
+decisions above.

@@ -88,6 +88,19 @@ Issue: #3716. Parent: #3714. Branch: `fm/cli-agents-wave-claude-r1`.
    official namespace guarantee and static generated-file checks from authenticated runtime
    discovery, source-version pinning, and managed/CLI override behavior.
 
+### Slice 5 — REVIEW FIX: nested discovery scopes and line endings
+
+1. Move Claude inventory enforcement from the root `.claude/agents` subtree to a repository-wide
+   walk that recognizes every nested `.claude/agents` scope, skips Git metadata, and fails closed
+   on scope symlinks, duplicate canonical names, or unexpected Markdown definitions.
+2. Normalize CRLF to LF at the Claude projection parsing and whole-file comparison boundary so a
+   Windows checkout remains semantically identical to the canonical renderer without weakening
+   any frontmatter, body, inventory, or denylist check.
+3. Add focused regressions for a duplicate and an unexpected definition under
+   `website/.claude/agents`, plus CRLF parsing, drift checking, and no-op sync behavior.
+4. Keep the canonical-source-only rule, the `Agent`/`Task`/`Skill` denylist, and the
+   captain-authorized clean-home smoke wording unchanged.
+
 ## Verification
 
 - RED/GREEN: `go test ./internal/agentcontract ./cmd/agentcontractgen`.

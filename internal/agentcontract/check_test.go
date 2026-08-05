@@ -127,6 +127,40 @@ func TestProjectionDriftCheckAndSync(t *testing.T) {
 	}
 }
 
+func TestClaudeProjectionCRLFIsNotDrift(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := t.TempDir()
+	if _, err := SyncProjections(root, contract); err != nil {
+		t.Fatalf("SyncProjections creates required Claude projections: %v", err)
+	}
+
+	for _, target := range contract.Projections {
+		if target.Harness != "claude" {
+			continue
+		}
+		projectionPath := filepath.Join(root, filepath.FromSlash(target.Path))
+		content, err := os.ReadFile(projectionPath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		content = bytes.ReplaceAll(content, []byte("\n"), []byte("\r\n"))
+		if err := os.WriteFile(projectionPath, content, 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("CheckProjections rejected canonical CRLF projections: %v", err)
+	}
+	updated, err := SyncProjections(root, contract)
+	if err != nil {
+		t.Fatalf("SyncProjections rejected canonical CRLF projections: %v", err)
+	}
+	if updated != 0 {
+		t.Fatalf("SyncProjections updated %d canonical CRLF projections, want 0", updated)
+	}
+}
+
 func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	target := contract.Projections[0]
@@ -153,6 +187,18 @@ func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
 			wantError: "unexpected definitions",
 		},
+		{
+			name:      "duplicate canonical name in nested project scope",
+			path:      "website/.claude/agents/pm-delivery-worker.md",
+			content:   projection,
+			wantError: "duplicate claude project agent name",
+		},
+		{
+			name:      "unexpected definition in nested project scope",
+			path:      "website/.claude/agents/unexpected-worker.md",
+			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
+			wantError: "unexpected definitions",
+		},
 	}
 
 	for _, test := range tests {
@@ -173,6 +219,29 @@ func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 				t.Fatalf("CheckProjections error = %v, want substring %q", err, test.wantError)
 			}
 		})
+	}
+}
+
+func TestCheckProjectionsRejectsNestedClaudeAgentScopeSymlink(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := t.TempDir()
+	if _, err := SyncProjections(root, contract); err != nil {
+		t.Fatalf("SyncProjections creates required Claude projections: %v", err)
+	}
+	outside := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(outside, "agents"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(root, "website"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(outside, filepath.Join(root, "website", ".claude")); err != nil {
+		t.Skipf("cannot create nested Claude scope symlink: %v", err)
+	}
+
+	err := CheckProjections(root, contract)
+	if err == nil || !strings.Contains(err.Error(), "inventory contains symlink website/.claude") {
+		t.Fatalf("CheckProjections error = %v, want nested Claude scope symlink rejection", err)
 	}
 }
 

@@ -72,6 +72,7 @@ func renderClaudeProjection(contract *Contract, target ProjectionTarget, policy 
 
 func parseClaudeFrontmatter(content []byte) (claudeFrontmatter, error) {
 	var frontmatter claudeFrontmatter
+	content = normalizeClaudeProjection(content)
 	const delimiter = "---\n"
 	if !bytes.HasPrefix(content, []byte(delimiter)) {
 		return frontmatter, fmt.Errorf("claude projection frontmatter start marker is missing")
@@ -93,6 +94,13 @@ func parseClaudeFrontmatter(content []byte) (claudeFrontmatter, error) {
 		return frontmatter, fmt.Errorf("decode Claude projection frontmatter: %w", err)
 	}
 	return frontmatter, nil
+}
+
+func normalizeClaudeProjection(content []byte) []byte {
+	if !bytes.Contains(content, []byte("\r\n")) {
+		return content
+	}
+	return bytes.ReplaceAll(content, []byte("\r\n"), []byte("\n"))
 }
 
 func validateClaudeFrontmatter(frontmatter claudeFrontmatter, target ProjectionTarget, policy HarnessPolicy) error {
