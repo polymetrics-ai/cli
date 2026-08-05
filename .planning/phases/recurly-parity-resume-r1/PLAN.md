@@ -5,8 +5,9 @@
 Own `internal/connectors/defs/recurly/**`, Recurly-only generated documentation/data, this phase's
 GSD artifacts, and required generated CLI transcript coverage. The recovered commit `6b3224e7f`
 is a source snapshot, not a branch to resurrect. Review fixes may also change the smallest shared
-runtime boundaries required for provider-neutral decimal flags, declarative-write retry safety,
-and fixture response-header replay. Do not modify other connector bundles or legacy connector Go.
+runtime boundaries required for provider-neutral decimal flags, declarative-write body/retry
+safety, and fixture request/response replay. Do not modify other connector bundles or legacy
+connector Go.
 
 ## Manual-GSD fallback
 
@@ -44,7 +45,7 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
 6. Run the connector gates, build `pm`, execute representative help and Recurly commands, regenerate
    Recurly-owned docs/catalog/website output late, commit coherent green slices, and then run
    `no-mistakes` on the committed feature branch.
-7. Before the pre-citation `no-mistakes` run, compare every Recurly artifact that existed on current
+7. Before the `no-mistakes` run, compare every Recurly artifact that existed on current
    `origin/main` with the recovered definition. Preserve the five legacy streams' query defaults,
    schema primary/cursor/required metadata, typed fields, computed projections, and representative
    fixture records; add a connector-local regression test for that recovery invariant.
@@ -52,9 +53,10 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
    request schemas, write fixtures, non-legacy response schemas, and stream fixtures from that
    source. Preserve the five current-main legacy stream contracts and the raw provider-research
    artifacts byte-for-byte.
-9. Add provider-neutral decimal flag coercion, stable per-record idempotency headers for actions
-   that declare provider support, fail-safe single-attempt execution otherwise, and response-header
-   replay for link-pagination fixtures. Document the billing-write retry policy explicitly.
+9. Add provider-neutral decimal flag coercion, required-empty-JSON body support, stable per-record
+   idempotency headers for actions that declare provider support, fail-safe single-attempt execution
+   otherwise, expected-query matching for write fixtures, and response-header replay for
+   link-pagination fixtures. Document the billing-write retry policy explicitly.
 10. Remove Recurly's newly introduced hard runtime limiter because the provider documents different
     sandbox and production/GET limits; retain only evidence-backed informational metadata.
 11. Preserve automatic retries for actions that explicitly declare idempotent delete semantics,
@@ -76,9 +78,9 @@ verification checklist, prompt snapshot, summary, and run state are maintained d
   against a bounded fixture/replay path afterward.
 - Red/green: a recovery-preservation test must demonstrate the legacy-stream metadata loss before
   restoring it from current `origin/main`, then prove the restored metadata stays present.
-- Red/green: focused regression tests must fail before decimal coercion, idempotency-bound retries,
-  response-header replay, and the selected Recurly OAS-shape corrections, then pass together after
-  the complete review-fix round.
+- Red/green: focused regression tests must fail before decimal coercion, required-empty-body
+  emission, idempotency-bound retries, expected-query matching, response-header replay, and the
+  selected Recurly OAS-shape corrections, then pass together after the complete review-fix round.
 - Red/green: reasoned pre-fix inspection proves explicitly idempotent deletes are forced to one
   attempt and all three Recurly mutation query controls are absent. Add focused regressions before
   production edits, apply the whole fix round, then run one focused test command at the end.

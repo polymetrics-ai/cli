@@ -486,6 +486,8 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 	}
 }
 
+// writeRequester clones the shared requester and permits mutation replay only
+// when the action carries provider-scoped idempotency evidence.
 func writeRequester(base *connsdk.Requester, action WriteAction) (*connsdk.Requester, error) {
 	if base == nil {
 		return nil, fmt.Errorf("engine: write action %q: requester is nil", action.Name)

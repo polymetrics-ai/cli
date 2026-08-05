@@ -866,8 +866,8 @@ func isAllDigitsForAssertion(s string) bool {
 
 // --- write fixture parsing -------------------------------------------------
 
-// writeFixture is fixtures/writes/<action>.json's shape (design §E.2):
-// {"record": {...}, "expect": {"method","path","body"}}.
+// writeFixture is fixtures/writes/<action>.json's shape (migration conventions §4):
+// {"record": {...}, "expect": {"method","path","query"?,"body"?}}.
 type writeFixture struct {
 	Record   map[string]any   `json:"record"`
 	Expect   writeExpectation `json:"expect"`

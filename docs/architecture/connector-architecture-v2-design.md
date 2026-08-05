@@ -417,28 +417,12 @@ type IncrementalSpec struct {
     StartConfigKey string `json:"start_config_key,omitempty"`
     ClientFiltered bool   `json:"client_filtered,omitempty"` // API has no filter; engine drops old records
 }
-
-type WriteAction struct {
-    Name         string          `json:"name"`
-    Kind         string          `json:"kind"` // create|update|upsert|delete|custom
-    Method, Path string
-    PathFields   []string        `json:"path_fields,omitempty"`
-    RedactFields []string        `json:"redact_fields,omitempty"` // record fields redacted from plan samples, write previews/errors
-    BodyType     string          `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload
-    BodyFields   []string        `json:"body_fields,omitempty"`
-    RecordSchema json.RawMessage `json:"record_schema"`
-    Delete       *DeleteSpec     `json:"delete,omitempty"` // idempotent, missing_ok_status
-    Risk         string            `json:"risk"`
-    Batchable    *bool             `json:"batchable,omitempty"`
-    Confirm      string            `json:"confirm,omitempty"` // legacy: "" | "destructive"
-    Confirmation *ConfirmationSpec `json:"confirmation,omitempty"`
-    Hook         string            `json:"hook,omitempty"` // custom executor
-}
-
-type ConfirmationSpec struct {
-    Kind connectors.ConfirmationKind `json:"kind"` // closed by schema to "destructive"
-}
 ```
+
+`WriteAction` is intentionally not copied into this design snapshot. Its authoritative Go
+definition is `internal/connectors/engine/bundle.go`, and its authoritative JSON contract is
+`internal/connectors/engine/schema/writes.schema.json`; the authoring recipe lives in
+`docs/migration/conventions.md`.
 
 ### B.3 Interpolation — deliberately tiny
 
@@ -695,15 +679,15 @@ Static (per bundle): `spec_schema_valid`, `stream_schemas_valid`, `pk_fields_exi
 
 Dynamic (per bundle, fixture-backed): an `httptest.Server` replays
 `fixtures/streams/<stream>/page_N.json` (recorded real API pages, keyed by expected request
-path+query); the **real engine** runs against it:
+path+query); the **real engine** runs against it. Canonical fixture shapes and matching semantics
+live in the [connector authoring conventions](../migration/conventions.md#4-fixture-rules):
 - `check_fixture`, `read_fixture_nonempty` per stream with fixtures (first stream mandatory),
 - `pagination_terminates` (multi-page fixture consumed exactly once, no infinite loop),
 - `records_match_schema` (every emitted record validates against the stream schema),
 - `cursor_advances` (incremental: cursor after read == max cursor in fixtures; re-read with that
   cursor sends the right `request_param`),
-- `write_validate` + `write_request_shape` per action: `fixtures/writes/<action>.json` =
-  `{"record": {...}, "expect": {"method","path","body"}}`; engine dry-run must produce the
-  expected request; invalid-record cases must fail validation,
+- `write_validate` + `write_request_shape` per action; engine dry-run must satisfy the canonical
+  fixture contract, and invalid-record cases must fail validation,
 - `delete_semantics` for `kind:delete` actions (404 handling per `missing_ok_status`).
 
 Live (opt-in): `LiveConformanceProvider` supplies real credentials for a nightly job.

@@ -13,7 +13,8 @@ import (
 )
 
 // fixturePage is one recorded API page: fixtures/streams/<stream>/page_N.json,
-// shape {"request":{"method","path","query"},"read_query":{...},"response":{"status","body"}}.
+// shape {"request":{"method","path","query"},"read_query":{...},
+// "response":{"status","headers"?,"body"}}.
 // read_query is optional harness input for parameterized streams whose runtime
 // request needs connectors.ReadRequest.Query values that are not URL query
 // params, e.g. GraphQL command flags embedded in the POST body.

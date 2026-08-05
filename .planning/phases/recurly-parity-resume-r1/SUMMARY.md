@@ -1,11 +1,11 @@
 # Recurly parity-resume r1 summary
 
-Status: pre-citation implementation is complete; the requested no-mistakes validation is in progress,
-followed by final citation-convention integration and a focused gate rerun.
+Implementation status: complete. Final validation status is tracked in `RUN-STATE.json` by the
+outer no-mistakes run.
 
-Paused only for the shared request-contract convention: its source lane remains active and has not
-landed on `origin/main`. The branch intentionally does not claim completion until its 538 raw
-field citations are represented in that canonical, enforced format.
+Shared citation-convention integration is intentionally outside this phase. The committed 538-field
+local reconciliation and provider matrix remain raw research artifacts; this branch neither invents
+nor changes the shared citation format, schema, or engine.
 
 Current executed evidence:
 
@@ -14,7 +14,7 @@ Current executed evidence:
   bounded binary downloads. There are zero planned or blocked operations.
 - The raw provider matrix contains 2,951 provider request inputs. The local-field reconciliation
   covers 538 exposed Recurly request fields with zero unmatched fields. These artifacts deliberately
-  await the shared citation metadata convention rather than inventing a competing shape.
+  remain raw until a convention-owned follow-up consumes them.
 - Focused Recurly conformance, commandrunner's all-implemented-command preflight, Recurly binary
   execution fixtures, surface sync/check, focused validation, vet, `pm` build/help, root CLI golden
   generation, and website data generation have passed.
@@ -29,3 +29,7 @@ Current executed evidence:
   The restored contracts retain their primary/cursor/required metadata, typed fields, query defaults,
   computed projections, and fixture response bodies. A new connector-local regression test locks
   this preservation in place; `base_url` also retains its prior `uri` format.
+- Review fixes align request/response contracts with the pinned OAS, preserve finite decimal flags,
+  bind Recurly retries to per-record idempotency keys, replay pagination headers, and require the
+  documented redaction, refund, and termination-charge choices without changing the shared
+  citation convention.

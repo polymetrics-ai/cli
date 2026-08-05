@@ -8,4 +8,4 @@ and create per-request-field provider research without inventing the in-flight c
 
 Downstream artifact: this phase's plan, ledger, matrix, verification record, and summary.
 
-Verification result: pending.
+Verification evidence: see `VERIFICATION.md`; the outer no-mistakes run owns the final outcome.

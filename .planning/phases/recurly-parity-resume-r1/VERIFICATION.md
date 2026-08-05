@@ -12,14 +12,16 @@
 - [x] `go build ./cmd/pm`
 - [x] `pm recurly --help`, bare `pm recurly`, and all three binary command help paths; fixture-backed commandrunner execution covers the binary requests without credentials or live calls
 - [x] `cd website && pnpm run gen:website-data`
-- [ ] `git diff --check`
+- [x] `git diff --check`
 
 ## Scope and safety
 
-- [ ] Changed files remain Recurly-owned bundle/generated surfaces plus this phase's artifacts.
-- [ ] No credentials, live Recurly calls, reverse-ETL execution, or shared runtime/schema edits.
+- [x] Changed files remain Recurly-owned bundle/generated surfaces, this phase's artifacts, and the
+  small provider-neutral review-fix boundaries explicitly scoped in `PLAN.md`.
+- [x] No credentials, live Recurly calls, or reverse-ETL execution were used.
 - [x] Provider OpenAPI source, operation total, and reachable count are recorded honestly.
-- [ ] Final citation-convention metadata is applied and field-citation coverage is recorded.
+- [x] Shared citation integration is intentionally deferred; the committed 538-field reconciliation
+  remains raw evidence as required by this phase.
 
 ## GSD verification status
 

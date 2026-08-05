@@ -148,7 +148,9 @@ type Requester struct {
 	Accept string
 
 	// MaxRetries is the number of additional attempts after the first (default 4).
-	MaxRetries     int
+	MaxRetries int
+	// DisableRetries prevents every automatic replay, including transient-status,
+	// transport-error, and 401 reauthentication retries. The first attempt still runs.
 	DisableRetries bool
 	// BaseBackoff and MaxBackoff bound exponential backoff (defaults 500ms / 30s).
 	BaseBackoff time.Duration

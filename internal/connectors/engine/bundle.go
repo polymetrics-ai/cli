@@ -449,18 +449,22 @@ type WriteAction struct {
 	// existed (executeWriteRecord passed a nil url.Values in all six
 	// body_type branches). The field is strictly additive and opt-in: no
 	// existing bundle changes behavior by its introduction.
-	Query                map[string]QueryParam `json:"query,omitempty"`
-	RedactFields         []string              `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
-	BodyType             string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart | base64_upload
-	BodyRequired         bool                  `json:"body_required,omitempty"`
-	BodyFields           []string              `json:"body_fields,omitempty"`
-	BodyField            string                `json:"body_field,omitempty"`
-	BodySchema           json.RawMessage       `json:"body_schema,omitempty"`
-	GraphQL              *GraphQLRequestSpec   `json:"graphql,omitempty"`
-	Multipart            *MultipartSpec        `json:"multipart,omitempty"`
-	Base64Upload         *Base64UploadSpec     `json:"base64_upload,omitempty"`
-	RecordSchema         json.RawMessage       `json:"record_schema"`
-	IdempotencyKeyHeader string                `json:"idempotency_key_header,omitempty"`
+	Query        map[string]QueryParam `json:"query,omitempty"`
+	RedactFields []string              `json:"redact_fields,omitempty"` // record fields redacted from plan samples/previews/errors
+	BodyType     string                `json:"body_type,omitempty"`     // json (default) | form | none | graphql | json_array | multipart | base64_upload
+	// BodyRequired forces an empty JSON object onto the wire when body construction
+	// resolves no fields. It is valid only for the default json body type.
+	BodyRequired bool                `json:"body_required,omitempty"`
+	BodyFields   []string            `json:"body_fields,omitempty"`
+	BodyField    string              `json:"body_field,omitempty"`
+	BodySchema   json.RawMessage     `json:"body_schema,omitempty"`
+	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
+	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
+	Base64Upload *Base64UploadSpec   `json:"base64_upload,omitempty"`
+	RecordSchema json.RawMessage     `json:"record_schema"`
+	// IdempotencyKeyHeader names a provider-documented request header. Execution
+	// generates one fresh key per record and reuses it only across that record's retries.
+	IdempotencyKeyHeader string `json:"idempotency_key_header,omitempty"`
 	// DynamicFields optionally declares ONE record field as a typed
 	// dynamic-key region. Absent means today's exact behavior.
 	DynamicFields *DynamicFieldsSpec `json:"dynamic_fields,omitempty"`
