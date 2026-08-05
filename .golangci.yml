@@ -1,6 +1,6 @@
 version: "2"
 
-# Scope note: this config enables a minimal, non-weakened linter set. The
+# Scope note: this config owns the minimal, non-weakened linter set. The
 # Makefile `lint` target owns the package scope.
 
 run:

@@ -21,14 +21,10 @@ runner-specific format.
 
 ## GSD Runtime
 
-All connector migration agents use the repo-local official GSD Core Pi adapter:
-
-- In Pi, use `/gsd <command>` or generated aliases such as `/gsd-programming-loop` and
-  `/gsd-code-review`.
-- In shell/non-interactive runners, use `scripts/gsd prompt <command> [args...]` and execute the
-  generated prompt.
-- Read `.agents/agentic-delivery/references/gsd-pi-adapter.md` before GSD work.
-- Record manual-GSD fallback only when the adapter is unavailable.
+All connector migration agents use the repo-local official GSD Core Pi adapter. Read
+`.agents/agentic-delivery/references/gsd-pi-adapter.md` before GSD work; it owns the current Pi and
+shell command paths, command-resolution checks, and inline/manual fallback rules. Do not maintain a
+second command list here.
 
 ## CLI Help / Docs / Website Parity
 

@@ -71,10 +71,14 @@ repository: trust it in Codex before selecting either worker. Their generated
 `codex` section owns this isolation contract, its official documentation links, and the caveat that
 same-filename user/project standalone-agent precedence is undocumented.
 
-The Claude check inventories `.claude/agents` recursively and permits exactly the two registered
-regular Markdown definitions. Claude workers preload only plugin-qualified trusted skills and omit
-and deny the runtime `Skill` tool; any repository-routed skill without a trusted namespace is documented as
-unavailable rather than exposed through a collision-prone name.
+The Claude check inventories every repository-local `.claude/agents` scope recursively while
+pruning only the exact root `.git` metadata directory. It rejects scope symlinks, extra Markdown
+definitions, duplicate names, and missing or non-regular registered definitions; exactly the two
+registered Markdown files may define Claude agents. Whole-file comparison normalizes each
+carriage-return run immediately before LF to one LF, so CRLF checkout conversion does not create
+drift; every other byte remains exact. Claude workers preload only plugin-qualified trusted skills
+and omit and deny runtime `Skill`; any repository-routed skill without a trusted namespace is
+documented as unavailable rather than exposed through a collision-prone name.
 
 ## Design principles
 
