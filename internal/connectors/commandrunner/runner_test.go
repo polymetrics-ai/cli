@@ -21,26 +21,36 @@ import (
 )
 
 type fakeConnector struct {
-	surface                 *connectors.CommandSurface
-	manifest                connectors.Manifest
-	readReq                 connectors.ReadRequest
-	directReadReq           connectors.DirectReadRequest
-	operationDirectReadReq  connectors.OperationDirectReadRequest
-	operationDirectWriteReq connectors.OperationDirectWriteRequest
-	directWriteMetadata     connectors.OperationDirectWriteMetadata
-	binaryDownloadReq       connectors.OperationBinaryDownloadRequest
-	binaryDownloadErr       error
-	validateReq             connectors.WriteRequest
-	dryRunReq               connectors.WriteRequest
-	writeReq                connectors.WriteRequest
-	writeRecords            []connectors.Record
-	validateErr             error
-	dryRunErr               error
-	readErr                 error
-	writeErr                error
-	readRecords             []connectors.Record
-	preview                 connectors.WritePreview
-	writeResult             connectors.WriteResult
+	surface                   *connectors.CommandSurface
+	manifest                  connectors.Manifest
+	readReq                   connectors.ReadRequest
+	directReadReq             connectors.DirectReadRequest
+	operationDirectReadReq    connectors.OperationDirectReadRequest
+	operationReadPreflight    operationDirectReadPreflightCall
+	operationReadPreflightErr error
+	operationDirectWriteReq   connectors.OperationDirectWriteRequest
+	directWriteMetadata       connectors.OperationDirectWriteMetadata
+	binaryDownloadReq         connectors.OperationBinaryDownloadRequest
+	binaryDownloadErr         error
+	validateReq               connectors.WriteRequest
+	dryRunReq                 connectors.WriteRequest
+	writeReq                  connectors.WriteRequest
+	writeRecords              []connectors.Record
+	validateErr               error
+	dryRunErr                 error
+	readErr                   error
+	writeErr                  error
+	readRecords               []connectors.Record
+	preview                   connectors.WritePreview
+	writeResult               connectors.WriteResult
+}
+
+type operationDirectReadPreflightCall struct {
+	operation    string
+	method       string
+	path         string
+	maxBytes     int
+	outputPolicy string
 }
 
 type preflightFakeConnector struct {
@@ -97,6 +107,17 @@ func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.Op
 		Status:    200,
 		Body:      map[string]any{"ok": true},
 	}, nil
+}
+
+func (f *fakeConnector) PreflightOperationDirectRead(operation, method, path string, maxBytes int, outputPolicy string) error {
+	f.operationReadPreflight = operationDirectReadPreflightCall{
+		operation:    operation,
+		method:       method,
+		path:         path,
+		maxBytes:     maxBytes,
+		outputPolicy: outputPolicy,
+	}
+	return f.operationReadPreflightErr
 }
 func (f *fakeConnector) PreviewOperationDirectWrite(_ context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
 	f.operationDirectWriteReq = req
@@ -1700,6 +1721,42 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	emails, ok := connector.operationDirectReadReq.Body["emails"].([]string)
 	if !ok || len(emails) != 2 || emails[0] != "ada@example.com" || emails[1] != "grace@example.com" {
 		t.Fatalf("operation body = %#v, want typed emails", connector.operationDirectReadReq.Body)
+	}
+}
+
+func TestPreflightOperationDirectReadRejectsNonExecutableOperationMetadata(t *testing.T) {
+	connector := &fakeConnector{
+		operationReadPreflightErr: errors.New("operation direct read requires rest_read or provider_search operation, got \"graphql_query\""),
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "meetings integration-status",
+			Intent:       "direct_read",
+			Availability: "implemented",
+			Operation:    "gong.meetings_integration_status",
+			APISurface: []connectors.CommandSurfaceEndpointRef{
+				{Method: http.MethodPost, Path: "/v2/meetings/integration/status"},
+			},
+			OutputPolicy: "json_redacted",
+		}}},
+	}
+
+	err := Preflight(connector, []string{"meetings", "integration-status"})
+	if err == nil {
+		t.Fatal("Preflight error = nil, want loaded operation rejection")
+	}
+	if !strings.Contains(err.Error(), "operation direct read metadata is not executable") {
+		t.Fatalf("Preflight error = %q, want executable metadata rejection", err)
+	}
+	if got, want := connector.operationReadPreflight, (operationDirectReadPreflightCall{
+		operation:    "gong.meetings_integration_status",
+		method:       http.MethodPost,
+		path:         "/v2/meetings/integration/status",
+		maxBytes:     MaxOperationDirectReadBytes,
+		outputPolicy: "json_redacted",
+	}); got != want {
+		t.Fatalf("operation preflight = %#v, want %#v", got, want)
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("OperationDirectRead dispatched during preflight: %+v", connector.operationDirectReadReq)
 	}
 }
 
