@@ -44,7 +44,15 @@
     "cliRealCLIInvocations": 61,
     "cliInvocationBudget": 61,
     "cliPackageElapsedSeconds": 43.128,
-    "cliCommand": "go test -count=1 -run '^TestCertifyCLI' ./internal/cli"
+    "cliCommand": "go test -count=1 -run '^TestCertifyCLI' ./internal/cli",
+    "localTimingSample": {
+      "command": "make certify-timing",
+      "certifyElapsedSeconds": 57.745,
+      "cliElapsedSeconds": 42.359,
+      "totalElapsedSeconds": 100.104,
+      "slowestCertifyTest": "TestFullSweepSourceStagesAgainstSample (49.160s)",
+      "slowestCLITest": "TestCertifyCLISingleConnectorPassExitsZero (27.150s)"
+    }
   },
   "verificationPassed": false
 }
