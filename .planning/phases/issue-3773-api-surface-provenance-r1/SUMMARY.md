@@ -21,6 +21,7 @@
 
 ## Handoff
 
-PR #3740 remains open and has not been used as a base. Before final delivery this branch is rebased
-only onto current `main`, then the focused matrix is rerun. The separate provider-artifact sweep
-owns all `internal/connectors/defs/**` migration work.
+PR #3740 remains open and has not been used as a base. This branch was rebased only onto current
+`origin/main` `7d34a0794`, producing implementation commit `6ab5f8bab`, and the focused matrix plus
+individual repository gates passed afterward. The separate provider-artifact sweep owns all
+`internal/connectors/defs/**` migration work.
