@@ -34,7 +34,8 @@
     "api_surface_covered_rows": 1,
     "api_surface_blocked_operation_rows": 1097,
     "typed_destructive_rest_write_operations": 33,
-    "static_cli_commands": 1098
+    "static_cli_commands": 1098,
+    "graphql_destructive_mutation_rows": 136
   },
   "rows": [
     {
@@ -2363,7 +2364,8 @@
       "path": "GraphQL Mutation.appRevokeAccessScopes",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appRevokeAccessScopes",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.appSubscriptionCancel",
@@ -2371,7 +2373,8 @@
       "path": "GraphQL Mutation.appSubscriptionCancel",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appSubscriptionCancel",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.appSubscriptionCreate",
@@ -2403,7 +2406,8 @@
       "path": "GraphQL Mutation.appUninstall",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appUninstall",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.appUsageRecordCreate",
@@ -2427,7 +2431,8 @@
       "path": "GraphQL Mutation.articleDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/articleDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.articleUpdate",
@@ -2459,7 +2464,8 @@
       "path": "GraphQL Mutation.blogDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/blogDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.blogUpdate",
@@ -2475,7 +2481,8 @@
       "path": "GraphQL Mutation.bulkOperationCancel",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/bulkOperationCancel",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.bulkOperationRunMutation",
@@ -2515,7 +2522,8 @@
       "path": "GraphQL Mutation.carrierServiceDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/carrierServiceDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.carrierServiceUpdate",
@@ -2539,7 +2547,8 @@
       "path": "GraphQL Mutation.cartTransformDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/cartTransformDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.cashDrawerCreate",
@@ -2579,7 +2588,8 @@
       "path": "GraphQL Mutation.cashManagementReasonCodeDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/cashManagementReasonCodeDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.catalogContextUpdate",
@@ -2603,7 +2613,8 @@
       "path": "GraphQL Mutation.catalogDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/catalogDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.catalogUpdate",
@@ -2627,7 +2638,8 @@
       "path": "GraphQL Mutation.channelDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/channelDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.channelFullSync",
@@ -2691,7 +2703,8 @@
       "path": "GraphQL Mutation.collectionConditionsSourceDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionConditionsSourceDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.collectionConditionsSourceUpdate",
@@ -2715,7 +2728,8 @@
       "path": "GraphQL Mutation.collectionDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.collectionDuplicate",
@@ -2739,7 +2753,8 @@
       "path": "GraphQL Mutation.collectionRemoveProducts",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionRemoveProducts",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.collectionReorderProducts",
@@ -2787,7 +2802,8 @@
       "path": "GraphQL Mutation.commentDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/commentDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.commentNotSpam",
@@ -2811,7 +2827,8 @@
       "path": "GraphQL Mutation.companiesDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companiesDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyAddressDelete",
@@ -2819,7 +2836,8 @@
       "path": "GraphQL Mutation.companyAddressDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyAddressDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyAssignCustomerAsContact",
@@ -2867,7 +2885,8 @@
       "path": "GraphQL Mutation.companyContactDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyContactRemoveFromCompany",
@@ -2875,7 +2894,8 @@
       "path": "GraphQL Mutation.companyContactRemoveFromCompany",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRemoveFromCompany",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyContactRevokeRole",
@@ -2883,7 +2903,8 @@
       "path": "GraphQL Mutation.companyContactRevokeRole",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRevokeRole",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyContactRevokeRoles",
@@ -2891,7 +2912,8 @@
       "path": "GraphQL Mutation.companyContactRevokeRoles",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRevokeRoles",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyContactsDelete",
@@ -2899,7 +2921,8 @@
       "path": "GraphQL Mutation.companyContactsDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactsDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyContactUpdate",
@@ -2923,7 +2946,8 @@
       "path": "GraphQL Mutation.companyDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyLocationAssignAddress",
@@ -2979,7 +3003,8 @@
       "path": "GraphQL Mutation.companyLocationDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyLocationRemoveStaffMembers",
@@ -2987,7 +3012,8 @@
       "path": "GraphQL Mutation.companyLocationRemoveStaffMembers",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRemoveStaffMembers",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyLocationRevokeRoles",
@@ -2995,7 +3021,8 @@
       "path": "GraphQL Mutation.companyLocationRevokeRoles",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeRoles",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyLocationRevokeTaxExemptions",
@@ -3003,7 +3030,8 @@
       "path": "GraphQL Mutation.companyLocationRevokeTaxExemptions",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeTaxExemptions",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyLocationRevokeTaxRegistration",
@@ -3011,7 +3039,8 @@
       "path": "GraphQL Mutation.companyLocationRevokeTaxRegistration",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeTaxRegistration",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyLocationsDelete",
@@ -3019,7 +3048,8 @@
       "path": "GraphQL Mutation.companyLocationsDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationsDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyLocationTaxSettingsUpdate",
@@ -3043,7 +3073,8 @@
       "path": "GraphQL Mutation.companyRevokeMainContact",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyRevokeMainContact",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.companyUpdate",
@@ -3075,7 +3106,8 @@
       "path": "GraphQL Mutation.customerAddressDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerAddressDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.customerAddressUpdate",
@@ -3099,7 +3131,8 @@
       "path": "GraphQL Mutation.customerCancelDataErasure",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerCancelDataErasure",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.customerCreate",
@@ -3115,7 +3148,8 @@
       "path": "GraphQL Mutation.customerDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.customerEmailMarketingConsentUpdate",
@@ -3195,7 +3229,8 @@
       "path": "GraphQL Mutation.customerPaymentMethodRevoke",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerPaymentMethodRevoke",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.customerPaymentMethodSendUpdateEmail",
@@ -3211,7 +3246,8 @@
       "path": "GraphQL Mutation.customerRemoveTaxExemptions",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerRemoveTaxExemptions",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.customerReplaceTaxExemptions",
@@ -3331,7 +3367,8 @@
       "path": "GraphQL Mutation.deliveryCustomizationDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryCustomizationDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.deliveryCustomizationUpdate",
@@ -3355,7 +3392,8 @@
       "path": "GraphQL Mutation.deliveryProfileRemove",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryProfileRemove",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.deliveryProfileUpdate",
@@ -3443,7 +3481,8 @@
       "path": "GraphQL Mutation.discountAutomaticBulkDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticBulkDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.discountAutomaticBxgyCreate",
@@ -3467,7 +3506,8 @@
       "path": "GraphQL Mutation.discountAutomaticDeactivate",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticDeactivate",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.discountAutomaticDelete",
@@ -3475,7 +3515,8 @@
       "path": "GraphQL Mutation.discountAutomaticDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.discountAutomaticFreeShippingCreate",
@@ -3507,7 +3548,8 @@
       "path": "GraphQL Mutation.discountBulkTagsRemove",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountBulkTagsRemove",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.discountCodeActivate",
@@ -3563,7 +3605,8 @@
       "path": "GraphQL Mutation.discountCodeBulkDeactivate",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeBulkDeactivate",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.discountCodeBulkDelete",
@@ -3571,7 +3614,8 @@
       "path": "GraphQL Mutation.discountCodeBulkDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeBulkDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.discountCodeBxgyCreate",
@@ -3595,7 +3639,8 @@
       "path": "GraphQL Mutation.discountCodeDeactivate",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeDeactivate",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.discountCodeDelete",
@@ -3603,7 +3648,8 @@
       "path": "GraphQL Mutation.discountCodeDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.discountCodeFreeShippingCreate",
@@ -3627,7 +3673,8 @@
       "path": "GraphQL Mutation.discountCodeRedeemCodeBulkDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeRedeemCodeBulkDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.discountRedeemCodeBulkAdd",
@@ -3659,7 +3706,8 @@
       "path": "GraphQL Mutation.draftOrderBulkDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderBulkDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.draftOrderBulkRemoveTags",
@@ -3667,7 +3715,8 @@
       "path": "GraphQL Mutation.draftOrderBulkRemoveTags",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderBulkRemoveTags",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.draftOrderCalculate",
@@ -3707,7 +3756,8 @@
       "path": "GraphQL Mutation.draftOrderDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.draftOrderDuplicate",
@@ -3787,7 +3837,8 @@
       "path": "GraphQL Mutation.fileDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fileDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.fileUpdate",
@@ -3811,7 +3862,8 @@
       "path": "GraphQL Mutation.fulfillmentCancel",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentCancel",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.fulfillmentConstraintRuleCreate",
@@ -3827,7 +3879,8 @@
       "path": "GraphQL Mutation.fulfillmentConstraintRuleDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentConstraintRuleDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.fulfillmentConstraintRuleUpdate",
@@ -3867,7 +3920,8 @@
       "path": "GraphQL Mutation.fulfillmentOrderAcceptCancellationRequest",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderAcceptCancellationRequest",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.fulfillmentOrderAcceptFulfillmentRequest",
@@ -3883,7 +3937,8 @@
       "path": "GraphQL Mutation.fulfillmentOrderCancel",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderCancel",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.fulfillmentOrderClose",
@@ -3891,7 +3946,8 @@
       "path": "GraphQL Mutation.fulfillmentOrderClose",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderClose",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.fulfillmentOrderHold",
@@ -3939,7 +3995,8 @@
       "path": "GraphQL Mutation.fulfillmentOrderRejectCancellationRequest",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderRejectCancellationRequest",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.fulfillmentOrderRejectFulfillmentRequest",
@@ -3947,7 +4004,8 @@
       "path": "GraphQL Mutation.fulfillmentOrderRejectFulfillmentRequest",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderRejectFulfillmentRequest",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.fulfillmentOrderReleaseHold",
@@ -4003,7 +4061,8 @@
       "path": "GraphQL Mutation.fulfillmentOrderSubmitCancellationRequest",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderSubmitCancellationRequest",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.fulfillmentOrderSubmitFulfillmentRequest",
@@ -4027,7 +4086,8 @@
       "path": "GraphQL Mutation.fulfillmentServiceDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentServiceDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.fulfillmentServiceUpdate",
@@ -4075,7 +4135,8 @@
       "path": "GraphQL Mutation.giftCardDeactivate",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/giftCardDeactivate",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.giftCardDebit",
@@ -4147,7 +4208,8 @@
       "path": "GraphQL Mutation.inventoryDeactivate",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryDeactivate",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.inventoryItemUpdate",
@@ -4211,7 +4273,8 @@
       "path": "GraphQL Mutation.inventoryShipmentDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryShipmentDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.inventoryShipmentMarkInTransit",
@@ -4235,7 +4298,8 @@
       "path": "GraphQL Mutation.inventoryShipmentRemoveItems",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryShipmentRemoveItems",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.inventoryShipmentSetBarcode",
@@ -4267,7 +4331,8 @@
       "path": "GraphQL Mutation.inventoryTransferCancel",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferCancel",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.inventoryTransferCreate",
@@ -4291,7 +4356,8 @@
       "path": "GraphQL Mutation.inventoryTransferDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.inventoryTransferDuplicate",
@@ -4323,7 +4389,8 @@
       "path": "GraphQL Mutation.inventoryTransferRemoveItems",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferRemoveItems",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.inventoryTransferSetItems",
@@ -4355,7 +4422,8 @@
       "path": "GraphQL Mutation.locationDeactivate",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationDeactivate",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.locationDelete",
@@ -4363,7 +4431,8 @@
       "path": "GraphQL Mutation.locationDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.locationEdit",
@@ -4411,7 +4480,8 @@
       "path": "GraphQL Mutation.marketDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.marketingActivitiesDeleteAllExternal",
@@ -4419,7 +4489,8 @@
       "path": "GraphQL Mutation.marketingActivitiesDeleteAllExternal",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivitiesDeleteAllExternal",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.marketingActivityCreate",
@@ -4443,7 +4514,8 @@
       "path": "GraphQL Mutation.marketingActivityDeleteExternal",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityDeleteExternal",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.marketingActivityUpdate",
@@ -4483,7 +4555,8 @@
       "path": "GraphQL Mutation.marketingEngagementsDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingEngagementsDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.marketLocalizationsRegister",
@@ -4499,7 +4572,8 @@
       "path": "GraphQL Mutation.marketLocalizationsRemove",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketLocalizationsRemove",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.marketRegionDelete",
@@ -4507,7 +4581,8 @@
       "path": "GraphQL Mutation.marketRegionDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.marketRegionsCreate",
@@ -4523,7 +4598,8 @@
       "path": "GraphQL Mutation.marketRegionsDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionsDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.marketUpdate",
@@ -4547,7 +4623,8 @@
       "path": "GraphQL Mutation.marketWebPresenceDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketWebPresenceDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.marketWebPresenceUpdate",
@@ -4571,7 +4648,8 @@
       "path": "GraphQL Mutation.menuDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/menuDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.menuUpdate",
@@ -4595,7 +4673,8 @@
       "path": "GraphQL Mutation.metafieldDefinitionDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metafieldDefinitionDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.metafieldDefinitionPin",
@@ -4627,7 +4706,8 @@
       "path": "GraphQL Mutation.metafieldsDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metafieldsDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.metafieldsSet",
@@ -4643,7 +4723,8 @@
       "path": "GraphQL Mutation.metaobjectBulkDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectBulkDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.metaobjectCreate",
@@ -4667,7 +4748,8 @@
       "path": "GraphQL Mutation.metaobjectDefinitionDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectDefinitionDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.metaobjectDefinitionUpdate",
@@ -4683,7 +4765,8 @@
       "path": "GraphQL Mutation.metaobjectDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.metaobjectUpdate",
@@ -4715,7 +4798,8 @@
       "path": "GraphQL Mutation.mobilePlatformApplicationDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/mobilePlatformApplicationDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.mobilePlatformApplicationUpdate",
@@ -4731,7 +4815,8 @@
       "path": "GraphQL Mutation.orderAttributionDefinitionDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderAttributionDefinitionDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.orderAttributionDefinitionUpsert",
@@ -4747,7 +4832,8 @@
       "path": "GraphQL Mutation.orderCancel",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderCancel",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.orderCapture",
@@ -4763,7 +4849,8 @@
       "path": "GraphQL Mutation.orderClose",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderClose",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.orderCreate",
@@ -4795,7 +4882,8 @@
       "path": "GraphQL Mutation.orderCustomerRemove",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderCustomerRemove",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.orderCustomerSet",
@@ -4811,7 +4899,8 @@
       "path": "GraphQL Mutation.orderDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.orderEditAddCustomItem",
@@ -4867,7 +4956,8 @@
       "path": "GraphQL Mutation.orderEditRemoveDiscount",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveDiscount",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.orderEditRemoveLineItemDiscount",
@@ -4875,7 +4965,8 @@
       "path": "GraphQL Mutation.orderEditRemoveLineItemDiscount",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveLineItemDiscount",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.orderEditRemoveShippingLine",
@@ -4883,7 +4974,8 @@
       "path": "GraphQL Mutation.orderEditRemoveShippingLine",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveShippingLine",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.orderEditSetQuantity",
@@ -4963,7 +5055,8 @@
       "path": "GraphQL Mutation.pageDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pageDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.pageUpdate",
@@ -4995,7 +5088,8 @@
       "path": "GraphQL Mutation.paymentCustomizationDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/paymentCustomizationDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.paymentCustomizationUpdate",
@@ -5035,7 +5129,8 @@
       "path": "GraphQL Mutation.paymentTermsDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/paymentTermsDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.paymentTermsUpdate",
@@ -5067,7 +5162,8 @@
       "path": "GraphQL Mutation.pointOfSaleDevicePaymentSessionClose",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pointOfSaleDevicePaymentSessionClose",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.pointOfSaleDevicePaymentSessionCount",
@@ -5099,7 +5195,8 @@
       "path": "GraphQL Mutation.priceListDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.priceListFixedPricesAdd",
@@ -5123,7 +5220,8 @@
       "path": "GraphQL Mutation.priceListFixedPricesDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListFixedPricesDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.priceListFixedPricesUpdate",
@@ -5195,7 +5293,8 @@
       "path": "GraphQL Mutation.productDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.productDeleteMedia",
@@ -5203,7 +5302,8 @@
       "path": "GraphQL Mutation.productDeleteMedia",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productDeleteMedia",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.productDuplicate",
@@ -5227,7 +5327,8 @@
       "path": "GraphQL Mutation.productFeedDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productFeedDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.productFullSync",
@@ -5267,7 +5368,8 @@
       "path": "GraphQL Mutation.productOptionsDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productOptionsDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.productOptionsReorder",
@@ -5387,7 +5489,8 @@
       "path": "GraphQL Mutation.productVariantsBulkDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantsBulkDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.productVariantsBulkReorder",
@@ -5419,7 +5522,8 @@
       "path": "GraphQL Mutation.publicationDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publicationDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.publicationUpdate",
@@ -5507,7 +5611,8 @@
       "path": "GraphQL Mutation.quantityRulesDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/quantityRulesDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.refundCreate",
@@ -5539,7 +5644,8 @@
       "path": "GraphQL Mutation.returnCancel",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnCancel",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.returnClose",
@@ -5547,7 +5653,8 @@
       "path": "GraphQL Mutation.returnClose",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnClose",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.returnCreate",
@@ -5571,7 +5678,8 @@
       "path": "GraphQL Mutation.returnLineItemRemoveFromReturn",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnLineItemRemoveFromReturn",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.returnProcess",
@@ -5643,7 +5751,8 @@
       "path": "GraphQL Mutation.savedSearchDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/savedSearchDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.savedSearchUpdate",
@@ -5667,7 +5776,8 @@
       "path": "GraphQL Mutation.scriptTagDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/scriptTagDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.scriptTagUpdate",
@@ -5691,7 +5801,8 @@
       "path": "GraphQL Mutation.segmentDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/segmentDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.segmentUpdate",
@@ -5731,7 +5842,8 @@
       "path": "GraphQL Mutation.sellingPlanGroupDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.sellingPlanGroupRemoveProducts",
@@ -5739,7 +5851,8 @@
       "path": "GraphQL Mutation.sellingPlanGroupRemoveProducts",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProducts",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.sellingPlanGroupRemoveProductVariants",
@@ -5747,7 +5860,8 @@
       "path": "GraphQL Mutation.sellingPlanGroupRemoveProductVariants",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProductVariants",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.sellingPlanGroupUpdate",
@@ -5771,7 +5885,8 @@
       "path": "GraphQL Mutation.serverPixelDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/serverPixelDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.shippingLabelPurchase",
@@ -5787,7 +5902,8 @@
       "path": "GraphQL Mutation.shippingPackageDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/shippingPackageDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.shippingPackageMakeDefault",
@@ -5923,7 +6039,8 @@
       "path": "GraphQL Mutation.storefrontAccessTokenDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/storefrontAccessTokenDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.subscriptionBillingAttemptCreate",
@@ -5987,7 +6104,8 @@
       "path": "GraphQL Mutation.subscriptionBillingCycleEditDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionBillingCycleEditDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.subscriptionBillingCycleEditsDelete",
@@ -5995,7 +6113,8 @@
       "path": "GraphQL Mutation.subscriptionBillingCycleEditsDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionBillingCycleEditsDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.subscriptionBillingCycleScheduleEdit",
@@ -6043,7 +6162,8 @@
       "path": "GraphQL Mutation.subscriptionContractCancel",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionContractCancel",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.subscriptionContractCreate",
@@ -6059,7 +6179,8 @@
       "path": "GraphQL Mutation.subscriptionContractExpire",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionContractExpire",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.subscriptionContractFail",
@@ -6131,7 +6252,8 @@
       "path": "GraphQL Mutation.subscriptionDraftDiscountRemove",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionDraftDiscountRemove",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.subscriptionDraftDiscountUpdate",
@@ -6171,7 +6293,8 @@
       "path": "GraphQL Mutation.subscriptionDraftLineRemove",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionDraftLineRemove",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.subscriptionDraftLineUpdate",
@@ -6203,7 +6326,8 @@
       "path": "GraphQL Mutation.tagsRemove",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/tagsRemove",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.taxAppConfigure",
@@ -6235,7 +6359,8 @@
       "path": "GraphQL Mutation.themeDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/themeDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.themeDuplicate",
@@ -6259,7 +6384,8 @@
       "path": "GraphQL Mutation.themeFilesDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/themeFilesDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.themeFilesUpsert",
@@ -6291,7 +6417,8 @@
       "path": "GraphQL Mutation.transactionVoid",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/transactionVoid",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.translationsRegister",
@@ -6307,7 +6434,8 @@
       "path": "GraphQL Mutation.translationsRemove",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/translationsRemove",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.urlRedirectBulkDeleteAll",
@@ -6315,7 +6443,8 @@
       "path": "GraphQL Mutation.urlRedirectBulkDeleteAll",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteAll",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.urlRedirectBulkDeleteByIds",
@@ -6323,7 +6452,8 @@
       "path": "GraphQL Mutation.urlRedirectBulkDeleteByIds",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteByIds",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.urlRedirectBulkDeleteBySavedSearch",
@@ -6331,7 +6461,8 @@
       "path": "GraphQL Mutation.urlRedirectBulkDeleteBySavedSearch",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteBySavedSearch",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.urlRedirectBulkDeleteBySearch",
@@ -6339,7 +6470,8 @@
       "path": "GraphQL Mutation.urlRedirectBulkDeleteBySearch",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteBySearch",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.urlRedirectCreate",
@@ -6355,7 +6487,8 @@
       "path": "GraphQL Mutation.urlRedirectDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.urlRedirectImportCreate",
@@ -6395,7 +6528,8 @@
       "path": "GraphQL Mutation.validationDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/validationDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.validationUpdate",
@@ -6419,7 +6553,8 @@
       "path": "GraphQL Mutation.webhookSubscriptionDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webhookSubscriptionDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.webhookSubscriptionUpdate",
@@ -6443,7 +6578,8 @@
       "path": "GraphQL Mutation.webPixelDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webPixelDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.webPixelUpdate",
@@ -6467,7 +6603,8 @@
       "path": "GraphQL Mutation.webPresenceDelete",
       "citation_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webPresenceDelete",
       "source_artifact": "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md",
-      "retrieved_at": "2026-08-06"
+      "retrieved_at": "2026-08-06",
+      "implementation_requirement": "typed_destructive_confirmation"
     },
     {
       "key": "POST GraphQL Mutation.webPresenceUpdate",
@@ -8826,6 +8963,7 @@
     "Each row has one official Shopify citation URL and the exact retrieval date used for this rebuild.",
     "The REST Admin API is documented by Shopify as legacy; this inventory records its currently published reference, not a live-provider certification.",
     "The AccessScope resource page contains the access-scope GET endpoint and it is represented exactly once.",
-    "No generic GraphQL, HTTP path, query, or body passthrough is declared."
+    "No generic GraphQL, HTTP path, query, or body passthrough is declared.",
+    "Current GraphQL mutation rows historically classified as destructive stay in scope and require typed destructive confirmation before implementation."
   ]
 }

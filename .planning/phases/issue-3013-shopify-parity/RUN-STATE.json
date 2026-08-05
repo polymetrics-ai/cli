@@ -1,6 +1,6 @@
 {
   "phase": "issue-3013-shopify-parity",
-  "status": "blocked_shared_command_schema_and_icon_registry",
+  "status": "blocked_shared_foundations",
   "branch": "fm/cli-shopify-parity-wave01-r1",
   "verificationPassed": false,
   "gsdCommand": "scripts/gsd prompt quick \"Implement documented Shopify connector parity for issue 3013 within connector-local definition bundle, including destructive/delete operations with typed confirmation and plan-preview-approval-execute safety, no live credentials or provider calls\"",
@@ -15,6 +15,7 @@
   "verification": [
     "public Shopify docs re-audit (historical, superseded): officialDocsTotal=1166 ledgerTotal=1166 missing=0 stale=0 noncanonicalDeleteRows=0",
     "2026-08-06 public Markdown preflight: 287 GraphQL queries + 518 mutations + 293 REST operations = 1098 cited rows",
+    "public source availability recheck: GraphQL full index=287 queries/518 mutations, sitemap=67 REST resource pages, all 67 recorded REST Markdown artifacts HTTP 200",
     "go run ./cmd/connectorgen validate internal/connectors/defs",
     "go test ./internal/connectors/conformance -run 'TestConformance/shopify' -count=1",
     "go run ./cmd/pm docs validate --connectors-dir docs/connectors",
@@ -25,7 +26,7 @@
     "git diff --check",
     "go test ./internal/connectors/defs/shopify -run TestShopDomainUsesCanonicalAdminHost -count=1"
   ],
-  "blocker": "Connector-local rebuild is complete: source inventory, typed REST DELETE operations, static commands, fixtures, focused validation, and conformance passed. Promotion of the 33 no-redaction direct-write commands needs internal/connectors/engine/schema/cli_surface.schema.json to admit output_policy json. #3809 owns the separate icon generator/registry defect; the user directed this lane not to rerun, work around, or hand-edit it, and global preflight now panics at missing Shopify icon coverage.",
+  "blocker": "Connector-local rebuild is complete: the cited source inventory, 33 typed REST DELETE operations, 136 current destructive GraphQL mutation ledger rows, static commands, fixtures, focused validation, and conformance passed. #3852 owns the shared internal/connectors/engine/schema/cli_surface.schema.json change needed to admit output_policy json for the 33 no-redaction direct-write commands; this lane will not substitute a redacting policy or edit the shared schema. #3809 owns the separate icon generator/registry defect; the user directed this lane not to rerun, work around, or hand-edit it, and global preflight now panics at missing Shopify icon coverage.",
   "liveProviderCalls": false,
   "credentialsUsed": false,
   "writesExecuted": false,

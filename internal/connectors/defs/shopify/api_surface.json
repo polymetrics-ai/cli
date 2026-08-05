@@ -3489,11 +3489,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.appRevokeAccessScopes",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appRevokeAccessScopes"
       }
     },
@@ -3501,11 +3501,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.appSubscriptionCancel",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appSubscriptionCancel"
       }
     },
@@ -3549,11 +3549,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.appUninstall",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appUninstall"
       }
     },
@@ -3585,11 +3585,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.articleDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/articleDelete"
       }
     },
@@ -3633,11 +3633,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.blogDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/blogDelete"
       }
     },
@@ -3657,11 +3657,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.bulkOperationCancel",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/bulkOperationCancel"
       }
     },
@@ -3717,11 +3717,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.carrierServiceDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/carrierServiceDelete"
       }
     },
@@ -3753,11 +3753,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.cartTransformDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/cartTransformDelete"
       }
     },
@@ -3813,11 +3813,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.cashManagementReasonCodeDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/cashManagementReasonCodeDelete"
       }
     },
@@ -3849,11 +3849,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.catalogDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/catalogDelete"
       }
     },
@@ -3885,11 +3885,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.channelDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/channelDelete"
       }
     },
@@ -3981,11 +3981,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.collectionConditionsSourceDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionConditionsSourceDelete"
       }
     },
@@ -4017,11 +4017,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.collectionDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionDelete"
       }
     },
@@ -4053,11 +4053,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.collectionRemoveProducts",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionRemoveProducts"
       }
     },
@@ -4125,11 +4125,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.commentDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/commentDelete"
       }
     },
@@ -4161,11 +4161,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companiesDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companiesDelete"
       }
     },
@@ -4173,11 +4173,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyAddressDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyAddressDelete"
       }
     },
@@ -4245,11 +4245,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyContactDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactDelete"
       }
     },
@@ -4257,11 +4257,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyContactRemoveFromCompany",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRemoveFromCompany"
       }
     },
@@ -4269,11 +4269,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyContactRevokeRole",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRevokeRole"
       }
     },
@@ -4281,11 +4281,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyContactRevokeRoles",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRevokeRoles"
       }
     },
@@ -4293,11 +4293,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyContactsDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactsDelete"
       }
     },
@@ -4329,11 +4329,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyDelete"
       }
     },
@@ -4413,11 +4413,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyLocationDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationDelete"
       }
     },
@@ -4425,11 +4425,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyLocationRemoveStaffMembers",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRemoveStaffMembers"
       }
     },
@@ -4437,11 +4437,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyLocationRevokeRoles",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeRoles"
       }
     },
@@ -4449,11 +4449,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyLocationRevokeTaxExemptions",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeTaxExemptions"
       }
     },
@@ -4461,11 +4461,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyLocationRevokeTaxRegistration",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeTaxRegistration"
       }
     },
@@ -4473,11 +4473,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyLocationsDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationsDelete"
       }
     },
@@ -4509,11 +4509,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.companyRevokeMainContact",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyRevokeMainContact"
       }
     },
@@ -4557,11 +4557,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.customerAddressDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerAddressDelete"
       }
     },
@@ -4593,11 +4593,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.customerCancelDataErasure",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerCancelDataErasure"
       }
     },
@@ -4617,11 +4617,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.customerDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerDelete"
       }
     },
@@ -4737,11 +4737,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.customerPaymentMethodRevoke",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerPaymentMethodRevoke"
       }
     },
@@ -4761,11 +4761,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.customerRemoveTaxExemptions",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerRemoveTaxExemptions"
       }
     },
@@ -4941,11 +4941,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.deliveryCustomizationDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryCustomizationDelete"
       }
     },
@@ -4977,11 +4977,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.deliveryProfileRemove",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryProfileRemove"
       }
     },
@@ -5109,11 +5109,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountAutomaticBulkDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticBulkDelete"
       }
     },
@@ -5145,11 +5145,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountAutomaticDeactivate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticDeactivate"
       }
     },
@@ -5157,11 +5157,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountAutomaticDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticDelete"
       }
     },
@@ -5205,11 +5205,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountBulkTagsRemove",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountBulkTagsRemove"
       }
     },
@@ -5289,11 +5289,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountCodeBulkDeactivate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeBulkDeactivate"
       }
     },
@@ -5301,11 +5301,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountCodeBulkDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeBulkDelete"
       }
     },
@@ -5337,11 +5337,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountCodeDeactivate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeDeactivate"
       }
     },
@@ -5349,11 +5349,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountCodeDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeDelete"
       }
     },
@@ -5385,11 +5385,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.discountCodeRedeemCodeBulkDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeRedeemCodeBulkDelete"
       }
     },
@@ -5433,11 +5433,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.draftOrderBulkDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderBulkDelete"
       }
     },
@@ -5445,11 +5445,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.draftOrderBulkRemoveTags",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderBulkRemoveTags"
       }
     },
@@ -5505,11 +5505,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.draftOrderDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderDelete"
       }
     },
@@ -5625,11 +5625,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.fileDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fileDelete"
       }
     },
@@ -5661,11 +5661,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentCancel",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentCancel"
       }
     },
@@ -5685,11 +5685,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentConstraintRuleDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentConstraintRuleDelete"
       }
     },
@@ -5745,11 +5745,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentOrderAcceptCancellationRequest",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderAcceptCancellationRequest"
       }
     },
@@ -5769,11 +5769,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentOrderCancel",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderCancel"
       }
     },
@@ -5781,11 +5781,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentOrderClose",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderClose"
       }
     },
@@ -5853,11 +5853,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentOrderRejectCancellationRequest",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderRejectCancellationRequest"
       }
     },
@@ -5865,11 +5865,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentOrderRejectFulfillmentRequest",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderRejectFulfillmentRequest"
       }
     },
@@ -5949,11 +5949,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentOrderSubmitCancellationRequest",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderSubmitCancellationRequest"
       }
     },
@@ -5985,11 +5985,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.fulfillmentServiceDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentServiceDelete"
       }
     },
@@ -6057,11 +6057,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.giftCardDeactivate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/giftCardDeactivate"
       }
     },
@@ -6165,11 +6165,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.inventoryDeactivate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryDeactivate"
       }
     },
@@ -6261,11 +6261,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.inventoryShipmentDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryShipmentDelete"
       }
     },
@@ -6297,11 +6297,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.inventoryShipmentRemoveItems",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryShipmentRemoveItems"
       }
     },
@@ -6345,11 +6345,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.inventoryTransferCancel",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferCancel"
       }
     },
@@ -6381,11 +6381,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.inventoryTransferDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferDelete"
       }
     },
@@ -6429,11 +6429,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.inventoryTransferRemoveItems",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferRemoveItems"
       }
     },
@@ -6477,11 +6477,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.locationDeactivate",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationDeactivate"
       }
     },
@@ -6489,11 +6489,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.locationDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationDelete"
       }
     },
@@ -6561,11 +6561,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketDelete"
       }
     },
@@ -6573,11 +6573,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketingActivitiesDeleteAllExternal",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivitiesDeleteAllExternal"
       }
     },
@@ -6609,11 +6609,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketingActivityDeleteExternal",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityDeleteExternal"
       }
     },
@@ -6669,11 +6669,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketingEngagementsDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingEngagementsDelete"
       }
     },
@@ -6693,11 +6693,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketLocalizationsRemove",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketLocalizationsRemove"
       }
     },
@@ -6705,11 +6705,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketRegionDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionDelete"
       }
     },
@@ -6729,11 +6729,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketRegionsDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionsDelete"
       }
     },
@@ -6765,11 +6765,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.marketWebPresenceDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketWebPresenceDelete"
       }
     },
@@ -6801,11 +6801,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.menuDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/menuDelete"
       }
     },
@@ -6837,11 +6837,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.metafieldDefinitionDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metafieldDefinitionDelete"
       }
     },
@@ -6885,11 +6885,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.metafieldsDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metafieldsDelete"
       }
     },
@@ -6909,11 +6909,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.metaobjectBulkDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectBulkDelete"
       }
     },
@@ -6945,11 +6945,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.metaobjectDefinitionDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectDefinitionDelete"
       }
     },
@@ -6969,11 +6969,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.metaobjectDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectDelete"
       }
     },
@@ -7017,11 +7017,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.mobilePlatformApplicationDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/mobilePlatformApplicationDelete"
       }
     },
@@ -7041,11 +7041,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderAttributionDefinitionDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderAttributionDefinitionDelete"
       }
     },
@@ -7065,11 +7065,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderCancel",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderCancel"
       }
     },
@@ -7089,11 +7089,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderClose",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderClose"
       }
     },
@@ -7137,11 +7137,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderCustomerRemove",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderCustomerRemove"
       }
     },
@@ -7161,11 +7161,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderDelete"
       }
     },
@@ -7245,11 +7245,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderEditRemoveDiscount",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveDiscount"
       }
     },
@@ -7257,11 +7257,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderEditRemoveLineItemDiscount",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveLineItemDiscount"
       }
     },
@@ -7269,11 +7269,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.orderEditRemoveShippingLine",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveShippingLine"
       }
     },
@@ -7389,11 +7389,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.pageDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pageDelete"
       }
     },
@@ -7437,11 +7437,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.paymentCustomizationDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/paymentCustomizationDelete"
       }
     },
@@ -7497,11 +7497,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.paymentTermsDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/paymentTermsDelete"
       }
     },
@@ -7545,11 +7545,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.pointOfSaleDevicePaymentSessionClose",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pointOfSaleDevicePaymentSessionClose"
       }
     },
@@ -7593,11 +7593,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.priceListDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListDelete"
       }
     },
@@ -7629,11 +7629,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.priceListFixedPricesDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListFixedPricesDelete"
       }
     },
@@ -7737,11 +7737,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.productDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productDelete"
       }
     },
@@ -7749,11 +7749,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.productDeleteMedia",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productDeleteMedia"
       }
     },
@@ -7785,11 +7785,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.productFeedDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productFeedDelete"
       }
     },
@@ -7845,11 +7845,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.productOptionsDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productOptionsDelete"
       }
     },
@@ -8025,11 +8025,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.productVariantsBulkDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantsBulkDelete"
       }
     },
@@ -8073,11 +8073,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.publicationDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publicationDelete"
       }
     },
@@ -8205,11 +8205,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.quantityRulesDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/quantityRulesDelete"
       }
     },
@@ -8253,11 +8253,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.returnCancel",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnCancel"
       }
     },
@@ -8265,11 +8265,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.returnClose",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnClose"
       }
     },
@@ -8301,11 +8301,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.returnLineItemRemoveFromReturn",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnLineItemRemoveFromReturn"
       }
     },
@@ -8409,11 +8409,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.savedSearchDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/savedSearchDelete"
       }
     },
@@ -8445,11 +8445,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.scriptTagDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/scriptTagDelete"
       }
     },
@@ -8481,11 +8481,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.segmentDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/segmentDelete"
       }
     },
@@ -8541,11 +8541,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.sellingPlanGroupDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupDelete"
       }
     },
@@ -8553,11 +8553,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.sellingPlanGroupRemoveProducts",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProducts"
       }
     },
@@ -8565,11 +8565,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.sellingPlanGroupRemoveProductVariants",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProductVariants"
       }
     },
@@ -8601,11 +8601,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.serverPixelDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/serverPixelDelete"
       }
     },
@@ -8625,11 +8625,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.shippingPackageDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/shippingPackageDelete"
       }
     },
@@ -8829,11 +8829,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.storefrontAccessTokenDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/storefrontAccessTokenDelete"
       }
     },
@@ -8925,11 +8925,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.subscriptionBillingCycleEditDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionBillingCycleEditDelete"
       }
     },
@@ -8937,11 +8937,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.subscriptionBillingCycleEditsDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionBillingCycleEditsDelete"
       }
     },
@@ -9009,11 +9009,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.subscriptionContractCancel",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionContractCancel"
       }
     },
@@ -9033,11 +9033,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.subscriptionContractExpire",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionContractExpire"
       }
     },
@@ -9141,11 +9141,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.subscriptionDraftDiscountRemove",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionDraftDiscountRemove"
       }
     },
@@ -9201,11 +9201,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.subscriptionDraftLineRemove",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionDraftLineRemove"
       }
     },
@@ -9249,11 +9249,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.tagsRemove",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/tagsRemove"
       }
     },
@@ -9297,11 +9297,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.themeDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/themeDelete"
       }
     },
@@ -9333,11 +9333,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.themeFilesDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/themeFilesDelete"
       }
     },
@@ -9381,11 +9381,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.transactionVoid",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/transactionVoid"
       }
     },
@@ -9405,11 +9405,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.translationsRemove",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/translationsRemove"
       }
     },
@@ -9417,11 +9417,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.urlRedirectBulkDeleteAll",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteAll"
       }
     },
@@ -9429,11 +9429,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.urlRedirectBulkDeleteByIds",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteByIds"
       }
     },
@@ -9441,11 +9441,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.urlRedirectBulkDeleteBySavedSearch",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteBySavedSearch"
       }
     },
@@ -9453,11 +9453,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.urlRedirectBulkDeleteBySearch",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteBySearch"
       }
     },
@@ -9477,11 +9477,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.urlRedirectDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectDelete"
       }
     },
@@ -9537,11 +9537,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.validationDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/validationDelete"
       }
     },
@@ -9573,11 +9573,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.webhookSubscriptionDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webhookSubscriptionDelete"
       }
     },
@@ -9609,11 +9609,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.webPixelDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webPixelDelete"
       }
     },
@@ -9645,11 +9645,11 @@
       "method": "POST",
       "path": "GraphQL Mutation.webPresenceDelete",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, and plan -> preview -> explicit approval -> execute contract are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
+        "reason": "In scope but blocked until a connector-owned fixed GraphQL mutation document, typed input schema, bounded non-redacting JSON output, and plan -> preview -> explicit approval -> execute contract with typed destructive confirmation are declared; no arbitrary GraphQL mutation or variables passthrough is permitted.",
         "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webPresenceDelete"
       }
     },
@@ -12788,7 +12788,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_blogs_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_blogs_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/blog.md#delete-blogs-blog-id"
       }
     },
@@ -12800,7 +12800,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_blogs_id_articles_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_blogs_id_articles_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/article.md#delete-blogs-blog-id-articles-article-id"
       }
     },
@@ -12812,7 +12812,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_blogs_id_metafields_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_blogs_id_metafields_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/metafield.md#delete-blogs-blog-id-metafields-metafield-id"
       }
     },
@@ -12824,7 +12824,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_carrier_services_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_carrier_services_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/carrierservice.md#delete-carrier-services-carrier-service-id"
       }
     },
@@ -12836,7 +12836,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_collection_listings_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_collection_listings_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/collectionlisting.md#delete-collection-listings-collection-listing-id"
       }
     },
@@ -12848,7 +12848,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_collects_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_collects_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/collect.md#delete-collects-collect-id"
       }
     },
@@ -12860,7 +12860,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_countries_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_countries_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/country.md#delete-countries-country-id"
       }
     },
@@ -12872,7 +12872,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_custom_collections_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_custom_collections_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customcollection.md#delete-custom-collections-custom-collection-id"
       }
     },
@@ -12884,7 +12884,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_customers_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_customers_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customer.md#delete-customers-customer-id"
       }
     },
@@ -12896,7 +12896,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_customers_id_addresses_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_customers_id_addresses_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/customer-address.md#delete-customers-customer-id-addresses-address-id"
       }
     },
@@ -12908,7 +12908,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_draft_orders_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_draft_orders_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/draftorder.md#delete-draft-orders-draft-order-id"
       }
     },
@@ -12920,7 +12920,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_fulfillment_services_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_fulfillment_services_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentservice.md#delete-fulfillment-services-fulfillment-service-id"
       }
     },
@@ -12932,7 +12932,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_inventory_levels\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_inventory_levels\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/inventorylevel.md#delete-inventory-levels?inventory-item-id=808950810&location-id=655441491"
       }
     },
@@ -12944,7 +12944,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_marketing_events_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_marketing_events_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/marketingevent.md#delete-marketing-events-marketing-event-id"
       }
     },
@@ -12956,7 +12956,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_mobile_platform_applications_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_mobile_platform_applications_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/mobileplatformapplication.md#delete-mobile-platform-applications-mobile-platform-application-id"
       }
     },
@@ -12968,7 +12968,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_orders_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_orders_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order.md#delete-orders-order-id"
       }
     },
@@ -12980,7 +12980,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_orders_id_fulfillments_id_events_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_orders_id_fulfillments_id_events_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/fulfillmentevent.md#delete-orders-order-id-fulfillments-fulfillment-id-events-event-id"
       }
     },
@@ -12992,7 +12992,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_orders_id_risks_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_orders_id_risks_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/order-risk.md#delete-orders-order-id-risks-risk-id"
       }
     },
@@ -13004,7 +13004,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_pages_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_pages_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/page.md#delete-pages-page-id"
       }
     },
@@ -13016,7 +13016,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_price_rules_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_price_rules_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/pricerule.md#delete-price-rules-price-rule-id"
       }
     },
@@ -13028,7 +13028,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_price_rules_id_discount_codes_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_price_rules_id_discount_codes_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/discountcode.md#delete-price-rules-price-rule-id-discount-codes-discount-code-id"
       }
     },
@@ -13040,7 +13040,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_product_listings_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_product_listings_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/productlisting.md#delete-product-listings-product-listing-id"
       }
     },
@@ -13052,7 +13052,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_products_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_products_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product.md#delete-products-product-id"
       }
     },
@@ -13064,7 +13064,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_products_id_images_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_products_id_images_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product-image.md#delete-products-product-id-images-image-id"
       }
     },
@@ -13076,7 +13076,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_products_id_variants_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_products_id_variants_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/product-variant.md#delete-products-product-id-variants-variant-id"
       }
     },
@@ -13088,7 +13088,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_recurring_application_charges_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_recurring_application_charges_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/recurringapplicationcharge.md#delete-recurring-application-charges-recurring-application-charge-id"
       }
     },
@@ -13100,7 +13100,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_redirects_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_redirects_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/redirect.md#delete-redirects-redirect-id"
       }
     },
@@ -13112,7 +13112,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_script_tags_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_script_tags_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/scripttag.md#delete-script-tags-script-tag-id"
       }
     },
@@ -13124,7 +13124,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_shopify_payments_disputes_id_dispute_file_uploads_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_shopify_payments_disputes_id_dispute_file_uploads_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/dispute-file-upload.md#delete-shopify-payments-disputes-dispute-id-dispute-file-uploads-dispute-file-upload-id"
       }
     },
@@ -13136,7 +13136,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_smart_collections_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_smart_collections_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/smartcollection.md#delete-smart-collections-smart-collection-id"
       }
     },
@@ -13148,7 +13148,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_storefront_access_tokens_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_storefront_access_tokens_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/storefrontaccesstoken.md#delete-storefront-access-tokens-storefront-access-token-id"
       }
     },
@@ -13160,7 +13160,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_themes_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_themes_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/theme.md#delete-themes-theme-id"
       }
     },
@@ -13172,7 +13172,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_webhooks_id\" and its fixed static direct-write command. The command remains planned only because the shared cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
+        "reason": "Bound by connector-owned typed rest_write operation \"shopify.delete_webhooks_id\" and its fixed static direct-write command. The command remains planned only because the shared #3852 cli_surface output-policy schema cannot yet represent the captain-required non-redacting \"json\" policy; when unblocked it must use plan -> preview -> explicit approval -> execute with typed destructive confirmation.",
         "source_url": "https://shopify.dev/docs/api/admin-rest/latest/resources/webhook.md#delete-webhooks-webhook-id"
       }
     }

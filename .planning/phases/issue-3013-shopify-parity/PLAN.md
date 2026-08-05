@@ -70,9 +70,14 @@ Do not edit shared runtime, engine, CLI dispatcher, hook/native registries, depe
 7. **2026-08-06 published-reference rebuild and typed direct operations**
    - Rebuild the ledger from the current Shopify Admin GraphQL latest full-index Markdown and the 67 Admin REST latest resource-page Markdown artifacts discovered through Shopify's public sitemap; do not reuse the prior aggregate count as source evidence.
    - Record one canonical citation URL and the `2026-08-06` retrieval date for every ledger row in the connector-local source inventory. The rebuilt reference set is 287 GraphQL queries, 518 GraphQL mutations, and 293 REST operations (152 GET, 73 POST, 35 PUT, 33 DELETE): 1,098 rows total. The AccessScope resource page already contains the access-scope endpoint, so it must be represented once rather than double-counted from the usage guide.
-   - Replace the legacy reverse-ETL DELETE declarations that overlap the current reference with connector-owned fixed `rest_write` operations and individually named `direct_write` commands. Each must use `mutation_class: "destructive"`, typed `confirmation.kind: "destructive"`, bounded output, and the existing plan -> preview -> explicit approval -> execute path.
+   - Preserve the 136 still-current GraphQL mutation rows previously reviewed as destructive as explicit `destructive_action` ledger rows with a per-row `typed_destructive_confirmation` implementation requirement. They remain planned until their individual fixed document/schema contracts exist; they are not generic unsafe exclusions.
+   - Replace the legacy reverse-ETL DELETE declarations that overlap the current reference with connector-owned fixed `rest_write` operations and individually named `direct_write` commands. Each must use `mutation_class: "destructive"`, typed `confirmation.kind: "destructive"`, bounded output, and the existing plan -> preview -> explicit approval -> execute path. Keep their commands planned until #3852 admits the required no-redaction `json` output policy in the shared schema.
    - Leave the remaining published operations individually represented by static command declarations with truthful `planned` availability. Do not expose generic GraphQL, HTTP, path, query, or body passthrough.
    - Do not edit or regenerate the shared icon registry. Generated catalog/manual/app validation remains deferred until #3809 repairs `icons-generate`.
+
+8. **Shared-foundation handoff**
+   - #3852 owns the shared `cli_surface` schema enum gap: the runtime supports non-redacting direct-write JSON output, but the schema currently rejects its declaration. Do not substitute a redacting policy or edit the shared schema here.
+   - #3809 owns the icon-generator/registry repair. Do not regenerate or hand-edit registry output here.
 
 ## TDD/validation approach
 

@@ -17,6 +17,7 @@ type shopifySourceInventory struct {
 	Counts     struct {
 		GraphQLQueries               int `json:"graphql_queries"`
 		GraphQLMutations             int `json:"graphql_mutations"`
+		GraphQLDestructiveMutations  int `json:"graphql_destructive_mutation_rows"`
 		RESTGetRows                  int `json:"rest_get_rows"`
 		RESTPostRows                 int `json:"rest_post_rows"`
 		RESTPutRows                  int `json:"rest_put_rows"`
@@ -30,12 +31,13 @@ type shopifySourceInventory struct {
 }
 
 type shopifySourceInventoryRow struct {
-	Key            string `json:"key"`
-	Method         string `json:"method"`
-	Path           string `json:"path"`
-	CitationURL    string `json:"citation_url"`
-	SourceArtifact string `json:"source_artifact"`
-	RetrievedAt    string `json:"retrieved_at"`
+	Key                       string `json:"key"`
+	Method                    string `json:"method"`
+	Path                      string `json:"path"`
+	CitationURL               string `json:"citation_url"`
+	SourceArtifact            string `json:"source_artifact"`
+	RetrievedAt               string `json:"retrieved_at"`
+	ImplementationRequirement string `json:"implementation_requirement"`
 }
 
 func TestPublishedReferenceInventoryHasOneCitedStaticCommandPerOperation(t *testing.T) {
@@ -111,6 +113,30 @@ func TestPublishedReferenceInventoryHasOneCitedStaticCommandPerOperation(t *test
 		if !strings.HasPrefix(row.SourceArtifact, "https://shopify.dev/docs/") {
 			t.Fatalf("source row %q artifact = %q, want official Shopify documentation URL", key, row.SourceArtifact)
 		}
+		switch {
+		case strings.HasPrefix(row.Path, "GraphQL Query."):
+			name := strings.TrimPrefix(row.Path, "GraphQL Query.")
+			if row.Method != "POST" || !strings.HasPrefix(row.CitationURL, "https://shopify.dev/docs/api/admin-graphql/latest/queries/") || !strings.HasSuffix(row.CitationURL, name) {
+				t.Fatalf("GraphQL query row %q has non-canonical citation %q", key, row.CitationURL)
+			}
+			if row.SourceArtifact != "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md" {
+				t.Fatalf("GraphQL query row %q artifact = %q, want current full index", key, row.SourceArtifact)
+			}
+		case strings.HasPrefix(row.Path, "GraphQL Mutation."):
+			name := strings.TrimPrefix(row.Path, "GraphQL Mutation.")
+			if row.Method != "POST" || !strings.HasPrefix(row.CitationURL, "https://shopify.dev/docs/api/admin-graphql/latest/mutations/") || !strings.HasSuffix(row.CitationURL, name) {
+				t.Fatalf("GraphQL mutation row %q has non-canonical citation %q", key, row.CitationURL)
+			}
+			if row.SourceArtifact != "https://shopify.dev/docs/api/admin-graphql/latest/full-index.md" {
+				t.Fatalf("GraphQL mutation row %q artifact = %q, want current full index", key, row.SourceArtifact)
+			}
+		case strings.HasPrefix(row.Path, "/admin/"):
+			if !strings.HasPrefix(row.CitationURL, row.SourceArtifact+"#") {
+				t.Fatalf("REST row %q citation = %q, want section within artifact %q", key, row.CitationURL, row.SourceArtifact)
+			}
+		default:
+			t.Fatalf("source row %q has an unsupported operation path", key)
+		}
 		citations[key] = row
 	}
 
@@ -124,6 +150,13 @@ func TestPublishedReferenceInventoryHasOneCitedStaticCommandPerOperation(t *test
 			t.Fatalf("duplicate command path %q", command.Path)
 		}
 		commandPaths[command.Path] = true
+		source, ok := citations[command.SourceCLIPath]
+		if !ok {
+			t.Fatalf("command %q source_cli_path = %q, which is absent from the published inventory", command.Path, command.SourceCLIPath)
+		}
+		if got, want := command.SourceURL, source.CitationURL; got != want {
+			t.Fatalf("command %q source_url = %q, want inventory citation %q", command.Path, got, want)
+		}
 		if command.Path == "shop read" {
 			if command.Intent != "etl" || command.Availability != "implemented" || command.Stream != "shop" || command.SourceCLIPath != "GET /admin/api/latest/shop.json" {
 				t.Fatalf("shop read command = %+v, want implemented shop ETL stream", command)
@@ -150,14 +183,31 @@ func TestPublishedReferenceInventoryHasOneCitedStaticCommandPerOperation(t *test
 
 	for _, endpoint := range bundle.Surface.Endpoints {
 		key := shopifyEndpointKey(endpoint.Method, endpoint.Path)
-		if _, ok := citations[key]; !ok {
+		source, ok := citations[key]
+		if !ok {
 			t.Fatalf("api_surface endpoint %q lacks a per-row source citation", key)
+		}
+		if endpoint.Operation != nil && endpoint.Operation.SourceURL != source.CitationURL {
+			t.Fatalf("api_surface endpoint %q source_url = %q, want inventory citation %q", key, endpoint.Operation.SourceURL, source.CitationURL)
 		}
 		if endpoint.CoveredBy != nil && endpoint.CoveredBy.Stream == "shop" {
 			continue
 		}
 		if got, want := commandReferences[key], 1; got != want {
 			t.Fatalf("api_surface endpoint %q has %d static command references, want %d", key, got, want)
+		}
+	}
+	for _, operation := range bundle.Operations {
+		if operation.REST == nil {
+			continue
+		}
+		key := shopifyEndpointKey(operation.REST.Method, operation.REST.Path)
+		source, ok := citations[key]
+		if !ok {
+			t.Fatalf("operation %q has no published inventory row %q", operation.ID, key)
+		}
+		if got, want := operation.SourceURL, source.CitationURL; got != want {
+			t.Fatalf("operation %q source_url = %q, want inventory citation %q", operation.ID, got, want)
 		}
 	}
 }
@@ -221,6 +271,9 @@ func TestTypedDestructiveDeleteDeclarationsAreCompleteAndFixtureBacked(t *testin
 		if !ok || endpoint.Operation == nil || endpoint.Operation.Model != "destructive_action" {
 			t.Fatalf("operation %q path %q has no destructive api_surface operation row", operation.ID, operation.REST.Path)
 		}
+		if !strings.Contains(endpoint.Operation.Reason, "#3852") {
+			t.Fatalf("operation %q api_surface reason = %q, want shared schema ownership #3852", operation.ID, endpoint.Operation.Reason)
+		}
 		metadata, err := connector.OperationDirectWriteMetadata(operation.ID)
 		if err != nil {
 			t.Fatalf("operation metadata for %q: %v", operation.ID, err)
@@ -239,6 +292,9 @@ func TestTypedDestructiveDeleteDeclarationsAreCompleteAndFixtureBacked(t *testin
 		if got, want := command.SourceCLIPath, "DELETE "+operation.REST.Path; got != want {
 			t.Fatalf("command for %q source_cli_path = %q, want %q", operation.ID, got, want)
 		}
+		if !strings.Contains(command.Notes, "#3852") {
+			t.Fatalf("command for %q notes = %q, want shared schema ownership #3852", operation.ID, command.Notes)
+		}
 		for _, variable := range shopifyPathVariables(operation.REST.Path) {
 			if !shopifyRequiredPathFlag(command, variable) {
 				t.Fatalf("command %q has no required typed flag for operation path variable %q", command.Path, variable)
@@ -249,6 +305,63 @@ func TestTypedDestructiveDeleteDeclarationsAreCompleteAndFixtureBacked(t *testin
 		if !fixtureNames[fixtureName] {
 			t.Fatalf("operation %q lacks fixture %s.json", operation.ID, fixtureName)
 		}
+	}
+}
+
+func TestPublishedDestructiveGraphQLMutationsRemainInScope(t *testing.T) {
+	bundle := loadBundle(t)
+	if bundle.Surface == nil || bundle.CLISurface == nil {
+		t.Fatal("Shopify bundle is missing api_surface or cli_surface")
+	}
+
+	raw, err := os.ReadFile("source_inventory.json")
+	if err != nil {
+		t.Fatalf("read source_inventory.json: %v", err)
+	}
+	var inventory shopifySourceInventory
+	if err := json.Unmarshal(raw, &inventory); err != nil {
+		t.Fatalf("parse source_inventory.json: %v", err)
+	}
+	if got, want := inventory.Counts.GraphQLDestructiveMutations, 136; got != want {
+		t.Fatalf("inventory destructive GraphQL mutation count = %d, want %d", got, want)
+	}
+
+	endpoints := make(map[string]engine.SurfaceEndpoint, len(bundle.Surface.Endpoints))
+	for _, endpoint := range bundle.Surface.Endpoints {
+		endpoints[shopifyEndpointKey(endpoint.Method, endpoint.Path)] = endpoint
+	}
+	commands := make(map[string]engine.CLICommand, len(bundle.CLISurface.Commands))
+	for _, command := range bundle.CLISurface.Commands {
+		commands[command.SourceCLIPath] = command
+	}
+
+	destructive := 0
+	for _, row := range inventory.Rows {
+		if row.ImplementationRequirement != "typed_destructive_confirmation" {
+			continue
+		}
+		destructive++
+		if row.Method != "POST" || !strings.HasPrefix(row.Path, "GraphQL Mutation.") {
+			t.Fatalf("destructive requirement row = %q %q, want a documented GraphQL mutation", row.Method, row.Path)
+		}
+		key := shopifyEndpointKey(row.Method, row.Path)
+		endpoint, ok := endpoints[key]
+		if !ok || endpoint.Operation == nil || endpoint.Operation.Model != "destructive_action" {
+			t.Fatalf("destructive mutation %q has no destructive api_surface ledger row", key)
+		}
+		if !strings.Contains(endpoint.Operation.Reason, "typed destructive confirmation") {
+			t.Fatalf("destructive mutation %q reason = %q, want typed confirmation requirement", key, endpoint.Operation.Reason)
+		}
+		command, ok := commands[key]
+		if !ok || command.Intent != "direct_write" || command.Availability != "planned" {
+			t.Fatalf("destructive mutation %q command = %+v, want planned direct_write declaration", key, command)
+		}
+		if !strings.Contains(command.Approval, "typed destructive confirmation") || command.OutputPolicy != "" || len(command.RedactFields) != 0 {
+			t.Fatalf("destructive mutation %q command policy = %+v, want future typed confirmation with no redacting fallback", key, command)
+		}
+	}
+	if got, want := destructive, 136; got != want {
+		t.Fatalf("destructive GraphQL mutation rows = %d, want %d", got, want)
 	}
 }
 

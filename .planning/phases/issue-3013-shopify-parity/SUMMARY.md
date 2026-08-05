@@ -7,6 +7,7 @@ Rebuilt the connector-local Shopify Admin API parity bundle for parent issue #30
 - Rebuilt `internal/connectors/defs/shopify/**` with current source inventory, auth spec, fixture-backed `shop` stream, operation ledger, static CLI surface, docs, certification metadata, schemas, and connector-local regression tests.
 - Represented 1,098 current official rows exactly once: 287 GraphQL queries, 518 GraphQL mutations, and 293 REST operations (152 GET, 73 POST, 35 PUT, 33 DELETE). Every row carries an official citation URL and `2026-08-06` retrieval date in `source_inventory.json`.
 - Replaced 42 legacy `writes.json` DELETE actions with 33 current fixed typed `rest_write` declarations and fixtures. The 10 retired owner/global Metafield DELETE routes are removed; the current inventory-level identifier-pair DELETE is now typed. Every typed DELETE has `confirmation.kind: "destructive"`, bounded output, and plan -> preview -> explicit approval -> execute metadata.
+- Preserved 136 still-current GraphQL mutations that the prior ledger classified as destructive as explicit blocked `destructive_action` rows. Each carries its existing official per-row citation and an inventory-level `typed_destructive_confirmation` requirement; its individually named static command remains planned until a fixed GraphQL document and typed input contract are defined.
 - Declared 1,098 individual static `pm shopify <command>` paths with no generic GraphQL, HTTP path, query, or body passthrough. The fixture-backed `shop read` stream remains implemented; all other commands retain truthful planned availability.
 - Appended idempotent captain-policy addendum marker `captain-policy-shopify-destructive-in-scope-r1` to #3013 and #3014-#3020 via `gh-axi`.
 
@@ -18,7 +19,7 @@ Rebuilt the connector-local Shopify Admin API parity bundle for parent issue #30
 
 ## Shared dependencies
 
-- The no-redaction captain policy requires direct-write `output_policy: "json"`. The shared `internal/connectors/engine/schema/cli_surface.schema.json` does not admit that value, even though the declared REST write executor supports it. The 33 typed deletes therefore remain planned until the schema owner lands that change and surface-sync can derive their executable bindings.
+- The no-redaction captain policy requires direct-write `output_policy: "json"`. #3852 owns the shared `internal/connectors/engine/schema/cli_surface.schema.json` change: it does not admit that value even though the declared REST write executor supports it. The 33 typed deletes therefore remain planned until that lane lands the change and surface-sync can derive their executable bindings; this bundle does not substitute a redacting policy.
 - #3809 owns the unrelated shared icon generator defect. The connector-local work reached the genuine registry boundary when global command-runner preflight panicked for the missing Shopify icon row. No generator retry, registry workaround, or hand edit was made.
 
 ## Resume host policy
@@ -29,4 +30,4 @@ Rebuilt the connector-local Shopify Admin API parity bundle for parent issue #30
 
 ## Verification
 
-See `VERIFICATION.md`; current connector-local tests, full definition validation, surface-sync check, conformance, vet, and diff check passed. Global command-runner preflight is blocked at icon registration, and no-redaction direct-write promotion is blocked by the shared command schema.
+See `VERIFICATION.md`; current connector-local tests, full definition validation, surface-sync check, conformance, vet, and diff check passed. Global command-runner preflight is blocked at icon registration (#3809), and no-redaction direct-write promotion is blocked by the shared command schema (#3852).

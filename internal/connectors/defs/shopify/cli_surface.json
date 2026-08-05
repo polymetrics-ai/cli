@@ -3783,9 +3783,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.appRevokeAccessScopes",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appRevokeAccessScopes",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation app-subscription-cancel",
@@ -3794,9 +3794,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.appSubscriptionCancel",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appSubscriptionCancel",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation app-subscription-create",
@@ -3838,9 +3838,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.appUninstall",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/appUninstall",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation app-usage-record-create",
@@ -3871,9 +3871,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.articleDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/articleDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation article-update",
@@ -3915,9 +3915,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.blogDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/blogDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation blog-update",
@@ -3937,9 +3937,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.bulkOperationCancel",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/bulkOperationCancel",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation bulk-operation-run-mutation",
@@ -3992,9 +3992,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.carrierServiceDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/carrierServiceDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation carrier-service-update",
@@ -4025,9 +4025,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.cartTransformDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/cartTransformDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation cash-drawer-create",
@@ -4080,9 +4080,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.cashManagementReasonCodeDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/cashManagementReasonCodeDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation catalog-context-update",
@@ -4113,9 +4113,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.catalogDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/catalogDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation catalog-update",
@@ -4146,9 +4146,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.channelDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/channelDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation channel-full-sync",
@@ -4234,9 +4234,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.collectionConditionsSourceDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionConditionsSourceDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation collection-conditions-source-update",
@@ -4267,9 +4267,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.collectionDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation collection-duplicate",
@@ -4300,9 +4300,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.collectionRemoveProducts",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/collectionRemoveProducts",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation collection-reorder-products",
@@ -4366,9 +4366,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.commentDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/commentDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation comment-not-spam",
@@ -4399,9 +4399,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companiesDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companiesDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-address-delete",
@@ -4410,9 +4410,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyAddressDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyAddressDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-assign-customer-as-contact",
@@ -4476,9 +4476,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyContactDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-contact-remove-from-company",
@@ -4487,9 +4487,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyContactRemoveFromCompany",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRemoveFromCompany",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-contact-revoke-role",
@@ -4498,9 +4498,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyContactRevokeRole",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRevokeRole",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-contact-revoke-roles",
@@ -4509,9 +4509,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyContactRevokeRoles",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactRevokeRoles",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-contacts-delete",
@@ -4520,9 +4520,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyContactsDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyContactsDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-contact-update",
@@ -4553,9 +4553,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-location-assign-address",
@@ -4630,9 +4630,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyLocationDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-location-remove-staff-members",
@@ -4641,9 +4641,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyLocationRemoveStaffMembers",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRemoveStaffMembers",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-location-revoke-roles",
@@ -4652,9 +4652,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyLocationRevokeRoles",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeRoles",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-location-revoke-tax-exemptions",
@@ -4663,9 +4663,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyLocationRevokeTaxExemptions",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeTaxExemptions",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-location-revoke-tax-registration",
@@ -4674,9 +4674,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyLocationRevokeTaxRegistration",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationRevokeTaxRegistration",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-locations-delete",
@@ -4685,9 +4685,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyLocationsDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyLocationsDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-location-tax-settings-update",
@@ -4718,9 +4718,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.companyRevokeMainContact",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/companyRevokeMainContact",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation company-update",
@@ -4762,9 +4762,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.customerAddressDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerAddressDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation customer-address-update",
@@ -4795,9 +4795,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.customerCancelDataErasure",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerCancelDataErasure",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation customer-create",
@@ -4817,9 +4817,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.customerDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation customer-email-marketing-consent-update",
@@ -4927,9 +4927,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.customerPaymentMethodRevoke",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerPaymentMethodRevoke",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation customer-payment-method-send-update-email",
@@ -4949,9 +4949,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.customerRemoveTaxExemptions",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/customerRemoveTaxExemptions",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation customer-replace-tax-exemptions",
@@ -5114,9 +5114,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.deliveryCustomizationDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryCustomizationDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation delivery-customization-update",
@@ -5147,9 +5147,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.deliveryProfileRemove",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/deliveryProfileRemove",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation delivery-profile-update",
@@ -5268,9 +5268,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.discountAutomaticBulkDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticBulkDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation discount-automatic-bxgy-create",
@@ -5301,9 +5301,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.discountAutomaticDeactivate",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticDeactivate",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation discount-automatic-delete",
@@ -5312,9 +5312,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.discountAutomaticDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountAutomaticDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation discount-automatic-free-shipping-create",
@@ -5356,9 +5356,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.discountBulkTagsRemove",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountBulkTagsRemove",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation discount-code-activate",
@@ -5433,9 +5433,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.discountCodeBulkDeactivate",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeBulkDeactivate",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation discount-code-bulk-delete",
@@ -5444,9 +5444,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.discountCodeBulkDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeBulkDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation discount-code-bxgy-create",
@@ -5477,9 +5477,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.discountCodeDeactivate",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeDeactivate",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation discount-code-delete",
@@ -5488,9 +5488,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.discountCodeDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation discount-code-free-shipping-create",
@@ -5521,9 +5521,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.discountCodeRedeemCodeBulkDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/discountCodeRedeemCodeBulkDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation discount-redeem-code-bulk-add",
@@ -5565,9 +5565,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.draftOrderBulkDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderBulkDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation draft-order-bulk-remove-tags",
@@ -5576,9 +5576,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.draftOrderBulkRemoveTags",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderBulkRemoveTags",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation draft-order-calculate",
@@ -5631,9 +5631,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.draftOrderDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/draftOrderDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation draft-order-duplicate",
@@ -5741,9 +5741,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.fileDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fileDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation file-update",
@@ -5774,9 +5774,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.fulfillmentCancel",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentCancel",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation fulfillment-constraint-rule-create",
@@ -5796,9 +5796,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.fulfillmentConstraintRuleDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentConstraintRuleDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation fulfillment-constraint-rule-update",
@@ -5851,9 +5851,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.fulfillmentOrderAcceptCancellationRequest",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderAcceptCancellationRequest",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation fulfillment-order-accept-fulfillment-request",
@@ -5873,9 +5873,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.fulfillmentOrderCancel",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderCancel",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation fulfillment-order-close",
@@ -5884,9 +5884,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.fulfillmentOrderClose",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderClose",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation fulfillment-order-hold",
@@ -5950,9 +5950,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.fulfillmentOrderRejectCancellationRequest",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderRejectCancellationRequest",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation fulfillment-order-reject-fulfillment-request",
@@ -5961,9 +5961,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.fulfillmentOrderRejectFulfillmentRequest",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderRejectFulfillmentRequest",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation fulfillment-order-release-hold",
@@ -6038,9 +6038,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.fulfillmentOrderSubmitCancellationRequest",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentOrderSubmitCancellationRequest",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation fulfillment-order-submit-fulfillment-request",
@@ -6071,9 +6071,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.fulfillmentServiceDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/fulfillmentServiceDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation fulfillment-service-update",
@@ -6137,9 +6137,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.giftCardDeactivate",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/giftCardDeactivate",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation gift-card-debit",
@@ -6236,9 +6236,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.inventoryDeactivate",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryDeactivate",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation inventory-item-update",
@@ -6324,9 +6324,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.inventoryShipmentDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryShipmentDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation inventory-shipment-mark-in-transit",
@@ -6357,9 +6357,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.inventoryShipmentRemoveItems",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryShipmentRemoveItems",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation inventory-shipment-set-barcode",
@@ -6401,9 +6401,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.inventoryTransferCancel",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferCancel",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation inventory-transfer-create",
@@ -6434,9 +6434,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.inventoryTransferDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation inventory-transfer-duplicate",
@@ -6478,9 +6478,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.inventoryTransferRemoveItems",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/inventoryTransferRemoveItems",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation inventory-transfer-set-items",
@@ -6522,9 +6522,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.locationDeactivate",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationDeactivate",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation location-delete",
@@ -6533,9 +6533,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.locationDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/locationDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation location-edit",
@@ -6599,9 +6599,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.marketDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation marketing-activities-delete-all-external",
@@ -6610,9 +6610,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.marketingActivitiesDeleteAllExternal",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivitiesDeleteAllExternal",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation marketing-activity-create",
@@ -6643,9 +6643,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.marketingActivityDeleteExternal",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingActivityDeleteExternal",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation marketing-activity-update",
@@ -6698,9 +6698,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.marketingEngagementsDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketingEngagementsDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation market-localizations-register",
@@ -6720,9 +6720,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.marketLocalizationsRemove",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketLocalizationsRemove",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation market-region-delete",
@@ -6731,9 +6731,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.marketRegionDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation market-regions-create",
@@ -6753,9 +6753,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.marketRegionsDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketRegionsDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation market-update",
@@ -6786,9 +6786,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.marketWebPresenceDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/marketWebPresenceDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation market-web-presence-update",
@@ -6819,9 +6819,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.menuDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/menuDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation menu-update",
@@ -6852,9 +6852,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.metafieldDefinitionDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metafieldDefinitionDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation metafield-definition-pin",
@@ -6896,9 +6896,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.metafieldsDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metafieldsDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation metafields-set",
@@ -6918,9 +6918,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.metaobjectBulkDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectBulkDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation metaobject-create",
@@ -6951,9 +6951,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.metaobjectDefinitionDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectDefinitionDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation metaobject-definition-update",
@@ -6973,9 +6973,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.metaobjectDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/metaobjectDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation metaobject-update",
@@ -7017,9 +7017,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.mobilePlatformApplicationDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/mobilePlatformApplicationDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation mobile-platform-application-update",
@@ -7039,9 +7039,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.orderAttributionDefinitionDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderAttributionDefinitionDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation order-attribution-definition-upsert",
@@ -7061,9 +7061,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.orderCancel",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderCancel",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation order-capture",
@@ -7083,9 +7083,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.orderClose",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderClose",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation order-create",
@@ -7127,9 +7127,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.orderCustomerRemove",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderCustomerRemove",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation order-customer-set",
@@ -7149,9 +7149,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.orderDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation order-edit-add-custom-item",
@@ -7226,9 +7226,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.orderEditRemoveDiscount",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveDiscount",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation order-edit-remove-line-item-discount",
@@ -7237,9 +7237,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.orderEditRemoveLineItemDiscount",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveLineItemDiscount",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation order-edit-remove-shipping-line",
@@ -7248,9 +7248,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.orderEditRemoveShippingLine",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/orderEditRemoveShippingLine",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation order-edit-set-quantity",
@@ -7358,9 +7358,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.pageDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pageDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation page-update",
@@ -7402,9 +7402,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.paymentCustomizationDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/paymentCustomizationDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation payment-customization-update",
@@ -7457,9 +7457,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.paymentTermsDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/paymentTermsDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation payment-terms-update",
@@ -7501,9 +7501,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.pointOfSaleDevicePaymentSessionClose",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/pointOfSaleDevicePaymentSessionClose",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation point-of-sale-device-payment-session-count",
@@ -7545,9 +7545,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.priceListDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation price-list-fixed-prices-add",
@@ -7578,9 +7578,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.priceListFixedPricesDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/priceListFixedPricesDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation price-list-fixed-prices-update",
@@ -7677,9 +7677,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.productDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation product-delete-media",
@@ -7688,9 +7688,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.productDeleteMedia",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productDeleteMedia",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation product-duplicate",
@@ -7721,9 +7721,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.productFeedDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productFeedDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation product-full-sync",
@@ -7776,9 +7776,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.productOptionsDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productOptionsDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation product-options-reorder",
@@ -7941,9 +7941,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.productVariantsBulkDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/productVariantsBulkDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation product-variants-bulk-reorder",
@@ -7985,9 +7985,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.publicationDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/publicationDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation publication-update",
@@ -8106,9 +8106,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.quantityRulesDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/quantityRulesDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation refund-create",
@@ -8150,9 +8150,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.returnCancel",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnCancel",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation return-close",
@@ -8161,9 +8161,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.returnClose",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnClose",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation return-create",
@@ -8194,9 +8194,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.returnLineItemRemoveFromReturn",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/returnLineItemRemoveFromReturn",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation return-process",
@@ -8293,9 +8293,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.savedSearchDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/savedSearchDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation saved-search-update",
@@ -8326,9 +8326,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.scriptTagDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/scriptTagDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation script-tag-update",
@@ -8359,9 +8359,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.segmentDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/segmentDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation segment-update",
@@ -8414,9 +8414,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.sellingPlanGroupDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation selling-plan-group-remove-products",
@@ -8425,9 +8425,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.sellingPlanGroupRemoveProducts",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProducts",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation selling-plan-group-remove-product-variants",
@@ -8436,9 +8436,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.sellingPlanGroupRemoveProductVariants",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/sellingPlanGroupRemoveProductVariants",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation selling-plan-group-update",
@@ -8469,9 +8469,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.serverPixelDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/serverPixelDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation shipping-label-purchase",
@@ -8491,9 +8491,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.shippingPackageDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/shippingPackageDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation shipping-package-make-default",
@@ -8678,9 +8678,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.storefrontAccessTokenDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/storefrontAccessTokenDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation subscription-billing-attempt-create",
@@ -8766,9 +8766,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.subscriptionBillingCycleEditDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionBillingCycleEditDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation subscription-billing-cycle-edits-delete",
@@ -8777,9 +8777,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.subscriptionBillingCycleEditsDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionBillingCycleEditsDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation subscription-billing-cycle-schedule-edit",
@@ -8843,9 +8843,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.subscriptionContractCancel",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionContractCancel",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation subscription-contract-create",
@@ -8865,9 +8865,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.subscriptionContractExpire",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionContractExpire",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation subscription-contract-fail",
@@ -8964,9 +8964,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.subscriptionDraftDiscountRemove",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionDraftDiscountRemove",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation subscription-draft-discount-update",
@@ -9019,9 +9019,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.subscriptionDraftLineRemove",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/subscriptionDraftLineRemove",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation subscription-draft-line-update",
@@ -9063,9 +9063,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.tagsRemove",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/tagsRemove",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation tax-app-configure",
@@ -9107,9 +9107,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.themeDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/themeDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation theme-duplicate",
@@ -9140,9 +9140,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.themeFilesDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/themeFilesDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation theme-files-upsert",
@@ -9184,9 +9184,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.transactionVoid",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/transactionVoid",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation translations-register",
@@ -9206,9 +9206,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.translationsRemove",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/translationsRemove",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation url-redirect-bulk-delete-all",
@@ -9217,9 +9217,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.urlRedirectBulkDeleteAll",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteAll",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation url-redirect-bulk-delete-by-ids",
@@ -9228,9 +9228,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.urlRedirectBulkDeleteByIds",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteByIds",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation url-redirect-bulk-delete-by-saved-search",
@@ -9239,9 +9239,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.urlRedirectBulkDeleteBySavedSearch",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteBySavedSearch",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation url-redirect-bulk-delete-by-search",
@@ -9250,9 +9250,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.urlRedirectBulkDeleteBySearch",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectBulkDeleteBySearch",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation url-redirect-create",
@@ -9272,9 +9272,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.urlRedirectDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/urlRedirectDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation url-redirect-import-create",
@@ -9327,9 +9327,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.validationDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/validationDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation validation-update",
@@ -9360,9 +9360,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.webhookSubscriptionDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webhookSubscriptionDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation webhook-subscription-update",
@@ -9393,9 +9393,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.webPixelDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webPixelDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation web-pixel-update",
@@ -9426,9 +9426,9 @@
       "availability": "planned",
       "source_cli_path": "POST GraphQL Mutation.webPresenceDelete",
       "source_url": "https://shopify.dev/docs/api/admin-graphql/latest/mutations/webPresenceDelete",
-      "risk": "Mutating Shopify operation requiring a fixed typed contract.",
-      "approval": "plan -> preview -> explicit approval -> execute when a typed mutation contract is declared",
-      "notes": "Static command path reserved for this documented mutation only; no arbitrary GraphQL document or variables input is accepted."
+      "risk": "Destructive Shopify operation requiring a fixed typed contract and typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation when a fixed mutation contract is declared",
+      "notes": "Static command path reserved for this documented destructive mutation only; a future implementation must require typed destructive confirmation. No arbitrary GraphQL document or variables input is accepted."
     },
     {
       "path": "graphql mutation web-presence-update",
@@ -12020,7 +12020,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete blogs-id-articles-id",
@@ -12048,7 +12048,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete blogs-id-metafields-id",
@@ -12076,7 +12076,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete carrier-services-id",
@@ -12097,7 +12097,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete collection-listings-id",
@@ -12118,7 +12118,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete collects-id",
@@ -12139,7 +12139,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete countries-id",
@@ -12160,7 +12160,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete custom-collections-id",
@@ -12181,7 +12181,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete customers-id",
@@ -12202,7 +12202,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete customers-id-addresses-id",
@@ -12230,7 +12230,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete draft-orders-id",
@@ -12251,7 +12251,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete fulfillment-services-id",
@@ -12272,7 +12272,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete inventory-levels",
@@ -12300,7 +12300,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete marketing-events-id",
@@ -12321,7 +12321,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete mobile-platform-applications-id",
@@ -12342,7 +12342,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete orders-id",
@@ -12363,7 +12363,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete orders-id-fulfillments-id-events-id",
@@ -12398,7 +12398,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete orders-id-risks-id",
@@ -12426,7 +12426,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete pages-id",
@@ -12447,7 +12447,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete price-rules-id",
@@ -12468,7 +12468,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete price-rules-id-discount-codes-id",
@@ -12496,7 +12496,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete product-listings-id",
@@ -12517,7 +12517,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete products-id",
@@ -12538,7 +12538,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete products-id-images-id",
@@ -12566,7 +12566,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete products-id-variants-id",
@@ -12594,7 +12594,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete recurring-application-charges-id",
@@ -12615,7 +12615,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete redirects-id",
@@ -12636,7 +12636,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete script-tags-id",
@@ -12657,7 +12657,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete shopify-payments-disputes-id-dispute-file-uploads-id",
@@ -12685,7 +12685,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete smart-collections-id",
@@ -12706,7 +12706,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete storefront-access-tokens-id",
@@ -12727,7 +12727,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete themes-id",
@@ -12748,7 +12748,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     },
     {
       "path": "delete webhooks-id",
@@ -12769,7 +12769,7 @@
           "required": true
         }
       ],
-      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
+      "notes": "The declaration is complete and fixed-path. Availability remains planned solely until the shared #3852 cli_surface output-policy schema accepts the captain-required non-redacting `json` direct-write policy; no redacting fallback is declared."
     }
   ],
   "help_topics": [
