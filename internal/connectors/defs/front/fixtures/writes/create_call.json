@@ -4,6 +4,7 @@
     "external_call_id": "fixture_call_1",
     "initial_status": "ringing",
     "direction": "inbound",
+    "parent_external_call_id": "fixture_call_1",
     "from": {
       "handle": "+15550100"
     }
@@ -15,6 +16,7 @@
       "external_call_id": "fixture_call_1",
       "initial_status": "ringing",
       "direction": "inbound",
+      "parent_external_call_id": "fixture_call_1",
       "from": {
         "handle": "+15550100"
       }

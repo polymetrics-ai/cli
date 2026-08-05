@@ -1,10 +1,18 @@
 {
   "record": {
-    "knowledge_base_id": "fixture_knowledge_base_id"
+    "knowledge_base_id": "fixture_knowledge_base_id",
+    "author_id": "fixture_author_id",
+    "subject": "Fixture article",
+    "content": "Fixture article content."
   },
   "expect": {
     "method": "POST",
-    "path": "/knowledge_bases/fixture_knowledge_base_id/articles"
+    "path": "/knowledge_bases/fixture_knowledge_base_id/articles",
+    "body": {
+      "author_id": "fixture_author_id",
+      "subject": "Fixture article",
+      "content": "Fixture article content."
+    }
   },
   "response": {
     "status": 201,

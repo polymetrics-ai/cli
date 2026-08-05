@@ -54907,37 +54907,49 @@
     "streams": [
       {
         "name": "contacts",
-        "primary_key": [],
-        "cursor": "",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "updated_at",
         "incremental": false
       },
       {
         "name": "conversations",
-        "primary_key": [],
-        "cursor": "",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "last_message_at",
         "incremental": false
       },
       {
         "name": "inboxes",
-        "primary_key": [],
+        "primary_key": [
+          "id"
+        ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "tags",
-        "primary_key": [],
+        "primary_key": [
+          "id"
+        ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "teammates",
-        "primary_key": [],
+        "primary_key": [
+          "id"
+        ],
         "cursor": "",
         "incremental": false
       },
       {
         "name": "channels",
-        "primary_key": [],
+        "primary_key": [
+          "id"
+        ],
         "cursor": "",
         "incremental": false
       },
@@ -59281,7 +59293,17 @@
           "write": "create_account",
           "source_cli_path": "",
           "source_url": "https://dev.frontapp.com/reference/create-account.md",
-          "flags": [],
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Maps to record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
           "examples": [],
           "output_policy": "",
           "risk": "high: fixed Front POST /accounts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -59304,7 +59326,8 @@
               "summary": "Maps to record.application_uid.",
               "values": [],
               "maps_to": "record.application_uid",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "event-type",
@@ -59312,6 +59335,23 @@
               "summary": "Maps to record.event_type.",
               "values": [],
               "maps_to": "record.event_type",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "app-object-id",
+              "type": "string",
+              "summary": "Maps to record.app_object.id.",
+              "values": [],
+              "maps_to": "record.app_object.id",
+              "allow_empty": false
+            },
+            {
+              "name": "app-object-ext-link",
+              "type": "string",
+              "summary": "Maps to record.app_object.ext_link.",
+              "values": [],
+              "maps_to": "record.app_object.ext_link",
               "allow_empty": false
             }
           ],
@@ -59370,7 +59410,8 @@
               "summary": "Maps to record.channel_id.",
               "values": [],
               "maps_to": "record.channel_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "sender-handle",
@@ -59378,7 +59419,8 @@
               "summary": "Maps to record.sender.handle.",
               "values": [],
               "maps_to": "record.sender.handle",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "body",
@@ -59386,7 +59428,8 @@
               "summary": "Maps to record.body.",
               "values": [],
               "maps_to": "record.body",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -59812,7 +59855,8 @@
               "summary": "Maps to record.contact_id.",
               "values": [],
               "maps_to": "record.contact_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "handle",
@@ -59820,14 +59864,24 @@
               "summary": "Maps to record.handle.",
               "values": [],
               "maps_to": "record.handle",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "source",
               "type": "enum",
               "summary": "Maps to record.source.",
-              "values": [],
-              "maps_to": "record.source"
+              "values": [
+                "twitter",
+                "email",
+                "phone",
+                "facebook",
+                "intercom",
+                "front_chat",
+                "custom"
+              ],
+              "maps_to": "record.source",
+              "required": true
             }
           ],
           "examples": [],
@@ -59852,7 +59906,8 @@
               "summary": "Maps to record.contact_id.",
               "values": [],
               "maps_to": "record.contact_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "handle",
@@ -59860,14 +59915,24 @@
               "summary": "Maps to record.handle.",
               "values": [],
               "maps_to": "record.handle",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "source",
               "type": "enum",
               "summary": "Maps to record.source.",
-              "values": [],
-              "maps_to": "record.source"
+              "values": [
+                "twitter",
+                "email",
+                "phone",
+                "facebook",
+                "intercom",
+                "front_chat",
+                "custom"
+              ],
+              "maps_to": "record.source",
+              "required": true
             }
           ],
           "examples": [],
@@ -60000,7 +60065,33 @@
           "write": "create_contact",
           "source_cli_path": "",
           "source_url": "https://dev.frontapp.com/reference/create-contact.md",
-          "flags": [],
+          "flags": [
+            {
+              "name": "handle",
+              "type": "string",
+              "summary": "Maps to record.handles.0.handle.",
+              "values": [],
+              "maps_to": "record.handles.0.handle",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "handle-source",
+              "type": "enum",
+              "summary": "Maps to record.handles.0.source.",
+              "values": [
+                "twitter",
+                "email",
+                "phone",
+                "facebook",
+                "intercom",
+                "front_chat",
+                "custom"
+              ],
+              "maps_to": "record.handles.0.source",
+              "required": true
+            }
+          ],
           "examples": [],
           "output_policy": "",
           "risk": "high: fixed Front POST /contacts mutation; reverse ETL requires plan -> preview -> explicit approval -> execute",
@@ -60428,8 +60519,12 @@
               "name": "type",
               "type": "enum",
               "summary": "Maps to record.type.",
-              "values": [],
-              "maps_to": "record.type"
+              "values": [
+                "discussion",
+                "task"
+              ],
+              "maps_to": "record.type",
+              "required": true
             },
             {
               "name": "subject",
@@ -60437,7 +60532,8 @@
               "summary": "Maps to record.subject.",
               "values": [],
               "maps_to": "record.subject",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -60528,14 +60624,20 @@
               "summary": "Maps to record.inbox_id.",
               "values": [],
               "maps_to": "record.inbox_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "type",
               "type": "enum",
               "summary": "Maps to record.type.",
-              "values": [],
-              "maps_to": "record.type"
+              "values": [
+                "custom",
+                "smtp",
+                "twilio"
+              ],
+              "maps_to": "record.type",
+              "required": true
             }
           ],
           "examples": [],
@@ -60560,7 +60662,8 @@
               "summary": "Maps to record.inbox_id.",
               "values": [],
               "maps_to": "record.inbox_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "sender-handle",
@@ -60568,14 +60671,16 @@
               "summary": "Maps to record.sender.handle.",
               "values": [],
               "maps_to": "record.sender.handle",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "to",
               "type": "string_array",
               "summary": "Maps to record.to.",
               "values": [],
-              "maps_to": "record.to"
+              "maps_to": "record.to",
+              "required": true
             },
             {
               "name": "body",
@@ -60583,7 +60688,8 @@
               "summary": "Maps to record.body.",
               "values": [],
               "maps_to": "record.body",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "external-id",
@@ -60591,21 +60697,24 @@
               "summary": "Maps to record.external_id.",
               "values": [],
               "maps_to": "record.external_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "created-at",
               "type": "integer",
               "summary": "Maps to record.created_at.",
               "values": [],
-              "maps_to": "record.created_at"
+              "maps_to": "record.created_at",
+              "required": true
             },
             {
               "name": "metadata-is-inbound",
               "type": "boolean",
               "summary": "Maps to record.metadata.is_inbound.",
               "values": [],
-              "maps_to": "record.metadata.is_inbound"
+              "maps_to": "record.metadata.is_inbound",
+              "required": true
             }
           ],
           "examples": [],
@@ -60719,7 +60828,26 @@
               "summary": "Maps to record.article_id.",
               "values": [],
               "maps_to": "record.article_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "author-id",
+              "type": "string",
+              "summary": "Maps to record.author_id.",
+              "values": [],
+              "maps_to": "record.author_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "summary": "Maps to record.content.",
+              "values": [],
+              "maps_to": "record.content",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -60744,7 +60872,8 @@
               "summary": "Maps to record.article_id.",
               "values": [],
               "maps_to": "record.article_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "locale",
@@ -60752,7 +60881,26 @@
               "summary": "Maps to record.locale.",
               "values": [],
               "maps_to": "record.locale",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "author-id",
+              "type": "string",
+              "summary": "Maps to record.author_id.",
+              "values": [],
+              "maps_to": "record.author_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "summary": "Maps to record.content.",
+              "values": [],
+              "maps_to": "record.content",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -60885,7 +61033,35 @@
               "summary": "Maps to record.knowledge_base_id.",
               "values": [],
               "maps_to": "record.knowledge_base_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "author-id",
+              "type": "string",
+              "summary": "Maps to record.author_id.",
+              "values": [],
+              "maps_to": "record.author_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "subject",
+              "type": "string",
+              "summary": "Maps to record.subject.",
+              "values": [],
+              "maps_to": "record.subject",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "summary": "Maps to record.content.",
+              "values": [],
+              "maps_to": "record.content",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -60943,7 +61119,17 @@
               "summary": "Maps to record.knowledge_base_id.",
               "values": [],
               "maps_to": "record.knowledge_base_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Maps to record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -60968,7 +61154,8 @@
               "summary": "Maps to record.knowledge_base_id.",
               "values": [],
               "maps_to": "record.knowledge_base_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "locale",
@@ -60976,7 +61163,35 @@
               "summary": "Maps to record.locale.",
               "values": [],
               "maps_to": "record.locale",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "author-id",
+              "type": "string",
+              "summary": "Maps to record.author_id.",
+              "values": [],
+              "maps_to": "record.author_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "subject",
+              "type": "string",
+              "summary": "Maps to record.subject.",
+              "values": [],
+              "maps_to": "record.subject",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "summary": "Maps to record.content.",
+              "values": [],
+              "maps_to": "record.content",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -61042,7 +61257,8 @@
               "summary": "Maps to record.knowledge_base_id.",
               "values": [],
               "maps_to": "record.knowledge_base_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "locale",
@@ -61050,7 +61266,17 @@
               "summary": "Maps to record.locale.",
               "values": [],
               "maps_to": "record.locale",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Maps to record.name.",
+              "values": [],
+              "maps_to": "record.name",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -61487,14 +61713,27 @@
               "summary": "Maps to record.name.",
               "values": [],
               "maps_to": "record.name",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "color",
               "type": "enum",
               "summary": "Maps to record.color.",
-              "values": [],
-              "maps_to": "record.color"
+              "values": [
+                "black",
+                "grey",
+                "pink",
+                "purple",
+                "blue",
+                "teal",
+                "green",
+                "yellow",
+                "orange",
+                "red"
+              ],
+              "maps_to": "record.color",
+              "required": true
             },
             {
               "name": "timezone",
@@ -61502,14 +61741,34 @@
               "summary": "Maps to record.timezone.",
               "values": [],
               "maps_to": "record.timezone",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "teammate-ids",
               "type": "string_array",
               "summary": "Maps to record.teammate_ids.",
               "values": [],
-              "maps_to": "record.teammate_ids"
+              "maps_to": "record.teammate_ids",
+              "required": true
+            },
+            {
+              "name": "monday-start",
+              "type": "string",
+              "summary": "Maps to record.times.mon.start.",
+              "values": [],
+              "maps_to": "record.times.mon.start",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "monday-end",
+              "type": "string",
+              "summary": "Maps to record.times.mon.end.",
+              "values": [],
+              "maps_to": "record.times.mon.end",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -62025,7 +62284,33 @@
               "summary": "Maps to record.teammate_id.",
               "values": [],
               "maps_to": "record.teammate_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "handle",
+              "type": "string",
+              "summary": "Maps to record.handles.0.handle.",
+              "values": [],
+              "maps_to": "record.handles.0.handle",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "handle-source",
+              "type": "enum",
+              "summary": "Maps to record.handles.0.source.",
+              "values": [
+                "twitter",
+                "email",
+                "phone",
+                "facebook",
+                "intercom",
+                "front_chat",
+                "custom"
+              ],
+              "maps_to": "record.handles.0.source",
+              "required": true
             }
           ],
           "examples": [],
@@ -62362,7 +62647,33 @@
               "summary": "Maps to record.team_id.",
               "values": [],
               "maps_to": "record.team_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "handle",
+              "type": "string",
+              "summary": "Maps to record.handles.0.handle.",
+              "values": [],
+              "maps_to": "record.handles.0.handle",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "handle-source",
+              "type": "enum",
+              "summary": "Maps to record.handles.0.source.",
+              "values": [
+                "twitter",
+                "email",
+                "phone",
+                "facebook",
+                "intercom",
+                "front_chat",
+                "custom"
+              ],
+              "maps_to": "record.handles.0.source",
+              "required": true
             }
           ],
           "examples": [],
@@ -62494,7 +62805,8 @@
               "summary": "Maps to record.team_id.",
               "values": [],
               "maps_to": "record.team_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "name",
@@ -62502,14 +62814,27 @@
               "summary": "Maps to record.name.",
               "values": [],
               "maps_to": "record.name",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "color",
               "type": "enum",
               "summary": "Maps to record.color.",
-              "values": [],
-              "maps_to": "record.color"
+              "values": [
+                "black",
+                "grey",
+                "pink",
+                "purple",
+                "blue",
+                "teal",
+                "green",
+                "yellow",
+                "orange",
+                "red"
+              ],
+              "maps_to": "record.color",
+              "required": true
             },
             {
               "name": "timezone",
@@ -62517,14 +62842,34 @@
               "summary": "Maps to record.timezone.",
               "values": [],
               "maps_to": "record.timezone",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "teammate-ids",
               "type": "string_array",
               "summary": "Maps to record.teammate_ids.",
               "values": [],
-              "maps_to": "record.teammate_ids"
+              "maps_to": "record.teammate_ids",
+              "required": true
+            },
+            {
+              "name": "monday-start",
+              "type": "string",
+              "summary": "Maps to record.times.mon.start.",
+              "values": [],
+              "maps_to": "record.times.mon.start",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "monday-end",
+              "type": "string",
+              "summary": "Maps to record.times.mon.end.",
+              "values": [],
+              "maps_to": "record.times.mon.end",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -62835,6 +63180,32 @@
               "summary": "Maps to request body columns.",
               "values": [],
               "maps_to": "body.columns",
+              "required": true
+            },
+            {
+              "name": "type",
+              "type": "enum",
+              "summary": "Maps to request body type.",
+              "values": [
+                "messages"
+              ],
+              "maps_to": "body.type",
+              "required": true
+            },
+            {
+              "name": "start",
+              "type": "integer",
+              "summary": "Maps to request body start.",
+              "values": [],
+              "maps_to": "body.start",
+              "required": true
+            },
+            {
+              "name": "end",
+              "type": "integer",
+              "summary": "Maps to request body end.",
+              "values": [],
+              "maps_to": "body.end",
               "required": true
             }
           ],
@@ -63269,6 +63640,79 @@
               "summary": "Maps to record.channel_id.",
               "values": [],
               "maps_to": "record.channel_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "external-call-id",
+              "type": "string",
+              "summary": "Maps to record.external_call_id.",
+              "values": [],
+              "maps_to": "record.external_call_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "initial-status",
+              "type": "enum",
+              "summary": "Maps to record.initial_status.",
+              "values": [
+                "queued",
+                "ringing"
+              ],
+              "maps_to": "record.initial_status",
+              "required": true
+            },
+            {
+              "name": "direction",
+              "type": "enum",
+              "summary": "Maps to record.direction.",
+              "values": [
+                "inbound",
+                "outbound"
+              ],
+              "maps_to": "record.direction",
+              "required": true
+            },
+            {
+              "name": "parent-external-call-id",
+              "type": "string",
+              "summary": "Maps to record.parent_external_call_id.",
+              "values": [],
+              "maps_to": "record.parent_external_call_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "from-handle",
+              "type": "string",
+              "summary": "Maps to record.from.handle.",
+              "values": [],
+              "maps_to": "record.from.handle",
+              "allow_empty": false
+            },
+            {
+              "name": "from-name",
+              "type": "string",
+              "summary": "Maps to record.from.name.",
+              "values": [],
+              "maps_to": "record.from.name",
+              "allow_empty": false
+            },
+            {
+              "name": "to-handle",
+              "type": "string",
+              "summary": "Maps to record.to.handle.",
+              "values": [],
+              "maps_to": "record.to.handle",
+              "allow_empty": false
+            },
+            {
+              "name": "to-name",
+              "type": "string",
+              "summary": "Maps to record.to.name.",
+              "values": [],
+              "maps_to": "record.to.name",
               "allow_empty": false
             }
           ],
@@ -63294,7 +63738,8 @@
               "summary": "Maps to record.channel_id.",
               "values": [],
               "maps_to": "record.channel_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "external-call-id",
@@ -63302,7 +63747,25 @@
               "summary": "Maps to record.external_call_id.",
               "values": [],
               "maps_to": "record.external_call_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "call-status",
+              "type": "enum",
+              "summary": "Maps to record.call_status.",
+              "values": [
+                "queued",
+                "ringing",
+                "connected",
+                "hold",
+                "hangup",
+                "abandoned",
+                "missed",
+                "transferred"
+              ],
+              "maps_to": "record.call_status",
+              "required": true
             }
           ],
           "examples": [],
@@ -63378,7 +63841,8 @@
               "summary": "Maps to record.channel_id.",
               "values": [],
               "maps_to": "record.channel_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "external-call-id",
@@ -63386,7 +63850,17 @@
               "summary": "Maps to record.external_call_id.",
               "values": [],
               "maps_to": "record.external_call_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "content",
+              "type": "string",
+              "summary": "Maps to record.content.",
+              "values": [],
+              "maps_to": "record.content",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -63411,7 +63885,8 @@
               "summary": "Maps to record.channel_id.",
               "values": [],
               "maps_to": "record.channel_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "external-call-id",
@@ -63419,7 +63894,45 @@
               "summary": "Maps to record.external_call_id.",
               "values": [],
               "maps_to": "record.external_call_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "line-speaker-name",
+              "type": "string",
+              "summary": "Maps to record.lines.0.speaker_name.",
+              "values": [],
+              "maps_to": "record.lines.0.speaker_name",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "line-content",
+              "type": "string",
+              "summary": "Maps to record.lines.0.content.",
+              "values": [],
+              "maps_to": "record.lines.0.content",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "line-start-time-seconds",
+              "type": "integer",
+              "summary": "Maps to record.lines.0.start_time_seconds.",
+              "values": [],
+              "maps_to": "record.lines.0.start_time_seconds",
+              "required": true
+            },
+            {
+              "name": "line-speaker-type",
+              "type": "enum",
+              "summary": "Maps to record.lines.0.speaker_type.",
+              "values": [
+                "internal",
+                "external"
+              ],
+              "maps_to": "record.lines.0.speaker_type",
+              "required": true
             }
           ],
           "examples": [],
@@ -63502,7 +64015,44 @@
               "summary": "Maps to record.channel_id.",
               "values": [],
               "maps_to": "record.channel_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "sender-handle",
+              "type": "string",
+              "summary": "Maps to record.sender.handle.",
+              "values": [],
+              "maps_to": "record.sender.handle",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "summary": "Maps to record.body.",
+              "values": [],
+              "maps_to": "record.body",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "metadata-external-id",
+              "type": "string",
+              "summary": "Maps to record.metadata.external_id.",
+              "values": [],
+              "maps_to": "record.metadata.external_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "metadata-external-conversation-id",
+              "type": "string",
+              "summary": "Maps to record.metadata.external_conversation_id.",
+              "values": [],
+              "maps_to": "record.metadata.external_conversation_id",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -63527,7 +64077,44 @@
               "summary": "Maps to record.channel_id.",
               "values": [],
               "maps_to": "record.channel_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "recipient-handle",
+              "type": "string",
+              "summary": "Maps to record.to.0.handle.",
+              "values": [],
+              "maps_to": "record.to.0.handle",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "body",
+              "type": "string",
+              "summary": "Maps to record.body.",
+              "values": [],
+              "maps_to": "record.body",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "metadata-external-id",
+              "type": "string",
+              "summary": "Maps to record.metadata.external_id.",
+              "values": [],
+              "maps_to": "record.metadata.external_id",
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "metadata-external-conversation-id",
+              "type": "string",
+              "summary": "Maps to record.metadata.external_conversation_id.",
+              "values": [],
+              "maps_to": "record.metadata.external_conversation_id",
+              "allow_empty": false,
+              "required": true
             }
           ],
           "examples": [],
@@ -63552,7 +64139,8 @@
               "summary": "Maps to record.channel_id.",
               "values": [],
               "maps_to": "record.channel_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "conv-ext-id",
@@ -63560,7 +64148,8 @@
               "summary": "Maps to record.conv_ext_id.",
               "values": [],
               "maps_to": "record.conv_ext_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
             },
             {
               "name": "message-ext-id",
@@ -63568,7 +64157,18 @@
               "summary": "Maps to record.message_ext_id.",
               "values": [],
               "maps_to": "record.message_ext_id",
-              "allow_empty": false
+              "allow_empty": false,
+              "required": true
+            },
+            {
+              "name": "status",
+              "type": "enum",
+              "summary": "Maps to record.status.",
+              "values": [
+                "failed"
+              ],
+              "maps_to": "record.status",
+              "required": true
             }
           ],
           "examples": [],
@@ -63589,7 +64189,7 @@
         }
       ]
     },
-    "docs_md": "# Overview\n\nFront is modeled as a definition-owned connector bundle for the documented Front Platform API sources listed in `https://dev.frontapp.com/llms.txt` and the linked `reference/*.md` pages. This worker parsed the embedded OpenAPI snippets from those reference pages and reconciled 255 documented operation pages (254 unique method/path pairs; `PATCH /channels/{channel_id}` is documented twice and one row is retained as a duplicate ledger entry for count reconciliation).\n\nImplemented read streams cover 115 fixed Front GET/changefeed surfaces. Implemented reverse ETL metadata covers 129 documented Core REST and Channels API write operations (118 Core REST writes, 1 application event trigger surface, and 10 custom-channel call/message sync writes: create/update call, call recording/summary/transcript, application message template sync/update, inbound/outbound message sync, and external message status update). Direct/provider search metadata covers 5 bounded JSON operations. Binary attachment downloads (5) remain represented as planned/blocked fixed operations without raw passthrough, pending a shared binary-download execution foundation this connector-local worker cannot add. The duplicate `PATCH /channels/{channel_id}` documentation row is recorded once for count reconciliation; its executable behavior is covered by the single `update_channel` write action.\n\nService API documentation: https://dev.frontapp.com/llms.txt.\n\n## Auth setup\n\nConnection fields:\n\n- `api_key` (required, secret, string): Front API token, sent as `Authorization: Bearer <api_key>`. Never log or store token values in fixtures.\n- `base_url` (optional, string): default `https://api2.frontapp.com`.\n- `page_limit` (optional, string): default `50`; sent as `limit` on paginated list streams.\n- Optional path-parameter config fields such as `account_id`, `conversation_id`, `inbox_id`, and `team_id` are used only by parameterized streams. A parameterized stream fails closed if its required config value is absent.\n\nConnection checks call `GET /inboxes` with bearer authentication.\n\n## Streams notes\n\nThe bundle declares 115 Front read streams. List streams read records from `_results` and follow `_pagination.next`; single-resource streams use a single-object projection. Projection is `passthrough` for generated full-surface streams so the connector does not silently drop Front fields before a future schema-tightening pass.\n\nThe legacy fixture-backed streams remain available with their original names: `contacts`, `conversations`, `inboxes`, `tags`, `teammates`, and `channels`. Event/changefeed GET surfaces are represented as read streams; the mutating application event trigger is a fixed reverse-ETL action rather than a CDC reader claim. `metadata.capabilities.cdc` remains false because there is no streaming CDC implementation.\n\n## Write actions & risks\n\n`writes.json` declares fixed Front write actions only; there is no generic method/path/body escape hatch. Every action has a record schema, path field list where applicable, risk text, and `confirm: \"destructive\"` so execution stays behind the existing reverse ETL plan → preview → explicit approval → execute path plus typed destructive confirmation. DELETE actions declare idempotent 404 handling through `missing_ok_status: [404]`.\n\nCustom-channel call and message sync actions (`create_call`, `update_call`, `add_call_summary`, `add_call_transcript`, `sync_application_message_template`, `update_application_message_template`, `sync_inbound_message`, `sync_outbound_message`, `update_external_message_status`) use the same fixed-endpoint reverse ETL path as every other write; they operate against channels this connector's own `create_a_channel`/`update_channel`/`validate_channel` actions can create and manage, not a Front Marketplace-partner-only surface. `add_call_recording` uses the engine's typed multipart write support (`body_type: \"multipart\"`) to upload a bounded, project-relative local audio file path as the call recording attachment, matching the pattern already used by the `gong` connector's `upload_call_media`/`upload_crm_entities` actions; like those, it has no `fixtures/writes/` dynamic-replay fixture (multipart write-shape conformance is not yet exercised by any bundle in this repo) and its coverage rests on `connectorgen validate`'s static schema/CLI-mapping checks plus `go build`/`go vet`.\n\nDirect/provider-search commands for analytics exports/reports and conversation search are fixed, bounded, JSON-redacted direct reads. Binary attachment download operations are recorded in `operations.json` with max-byte bounds but remain planned because this connector-local worker cannot add the shared binary file-output execution foundation.\n\n## Known limits\n\n- No live Front credentials or provider calls were used; this bundle is fixture/conformance backed and remains uncertified for live behavior.\n- The generated stream schemas are intentionally permissive (`projection: passthrough`, `additionalProperties: true`) pending a future field-tightening pass; they preserve records rather than dropping undocumented fields.\n- Parameterized streams require the corresponding config values and are not safe as an all-stream default sync without operator selection.\n- Binary downloads are typed and bounded in metadata but not claimed executable until a shared binary-download execution contract is available.\n- `sync_inbound_message` and `sync_outbound_message` omit the provider's optional `attachments` field (a binary-payload array) from their record schemas; every other documented field is modeled. This is a strictly more permissive scope narrowing (never stricter than the provider's own requirements) pending the same shared binary-payload execution foundation the attachment-download operations need — sending an attachment through these two actions is not yet possible, everything else about the write is.\n- `add_call_recording` is a multipart file-upload write with no dynamic conformance fixture (see Write actions & risks); its correctness rests on static schema/CLI-mapping validation and `go vet`/`go build`, the same bar the repo's only other multipart-write connector (`gong`) is held to.\n- The duplicate `PATCH /channels/{channel_id}` docs row is recorded as a duplicate operation row; the executable Core API write action is declared once.\n",
+    "docs_md": "# Overview\n\nFront is modeled as a definition-owned connector bundle for the documented Front Platform API sources listed in `https://dev.frontapp.com/llms.txt` and the linked `reference/*.md` pages. This worker parsed the embedded OpenAPI snippets from those reference pages and reconciled 255 documented operation pages (254 unique method/path pairs; `PATCH /channels/{channel_id}` is documented twice and one row is retained as a duplicate ledger entry for count reconciliation).\n\nImplemented read streams cover 115 fixed Front GET/changefeed surfaces. Implemented reverse ETL metadata covers 129 documented Core REST and Channels API write operations (118 Core REST writes, 1 application event trigger surface, and 10 custom-channel call/message sync writes: create/update call, call recording/summary/transcript, application message template sync/update, inbound/outbound message sync, and external message status update). Direct/provider search metadata covers 5 bounded JSON operations. Five attachment downloads are implemented as fixed `binary_download` operations with project-relative output containment and per-operation byte limits. The duplicate `PATCH /channels/{channel_id}` documentation row is recorded once for count reconciliation; its executable behavior is covered by the single `update_channel` write action.\n\nService API documentation: https://dev.frontapp.com/llms.txt.\n\n## Auth setup\n\nConnection fields:\n\n- `api_key` (required, secret, string): Front API token, sent as `Authorization: Bearer <api_key>`. Never log or store token values in fixtures.\n- `base_url` (optional, string): default `https://api2.frontapp.com`.\n- `page_limit` (optional, string): default `50`; sent as `limit` on paginated list streams.\n- Optional path-parameter config fields such as `account_id`, `conversation_id`, `inbox_id`, and `team_id` are used only by parameterized streams. A parameterized stream fails closed if its required config value is absent.\n\nConnection checks call `GET /inboxes` with bearer authentication.\n\n## Streams notes\n\nThe bundle declares 115 Front read streams. List streams read records from `_results` and follow `_pagination.next`; single-resource streams use a single-object projection. Projection is `passthrough` for generated full-surface streams so the connector does not silently drop Front fields before a future schema-tightening pass.\n\nThe legacy fixture-backed streams remain available with their original names: `contacts`, `conversations`, `inboxes`, `tags`, `teammates`, and `channels`. Event/changefeed GET surfaces are represented as read streams; the mutating application event trigger is a fixed reverse-ETL action rather than a CDC reader claim. `metadata.capabilities.cdc` remains false because there is no streaming CDC implementation.\n\n## Write actions & risks\n\n`writes.json` declares fixed Front write actions only; there is no generic method/path/body escape hatch. Every action has a record schema, path field list where applicable, risk text, and `confirm: \"destructive\"` so execution stays behind the existing reverse ETL plan → preview → explicit approval → execute path plus typed destructive confirmation. DELETE actions declare idempotent 404 handling through `missing_ok_status: [404]`.\n\nCustom-channel call and message sync actions (`create_call`, `update_call`, `add_call_summary`, `add_call_transcript`, `sync_application_message_template`, `update_application_message_template`, `sync_inbound_message`, `sync_outbound_message`, `update_external_message_status`) use the same fixed-endpoint reverse ETL path as every other write; they operate against channels this connector's own `create_a_channel`/`update_channel`/`validate_channel` actions can create and manage, not a Front Marketplace-partner-only surface. `add_call_recording` uses the engine's typed multipart write support (`body_type: \"multipart\"`) to upload a bounded, project-relative local audio file path as the call recording attachment, matching the pattern already used by the `gong` connector's `upload_call_media`/`upload_crm_entities` actions; like those, it has no `fixtures/writes/` dynamic-replay fixture (multipart write-shape conformance is not yet exercised by any bundle in this repo) and its coverage rests on `connectorgen validate`'s static schema/CLI-mapping checks plus `go build`/`go vet`.\n\nDirect/provider-search commands for analytics exports/reports and conversation search are fixed, bounded, JSON-redacted direct reads. The five attachment download commands use the engine's implemented `binary_download` contract, fixed Front endpoints, project-relative destinations, and explicit maximum response sizes.\n\n## Deferred multipart fields\n\nThe following optional provider file fields are deliberately absent from the JSON write schemas because Front requires multipart form data when they are supplied:\n\n- `attachments` on [`create_draft`](https://dev.frontapp.com/reference/create-draft.md), [`receive_custom_messages`](https://dev.frontapp.com/reference/receive-custom-messages.md), [`create_message`](https://dev.frontapp.com/reference/create-message.md), [`add_comment_reply`](https://dev.frontapp.com/reference/add-comment-reply.md), [`add_comment`](https://dev.frontapp.com/reference/add-comment.md), [`create_draft_reply`](https://dev.frontapp.com/reference/create-draft-reply.md), [`create_message_reply`](https://dev.frontapp.com/reference/create-message-reply.md), [`create_conversation.comment`](https://dev.frontapp.com/reference/create-conversation.md), [`edit_draft`](https://dev.frontapp.com/reference/edit-draft.md), [`import_inbox_message`](https://dev.frontapp.com/reference/import-inbox-message.md), [`create_message_template`](https://dev.frontapp.com/reference/create-message-template.md), [`create_team_message_template`](https://dev.frontapp.com/reference/create-team-message-template.md), [`sync_inbound_message`](https://dev.frontapp.com/reference/sync-inbound-message.md), and [`sync_outbound_message`](https://dev.frontapp.com/reference/sync-outbound-message.md).\n- `avatar` on [`update_a_contact`](https://dev.frontapp.com/reference/update-a-contact.md), [`create_contact`](https://dev.frontapp.com/reference/create-contact.md), [`create_teammate_contact`](https://dev.frontapp.com/reference/create-teammate-contact.md), and [`create_team_contact`](https://dev.frontapp.com/reference/create-team-contact.md).\n\nSupporting these fields requires an array-aware extension to the typed multipart contract: repeated bounded file parts (including `attachments[]`), repeated scalar parts for array-valued form fields, deterministic encoding for nested object fields, project-root containment, approved payload digests, media-type checks, and per-file plus aggregate byte limits. The existing flat declared-part contract already expresses `add_call_recording`, so that action remains implemented without exposing a generic multipart or raw-body path.\n\n## Known limits\n\n- No live Front credentials or provider calls were used; this bundle is fixture/conformance backed and remains uncertified for live behavior.\n- The generated stream schemas are intentionally permissive (`projection: passthrough`, `additionalProperties: true`) pending a future field-tightening pass; they preserve records rather than dropping undocumented fields.\n- Parameterized streams require the corresponding config values and are not safe as an all-stream default sync without operator selection.\n- File-valued `attachments` and `avatar` request fields remain deferred exactly as listed above; supplying them requires the bounded array-aware multipart extension described there.\n- `add_call_recording` is a multipart file-upload write with no dynamic conformance fixture (see Write actions & risks); its correctness rests on static schema/CLI-mapping validation and `go vet`/`go build`, the same bar the repo's only other multipart-write connector (`gong`) is held to.\n- The duplicate `PATCH /channels/{channel_id}` docs row is recorded as a duplicate operation row; the executable Core API write action is declared once.\n",
     "icon": {
       "id": "pm-sample",
       "path": "icons/pm-sample.svg",

@@ -2947,7 +2947,16 @@
       "availability": "implemented",
       "write": "create_account",
       "source_url": "https://dev.frontapp.com/reference/create-account.md",
-      "flags": [],
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Maps to record.name.",
+          "maps_to": "record.name",
+          "allow_empty": false,
+          "required": true
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -2971,13 +2980,29 @@
           "type": "string",
           "summary": "Maps to record.application_uid.",
           "maps_to": "record.application_uid",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "event-type",
           "type": "string",
           "summary": "Maps to record.event_type.",
           "maps_to": "record.event_type",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "app-object-id",
+          "type": "string",
+          "summary": "Maps to record.app_object.id.",
+          "maps_to": "record.app_object.id",
+          "allow_empty": false
+        },
+        {
+          "name": "app-object-ext-link",
+          "type": "string",
+          "summary": "Maps to record.app_object.ext_link.",
+          "maps_to": "record.app_object.ext_link",
           "allow_empty": false
         }
       ],
@@ -3037,21 +3062,24 @@
           "type": "string",
           "summary": "Maps to record.channel_id.",
           "maps_to": "record.channel_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "sender-handle",
           "type": "string",
           "summary": "Maps to record.sender.handle.",
           "maps_to": "record.sender.handle",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "body",
           "type": "string",
           "summary": "Maps to record.body.",
           "maps_to": "record.body",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -3485,20 +3513,32 @@
           "type": "string",
           "summary": "Maps to record.contact_id.",
           "maps_to": "record.contact_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "handle",
           "type": "string",
           "summary": "Maps to record.handle.",
           "maps_to": "record.handle",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "source",
           "type": "enum",
           "summary": "Maps to record.source.",
-          "maps_to": "record.source"
+          "maps_to": "record.source",
+          "values": [
+            "twitter",
+            "email",
+            "phone",
+            "facebook",
+            "intercom",
+            "front_chat",
+            "custom"
+          ],
+          "required": true
         }
       ],
       "api_surface": [
@@ -3524,20 +3564,32 @@
           "type": "string",
           "summary": "Maps to record.contact_id.",
           "maps_to": "record.contact_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "handle",
           "type": "string",
           "summary": "Maps to record.handle.",
           "maps_to": "record.handle",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "source",
           "type": "enum",
           "summary": "Maps to record.source.",
-          "maps_to": "record.source"
+          "maps_to": "record.source",
+          "values": [
+            "twitter",
+            "email",
+            "phone",
+            "facebook",
+            "intercom",
+            "front_chat",
+            "custom"
+          ],
+          "required": true
         }
       ],
       "api_surface": [
@@ -3674,7 +3726,32 @@
       "availability": "implemented",
       "write": "create_contact",
       "source_url": "https://dev.frontapp.com/reference/create-contact.md",
-      "flags": [],
+      "flags": [
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Maps to record.handles.0.handle.",
+          "maps_to": "record.handles.0.handle",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "handle-source",
+          "type": "enum",
+          "summary": "Maps to record.handles.0.source.",
+          "maps_to": "record.handles.0.source",
+          "values": [
+            "twitter",
+            "email",
+            "phone",
+            "facebook",
+            "intercom",
+            "front_chat",
+            "custom"
+          ],
+          "required": true
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
@@ -4106,14 +4183,20 @@
           "name": "type",
           "type": "enum",
           "summary": "Maps to record.type.",
-          "maps_to": "record.type"
+          "maps_to": "record.type",
+          "values": [
+            "discussion",
+            "task"
+          ],
+          "required": true
         },
         {
           "name": "subject",
           "type": "string",
           "summary": "Maps to record.subject.",
           "maps_to": "record.subject",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4205,13 +4288,20 @@
           "type": "string",
           "summary": "Maps to record.inbox_id.",
           "maps_to": "record.inbox_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "type",
           "type": "enum",
           "summary": "Maps to record.type.",
-          "maps_to": "record.type"
+          "maps_to": "record.type",
+          "values": [
+            "custom",
+            "smtp",
+            "twilio"
+          ],
+          "required": true
         }
       ],
       "api_surface": [
@@ -4237,46 +4327,53 @@
           "type": "string",
           "summary": "Maps to record.inbox_id.",
           "maps_to": "record.inbox_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "sender-handle",
           "type": "string",
           "summary": "Maps to record.sender.handle.",
           "maps_to": "record.sender.handle",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "to",
           "type": "string_array",
           "summary": "Maps to record.to.",
-          "maps_to": "record.to"
+          "maps_to": "record.to",
+          "required": true
         },
         {
           "name": "body",
           "type": "string",
           "summary": "Maps to record.body.",
           "maps_to": "record.body",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "external-id",
           "type": "string",
           "summary": "Maps to record.external_id.",
           "maps_to": "record.external_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "created-at",
           "type": "integer",
           "summary": "Maps to record.created_at.",
-          "maps_to": "record.created_at"
+          "maps_to": "record.created_at",
+          "required": true
         },
         {
           "name": "metadata-is-inbound",
           "type": "boolean",
           "summary": "Maps to record.metadata.is_inbound.",
-          "maps_to": "record.metadata.is_inbound"
+          "maps_to": "record.metadata.is_inbound",
+          "required": true
         }
       ],
       "api_surface": [
@@ -4392,7 +4489,24 @@
           "type": "string",
           "summary": "Maps to record.article_id.",
           "maps_to": "record.article_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "author-id",
+          "type": "string",
+          "summary": "Maps to record.author_id.",
+          "maps_to": "record.author_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Maps to record.content.",
+          "maps_to": "record.content",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4418,14 +4532,32 @@
           "type": "string",
           "summary": "Maps to record.article_id.",
           "maps_to": "record.article_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "locale",
           "type": "string",
           "summary": "Maps to record.locale.",
           "maps_to": "record.locale",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "author-id",
+          "type": "string",
+          "summary": "Maps to record.author_id.",
+          "maps_to": "record.author_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Maps to record.content.",
+          "maps_to": "record.content",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4562,7 +4694,32 @@
           "type": "string",
           "summary": "Maps to record.knowledge_base_id.",
           "maps_to": "record.knowledge_base_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "author-id",
+          "type": "string",
+          "summary": "Maps to record.author_id.",
+          "maps_to": "record.author_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Maps to record.subject.",
+          "maps_to": "record.subject",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Maps to record.content.",
+          "maps_to": "record.content",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4621,7 +4778,16 @@
           "type": "string",
           "summary": "Maps to record.knowledge_base_id.",
           "maps_to": "record.knowledge_base_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Maps to record.name.",
+          "maps_to": "record.name",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4647,14 +4813,40 @@
           "type": "string",
           "summary": "Maps to record.knowledge_base_id.",
           "maps_to": "record.knowledge_base_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "locale",
           "type": "string",
           "summary": "Maps to record.locale.",
           "maps_to": "record.locale",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "author-id",
+          "type": "string",
+          "summary": "Maps to record.author_id.",
+          "maps_to": "record.author_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Maps to record.subject.",
+          "maps_to": "record.subject",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Maps to record.content.",
+          "maps_to": "record.content",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -4720,14 +4912,24 @@
           "type": "string",
           "summary": "Maps to record.knowledge_base_id.",
           "maps_to": "record.knowledge_base_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "locale",
           "type": "string",
           "summary": "Maps to record.locale.",
           "maps_to": "record.locale",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Maps to record.name.",
+          "maps_to": "record.name",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -5175,26 +5377,58 @@
           "type": "string",
           "summary": "Maps to record.name.",
           "maps_to": "record.name",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "color",
           "type": "enum",
           "summary": "Maps to record.color.",
-          "maps_to": "record.color"
+          "maps_to": "record.color",
+          "values": [
+            "black",
+            "grey",
+            "pink",
+            "purple",
+            "blue",
+            "teal",
+            "green",
+            "yellow",
+            "orange",
+            "red"
+          ],
+          "required": true
         },
         {
           "name": "timezone",
           "type": "string",
           "summary": "Maps to record.timezone.",
           "maps_to": "record.timezone",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "teammate-ids",
           "type": "string_array",
           "summary": "Maps to record.teammate_ids.",
-          "maps_to": "record.teammate_ids"
+          "maps_to": "record.teammate_ids",
+          "required": true
+        },
+        {
+          "name": "monday-start",
+          "type": "string",
+          "summary": "Maps to record.times.mon.start.",
+          "maps_to": "record.times.mon.start",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "monday-end",
+          "type": "string",
+          "summary": "Maps to record.times.mon.end.",
+          "maps_to": "record.times.mon.end",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -5719,7 +5953,32 @@
           "type": "string",
           "summary": "Maps to record.teammate_id.",
           "maps_to": "record.teammate_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Maps to record.handles.0.handle.",
+          "maps_to": "record.handles.0.handle",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "handle-source",
+          "type": "enum",
+          "summary": "Maps to record.handles.0.source.",
+          "maps_to": "record.handles.0.source",
+          "values": [
+            "twitter",
+            "email",
+            "phone",
+            "facebook",
+            "intercom",
+            "front_chat",
+            "custom"
+          ],
+          "required": true
         }
       ],
       "api_surface": [
@@ -6055,7 +6314,32 @@
           "type": "string",
           "summary": "Maps to record.team_id.",
           "maps_to": "record.team_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "summary": "Maps to record.handles.0.handle.",
+          "maps_to": "record.handles.0.handle",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "handle-source",
+          "type": "enum",
+          "summary": "Maps to record.handles.0.source.",
+          "maps_to": "record.handles.0.source",
+          "values": [
+            "twitter",
+            "email",
+            "phone",
+            "facebook",
+            "intercom",
+            "front_chat",
+            "custom"
+          ],
+          "required": true
         }
       ],
       "api_surface": [
@@ -6187,33 +6471,66 @@
           "type": "string",
           "summary": "Maps to record.team_id.",
           "maps_to": "record.team_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "name",
           "type": "string",
           "summary": "Maps to record.name.",
           "maps_to": "record.name",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "color",
           "type": "enum",
           "summary": "Maps to record.color.",
-          "maps_to": "record.color"
+          "maps_to": "record.color",
+          "values": [
+            "black",
+            "grey",
+            "pink",
+            "purple",
+            "blue",
+            "teal",
+            "green",
+            "yellow",
+            "orange",
+            "red"
+          ],
+          "required": true
         },
         {
           "name": "timezone",
           "type": "string",
           "summary": "Maps to record.timezone.",
           "maps_to": "record.timezone",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "teammate-ids",
           "type": "string_array",
           "summary": "Maps to record.teammate_ids.",
-          "maps_to": "record.teammate_ids"
+          "maps_to": "record.teammate_ids",
+          "required": true
+        },
+        {
+          "name": "monday-start",
+          "type": "string",
+          "summary": "Maps to record.times.mon.start.",
+          "maps_to": "record.times.mon.start",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "monday-end",
+          "type": "string",
+          "summary": "Maps to record.times.mon.end.",
+          "maps_to": "record.times.mon.end",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -6525,6 +6842,30 @@
           "type": "string_array",
           "summary": "Maps to request body columns.",
           "maps_to": "body.columns",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "summary": "Maps to request body type.",
+          "maps_to": "body.type",
+          "values": [
+            "messages"
+          ],
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "integer",
+          "summary": "Maps to request body start.",
+          "maps_to": "body.start",
+          "required": true
+        },
+        {
+          "name": "end",
+          "type": "integer",
+          "summary": "Maps to request body end.",
+          "maps_to": "body.end",
           "required": true
         }
       ],
@@ -6848,6 +7189,73 @@
           "type": "string",
           "summary": "Maps to record.channel_id.",
           "maps_to": "record.channel_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "external-call-id",
+          "type": "string",
+          "summary": "Maps to record.external_call_id.",
+          "maps_to": "record.external_call_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "initial-status",
+          "type": "enum",
+          "summary": "Maps to record.initial_status.",
+          "maps_to": "record.initial_status",
+          "values": [
+            "queued",
+            "ringing"
+          ],
+          "required": true
+        },
+        {
+          "name": "direction",
+          "type": "enum",
+          "summary": "Maps to record.direction.",
+          "maps_to": "record.direction",
+          "values": [
+            "inbound",
+            "outbound"
+          ],
+          "required": true
+        },
+        {
+          "name": "parent-external-call-id",
+          "type": "string",
+          "summary": "Maps to record.parent_external_call_id.",
+          "maps_to": "record.parent_external_call_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "from-handle",
+          "type": "string",
+          "summary": "Maps to record.from.handle.",
+          "maps_to": "record.from.handle",
+          "allow_empty": false
+        },
+        {
+          "name": "from-name",
+          "type": "string",
+          "summary": "Maps to record.from.name.",
+          "maps_to": "record.from.name",
+          "allow_empty": false
+        },
+        {
+          "name": "to-handle",
+          "type": "string",
+          "summary": "Maps to record.to.handle.",
+          "maps_to": "record.to.handle",
+          "allow_empty": false
+        },
+        {
+          "name": "to-name",
+          "type": "string",
+          "summary": "Maps to record.to.name.",
+          "maps_to": "record.to.name",
           "allow_empty": false
         }
       ],
@@ -6874,14 +7282,33 @@
           "type": "string",
           "summary": "Maps to record.channel_id.",
           "maps_to": "record.channel_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "external-call-id",
           "type": "string",
           "summary": "Maps to record.external_call_id.",
           "maps_to": "record.external_call_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "call-status",
+          "type": "enum",
+          "summary": "Maps to record.call_status.",
+          "maps_to": "record.call_status",
+          "values": [
+            "queued",
+            "ringing",
+            "connected",
+            "hold",
+            "hangup",
+            "abandoned",
+            "missed",
+            "transferred"
+          ],
+          "required": true
         }
       ],
       "api_surface": [
@@ -6957,14 +7384,24 @@
           "type": "string",
           "summary": "Maps to record.channel_id.",
           "maps_to": "record.channel_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "external-call-id",
           "type": "string",
           "summary": "Maps to record.external_call_id.",
           "maps_to": "record.external_call_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Maps to record.content.",
+          "maps_to": "record.content",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -6990,14 +7427,50 @@
           "type": "string",
           "summary": "Maps to record.channel_id.",
           "maps_to": "record.channel_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "external-call-id",
           "type": "string",
           "summary": "Maps to record.external_call_id.",
           "maps_to": "record.external_call_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "line-speaker-name",
+          "type": "string",
+          "summary": "Maps to record.lines.0.speaker_name.",
+          "maps_to": "record.lines.0.speaker_name",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "line-content",
+          "type": "string",
+          "summary": "Maps to record.lines.0.content.",
+          "maps_to": "record.lines.0.content",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "line-start-time-seconds",
+          "type": "integer",
+          "summary": "Maps to record.lines.0.start_time_seconds.",
+          "maps_to": "record.lines.0.start_time_seconds",
+          "required": true
+        },
+        {
+          "name": "line-speaker-type",
+          "type": "enum",
+          "summary": "Maps to record.lines.0.speaker_type.",
+          "maps_to": "record.lines.0.speaker_type",
+          "values": [
+            "internal",
+            "external"
+          ],
+          "required": true
         }
       ],
       "api_surface": [
@@ -7082,7 +7555,40 @@
           "type": "string",
           "summary": "Maps to record.channel_id.",
           "maps_to": "record.channel_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "sender-handle",
+          "type": "string",
+          "summary": "Maps to record.sender.handle.",
+          "maps_to": "record.sender.handle",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Maps to record.body.",
+          "maps_to": "record.body",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "metadata-external-id",
+          "type": "string",
+          "summary": "Maps to record.metadata.external_id.",
+          "maps_to": "record.metadata.external_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "metadata-external-conversation-id",
+          "type": "string",
+          "summary": "Maps to record.metadata.external_conversation_id.",
+          "maps_to": "record.metadata.external_conversation_id",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -7108,7 +7614,40 @@
           "type": "string",
           "summary": "Maps to record.channel_id.",
           "maps_to": "record.channel_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "recipient-handle",
+          "type": "string",
+          "summary": "Maps to record.to.0.handle.",
+          "maps_to": "record.to.0.handle",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "summary": "Maps to record.body.",
+          "maps_to": "record.body",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "metadata-external-id",
+          "type": "string",
+          "summary": "Maps to record.metadata.external_id.",
+          "maps_to": "record.metadata.external_id",
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "metadata-external-conversation-id",
+          "type": "string",
+          "summary": "Maps to record.metadata.external_conversation_id.",
+          "maps_to": "record.metadata.external_conversation_id",
+          "allow_empty": false,
+          "required": true
         }
       ],
       "api_surface": [
@@ -7134,21 +7673,34 @@
           "type": "string",
           "summary": "Maps to record.channel_id.",
           "maps_to": "record.channel_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "conv-ext-id",
           "type": "string",
           "summary": "Maps to record.conv_ext_id.",
           "maps_to": "record.conv_ext_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
         },
         {
           "name": "message-ext-id",
           "type": "string",
           "summary": "Maps to record.message_ext_id.",
           "maps_to": "record.message_ext_id",
-          "allow_empty": false
+          "allow_empty": false,
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "summary": "Maps to record.status.",
+          "maps_to": "record.status",
+          "values": [
+            "failed"
+          ],
+          "required": true
         }
       ],
       "api_surface": [

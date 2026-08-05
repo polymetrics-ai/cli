@@ -1,8 +1,13 @@
 {
-  "record": {},
+  "record": {
+    "name": "Fixture Account"
+  },
   "expect": {
     "method": "POST",
-    "path": "/accounts"
+    "path": "/accounts",
+    "body": {
+      "name": "Fixture Account"
+    }
   },
   "response": {
     "status": 201,

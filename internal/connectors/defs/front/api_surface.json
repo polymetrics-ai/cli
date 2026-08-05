@@ -3,7 +3,7 @@
   "docs": "https://dev.frontapp.com/llms.txt",
   "reviewed_at": "2026-07-31",
   "operation_ledger_version": 1,
-  "scope": "All documented Front reference/*.md OpenAPI operation pages discovered from llms.txt; fixed Core REST operations are implemented as streams, writes, or direct reads, binary downloads are planned with typed metadata, and application-channel/voice/plugin-adjacent surfaces are blocked/not-applicable without generic passthrough.",
+  "scope": "All documented Front reference/*.md OpenAPI operation pages discovered from llms.txt; every unique method/path operation is implemented as a stream, typed write, direct read, or one of five bounded binary downloads. The duplicate application-channel PATCH /channels/{channel_id} row remains a blocked duplicate covered by the typed update_channel action; no generic passthrough is exposed.",
   "endpoints": [
     {
       "method": "PATCH",

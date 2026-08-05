@@ -1,8 +1,23 @@
 {
-  "record": {},
+  "record": {
+    "handles": [
+      {
+        "handle": "fixture@example.com",
+        "source": "email"
+      }
+    ]
+  },
   "expect": {
     "method": "POST",
-    "path": "/contacts"
+    "path": "/contacts",
+    "body": {
+      "handles": [
+        {
+          "handle": "fixture@example.com",
+          "source": "email"
+        }
+      ]
+    }
   },
   "response": {
     "status": 201,

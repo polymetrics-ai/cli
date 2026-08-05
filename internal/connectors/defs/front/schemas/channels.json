@@ -2,15 +2,52 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "channels",
   "type": "object",
-  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ],
+  "required": [
+    "id"
+  ],
   "properties": {
     "id": {
+      "type": "string"
+    },
+    "name": {
       "type": [
         "string",
-        "number",
-        "integer",
+        "null"
+      ]
+    },
+    "address": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "send_as": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "is_private": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "is_valid": {
+      "type": [
+        "boolean",
         "null"
       ]
     }
-  }
+  },
+  "additionalProperties": true
 }

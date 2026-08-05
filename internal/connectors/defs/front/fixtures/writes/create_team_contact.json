@@ -1,10 +1,24 @@
 {
   "record": {
-    "team_id": "fixture_team_id"
+    "team_id": "fixture_team_id",
+    "handles": [
+      {
+        "handle": "fixture@example.com",
+        "source": "email"
+      }
+    ]
   },
   "expect": {
     "method": "POST",
-    "path": "/teams/fixture_team_id/contacts"
+    "path": "/teams/fixture_team_id/contacts",
+    "body": {
+      "handles": [
+        {
+          "handle": "fixture@example.com",
+          "source": "email"
+        }
+      ]
+    }
   },
   "response": {
     "status": 201,
