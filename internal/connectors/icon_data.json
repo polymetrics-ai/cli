@@ -5,9 +5,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "7shifts",
@@ -15,9 +15,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "activecampaign",
@@ -34,9 +34,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "adjust",
@@ -53,9 +53,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "agilecrm",
@@ -63,9 +63,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "aha",
@@ -100,9 +100,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "algolia",
@@ -125,9 +125,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "alpha-vantage",
@@ -187,9 +187,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "appfigures",
@@ -197,9 +197,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "appfollow",
@@ -240,9 +240,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "asana",
@@ -268,9 +268,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "auth0",
@@ -287,9 +287,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "avni",
@@ -305,9 +305,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "aws-cloudtrail",
@@ -365,9 +365,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "bigmailer",
@@ -375,9 +375,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "bing-ads",
@@ -434,9 +434,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "boldsign",
@@ -444,9 +444,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "box",
@@ -469,9 +469,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "braintree",
@@ -506,9 +506,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "brevo",
@@ -546,9 +546,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "buildkite",
@@ -571,9 +571,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "buzzsprout",
@@ -581,9 +581,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "cal-com",
@@ -645,9 +645,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "canny",
@@ -655,9 +655,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "capsule-crm",
@@ -665,9 +665,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "captain-data",
@@ -684,9 +684,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "cart",
@@ -703,9 +703,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "chameleon",
@@ -713,9 +713,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "chargebee",
@@ -732,9 +732,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "chargify",
@@ -784,9 +784,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "cimis",
@@ -794,9 +794,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "cin7",
@@ -804,9 +804,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "circa",
@@ -838,9 +838,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "clarif-ai",
@@ -890,9 +890,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "close-com",
@@ -909,9 +909,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "coassemble",
@@ -919,9 +919,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "coda",
@@ -998,9 +998,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "configcat",
@@ -1053,9 +1053,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "criteo-marketing",
@@ -1081,9 +1081,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "datadog",
@@ -1109,9 +1109,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "defillama",
@@ -1119,9 +1119,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "delighted",
@@ -1138,9 +1138,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "devin-ai",
@@ -1156,9 +1156,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "discord",
@@ -1199,9 +1199,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "dolibarr",
@@ -1242,9 +1242,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "dropbox-sign",
@@ -1267,9 +1267,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "dynamodb",
@@ -1286,9 +1286,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "easypost",
@@ -1296,9 +1296,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "easypromos",
@@ -1306,9 +1306,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "ebay-finance",
@@ -1346,9 +1346,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "elasticsearch",
@@ -1374,9 +1374,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "encharge",
@@ -1384,9 +1384,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "eventbrite",
@@ -1394,9 +1394,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "eventee",
@@ -1404,9 +1404,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "eventzilla",
@@ -1441,9 +1441,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "facebook-marketing",
@@ -1469,9 +1469,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "faker",
@@ -1528,8 +1528,8 @@
     "source": "polymetrics",
     "review_status": "polymetrics",
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "implemented": false,
-    "fallback_disposition": "runtime-builtin-not-definition-owned"
+    "fallback_disposition": "runtime-builtin-not-definition-owned",
+    "implemented": false
   },
   {
     "connector": "fillout",
@@ -1552,9 +1552,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "financial-modelling",
@@ -1562,9 +1562,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "finnhub",
@@ -1572,9 +1572,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "finnworlds",
@@ -1582,9 +1582,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "firehydrant",
@@ -1592,9 +1592,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "fleetio",
@@ -1602,9 +1602,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "flexmail",
@@ -1612,9 +1612,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "flexport",
@@ -1631,9 +1631,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "flowlu",
@@ -1641,9 +1641,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "formbricks",
@@ -1666,9 +1666,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "freightview",
@@ -1676,9 +1676,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "freshbooks",
@@ -1686,9 +1686,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "freshcaller",
@@ -1705,9 +1705,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "freshdesk",
@@ -1742,9 +1742,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "fulcrum",
@@ -1752,9 +1752,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "fullstory",
@@ -1789,9 +1789,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "getlago",
@@ -1907,9 +1907,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "gong",
@@ -2039,9 +2039,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "grafana",
@@ -2085,9 +2085,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "gutendex",
@@ -2120,9 +2120,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "hellobaton",
@@ -2162,9 +2162,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "hoorayhr",
@@ -2213,9 +2213,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "huntr",
@@ -2223,9 +2223,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "illumina-basespace",
@@ -2233,9 +2233,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "imagga",
@@ -2243,9 +2243,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "incident-io",
@@ -2253,9 +2253,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "inflowinventory",
@@ -2263,9 +2263,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "insightful",
@@ -2273,9 +2273,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "insightly",
@@ -2318,9 +2318,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "intruder",
@@ -2337,9 +2337,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "invoiceninja",
@@ -2380,9 +2380,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "jira",
@@ -2399,9 +2399,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "jotform",
@@ -2409,9 +2409,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "judge-me-reviews",
@@ -2419,9 +2419,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "just-sift",
@@ -2429,9 +2429,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "justcall",
@@ -2439,9 +2439,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "k6-cloud",
@@ -2473,9 +2473,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "kisi",
@@ -2483,9 +2483,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "kissmetrics",
@@ -2538,9 +2538,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "launchdarkly",
@@ -2557,9 +2557,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "lemlist",
@@ -2585,9 +2585,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "lightspeed-retail",
@@ -2595,9 +2595,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "linear",
@@ -2638,9 +2638,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "lob",
@@ -2648,9 +2648,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "lokalise",
@@ -2676,9 +2676,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "mailchimp",
@@ -2740,9 +2740,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "mailtrap",
@@ -2765,9 +2765,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "marketo",
@@ -2784,9 +2784,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "mendeley",
@@ -2809,9 +2809,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "mercado-ads",
@@ -2819,9 +2819,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "merge",
@@ -2847,9 +2847,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "microsoft-dataverse",
@@ -2866,9 +2866,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "microsoft-lists",
@@ -2876,9 +2876,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "microsoft-teams",
@@ -2910,9 +2910,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "mixmax",
@@ -2920,9 +2920,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "mixpanel",
@@ -2939,9 +2939,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "monday",
@@ -2958,9 +2958,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "my-hours",
@@ -2995,9 +2995,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "nebius-ai",
@@ -3005,9 +3005,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "netsuite",
@@ -3042,9 +3042,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "nexiopay",
@@ -3052,9 +3052,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "nexus-datasets",
@@ -3070,9 +3070,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "nocrm",
@@ -3080,9 +3080,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "northpass-lms",
@@ -3090,9 +3090,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "notion",
@@ -3109,9 +3109,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "nylas",
@@ -3119,9 +3119,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "nytimes",
@@ -3147,9 +3147,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "oncehub",
@@ -3157,9 +3157,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "onepagecrm",
@@ -3167,9 +3167,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "onesignal",
@@ -3186,9 +3186,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "open-data-dc",
@@ -3196,9 +3196,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "open-exchange-rates",
@@ -3224,9 +3224,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "openweather",
@@ -3243,9 +3243,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "opsgenie",
@@ -3262,9 +3262,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "orb",
@@ -3291,8 +3291,8 @@
     "source": "polymetrics",
     "review_status": "polymetrics",
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "implemented": false,
-    "fallback_disposition": "runtime-builtin-not-definition-owned"
+    "fallback_disposition": "runtime-builtin-not-definition-owned",
+    "implemented": false
   },
   {
     "connector": "outbrain-amplify",
@@ -3300,9 +3300,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "outlook",
@@ -3310,9 +3310,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "outreach",
@@ -3329,9 +3329,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "pabbly-subscriptions-billing",
@@ -3339,9 +3339,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "paddle",
@@ -3367,9 +3367,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "paperform",
@@ -3377,9 +3377,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "papersign",
@@ -3387,9 +3387,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "pardot",
@@ -3406,9 +3406,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "partnerstack",
@@ -3425,9 +3425,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "paypal-transaction",
@@ -3462,9 +3462,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "perigon",
@@ -3472,9 +3472,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "perk",
@@ -3482,9 +3482,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "persistiq",
@@ -3501,9 +3501,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "pexels-api",
@@ -3520,9 +3520,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "picqer",
@@ -3572,9 +3572,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "pivotal-tracker",
@@ -3614,9 +3614,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "plausible",
@@ -3659,9 +3659,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "postgres",
@@ -3705,9 +3705,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "primetric",
@@ -3733,9 +3733,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "productive",
@@ -3761,9 +3761,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "pypi",
@@ -3873,9 +3873,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "rentcast",
@@ -3883,9 +3883,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "repairshopr",
@@ -3893,9 +3893,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "reply-io",
@@ -3911,9 +3911,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "retently",
@@ -3948,9 +3948,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "rki-covid",
@@ -3975,9 +3975,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "rollbar",
@@ -4000,9 +4000,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "rss",
@@ -4018,9 +4018,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "safetyculture",
@@ -4028,9 +4028,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "sage-hr",
@@ -4038,9 +4038,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "salesflare",
@@ -4048,9 +4048,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "salesforce",
@@ -4077,8 +4077,8 @@
     "source": "polymetrics",
     "review_status": "polymetrics",
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "implemented": false,
-    "fallback_disposition": "runtime-builtin-not-definition-owned"
+    "fallback_disposition": "runtime-builtin-not-definition-owned",
+    "implemented": false
   },
   {
     "connector": "sap-fieldglass",
@@ -4095,9 +4095,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "scryfall",
@@ -4105,9 +4105,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "searxng",
@@ -4133,9 +4133,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "sendgrid",
@@ -4161,9 +4161,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "sendpulse",
@@ -4205,9 +4205,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "sharepoint-lists-enterprise",
@@ -4223,9 +4223,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "shippo",
@@ -4233,9 +4233,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "shipstation",
@@ -4252,9 +4252,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "shortcut",
@@ -4280,9 +4280,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "sigma-computing",
@@ -4290,9 +4290,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "signnow",
@@ -4300,9 +4300,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "simfin",
@@ -4310,9 +4310,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "simplecast",
@@ -4320,9 +4320,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "simplesat",
@@ -4330,9 +4330,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "slack",
@@ -4367,9 +4367,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "smartsheets",
@@ -4386,9 +4386,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "snapchat-marketing",
@@ -4405,9 +4405,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "sonar-cloud",
@@ -4448,9 +4448,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "spotify-ads",
@@ -4458,9 +4458,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "spotlercrm",
@@ -4468,9 +4468,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "square",
@@ -4502,9 +4502,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "statuspage",
@@ -4521,9 +4521,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "stockdata",
@@ -4594,9 +4594,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "systeme",
@@ -4604,9 +4604,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "taboola",
@@ -4614,9 +4614,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "tally",
@@ -4644,9 +4644,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "teamtailor",
@@ -4654,9 +4654,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "teamwork",
@@ -4664,9 +4664,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "tempo",
@@ -4725,9 +4725,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "ticketmaster",
@@ -4792,9 +4792,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "tmdb",
@@ -4829,9 +4829,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "trello",
@@ -4848,9 +4848,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "trustpilot",
@@ -4876,9 +4876,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "twilio",
@@ -4931,9 +4931,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "unleash",
@@ -4950,9 +4950,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "uptick",
@@ -4960,9 +4960,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "us-census",
@@ -5036,9 +5036,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "vwo",
@@ -5046,9 +5046,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "waiteraid",
@@ -5066,8 +5066,8 @@
     "source": "polymetrics",
     "review_status": "polymetrics",
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "implemented": false,
-    "fallback_disposition": "runtime-builtin-not-definition-owned"
+    "fallback_disposition": "runtime-builtin-not-definition-owned",
+    "implemented": false
   },
   {
     "connector": "wasabi-stats-api",
@@ -5075,9 +5075,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "watchmode",
@@ -5085,9 +5085,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "weatherstack",
@@ -5197,9 +5197,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "workflowmax",
@@ -5207,9 +5207,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "workramp",
@@ -5235,9 +5235,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "xero",
@@ -5263,9 +5263,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "yahoo-finance-price",
@@ -5291,9 +5291,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "younium",
@@ -5310,9 +5310,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "youtube-analytics",
@@ -5329,9 +5329,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "zapier-supported-storage",
@@ -5348,9 +5348,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "zendesk-chat",
@@ -5394,9 +5394,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "zoho-analytics-metadata-api",
@@ -5419,9 +5419,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "zoho-billing",
@@ -5534,9 +5534,9 @@
     "path": "icons/pm-sample.svg",
     "source": "polymetrics",
     "review_status": "polymetrics",
-    "implemented": true,
     "review_url": "https://github.com/polymetrics-ai/cli",
-    "fallback_disposition": "reviewed-polymetrics-sample-fallback"
+    "fallback_disposition": "reviewed-polymetrics-sample-fallback",
+    "implemented": true
   },
   {
     "connector": "zoom",
