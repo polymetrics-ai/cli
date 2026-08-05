@@ -13,3 +13,6 @@ Current executed evidence:
 - Focused Recurly conformance, commandrunner's all-implemented-command preflight, Recurly binary
   execution fixtures, surface sync/check, focused validation, vet, `pm` build/help, root CLI golden
   generation, and website data generation have passed.
+- `pm connectors inspect recurly --json` confirms 93 registered streams, 96 registered typed write
+  actions, and read/write capability support. The complete `go test ./internal/cli/... -count=1`
+  passed after the root-help transcript regeneration.

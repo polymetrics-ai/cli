@@ -7,7 +7,7 @@
 - [x] `go run ./cmd/connectorgen validate internal/connectors/defs/recurly --json`
 - [x] `go test ./internal/connectors/conformance/...`
 - [x] `go test ./internal/connectors/commandrunner -run TestEveryImplementedCommandPassesRuntimePreflight`
-- [ ] `go test ./internal/cli/...`
+- [x] `go test ./internal/cli/...` (green after regenerating the required root CLI transcript)
 - [x] `go vet` for changed packages
 - [x] `go build ./cmd/pm`
 - [x] `pm recurly --help`, bare `pm recurly`, and all three binary command help paths; fixture-backed commandrunner execution covers the binary requests without credentials or live calls
