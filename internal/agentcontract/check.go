@@ -31,7 +31,7 @@ func CheckGSDCommands(ctx context.Context, root string, commands []string) error
 	}
 	script := filepath.Join(absoluteRoot, "scripts", "gsd")
 	for _, command := range commands {
-		invocation := exec.CommandContext(ctx, script, "sources", command)
+		invocation := exec.CommandContext(ctx, "node", script, "sources", command)
 		invocation.Dir = absoluteRoot
 		output, err := invocation.CombinedOutput()
 		if err != nil {
@@ -57,7 +57,7 @@ func CheckProjections(root string, contract *Contract) (returnErr error) {
 		if err != nil {
 			return err
 		}
-		content, err := projectionRoot.ReadFile(path)
+		content, err := readProjection(projectionRoot, target, path)
 		if err != nil {
 			if os.IsNotExist(err) && !target.Required {
 				continue
@@ -112,7 +112,7 @@ func SyncProjections(root string, contract *Contract) (updated int, returnErr er
 		if err != nil {
 			return updated, err
 		}
-		content, err := projectionRoot.ReadFile(path)
+		content, err := readProjection(projectionRoot, target, path)
 		if err != nil {
 			if os.IsNotExist(err) && !target.Required {
 				continue
@@ -222,6 +222,44 @@ func projectionPath(path string) (string, error) {
 		return "", fmt.Errorf("canonical contract: projection path %q is not local", path)
 	}
 	return localPath, nil
+}
+
+func readProjection(root *os.Root, target ProjectionTarget, path string) ([]byte, error) {
+	if err := validateProjectionReadPath(root, path, target.RenderMode == "full"); err != nil {
+		return nil, err
+	}
+	return root.ReadFile(path)
+}
+
+func validateProjectionReadPath(root *os.Root, path string, requireRegularFile bool) error {
+	components := strings.Split(path, string(filepath.Separator))
+	current := ""
+	for index, component := range components {
+		current = filepath.Join(current, component)
+		info, err := root.Lstat(current)
+		if err != nil {
+			return err
+		}
+		isTarget := index == len(components)-1
+		if !isTarget {
+			if info.Mode()&os.ModeSymlink != 0 {
+				return fmt.Errorf("projection ancestor %s is a symbolic link", current)
+			}
+			if !info.IsDir() {
+				return fmt.Errorf("projection ancestor %s is not a directory", current)
+			}
+			continue
+		}
+		if requireRegularFile {
+			if info.Mode()&os.ModeSymlink != 0 {
+				return fmt.Errorf("full projection %s is a symbolic link", current)
+			}
+			if !info.Mode().IsRegular() {
+				return fmt.Errorf("full projection %s is not a regular file", current)
+			}
+		}
+	}
+	return nil
 }
 
 func writeAtomic(root *os.Root, path string, content []byte, mode os.FileMode) error {

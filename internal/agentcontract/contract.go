@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
+	"path"
 	"slices"
 	"strings"
 	"unicode"
@@ -362,7 +362,7 @@ func validateProjections(targets []ProjectionTarget) error {
 	for _, target := range targets {
 		key := target.Harness + "/" + target.Role
 		want, ok := expected[key]
-		if !ok || target.Path != want.path || target.Required != want.required || target.RenderMode != want.renderMode || filepath.Clean(target.Path) != target.Path || filepath.IsAbs(target.Path) || seen[key] {
+		if !ok || target.Path != want.path || target.Required != want.required || target.RenderMode != want.renderMode || path.Clean(target.Path) != target.Path || path.IsAbs(target.Path) || seen[key] {
 			return fmt.Errorf("canonical contract: invalid projection target %q at %q", key, target.Path)
 		}
 		seen[key] = true

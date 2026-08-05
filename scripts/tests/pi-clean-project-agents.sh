@@ -23,6 +23,8 @@ if [[ ! -d "$pi_dependency_modules" ]]; then
   fail 'the installed Pi coding-agent dependencies are required to execute the extension test'
 fi
 
+PI_SUB_AGENT_DEPTH=0 \
+PI_SUBAGENT_SESSION_DIR="" \
 PI_CODING_AGENT_DIR="$fixture_agent_dir" \
 NODE_PATH="$pi_dependency_modules:$node_modules" \
 PI_CLEAN_PROJECT_REPO_ROOT="$repo_root" \

@@ -27,8 +27,8 @@ func TestCheckGSDCommandsRunsFromSelectedRoot(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(root, ".selected-root"), nil, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	contents := []byte("#!/bin/sh\n[ -f .selected-root ]\n")
-	if err := os.WriteFile(script, contents, 0o755); err != nil {
+	contents := []byte("const fs = require(\"node:fs\");\nprocess.exit(fs.existsSync(\".selected-root\") ? 0 : 1);\n")
+	if err := os.WriteFile(script, contents, 0o644); err != nil {
 		t.Fatal(err)
 	}
 
@@ -91,14 +91,14 @@ func TestProjectionDriftCheckAndSync(t *testing.T) {
 	}
 }
 
-func TestOptionalNonPiWaveProjectionMayBeAbsent(t *testing.T) {
+func TestPendingNonPiWaveProjectionMayBeAbsent(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	root := t.TempDir()
 	if updated, err := SyncProjections(root, contract); err != nil || updated != 2 {
 		t.Fatalf("create required Pi projections: updated=%d err=%v", updated, err)
 	}
 	if err := CheckProjections(root, contract); err != nil {
-		t.Fatalf("optional non-Pi projections should be absent: %v", err)
+		t.Fatalf("pending non-Pi projections may be absent: %v", err)
 	}
 }
 
@@ -202,6 +202,69 @@ func TestSyncPiProjectionRejectsSymlinkParent(t *testing.T) {
 	}
 	if len(entries) != 0 {
 		t.Fatalf("SyncProjections created Pi projection content outside the selected root: %#v", entries)
+	}
+}
+
+func TestFullProjectionIORejectsInRootSymlinks(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	var target ProjectionTarget
+	for _, candidate := range contract.Projections {
+		if candidate.Harness == "pi" && candidate.Role == contract.BaseRole.Name {
+			target = candidate
+			break
+		}
+	}
+	if target.Path == "" {
+		t.Fatal("missing delivery-worker Pi projection")
+	}
+
+	tests := []struct {
+		name   string
+		mutate func(*testing.T, string, string)
+	}{
+		{
+			name: "projection file",
+			mutate: func(t *testing.T, _, targetPath string) {
+				realPath := targetPath + ".real"
+				if err := os.Rename(targetPath, realPath); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Symlink(filepath.Base(realPath), targetPath); err != nil {
+					t.Skipf("cannot create projection file symlink: %v", err)
+				}
+			},
+		},
+		{
+			name: "projection ancestor",
+			mutate: func(t *testing.T, root, _ string) {
+				piPath := filepath.Join(root, ".pi")
+				realPath := filepath.Join(root, ".pi-real")
+				if err := os.Rename(piPath, realPath); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Symlink(filepath.Base(realPath), piPath); err != nil {
+					t.Skipf("cannot create projection ancestor symlink: %v", err)
+				}
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			if updated, err := SyncProjections(root, contract); err != nil || updated != 2 {
+				t.Fatalf("create required Pi projections: updated=%d err=%v", updated, err)
+			}
+			targetPath := filepath.Join(root, filepath.FromSlash(target.Path))
+			test.mutate(t, root, targetPath)
+
+			if err := CheckProjections(root, contract); err == nil || !strings.Contains(err.Error(), "symbolic link") {
+				t.Fatalf("CheckProjections must reject the symlink, got %v", err)
+			}
+			if _, err := SyncProjections(root, contract); err == nil || !strings.Contains(err.Error(), "symbolic link") {
+				t.Fatalf("SyncProjections must reject the symlink, got %v", err)
+			}
+		})
 	}
 }
 

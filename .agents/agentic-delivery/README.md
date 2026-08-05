@@ -59,16 +59,19 @@ Specialized agent families can live beside it under `.agents/<functional-area>/`
 same schema and issue-to-PR contract.
 
 Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are thin
-activation adapters. The six `pm-delivery-worker` and `pm-connector-worker` targets registered in
-`canonical/delivery-contract.json` remain optional until their owning harness wave adds each
-wrapper. Once present, they project marked blocks from the canonical source and must not copy
-GSD/TDD, review, or human-gate policy by hand.
+activation adapters. The two Pi projections exist today as required, fully generated files from
+Wave 4 (#3715). The two Claude projections are pending Wave 2 (#3716), and the two Codex
+projections are pending Wave 3 (#3721); each becomes required once present. Pi uses full-file
+rendering, while the registered Claude and Codex targets render canonical blocks inside
+harness-owned wrappers. This is only a generation-mechanism distinction, not a difference in
+required status. No projection may copy GSD/TDD, review, or human-gate policy by hand.
 
 ## Design principles
 
 - `canonical/delivery-contract.json` is the sole owner of the canonical roles, ordered delivery
   states, tracker gates, GSD/no-mistakes topology, authority boundary, and projection registry.
-- Agent definitions are declarative YAML, but runtime-specific adapters stay optional.
+- Runtime-specific adapters are generated from the canonical JSON contract as their harness waves
+  land.
 - Issues remain the unit of work. PRs must reference issues.
 - Large goals use parent issues with sub-issues. A sub-PR may advance to completed parent-branch
   integration without human approval only when all automated gates pass and no human gate is
