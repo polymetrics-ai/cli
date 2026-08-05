@@ -2,6 +2,8 @@ package engine
 
 import (
 	"encoding/json"
+	"fmt"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -204,6 +206,132 @@ func TestSchemaValidateInstances(t *testing.T) {
 	}
 }
 
+func TestSchemaMappingRequirementsUseCompiledComposition(t *testing.T) {
+	t.Run("allOf required fields", func(t *testing.T) {
+		schema, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"additionalProperties":false,
+			"properties":{"name":{"type":"string"}},
+			"allOf":[{"required":["name"]}]
+		}`))
+		if err != nil {
+			t.Fatalf("CompileSchema: %v", err)
+		}
+		paths, err := schema.RequiredMappingPaths()
+		if err != nil {
+			t.Fatalf("RequiredMappingPaths: %v", err)
+		}
+		if !reflect.DeepEqual(paths, []string{"name"}) {
+			t.Fatalf("RequiredMappingPaths = %v, want [name]", paths)
+		}
+		info, err := schema.MappingPath("name")
+		if err != nil {
+			t.Fatalf("MappingPath(name): %v", err)
+		}
+		if !reflect.DeepEqual(info.Types, []string{"string"}) {
+			t.Fatalf("MappingPath(name).Types = %v, want [string]", info.Types)
+		}
+	})
+
+	t.Run("unsatisfiable allOf type intersection", func(t *testing.T) {
+		schema, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"additionalProperties":false,
+			"required":["value"],
+			"properties":{"value":{"allOf":[{"type":"string"},{"type":"integer"}]}}
+		}`))
+		if err != nil {
+			t.Fatalf("CompileSchema: %v", err)
+		}
+		if _, err := schema.RequiredMappingPaths(); err == nil || !strings.Contains(err.Error(), "unsatisfiable") {
+			t.Fatalf("RequiredMappingPaths error = %v, want unsatisfiable allOf error", err)
+		}
+		if _, err := schema.MappingPath("value"); err == nil || !strings.Contains(err.Error(), "unsatisfiable") {
+			t.Fatalf("MappingPath(value) error = %v, want unsatisfiable allOf error", err)
+		}
+	})
+
+	t.Run("number and integer intersect as integer", func(t *testing.T) {
+		schema, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"additionalProperties":false,
+			"required":["value"],
+			"properties":{"value":{"allOf":[{"type":"number"},{"type":"integer"}]}}
+		}`))
+		if err != nil {
+			t.Fatalf("CompileSchema: %v", err)
+		}
+		info, err := schema.MappingPath("value")
+		if err != nil {
+			t.Fatalf("MappingPath(value): %v", err)
+		}
+		if !reflect.DeepEqual(info.Types, []string{"integer"}) {
+			t.Fatalf("MappingPath(value).Types = %v, want [integer]", info.Types)
+		}
+	})
+
+	t.Run("incompatible closed allOf objects fail compilation", func(t *testing.T) {
+		_, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"allOf":[
+				{"type":"object","additionalProperties":false,"properties":{"first":{"type":"string"}}},
+				{"type":"object","additionalProperties":false,"properties":{"last":{"type":"string"}}}
+			]
+		}`))
+		if err == nil || !strings.Contains(err.Error(), "incompatible closed-object allOf") {
+			t.Fatalf("CompileSchema error = %v, want incompatible closed-object allOf", err)
+		}
+	})
+
+	t.Run("request pointers preserve literal dotted properties", func(t *testing.T) {
+		schema, err := CompileSchema(json.RawMessage(`{
+			"type":"object",
+			"additionalProperties":false,
+			"required":["a.b","a"],
+			"properties":{
+				"a.b":{"type":"string"},
+				"a":{"type":"object","additionalProperties":false,"required":["b"],"properties":{"b":{"type":"string"}}}
+			}
+		}`))
+		if err != nil {
+			t.Fatalf("CompileSchema: %v", err)
+		}
+		paths, err := schema.RequiredRequestBodyPointers()
+		if err != nil {
+			t.Fatalf("RequiredRequestBodyPointers: %v", err)
+		}
+		if !reflect.DeepEqual(paths, []string{"/body/a.b", "/body/a/b"}) {
+			t.Fatalf("RequiredRequestBodyPointers = %v", paths)
+		}
+		for _, pointer := range paths {
+			got, err := CanonicalRequestFieldPointer(pointer, schema)
+			if err != nil {
+				t.Fatalf("CanonicalRequestFieldPointer(%q): %v", pointer, err)
+			}
+			if got != pointer {
+				t.Fatalf("CanonicalRequestFieldPointer(%q) = %q", pointer, got)
+			}
+		}
+	})
+
+	for _, keyword := range []string{"anyOf", "oneOf"} {
+		t.Run(keyword+" is explicit", func(t *testing.T) {
+			schema, err := CompileSchema(json.RawMessage(fmt.Sprintf(`{
+				"type":"object",
+				"additionalProperties":false,
+				"properties":{"name":{"type":"string"},"id":{"type":"string"}},
+				%q:[{"required":["name"]},{"required":["id"]}]
+			}`, keyword)))
+			if err != nil {
+				t.Fatalf("CompileSchema: %v", err)
+			}
+			if _, err := schema.RequiredMappingPaths(); err == nil || !strings.Contains(err.Error(), keyword) {
+				t.Fatalf("RequiredMappingPaths error = %v, want %s alternative error", err, keyword)
+			}
+		})
+	}
+}
+
 func TestSchemaSecretKeys(t *testing.T) {
 	raw := `{
 		"type": "object",
@@ -343,6 +471,191 @@ func TestSchemaCompileErrorMessages(t *testing.T) {
 	_, err = CompileSchema(json.RawMessage(`{"type":"bogus-type"}`))
 	if err == nil {
 		t.Fatalf("expected error for unknown type value")
+	}
+}
+
+func TestSchemaValidatesRequestBodyInputTypes(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{
+			"count":{"type":"integer"},
+			"names":{"type":"array","items":{"type":"string"}},
+			"ids":{"type":"array","items":{"type":"integer"}}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	tests := []struct {
+		name      string
+		pointer   string
+		inputType string
+		wantErr   bool
+	}{
+		{name: "integer", pointer: "/body/count", inputType: "integer"},
+		{name: "integer rejects string", pointer: "/body/count", inputType: "string", wantErr: true},
+		{name: "string array", pointer: "/body/names", inputType: "string_array"},
+		{name: "string array rejects integer items", pointer: "/body/ids", inputType: "string_array", wantErr: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := sch.ValidateRequestBodyInputType(tt.pointer, tt.inputType)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("ValidateRequestBodyInputType() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestSchemaValidatesRequestBodyInputDomains(t *testing.T) {
+	sch, err := CompileSchema(json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"properties":{
+			"state":{"type":"string","enum":["open","paused"]},
+			"empty_only":{"type":"string","enum":[""]},
+			"timestamp":{"type":"string","enum":["not-a-date"]},
+			"whole":{"type":"number","enum":[1]},
+			"fractional":{"type":"number","enum":[1.5]},
+			"ids":{"type":"array","minItems":2,"maxItems":4,"items":{"type":"string"}},
+			"required_empty":{"type":"array","maxItems":0,"items":{"type":"string"}},
+			"patterned_state":{"type":"string","pattern":"^open$"},
+			"required_empty_pattern":{"type":"string","pattern":"^$"},
+			"required_whitespace_pattern":{"type":"string","pattern":"^ +$"},
+			"formatted_open_pattern":{"type":"string","pattern":"^open$"},
+			"single_digit_hour_pattern":{"type":"string","pattern":"T3:"},
+			"two_digit_hour_pattern":{"type":"string","pattern":"T03:"},
+			"compatible_pattern":{"type":"string","pattern":"^[a-z]+$"},
+			"empty_pattern_labels":{"type":"array","items":{"type":"string","pattern":"^$"}},
+			"delimited_pattern_labels":{"type":"array","items":{"type":"string","pattern":"^a,b$"}},
+			"incompatible_patterns":{"type":"string","allOf":[{"pattern":"^a+$"},{"pattern":"^b+$"}]},
+			"compatible_patterns":{"type":"string","allOf":[{"pattern":"^[a-z]+$"},{"pattern":"^a+$"}]},
+			"labels":{"type":"array","items":{"type":"string","enum":["alpha"]}},
+			"delimited_labels":{"type":"array","items":{"type":"string","enum":["a,b"]}},
+			"unsafe_labels":{"type":"array","enum":[["line\nbreak"]],"items":{"type":"string"}},
+			"numeric_labels":{"type":"array","items":{"enum":[1]}},
+			"composed_numeric_labels":{"allOf":[{"items":{"enum":[1]}}]}
+		}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	tests := []struct {
+		name    string
+		pointer string
+		input   RequestBodyInput
+		witness string
+		wantErr bool
+	}{
+		{name: "finite enum rejects partial schema enum overlap", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"open", "closed"}}, wantErr: true},
+		{name: "finite enum accepts complete schema enum overlap", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"open", "paused"}}},
+		{name: "disjoint enum", pointer: "/body/state", input: RequestBodyInput{Type: "enum", Values: []string{"closed"}}, wantErr: true},
+		{name: "required string excludes empty enum", pointer: "/body/empty_only", input: RequestBodyInput{Type: "string", Required: true}, wantErr: true},
+		{name: "date-time format excludes invalid enum", pointer: "/body/timestamp", input: RequestBodyInput{Type: "string", Format: "date-time"}, wantErr: true},
+		{name: "integer intersects whole number enum", pointer: "/body/whole", input: RequestBodyInput{Type: "integer"}},
+		{name: "integer excludes fractional number enum", pointer: "/body/fractional", input: RequestBodyInput{Type: "integer"}, wantErr: true},
+		{name: "compatible array bounds", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MinItems: 1, MaxItems: 3}},
+		{name: "cli maximum below schema minimum", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MaxItems: 1}, wantErr: true},
+		{name: "cli minimum above schema maximum", pointer: "/body/ids", input: RequestBodyInput{Type: "string_array", MinItems: 5}, wantErr: true},
+		{name: "required string array excludes schema maximum zero", pointer: "/body/required_empty", input: RequestBodyInput{Type: "string_array", Required: true}, wantErr: true},
+		{name: "finite enum rejects partial schema pattern match", pointer: "/body/patterned_state", input: RequestBodyInput{Type: "enum", Values: []string{"open", "closed"}, Required: true}, wantErr: true},
+		{name: "finite enum accepts complete schema pattern match", pointer: "/body/patterned_state", input: RequestBodyInput{Type: "enum", Values: []string{"open"}, Required: true}},
+		{name: "finite enum excludes schema pattern", pointer: "/body/patterned_state", input: RequestBodyInput{Type: "enum", Values: []string{"closed"}, Required: true}, wantErr: true},
+		{name: "required string excludes empty-only pattern", pointer: "/body/required_empty_pattern", input: RequestBodyInput{Type: "string", Required: true}, wantErr: true},
+		{name: "required string excludes whitespace-only pattern", pointer: "/body/required_whitespace_pattern", input: RequestBodyInput{Type: "string", Required: true}, wantErr: true},
+		{name: "date-time excludes incompatible pattern", pointer: "/body/formatted_open_pattern", input: RequestBodyInput{Type: "string", Format: "date-time", Required: true}, wantErr: true},
+		{name: "date-time accepts runtime single-digit hour", pointer: "/body/single_digit_hour_pattern", input: RequestBodyInput{Type: "string", Format: "date-time", Required: true}, witness: "2026-08-05T3:04:05Z"},
+		{name: "date-time accepts standard two-digit hour", pointer: "/body/two_digit_hour_pattern", input: RequestBodyInput{Type: "string", Format: "date-time", Required: true}, witness: "2026-08-05T03:04:05Z"},
+		{name: "string array excludes empty-only item pattern", pointer: "/body/empty_pattern_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
+		{name: "string array excludes delimiter-only item pattern", pointer: "/body/delimited_pattern_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
+		{name: "string rejects incompatible allOf patterns", pointer: "/body/incompatible_patterns", input: RequestBodyInput{Type: "string", Required: true}, wantErr: true},
+		{name: "string accepts compatible allOf patterns", pointer: "/body/compatible_patterns", input: RequestBodyInput{Type: "string", Required: true}},
+		{name: "non-enum string accepts compatible pattern", pointer: "/body/compatible_pattern", input: RequestBodyInput{Type: "string", Required: true}},
+		{name: "string array intersects item enum", pointer: "/body/labels", input: RequestBodyInput{Type: "string_array"}},
+		{name: "string array excludes delimited item enum", pointer: "/body/delimited_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
+		{name: "string array excludes unsafe root enum item", pointer: "/body/unsafe_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
+		{name: "string array excludes numeric item enum", pointer: "/body/numeric_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
+		{name: "string array excludes composed numeric item enum", pointer: "/body/composed_numeric_labels", input: RequestBodyInput{Type: "string_array"}, wantErr: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.witness != "" && !requestInputDomainAcceptsValue(tt.input, tt.witness) {
+				t.Fatalf("runtime input domain rejected witness %q", tt.witness)
+			}
+			err := sch.ValidateRequestBodyInput(tt.pointer, tt.input)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("ValidateRequestBodyInput() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestValidateRequestFieldPointerAssignmentsRejectsOverwrites(t *testing.T) {
+	tests := []struct {
+		name     string
+		pointers []string
+	}{
+		{name: "duplicate path", pointers: []string{"/path/id", "/path/id"}},
+		{name: "duplicate query", pointers: []string{"/query/filter", "/query/filter"}},
+		{name: "duplicate body", pointers: []string{"/body/name", "/body/name"}},
+		{name: "body parent child", pointers: []string{"/body/config", "/body/config/value"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := ValidateRequestFieldPointerAssignments(tt.pointers); err == nil {
+				t.Fatal("ValidateRequestFieldPointerAssignments() error = nil")
+			}
+		})
+	}
+}
+
+func TestSchemaValidatesEffectiveRequestBodyAssembly(t *testing.T) {
+	tests := []struct {
+		name     string
+		raw      string
+		static   map[string]any
+		required []string
+		optional []string
+		wantErr  bool
+	}{
+		{
+			name:     "required object override replaces static scalar",
+			raw:      `{"type":"object","additionalProperties":false,"required":["config"],"properties":{"config":{"type":"object","additionalProperties":false,"required":["value"],"properties":{"value":{"type":"string"}}}}}`,
+			static:   map[string]any{"config": "legacy"},
+			required: []string{"/body/config/value"},
+		},
+		{
+			name:     "dynamic array replacement must retain required siblings",
+			raw:      `{"type":"object","additionalProperties":false,"required":["items"],"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["name","kind"],"properties":{"name":{"type":"string"},"kind":{"type":"string"}}}}}}`,
+			static:   map[string]any{"items": []any{map[string]any{"name": "static", "kind": "widget"}}},
+			required: []string{"/body/items/0/name"},
+			wantErr:  true,
+		},
+		{
+			name:     "required sparse array mapping",
+			raw:      `{"type":"object","additionalProperties":false,"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}}}`,
+			required: []string{"/body/items/1/name"},
+			wantErr:  true,
+		},
+		{
+			name:     "optional sparse array mapping",
+			raw:      `{"type":"object","additionalProperties":false,"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}}}`,
+			optional: []string{"/body/items/1/name"},
+			wantErr:  true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			sch, err := CompileSchema(json.RawMessage(tt.raw))
+			if err != nil {
+				t.Fatalf("CompileSchema: %v", err)
+			}
+			err = sch.ValidateEffectiveRequestBody(tt.static, tt.required, tt.optional)
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("ValidateEffectiveRequestBody() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
 	}
 }
 

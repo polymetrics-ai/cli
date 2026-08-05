@@ -46,6 +46,19 @@ func TestValidateIdentifierAcceptsExpectedNames(t *testing.T) {
 	}
 }
 
+func TestValidateQueryParameterName(t *testing.T) {
+	for _, in := range []string{"filter", "filter[status]", "page[size]", "filter[status][eq]"} {
+		if err := safety.ValidateQueryParameterName(in, "query parameter"); err != nil {
+			t.Errorf("ValidateQueryParameterName(%q) error = %v", in, err)
+		}
+	}
+	for _, in := range []string{"", "filter[]", "filter[status", "filter[[status]]", "filter[sta tus]", "filter[status]&admin=true"} {
+		if err := safety.ValidateQueryParameterName(in, "query parameter"); err == nil {
+			t.Errorf("ValidateQueryParameterName(%q) succeeded, want error", in)
+		}
+	}
+}
+
 func TestRedactErrorTextRemovesHTTPURLQueryAndBodySecrets(t *testing.T) {
 	input := `http 401 for https://api.example.test/v1/items?api_key=secret-token&cursor=abc: {"error":"secret-token denied","access_token":"abc"}`
 	got := safety.RedactErrorText(input)

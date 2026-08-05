@@ -540,6 +540,28 @@ func TestExecuteWrite_NonCompoundActionFallsBackToDeclarative(t *testing.T) {
 	}
 }
 
+func TestWriteDispatchOwnershipMatchesExecuteSelector(t *testing.T) {
+	h := githubhooks.New()
+	owned := []string{
+		"close_issue",
+		"close_pull_request",
+		"reopen_issue",
+		"reopen_pull_request",
+		"create_pull_request",
+		"update_pull_request",
+		"create_label",
+		"update_label",
+	}
+	for _, action := range owned {
+		if !h.OwnsWriteAction(action) {
+			t.Errorf("OwnsWriteAction(%q) = false, want true", action)
+		}
+	}
+	if h.OwnsWriteAction("codespaces_secrets_secret_name") {
+		t.Fatal("OwnsWriteAction(codespaces_secrets_secret_name) = true, want declarative fallback")
+	}
+}
+
 func TestConnectorName(t *testing.T) {
 	h := githubhooks.New()
 	if got := h.ConnectorName(); got != "github" {

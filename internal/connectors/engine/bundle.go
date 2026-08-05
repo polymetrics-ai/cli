@@ -12,6 +12,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"polymetrics.ai/internal/safety"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
@@ -656,6 +658,7 @@ type OperationSpec struct {
 	Summary         string                  `json:"summary"`
 	Description     string                  `json:"description,omitempty"`
 	SourceURL       string                  `json:"source_url,omitempty"`
+	RequestContract *RequestContractSpec    `json:"request_contract,omitempty"`
 	Risk            string                  `json:"risk"`
 	Approval        string                  `json:"approval"`
 	OutputPolicy    string                  `json:"output_policy"`
@@ -676,14 +679,30 @@ type OperationSpec struct {
 	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
 }
 
+type RequestContractSpec struct {
+	SourceTier       int                    `json:"source_tier"`
+	SourceURL        string                 `json:"source_url"`
+	SourceLocation   string                 `json:"source_location"`
+	SiblingOperation string                 `json:"sibling_operation,omitempty"`
+	WriteAction      string                 `json:"write_action,omitempty"`
+	WriteFieldMap    map[string]string      `json:"write_field_map,omitempty"`
+	Fields           []RequestContractField `json:"fields"`
+}
+
+type RequestContractField struct {
+	Path           string `json:"path"`
+	SourceURL      string `json:"source_url"`
+	SourceLocation string `json:"source_location"`
+}
+
 type RESTOperationSpec struct {
-	Method      string            `json:"method"`
-	Path        string            `json:"path"`
-	ContentType string            `json:"content_type,omitempty"`
-	MaxBytes    int               `json:"max_bytes,omitempty"`
-	Query       map[string]string `json:"query,omitempty"`
-	Body        map[string]any    `json:"body,omitempty"`
-	BodySchema  json.RawMessage   `json:"body_schema,omitempty"`
+	Method      string             `json:"method"`
+	Path        string             `json:"path"`
+	ContentType string             `json:"content_type,omitempty"`
+	MaxBytes    int                `json:"max_bytes,omitempty"`
+	Query       map[string]string  `json:"query,omitempty"`
+	Body        *RESTOperationBody `json:"body,omitempty"`
+	BodySchema  json.RawMessage    `json:"body_schema,omitempty"`
 	// RequiredQuery declares query-parameter cardinality for endpoints that
 	// must never be called unfiltered — a listing that returns an entire
 	// enterprise when no filter is supplied, for example. Every group must be
@@ -692,6 +711,44 @@ type RESTOperationSpec struct {
 	// the constraint is about the wire request rather than about who supplied
 	// it. Empty (the default) imposes nothing.
 	RequiredQuery []RequiredQueryGroup `json:"required_query,omitempty"`
+}
+
+type RESTOperationBody struct {
+	Fields map[string]any
+	None   bool
+}
+
+func (b *RESTOperationBody) UnmarshalJSON(raw []byte) error {
+	var mode string
+	if err := json.Unmarshal(raw, &mode); err == nil {
+		if mode != "none" {
+			return fmt.Errorf("rest body string must be %q, got %q", "none", mode)
+		}
+		b.Fields = nil
+		b.None = true
+		return nil
+	}
+
+	var fields map[string]any
+	if err := json.Unmarshal(raw, &fields); err != nil {
+		return fmt.Errorf("rest body must be an object or %q: %w", "none", err)
+	}
+	if fields == nil {
+		return fmt.Errorf("rest body must be an object or %q", "none")
+	}
+	b.Fields = fields
+	b.None = false
+	return nil
+}
+
+func (b RESTOperationBody) MarshalJSON() ([]byte, error) {
+	if b.None {
+		return json.Marshal("none")
+	}
+	if b.Fields == nil {
+		return []byte("{}"), nil
+	}
+	return json.Marshal(b.Fields)
 }
 
 // RequiredQueryGroup is one "at least one of these" constraint. Several groups
@@ -1114,6 +1171,9 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	if err != nil {
 		return Bundle{}, err
 	}
+	if err := validateWriteRequestContractLinks(dirName, writes, operations); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
 
 	schemas, err := loadStreamSchemas(sub, dirName, streams)
 	if err != nil {
@@ -1366,6 +1426,14 @@ func validateWriteBodies(actions []WriteAction) error {
 		if action.Base64Upload != nil && bodyType != "base64_upload" {
 			return fmt.Errorf("action %d (%q) declares base64_upload but body_type is %q", i, action.Name, bodyType)
 		}
+		for name := range action.Query {
+			if name != strings.TrimSpace(name) {
+				return fmt.Errorf("action %d (%q) query parameter %q contains surrounding whitespace", i, action.Name, name)
+			}
+			if err := safety.ValidateQueryParameterName(name, "query parameter"); err != nil {
+				return fmt.Errorf("action %d (%q) query parameter %q: %w", i, action.Name, name, err)
+			}
+		}
 		switch bodyType {
 		case "graphql":
 			if action.GraphQL == nil {
@@ -1384,8 +1452,8 @@ func validateWriteBodies(actions []WriteAction) error {
 			if strings.TrimSpace(action.BodyField) == "" {
 				return fmt.Errorf("action %d (%q) body_type json_array requires body_field", i, action.Name)
 			}
-			if len(action.BodySchema) == 0 {
-				return fmt.Errorf("action %d (%q) body_type json_array requires body_schema", i, action.Name)
+			if err := validateJSONArrayRequestSchema(action.BodySchema); err != nil {
+				return fmt.Errorf("action %d (%q): %w", i, action.Name, err)
 			}
 		case "base64_upload":
 			if err := validateBase64UploadSpec(i, action); err != nil {
@@ -1398,6 +1466,9 @@ func validateWriteBodies(actions []WriteAction) error {
 			for j, part := range action.Multipart.Parts {
 				if strings.TrimSpace(part.Name) == "" || strings.TrimSpace(part.Field) == "" {
 					return fmt.Errorf("action %d (%q) multipart part %d requires name and field", i, action.Name, j)
+				}
+				if part.Name != strings.TrimSpace(part.Name) {
+					return fmt.Errorf("action %d (%q) multipart part %d name %q contains surrounding whitespace", i, action.Name, j, part.Name)
 				}
 				switch part.Type {
 				case "field", "file":
@@ -1766,6 +1837,17 @@ func loadOperations(sub fs.FS, dirName string) ([]OperationSpec, json.RawMessage
 	if err := strictDecode(raw, &doc); err != nil {
 		return nil, nil, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
 	}
+	for i := range doc.Operations {
+		op := &doc.Operations[i]
+		if op.REST == nil || len(op.REST.BodySchema) == 0 {
+			continue
+		}
+		inlined, err := inlineRequestSchema(op.REST.BodySchema)
+		if err != nil {
+			return nil, nil, fmt.Errorf("load bundle %s: operations.json: operation %d (%q): %w", dirName, i, op.ID, err)
+		}
+		op.REST.BodySchema = inlined
+	}
 	if err := validateOperations(doc.Operations); err != nil {
 		return nil, nil, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
 	}
@@ -1854,13 +1936,18 @@ func validateRequiredQuery(i int, op OperationSpec) error {
 	if op.REST == nil {
 		return nil
 	}
+	for name := range op.REST.Query {
+		if err := safety.ValidateQueryParameterName(name, "query parameter"); err != nil {
+			return fmt.Errorf("operation %d (%q) rest.query parameter %q: %w", i, op.ID, name, err)
+		}
+	}
 	for j, group := range op.REST.RequiredQuery {
 		if len(group.AnyOf) == 0 {
 			return fmt.Errorf("operation %d (%q) required_query group %d must name at least one parameter", i, op.ID, j)
 		}
 		for _, name := range group.AnyOf {
-			if strings.TrimSpace(name) == "" {
-				return fmt.Errorf("operation %d (%q) required_query group %d has a blank parameter name", i, op.ID, j)
+			if err := safety.ValidateQueryParameterName(name, "query parameter"); err != nil {
+				return fmt.Errorf("operation %d (%q) required_query group %d parameter %q: %w", i, op.ID, j, name, err)
 			}
 		}
 	}
@@ -1877,8 +1964,11 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if method != "GET" && method != "POST" {
 			return fmt.Errorf("operation %d (%q) rest_read method must be GET or POST, got %s", i, op.ID, method)
 		}
-		if method == "POST" && len(op.REST.BodySchema) == 0 {
+		if method == "POST" && len(op.REST.BodySchema) == 0 && (op.REST.Body == nil || !op.REST.Body.None) {
 			return fmt.Errorf("operation %d (%q) rest_read POST must declare body_schema", i, op.ID)
+		}
+		if method == "GET" && (len(op.REST.BodySchema) > 0 || op.REST.Body != nil && !op.REST.Body.None) {
+			return fmt.Errorf("operation %d (%q) rest_read GET must declare body %q", i, op.ID, "none")
 		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
 			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
@@ -1935,7 +2025,229 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 	if err := validateSensitivePolicy(i, op); err != nil {
 		return err
 	}
+	return validateRequestContract(i, op)
+}
+
+func validateRequestContract(i int, op OperationSpec) error {
+	if op.REST == nil {
+		if op.RequestContract != nil {
+			return fmt.Errorf("operation %d (%q) request_contract is only supported for REST operations", i, op.ID)
+		}
+		return nil
+	}
+	if op.REST.Body != nil && op.REST.Body.None {
+		if len(op.REST.BodySchema) != 0 {
+			return fmt.Errorf("operation %d (%q) rest body none must not declare body_schema", i, op.ID)
+		}
+	}
+	if op.RequestContract == nil {
+		return fmt.Errorf("operation %d (%q) REST operation must declare request_contract evidence", i, op.ID)
+	}
+
+	contract := op.RequestContract
+	if strings.TrimSpace(contract.SourceURL) == "" {
+		return fmt.Errorf("operation %d (%q) request_contract source_url is required", i, op.ID)
+	}
+	if strings.TrimSpace(contract.SourceLocation) == "" {
+		return fmt.Errorf("operation %d (%q) request_contract source_location is required", i, op.ID)
+	}
+	switch contract.SourceTier {
+	case 1, 2, 3:
+		if strings.TrimSpace(contract.SiblingOperation) != "" {
+			return fmt.Errorf("operation %d (%q) request_contract sibling_operation is only valid for source_tier 4", i, op.ID)
+		}
+	case 4:
+		if strings.TrimSpace(contract.SiblingOperation) == "" {
+			return fmt.Errorf("operation %d (%q) request_contract source_tier 4 requires sibling_operation", i, op.ID)
+		}
+	default:
+		return fmt.Errorf("operation %d (%q) request_contract source_tier must be 1, 2, 3, or 4", i, op.ID)
+	}
+	declaredFields, err := declaredRequestContractFields(op.REST)
+	if err != nil {
+		return fmt.Errorf("operation %d (%q) request_contract: %w", i, op.ID, err)
+	}
+	declaredFieldSet := make(map[string]bool, len(declaredFields))
+	for _, path := range declaredFields {
+		declaredFieldSet[path] = true
+	}
+
+	citations := make(map[string]bool, len(contract.Fields))
+	for j, field := range contract.Fields {
+		path := strings.TrimSpace(field.Path)
+		if !validRequestContractFieldPath(path) {
+			return fmt.Errorf("operation %d (%q) request_contract field %d has invalid path %q", i, op.ID, j, field.Path)
+		}
+		if citations[path] {
+			return fmt.Errorf("operation %d (%q) request_contract field %d duplicates path %q", i, op.ID, j, path)
+		}
+		if strings.TrimSpace(field.SourceURL) == "" {
+			return fmt.Errorf("operation %d (%q) request_contract field %q source_url is required", i, op.ID, path)
+		}
+		if strings.TrimSpace(field.SourceLocation) == "" {
+			return fmt.Errorf("operation %d (%q) request_contract field %q source_location is required", i, op.ID, path)
+		}
+		if requestContractFieldNamespace(path) == "body" && op.REST.Body != nil && op.REST.Body.None {
+			return fmt.Errorf("operation %d (%q) request_contract field %q conflicts with rest body none", i, op.ID, path)
+		}
+		if !declaredFieldSet[path] {
+			return fmt.Errorf("operation %d (%q) request_contract field %q does not match a declared REST request field", i, op.ID, path)
+		}
+		citations[path] = true
+	}
+
+	for _, path := range declaredFields {
+		if !citations[path] {
+			return fmt.Errorf("operation %d (%q) request_contract is missing citation for %q", i, op.ID, path)
+		}
+	}
+	if len(op.REST.BodySchema) == 0 && (op.REST.Body == nil || !op.REST.Body.None && len(op.REST.Body.Fields) == 0) {
+		return fmt.Errorf("operation %d (%q) request with no declared body fields must declare body %q", i, op.ID, "none")
+	}
+	if contract.WriteAction == "" && len(contract.WriteFieldMap) > 0 {
+		return fmt.Errorf("operation %d (%q) request_contract write_field_map requires write_action", i, op.ID)
+	}
 	return nil
+}
+
+func declaredRequestContractFields(rest *RESTOperationSpec) ([]string, error) {
+	fields := map[string]bool{}
+	variables, err := parsePathTemplate(rest.Path)
+	if err != nil {
+		return nil, fmt.Errorf("invalid rest.path template %q: %w", rest.Path, err)
+	}
+	for _, variable := range variables {
+		fields[requestFieldPointer("path", variable.Name)] = true
+	}
+	for name := range rest.Query {
+		fields[requestFieldPointer("query", name)] = true
+	}
+	for _, group := range rest.RequiredQuery {
+		for _, name := range group.AnyOf {
+			fields[requestFieldPointer("query", strings.TrimSpace(name))] = true
+		}
+	}
+	if rest.Body != nil && !rest.Body.None {
+		collectRequestValueFields(rest.Body.Fields, "/body", fields)
+	}
+	if len(rest.BodySchema) != 0 {
+		if err := collectRequestSchemaFields(rest.BodySchema, "/body", fields); err != nil {
+			return nil, err
+		}
+	}
+
+	paths := make([]string, 0, len(fields))
+	for path := range fields {
+		paths = append(paths, path)
+	}
+	sort.Strings(paths)
+	return paths, nil
+}
+
+func validateWriteRequestContractLinks(connector string, writes []WriteAction, operations []OperationSpec) error {
+	writeIndexes := make(map[string]int, len(writes))
+	for i, action := range writes {
+		if previous, ok := writeIndexes[action.Name]; ok {
+			return fmt.Errorf("writes.json actions %d and %d duplicate name %q", previous, i, action.Name)
+		}
+		writeIndexes[action.Name] = i
+	}
+
+	claims := make(map[string]string, len(writes))
+	for _, op := range operations {
+		if op.RequestContract == nil || op.RequestContract.WriteAction == "" {
+			continue
+		}
+		action := op.RequestContract.WriteAction
+		if strings.TrimSpace(action) != action {
+			return fmt.Errorf("operations.json operation %q request_contract.write_action must not contain surrounding whitespace", op.ID)
+		}
+		if op.Kind != "rest_write" {
+			return fmt.Errorf("operations.json operation %q request_contract.write_action requires kind rest_write", op.ID)
+		}
+		writeIndex, ok := writeIndexes[action]
+		if !ok {
+			return fmt.Errorf("operations.json operation %q request_contract.write_action %q does not name a writes.json action", op.ID, action)
+		}
+		if previous, ok := claims[action]; ok {
+			return fmt.Errorf("operations.json operations %q and %q both claim writes.json action %q", previous, op.ID, action)
+		}
+		if owner := writeDispatchOwnerFor(connector); owner != nil && owner.OwnsWriteAction(action) {
+			return fmt.Errorf("writes.json action %q is owned by the connector's effective write dispatch and cannot be claimed until its effective requests are modeled", action)
+		}
+		writeFields, err := declaredWriteRequestFields(writes[writeIndex])
+		if err != nil {
+			return fmt.Errorf("writes.json action %q request inputs: %w", action, err)
+		}
+		citations := make(map[string]bool, len(op.RequestContract.Fields))
+		for _, field := range op.RequestContract.Fields {
+			citations[strings.TrimSpace(field.Path)] = true
+		}
+		writeInputs := make(map[string]bool, len(writeFields))
+		mappedTargets := make(map[string]string, len(writeFields))
+		for _, writeField := range writeFields {
+			writeInputs[writeField] = true
+			requestField, ok := op.RequestContract.WriteFieldMap[writeField]
+			if !ok {
+				return fmt.Errorf("operations.json operation %q request_contract is missing write_field_map entry for %q", op.ID, writeField)
+			}
+			requestField = strings.TrimSpace(requestField)
+			if !validRequestContractFieldPath(requestField) {
+				return fmt.Errorf("operations.json operation %q request_contract write_field_map maps %q to invalid request field %q", op.ID, writeField, requestField)
+			}
+			writeNamespace := requestContractFieldNamespace(writeField)
+			requestNamespace := requestContractFieldNamespace(requestField)
+			if writeNamespace != requestNamespace {
+				return fmt.Errorf("operations.json operation %q request_contract write_field_map maps %q across namespaces to %q", op.ID, writeField, requestField)
+			}
+			if !citations[requestField] {
+				return fmt.Errorf("operations.json operation %q request_contract write_field_map maps %q to uncited request field %q", op.ID, writeField, requestField)
+			}
+			if previous := mappedTargets[requestField]; previous != "" {
+				return fmt.Errorf("operations.json operation %q request_contract write_field_map is not injective: %q and %q both map to %q", op.ID, previous, writeField, requestField)
+			}
+			mappedTargets[requestField] = writeField
+		}
+		for writeField := range op.RequestContract.WriteFieldMap {
+			if !writeInputs[writeField] {
+				return fmt.Errorf("operations.json operation %q request_contract write_field_map entry %q does not match a write input", op.ID, writeField)
+			}
+		}
+		claims[action] = op.ID
+	}
+
+	for _, action := range writes {
+		if _, ok := claims[action.Name]; !ok {
+			return fmt.Errorf("writes.json action %q must be claimed by exactly one retained operations.json request_contract.write_action", action.Name)
+		}
+	}
+	return nil
+}
+
+func collectRequestValueFields(values map[string]any, prefix string, fields map[string]bool) {
+	names := make([]string, 0, len(values))
+	for name := range values {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		path := appendRequestFieldPointer(prefix, name)
+		fields[path] = true
+		collectRequestValueField(values[name], path, fields)
+	}
+}
+
+func collectRequestValueField(value any, path string, fields map[string]bool) {
+	switch nested := value.(type) {
+	case map[string]any:
+		collectRequestValueFields(nested, path, fields)
+	case []any:
+		itemPath := appendRequestFieldPointer(path, "0")
+		fields[itemPath] = true
+		for _, item := range nested {
+			collectRequestValueField(item, itemPath, fields)
+		}
+	}
 }
 
 // validateSensitivePolicy enforces the sensitive/admin reverse-ETL policy model

@@ -136,6 +136,37 @@ func TestDirectReadMissingPathVariableFailsBeforeNetwork(t *testing.T) {
 	}
 }
 
+func TestResolveSurfaceEndpointPathSupportsHyphenatedVariable(t *testing.T) {
+	got, err := resolveSurfaceEndpointPath(
+		"/apps/{appId}/subscriptions/{subscription-id}",
+		connectors.RuntimeConfig{Config: map[string]string{"appId": "app123"}},
+		map[string]string{"subscription-id": "subscription123"},
+	)
+	if err != nil {
+		t.Fatalf("resolveSurfaceEndpointPath: %v", err)
+	}
+	if got != "/apps/app123/subscriptions/subscription123" {
+		t.Fatalf("resolved path = %q", got)
+	}
+}
+
+func TestResolveSurfaceEndpointPathRejectsMalformedTemplates(t *testing.T) {
+	tests := []string{
+		"/widgets/{}",
+		"/widgets/{bad?name}",
+		"/widgets/{missing",
+		"/widgets/unexpected}",
+	}
+	for _, template := range tests {
+		t.Run(template, func(t *testing.T) {
+			_, err := resolveSurfaceEndpointPath(template, connectors.RuntimeConfig{}, nil)
+			if err == nil {
+				t.Fatalf("resolveSurfaceEndpointPath(%q) error = nil", template)
+			}
+		})
+	}
+}
+
 func TestDirectReadRejectsPathTraversalBeforeNetwork(t *testing.T) {
 	var hits int
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
@@ -597,6 +628,142 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 	body := result.Body.(map[string]any)
 	if _, ok := body["apiToken"]; ok || body["apiToken_redacted"] != true {
 		t.Fatalf("response body = %+v, want apiToken redacted", body)
+	}
+}
+
+func TestOperationDirectReadPOSTNoBody(t *testing.T) {
+	var bodyBytes int64
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", r.Method)
+		}
+		bodyBytes = r.ContentLength
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:           "acme.widgets.refresh",
+			Kind:         "rest_read",
+			Summary:      "Refresh widget status",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:   http.MethodPost,
+				Path:     "/widgets/refresh",
+				MaxBytes: 1024,
+				Body:     &RESTOperationBody{None: true},
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/widgets/refresh",
+			Operation: &SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "low", BlockedByDefault: true, Reason: "typed operation metadata"},
+		}}},
+	}
+
+	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation:    "acme.widgets.refresh",
+		MaxBytes:     1024,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if bodyBytes > 0 {
+		t.Fatalf("Content-Length = %d, want no request body", bodyBytes)
+	}
+
+	_, err = OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.widgets.refresh",
+		Body:      map[string]any{"payload": "unexpected"},
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "body none") {
+		t.Fatalf("body override error = %v, want body none rejection", err)
+	}
+}
+
+func TestOperationReadBodyDeepMergesStaticAndFlagObjects(t *testing.T) {
+	op := OperationSpec{ID: "acme.widgets.preview", REST: &RESTOperationSpec{
+		Method: http.MethodPost,
+		Body: &RESTOperationBody{Fields: map[string]any{
+			"config": map[string]any{
+				"mode":    "safe",
+				"options": map[string]any{"timeout": json.Number("5"), "retries": json.Number("2")},
+				"replace": "static",
+			},
+		}},
+		BodySchema: json.RawMessage(`{
+			"type":"object",
+			"additionalProperties":false,
+			"required":["config"],
+			"properties":{"config":{
+				"type":"object",
+				"additionalProperties":false,
+				"required":["mode","value","options","replace"],
+				"properties":{
+					"mode":{"type":"string"},
+					"value":{"type":"string"},
+					"options":{"type":"object","additionalProperties":false,"required":["timeout","retries"],"properties":{"timeout":{"type":"integer"},"retries":{"type":"integer"}}},
+					"replace":{"type":"object","additionalProperties":false,"required":["nested"],"properties":{"nested":{"type":"boolean"}}}
+				}
+			}}
+		}`),
+	}}
+
+	body, err := operationReadBody(op, map[string]any{
+		"config": map[string]any{
+			"value":   "dynamic",
+			"options": map[string]any{"timeout": json.Number("10")},
+			"replace": map[string]any{"nested": true},
+		},
+	})
+	if err != nil {
+		t.Fatalf("operationReadBody: %v", err)
+	}
+	config := body.(map[string]any)["config"].(map[string]any)
+	if config["mode"] != "safe" || config["value"] != "dynamic" {
+		t.Fatalf("merged config = %#v", config)
+	}
+	options := config["options"].(map[string]any)
+	if options["timeout"] != json.Number("10") || options["retries"] != json.Number("2") {
+		t.Fatalf("merged options = %#v", options)
+	}
+	if config["replace"].(map[string]any)["nested"] != true {
+		t.Fatalf("object override = %#v", config["replace"])
+	}
+	staticConfig := op.REST.Body.Fields["config"].(map[string]any)
+	if staticConfig["replace"] != "static" || staticConfig["options"].(map[string]any)["timeout"] != json.Number("5") {
+		t.Fatalf("static body mutated = %#v", staticConfig)
+	}
+}
+
+func TestOperationDirectReadAllowsBracketedQueryNames(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got := r.URL.Query().Get("filter[status]"); got != "active" {
+			t.Fatalf("filter[status] = %q, want active", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer srv.Close()
+
+	b := directReadBundle(srv.URL, http.MethodGet, "/widgets")
+	b.Operations = []OperationSpec{{
+		ID: "acme.widgets.list", Kind: "rest_read", OutputPolicy: "json_redacted",
+		REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/widgets", MaxBytes: 1024, Body: &RESTOperationBody{None: true}},
+	}}
+	b.Surface.Endpoints[0].Operation = &SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "low", BlockedByDefault: true, Reason: "typed operation metadata"}
+	b.Surface.Endpoints[0].CoveredBy = nil
+	if _, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "acme.widgets.list",
+		Query:     map[string]string{"filter[status]": "active"},
+	}, nil); err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
 	}
 }
 

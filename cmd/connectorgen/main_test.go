@@ -15,6 +15,7 @@ import (
 	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors/boundary"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 // --- boundary: scans connector definition boundary --------------------------
@@ -607,6 +608,392 @@ func TestValidate_CLISurfaceOperationReferencePasses(t *testing.T) {
 	}
 }
 
+func TestValidate_CLISurfaceNoBodyRequestContractRequiresFlags(t *testing.T) {
+	operations := `{
+		"operations": [
+			{
+				"id": "cli-surface.widgets.refresh",
+				"kind": "rest_read",
+				"summary": "Refresh widget metadata",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json_redacted",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#refresh",
+					"source_location": "Refresh widget request",
+					"fields": [
+						{"path":"/path/id","source_url":"https://example.invalid/widgets#refresh","source_location":"path parameter id"},
+						{"path":"/query/force","source_url":"https://example.invalid/widgets#refresh","source_location":"query parameter force"}
+					]
+				},
+				"rest": {
+					"method": "POST",
+					"path": "/widgets/{id}:refresh",
+					"max_bytes": 1024,
+					"query": {"force": "{{.force}}"},
+					"body": "none"
+				}
+			},
+			{
+				"id": "cli-surface.widgets.create",
+				"kind": "rest_write",
+				"summary": "Create a widget",
+				"risk": "medium",
+				"approval": "required",
+				"output_policy": "json_redacted",
+				"mutation_class": "create",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#create",
+					"source_location": "Create widget request",
+					"write_action": "create_widget",
+					"write_field_map": {"/body/name":"/body/name"},
+					"fields": [{"path":"/body/name","source_url":"https://example.invalid/widgets#create","source_location":"name request property"}]
+				},
+				"rest": {"method":"POST","path":"/widgets","body_schema":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}
+			}
+		]
+	}`
+	cliSurface := `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget refresh",
+				"summary": "Refresh widget metadata",
+				"intent": "direct_read",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.refresh",
+				"api_surface": [{"method":"POST","path":"/widgets/{id}:refresh"}],
+				"output_policy": "json_redacted",
+				"flags": [
+					{"name":"id","type":"string","maps_to":"/path/id","required":true},
+					{"name":"force","type":"boolean","maps_to":"/query/force"}
+				]
+			}
+		]
+	}`
+	apiSurface := `{
+		"api":"test API v1",
+		"operation_ledger_version":1,
+		"endpoints":[
+			{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},
+			{"method":"POST","path":"/widgets","covered_by":{"write":"create_widget"}},
+			{"method":"POST","path":"/widgets/{id}:refresh","covered_by":{"direct_read":"widget refresh"}}
+		]
+	}`
+	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for cited no-body flags, got %+v", report.Findings)
+	}
+
+	missingFlag := strings.Replace(cliSurface, `,
+					{"name":"force","type":"boolean","maps_to":"/query/force"}`, "", 1)
+	fsys = cliSurfaceBundleFS(missingFlag)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err = validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir missing flag: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestValidate_CLISurfaceRequestContractFlagsApplyToAllOperations(t *testing.T) {
+	cliSurface := `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [{
+			"path": "widget list",
+			"summary": "List widgets",
+			"intent": "direct_read",
+			"availability": "implemented",
+			"operation": "cli-surface.widgets.list",
+			"api_surface": [{"method":"GET","path":"/widgets"}],
+			"output_policy": "json_redacted",
+			"flags": [{"name":"debug","type":"boolean","maps_to":"/query/debug"}]
+		}]
+	}`
+	operations := `{
+		"operations": [{
+			"id": "cli-surface.widgets.list",
+			"kind": "rest_read",
+			"summary": "List widgets",
+			"risk": "low",
+			"approval": "none",
+			"output_policy": "json_redacted",
+			"request_contract": {
+				"source_tier": 3,
+				"source_url": "https://example.invalid/widgets#list",
+				"source_location": "List widgets request",
+				"fields": []
+			},
+			"rest": {"method":"GET","path":"/widgets","max_bytes":1024,"body":"none"}
+		}]
+	}`
+	fsys := cliSurfaceBundleFS(cliSurface)
+	delete(fsys, "cli-surface/writes.json")
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api":"test API v1",
+		"operation_ledger_version":1,
+		"endpoints":[{"method":"GET","path":"/widgets","covered_by":{"direct_read":"widget list"}}]
+	}`)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
+func TestCLISurfaceRequestContractCanonicalizesArrayIndices(t *testing.T) {
+	rawSchema := json.RawMessage(`{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["items"],
+		"properties":{
+			"items":{
+				"type":"array",
+				"items":{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}
+			}
+		}
+	}`)
+	op := engine.OperationSpec{
+		ID: "acme.widgets.preview",
+		RequestContract: &engine.RequestContractSpec{
+			Fields: []engine.RequestContractField{
+				{Path: "/body/items"},
+				{Path: "/body/items/0"},
+				{Path: "/body/items/0/name"},
+			},
+		},
+		REST: &engine.RESTOperationSpec{BodySchema: rawSchema},
+	}
+	schema, err := engine.CompileSchema(rawSchema)
+	if err != nil {
+		t.Fatalf("CompileSchema: %v", err)
+	}
+	cmd := engine.CLICommand{Path: "widget preview", Flags: []engine.CLIFlag{{Name: "name", MapsTo: "/body/items/0/name", Required: true}}}
+	if findings := checkCLISurfaceRequestContractFlags(engine.Bundle{Name: "acme"}, 0, cmd, op); len(findings) != 0 {
+		t.Fatalf("array-index citation findings = %+v, want none", findings)
+	}
+	if findings := checkCLISurfaceOperationBodyMappings(engine.Bundle{Name: "acme"}, 0, cmd, op); len(findings) != 0 {
+		t.Fatalf("array-index required-mapping findings = %+v, want none", findings)
+	}
+	provided, err := operationStaticBodyProvidesPointer(schema, map[string]any{"items": []any{map[string]any{"name": "first"}, map[string]any{"name": "second"}}}, "/body/items/0/name")
+	if err != nil || !provided {
+		t.Fatal("operationStaticBodyProvidesPointer did not validate every complete static array element")
+	}
+	provided, err = operationStaticBodyProvidesPointer(schema, map[string]any{"items": []any{map[string]any{"name": "first"}, map[string]any{}}}, "/body/items/0/name")
+	if err != nil || provided {
+		t.Fatal("operationStaticBodyProvidesPointer accepted an incomplete later static array element")
+	}
+	provided, err = operationStaticBodyProvidesPointer(schema, map[string]any{"items": []any{map[string]any{"name": "first"}, map[string]any{"name": json.Number("7")}}}, "/body/items/0/name")
+	if err == nil || provided {
+		t.Fatal("operationStaticBodyProvidesPointer accepted a later static array element with the wrong type")
+	}
+}
+
+func TestCLISurfaceOperationBodyMappingsUseEffectiveRuntimeShape(t *testing.T) {
+	tests := []struct {
+		name         string
+		rawSchema    string
+		static       map[string]any
+		flags        []engine.CLIFlag
+		wantFinding  string
+		wantFindings bool
+	}{
+		{
+			name:      "required object flag replaces static scalar",
+			rawSchema: `{"type":"object","additionalProperties":false,"required":["config"],"properties":{"config":{"type":"object","additionalProperties":false,"required":["value"],"properties":{"value":{"type":"string"}}}}}`,
+			static:    map[string]any{"config": "legacy"},
+			flags:     []engine.CLIFlag{{Name: "value", Type: "string", MapsTo: "/body/config/value", Required: true}},
+		},
+		{
+			name:         "scalar flag type mismatch",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"count":{"type":"integer"}}}`,
+			flags:        []engine.CLIFlag{{Name: "count", Type: "string", MapsTo: "/body/count"}},
+			wantFinding:  "is incompatible with body_schema",
+			wantFindings: true,
+		},
+		{
+			name:         "array item flag type mismatch",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"ids":{"type":"array","items":{"type":"integer"}}}}`,
+			flags:        []engine.CLIFlag{{Name: "ids", Type: "string_array", MapsTo: "/body/ids"}},
+			wantFinding:  "requires string items",
+			wantFindings: true,
+		},
+		{
+			name:         "disjoint enum domain",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"state":{"type":"string","enum":["open"]}}}`,
+			flags:        []engine.CLIFlag{{Name: "state", Type: "enum", Values: []string{"closed"}, MapsTo: "/body/state"}},
+			wantFinding:  "enum value \"closed\" is not accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "integer domain excludes fractional number enum",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"count":{"type":"number","enum":[1.5]}}}`,
+			flags:        []engine.CLIFlag{{Name: "count", Type: "integer", MapsTo: "/body/count"}},
+			wantFinding:  "input domain has no values accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "required string domain excludes empty enum",
+			rawSchema:    `{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string","enum":[""]}}}`,
+			flags:        []engine.CLIFlag{{Name: "name", Type: "string", MapsTo: "/body/name", Required: true}},
+			wantFinding:  "input domain has no values accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "date-time format excludes invalid enum",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"timestamp":{"type":"string","enum":["not-a-date"]}}}`,
+			flags:        []engine.CLIFlag{{Name: "timestamp", Type: "string", Format: "date-time", MapsTo: "/body/timestamp"}},
+			wantFinding:  "input domain has no values accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "string array cannot emit delimited enum item",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"labels":{"type":"array","items":{"type":"string","enum":["a,b"]}}}}`,
+			flags:        []engine.CLIFlag{{Name: "labels", Type: "string_array", MapsTo: "/body/labels"}},
+			wantFinding:  "input domain has no values accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "incompatible string-array cardinality",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"ids":{"type":"array","minItems":2,"items":{"type":"string"}}}}`,
+			flags:        []engine.CLIFlag{{Name: "ids", Type: "string_array", MaxItems: 1, MapsTo: "/body/ids"}},
+			wantFinding:  "cardinality",
+			wantFindings: true,
+		},
+		{
+			name:         "required string-array excludes schema maximum zero",
+			rawSchema:    `{"type":"object","additionalProperties":false,"required":["ids"],"properties":{"ids":{"type":"array","maxItems":0,"items":{"type":"string"}}}}`,
+			flags:        []engine.CLIFlag{{Name: "ids", Type: "string_array", MapsTo: "/body/ids", Required: true}},
+			wantFinding:  "cardinality",
+			wantFindings: true,
+		},
+		{
+			name:         "finite enum rejects partial schema pattern match",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"state":{"type":"string","pattern":"^open$"}}}`,
+			flags:        []engine.CLIFlag{{Name: "state", Type: "enum", Values: []string{"open", "closed"}, MapsTo: "/body/state"}},
+			wantFinding:  "enum value \"closed\" is not accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "string-array excludes unsafe root enum item",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"labels":{"type":"array","enum":[["line\nbreak"]],"items":{"type":"string"}}}}`,
+			flags:        []engine.CLIFlag{{Name: "labels", Type: "string_array", MapsTo: "/body/labels"}},
+			wantFinding:  "no values accepted",
+			wantFindings: true,
+		},
+		{
+			name:         "dynamic array replaces static siblings",
+			rawSchema:    `{"type":"object","additionalProperties":false,"required":["items"],"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["name","kind"],"properties":{"name":{"type":"string"},"kind":{"type":"string"}}}}}}`,
+			static:       map[string]any{"items": []any{map[string]any{"name": "static", "kind": "widget"}}},
+			flags:        []engine.CLIFlag{{Name: "name", Type: "string", MapsTo: "/body/items/0/name", Required: true}},
+			wantFinding:  "cannot assemble a schema-valid effective request body",
+			wantFindings: true,
+		},
+		{
+			name:         "sparse concrete array mapping",
+			rawSchema:    `{"type":"object","additionalProperties":false,"properties":{"items":{"type":"array","items":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}}}`,
+			flags:        []engine.CLIFlag{{Name: "name", Type: "string", MapsTo: "/body/items/1/name", Required: true}},
+			wantFinding:  "sparse array index 1",
+			wantFindings: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			op := engine.OperationSpec{ID: "acme.widgets.preview", REST: &engine.RESTOperationSpec{BodySchema: json.RawMessage(tt.rawSchema)}}
+			if tt.static != nil {
+				op.REST.Body = &engine.RESTOperationBody{Fields: tt.static}
+			}
+			cmd := engine.CLICommand{Path: "widgets preview", Flags: tt.flags}
+			findings := checkCLISurfaceOperationBodyMappings(engine.Bundle{Name: "acme"}, 0, cmd, op)
+			if !tt.wantFindings {
+				if len(findings) != 0 {
+					t.Fatalf("findings = %+v, want none", findings)
+				}
+				return
+			}
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, tt.wantFinding) {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want message containing %q", findings, tt.wantFinding)
+		})
+	}
+}
+
+func TestCLISurfaceRequestContractRejectsOverwritingMappings(t *testing.T) {
+	tests := []struct {
+		name   string
+		flags  []engine.CLIFlag
+		fields []engine.RequestContractField
+	}{
+		{
+			name: "duplicate path",
+			flags: []engine.CLIFlag{
+				{Name: "first", MapsTo: "/path/id"},
+				{Name: "second", MapsTo: "/path/id"},
+			},
+			fields: []engine.RequestContractField{{Path: "/path/id"}},
+		},
+		{
+			name: "duplicate query",
+			flags: []engine.CLIFlag{
+				{Name: "first", MapsTo: "/query/filter"},
+				{Name: "second", MapsTo: "/query/filter"},
+			},
+			fields: []engine.RequestContractField{{Path: "/query/filter"}},
+		},
+		{
+			name: "duplicate body",
+			flags: []engine.CLIFlag{
+				{Name: "first", MapsTo: "/body/name"},
+				{Name: "second", MapsTo: "/body/name"},
+			},
+			fields: []engine.RequestContractField{{Path: "/body/name"}},
+		},
+		{
+			name: "body parent child",
+			flags: []engine.CLIFlag{
+				{Name: "config", MapsTo: "/body/config"},
+				{Name: "value", MapsTo: "/body/config/value"},
+			},
+			fields: []engine.RequestContractField{{Path: "/body/config"}, {Path: "/body/config/value"}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			op := engine.OperationSpec{
+				ID:              "acme.widgets.preview",
+				RequestContract: &engine.RequestContractSpec{Fields: tt.fields},
+				REST: &engine.RESTOperationSpec{BodySchema: json.RawMessage(`{
+					"type":"object",
+					"additionalProperties":false,
+					"properties":{"name":{"type":"string"},"config":{"type":"object","additionalProperties":false,"properties":{"value":{"type":"string"}}}}
+				}`)},
+			}
+			findings := checkCLISurfaceRequestContractFlags(engine.Bundle{Name: "acme"}, 0, engine.CLICommand{Path: "widgets preview", Flags: tt.flags}, op)
+			for _, finding := range findings {
+				if strings.Contains(finding.Message, "conflicting request mappings") {
+					return
+				}
+			}
+			t.Fatalf("findings = %+v, want conflicting request mappings", findings)
+		})
+	}
+}
+
 func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T) {
 	cliSurface := `{
 		"tagline": "Work with CLI Surface from the command line.",
@@ -635,6 +1022,12 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T
 				"risk": "low",
 				"approval": "none",
 				"output_policy": "json_redacted",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#preview",
+					"source_location": "Preview widget request",
+					"fields": [{"path":"/body/payload","source_url":"https://example.invalid/widgets#preview","source_location":"request property payload"}]
+				},
 				"rest": {
 					"method": "POST",
 					"path": "/widgets:preview",
@@ -643,10 +1036,10 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T
 					"body_schema": {
 						"type": "object",
 						"additionalProperties": false,
-						"required": ["payload"],
 						"properties": {
 							"payload": { "type": "string" }
-						}
+						},
+						"allOf": [{"required": ["payload"]}]
 					},
 					"body": {}
 				}
@@ -664,7 +1057,7 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresBodyMappings(t *testing.T
 	}`
 	fsys := cliSurfaceBundleFS(cliSurface)
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
-	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(withWriteEvidenceOperation(operations))}
 	report, err := validateDir(fsys)
 	if err != nil {
 		t.Fatalf("validateDir: %v", err)
@@ -688,7 +1081,7 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 				],
 				"output_policy": "json_redacted",
 				"flags": [
-					{ "name": "payload", "type": "string", "maps_to": "body.payload" }
+					{ "name": "payload", "type": "string", "maps_to": "/body/payload" }
 				],
 				"examples": ["pm cli-surface widget preview --payload fixture --json"]
 			}
@@ -703,6 +1096,12 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 				"risk": "low",
 				"approval": "none",
 				"output_policy": "json_redacted",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#preview",
+					"source_location": "Preview widget request",
+					"fields": [{"path":"/body/payload","source_url":"https://example.invalid/widgets#preview","source_location":"request property payload"}]
+				},
 				"rest": {
 					"method": "POST",
 					"path": "/widgets:preview",
@@ -711,10 +1110,10 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 					"body_schema": {
 						"type": "object",
 						"additionalProperties": false,
-						"required": ["payload"],
 						"properties": {
 							"payload": { "type": "string" }
-						}
+						},
+						"allOf": [{"required": ["payload"]}]
 					},
 					"body": {}
 				}
@@ -732,17 +1131,17 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 	}`
 	fsys := cliSurfaceBundleFS(cliSurface)
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
-	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(withWriteEvidenceOperation(operations))}
 	report, err := validateDir(fsys)
 	if err != nil {
 		t.Fatalf("validateDir: %v", err)
 	}
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 
-	fixed := strings.Replace(cliSurface, `"maps_to": "body.payload"`, `"maps_to": "body.payload", "required": true`, 1)
+	fixed := strings.Replace(cliSurface, `"maps_to": "/body/payload"`, `"maps_to": "/body/payload", "required": true`, 1)
 	fsys = cliSurfaceBundleFS(fixed)
 	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
-	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(withWriteEvidenceOperation(operations))}
 	report, err = validateDir(fsys)
 	if err != nil {
 		t.Fatalf("validateDir fixed: %v", err)
@@ -750,6 +1149,16 @@ func TestValidate_CLISurfaceOperationDirectReadRequiresRequiredBodyFlags(t *test
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for required body flag, got %+v", report.Findings)
 	}
+
+	alternative := strings.Replace(operations, `"allOf": [{"required": ["payload"]}]`, `"anyOf": [{"required": ["payload"]}, {"required": []}]`, 1)
+	fsys = cliSurfaceBundleFS(fixed)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
+	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(withWriteEvidenceOperation(alternative))}
+	report, err = validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir alternative: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
 func TestValidate_CLISurfaceOperationRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
@@ -1626,7 +2035,7 @@ func cliSurfaceBundleFS(cliSurface string) fstest.MapFS {
 					"kind": "create",
 					"method": "POST",
 					"path": "/widgets",
-					"record_schema": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" } } },
+					"record_schema": { "type": "object", "required": ["name"], "additionalProperties": false, "properties": { "name": { "type": "string" } } },
 					"risk": "creates a widget"
 				}
 			]
@@ -1668,6 +2077,7 @@ none
 none
 `)},
 		"cli-surface/cli_surface.json": &fstest.MapFile{Data: []byte(cliSurface)},
+		"cli-surface/operations.json":  &fstest.MapFile{Data: []byte(`{"operations":[` + validWriteEvidenceOperationJSON() + `]}`)},
 	}
 }
 
@@ -1696,14 +2106,58 @@ func validOperationsJSON() string {
 				"risk": "low",
 				"approval": "none",
 				"output_policy": "json_redacted",
+				"request_contract": {
+					"source_tier": 3,
+					"source_url": "https://example.invalid/widgets#get",
+					"source_location": "Get widget request",
+					"fields": [{"path":"/path/id","source_url":"https://example.invalid/widgets#get","source_location":"path parameter id"}]
+				},
 				"rest": {
 					"method": "GET",
 					"path": "/widgets/{id}",
-					"max_bytes": 1024
+					"max_bytes": 1024,
+					"body": "none"
 				}
-			}
+			},
+			` + validWriteEvidenceOperationJSON() + `
 		]
 	}`
+}
+
+func validWriteEvidenceOperationJSON() string {
+	return `{
+		"id": "cli-surface.widgets.create",
+		"kind": "rest_write",
+		"summary": "Create a widget",
+		"risk": "medium",
+		"approval": "required",
+		"output_policy": "json_redacted",
+		"mutation_class": "create",
+		"request_contract": {
+			"source_tier": 3,
+			"source_url": "https://example.invalid/widgets#create",
+			"source_location": "Create widget request",
+			"write_action": "create_widget",
+			"write_field_map": {"/body/name":"/body/name"},
+			"fields": [{"path":"/body/name","source_url":"https://example.invalid/widgets#create","source_location":"name request property"}]
+		},
+		"rest": {"method":"POST","path":"/widgets","body_schema":{"type":"object","additionalProperties":false,"properties":{"name":{"type":"string"}}}}
+	}`
+}
+
+func withWriteEvidenceOperation(operations string) string {
+	var document struct {
+		Operations []json.RawMessage `json:"operations"`
+	}
+	if err := json.Unmarshal([]byte(operations), &document); err != nil {
+		panic(err)
+	}
+	document.Operations = append(document.Operations, json.RawMessage(validWriteEvidenceOperationJSON()))
+	data, err := json.Marshal(document)
+	if err != nil {
+		panic(err)
+	}
+	return string(data)
 }
 
 func validOperationCLISurfaceJSON() string {
@@ -1722,6 +2176,7 @@ func validOperationCLISurfaceJSON() string {
 				],
 				"output_policy": "json_redacted",
 				"source_cli_path": "clis widget view",
+				"flags": [{"name":"id","type":"string","maps_to":"/path/id","required":true}],
 				"examples": ["pm cli-surface widget view --id w_1 --json"]
 			}
 		]
