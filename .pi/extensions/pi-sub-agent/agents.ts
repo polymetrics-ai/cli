@@ -4,11 +4,13 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { execFileSync } from "node:child_process";
 import { getAgentDir, parseFrontmatter } from "@earendil-works/pi-coding-agent";
 
 export type AgentScope = "clean-project" | "user" | "project" | "both";
 
 const CLEAN_PROJECT_SCOPE = "clean-project";
+const AGENT_CONTRACT_CHECK_TIMEOUT_MS = 30_000;
 
 export function shouldConfirmProjectAgents(scope: AgentScope): boolean {
 	return scope === CLEAN_PROJECT_SCOPE || scope === "project" || scope === "both";
@@ -188,8 +190,39 @@ function isSafeAgentFileStem(value: string): boolean {
 	return /^[a-z0-9][a-z0-9-]*$/.test(value);
 }
 
-function canonicalCleanProjectRoles(projectAgentsDir: string): string[] {
-	const projectRoot = path.dirname(path.dirname(projectAgentsDir));
+function isRealDirectory(directory: string): boolean {
+	try {
+		const stats = fs.lstatSync(directory);
+		return stats.isDirectory() && !stats.isSymbolicLink();
+	} catch {
+		return false;
+	}
+}
+
+function isRegularFile(filePath: string): boolean {
+	try {
+		const stats = fs.lstatSync(filePath);
+		return stats.isFile() && !stats.isSymbolicLink();
+	} catch {
+		return false;
+	}
+}
+
+function generatedAgentContractIsCurrent(projectRoot: string): boolean {
+	try {
+		execFileSync("go", ["run", "./cmd/agentcontractgen", "check", "--root", projectRoot], {
+			cwd: projectRoot,
+			stdio: "ignore",
+			timeout: AGENT_CONTRACT_CHECK_TIMEOUT_MS,
+			windowsHide: true,
+		});
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+function canonicalCleanProjectRoles(projectRoot: string): string[] {
 	const canonicalPath = path.join(projectRoot, ".agents", "agentic-delivery", "canonical", "delivery-contract.json");
 	let value: unknown;
 	try {
@@ -224,26 +257,27 @@ function canonicalCleanProjectRoles(projectAgentsDir: string): string[] {
 }
 
 function loadCleanProjectAgents(projectAgentsDir: string): AgentConfig[] {
-	for (const directory of [path.dirname(projectAgentsDir), projectAgentsDir]) {
-		try {
-			const stats = fs.lstatSync(directory);
-			if (!stats.isDirectory() || stats.isSymbolicLink()) return [];
-		} catch {
-			return [];
-		}
+	const projectRoot = path.dirname(path.dirname(projectAgentsDir));
+	const canonicalDir = path.join(projectRoot, ".agents", "agentic-delivery", "canonical");
+	const canonicalPath = path.join(canonicalDir, "delivery-contract.json");
+	for (const directory of [
+		path.join(projectRoot, ".pi"),
+		projectAgentsDir,
+		path.join(projectRoot, ".agents"),
+		path.join(projectRoot, ".agents", "agentic-delivery"),
+		canonicalDir,
+	]) {
+		if (!isRealDirectory(directory)) return [];
 	}
-	const roles = canonicalCleanProjectRoles(projectAgentsDir);
+	if (!isRegularFile(canonicalPath) || !generatedAgentContractIsCurrent(projectRoot)) return [];
+
+	const roles = canonicalCleanProjectRoles(projectRoot);
 	if (roles.length !== 2) return [];
 
 	const agents: AgentConfig[] = [];
 	for (const role of roles) {
 		const filePath = path.join(projectAgentsDir, `${role}.md`);
-		try {
-			const stats = fs.lstatSync(filePath);
-			if (!stats.isFile() || stats.isSymbolicLink()) return [];
-		} catch {
-			return [];
-		}
+		if (!isRegularFile(filePath)) return [];
 		const agent = loadAgentFile(filePath, "project");
 		if (!agent || agent.name !== role) return [];
 		agents.push(agent);

@@ -11,7 +11,7 @@ It registers the `subagent` tool and keeps `/sub-agent-settings` for explicitly 
 - `.pi/agents/pm-delivery-worker.md`
 - `.pi/agents/pm-connector-worker.md`
 
-The clean scope fails closed when the canonical contract or either expected generated file is missing or malformed. It does not scan user roles, the extension's historical `agents/` directory, or the retained legacy `.pi/agents` roles. Those legacy files remain until their separately gated migration wave.
+The clean scope runs `agentcontractgen check` before loading workers and fails closed when the canonical contract or either expected generated file is missing, malformed, drifted, or cannot pass that validation through the repository's Go toolchain. It does not scan user roles, the extension's historical `agents/` directory, or the retained legacy `.pi/agents` roles. Those legacy files remain until their separately gated migration wave.
 
 The extension still supports the official-example scopes when they are explicitly selected:
 
@@ -66,6 +66,6 @@ Delegated task text is sent over stdin, not process arguments. Parallel work is 
 
 ## Verification
 
-Run `bash scripts/tests/pi-clean-project-agents.sh` where Pi and Bun are installed. It imports the real extension and proves that clean discovery exposes only the two generated project workers despite a fixture global role, the extension's historical roster, and retained legacy project roles. It also checks the generated bounded tool list, the removed `subagent` tool, the depth block, and the `--no-extensions` child argument.
+Run `bash scripts/tests/pi-clean-project-agents.sh` where Pi and Bun are installed. It imports the real extension and proves that clean discovery exposes only the two generated project workers despite a fixture global role, the extension's historical roster, and retained legacy project roles. It also checks rejection of parseable but drifted contract and worker files, the generated bounded tool list, the removed `subagent` tool, the depth block, and the `--no-extensions` child argument.
 
 Run `go run ./cmd/agentcontractgen sync` to create or refresh the generated Pi workers, then `go run ./cmd/agentcontractgen check` to enforce exact full-file drift detection.
