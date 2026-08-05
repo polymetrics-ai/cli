@@ -37,6 +37,7 @@ type iconEntry struct {
 	Path                string `json:"path"`
 	Source              string `json:"source"`
 	SourceURL           string `json:"-"`
+	UpstreamRecord      string `json:"-"`
 	ReviewStatus        string `json:"review_status"`
 	ReviewURL           string `json:"review_url,omitempty"`
 	License             string `json:"license,omitempty"`
@@ -63,7 +64,7 @@ func main() {
 	out := flag.String("out", "internal/connectors/icon_data.json", "embedded connector icon registry output")
 	iconsDir := flag.String("icons-dir", "docs/connectors/icons", "local connector SVG asset directory")
 	defsDir := flag.String("defs-dir", "internal/connectors/defs", "connector definition directory used to scope implemented icon entries")
-	curated := flag.String("curated", "", "existing canonical icon registry to preserve curated Simple Icons/manual review metadata; defaults to --out when present")
+	curated := flag.String("curated", "", "existing canonical icon registry whose authored rows override upstream records; defaults to --out when present")
 	download := flag.Bool("download", true, "download connector icon SVG assets")
 	flag.Parse()
 	if strings.TrimSpace(*source) == "" {
@@ -118,7 +119,7 @@ func loadRegistry(source string) (registryFile, error) {
 		if err != nil {
 			return registryFile{}, fmt.Errorf("fetch registry: %w", err)
 		}
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 			return registryFile{}, fmt.Errorf("fetch registry returned %s", resp.Status)
 		}
@@ -137,6 +138,28 @@ func loadRegistry(source string) (registryFile, error) {
 }
 
 func buildIconEntries(registry registryFile, opts buildOptions) ([]iconEntry, []iconAsset, error) {
+	builtinConnectors := map[string]bool{}
+	if opts.IncludeLocalBuiltins {
+		for _, entry := range localIconEntries() {
+			builtinConnectors[entry.Connector] = true
+		}
+	}
+
+	// The canonical registry is authored state. Its source/review fields record
+	// provenance, not whether an existing bare key may settle an upstream
+	// disagreement before raw source/destination rows are collapsed.
+	curatedByConnector := make(map[string]iconEntry, len(opts.CuratedEntries))
+	for _, entry := range opts.CuratedEntries {
+		if _, exists := curatedByConnector[entry.Connector]; exists {
+			return nil, nil, fmt.Errorf("duplicate curated icon entry for %q", entry.Connector)
+		}
+		if !includeConnector(entry.Connector, opts.ImplementedConnectors) && !builtinConnectors[entry.Connector] {
+			return nil, nil, fmt.Errorf("curated icon entry %q has no connector definition or runtime builtin owner", entry.Connector)
+		}
+		entry.Implemented = opts.ImplementedConnectors[entry.Connector]
+		curatedByConnector[entry.Connector] = entry
+	}
+
 	byConnector := map[string]iconEntry{}
 	for _, rawGroup := range [][]map[string]any{registry.Sources, registry.Destinations} {
 		for _, raw := range rawGroup {
@@ -145,6 +168,9 @@ func buildIconEntries(registry registryFile, opts buildOptions) ([]iconEntry, []
 				return nil, nil, err
 			}
 			if !ok || !includeConnector(entry.Connector, opts.ImplementedConnectors) {
+				continue
+			}
+			if _, curated := curatedByConnector[entry.Connector]; curated {
 				continue
 			}
 			if existing, exists := byConnector[entry.Connector]; exists {
@@ -160,29 +186,8 @@ func buildIconEntries(registry registryFile, opts buildOptions) ([]iconEntry, []
 		}
 	}
 
-	curatedConnectors := make(map[string]struct{}, len(opts.CuratedEntries))
-	for _, entry := range opts.CuratedEntries {
-		if _, exists := curatedConnectors[entry.Connector]; exists {
-			return nil, nil, fmt.Errorf("duplicate curated icon entry for %q", entry.Connector)
-		}
-		curatedConnectors[entry.Connector] = struct{}{}
-	}
-
-	builtinConnectors := map[string]bool{}
-	if opts.IncludeLocalBuiltins {
-		for _, entry := range localIconEntries() {
-			builtinConnectors[entry.Connector] = true
-		}
-	}
-
-	for _, entry := range opts.CuratedEntries {
-		if !isCuratedIconEntry(entry) {
-			continue
-		}
-		if !includeConnector(entry.Connector, opts.ImplementedConnectors) && !builtinConnectors[entry.Connector] {
-			return nil, nil, fmt.Errorf("curated icon entry %q has no connector definition or runtime builtin owner", entry.Connector)
-		}
-		entry.Implemented = opts.ImplementedConnectors[entry.Connector]
+	for connector, entry := range curatedByConnector {
+		entry.Implemented = opts.ImplementedConnectors[connector]
 		byConnector[entry.Connector] = entry
 	}
 
@@ -252,10 +257,14 @@ func includeConnector(connector string, implemented map[string]bool) bool {
 
 func mergeCollapsedIconEntry(a, b iconEntry) (iconEntry, error) {
 	if a.ID != b.ID || a.Path != b.Path {
-		return iconEntry{}, fmt.Errorf("ambiguous source/destination icon collapse for %q: %s/%s vs %s/%s", a.Connector, a.ID, a.Path, b.ID, b.Path)
+		return iconEntry{}, collapsedIconConflictError(
+			a,
+			b,
+			fmt.Sprintf("conflicting icon identities %s/%s vs %s/%s", a.ID, a.Path, b.ID, b.Path),
+		)
 	}
 	if a.SourceURL != b.SourceURL {
-		return iconEntry{}, fmt.Errorf("ambiguous source/destination icon collapse for %q: conflicting source URLs", a.Connector)
+		return iconEntry{}, collapsedIconConflictError(a, b, "conflicting source URLs")
 	}
 	if reviewRank(b.ReviewStatus) > reviewRank(a.ReviewStatus) || (b.ReviewURL != "" && a.ReviewURL == "") {
 		b.Implemented = a.Implemented || b.Implemented
@@ -266,6 +275,19 @@ func mergeCollapsedIconEntry(a, b iconEntry) (iconEntry, error) {
 	}
 	a.Implemented = a.Implemented || b.Implemented
 	return a, nil
+}
+
+func collapsedIconConflictError(a, b iconEntry, reason string) error {
+	return fmt.Errorf(
+		"ambiguous source/destination icon collapse for %q: %s between upstream records %q (%q) and %q (%q); add a curated icon entry for %q to resolve",
+		a.Connector,
+		reason,
+		a.UpstreamRecord,
+		a.SourceURL,
+		b.UpstreamRecord,
+		b.SourceURL,
+		a.Connector,
+	)
 }
 
 func reviewRank(status string) int {
@@ -280,19 +302,6 @@ func reviewRank(status string) int {
 		return 1
 	default:
 		return 0
-	}
-}
-
-func isCuratedIconEntry(entry iconEntry) bool {
-	switch {
-	case entry.Source == connectors.IconSourceSimpleIcons:
-		return true
-	case entry.ReviewStatus == connectors.IconReviewManualOverride:
-		return true
-	case entry.ReviewStatus == connectors.IconReviewOfficial:
-		return true
-	default:
-		return false
 	}
 }
 
@@ -336,12 +345,13 @@ func buildIconEntry(raw map[string]any) (iconEntry, bool, error) {
 	}
 	iconID := iconIDFromName(iconName, slug)
 	return iconEntry{
-		Connector:    slug,
-		ID:           iconID,
-		Path:         "icons/" + iconID + ".svg",
-		Source:       connectors.IconSourceUpstream,
-		SourceURL:    iconURL,
-		ReviewStatus: connectors.IconReviewUpstreamSeeded,
+		Connector:      slug,
+		ID:             iconID,
+		Path:           "icons/" + iconID + ".svg",
+		Source:         connectors.IconSourceUpstream,
+		SourceURL:      iconURL,
+		UpstreamRecord: dockerSlug(repo),
+		ReviewStatus:   connectors.IconReviewUpstreamSeeded,
 	}, true, nil
 }
 
@@ -549,7 +559,7 @@ func downloadIconAsset(client http.Client, iconsDir string, asset iconAsset) err
 	if err != nil {
 		return fmt.Errorf("fetch icon %s: %w", asset.SourceURL, err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return fmt.Errorf("fetch icon %s returned %s", asset.SourceURL, resp.Status)
 	}
@@ -609,18 +619,5 @@ func stringValue(value any) string {
 
 func boolValue(value any) bool {
 	typed, _ := value.(bool)
-	return typed
-}
-
-func mapValue(value any) map[string]any {
-	typed, _ := value.(map[string]any)
-	if typed == nil {
-		return map[string]any{}
-	}
-	return typed
-}
-
-func anySlice(value any) []any {
-	typed, _ := value.([]any)
 	return typed
 }
