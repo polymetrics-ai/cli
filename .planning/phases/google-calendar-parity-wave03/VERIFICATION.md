@@ -37,7 +37,7 @@
 - [x] `pm connectors inspect google-calendar --json` — reports `capabilities.write=true` and all 26 `write_actions`.
 - [x] `go vet ./internal/connectors/conformance ./internal/connectors/commandrunner ./internal/connectors/hooks/google-calendar ./internal/cli` — pass.
 - [x] `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors`, `./pm docs validate --connectors-dir docs/connectors`, and `make docs-check-no-build` — pass; generated Google Calendar manual, skill, and catalogs are tracked.
-- [x] `cd website && pnpm run gen:website-data && pnpm run typecheck` — pass; catalog now reports 231 connectors with write actions, including Google Calendar.
+- [x] `cd website && pnpm run gen:website-data && pnpm run typecheck` — pass; the generated catalog records Google Calendar as write-capable.
 - [x] `make tidy-check`, `make lint`, `make smoke-no-build`, `make connector-boundary`, and `make release-workflow-check` — pass.
 - [x] `git diff --check` — pass.
 

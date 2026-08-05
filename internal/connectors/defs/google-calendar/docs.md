@@ -31,7 +31,7 @@ The `events` stream is incremental on `updated`. An explicitly configured `start
 
 ## Write actions & risks
 
-All 26 documented mutations are executable typed reverse-ETL actions. Every action has a record schema and replay fixture under `fixtures/writes/`, and every direct command follows the shared plan → preview → explicit approval → execute flow.
+All 26 documented mutations are executable typed reverse-ETL actions. Every action has a record schema and replay fixture under `fixtures/writes/`, and every write command follows the shared plan → preview → explicit approval → execute flow.
 
 - ACL: delete, insert, patch, update, and watch.
 - Calendar list: delete, insert, patch, update, and watch.
