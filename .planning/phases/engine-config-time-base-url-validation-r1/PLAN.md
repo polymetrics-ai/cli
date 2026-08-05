@@ -90,8 +90,9 @@ existing full-instance `Schema.Validate`:
    names the field and the actual declared constraint without echoing input.
 3. Add an optional connector contract whose `HasConfigurationConstraints`
    signal distinguishes a real declaration from an unconditional no-op. The
-   app invokes the validator only when that signal is true. `engine.Connector`
-   and `engine.Base` both expose the contract from the same compiled schema.
+   app invokes the validator only when that signal is true. `engine.Connector`,
+   `engine.Base`, and the promoted-native `definitionConnector` forwarder all
+   expose the contract from the same compiled schema.
 4. Invoke that contract in `App.AddCredential` after existing local-path
    safety checks and before ID generation, vault writes, or state mutation.
 
@@ -125,6 +126,18 @@ parse/coercion contract before it can claim support.
    any narrowly needed schema unit tests.
 6. **Refactor and verify.** Run focused app/engine/connectors tests, the
    executable configuration-time path, and the repo-required scoped gates.
+
+### Forwarder audit
+
+The post-green registry audit found a second generic seam:
+`native/nativeset.definitionConnector` wraps promoted native connectors with
+`engine.Base` to supply their bundle definition. It must forward this optional
+capability from that Base rather than leaving the wrapper unable to honour a
+future declared constraint. Its methods will report the Base's actual
+`HasConfigurationConstraints` result, not blanket success. The current survey
+shows all promoted-native specs are constraint-free, but the test constructs a
+constrained wrapped bundle to lock the contract before it is needed. The
+red-forwarder test now passes with that delegation in place.
 
 ## TDD gate tracking
 

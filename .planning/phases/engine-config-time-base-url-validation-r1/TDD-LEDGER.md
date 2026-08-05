@@ -14,6 +14,7 @@ production edit.
 | R4 | All declared format siblings use the same engine path | invalid date/date-time/URI-shaped values are accepted | every actual format family is refused at add time |
 | R5 | Constraint-free inputs are unchanged | not applicable — this guards a non-regression | a connector/property with no relevant constraint accepts the same value as before |
 | R6 | Rejection is pre-persistence | current app flow could reach vault/state after validation failure | a failing validation leaves `ListCredentials()` empty and no stored credential |
+| R7 | Promoted native definition forwarder can honour constraints | a constrained `definitionConnector` does not expose the optional validator | the wrapper delegates to its `engine.Base` and rejects the declared enum |
 
 ## Run log
 
@@ -104,3 +105,37 @@ The engine contract test proves an unconstrained bundle advertises
 `HasConfigurationConstraints=false`; the application control test proves the
 real constraint-free Faker connector remains accepted without coercing its
 flat configuration strings.
+
+### R7 — promoted-native forwarder audit
+
+Status: red-confirmed
+
+The registry registers promoted native connectors through
+`native/nativeset.definitionConnector`, which embeds the original connector and
+stores an `engine.Base` only for the bundled definition. Before a forwarding
+method exists, a constrained wrapped bundle cannot advertise the optional
+validator:
+
+```text
+$ go test ./internal/connectors/native/nativeset -run '^TestDefinitionConnectorForwardsDeclaredConfigurationConstraints$' -count=1
+--- FAIL: TestDefinitionConnectorForwardsDeclaredConfigurationConstraints
+    definitionConnector does not expose ConfigurationConstraintValidator
+FAIL    polymetrics.ai/internal/connectors/native/nativeset
+```
+
+The fix must delegate to `Base`'s actual declaration signal, preserving the
+constraint-free current promoted connectors as genuinely unconstrained.
+
+### R7 — green transition
+
+```text
+$ go test ./internal/connectors/native/nativeset -run '^TestDefinitionConnectorForwardsDeclaredConfigurationConstraints$' -count=1
+ok      polymetrics.ai/internal/connectors/native/nativeset
+
+$ go test ./internal/app -run '^(TestAddCredentialRejectsInvalidGitHubBaseURLAtConfigurationTime|TestAddCredentialRejectsDeclaredConfigurationConstraintsAtConfigurationTime|TestAddCredentialLeavesConstraintFreeConnectorUnconstrained)$' -count=1
+ok      polymetrics.ai/internal/app
+```
+
+The promoted-native forwarder now delegates both the actual declaration signal
+and validation to `engine.Base`; its constraint-free bundles return false from
+that signal instead of receiving a synthetic success.

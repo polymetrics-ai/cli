@@ -46,6 +46,20 @@ func (c definitionConnector) Definition() connectors.Definition {
 	return c.base.Definition()
 }
 
+// HasConfigurationConstraints forwards the wrapped bundle's actual
+// configuration-constraint declaration. It prevents promoted native
+// connectors from advertising a generic validator when their bundle has no
+// constraint to evaluate.
+func (c definitionConnector) HasConfigurationConstraints() bool {
+	return c.base.HasConfigurationConstraints()
+}
+
+// ValidateConfiguration delegates declared configuration checks to the
+// wrapped bundle's compiled schema.
+func (c definitionConnector) ValidateConfiguration(config map[string]string) error {
+	return c.base.ValidateConfiguration(config)
+}
+
 func withBundleDefinition(name string, c connectors.Connector) connectors.Connector {
 	bundle, err := engine.Load(defs.FS, name)
 	if err != nil {
