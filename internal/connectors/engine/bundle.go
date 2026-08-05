@@ -1977,7 +1977,7 @@ func validateSensitivePolicy(i int, op OperationSpec) error {
 			return nil
 		}
 	} else if op.SensitivePolicy == nil {
-		return fmt.Errorf("operation %d (%q) is secret_sensitive but declares no sensitive_policy (input_mode, redact_fields, approval_mode)", i, op.ID)
+		return fmt.Errorf("operation %d (%q) is secret_sensitive but declares no sensitive_policy (input_mode, approval_mode)", i, op.ID)
 	}
 	p := op.SensitivePolicy
 	switch strings.ToLower(strings.TrimSpace(p.InputMode)) {

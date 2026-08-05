@@ -828,6 +828,9 @@ func TestBundleLoadRejectsSecretOperationWithoutPolicy(t *testing.T) {
 	if !strings.Contains(err.Error(), "sensitive_policy") {
 		t.Fatalf("Load error = %q, want sensitive_policy rejection", err.Error())
 	}
+	if strings.Contains(err.Error(), "redact_fields") {
+		t.Fatalf("Load error = %q, must not require redact_fields", err.Error())
+	}
 }
 
 func TestBundleLoadRejectsInlineInputModeForSecretOperation(t *testing.T) {
