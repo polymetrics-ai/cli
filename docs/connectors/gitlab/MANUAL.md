@@ -20,7 +20,7 @@ ICON
   review_url: https://docs.gitlab.com/ee/api/rest/deprecations.html
 
 CAPABILITIES
-  check=true catalog=true read=true write=true query=false
+  check=true catalog=true read=true write=false query=false
   Integration type: api
 
 AUTHENTICATION

@@ -19,7 +19,7 @@ Reads GitLab projects, groups, users, and issues through existing GitLab REST AP
 
 ## Capabilities
 
-- check=true catalog=true read=true write=true query=false
+- check=true catalog=true read=true write=false query=false
 - Integration type: api
 
 ## Authentication

@@ -70292,7 +70292,7 @@
     "capabilities": {
       "check": true,
       "read": true,
-      "write": true,
+      "write": false,
       "query": false,
       "cdc": false,
       "dynamic_schema": false

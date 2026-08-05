@@ -61733,7 +61733,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": true,
+      "write": false,
       "query": false
     },
     "spec": {
