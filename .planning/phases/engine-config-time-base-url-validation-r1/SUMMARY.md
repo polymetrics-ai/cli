@@ -35,7 +35,8 @@ remain outside this flat configuration-map feature.
 
 ## Handoff
 
-This is merge group two. Rebase onto the three group-one foundations once they
-land on `main`, then rerun the focused app/engine/native-set regression matrix.
-No connector bundles, vault/storage code, CLI surface, user-facing docs, or
-website files were changed.
+This is merge group two. The branch was rebased cleanly onto current `main`
+(`d30dd4905`) and the focused app/engine/native-set matrix passed afterward.
+The three group-one foundations were not yet on `main`; rebase once more when
+they land, then rerun that focused matrix. No connector bundles, vault/storage
+code, CLI surface, user-facing docs, or website files were changed.

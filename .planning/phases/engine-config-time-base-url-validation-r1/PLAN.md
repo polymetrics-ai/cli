@@ -162,6 +162,9 @@ red-forwarder test now passes with that delegation in place.
 
 ## Rebase plan
 
-This is merge group two. Before handoff, rebase onto the three group-one
-foundations and rerun the focused regression matrix. Keep the diff limited to
-the configuration-validation seam and tests so conflicts remain mechanical.
+This is merge group two. The branch was rebased cleanly onto current
+`origin/main` commit `d30dd4905`; its focused engine/app/native regression
+matrix passed again afterward. The three stated group-one foundations were not
+yet on `main` at that check, so rebase once more onto them before integration if
+they land later. Keep the diff limited to the configuration-validation seam and
+tests so conflicts remain mechanical.

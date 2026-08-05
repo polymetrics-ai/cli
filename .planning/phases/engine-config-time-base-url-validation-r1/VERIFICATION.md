@@ -22,6 +22,7 @@
 | Release workflow | `make release-workflow-check` | passed |
 | GSD evidence | `scripts/verify-gsd-workflow origin/main` | passed |
 | Scope guard | `git diff --name-only origin/main...HEAD -- internal/connectors/defs` | passed (empty; no bundle change) |
+| Rebase regression | focused engine/app/native-set matrix after rebase to `d30dd4905` | passed |
 
 `go test ./...` and `make verify` are intentionally not run as single commands
 in this per-command environment; CI carries the complete suite after the
