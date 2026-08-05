@@ -8,12 +8,10 @@ import (
 	"polymetrics.ai/internal/connectors/certify"
 )
 
-// TestSourceStagesAgainstSample drives certify.Runner.Run end-to-end against
-// the built-in "sample" connector (certification design implementation-order
-// step 2 / PLAN.md T-14 / SPEC.md §1.6): stages 0-11 in an ephemeral --root
-// workdir mirroring the Makefile "smoke" recipe flags (Makefile:41), proving
-// the source-stage pipeline without any CLI wiring (Runner drives cli.Run
-// in-process via the harness built in T/B-12).
+// TestFullSweepSourceStagesAgainstSample is the package's one exhaustive real
+// CLI proof. It exercises every catalog stream, including each flow/schedule
+// round-trip. Focused behavior tests below use the strict scripted CLI driver
+// so they retain their distinct assertions without repeating this cost.
 func TestFullSweepSourceStagesAgainstSample(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
@@ -64,7 +62,7 @@ func TestFullSweepSourceStagesAgainstSample(t *testing.T) {
 func TestSourceStagesAgainstSample(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -75,6 +73,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 
 	if !rep.Passed {
 		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
@@ -278,7 +277,7 @@ func TestSourceStagesAgainstSample(t *testing.T) {
 func TestSourceStagesSabotageFailsNamedStage(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -290,6 +289,7 @@ func TestSourceStagesSabotageFailsNamedStage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 
 	if rep.Passed {
 		t.Fatalf("Report.Passed = true, want false after sabotage")
@@ -331,7 +331,7 @@ func TestSourceStagesSecretLeakInStdoutFailsSecretRedactionNamingStage(t *testin
 	const knownSecret = "sample-cert-token"
 	t.Setenv("PM_SAMPLE_TOKEN", knownSecret)
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -343,6 +343,7 @@ func TestSourceStagesSecretLeakInStdoutFailsSecretRedactionNamingStage(t *testin
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 
 	// The sabotaged stage's OWN outcome (envelope kind/exit code) is
 	// unaffected: only secret_redaction should notice the planted leak.
@@ -368,7 +369,7 @@ func TestSourceStagesSecretLeakInStdoutFailsSecretRedactionNamingStage(t *testin
 func TestSourceStagesEphemeralWorkdirCleanedUp(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -379,6 +380,7 @@ func TestSourceStagesEphemeralWorkdirCleanedUp(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	if !rep.Passed {
 		t.Fatalf("Report.Passed = false, want true")
 	}

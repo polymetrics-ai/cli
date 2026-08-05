@@ -31,7 +31,20 @@
     "certifyRealCLIInvocations": 782,
     "certifyPackageElapsedSeconds": 578.282,
     "budget": 128,
-    "command": "go test -count=1 -v ./internal/connectors/certify"
+    "command": "go test -count=1 -v ./internal/connectors/certify",
+    "cliRealCLIInvocations": 213,
+    "cliPackageElapsedSeconds": 227.819,
+    "cliCommand": "go test -count=1 -v -run '^TestCertifyCLI' ./internal/cli"
+  },
+  "greenEvidence": {
+    "certifyRealCLIInvocations": 85,
+    "certifyInvocationBudget": 85,
+    "certifyPackageElapsedSeconds": 58.972,
+    "certifyCommand": "go test -count=1 ./internal/connectors/certify",
+    "cliRealCLIInvocations": 61,
+    "cliInvocationBudget": 61,
+    "cliPackageElapsedSeconds": 43.128,
+    "cliCommand": "go test -count=1 -run '^TestCertifyCLI' ./internal/cli"
   },
   "verificationPassed": false
 }
