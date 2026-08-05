@@ -2,7 +2,8 @@
 
 ## Planned local gates
 
-- [ ] `go test -count=1 ./internal/connectors/certify`
+- [x] `go test -count=1 ./internal/connectors/certify` — 58.972s; 85/85 real CLI calls (cold count reported by verbose precursor)
+- [x] `go test -count=1 -run '^TestCertifyCLI' ./internal/cli` — 43.128s; 61/61 real CLI calls
 - [ ] `go test -count=1 ./internal/cli`
 - [ ] `go test -race ./internal/connectors/certify`
 - [ ] `go test -race ./internal/cli`

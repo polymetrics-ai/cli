@@ -21,7 +21,7 @@ import (
 func TestWriteStagesSelfTestAgainstOutbox(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -33,6 +33,7 @@ func TestWriteStagesSelfTestAgainstOutbox(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	if !rep.Passed {
 		t.Fatalf("Report.Passed = false, want true; stages=%+v", rep.Stages)
 	}
@@ -114,7 +115,7 @@ func TestWriteStagesSelfTestAgainstOutbox(t *testing.T) {
 func TestWritePlanPreviewJSONHasNoApprovalToken(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -125,6 +126,7 @@ func TestWritePlanPreviewJSONHasNoApprovalToken(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	stage := mustStage(t, rep, "write_plan_preview")
 	if !stage.Passed {
 		t.Fatalf("write_plan_preview failed: %+v", stage)
@@ -139,7 +141,7 @@ func TestWritePlanPreviewJSONHasNoApprovalToken(t *testing.T) {
 func TestWriteStagesSkipWhenDisabled(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -150,6 +152,7 @@ func TestWriteStagesSkipWhenDisabled(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	if !rep.Passed {
 		t.Fatalf("Report.Passed = false with Write disabled, want true; stages=%+v", rep.Stages)
 	}
@@ -168,7 +171,7 @@ func TestWriteStagesSkipWhenDisabled(t *testing.T) {
 func TestWriteCreateFailureRecordsNoLeak(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, _ := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -201,7 +204,7 @@ func TestWriteCreateFailureRecordsNoLeak(t *testing.T) {
 func TestWriteCleanupFailureRecordsLeak(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, _ := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -235,7 +238,7 @@ func TestWriteCleanupFailureRecordsLeak(t *testing.T) {
 func TestCleanupVerifyFailureRecordsLeak(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, _ := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -266,7 +269,7 @@ func TestCleanupVerifyFailureRecordsLeak(t *testing.T) {
 func TestApprovalIdempotencyStageRejectsReplay(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -277,6 +280,7 @@ func TestApprovalIdempotencyStageRejectsReplay(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	stage := mustStage(t, rep, "approval_idempotency")
 	if !stage.Passed {
 		t.Fatalf("approval_idempotency stage failed: %+v", stage)
@@ -295,7 +299,7 @@ func TestApprovalIdempotencyStageRejectsReplay(t *testing.T) {
 func TestWriteStagesLedgerWrittenBeforeCreate(t *testing.T) {
 	t.Setenv("PM_SAMPLE_TOKEN", "sample-cert-token")
 
-	r := certify.NewRunner(certify.Options{
+	r, driver := scriptedSampleRunner(t, certify.Options{
 		Connector: "sample",
 		Stream:    "customers",
 		Limit:     50,
@@ -307,6 +311,7 @@ func TestWriteStagesLedgerWrittenBeforeCreate(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
+	driver.assertProtocol(t)
 	workdir := certify.LastWorkdir(r)
 	defer func() { _ = os.RemoveAll(workdir) }()
 
