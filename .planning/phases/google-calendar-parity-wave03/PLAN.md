@@ -28,7 +28,7 @@ Google's current Calendar v3 Discovery document (`revision=20260731`) lists 38 o
 
 ## Safety and non-goals
 
-- No credentialed Google calls, credential access, reverse-ETL execution, provider writes, dependencies, shared-schema changes, or main-branch merge.
+- No credentialed Google calls, credential access, reverse-ETL execution, provider writes, dependencies, unrelated shared-schema changes, or main-branch merge. Shared schema validation is limited to enforcing absolute URI syntax for declared `format: uri` fields.
 - `rest_write` is not an implementation path. The 26 mutations are authored as typed `writes.json` actions, which the existing reverse-ETL executor can run.
 
 ## Orchestration decision
