@@ -2298,6 +2298,112 @@ func TestBundleLoadAPISurfaceOperationLedger(t *testing.T) {
 	}
 }
 
+// TestBundleLoadAPISurfaceV2ProvenanceContract is the #3785 red/green
+// contract: a v2 ledger carries an artifact table and endpoint-local
+// provenance without changing the endpoint's covered_by classifier.
+func TestBundleLoadAPISurfaceV2ProvenanceContract(t *testing.T) {
+	const validV2 = `{
+		"api": "test API v2",
+		"operation_ledger_version": 2,
+		"artifacts": [
+			{
+				"id": "acme-openapi-2026-08-06",
+				"url": "https://docs.acme.test/openapi.yaml",
+				"retrieved_at": "2026-08-06",
+				"sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+			}
+		],
+		"endpoints": [
+			{
+				"method": "GET",
+				"path": "/widgets",
+				"provenance": {
+					"artifact": "acme-openapi-2026-08-06",
+					"source_url": "https://docs.acme.test/api/widgets"
+				},
+				"covered_by": { "stream": "widgets" }
+			}
+		]
+	}`
+	const validV1 = `{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{
+				"method": "GET",
+				"path": "/widgets",
+				"covered_by": { "stream": "widgets" }
+			}
+		]
+	}`
+
+	tests := []struct {
+		name              string
+		apiSurface        string
+		wantLedgerVersion int
+		wantErrKey        string
+	}{
+		{name: "complete_v2", apiSurface: validV2, wantLedgerVersion: 2},
+		{name: "v1_ledger_compatibility", apiSurface: validV1, wantLedgerVersion: 1},
+		{
+			name:       "unknown_root_key",
+			apiSurface: strings.Replace(validV2, `"artifacts": [`, `"surprise": true, "artifacts": [`, 1),
+			wantErrKey: "surprise",
+		},
+		{
+			name:       "unknown_artifact_key",
+			apiSurface: strings.Replace(validV2, `"sha256":`, `"unexpected": true, "sha256":`, 1),
+			wantErrKey: "unexpected",
+		},
+		{
+			name:       "unknown_endpoint_key",
+			apiSurface: strings.Replace(validV2, `"covered_by": { "stream": "widgets" }`, `"covered_by": { "stream": "widgets" }, "unexpected_endpoint": true`, 1),
+			wantErrKey: "unexpected_endpoint",
+		},
+		{
+			name:       "provenance_cannot_be_a_classifier",
+			apiSurface: strings.Replace(validV2, `"source_url": "https://docs.acme.test/api/widgets"`, `"source_url": "https://docs.acme.test/api/widgets", "covered_by": { "stream": "widgets" }`, 1),
+			wantErrKey: "covered_by",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(tc.apiSurface)}
+
+			bundle, err := Load(fsys, "acme")
+			if tc.wantErrKey == "" {
+				if err != nil {
+					t.Fatalf("Load complete v2 api_surface: %v", err)
+				}
+				if bundle.Surface == nil || bundle.Surface.OperationLedgerVersion != tc.wantLedgerVersion {
+					t.Fatalf("Surface = %+v, want loaded operation_ledger_version %d", bundle.Surface, tc.wantLedgerVersion)
+				}
+				if tc.wantLedgerVersion == 1 {
+					if len(bundle.Surface.Artifacts) != 0 || bundle.Surface.Endpoints[0].Provenance != nil {
+						t.Fatalf("v1 Surface = %+v, want no v2 provenance data", bundle.Surface)
+					}
+					return
+				}
+				if got := bundle.Surface.Artifacts; len(got) != 1 || got[0].ID != "acme-openapi-2026-08-06" || got[0].RetrievedAt != "2026-08-06" {
+					t.Fatalf("Surface.Artifacts = %+v, want loaded provider artifact", got)
+				}
+				if got := bundle.Surface.Endpoints[0].Provenance; got == nil || got.Artifact != "acme-openapi-2026-08-06" || got.SourceURL != "https://docs.acme.test/api/widgets" {
+					t.Fatalf("Surface.Endpoints[0].Provenance = %+v, want loaded endpoint citation", got)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatalf("Load error = nil, want unknown key %q to be rejected", tc.wantErrKey)
+			}
+			if !strings.Contains(err.Error(), tc.wantErrKey) {
+				t.Fatalf("Load error = %q, want it to name unknown key %q", err.Error(), tc.wantErrKey)
+			}
+		})
+	}
+}
+
 func TestBundleLoadAPISurfaceOperationRejectsUnblockedDefault(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{

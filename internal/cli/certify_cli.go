@@ -240,6 +240,22 @@ func renderCertifyReportText(rep certify.Report) string {
 	fmt.Fprintf(&b, "  read:     %s (stream=%s records=%d)\n", rep.Capabilities.Read.Result, rep.Capabilities.Read.Stream, rep.Capabilities.Read.Records)
 	fmt.Fprintf(&b, "  resume:   %s\n", rep.Capabilities.Resume.Result)
 	fmt.Fprintf(&b, "  redaction:%s\n", rep.Capabilities.SecretRedaction.Result)
+	if surface := rep.Capabilities.Surface; surface != nil {
+		fmt.Fprintf(&b, "  surface:  %s", surface.Result)
+		if provenance := surface.Provenance; provenance != nil {
+			fmt.Fprintf(&b, "; provenance: %s (ledger=%d artifacts=%d endpoints=%d cited=%d)",
+				provenance.Status,
+				provenance.LedgerVersion,
+				provenance.ArtifactCount,
+				provenance.EndpointCount,
+				provenance.CitedEndpoints,
+			)
+			if provenance.Reason != "" {
+				fmt.Fprintf(&b, "; provenance reason: %s", provenance.Reason)
+			}
+		}
+		fmt.Fprintln(&b)
+	}
 	if len(rep.Leaks) > 0 {
 		fmt.Fprintf(&b, "  LEAKED RESOURCES: %d\n", len(rep.Leaks))
 		for _, leak := range rep.Leaks {

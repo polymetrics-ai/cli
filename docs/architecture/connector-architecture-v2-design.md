@@ -714,7 +714,7 @@ write actions.
 Rules (enforced by `connectorgen validate` + conformance):
 
 1. Every endpoint entry has exactly one classifier: executable `covered_by`, blocked
-   `operation` (when `operation_ledger_version: 1` is set), or legacy `excluded`.
+   `operation` (when an `operation_ledger_version` is set), or legacy `excluded`.
 2. `covered_by.stream`/`covered_by.write`/`covered_by.direct_read` must resolve to a declared
    stream, write action, or implemented direct-read command — and vice versa: every declared
    stream and write action must appear in the surface.
@@ -723,6 +723,43 @@ Rules (enforced by `connectorgen validate` + conformance):
 4. **Fail-first-run**: `capabilities.write == false` is only legal when the surface contains zero
    executable POST/PUT/PATCH/DELETE endpoints. Same rule for GET endpoints vs streams.
 5. Freshness: `reviewed_at` older than 12 months → warning (not failure).
+
+#### Version 2 provider-artifact provenance
+
+`operation_ledger_version: 2` adds evidence metadata alongside the existing endpoint classifier:
+
+```json
+{
+  "operation_ledger_version": 2,
+  "artifacts": [{
+    "id": "github-rest-openapi-2026-08-06",
+    "url": "https://docs.github.com/rest/openapi-description/openapi.github.json",
+    "retrieved_at": "2026-08-06",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }],
+  "endpoints": [{
+    "method": "GET",
+    "path": "/repos/{owner}/{repo}/issues",
+    "provenance": {
+      "artifact": "github-rest-openapi-2026-08-06",
+      "source_url": "https://docs.github.com/en/rest/issues/issues#list-repository-issues"
+    },
+    "covered_by": { "stream": "issues" }
+  }]
+}
+```
+
+Every v2 endpoint must cite an HTTPS `provenance.source_url` and an artifact ID that resolves to
+exactly one `artifacts[]` row. Each artifact has an HTTPS URL and an ISO-8601 full-date
+`retrieved_at`; preserve a provider-published immutable SHA-256 digest when it is available. The
+artifact/provenance pair is evidence only. It never supplies `covered_by`, never changes a
+capability, and never makes an endpoint executable. `covered_by` continues to resolve only to a
+declared stream, write action, or implemented direct-read command. `operation.source_url` remains
+the v1 citation field; v2 uses endpoint-local `provenance.source_url` uniformly.
+
+Version 1 (and pre-ledger) inventories remain valid and certify as `legacy_unverified` during the
+staged provider-artifact migration. The migration sweep upgrades individual bundles; the v2
+contract itself does not rewrite the existing fleet or infer evidence from a bare source URL.
 
 ### E.2 Conformance v2 (`internal/connectors/conformance/`)
 

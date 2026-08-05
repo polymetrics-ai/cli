@@ -65,6 +65,7 @@ pm connectors certify <connector>
     [--limit N]                  # per-read record cap (default 50)
     [--modes m1,m2,...]          # default: all 5
     [--skip write,flow,schedule]
+    [--full]                     # include API-surface inventory and provenance evidence
     [--rate-limit RPS] [--budget N]
     [--record | --replay]        # Tier-1 capture / replay
     [--live-all-modes] [--allow-production-writes]
@@ -125,6 +126,19 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
     "check":   {"live": "pass"},
     "catalog": {"live": "pass", "streams": 21},
     "read":    {"live": "pass", "stream": "issues", "records": 50},
+    "surface": {
+      "result": "pass",
+      "endpoints": 509,
+      "covered": 440,
+      "blocked": 69,
+      "provenance": {
+        "status": "complete",
+        "ledger_version": 2,
+        "artifact_count": 1,
+        "endpoint_count": 509,
+        "cited_endpoints": 509
+      }
+    },
     "sync_modes": {
       "full_refresh_append":            {"result": "pass", "data_source": "live"},
       "full_refresh_overwrite":         {"result": "pass", "data_source": "capture"},
@@ -150,6 +164,12 @@ json_contract (meta-stage aggregating envelope kind + exit-code assertions).
 ```
 
 History appends to `.polymetrics/certifications/history/<connector>/<timestamp>.json`.
+
+With `--full`, `capabilities.surface.provenance` is evidence separate from endpoint coverage and
+capability claims. Version-1/pre-ledger surfaces report `legacy_unverified` so the staged migration
+does not orphan existing bundles. Version-2 surfaces require each endpoint citation to resolve to a
+provider artifact with a retrieval date; invalid evidence fails the `surface_inventory` stage. The
+provenance block never changes `covered_by` or enables a command.
 
 ### Enablement (replacing the manual flip)
 

@@ -287,6 +287,9 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	if b.Surface == nil {
 		return fmt.Errorf("api_surface.json did not load")
 	}
+	if provenance := engine.ValidateSurfaceProvenance(b.Surface); provenance.Status == engine.SurfaceProvenanceInvalid {
+		return provenance.Issues[0]
+	}
 
 	streams := map[string]bool{}
 	for _, s := range b.Streams {
@@ -367,7 +370,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				return fmt.Errorf("endpoint %d (%s %s) excluded.category %q is not in the closed vocabulary", i, ep.Method, ep.Path, ep.Excluded.Category)
 			}
 		case hasOperation:
-			if err := checkSurfaceOperation(i, ep); err != nil {
+			if err := checkSurfaceOperation(i, ep, b.Surface.OperationLedgerVersion >= 2); err != nil {
 				return err
 			}
 		}
@@ -394,7 +397,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	return nil
 }
 
-func checkSurfaceOperation(i int, ep engine.SurfaceEndpoint) error {
+func checkSurfaceOperation(i int, ep engine.SurfaceEndpoint, v2Ledger bool) error {
 	op := ep.Operation
 	if op == nil {
 		return nil
@@ -418,9 +421,11 @@ func checkSurfaceOperation(i int, ep engine.SurfaceEndpoint) error {
 	if op.Model == "duplicate" && strings.TrimSpace(op.DuplicateOf) == "" {
 		return fmt.Errorf("%s operation.duplicate_of is required for duplicate rows", prefix)
 	}
-	if sourceRequiredOperationModels[op.Model] &&
-		strings.TrimSpace(op.SourceURL) == "" &&
-		strings.TrimSpace(op.Notes) == "" {
+	hasCitation := strings.TrimSpace(op.SourceURL) != "" || strings.TrimSpace(op.Notes) != ""
+	if v2Ledger && ep.Provenance != nil && strings.TrimSpace(ep.Provenance.SourceURL) != "" {
+		hasCitation = true
+	}
+	if sourceRequiredOperationModels[op.Model] && !hasCitation {
 		return fmt.Errorf("%s operation.source_url or operation.notes is required for sensitive/admin/destructive/disallowed rows", prefix)
 	}
 	return nil

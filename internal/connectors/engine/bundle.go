@@ -633,16 +633,35 @@ type APISurface struct {
 	ReviewedAt             string            `json:"reviewed_at,omitempty"`
 	OperationLedgerVersion int               `json:"operation_ledger_version,omitempty"`
 	Scope                  string            `json:"scope,omitempty"`
+	Artifacts              []SurfaceArtifact `json:"artifacts,omitempty"`
 	Endpoints              []SurfaceEndpoint `json:"endpoints"`
+}
+
+// SurfaceArtifact is a provider artifact cited by v2 endpoint provenance.
+// Semantic validation resolves its ID and validates its immutable source data.
+type SurfaceArtifact struct {
+	ID          string `json:"id"`
+	URL         string `json:"url"`
+	RetrievedAt string `json:"retrieved_at"`
+	SHA256      string `json:"sha256,omitempty"`
 }
 
 // SurfaceEndpoint is one api_surface.json endpoint entry.
 type SurfaceEndpoint struct {
-	Method    string            `json:"method,omitempty"`
-	Path      string            `json:"path,omitempty"`
-	CoveredBy *SurfaceCoverage  `json:"covered_by,omitempty"`
-	Excluded  *SurfaceExclusion `json:"excluded,omitempty"`
-	Operation *SurfaceOperation `json:"operation,omitempty"`
+	Method     string             `json:"method,omitempty"`
+	Path       string             `json:"path,omitempty"`
+	Provenance *SurfaceProvenance `json:"provenance,omitempty"`
+	CoveredBy  *SurfaceCoverage   `json:"covered_by,omitempty"`
+	Excluded   *SurfaceExclusion  `json:"excluded,omitempty"`
+	Operation  *SurfaceOperation  `json:"operation,omitempty"`
+}
+
+// SurfaceProvenance cites one operation-specific provider source in a v2
+// ledger. It is evidence metadata only: CoveredBy remains the sole binding to
+// an executable connector surface.
+type SurfaceProvenance struct {
+	Artifact  string `json:"artifact"`
+	SourceURL string `json:"source_url"`
 }
 
 // SurfaceCoverage names the executable connector surface that covers an endpoint.

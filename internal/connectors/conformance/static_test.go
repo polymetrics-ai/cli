@@ -2,6 +2,7 @@ package conformance
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
@@ -171,6 +172,103 @@ func TestCheckSurfaceComplete_BinaryDownloadSatisfiesDirectReadCoverage(t *testi
 	}
 	if err := checkSurfaceComplete(plannedB); err == nil {
 		t.Fatal("checkSurfaceComplete: a planned binary_download command must not satisfy covered_by.direct_reads")
+	}
+}
+
+func TestCheckSurfaceComplete_RequiresV2EndpointProvenance(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true},
+		},
+		Streams: []engine.StreamSpec{{Name: "widgets"}},
+		Surface: &engine.APISurface{
+			OperationLedgerVersion: 2,
+			Artifacts: []engine.SurfaceArtifact{{
+				ID:          "acme-openapi-2026-08-06",
+				URL:         "https://docs.acme.test/openapi.yaml",
+				RetrievedAt: "2026-08-06",
+			}},
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method:    "GET",
+				Path:      "/widgets",
+				CoveredBy: &engine.SurfaceCoverage{Stream: "widgets"},
+			}},
+		},
+	}
+
+	err := checkSurfaceComplete(b)
+	if err == nil {
+		t.Fatal("checkSurfaceComplete: v2 endpoint without provenance passed")
+	}
+	if !strings.Contains(err.Error(), "provenance is required") {
+		t.Fatalf("checkSurfaceComplete error = %q, want missing provenance diagnostic", err)
+	}
+}
+
+func TestCheckSurfaceComplete_ProvenanceDoesNotSatisfyCoverage(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Metadata: engine.Metadata{
+			Capabilities: engine.Capabilities{Read: true},
+		},
+		Surface: &engine.APISurface{
+			OperationLedgerVersion: 2,
+			Artifacts: []engine.SurfaceArtifact{{
+				ID:          "acme-openapi-2026-08-06",
+				URL:         "https://docs.acme.test/openapi.yaml",
+				RetrievedAt: "2026-08-06",
+			}},
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method: "GET",
+				Path:   "/widgets",
+				Provenance: &engine.SurfaceProvenance{
+					Artifact:  "acme-openapi-2026-08-06",
+					SourceURL: "https://docs.acme.test/api/widgets",
+				},
+			}},
+		},
+	}
+
+	err := checkSurfaceComplete(b)
+	if err == nil {
+		t.Fatal("checkSurfaceComplete: provenance-only endpoint passed without a coverage classifier")
+	}
+	if !strings.Contains(err.Error(), "has no classifier") {
+		t.Fatalf("checkSurfaceComplete error = %q, want unchanged covered_by classifier diagnostic", err)
+	}
+}
+
+func TestCheckSurfaceComplete_V2ProvenanceSuppliesBlockedOperationCitation(t *testing.T) {
+	b := engine.Bundle{
+		Name: "acme",
+		Surface: &engine.APISurface{
+			OperationLedgerVersion: 2,
+			Artifacts: []engine.SurfaceArtifact{{
+				ID:          "acme-openapi-2026-08-06",
+				URL:         "https://docs.acme.test/openapi.yaml",
+				RetrievedAt: "2026-08-06",
+			}},
+			Endpoints: []engine.SurfaceEndpoint{{
+				Method: "POST",
+				Path:   "/widgets",
+				Provenance: &engine.SurfaceProvenance{
+					Artifact:  "acme-openapi-2026-08-06",
+					SourceURL: "https://docs.acme.test/api/widgets#create",
+				},
+				Operation: &engine.SurfaceOperation{
+					Model:            "sensitive_reverse_etl",
+					Status:           "blocked",
+					Risk:             "high",
+					BlockedByDefault: true,
+					Reason:           "requires sensitive-data safeguards",
+				},
+			}},
+		},
+	}
+
+	if err := checkSurfaceComplete(b); err != nil {
+		t.Fatalf("checkSurfaceComplete: v2 endpoint provenance should supply the blocked-operation citation: %v", err)
 	}
 }
 
