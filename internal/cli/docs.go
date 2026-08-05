@@ -723,7 +723,7 @@ COMMANDS
     Create a reverse ETL plan from a local warehouse table to a destination
     connector. A human-readable non-destructive plan prints an approval token;
     a destructive plan prints no token until preview succeeds. JSON output
-    always redacts tokens. A non-batchable destination action is refused here,
+    always omits tokens. A non-batchable destination action is refused here,
     before any plan or approval token exists.
 
   preview

@@ -58,7 +58,7 @@ JSON output:
 
 ```bash
 pm reverse preview plan_abc123          # destructive plans issue the token here
-pm reverse preview plan_abc123 --json   # machine-readable output redacts the token
+pm reverse preview plan_abc123 --json   # machine-readable output omits the token
 ```
 
 Preview returns the plan metadata and mapped sample rows. For destructive plans it also runs the destination's real no-network dry-run path, returns resolved warnings with complete connector content, persists a digest that binds the complete staged request set and its execution identity, changes the plan status to `previewed`, and issues the approval token in plain-text output. Fields declared in `redact_fields` are not substituted in the engine preview, so the operator approves the content that will be sent. The non-destructive `create_issue` example below remains `planned`; a destructive preview reports `previewed`.
