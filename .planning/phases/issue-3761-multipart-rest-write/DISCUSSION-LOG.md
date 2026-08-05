@@ -13,4 +13,3 @@ The only delivery topology decision is likewise fixed by the worker brief:
 finish a committed branch and report `done` to firstmate. Do not independently
 start the no-mistakes shipping pipeline, push, open a PR, or merge until
 firstmate explicitly resumes that stage.
-

@@ -53,4 +53,3 @@ were executed inline. The issue and its child contracts already decide all
 product and safety choices, and this worker is explicitly prohibited from
 spawning roles. This is the repo-local GSD adapter's documented inline/manual
 fallback; it does not relax TDD, verification, or review requirements.
-
