@@ -8,6 +8,7 @@
 - [ ] `go test -race ./internal/connectors/certify` — the complete package reached Go's built-in 10-minute test timeout while the retained real CLI proof was running; do not rerun the same broad race command. The changed scripted-stage contract passed its focused race command.
 - [ ] `go test -race ./internal/cli` — the changed CLI route/fixture contract passed `go test -race -count=1 -run '^TestCertifyCLI' ./internal/cli`.
 - [x] timing parser/runner pass and controlled failure modes — `go test -count=1 ./internal/certifytiming ./cmd/certifytiming`
+- [x] enforced timing target — `make certify-timing` reports 85/85 and 61/61 invocation caps, 112.159s measured local wall time, and passes the fixed `4m15s` bound
 - [x] two cold local `-count=1 -json` timing samples: (1) harness 57.745s, CLI 42.359s, total 100.104s; (2) harness 56.539s, CLI 43.328s, total 99.867s. These diagnostics do not set the hosted wall-time limit.
 - [ ] `go vet ./...`
 - [ ] `go build ./cmd/pm`
@@ -24,11 +25,11 @@
 
 ## CI evidence required before measured threshold
 
-- [ ] At least two post-refactor GitHub-hosted Verify samples from the timing
+- [x] At least two post-refactor GitHub-hosted Verify samples from the timing
   target, each cold (`-count=1`) and carrying raw `go test -json` events.
-- [ ] Record run/job URL, retrieval date, runner environment if exposed,
+- [x] Record run/job URL, retrieval date, runner environment if exposed,
   certify elapsed time, CLI elapsed time, slowest tests, and sample maximum.
-- [ ] Record the arithmetic used to derive the explicit threshold and explain
+- [x] Record the arithmetic used to derive the explicit threshold and explain
   its margin. A local laptop measurement is not sufficient for #3807.
 
 ### Hosted timing observations (retrieved 2026-08-06)
@@ -51,7 +52,26 @@
   elapsed/wall elapsed 153.685s/193.213s. The slowest retained tests were
   `TestFullSweepSourceStagesAgainstSample` and
   `TestCertifyCLISingleConnectorPassExitsZero`. This is sample 1 of 2; no
-  threshold is selected yet.
+  threshold was selected at this point.
+
+- Second measured wall-clock sample: [Verify run 31054516637 / job
+  92468986349](https://github.com/polymetrics-ai/cli/actions/runs/31054516637/job/92468986349)
+  completed successfully on the same GitHub-hosted Ubuntu 24.04.4 image. Its
+  raw `-count=1 -json` stream reports 85/85 harness calls, certify package
+  elapsed/wall elapsed 63.340s/91.407s, CLI package elapsed/wall elapsed
+  47.563s/49.525s, and aggregate elapsed/wall elapsed 110.903s/140.932s.
+  The same retained real proof names were the slowest tests.
+
+### Fixed measured budget
+
+The two hosted wall samples are 193.213s and 140.932s. The first is the
+maximum and their observed spread is 52.281s, so the derived pre-rounding
+bound is `193.213 + 52.281 = 245.494s`. `CERTIFY_TIMING_MAX_DURATION` is
+therefore the next 15-second boundary, `4m15s` (255s): 52.281s of measured
+variance plus 9.506s of explicit rounding room above the slowest sample. The
+Make timing target now passes that fixed value to the command, which enforces
+the sum of measured target process wall times and names observed/allowed values
+on failure. The deterministic 85/61 real-CLI caps remain the primary guard.
 
 ## Deliberate exclusions
 
