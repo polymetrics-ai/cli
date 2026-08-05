@@ -17,11 +17,11 @@
     },
     "site_urls": {
       "type": "string",
-      "description": "Comma- or newline-separated Search Console site properties (e.g. https://example.com/ or sc-domain:example.com) to fan out over for the sitemaps and search_analytics_* streams. Required for those streams only; sites itself is account-scoped and does not reference it."
+      "description": "Comma- or newline-separated Search Console site properties (e.g. https://example.com/ or sc-domain:example.com) to fan out over for the sitemaps and search_analytics_* streams. When unset, those streams fall back to site_url; sites itself is account-scoped and does not reference either field."
     },
     "site_url": {
       "type": "string",
-      "description": "Single Search Console site property for site_details, sitemap_details, and fixture/live certification defaults."
+      "description": "Single Search Console site property for site_details and sitemap_details, as the sitemaps and search_analytics_* fallback, and for fixture/live certification defaults."
     },
     "feedpath": {
       "type": "string",

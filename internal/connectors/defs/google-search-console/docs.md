@@ -33,10 +33,11 @@ Connection fields:
   appends the official `/webmasters/v3` and `/v1` prefixes.
 - `site_urls` (optional, string); comma- or newline-separated Search Console site properties (for
   example `https://example.com/` or `sc-domain:example.com`) to fan out over for `sitemaps` and
-  `search_analytics_*` streams.
+  `search_analytics_*` streams. When unset, those streams fall back to `site_url`.
 - `site_url` (optional, string); single Search Console site property for `site_details`,
-  `sitemap_details`, and certification defaults.
-- `feedpath` (optional, string); sitemap feed URL/path for `sitemap_details`.
+  `sitemap_details`, the `sitemaps` and `search_analytics_*` fallback, and certification defaults.
+- `feedpath` (optional, string); sitemap feed URL/path for `sitemap_details` and sitemap
+  write/delete certification defaults.
 - `inspection_url` and `mobile_test_url` (optional, string); fixture/live certification defaults for
   typed direct-read sweeps.
 - `start_date` (optional, string); default `2021-01-01`; format `date`; lower bound for
@@ -67,7 +68,7 @@ because the official operation is a POST whose cursor (`startRow`) lives inside 
   out over `site_urls` and falls back to `site_url` in the hook.
 - `sitemap_details`: GET `/webmasters/v3/sites/{{ config.site_url }}/sitemaps/{{ config.feedpath }}`.
 - `search_analytics_by_date`: POST `/webmasters/v3/sites/{{ fanout.id }}/searchAnalytics/query`
-  with the fixed `date` dimension.
+  with the fixed `date` dimension; fans out over `site_urls` and falls back to `site_url`.
 - `search_analytics_by_country`, `search_analytics_by_device`, `search_analytics_by_page`, and
   `search_analytics_by_query`: the same POST with `date` plus the named dimension. Each record is
   therefore grouped per date and dimension value; `date` remains the incremental cursor and part
@@ -107,11 +108,9 @@ operations also require typed confirmation. No write action accepts a raw body.
 
 - Fixture and local validation only in this wave; this file does not claim live provider
   certification.
-- `base_url` must be an origin-only root such as `https://searchconsole.googleapis.com`. Pathful
-  values are unsupported and are not silently corrected.
-- `spec.json` patterns are not consulted by `AddCredential`, command overlays, or `newRuntime`;
-  configuration-time enforcement is tracked separately as
-  `cli-engine-config-time-base-url-validation-r1`.
+- `base_url` must be an origin-only root such as `https://searchconsole.googleapis.com`.
+  Credential creation and command overlays do not enforce that shape, so validate overrides before
+  use; pathful values are unsupported and are not silently corrected.
 - API coverage is 11/11 unique provider-published operations: five operations are reachable via
   ETL streams, four via typed reverse-ETL writes, and two additional operations via typed bounded
   direct reads. Search Analytics has five dimension-specific ETL conveniences over its single
