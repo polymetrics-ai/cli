@@ -96,6 +96,33 @@ func TestOptionalWaveProjectionMayBeAbsent(t *testing.T) {
 	}
 }
 
+func TestCodexWorkersCannotDelegateToAmbientAgents(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+
+	for _, target := range contract.Projections {
+		if target.Harness != "codex" {
+			continue
+		}
+
+		rendered, err := RenderBlock(contract, target.Role)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, ambientAgent := range []string{"worker", "ambient-user-role"} {
+			if codexCanDelegateToAmbientAgent(rendered, ambientAgent) {
+				t.Fatalf("%s can delegate to ambient agent %q because agents.enabled is not false", target.Role, ambientAgent)
+			}
+		}
+	}
+}
+
+// Codex documents agents.enabled as true by default and false as disabling multi-agent tools.
+// This models whether an otherwise reachable built-in or user-defined agent can be delegated to;
+// it intentionally does not invoke a live model during a unit test.
+func codexCanDelegateToAmbientAgent(content []byte, ambientAgent string) bool {
+	return ambientAgent != "" && !bytes.Contains(content, []byte("agents.enabled = false"))
+}
+
 func TestProjectionIORejectsSymlinkEscape(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	contract.Projections[0].Required = true

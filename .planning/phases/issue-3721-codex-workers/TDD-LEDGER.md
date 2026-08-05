@@ -2,7 +2,7 @@
 
 | ID | Enforcement | RED evidence | GREEN evidence | Refactor/verification |
 |---|---|---|---|---|
-| R1 | Generated workers cannot delegate to an ambient agent | Pending: add and execute a failing negative delegation test before production renderer/source work | Pending | Pending |
+| R1 | Generated workers cannot delegate to an ambient agent | `go test ./internal/agentcontract -run '^TestCodexWorkersCannotDelegateToAmbientAgents$' -count=1` failed: `pm-delivery-worker can delegate to ambient agent "worker" because agents.enabled is not false` | Pending | Pending |
 | R2 | Every generated role is valid standalone TOML with required fields | Pending | Pending | Pending |
 | R3 | Removing delegation isolation causes drift failure | Pending | Pending | Pending |
 | R4 | Required Codex projections are generated only from canonical source | Pending | Pending | Pending |
