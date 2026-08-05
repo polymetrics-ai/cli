@@ -663,12 +663,16 @@ Rules (enforced by `connectorgen validate` + conformance):
 1. Every endpoint entry has exactly one classifier: executable `covered_by`, blocked
    `operation` (when `operation_ledger_version: 1` is set), or legacy `excluded`.
 2. `covered_by.stream`/`covered_by.write`/`covered_by.direct_read` must resolve to a declared
-   stream, write action, or implemented direct-read command — and vice versa: every declared
-   stream and write action must appear in the surface.
+   stream, write action, or implemented direct-read command path; `covered_by.direct_reads` is the
+   list form for multiple fixed commands on one endpoint. Every declared stream and write action
+   must appear in the surface.
 3. `operation` rows use closed `model`, `status`, and `risk` vocabularies; legacy
    `excluded.category` rows use the closed vocabulary in `docs/migration/conventions.md`.
-4. **Fail-first-run**: `capabilities.write == false` is only legal when the surface contains zero
-   executable POST/PUT/PATCH/DELETE endpoints. Same rule for GET endpoints vs streams.
+4. **Fail-first-run**: `capabilities.read == false` is only legal when the surface contains no
+   executable read endpoint (`GET`, `covered_by.stream`, or `covered_by.direct_read[s]`).
+   `capabilities.write == false` is only illegal for executable mutations (`PUT`/`PATCH`/`DELETE`,
+   or `POST` covered by a write action); `POST` endpoints covered by streams or direct reads are
+   read/query surfaces, not write capability evidence.
 5. Freshness: `reviewed_at` older than 12 months → warning (not failure).
 
 ### E.2 Conformance v2 (`internal/connectors/conformance/`)

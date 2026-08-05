@@ -1,5 +1,7 @@
 # Connector Operation Kernel
 
+Status: operation metadata and fixed direct-read/binary-download execution foundation.
+
 Started as the foundation slice for GitHub CLI parity (#56). The executor
 contract below describes what the runtime does today; `commandrunner` and
 `internal/connectors/engine` remain the authority when this document and the
@@ -23,10 +25,14 @@ metadata use `covered_by.direct_read` or `covered_by.direct_reads`. Blocked
 `api_surface.operation` rows remain ledger-only and are not an execution
 allowlist.
 
-Operation execution is opt-in per intent, not blanket-enabled: an operation runs
-only through an intent whose executor exists. Direct reads and bounded binary
-downloads have executors today; GraphQL, XML, local git, local file, browser,
-and composite operations do not, and remain blocked.
+Operation metadata is loaded and validated for every bundle. A command becomes
+executable only when its `cli_surface.json` entry is `availability: "implemented"`,
+and an intent with a runtime executor. Direct reads reference `rest_read`
+operations and the connector implements `OperationDirectReader`; they are bounded
+to connector-relative GET/POST REST endpoints, require a supported
+`output_policy`, and reject raw method/path/body flags. Bounded binary downloads
+also have an executor. GraphQL, XML, local git, local file, browser, composite,
+and mutation operation kinds remain blocked until their typed executors land.
 
 ## Supported Operation Kinds
 
@@ -103,7 +109,7 @@ Executable".
   "summary": "List GitHub Projects using a fixed GraphQL query.",
   "risk": "low",
   "approval": "none",
-  "output_policy": "json",
+  "output_policy": "json_redacted",
   "graphql": {
     "operation_name": "ListProjects",
     "document": "query ListProjects($owner: String!, $first: Int!, $after: String) { organization(login: $owner) { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } }"

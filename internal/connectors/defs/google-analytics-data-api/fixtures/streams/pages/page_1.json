@@ -1,0 +1,13 @@
+{
+  "data": [
+    {
+      "property_id": "000000000",
+      "date": "20260101",
+      "pagePath": "/fixture",
+      "pageTitle": "Fixture Page",
+      "screenPageViews": 42,
+      "activeUsers": 10,
+      "averageSessionDuration": 13.5
+    }
+  ]
+}

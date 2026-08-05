@@ -3,9 +3,12 @@
     {
       "property_id": "000000000",
       "date": "20260101",
+      "sessionSource": "fixture_source",
+      "sessionMedium": "fixture_medium",
+      "sessions": 12,
       "activeUsers": 10,
       "newUsers": 4,
-      "sessions": 12
+      "engagedSessions": 8
     }
   ]
 }

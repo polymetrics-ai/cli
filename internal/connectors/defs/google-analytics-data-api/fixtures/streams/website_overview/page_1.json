@@ -5,7 +5,10 @@
       "date": "20260101",
       "activeUsers": 10,
       "newUsers": 4,
-      "sessions": 12
+      "sessions": 12,
+      "screenPageViews": 42,
+      "averageSessionDuration": 13.5,
+      "bounceRate": 0.25
     }
   ]
 }

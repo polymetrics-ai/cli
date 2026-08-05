@@ -73,7 +73,7 @@ func promotedFactories() []Factory {
 		}},
 		{Name: "freightview", New: func() connectors.Connector { return withBundleDefinition("freightview", freightview.New()) }},
 		{Name: "google-analytics-data-api", New: func() connectors.Connector {
-			return withBundleDefinition("google-analytics-data-api", googleanalyticsdataapi.New())
+			return googleanalyticsdataapi.New()
 		}},
 		{Name: "google-calendar", New: func() connectors.Connector { return withBundleDefinition("google-calendar", googlecalendar.New()) }},
 		{Name: "google-classroom", New: func() connectors.Connector { return withBundleDefinition("google-classroom", googleclassroom.New()) }},

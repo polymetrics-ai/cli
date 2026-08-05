@@ -165,15 +165,18 @@ not a full override by default.
   not add a "supported_sync_modes" field anywhere — there isn't one in this dialect; the engine
   derives it from schema/stream shape at runtime.
 - **`api_surface.json` depth — minimal-honest for wave0/pilot** (DECISIONS.md #4): list every
-  implemented stream/write under `covered_by`; everything else is documented as blocked/planned or
-  excluded operation-ledger metadata until typed schemas, bounds, fixtures, and safety evidence are
-  authored (see stripe's `api_surface.json` for the current full-ledger pattern — 5 covered streams,
-  3 covered customer writes, and the remaining official Stripe operations tracked exactly once as
+  implemented stream, write, and fixed direct-read command under `covered_by` (`direct_read` for one
+  command path, `direct_reads` for several). A `POST` endpoint covered by a stream or direct read is
+  a read/query surface, not write capability evidence; only `covered_by.write` makes a `POST`
+  executable as a write. Everything else is documented as blocked/planned or excluded
+  operation-ledger metadata until typed schemas, bounds, fixtures, and safety evidence are authored
+  (see stripe's `api_surface.json` for the current full-ledger pattern — 5 covered streams, 3
+  covered customer writes, and the remaining official Stripe operations tracked exactly once as
   blocked/planned or excluded rows). Full API-surface research (every documented endpoint actually
-  implemented) is Pass B (wave5), not wave0/pilot/Pass-A fan-out. The
-  closed exclusion-category vocabulary (design §E.1 rule 3, enforced by the loader's meta-schema
-  enum): `destructive_admin`, `requires_elevated_scope`, `binary_payload`, `deprecated`,
-  `non_data_endpoint`, `duplicate_of`, `out_of_scope`.
+  implemented) is Pass B (wave5), not wave0/pilot/Pass-A fan-out. The closed exclusion-category
+  vocabulary (design §E.1 rule 3, enforced by the loader's meta-schema enum): `destructive_admin`,
+  `requires_elevated_scope`, `binary_payload`, `deprecated`, `non_data_endpoint`, `duplicate_of`,
+  `out_of_scope`.
 - **`docs.md` required headings** (exact text, `#`/`##` either level; `conformance`'s
   `docs_present` and `connectorgen validate`'s `docs_heading` rule both check presence by trimmed
   text only): `Overview`, `Auth setup`, `Streams notes`, `Write actions & risks`, `Known limits`.

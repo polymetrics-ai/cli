@@ -6,54 +6,89 @@
     "property_ids"
   ],
   "properties": {
-    "convert_conversions_event": {
+    "property_ids": {
       "type": "string",
-      "description": "Enables conversion of `conversions:*` event metrics from integers to floats. This is beneficial for preventing data rounding when the API returns float values for any `conversions:*` fields."
+      "description": "Comma, space, or newline separated GA4 numeric property IDs. Native reads use the first property ID per read call; run separate reads for additional properties."
+    },
+    "property_id": {
+      "type": "string",
+      "description": "Optional single GA4 numeric property ID used by provider-style direct commands. Defaults to the first value from property_ids when omitted."
+    },
+    "audience_export_id": {
+      "type": "string",
+      "description": "Audience export identifier used by the get audience export direct command."
+    },
+    "audience_list_id": {
+      "type": "string",
+      "description": "Audience list identifier used by the v1alpha audience-list get direct command."
+    },
+    "recurring_audience_list_id": {
+      "type": "string",
+      "description": "Recurring audience list identifier used by the v1alpha recurring-audience-list get direct command."
+    },
+    "report_task_id": {
+      "type": "string",
+      "description": "Report task identifier used by the v1alpha report-task get direct command."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "OAuth2 bearer access token with Analytics Data API read access. Prefer supplying from an environment variable or stdin."
     },
     "credentials": {
       "type": "string",
-      "description": "Credentials for the service"
-    },
-    "custom_reports_array": {
-      "type": "string",
-      "description": "You can add your Custom Analytics report by creating one."
-    },
-    "date_ranges_end_date": {
-      "type": "string",
-      "description": "The end date from which to replicate report data in the format YYYY-MM-DD. Data generated after this date will not be included in the report. Not applied to custom Cohort reports. When no date is provided or the date is in the future, the date from today is used."
-    },
-    "date_ranges_start_date": {
-      "type": "string",
-      "description": "The start date from which to replicate report data in the format YYYY-MM-DD. Data generated before this date will not be included in the report. Not applied to custom Cohort reports."
-    },
-    "keep_empty_rows": {
-      "type": "string",
-      "description": "If false, each row with all metrics equal to 0 will not be returned. If true, these rows will be returned if they are not separately removed by a filter. More information is available in <a href=\"https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/runReport#request-body\">the documentation</a>."
-    },
-    "lookback_window": {
-      "type": "string",
-      "description": "Since attribution changes after the event date, and Google Analytics has a data processing latency, we should specify how many days in the past we should refresh the data in every run. So if you set it at 5 days, in every sync it will fetch the last bookmark date minus 5 days."
-    },
-    "property_ids": {
-      "type": "string",
-      "description": "A list of your Property IDs. The Property ID is a unique number assigned to each property in Google Analytics, found in your GA4 property URL. This ID allows the connector to track the specific events associated with your property. Refer to the <a href='https://developers.google.com/analytics/devguides/reporting/data/v1/property-id#what_is_my_property_id'>Google Analytics documentation</a> to locate your property ID."
-    },
-    "subscription_tier": {
-      "type": "string",
-      "description": "Quota tier of the Google Analytics 4 properties being queried. Determines the per-property rate-limit policy applied locally once the tier-aware rate-limit budget is activated. Select \"Analytics 360 Property\" only if all configured property IDs belong to an Analytics 360 subscription. See https://developers.google.com/analytics/devguides/reporting/data/v1/quotas."
-    },
-    "window_in_days": {
-      "type": "string",
-      "description": "manual intervention needed"
+      "x-secret": true,
+      "description": "Legacy flattened credential payload or bearer token. Prefer access_token for new credentials; never pass secret values in shell history or chat."
     },
     "base_url": {
       "type": "string",
-      "default": "https://example.invalid",
-      "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
+      "format": "uri",
+      "default": "https://analyticsdata.googleapis.com",
+      "description": "Analytics Data API base URL. Override only for local fixture tests."
+    },
+    "date_ranges_start_date": {
+      "type": "string",
+      "description": "GA4 report start date, either YYYY-MM-DD or a GA4 relative token such as 30daysAgo."
+    },
+    "date_ranges_end_date": {
+      "type": "string",
+      "description": "GA4 report end date, either YYYY-MM-DD or a GA4 relative token such as today or yesterday."
+    },
+    "keep_empty_rows": {
+      "type": "string",
+      "description": "Legacy compatibility flag for GA4 runReport keepEmptyRows behavior; native preset reads currently send false."
+    },
+    "convert_conversions_event": {
+      "type": "string",
+      "description": "Legacy compatibility flag for conversion metric coercion."
+    },
+    "custom_reports_array": {
+      "type": "string",
+      "description": "Legacy custom report JSON string. Custom reports remain outside this documented parity slice."
+    },
+    "lookback_window": {
+      "type": "string",
+      "description": "Legacy lookback-window setting for repeated report reads."
+    },
+    "subscription_tier": {
+      "type": "string",
+      "description": "Informational GA4 property tier for quota planning; no connector-local throttle is enforced in this slice."
+    },
+    "window_in_days": {
+      "type": "string",
+      "description": "Legacy window setting retained for credential compatibility."
+    },
+    "page_size": {
+      "type": "string",
+      "description": "Native runReport page size. Defaults to 10000 and is capped at 250000."
+    },
+    "max_pages": {
+      "type": "string",
+      "description": "Native runReport page cap. Use a positive integer, 0, all, or unlimited."
     },
     "mode": {
       "type": "string",
-      "description": "Set to fixture for credential-free legacy fixture tests."
+      "description": "Set to fixture for credential-free connector-owned tests. Do not use for live provider validation."
     }
   }
 }

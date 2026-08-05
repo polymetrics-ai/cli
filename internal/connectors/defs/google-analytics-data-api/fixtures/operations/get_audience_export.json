@@ -1,0 +1,18 @@
+{
+  "request": {
+    "operation": "google-analytics-data-api.get_audience_export",
+    "path_params": {
+      "property_id": "000000000",
+      "audience_export_id": "audience_export_fixture_1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "name": "properties/000000000/audienceExports/audience_export_fixture_1",
+      "displayName": "Fixture audience export",
+      "state": "ACTIVE",
+      "rowCount": 1
+    }
+  }
+}
