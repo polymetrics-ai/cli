@@ -33,6 +33,13 @@ connector-local recording path is excluded because it is transport input rather 
 field. The accounting includes three cited `minProperties` rules and excludes the request field
 named `pattern` from schema-keyword counts.
 
+The Front schemas remain truthful for provider-valid empty `teammate_ids` and analytics `columns`
+arrays, but the current required `string_array` CLI path cannot transmit `[]`: it discards blank
+entries and then treats the result as missing. `cli-engine-empty-required-array-r1` is the explicit
+shared dependency for `create-teammate-discussion`, `create-teammate-task`, `analytics exports
+create`, and `analytics exports create-events`; their generated help discloses the limitation while
+this Front-only lane leaves shared command handling untouched.
+
 Final record-driven composition enforcement remains paused on the in-flight shared normalized-schema
 composition support. Current main's minimal compiler cannot evaluate `oneOf`, `allOf`, `if`/`then`,
 `not`, or `anyOf`, and this connector lane intentionally did not change shared validation/runtime.
