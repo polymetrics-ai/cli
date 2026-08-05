@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math/rand/v2"
 	"mime"
 	"mime/multipart"
 	"net/http"
@@ -17,7 +18,6 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 
@@ -162,6 +162,20 @@ type Requester struct {
 	RetryStatuses map[int]bool
 	// Sleep waits for d or until ctx is cancelled. Injectable for tests.
 	Sleep func(ctx context.Context, d time.Duration) error
+	// Now supplies the clock used to interpret provider reset headers.
+	// Injectable tests can therefore prove the exact reset timestamp.
+	Now func() time.Time
+	// Jitter supplies full jitter for fallback exponential retries. It is never
+	// called for a valid provider Retry-After reset. Returned values are clamped
+	// to the fallback cap so an implementation cannot lengthen a retry.
+	Jitter func(cap time.Duration) time.Duration
+	// Admission runs immediately before every HTTP transport send. It must
+	// honor the request context; an error prevents that attempt from reaching
+	// the provider. #3753 owns attaching a declaration-aware implementation.
+	Admission RateLimitAdmission
+	// Observer receives parsed response rate-limit facts synchronously. It is
+	// deliberately not an output hook; #3755 owns operator-visible events.
+	Observer RateLimitObserver
 }
 
 func (r *Requester) client() *http.Client {
@@ -220,6 +234,28 @@ func (r *Requester) sleep(ctx context.Context, d time.Duration) error {
 		return r.Sleep(ctx, d)
 	}
 	return ctxSleep(ctx, d)
+}
+
+func (r *Requester) now() time.Time {
+	if r.Now != nil {
+		return r.Now()
+	}
+	return time.Now()
+}
+
+func (r *Requester) admit(ctx context.Context, method string, attempt int) error {
+	if r.Admission == nil {
+		return nil
+	}
+	return r.Admission.Admit(ctx, RateLimitRequest{Method: method, Attempt: attempt + 1})
+}
+
+func (r *Requester) observeRateLimit(ctx context.Context, status int, header http.Header, attempt int) RateLimitObservation {
+	observation, ok := rateLimitObservation(status, header, attempt+1, r.now())
+	if ok && r.Observer != nil {
+		r.Observer.Observe(ctx, observation)
+	}
+	return observation
 }
 
 // ctxSleep waits for d or returns early if ctx is cancelled.
@@ -740,6 +776,10 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			req.Header.Del("Idempotency-Key")
 			req.Header.Del("X-Idempotency-Key")
 		}
+		if err := r.admit(ctx, method, attempt); err != nil {
+			cleanupRequestBody(body)
+			return nil, fmt.Errorf("rate-limit admission: %w", err)
+		}
 
 		resp, err := r.clientFor(ctx).Do(req)
 		bodyErr := cleanupRequestBody(body)
@@ -752,7 +792,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 				return nil, lastErr
 			}
 			if attempt < attempts-1 {
-				if werr := r.sleep(ctx, r.backoff(attempt, "")); werr != nil {
+				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
 					return nil, werr
 				}
 				continue
@@ -766,6 +806,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
 		resp.Body.Close()
+		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, attempt)
 
 		// A 401 can mean the credential was invalidated out of band (revoked
 		// grant, password change, scope change) rather than that it was never
@@ -795,15 +836,15 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		}
 
 		if !r.DisableRetries && r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
-			lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
-			if werr := r.sleep(ctx, r.backoff(attempt, resp.Header.Get("Retry-After"))); werr != nil {
+			lastErr = responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
+			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
 				return nil, werr
 			}
 			continue
 		}
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			return nil, &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(respBody)}
+			return nil, responseHTTPError(resp.StatusCode, fullURL, respBody, observation)
 		}
 
 		return &Response{Status: resp.StatusCode, Header: resp.Header, Body: respBody, requestURL: fullURL}, nil
@@ -860,44 +901,64 @@ func (r *Requester) applyHeaders(req *http.Request, hasBody bool, contentType st
 	}
 }
 
-// backoff computes the wait before the next attempt. A Retry-After header (delay
-// seconds or HTTP date) takes precedence, otherwise exponential backoff capped at
-// MaxBackoff is used.
-func (r *Requester) backoff(attempt int, retryAfter string) time.Duration {
-	if d, ok := parseRetryAfter(retryAfter); ok {
-		if d > r.maxBackoff() {
-			return r.maxBackoff()
-		}
-		return d
+// backoff computes the wait before the next attempt. A valid provider
+// Retry-After is deterministic and is honored exactly, even when it exceeds
+// MaxBackoff. Only unhinted fallback retries use bounded full jitter.
+func (r *Requester) backoff(attempt int, observation RateLimitObservation) time.Duration {
+	if observation.HasRetryAfter {
+		return observation.RetryAfter
 	}
-	d := r.baseBackoff() << attempt
-	if d <= 0 || d > r.maxBackoff() {
-		return r.maxBackoff()
-	}
-	return d
+	return r.fullJitter(r.fallbackBackoff(attempt))
 }
 
-// parseRetryAfter parses a Retry-After header value as either delay-seconds or an
-// HTTP date relative to now.
-func parseRetryAfter(value string) (time.Duration, bool) {
-	value = strings.TrimSpace(value)
-	if value == "" {
-		return 0, false
+func (r *Requester) fallbackBackoff(attempt int) time.Duration {
+	delay := r.baseBackoff()
+	maximum := r.maxBackoff()
+	if delay >= maximum {
+		return maximum
 	}
-	if secs, err := strconv.Atoi(value); err == nil {
-		if secs < 0 {
-			return 0, false
+	for i := 0; i < attempt; i++ {
+		if delay > maximum/2 {
+			return maximum
 		}
-		return time.Duration(secs) * time.Second, true
+		delay *= 2
 	}
-	if t, err := http.ParseTime(value); err == nil {
-		d := time.Until(t)
-		if d < 0 {
-			return 0, true
-		}
-		return d, true
+	if delay > maximum {
+		return maximum
 	}
-	return 0, false
+	return delay
+}
+
+func (r *Requester) fullJitter(cap time.Duration) time.Duration {
+	if cap <= 0 {
+		return 0
+	}
+	if r.Jitter == nil {
+		return time.Duration(rand.Int64N(int64(cap)))
+	}
+	delay := r.Jitter(cap)
+	if delay < 0 {
+		return 0
+	}
+	if delay > cap {
+		return cap
+	}
+	return delay
+}
+
+func responseHTTPError(status int, requestURL string, body []byte, observation RateLimitObservation) error {
+	httpErr := &HTTPError{Status: status, URL: requestURL, Body: truncate(body)}
+	if status != http.StatusTooManyRequests {
+		return httpErr
+	}
+	return &RateLimitError{
+		HTTPError:     httpErr,
+		Source:        observation.Source,
+		RetryAfter:    observation.RetryAfter,
+		HasRetryAfter: observation.HasRetryAfter,
+		ResetAt:       observation.ResetAt,
+		HasReset:      observation.HasReset,
+	}
 }
 
 func truncate(body []byte) string {

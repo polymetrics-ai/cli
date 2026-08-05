@@ -5,7 +5,7 @@
   "relatedIssue": 3750,
   "deferredIssues": [3753, 3754, 3755],
   "branch": "fm/cli-found-rate-limit-admission-r1",
-  "status": "slice_a_green",
+  "status": "slice_b_green",
   "verificationPassed": false,
   "verificationBlocked": false,
   "humanGated": false,
@@ -43,6 +43,10 @@
     {"command": "scripts/gsd doctor", "result": "passed"},
     {"command": "go run ./cmd/agentcontractgen check", "result": "passed"},
     {"command": "rg -l '\"rate_limit\"' internal/connectors/defs/*/metadata.json | wc -l", "result": "11"},
-    {"command": "go test ./internal/connectors/engine -run 'TestBundleLoad(ParsesProviderCitedRateLimits|RejectsUncitedOrMalformedRateLimits|ParsesHonestRateLimitStates)' -count=1", "result": "passed"}
+    {"command": "go test ./internal/connectors/engine -run 'TestBundleLoad(ParsesProviderCitedRateLimits|RejectsUncitedOrMalformedRateLimits|ParsesHonestRateLimitStates)' -count=1", "result": "passed"},
+    {"command": "go test ./internal/connectors/connsdk -count=1", "result": "passed"},
+    {"command": "go test ./internal/connectors/engine ./internal/connectors/bundleregistry ./cmd/connectorgen -count=1", "result": "passed"},
+    {"command": "go vet ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors/bundleregistry ./cmd/connectorgen", "result": "passed"},
+    {"command": "go build ./cmd/pm", "result": "passed"}
   ]
 }

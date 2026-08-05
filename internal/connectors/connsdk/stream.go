@@ -104,26 +104,30 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			}
 		}
 		credKeys = credentialHeaderKeys(before, req.Header, r.DefaultHeaders)
+		if err := r.admit(ctx, method, attempt); err != nil {
+			return nil, fmt.Errorf("rate-limit admission: %w", err)
+		}
 
 		resp, err := client.Do(req)
 		if err != nil {
 			lastErr = fmt.Errorf("send request: %w", err)
 			if attempt < attempts-1 && !isRedirectPolicyError(err) {
-				if werr := r.sleep(ctx, r.backoff(attempt, "")); werr != nil {
+				if werr := r.sleep(ctx, r.backoff(attempt, RateLimitObservation{})); werr != nil {
 					return nil, werr
 				}
 				continue
 			}
 			return nil, lastErr
 		}
+		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, attempt)
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			// Discard this attempt's body entirely; nothing from a failed
 			// attempt may reach the caller.
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
 			resp.Body.Close()
-			lastErr = &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(body)}
-			if werr := r.sleep(ctx, r.backoff(attempt, resp.Header.Get("Retry-After"))); werr != nil {
+			lastErr = responseHTTPError(resp.StatusCode, fullURL, body, observation)
+			if werr := r.sleep(ctx, r.backoff(attempt, observation)); werr != nil {
 				return nil, werr
 			}
 			continue
@@ -132,7 +136,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, maxErrorBody))
 			resp.Body.Close()
-			return nil, &HTTPError{Status: resp.StatusCode, URL: fullURL, Body: truncate(body)}
+			return nil, responseHTTPError(resp.StatusCode, fullURL, body, observation)
 		}
 
 		return &StreamResponse{

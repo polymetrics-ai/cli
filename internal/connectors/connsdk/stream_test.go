@@ -222,6 +222,37 @@ func TestDoStreamRetryDiscardsPartialBody(t *testing.T) {
 	}
 }
 
+func TestDoStreamReturnsTypedRateLimitError(t *testing.T) {
+	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Retry-After", "90")
+		w.WriteHeader(http.StatusTooManyRequests)
+		_, _ = w.Write([]byte(`{"error":"limited"}`))
+	}))
+	defer srv.Close()
+
+	r := &Requester{
+		BaseURL:        srv.URL,
+		DisableRetries: true,
+		Now:            func() time.Time { return now },
+	}
+	_, err := r.DoStream(context.Background(), http.MethodGet, "/file", nil, StreamOptions{})
+	if err == nil {
+		t.Fatal("DoStream: want rate-limit error")
+	}
+	var rateLimitErr *RateLimitError
+	if !errors.As(err, &rateLimitErr) {
+		t.Fatalf("error type = %T, want *RateLimitError", err)
+	}
+	if got, want := rateLimitErr.ResetAt, now.Add(90*time.Second); !got.Equal(want) {
+		t.Fatalf("reset = %v, want %v", got, want)
+	}
+	var httpErr *HTTPError
+	if !errors.As(err, &httpErr) || httpErr.Status != http.StatusTooManyRequests {
+		t.Fatalf("wrapped HTTPError = %v, want 429", httpErr)
+	}
+}
+
 // TestDoStreamDoesNotMutateSharedClient: the redirect policy must be set on a
 // clone. Mutating the shared client would silently apply this policy to every
 // other request the connector makes.

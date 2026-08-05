@@ -114,6 +114,9 @@ func TestRequesterHonorsProviderRetryAfterBeyondFallbackCap(t *testing.T) {
 	if jitterCalls != 0 {
 		t.Fatalf("provider Retry-After invoked fallback jitter %d times", jitterCalls)
 	}
+	if got, want := atomic.LoadInt32(&calls), int32(2); got != want {
+		t.Fatalf("HTTP calls = %d, want retry cap of %d", got, want)
+	}
 }
 
 type rateLimitAdmissionFunc func(context.Context, RateLimitRequest) error
@@ -173,14 +176,13 @@ func TestRequesterAdmissionPreventsEveryTransportSend(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	ctx, cancel := context.WithCancel(context.Background())
-	cancel()
+	ctx := context.Background()
 	var admissions []RateLimitRequest
 	r := &Requester{
 		BaseURL: srv.URL,
 		Admission: rateLimitAdmissionFunc(func(ctx context.Context, request RateLimitRequest) error {
 			admissions = append(admissions, request)
-			return ctx.Err()
+			return context.Canceled
 		}),
 	}
 	tests := []struct {
@@ -237,6 +239,78 @@ func TestRequesterAdmissionPreventsEveryTransportSend(t *testing.T) {
 	}
 }
 
+func TestRequesterAdmissionHonorsCallerCancellationBeforeSend(t *testing.T) {
+	var hits int32
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		atomic.AddInt32(&hits, 1)
+	}))
+	defer srv.Close()
+
+	started := make(chan struct{})
+	r := &Requester{
+		BaseURL: srv.URL,
+		Admission: rateLimitAdmissionFunc(func(ctx context.Context, _ RateLimitRequest) error {
+			close(started)
+			<-ctx.Done()
+			return ctx.Err()
+		}),
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	errs := make(chan error, 1)
+	go func() {
+		_, err := r.Do(ctx, http.MethodGet, "/wait", nil, nil)
+		errs <- err
+	}()
+	select {
+	case <-started:
+	case <-time.After(time.Second):
+		t.Fatal("admission did not receive request context")
+	}
+	cancel()
+	select {
+	case err := <-errs:
+		if !errors.Is(err, context.Canceled) {
+			t.Fatalf("request error = %v, want context cancellation", err)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("request did not return when admission context was canceled")
+	}
+	if got, want := atomic.LoadInt32(&hits), int32(0); got != want {
+		t.Fatalf("HTTP sends = %d, want %d", got, want)
+	}
+}
+
+func TestRequesterAdmitsEveryRetryAttempt(t *testing.T) {
+	var calls int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if atomic.AddInt32(&calls, 1) == 1 {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	var admissions []RateLimitRequest
+	r := &Requester{
+		BaseURL:    srv.URL,
+		MaxRetries: 1,
+		Admission: rateLimitAdmissionFunc(func(_ context.Context, request RateLimitRequest) error {
+			admissions = append(admissions, request)
+			return nil
+		}),
+		Jitter: func(time.Duration) time.Duration { return 0 },
+		Sleep:  noSleep,
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/retry", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if got, want := admissions, []RateLimitRequest{{Method: http.MethodGet, Attempt: 1}, {Method: http.MethodGet, Attempt: 2}}; !slices.Equal(got, want) {
+		t.Fatalf("admissions = %+v, want %+v", got, want)
+	}
+}
+
 func TestRequesterReturnsTypedRateLimitErrorAndObservation(t *testing.T) {
 	const fixtureSecret = "fixture-rate-limit-secret"
 	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
@@ -269,6 +343,9 @@ func TestRequesterReturnsTypedRateLimitErrorAndObservation(t *testing.T) {
 	if got, want := rateLimitErr.ResetAt, now.Add(90*time.Second); !got.Equal(want) {
 		t.Fatalf("RateLimitError reset = %v, want %v", got, want)
 	}
+	if !rateLimitErr.HasReset || !rateLimitErr.HasRetryAfter {
+		t.Fatalf("RateLimitError reset presence = %+v, want parsed provider timing", rateLimitErr)
+	}
 	var httpErr *HTTPError
 	if !errors.As(err, &httpErr) || httpErr.Status != http.StatusTooManyRequests {
 		t.Fatalf("wrapped HTTPError = %v, want status 429", httpErr)
@@ -292,8 +369,14 @@ func TestRequesterReturnsTypedRateLimitErrorAndObservation(t *testing.T) {
 	if got, want := observation.Limit, int64(100); got != want {
 		t.Fatalf("observation Limit = %d, want %d", got, want)
 	}
+	if !observation.HasLimit {
+		t.Fatal("observation did not mark RateLimit-Limit present")
+	}
 	if got, want := observation.Remaining, int64(0); got != want {
 		t.Fatalf("observation Remaining = %d, want %d", got, want)
+	}
+	if !observation.HasRemaining {
+		t.Fatal("observation did not preserve remaining=0 as present")
 	}
 	if output := fmt.Sprintf("%+v", observation); strings.Contains(output, fixtureSecret) {
 		t.Fatalf("observation output leaked fixture secret: %q", output)
@@ -703,5 +786,41 @@ func TestParseRetryAfterSeconds(t *testing.T) {
 	}
 	if _, ok := parseRetryAfter(""); ok {
 		t.Fatal("empty Retry-After should not parse")
+	}
+}
+
+func TestParseRetryAfterAtPreservesProviderDate(t *testing.T) {
+	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	reset := now.Add(90 * time.Second)
+	delay, gotReset, ok := parseRetryAfterAt(reset.Format(http.TimeFormat), now)
+	if !ok {
+		t.Fatal("parseRetryAfterAt: want HTTP-date to parse")
+	}
+	if got, want := delay, 90*time.Second; got != want {
+		t.Fatalf("delay = %v, want %v", got, want)
+	}
+	if !gotReset.Equal(reset) {
+		t.Fatalf("reset = %v, want exact provider date %v", gotReset, reset)
+	}
+}
+
+func TestRateLimitObservationParsesStandardBudgetHeaders(t *testing.T) {
+	now := time.Date(2026, time.August, 6, 12, 0, 0, 0, time.UTC)
+	header := make(http.Header)
+	header.Set("RateLimit-Limit", "100")
+	header.Set("RateLimit-Remaining", "0")
+	header.Set("RateLimit-Reset", "90")
+	observation, ok := rateLimitObservation(http.StatusOK, header, 1, now)
+	if !ok {
+		t.Fatal("rateLimitObservation: want standard headers to be observed")
+	}
+	if got, want := observation.Source, RateLimitObservationSourceHeaders; got != want {
+		t.Fatalf("source = %q, want %q", got, want)
+	}
+	if !observation.HasLimit || observation.Limit != 100 || !observation.HasRemaining || observation.Remaining != 0 {
+		t.Fatalf("budget observation = %+v, want limit=100 remaining=0", observation)
+	}
+	if !observation.HasReset || !observation.ResetAt.Equal(now.Add(90*time.Second)) {
+		t.Fatalf("reset observation = %+v, want %v", observation, now.Add(90*time.Second))
 	}
 }

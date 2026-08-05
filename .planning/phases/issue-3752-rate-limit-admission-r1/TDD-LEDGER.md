@@ -11,12 +11,12 @@ canonical delivery contract forbids spawning GSD roles. This ledger is the durab
 | #3751 optional loader | `Load` has no `rate_limits.json` typed result; a fixture declaration cannot be loaded and validated | optional file returns nil when absent and typed data when present | Green |
 | #3751 citation | table-driven declaration lacking `source.url` or `source.retrieved_at` is not rejected today | load error identifies `rate_limits.json` and the deficient citation | Green |
 | #3751 selector/state | malformed endpoint/tier/auth selector, duplicate policy ID, invalid scope subject, and inconsistent unknown/not_applicable state | each is rejected before runtime; a real-shape declared policy survives typed load | Green |
-| #3752 provider reset | `Retry-After: 90` + `MaxBackoff: 30s` records `30s` through injected `Sleep` | the same fixture records exactly `90s` | Red |
-| #3752 reset typing | terminal 429 exposes only `*HTTPError` today | `errors.As(err, *RateLimitError)` exposes reset and still reaches `*HTTPError` | Planned |
-| #3752 fallback jitter | fallback retry has no jitter hook and retries in lockstep | injected full jitter is within cap; valid provider reset calls no jitter hook | Planned |
-| #3752 admission | no pre-send admission exists in `doWithBody` / `DoStream` | cancellation/error prevents every `httptest` send and shallow clones preserve the admission | Planned |
-| #3752 observation | 429 has no typed callback | observer sees status, attempted request, source, retry duration/reset; output contains no fixture secret | Planned |
-| #3752 retry safety | retry cap / DisableRetries are existing contracts | typed rate limiting retains retry count and no-replay behavior | Planned |
+| #3752 provider reset | `Retry-After: 90` + `MaxBackoff: 30s` records `30s` through injected `Sleep` | the same fixture records exactly `90s` | Green |
+| #3752 reset typing | terminal 429 exposes only `*HTTPError` today | `errors.As(err, *RateLimitError)` exposes reset and still reaches `*HTTPError` | Green |
+| #3752 fallback jitter | fallback retry has no jitter hook and retries in lockstep | injected full jitter is within cap; valid provider reset calls no jitter hook | Green |
+| #3752 admission | no pre-send admission exists in `doWithBody` / `DoStream` | cancellation/error prevents every `httptest` send and shallow clones preserve the admission | Green |
+| #3752 observation | 429 has no typed callback | observer sees status, attempted request, source, retry duration/reset; output contains no fixture secret | Green |
+| #3752 retry safety | retry cap / DisableRetries are existing contracts | typed rate limiting retains retry count and no-replay behavior | Green |
 
 ## Red evidence log
 
@@ -63,4 +63,17 @@ internal/connectors/connsdk/http_test.go:119:51: undefined: RateLimitRequest
 internal/connectors/connsdk/http_test.go:125:50: undefined: RateLimitObservation
 internal/connectors/connsdk/http_test.go:181:3: unknown field Admission in struct literal of type Requester
 FAIL    polymetrics.ai/internal/connectors/connsdk [build failed]
+```
+
+The green requester suite covers exact 90-second provider waits, no jitter for a valid provider
+reset, capped injected full jitter only for fallback retries, admission before JSON/form/multipart/
+stream sends, caller cancellation while an admission is waiting, every retry attempt, terminal
+typed-429 wrapping, standard limit/remaining/reset headers, and HTTP-date preservation:
+
+```text
+$ go test ./internal/connectors/connsdk -count=1
+ok      polymetrics.ai/internal/connectors/connsdk    0.873s
+
+$ go test -race ./internal/connectors/connsdk -run '^(TestRequesterHonorsProviderRetryAfterBeyondFallbackCap|TestRequesterFallbackRetryUsesBoundedFullJitter|TestRequesterAdmissionPreventsEveryTransportSend|TestRequesterAdmissionHonorsCallerCancellationBeforeSend|TestRequesterAdmitsEveryRetryAttempt|TestRequesterReturnsTypedRateLimitErrorAndObservation|TestParseRetryAfterAtPreservesProviderDate|TestRateLimitObservationParsesStandardBudgetHeaders|TestDoStreamReturnsTypedRateLimitError)$' -count=1
+ok      polymetrics.ai/internal/connectors/connsdk    1.286s
 ```
