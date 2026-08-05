@@ -105,7 +105,7 @@
           "calendar_id": {"type": "string"},
           "id": {"type": "string"},
           "type": {"type": "string", "enum": ["web_hook"]},
-          "address": {"type": "string", "format": "uri"},
+          "address": {"type": "string", "format": "uri", "pattern": "^https://"},
           "token": {"type": "string"}
         }
       },
@@ -197,7 +197,7 @@
         "type": "object",
         "required": ["id", "type", "address"],
         "additionalProperties": false,
-        "properties": {"id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri"}, "token": {"type": "string"}}
+        "properties": {"id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://"}, "token": {"type": "string"}}
       },
       "risk": "external mutation; creates a calendar-list notification channel; requires reverse-ETL plan, preview, and explicit approval",
       "batchable": false
@@ -282,6 +282,7 @@
       "method": "POST",
       "path": "/calendars/{{ record.calendar_id }}/transferOwnership",
       "path_fields": ["calendar_id"],
+      "redact_fields": ["calendar_id", "new_data_owner"],
       "query": {"newDataOwner": "{{ record.new_data_owner }}", "useAdminAccess": "{{ record.use_admin_access }}"},
       "body_type": "none",
       "record_schema": {
@@ -289,7 +290,7 @@
         "type": "object",
         "required": ["calendar_id", "new_data_owner", "use_admin_access"],
         "additionalProperties": false,
-        "properties": {"calendar_id": {"type": "string"}, "new_data_owner": {"type": "string", "format": "email"}, "use_admin_access": {"type": "boolean"}}
+        "properties": {"calendar_id": {"type": "string"}, "new_data_owner": {"type": "string", "format": "email"}, "use_admin_access": {"type": "boolean", "enum": [true]}}
       },
       "risk": "critical administrative external mutation; transfers secondary-calendar data ownership; reverse-ETL approval and typed destructive confirmation required",
       "batchable": false,
@@ -318,6 +319,7 @@
       "kind": "custom",
       "method": "POST",
       "path": "/channels/stop",
+      "redact_fields": ["id", "resourceId"],
       "body_type": "json",
       "body_fields": ["id", "resourceId"],
       "record_schema": {
@@ -357,14 +359,14 @@
       "path": "/calendars/{{ record.calendar_id }}/events/import",
       "path_fields": ["calendar_id"],
       "body_type": "json",
-      "body_fields": ["summary", "description", "location", "start", "end", "attendees", "recurrence", "colorId", "visibility", "transparency"],
+      "body_fields": ["iCalUID", "summary", "description", "location", "start", "end", "attendees", "recurrence", "colorId", "visibility", "transparency"],
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": ["calendar_id", "summary", "start", "end"],
+        "required": ["calendar_id", "iCalUID", "summary", "start", "end"],
         "additionalProperties": false,
         "properties": {
-          "calendar_id": {"type": "string"}, "summary": {"type": "string"}, "description": {"type": "string"}, "location": {"type": "string"},
+          "calendar_id": {"type": "string"}, "iCalUID": {"type": "string"}, "summary": {"type": "string"}, "description": {"type": "string"}, "location": {"type": "string"},
           "start": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {"date": {"type": "string"}, "dateTime": {"type": "string", "format": "date-time"}, "timeZone": {"type": "string"}}},
           "end": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {"date": {"type": "string"}, "dateTime": {"type": "string", "format": "date-time"}, "timeZone": {"type": "string"}}},
           "attendees": {"type": "array", "items": {"type": "object"}}, "recurrence": {"type": "array", "items": {"type": "string"}}, "colorId": {"type": "string"}, "visibility": {"type": "string"}, "transparency": {"type": "string"}
@@ -491,7 +493,7 @@
         "type": "object",
         "required": ["calendar_id", "id", "type", "address"],
         "additionalProperties": false,
-        "properties": {"calendar_id": {"type": "string"}, "id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri"}, "token": {"type": "string"}}
+        "properties": {"calendar_id": {"type": "string"}, "id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://"}, "token": {"type": "string"}}
       },
       "risk": "external mutation; creates an event notification channel; requires reverse-ETL plan, preview, and explicit approval",
       "batchable": false
@@ -508,7 +510,7 @@
         "type": "object",
         "required": ["id", "type", "address"],
         "additionalProperties": false,
-        "properties": {"id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri"}, "token": {"type": "string"}}
+        "properties": {"id": {"type": "string"}, "type": {"type": "string", "enum": ["web_hook"]}, "address": {"type": "string", "format": "uri", "pattern": "^https://"}, "token": {"type": "string"}}
       },
       "risk": "external mutation; creates a settings notification channel; requires reverse-ETL plan, preview, and explicit approval",
       "batchable": false

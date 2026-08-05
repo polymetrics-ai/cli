@@ -164,7 +164,11 @@ func TestFreeBusyOperationDirectReadFixtureOnly(t *testing.T) {
 			t.Fatalf("unexpected time bounds: %#v", body)
 		}
 		w.Header().Set("Content-Type", "application/json")
-		_ = json.NewEncoder(w).Encode(map[string]any{"kind": "calendar#freeBusy", "calendars": map[string]any{"primary": map[string]any{"busy": []any{}}}})
+		_ = json.NewEncoder(w).Encode(map[string]any{
+			"kind":        "calendar#freeBusy",
+			"calendars":   map[string]any{"primary": map[string]any{"busy": []any{}}},
+			"accessToken": "provider-sensitive-fixture",
+		})
 	}))
 	defer srv.Close()
 
@@ -187,12 +191,122 @@ func TestFreeBusyOperationDirectReadFixtureOnly(t *testing.T) {
 	if err != nil {
 		t.Fatalf("OperationDirectRead: %v", err)
 	}
-	body, err := json.Marshal(direct.Body)
-	if err != nil {
-		t.Fatalf("marshal body: %v", err)
+	body, ok := direct.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want object", direct.Body)
 	}
-	if !strings.Contains(string(body), "calendar#freeBusy") {
-		t.Fatalf("body = %s", body)
+	calendars, ok := body["calendars"].(map[string]any)
+	if !ok {
+		t.Fatalf("calendars = %#v, want object", body["calendars"])
+	}
+	if _, ok := calendars["primary"]; !ok {
+		t.Fatalf("calendars = %#v, want caller-supplied primary key", calendars)
+	}
+	if _, ok := body["accessToken"]; ok {
+		t.Fatalf("body retained sensitive accessToken: %#v", body)
+	}
+	if redacted, ok := body["accessToken_redacted"].(bool); !ok || !redacted {
+		t.Fatalf("accessToken_redacted = %#v, want true", body["accessToken_redacted"])
+	}
+}
+
+func TestWriteActionProviderConstraints(t *testing.T) {
+	b, err := engine.Load(defs.FS, "google-calendar")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	conn := engine.New(b, Hooks{})
+	tests := []struct {
+		name        string
+		action      string
+		record      connectors.Record
+		wantErrText string
+	}{
+		{
+			name:   "import requires iCalendar UID",
+			action: "import_event",
+			record: connectors.Record{
+				"calendar_id": "calendar-fixture",
+				"summary":     "Fixture event",
+				"start":       map[string]any{"dateTime": "2030-01-01T10:00:00Z"},
+				"end":         map[string]any{"dateTime": "2030-01-01T11:00:00Z"},
+			},
+			wantErrText: "iCalUID",
+		},
+		{
+			name:   "ownership transfer rejects false admin access",
+			action: "transfer_calendar_ownership",
+			record: connectors.Record{
+				"calendar_id":      "calendar-fixture",
+				"new_data_owner":   "owner@example.invalid",
+				"use_admin_access": false,
+			},
+			wantErrText: "enum",
+		},
+		{
+			name:        "ACL watch requires HTTPS",
+			action:      "watch_acl",
+			record:      connectors.Record{"calendar_id": "calendar-fixture", "id": "channel-fixture", "type": "web_hook", "address": "http://example.invalid/hook"},
+			wantErrText: "pattern",
+		},
+		{
+			name:        "calendar list watch requires HTTPS",
+			action:      "watch_calendar_list",
+			record:      connectors.Record{"id": "channel-fixture", "type": "web_hook", "address": "http://example.invalid/hook"},
+			wantErrText: "pattern",
+		},
+		{
+			name:        "event watch requires HTTPS",
+			action:      "watch_events",
+			record:      connectors.Record{"calendar_id": "calendar-fixture", "id": "channel-fixture", "type": "web_hook", "address": "http://example.invalid/hook"},
+			wantErrText: "pattern",
+		},
+		{
+			name:        "settings watch requires HTTPS",
+			action:      "watch_settings",
+			record:      connectors.Record{"id": "channel-fixture", "type": "web_hook", "address": "http://example.invalid/hook"},
+			wantErrText: "pattern",
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			err := conn.ValidateWrite(context.Background(), connectors.WriteRequest{Action: tc.action}, []connectors.Record{tc.record})
+			if err == nil {
+				t.Fatalf("ValidateWrite(%s) accepted invalid record", tc.action)
+			}
+			if !strings.Contains(err.Error(), tc.wantErrText) {
+				t.Fatalf("ValidateWrite(%s) error = %q, want %q", tc.action, err, tc.wantErrText)
+			}
+		})
+	}
+}
+
+func TestCommandRedactionsReachWriteActions(t *testing.T) {
+	b, err := engine.Load(defs.FS, "google-calendar")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	actions := make(map[string]engine.WriteAction, len(b.Writes))
+	for _, action := range b.Writes {
+		actions[action.Name] = action
+	}
+	for _, command := range b.CLISurface.Commands {
+		if command.Write == "" || len(command.RedactFields) == 0 {
+			continue
+		}
+		action, ok := actions[command.Write]
+		if !ok {
+			t.Fatalf("command %q references missing write action %q", command.Path, command.Write)
+		}
+		redacted := make(map[string]bool, len(action.RedactFields))
+		for _, field := range action.RedactFields {
+			redacted[field] = true
+		}
+		for _, field := range command.RedactFields {
+			if !redacted[field] {
+				t.Fatalf("command %q redacts %q but write action %q does not", command.Path, field, action.Name)
+			}
+		}
 	}
 }
 

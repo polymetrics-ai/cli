@@ -101,6 +101,7 @@ The 2026-08-05 contract correction establishes that record-driven `writes.json` 
 | `events.delete` | `path.calendarId ← record.calendar_id` | [events.delete], Parameters > `calendarId` | provider reference | high | Provider-required path parameter. |
 | `events.delete` | `path.eventId ← record.event_id` | [events.delete], Parameters > `eventId` | provider reference | high | Provider-required path parameter. |
 | `events.import` | `path.calendarId ← record.calendar_id` | [events.import], Parameters > `calendarId` | provider reference | high | Provider-required path parameter. |
+| `events.import` | `body.iCalUID ← record.iCalUID` | [events.import], Request body > `Event.iCalUID` | provider reference | high | Provider-required import identifier; uniquely identifies the event across calendaring systems. |
 | `events.import` | `body.summary ← record.summary` | [events.import], Request body > `Event.summary` | provider reference | high | Required by the typed import action. |
 | `events.import` | `body.description ← record.description` | [events.import], Request body > `Event.description` | provider reference | high | Optional provider body field. |
 | `events.import` | `body.location ← record.location` | [events.import], Request body > `Event.location` | provider reference | high | Optional provider body field. |
@@ -194,7 +195,7 @@ Each documented mutation is a record-shaped reverse-ETL request and is therefore
 | `events.watch` | `writes.json:watch_events` — typed channel-create record. |
 | `settings.watch` | `writes.json:watch_settings` — typed channel-create record. |
 
-Coverage: **148/148 declared request-field uses have a primary-provider citation**: 27 pre-existing read/direct-read uses plus the 121 write-action uses above. No field is deferred under tier 5. The 11 stream endpoints, `freeBusy.query`, and all 26 write actions have explicit provider references, for **38/38 operation-level source coverage**.
+Coverage: **149/149 declared request-field uses have a primary-provider citation**: 27 pre-existing read/direct-read uses plus the 122 write-action uses above. No field is deferred under tier 5. The 11 stream endpoints, `freeBusy.query`, and all 26 write actions have explicit provider references, for **38/38 operation-level source coverage**.
 
 [acl.delete]: https://developers.google.com/workspace/calendar/api/v3/reference/acl/delete
 [acl.insert]: https://developers.google.com/workspace/calendar/api/v3/reference/acl/insert

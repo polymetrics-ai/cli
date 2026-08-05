@@ -10,7 +10,7 @@
 
 - `scripts/gsd doctor` passed. `scripts/gsd prompt programming-loop init --phase google-calendar-parity-wave03 --dry-run` returned `unknown GSD command: programming-loop`; this is the documented adapter-unavailable case, so the manual GSD workflow is in use.
 - Manual lifecycle evidence: this plan, `SPEC.md`, `TEST-PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `PROMPTS.md`, and `RUN-STATE.json`.
-- Skills loaded: `gsd-programming-loop`; `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, and `golang-documentation`.
+- Skills loaded: `gsd-programming-loop`; `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-lint`, and `golang-documentation`.
 
 ## Provider baseline
 
